@@ -1,4 +1,4 @@
-package com.github.alvaro2112.moneyrun;
+package sdp.moneyrun;
 
 import androidx.appcompat.app.AppCompatActivity;
 
