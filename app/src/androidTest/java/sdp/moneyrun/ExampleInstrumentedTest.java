@@ -1,4 +1,4 @@
-package com.github.alvaro2112.moneyrun;
+package sdp.moneyrun;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.github.alvaro2112.moneyrun", appContext.getPackageName());
+        assertEquals("sdp.moneyrun", appContext.getPackageName());
     }
 }
