@@ -3,7 +3,7 @@ check_android_task:
   env:
     API_LEVEL: 23
     TARGET: google_apis
-    ARCH: x86
+    ARCH: default
     CC_TEST_REPORTER_ID: ENCRYPTED[c13adc18706c76860cc0c767733429592e636b80c7e73388891264e72609f79e985c724598ebcb3defa6d160a1ddc4f4]
   container:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
