@@ -30,7 +30,7 @@ public class Player {
         return numberOfDiedGames;
     }
 
-    public int getPlayerId() {
+    public int getPlayerId() { 
         return playerId;
     }
 
