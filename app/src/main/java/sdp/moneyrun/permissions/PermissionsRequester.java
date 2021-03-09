@@ -39,10 +39,13 @@ public class PermissionsRequester {
             throw new IllegalArgumentException("Activity should not be null.");
         }
         if(requestPermissionsLauncher == null){
-            throw new IllegalArgumentException("Permission launcher should not be null.");
+            throw new IllegalArgumentException("Permissions launcher should not be null.");
         }
-        if(permissions == null){
-            throw new IllegalArgumentException("Permissions should not be null.");
+        if(requestMessage == null){
+            throw new IllegalArgumentException("Permissions request message should be requested.");
+        }
+        if(permissions == null || permissions.length == 0){
+            throw new IllegalArgumentException("At least one permission should be requested.");
         }
         for(String permission : permissions){
             if(permission == null){

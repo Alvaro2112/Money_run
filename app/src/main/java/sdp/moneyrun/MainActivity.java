@@ -12,9 +12,6 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     *
-     */
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
         for(String permission : map.keySet()){
             boolean isGranted = map.get(permission);
@@ -43,5 +40,9 @@ public class MainActivity extends AppCompatActivity {
                 coarseLocation,
                 fineLocation);
         locationPermissionsRequester.requestPermission();
+    }
+
+    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher(){
+        return requestPermissionsLauncher;
     }
 }
