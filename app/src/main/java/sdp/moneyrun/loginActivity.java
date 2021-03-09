@@ -16,6 +16,7 @@ public class loginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+    // link from signup button to signup page
     public void signUp(View view) {
 
         Intent intent = new Intent(this, placeHolderSignUp.class);
