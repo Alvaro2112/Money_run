@@ -1,30 +1,45 @@
-package sdp.moneyrun.permission;
+package sdp.moneyrun.permissions;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import sdp.moneyrun.MainActivity;
-
-public class RequestPermissions {
+/**
+ * This class implements a permissions requester.
+ * @author Arnaud Poletto
+ */
+public class PermissionsRequester {
     private final Activity activity;
-    private final String[] permissions;
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher;
+    private final String[] permissions;
 
     private final String requestMessage;
     private final boolean forceShowRequest;
 
-    public RequestPermissions(AppCompatActivity activity, String requestMessage, boolean forceShowRequest, String... permissions){
+    /**
+     * @param activity the current activity
+     * @param requestPermissionsLauncher the permissions launcher
+     * @param requestMessage the informative message for the user about requested permissions
+     * @param forceShowRequest a boolean forcing the appearance of the informative message
+     * @param permissions the permissions requested
+     */
+    public PermissionsRequester(
+            AppCompatActivity activity,
+            ActivityResultLauncher<String[]> requestPermissionsLauncher,
+            String requestMessage,
+            boolean forceShowRequest,
+            String... permissions){
         if(activity == null) {
             throw new IllegalArgumentException("Activity should not be null.");
+        }
+        if(requestPermissionsLauncher == null){
+            throw new IllegalArgumentException("Permission launcher should not be null.");
         }
         if(permissions == null){
             throw new IllegalArgumentException("Permissions should not be null.");
@@ -36,23 +51,17 @@ public class RequestPermissions {
         }
 
         this.activity = activity;
+        this.requestPermissionsLauncher = requestPermissionsLauncher;
         this.permissions = permissions;
-        this.requestPermissionsLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-            for(String permission : map.keySet()){
-                boolean isGranted = map.get(permission);
-                if (isGranted) {
-                    System.out.println("Permission" + permission + " granted.");
-                } else {
-                    System.out.println("Permission" + permission + " denied.");
-                }
-            }
-
-        });
 
         this.requestMessage = requestMessage;
         this.forceShowRequest = forceShowRequest;
     }
 
+    /**
+     * Requests the permissions to the user.
+     * @return true if all permissions have been granted, false otherwise
+     */
     public boolean requestPermission(){
         if(!hasPermissions()){
             if(shouldShowRequestPermissionsRationale() || forceShowRequest){
@@ -60,12 +69,11 @@ public class RequestPermissions {
                 CharSequence positiveButtonText = "OK";
                 CharSequence negativeButtonText = "CANCEL";
                 DialogInterface.OnClickListener positiveButtonListener = (dialogInterface, i) -> requestPermissionsLauncher.launch(permissions);
-                DialogInterface.OnClickListener negativeButtonListener = (dialogInterface, i) -> {};
 
                 builder.setTitle("Grant permissions");
                 builder.setMessage(requestMessage);
                 builder.setPositiveButton(positiveButtonText, positiveButtonListener);
-                builder.setNegativeButton(negativeButtonText, negativeButtonListener);
+                builder.setNegativeButton(negativeButtonText, null);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
@@ -77,6 +85,9 @@ public class RequestPermissions {
         return hasPermissions();
     }
 
+    /**
+     * @return true if the permissions are already granted, false otherwise
+     */
     private boolean hasPermissions(){
         for (String permission : permissions){
             if (ContextCompat.checkSelfPermission(
@@ -88,6 +99,9 @@ public class RequestPermissions {
         return true;
     }
 
+    /**
+     * @return true if an informative message should be sent to the user about requested permissions, false otherwise
+     */
     private boolean shouldShowRequestPermissionsRationale(){
         for(String permission : permissions){
             if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)){
@@ -95,5 +109,40 @@ public class RequestPermissions {
             }
         }
         return false;
+    }
+
+    /**
+     * @return the current activity
+     */
+    public Activity getActivity(){
+        return activity;
+    }
+
+    /**
+     * @return the permissions launcher
+     */
+    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher(){
+        return requestPermissionsLauncher;
+    }
+
+    /**
+     * @return the permissions requested
+     */
+    public String[] getPermissions(){
+        return permissions.clone();
+    }
+
+    /**
+     * @return the informative message for the user about requested permissions
+     */
+    public String getRequestMessage() {
+        return requestMessage;
+    }
+
+    /**
+     * @return a boolean forcing the appearance of the informative message
+     */
+    public boolean getForceShowRequest(){
+        return forceShowRequest;
     }
 }
