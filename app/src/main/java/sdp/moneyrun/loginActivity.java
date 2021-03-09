@@ -1,10 +1,11 @@
 package sdp.moneyrun;
 
 import android.os.Bundle;
-import android.support.wearable.activity.WearableActivity;
 import android.widget.TextView;
 
-public class loginActivity extends WearableActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class loginActivity extends AppCompatActivity {
 
     private TextView mTextView;
 
@@ -15,7 +16,5 @@ public class loginActivity extends WearableActivity {
 
         mTextView = (TextView) findViewById(R.id.text);
 
-        // Enables Always-on
-        setAmbientEnabled();
     }
 }
