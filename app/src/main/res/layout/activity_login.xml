@@ -13,7 +13,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:boxedEdges="all">
+        app:boxedEdges="all">
 
         <EditText
             android:id="@+id/loginEmailAddress"
