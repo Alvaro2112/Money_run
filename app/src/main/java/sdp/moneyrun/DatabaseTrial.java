@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import sdp.moneyrun.databases.DatabaseOpenHelper;
-
 public class DatabaseTrial {
     //TODO: Setup a SQLite database
     //TODO:Setup a local database object
@@ -24,7 +22,7 @@ public class DatabaseTrial {
         this.openHelper = new DatabaseOpenHelper(context);
     }
 
-    public DatabaseTrial getDatabaseTrialInstance(Context context){
+    public static DatabaseTrial getDatabaseTrialInstance(Context context){
         if(databaseTrialInstance == null)
             databaseTrialInstance = new DatabaseTrial(context);
         return databaseTrialInstance;
@@ -44,15 +42,18 @@ public class DatabaseTrial {
     //Query the result from the database
     // TODO: setup database, here we assume the result will be of type String but might not be the case
     // also assume the key is also a String
-    public String query(String key){
-        cursor = db.rawQuery("SELECT * FROM TABLE WHERE KEY ='" + key + "'", new String[]{});
+    public String query(int key){
+        cursor = db.rawQuery("SELECT * FROM TABLE1TRIALSDP WHERE KEY ='" + key + "'", new String[]{});
         StringBuffer buffer = new StringBuffer();
         while(cursor.moveToNext()){
             String result = cursor.getString(0);
-            buffer.append(""+result);
+            String result2  = cursor.getString(1);
+            String result3  = cursor.getString(2);
+            String result4  = cursor.getString(3);
+            buffer.append("PlayerId: "+result + " lives in " + result2 + " has " + result3 + " games where he died and " + result4+ " is his name" );
         }
         return buffer.toString();
     }
-    //TODO: also setup in MainActivity so on click query occurs // need to change layout file to incorporae button textview...
+    //TODO: also setup in MainActivity so on click query occurs // need to change layout file to incorporate button textView...
 }
 

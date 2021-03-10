@@ -1,11 +1,11 @@
-package sdp.moneyrun.databases;
+package sdp.moneyrun;
 
 import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class DatabaseOpenHelper extends SQLiteAssetHelper {
-    private static final String DATABASE_NAME = "dataBaseName.db"; //TODO: download SQLite and setup a database file .db
+    private static final String DATABASE_NAME = "SDPcacheTrialDB.db";
     private static final int DATABASE_VERSION = 1;
 
     public DatabaseOpenHelper(Context context){
