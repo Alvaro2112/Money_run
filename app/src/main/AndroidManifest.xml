@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="sdp.moneyrun">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup=""
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent=""
+        tools:ignore="AllowBackup">
         <activity android:name=".placeHolderSignUp"
             android:parentActivityName=".loginActivity">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
