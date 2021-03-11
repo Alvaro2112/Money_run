@@ -29,8 +29,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterThrowsExceptionWhenActivityNull(){
         exception.expect(RuntimeException.class);
 
-        ActivityScenario scenario = activityRule.getScenario();
-        scenario.onActivity(a -> {
+        activityRule.getScenario().onActivity(a -> {
             MainActivity activity = (MainActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     null,
@@ -46,8 +45,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterThrowsExceptionWhenLauncherNull(){
         exception.expect(RuntimeException.class);
 
-        ActivityScenario scenario = activityRule.getScenario();
-        scenario.onActivity(a -> {
+        activityRule.getScenario().onActivity(a -> {
             MainActivity activity = (MainActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
@@ -63,8 +61,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterThrowsExceptionWhenMessageNull(){
         exception.expect(RuntimeException.class);
 
-        ActivityScenario scenario = activityRule.getScenario();
-        scenario.onActivity(a -> {
+        activityRule.getScenario().onActivity(a -> {
             MainActivity activity = (MainActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
@@ -80,8 +77,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterThrowsExceptionWhenNoPermission(){
         exception.expect(RuntimeException.class);
 
-        ActivityScenario scenario = activityRule.getScenario();
-        scenario.onActivity(a -> {
+        activityRule.getScenario().onActivity(a -> {
             MainActivity activity = (MainActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
@@ -95,8 +91,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterThrowsExceptionWhenPermissionNull(){
         exception.expect(RuntimeException.class);
 
-        ActivityScenario scenario = activityRule.getScenario();
-        scenario.onActivity(a -> {
+        activityRule.getScenario().onActivity(a -> {
             MainActivity activity = (MainActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
