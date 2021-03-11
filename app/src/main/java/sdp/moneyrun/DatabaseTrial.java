@@ -42,18 +42,34 @@ public class DatabaseTrial {
     //Query the result from the database
     // TODO: setup database, here we assume the result will be of type String but might not be the case
     // also assume the key is also a String
-    public String query(int key){
+    public String[] query(int key){
         cursor = db.rawQuery("SELECT * FROM TABLE1TRIALSDP WHERE KEY ='" + key + "'", new String[]{});
-        StringBuffer buffer = new StringBuffer();
+        String buffer[] = new String[4];
         while(cursor.moveToNext()){
             String result = cursor.getString(0);
             String result2  = cursor.getString(1);
             String result3  = cursor.getString(2);
             String result4  = cursor.getString(3);
-            buffer.append("PlayerId: "+result + " lives in " + result2 + " has " + result3 + " games where he died and " + result4+ " is his name" );
+            buffer[0] = result;
+            buffer[1] = result2;
+            buffer[2] = result3;
+            buffer[3] = result4;
         }
-        return buffer.toString();
+        return buffer;
     }
-    //TODO: also setup in MainActivity so on click query occurs // need to change layout file to incorporate button textView...
+    public String displayQueryAsString(String[] strings){
+        StringBuffer stringBuffer = new StringBuffer();
+        for(String s : strings)
+            stringBuffer.append(s);
+        return stringBuffer.toString();
+    }
+    //We should have a way to insert a Player into the database
+    public void insert(Player player){
+        System.out.print("To be implemented");
+    }
+    //We should have a way to change a player's personal info
+    public void modify(Player player){
+        System.out.print("To be implemented");
+    }
 }
 
