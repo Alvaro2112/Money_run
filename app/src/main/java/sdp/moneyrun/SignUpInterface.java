@@ -63,7 +63,7 @@ public class SignUpInterface extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        
+
     }
 
 
