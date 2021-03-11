@@ -28,7 +28,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         goBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MainActivity.class);
+                Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MainMenuActivity.class);
                 startActivity(mainMenuIntent);
             }
         });

@@ -17,7 +17,7 @@ public class CreatePlayerProfileActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainMenuIntent = new Intent(CreatePlayerProfileActivity.this, MainActivity.class);
+                Intent mainMenuIntent = new Intent(CreatePlayerProfileActivity.this, MainMenuActivity.class);
                 startActivity(mainMenuIntent);
             }
         });
