@@ -40,7 +40,7 @@ public class SignUpInterface extends AppCompatActivity {
     protected void submitSignUp(){
         String email = findViewById(R.id.signUpEmailText).toString();
         String password = findViewById(R.id.signUpPassword).toString();
-        if(email != null && password != null && isEmailValid(email)){
+        if (email != null && password != null && isEmailValid(email)){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpInterface.this, new OnCompleteListener<AuthResult>(){
                     @Override
@@ -63,9 +63,7 @@ public class SignUpInterface extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if(user != null){
-
-        }//Activity was a success
+        
     }
 
 
