@@ -15,19 +15,21 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 @RunWith(AndroidJUnit4.class)
 public class PermissionRequesterInstrumentedTest {
 
-    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
     @Rule
-    public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+
     @Test
-    public void requesterThrowsExceptionWhenActivityNull() {
+    public void requesterThrowsExceptionWhenActivityNull(){
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     null,
                     activity.getRequestPermissionsLauncher(),
@@ -39,11 +41,11 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenLauncherNull() {
+    public void requesterThrowsExceptionWhenLauncherNull(){
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     null,
@@ -55,11 +57,11 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenMessageNull() {
+    public void requesterThrowsExceptionWhenMessageNull(){
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -71,11 +73,11 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenNoPermission() {
+    public void requesterThrowsExceptionWhenNoPermission(){
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
