@@ -15,17 +15,17 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 @RunWith(AndroidJUnit4.class)
 public class PermissionRequesterInstrumentedTest {
 
+    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+    
     @Rule
     public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
-
     @Test
-    public void requesterThrowsExceptionWhenActivityNull(){
+    public void requesterThrowsExceptionWhenActivityNull() {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
@@ -41,7 +41,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenLauncherNull(){
+    public void requesterThrowsExceptionWhenLauncherNull() {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
@@ -57,7 +57,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenMessageNull(){
+    public void requesterThrowsExceptionWhenMessageNull() {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
@@ -73,7 +73,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenNoPermission(){
+    public void requesterThrowsExceptionWhenNoPermission() {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
@@ -87,7 +87,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterThrowsExceptionWhenPermissionNull(){
+    public void requesterThrowsExceptionWhenPermissionNull() {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
