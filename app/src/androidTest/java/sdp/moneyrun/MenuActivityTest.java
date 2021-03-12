@@ -18,7 +18,7 @@ public class MenuActivityTest extends TestCase {
 
     @Test
     public void activityStartsProperly() {
-        assertEquals(State.CREATED, testRule.getScenario().getState());
+        assertEquals(State.RESUMED, testRule.getScenario().getState());
         
     }
 
