@@ -1,15 +1,9 @@
 <resources>
     <string name="app_name">Money Run</string>
     <string name="title_activity_menu">MenuActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Money Run</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <string name="menu_home">Profile</string>
     <string name="menu_gallery">Friends</string>
     <string name="menu_slideshow">Stats</string>
-    <string name="money_run">Money Run</string>
     <string name="Start_game">New game</string>
 </resources>

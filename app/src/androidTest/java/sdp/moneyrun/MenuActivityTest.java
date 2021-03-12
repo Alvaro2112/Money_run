@@ -16,7 +16,7 @@ public class MenuActivityTest extends TestCase {
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
 
     @Test
-    public void activityStartsProperly(){
+    public void activityStartsProperly() {
     }
 
 
