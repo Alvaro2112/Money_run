@@ -21,13 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
     private void runAuthentication(){
         setContentView(R.layout.splash_screen);
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
-
         /*When the app starts, if the user is already logged in, keeps going, O.W sends him
           to the authentication activity*/
         new Handler().postDelayed(new Runnable() {
@@ -46,6 +43,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 3000);
     }
-
-
 }
