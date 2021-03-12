@@ -1,19 +1,18 @@
 package sdp.moneyrun;
 
+import android.Manifest;
+import android.os.Bundle;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
-import android.os.Bundle;
-import android.widget.Button;
 
 import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class MainActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for(String permission : map.keySet()){
+        for (String permission : map.keySet()) {
             boolean isGranted = map.get(permission);
             if (isGranted) {
                 System.out.println("Permission" + permission + " granted.");
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         locationPermissionsRequester.requestPermission();
     }
 
-    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher(){
+    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher() {
         return requestPermissionsLauncher;
     }
 }

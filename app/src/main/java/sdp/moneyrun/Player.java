@@ -11,14 +11,6 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public void updatePlayedGames() {
         numberOfPlayedGames++;
     }
@@ -41,10 +33,18 @@ public class Player {
         return address;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getName() {
         if (name == null)
             throw new IllegalStateException();
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getNumberOfPlayedGames() {
