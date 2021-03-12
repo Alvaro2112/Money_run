@@ -2,7 +2,6 @@ package sdp.moneyrun;
 
 import android.Manifest;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -17,7 +16,7 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 public class PermissionRequesterInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -30,7 +29,7 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     null,
                     activity.getRequestPermissionsLauncher(),
@@ -46,7 +45,7 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     null,
@@ -62,7 +61,7 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -78,7 +77,7 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -92,7 +91,7 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
