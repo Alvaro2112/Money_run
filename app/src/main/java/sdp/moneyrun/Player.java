@@ -7,6 +7,12 @@ public class Player {
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
 
+    /*
+    For database purpose, a default constructor is needed
+     */
+    public Player(){
+
+    }
     public Player(int playerId){
         this.playerId = playerId;
     }

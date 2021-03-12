@@ -13,7 +13,6 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="305dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -27,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
@@ -51,4 +49,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpPassword" />
+
+    <TextView
+        android:id="@+id/SignUpErorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:clickable="false"
+        android:text="TextView"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/signUpSubmitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpPassword"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
