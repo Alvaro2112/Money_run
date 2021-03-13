@@ -109,7 +109,7 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetActivityReturnsRightObject(){
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -125,7 +125,7 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetRequestPermissionsLauncherReturnsRightObject(){
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -141,7 +141,7 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetPermissionsReturnsRightObject(){
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -159,7 +159,7 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterGetRequestMessageReturnsRightObject(){
 
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -176,7 +176,7 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetForceShowRequestMessageReturnsRightObject(){
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
@@ -192,7 +192,7 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterRunsCorrectly(){
         activityRule.getScenario().onActivity(a -> {
-            MainActivity activity = (MainActivity) a;
+            LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
                     activity.getRequestPermissionsLauncher(),
