@@ -24,8 +24,6 @@ import org.w3c.dom.Text;
 
 public class SignUpInterface extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    public final String INPUT_ERROR_MESSAGE = "Email and/or password is blank or invalid";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +31,42 @@ public class SignUpInterface extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up_interface);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        setErrorMessage();
-        setErrorVisibility(View.INVISIBLE);
-        Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
+
+        final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clicked) {
-                String email = ((EditText) findViewById(R.id.signUpEmailText)).getText().toString();
-                String password = ((EditText)findViewById(R.id.signUpPassword)).getText().toString();
-                System.out.println(email + password);
-                if (email != null && password != null && SignUpInterface.this.isEmailValid(email)) {
-                    setErrorVisibility(View.INVISIBLE);
-                    submitSignUp(email, password);
-                } else {
-                    setErrorVisibility(View.VISIBLE);
+                EditText emailView = (EditText) findViewById(R.id.signUpEmailText);
+                EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
+                String email = emailView.getText().toString().trim();
+                String password = passwordView.getText().toString().trim();
+
+                if(email.isEmpty()){
+                    emailView.setError("Email is required");
+                    emailView.requestFocus();
+                    return;
                 }
+
+                if(password.isEmpty()){
+                    passwordView.setError("Password is required");
+                    passwordView.requestFocus();
+                    return;
+                }
+
+                if(!isEmailValid(email)){
+                    emailView.setError("Please enter a valid email address");
+                    emailView.requestFocus();
+                    return;
+                }
+
+                if(!isPasswordValid(password)){
+                    passwordView.setError("Password is too weak");
+                    passwordView.requestFocus();
+                    return;
+                }
+                submitSignUp(email, password);
+
+
             }
         });
     }
@@ -94,20 +113,13 @@ public class SignUpInterface extends AppCompatActivity {
             //  startActivity(intent);
         }
     }
-
+    private boolean isPasswordValid(CharSequence password){
+        return password.length() > 6;
+    }
 
     private boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void setErrorMessage(){
-        TextView errorView = (TextView) findViewById(R.id.SignUpErorMessage);
-        errorView.setText(INPUT_ERROR_MESSAGE);
-    }
-
-    private void setErrorVisibility(int visibility){
-        TextView errorView = (TextView) findViewById(R.id.SignUpErorMessage);
-        errorView.setVisibility(visibility);
-    }
 
 }
