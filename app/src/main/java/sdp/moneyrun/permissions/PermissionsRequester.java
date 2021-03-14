@@ -21,6 +21,7 @@ public class PermissionsRequester {
 
     private final String requestMessage;
     private final boolean forceShowRequest;
+    private AlertDialog alertDialog;
 
     /**
      * @param activity the current activity
@@ -59,6 +60,7 @@ public class PermissionsRequester {
 
         this.requestMessage = requestMessage;
         this.forceShowRequest = forceShowRequest;
+        this.alertDialog = buildAlertDialog();
     }
 
     /**
@@ -68,18 +70,7 @@ public class PermissionsRequester {
     public boolean requestPermission(){
         if(!hasPermissions()){
             if(shouldShowRequestPermissionsRationale() || forceShowRequest){
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                CharSequence positiveButtonText = "OK";
-                CharSequence negativeButtonText = "CANCEL";
-                DialogInterface.OnClickListener positiveButtonListener = (dialogInterface, i) -> requestPermissionsLauncher.launch(permissions);
-
-                builder.setTitle("Grant permissions");
-                builder.setMessage(requestMessage);
-                builder.setPositiveButton(positiveButtonText, positiveButtonListener);
-                builder.setNegativeButton(negativeButtonText, null);
-                AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
             }else{
                 requestPermissionsLauncher.launch(permissions);
             }
@@ -108,10 +99,28 @@ public class PermissionsRequester {
     private boolean shouldShowRequestPermissionsRationale(){
         for(String permission : permissions){
             if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)){
-               return true;
+                return true;
             }
         }
         return false;
+    }
+
+    /**
+     * @return a popup with informations about the requested permissions
+     */
+    private AlertDialog buildAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        CharSequence positiveButtonText = "OK";
+        CharSequence negativeButtonText = "CANCEL";
+        DialogInterface.OnClickListener positiveButtonListener = (dialogInterface, i) -> requestPermissionsLauncher.launch(permissions);
+
+        builder.setTitle("Grant permissions");
+        builder.setMessage(requestMessage);
+        builder.setPositiveButton(positiveButtonText, positiveButtonListener);
+        builder.setNegativeButton(negativeButtonText, null);
+        AlertDialog alertDialog = builder.create();
+
+        return alertDialog;
     }
 
     /**
@@ -147,5 +156,9 @@ public class PermissionsRequester {
      */
     public boolean getForceShowRequest(){
         return forceShowRequest;
+    }
+
+    public AlertDialog getAlertDialog(){
+        return alertDialog;
     }
 }

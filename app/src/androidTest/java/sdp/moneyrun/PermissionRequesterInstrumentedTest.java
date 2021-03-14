@@ -1,6 +1,8 @@
 package sdp.moneyrun;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.widget.Button;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -11,6 +13,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import sdp.moneyrun.permissions.PermissionsRequester;
+
+import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class PermissionRequesterInstrumentedTest {
@@ -99,6 +103,107 @@ public class PermissionRequesterInstrumentedTest {
                     false,
                     coarseLocation,
                     null);
+        });
+    }
+
+    @Test
+    public void requesterGetActivityReturnsRightObject(){
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            assertEquals(activity, pr.getActivity());
+        });
+    }
+
+    @Test
+    public void requesterGetRequestPermissionsLauncherReturnsRightObject(){
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            assertEquals(activity.getRequestPermissionsLauncher(), pr.getRequestPermissionsLauncher());
+        });
+    }
+
+    @Test
+    public void requesterGetPermissionsReturnsRightObject(){
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            String[] expectedPermissions = {coarseLocation, fineLocation};
+            assertEquals(expectedPermissions, pr.getPermissions());
+        });
+    }
+
+    @Test
+    public void requesterGetRequestMessageReturnsRightObject(){
+
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            String expectedRequestMessage = "Test message";
+            assertEquals(expectedRequestMessage, pr.getRequestMessage());
+        });
+    }
+
+    @Test
+    public void requesterGetForceShowRequestMessageReturnsRightObject(){
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            assertEquals(false, pr.getForceShowRequest());
+        });
+    }
+
+    @Test
+    public void requesterRunsCorrectly(){
+        activityRule.getScenario().onActivity(a -> {
+            LoginActivity activity = (LoginActivity) a;
+            PermissionsRequester pr = new PermissionsRequester(
+                    activity,
+                    activity.getRequestPermissionsLauncher(),
+                    "Test message",
+                    true,
+                    coarseLocation,
+                    fineLocation);
+
+            pr.requestPermission();
+
+            assertTrue(true);
         });
     }
 }
