@@ -44,6 +44,13 @@ public class TestPlayer {
             assertEquals(1,1);
         }
     }
+    @Test
+    public void testSettingTheFieldsInPlayerProfileActivity(){
+        PlayerProfileActivity ppa = new PlayerProfileActivity();
+        ppa.setDisplayedTexts(null);
+        String[] fields = {"John", "New Yorks","0","0"};
+        ppa.setDisplayedTexts(fields);
+    }
 
 
 }
