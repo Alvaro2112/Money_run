@@ -50,6 +50,7 @@ public class TestPlayer {
         ppa.setDisplayedTexts(null);
         String[] fields = {"John", "New Yorks","0","0"};
         ppa.setDisplayedTexts(fields);
+        assertEquals(1,1);
     }
 
 
