@@ -68,20 +68,23 @@ public class PlayerProfileInstrumentedTest {
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists(){
         //TODO: find a way to put info into result array in PlayerProfileActivity
-//        try(ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
-//            Intents.init();
-//            String[] content = {"John", "New York", "0", "5"};
-//
-//            Espresso. onView(withId(R.id.playerDiedGames))
-//                    .check(matches(withText("Player has died 0 many times")));
-//            Espresso. onView(withId(R.id.playerPlayedGames))
-//                    .check(matches(withText("Player has played 5 many games")));
-//            Espresso. onView(withId(R.id.playerAddress))
-//                    .check(matches(withText("Player address : New York")));
-//            Espresso. onView(withId(R.id.playerName))
-//                    .check(matches(withText("Player name : John")));
-//            Intents.release();
-//        }
+        try(ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+            Intents.init();
+            String[] content = {"John", "New York", "0", "5"};
+            scenario.onActivity(a->{
+                PlayerProfileActivity playerProfileActivity = (PlayerProfileActivity)a;
+                playerProfileActivity.setDisplayedTexts(content);
+            });
+            Espresso. onView(withId(R.id.playerDiedGames))
+                    .check(matches(withText("Player has died 0 many times")));
+            Espresso. onView(withId(R.id.playerPlayedGames))
+                    .check(matches(withText("Player has played 5 many games")));
+            Espresso. onView(withId(R.id.playerAddress))
+                    .check(matches(withText("Player address : New York")));
+            Espresso. onView(withId(R.id.playerName))
+                    .check(matches(withText("Player name : John")));
+            Intents.release();
+        }
     }
     @Test
     public void checkNoInfoDisplayedWhenPlayerDoesNotExist(){
