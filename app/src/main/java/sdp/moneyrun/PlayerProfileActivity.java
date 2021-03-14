@@ -33,7 +33,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
         goBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MainMenuActivity.class);
+                Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MenuActivity.class);
                 startActivity(mainMenuIntent);
             }
         });
