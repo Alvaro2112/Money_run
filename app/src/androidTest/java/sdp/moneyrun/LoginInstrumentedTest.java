@@ -1,30 +1,29 @@
 package sdp.moneyrun;
-import android.content.Context;
-import android.util.Log;
 
-import androidx.lifecycle.Lifecycle;
+import android.content.Context;
+import android.view.View;
+import android.widget.EditText;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.junit.Rule;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import sdp.moneyrun.LoginActivity;
-import sdp.moneyrun.R;
-import sdp.moneyrun.placeHolderSignUp;
-
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.ComponentNameMatchers.hasShortClassName;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static org.junit.Assert.*;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 
@@ -44,7 +43,7 @@ public class LoginInstrumentedTest {
 
         try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
-            Espresso.onView(ViewMatchers.withId(R.id.signUpButton)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             intended(hasComponent(placeHolderSignUp.class.getName()));
@@ -54,9 +53,52 @@ public class LoginInstrumentedTest {
 
     }
 
+    //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    private static Matcher<View> withError(final String expected) {
+        return new TypeSafeMatcher<View>() {
 
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof EditText)) {
+                    return false;
+                }
+                EditText editText = (EditText) view;
+                return editText.getError().toString().equals(expected);
+            }
 
+            @Override
+            public void describeTo(Description description) {
 
+            }
+        };
+    }
 
+    @Test
+    public void loginNoEmailError() {
+        try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            final String expected = "Email is required";
+            Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
+            Intents.release();
+
+        }
+
+    }
+
+    @Test
+    public void loginNoPasswordError() {
+        try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            final String email = "kk@epfl.ch";
+            final String expected = "Password is required";
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.loginPassword)).check(matches(withError(expected)));
+            Intents.release();
+
+        }
+
+    }
 
 }
