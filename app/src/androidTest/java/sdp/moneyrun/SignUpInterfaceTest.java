@@ -7,9 +7,12 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.junit.Rule;
 import org.junit.Test;
 
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -37,6 +40,28 @@ public class SignUpInterfaceTest {
         Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
         Espresso.onView(withId(R.id.signUpPassword)).check(matches(withText(password)));
         Intents.release();
+    }
+
+    @Test
+    public void anActivityIsStartedOnSubmit(){
+        Intents.init();
+        String email = "exemple@epfl.ch";
+        String password = "Barents$8467";
+        Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
+        Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
+        Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
+        Intents.release();
+    }
+
+    @Test
+    public void authIsPerformed(){
+        FirebaseAuth.getInstance().useEmulator("10.0.2.2'", 9099);
+        Intents.init();
+        String email = "exemple@epfl.ch";
+        String password = "abcd";
+        Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
+        Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
+        Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
     }
 
 }

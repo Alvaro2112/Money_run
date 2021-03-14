@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,11 +39,12 @@ public class SignUpInterface extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clicked) {
-                String email = SignUpInterface.this.findViewById(R.id.signUpEmailText).toString();
-                String password = SignUpInterface.this.findViewById(R.id.signUpPassword).toString();
+                String email = ((EditText) findViewById(R.id.signUpEmailText)).getText().toString();
+                String password = ((EditText)findViewById(R.id.signUpPassword)).getText().toString();
+                System.out.println(email + password);
                 if (email != null && password != null && SignUpInterface.this.isEmailValid(email)) {
                     setErrorVisibility(View.INVISIBLE);
-                    SignUpInterface.this.submitSignUp(email, password);
+                    submitSignUp(email, password);
                 } else {
                     setErrorVisibility(View.VISIBLE);
                 }
@@ -85,6 +87,10 @@ public class SignUpInterface extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if(user != null){
             // Intent intent = new Intent (MenuActivity.class);
+            //  startActivity(intent);
+
+            ////////////////////Awaiting Merge, Tests with MainActivity
+            Intent intent = new Intent (this, MainActivity.class);
             //  startActivity(intent);
         }
     }
