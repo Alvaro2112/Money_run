@@ -39,6 +39,9 @@ public class PlayerProfileActivity extends AppCompatActivity {
         });
         Intent playerIntent = getIntent();
         String[] playerInfo = playerIntent.getStringArrayExtra("profile");
+        setDisplayedTexts(playerInfo);
+    }
+    private void setDisplayedTexts(String[] playerInfo){
         if(playerInfo == null || playerInfo.length == 0){
             playerIsEmptyText.setAllCaps(true);
             playerIsEmptyText.setText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER");
