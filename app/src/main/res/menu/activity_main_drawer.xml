@@ -4,8 +4,11 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:title="@string/menu_home" />
-        <item android:title="@string/menu_gallery" />
-        <item android:title="@string/menu_slideshow" />
+        <item android:title="@string/menu_home"
+            android:id="@+id/profile_button"/>
+        <item android:title="@string/menu_gallery"
+            android:id="@+id/friends_button"/>
+        <item android:title="@string/menu_slideshow"
+            android:id="@+id/stats_button"/>
     </group>
 </menu>
