@@ -26,12 +26,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     });
 
+    private  final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
-        String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
                 this,
                 requestPermissionsLauncher,
@@ -42,6 +43,17 @@ public class LoginActivity extends AppCompatActivity {
         locationPermissionsRequester.requestPermission();
 
         final Button loginButton = (Button) findViewById(R.id.loginButton);
+        setLogIn(loginButton);
+
+    }
+
+    // link from signup button to signup page
+    public void signUp(View view) {
+        Intent intent = new Intent(this, placeHolderSignUp.class);
+        startActivity(intent);
+    }
+
+    private void setLogIn(Button loginButton){
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clicked) {
@@ -64,13 +76,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    // link from signup button to signup page
-    public void signUp(View view) {
-        Intent intent = new Intent(this, placeHolderSignUp.class);
-        startActivity(intent);
     }
 
 
