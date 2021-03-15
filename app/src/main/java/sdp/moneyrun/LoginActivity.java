@@ -46,14 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = (Button) findViewById(R.id.loginButton);
         setLogIn(loginButton);
 
-        login = findViewById(R.id.loginButton);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-                startActivity(menuIntent);
-            }
-        });
     }
 
     // link from signup button to signup page
@@ -74,23 +66,23 @@ public class LoginActivity extends AppCompatActivity {
                 if(email.isEmpty()){
                     emailView.setError("Email is required");
                     emailView.requestFocus();
-                    return;
+
                 }
 
-                if(password.isEmpty()){
+                else if(password.isEmpty()){
                     passwordView.setError("Password is required");
                     passwordView.requestFocus();
-                    return;
+                    ;
+                }
+                else{
+                    Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
+                    startActivity(menuIntent);
                 }
             }
         });
 
     }
 
-
-    private boolean isEmailValid(CharSequence email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
 
 
     public ActivityResultLauncher<String[]> getRequestPermissionsLauncher(){

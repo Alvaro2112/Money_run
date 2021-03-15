@@ -29,7 +29,6 @@ import static org.junit.Assert.assertEquals;
 
 public class LoginInstrumentedTest {
 
-
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -40,7 +39,6 @@ public class LoginInstrumentedTest {
 
     @Test
     public void signUpButtonToSignUpPage() {
-
         try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
@@ -73,6 +71,7 @@ public class LoginInstrumentedTest {
         };
     }
 
+
     @Test
     public void loginNoEmailError() {
         try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
@@ -81,10 +80,10 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
             Intents.release();
-
         }
-
     }
+
+
 
     @Test
     public void loginNoPasswordError() {
@@ -96,9 +95,8 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.loginPassword)).check(matches(withError(expected)));
             Intents.release();
-
         }
-
     }
+
 
 }
