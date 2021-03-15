@@ -1,5 +1,6 @@
 package sdp.moneyrun;
 
+import androidx.lifecycle.Lifecycle.State;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -8,7 +9,6 @@ import junit.framework.TestCase;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import androidx.lifecycle.Lifecycle.State;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest extends TestCase {
@@ -21,6 +21,5 @@ public class MenuActivityTest extends TestCase {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
         
     }
-
 
 }
