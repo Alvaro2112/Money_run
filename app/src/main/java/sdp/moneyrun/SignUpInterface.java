@@ -40,33 +40,9 @@ public class SignUpInterface extends AppCompatActivity {
                 EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
                 String email = emailView.getText().toString().trim();
                 String password = passwordView.getText().toString().trim();
-
-                if(email.isEmpty()){
-                    emailView.setError("Email is required");
-                    emailView.requestFocus();
-                    return;
+                if(checkInput(emailView, passwordView)) {
+                    submitSignUp(email, password);
                 }
-
-                if(password.isEmpty()){
-                    passwordView.setError("Password is required");
-                    passwordView.requestFocus();
-                    return;
-                }
-
-                if(!isEmailValid(email)){
-                    emailView.setError("Please enter a valid email address");
-                    emailView.requestFocus();
-                    return;
-                }
-
-                if(!isPasswordValid(password)){
-                    passwordView.setError("Password is too weak");
-                    passwordView.requestFocus();
-                    return;
-                }
-                submitSignUp(email, password);
-
-
             }
         });
     }
@@ -119,6 +95,35 @@ public class SignUpInterface extends AppCompatActivity {
 
     private boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+        private boolean checkInput(EditText emailView, EditText passwordView){
+        String email = emailView.getText().toString().trim();
+        String password = passwordView.getText().toString().trim();
+        if(email.isEmpty()){
+            emailView.setError("Email is required");
+            emailView.requestFocus();
+            return false;
+        }
+
+        if(password.isEmpty()){
+            passwordView.setError("Password is required");
+            passwordView.requestFocus();
+            return false;
+        }
+
+        if(!isEmailValid(email)){
+            emailView.setError("Please enter a valid email address");
+            emailView.requestFocus();
+            return false;
+        }
+
+        if(!isPasswordValid(password)){
+            passwordView.setError("Password is too weak");
+            passwordView.requestFocus();
+            return false;
+        }
+        return true;
     }
 
 
