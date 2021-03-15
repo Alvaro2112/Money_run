@@ -49,5 +49,11 @@ public class Player {
     public int getNumberOfPlayedGames() {
         return numberOfPlayedGames;
     }
+
+    public String ask(String question){
+        String answer = "";
+        //TODO: display question on  player's screen and store the response
+        return answer;
+    }
     //TODO: add later methods related to the game itself
 }
