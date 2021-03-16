@@ -24,7 +24,7 @@
         </activity>
 
 
-        tools:ignore="AllowBackup">
+
         <activity android:name=".placeHolderSignUp"
             android:parentActivityName=".LoginActivity">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
