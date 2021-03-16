@@ -23,19 +23,21 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 public class JoinGame extends TestCase {
 
-    @Rule
-    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
-
 
     @Test
     public void popupIsDisplayed() {
-        assertEquals(State.RESUMED, testRule.getScenario().getState());
-        onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
+        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
+            Intents.release();
+        }
+
 
     }
 
