@@ -40,7 +40,7 @@ public class SignUpInterface extends AppCompatActivity {
                 EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
                 String email = emailView.getText().toString().trim();
                 String password = passwordView.getText().toString().trim();
-                if(checkInput()) {
+                if(checkInput(emailView, passwordView)) {
                     submitSignUp(email, password);
                 }
             }
@@ -96,10 +96,8 @@ public class SignUpInterface extends AppCompatActivity {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-        private boolean checkInput(){
+        private boolean checkInput(EditText emailView, EditText passwordView){
         boolean retValue = true;
-        EditText emailView = (EditText) findViewById(R.id.signUpEmailText);
-        EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
         String email = emailView.getText().toString().trim();
         String password = passwordView.getText().toString().trim();
         if(email.isEmpty()){
