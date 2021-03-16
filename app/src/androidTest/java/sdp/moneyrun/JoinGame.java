@@ -30,16 +30,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class JoinGame {
 
 
+    @Rule
+    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
+
     @Test
     public void popupIsDisplayed() {
-        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
-            onView(ViewMatchers.withId(R.id.join_game)).perform(closeSoftKeyboard()).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
             Intents.release();
-        }catch (Exception e){
-            Intents.release();
-        }
+
 
 
     }

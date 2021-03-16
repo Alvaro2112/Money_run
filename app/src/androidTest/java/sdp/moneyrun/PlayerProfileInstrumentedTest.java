@@ -82,7 +82,7 @@ public class PlayerProfileInstrumentedTest {
     public void checkNoInfoDisplayedWhenPlayerDoesNotExist(){
         try(ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
             Intents.init();
-            Espresso. onView(withId(R.id.playerEmptyMessage))
+            Espresso.onView(withId(R.id.playerEmptyMessage))
                     .perform(click())
                     .check(matches(withText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER")));
             Intents.release();
