@@ -1,8 +1,6 @@
 package sdp.moneyrun;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.widget.Button;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,20 +12,20 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.permissions.PermissionsRequester;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class PermissionRequesterInstrumentedTest {
 
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
-    
+
     @Rule
     public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
-
 
 
     @Test
@@ -109,7 +107,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetActivityReturnsRightObject(){
+    public void requesterGetActivityReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
@@ -125,7 +123,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetRequestPermissionsLauncherReturnsRightObject(){
+    public void requesterGetRequestPermissionsLauncherReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
@@ -141,7 +139,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetPermissionsReturnsRightObject(){
+    public void requesterGetPermissionsReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
@@ -158,7 +156,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetRequestMessageReturnsRightObject(){
+    public void requesterGetRequestMessageReturnsRightObject() {
 
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
@@ -176,7 +174,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetForceShowRequestMessageReturnsRightObject(){
+    public void requesterGetForceShowRequestMessageReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
@@ -192,7 +190,7 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterRunsCorrectly(){
+    public void requesterRunsCorrectly() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(

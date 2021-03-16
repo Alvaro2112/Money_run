@@ -13,22 +13,22 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/activity_main_drawer"
-        android:id="@+id/nav_view"/>
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical">-->
-<!--        <FrameLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:id="@+id/fragment_container">-->
+        app:menu="@menu/activity_main_drawer" />
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical">-->
+    <!--        <FrameLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:id="@+id/fragment_container">-->
 
-<!--        </FrameLayout>-->
-<!--    </LinearLayout>-->
+    <!--        </FrameLayout>-->
+    <!--    </LinearLayout>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

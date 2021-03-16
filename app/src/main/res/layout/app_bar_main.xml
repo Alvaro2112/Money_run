@@ -10,18 +10,19 @@
         android:id="@+id/new_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="592dp"
         android:text="@string/Start_game"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.71"
+        app:layout_constraintHorizontal_bias="0.726"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.967" />
 
     <Button
         android:id="@+id/go_to_profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="372dp"
+        android:layout_marginTop="328dp"
         android:text="@string/check_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,12 +32,13 @@
         android:id="@+id/join_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="304dp"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/join_game"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.968" />
 </androidx.constraintlayout.widget.ConstraintLayout>
