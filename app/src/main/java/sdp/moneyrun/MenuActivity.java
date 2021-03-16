@@ -19,7 +19,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
     private Button profileButton;
-    private String result[];
+    private String[] result;
     private Player player;
 
     @Override

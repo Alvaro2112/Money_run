@@ -21,7 +21,7 @@ public class PermissionsRequester {
 
     private final String requestMessage;
     private final boolean forceShowRequest;
-    private AlertDialog alertDialog;
+    private final AlertDialog alertDialog;
 
     /**
      * @param activity the current activity

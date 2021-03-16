@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
                 else if(password.isEmpty()){
                     passwordView.setError("Password is required");
                     passwordView.requestFocus();
-                    ;
                 }
                 else{
                     Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);

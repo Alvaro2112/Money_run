@@ -1,7 +1,7 @@
 package sdp.moneyrun;
 
 public class Player {
-    private int playerId;
+    private final int playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
