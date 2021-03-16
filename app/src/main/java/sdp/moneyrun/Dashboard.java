@@ -24,7 +24,7 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Authentication.class);
                 startActivity(intent);
                 finish();
             }

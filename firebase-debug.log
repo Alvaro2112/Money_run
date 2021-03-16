@@ -1,0 +1,21 @@
+[debug] [2021-03-15T17:06:37.541Z] ----------------------------------------------------------------------
+[debug] [2021-03-15T17:06:37.543Z] Command:       C:\Users\rafar\DOWNLO~1\firebase-tools-instant-win.exe C:\Users\rafar\.cache\firebase\tools\lib\node_modules\firebase-tools\lib\bin\firebase init
+[debug] [2021-03-15T17:06:37.543Z] CLI Version:   9.6.1
+[debug] [2021-03-15T17:06:37.543Z] Platform:      win32
+[debug] [2021-03-15T17:06:37.543Z] Node Version:  v12.18.1
+[debug] [2021-03-15T17:06:37.545Z] Time:          Mon Mar 15 2021 18:06:37 GMT+0100 (Central European Standard Time)
+[debug] [2021-03-15T17:06:37.545Z] ----------------------------------------------------------------------
+[debug] [2021-03-15T17:06:37.545Z] 
+[debug] [2021-03-15T17:06:37.551Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-15T17:06:37.552Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\rafar\Documents\EPFL\BA6\SDEP\Money_run
+

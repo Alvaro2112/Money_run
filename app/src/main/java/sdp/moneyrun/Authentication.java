@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,11 +32,11 @@ public class Authentication extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authentication);
+        setContentView(R.layout.splash_screen);
+        isAlreadyLoggedIn();
+    }
 
-
-
-        // Configure Google Sign In
+    private void googleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -54,6 +55,30 @@ public class Authentication extends AppCompatActivity {
             }
         });
     }
+
+
+    private void isAlreadyLoggedIn(){
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+
+        /*When the app starts, if the user is already logged in, go to the dashboard, O.W sends him
+          to the authentication activity*/
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(user != null){
+                    Intent dashBoardIntent = new Intent(getApplicationContext(), Dashboard.class);
+                    startActivity(dashBoardIntent);
+                    finish();
+                }
+                else{
+                    setContentView(R.layout.activity_authentication);
+                    googleSignIn();
+                }
+            }
+        }, 3000);
+    }
+
 
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -83,7 +108,6 @@ public class Authentication extends AppCompatActivity {
             else{
                 Log.w("SignInActivity", excep.toString());
             }
-
         }
     }
 
@@ -104,11 +128,7 @@ public class Authentication extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w("SignInActivity", "signInWithCredential:failure", task.getException());
                         }
-
-                        // ...
                     }
                 });
     }
-
-
 }
