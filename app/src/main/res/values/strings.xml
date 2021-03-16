@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">moneyRun</string>
+    <string name="EMAIL_HINT">Email</string>
+    <string name="PASSWORD_HINT">Password</string>
 </resources>

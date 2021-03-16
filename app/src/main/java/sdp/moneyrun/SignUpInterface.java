@@ -24,7 +24,6 @@ import org.w3c.dom.Text;
 
 public class SignUpInterface extends AppCompatActivity {
     private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
