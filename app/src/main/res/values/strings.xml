@@ -2,7 +2,6 @@
     <string name="app_name">moneyRun</string>
     <string name="EMAIL_HINT">Email</string>
     <string name="PASSWORD_HINT">Password</string>
-    <string name="app_name">Money Run</string>
     <string name="title_activity_menu">MenuActivity</string>
 
     <string name="menu_home">Profile</string>

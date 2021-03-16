@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // link from signup button to signup page
     public void signUp(View view) {
-        Intent intent = new Intent(this, placeHolderSignUp.class);
+        Intent intent = new Intent(this, SignUpInterface.class);
         startActivity(intent);
     }
 
