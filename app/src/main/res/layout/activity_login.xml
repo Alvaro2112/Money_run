@@ -16,7 +16,7 @@
         android:ems="10"
         android:hint="@string/login_page_email_input_hint"
         android:inputType="textEmailAddress"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
