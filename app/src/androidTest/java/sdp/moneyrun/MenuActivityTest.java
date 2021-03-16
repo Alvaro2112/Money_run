@@ -36,9 +36,6 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
         Intents.release();
-
-
-
     }
 
 
