@@ -71,21 +71,23 @@
         app:layout_constraintTop_toBottomOf="@+id/keepSigned"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
+    <TextView
         android:id="@+id/welcomeText"
         android:layout_width="276dp"
         android:layout_height="56dp"
         android:layout_marginTop="120dp"
         android:layout_marginBottom="72dp"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="@string/login_page_welcome_text"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/loginEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints=""
         tools:ignore="LabelFor" />
 
     <CheckBox
