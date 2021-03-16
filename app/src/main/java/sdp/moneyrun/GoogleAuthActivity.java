@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class Authentication extends AppCompatActivity {
+public class GoogleAuthActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
     private final int RC_SIGN_IN = 120;
@@ -42,11 +42,7 @@ public class Authentication extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
         mAuth = FirebaseAuth.getInstance();
-
-
         signInBtn = findViewById(R.id.sign_in_btn);
         signInBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -58,6 +54,7 @@ public class Authentication extends AppCompatActivity {
 
 
     private void isAlreadyLoggedIn(){
+        //For the app
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
 
@@ -67,7 +64,7 @@ public class Authentication extends AppCompatActivity {
             @Override
             public void run() {
                 if(user != null){
-                    Intent dashBoardIntent = new Intent(getApplicationContext(), Dashboard.class);
+                    Intent dashBoardIntent = new Intent(getApplicationContext(), DashBoardActivity.class);
                     startActivity(dashBoardIntent);
                     finish();
                 }
@@ -121,7 +118,7 @@ public class Authentication extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SignInActivity", "signInWithCredential:success");
-                            Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                            Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
