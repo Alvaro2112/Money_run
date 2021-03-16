@@ -35,14 +35,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         joinGame = findViewById(R.id.join_game);
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-                playerProfileIntent.putExtra("profile", result);
-                startActivity(playerProfileIntent);
-            }
-        });
 
         joinGame.setOnClickListener(new View.OnClickListener() {
             @Override
