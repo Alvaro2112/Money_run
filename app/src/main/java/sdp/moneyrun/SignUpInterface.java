@@ -79,12 +79,8 @@ public class SignUpInterface extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if(user != null){
-            // Intent intent = new Intent (MenuActivity.class);
-            //  startActivity(intent);
-
-            ////////////////////Awaiting Merge, Tests with MainActivity
-            Intent intent = new Intent (this, MainActivity.class);
-            //  startActivity(intent);
+            Intent intent = new Intent (this, MenuActivity.class);
+            startActivity(intent);
         }
     }
     private boolean isPasswordValid(CharSequence password){
