@@ -97,6 +97,7 @@ public class SignUpInterface extends AppCompatActivity {
     }
 
         private boolean checkInput(){
+        boolean retValue = true;
         EditText emailView = (EditText) findViewById(R.id.signUpEmailText);
         EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
         String email = emailView.getText().toString().trim();
@@ -104,27 +105,27 @@ public class SignUpInterface extends AppCompatActivity {
         if(email.isEmpty()){
             emailView.setError("Email is required");
             emailView.requestFocus();
-            return false;
+            retValue = false;
         }
 
-        if(password.isEmpty()){
+        else if(password.isEmpty()){
             passwordView.setError("Password is required");
             passwordView.requestFocus();
-            return false;
+            retValue = false;
         }
 
-        if(!isEmailValid(email)){
+        else if(!isEmailValid(email)){
             emailView.setError("Please enter a valid email address");
             emailView.requestFocus();
-            return false;
+            retValue = false;
         }
 
-        if(!isPasswordValid(password)){
+        else if(!isPasswordValid(password)){
             passwordView.setError("Password is too weak");
             passwordView.requestFocus();
-            return false;
+            retValue = false;
         }
-        return true;
+        return retValue;
     }
 
 
