@@ -40,7 +40,7 @@ public class SignUpInterface extends AppCompatActivity {
                 EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
                 String email = emailView.getText().toString().trim();
                 String password = passwordView.getText().toString().trim();
-                if(checkInput(emailView, passwordView)) {
+                if(checkInput()) {
                     submitSignUp(email, password);
                 }
             }
@@ -71,7 +71,6 @@ public class SignUpInterface extends AppCompatActivity {
                         else{
                             Log.w(MainActivity.TAG, "CreateUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpInterface.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
                     }
                 });
@@ -97,7 +96,9 @@ public class SignUpInterface extends AppCompatActivity {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-        private boolean checkInput(EditText emailView, EditText passwordView){
+        private boolean checkInput(){
+        EditText emailView = (EditText) findViewById(R.id.signUpEmailText);
+        EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
         String email = emailView.getText().toString().trim();
         String password = passwordView.getText().toString().trim();
         if(email.isEmpty()){
