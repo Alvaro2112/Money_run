@@ -62,11 +62,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // lets taps outside the popup also dismiss it
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
 
-        // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
+        // show the popup window at wanted location
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
