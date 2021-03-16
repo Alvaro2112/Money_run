@@ -37,6 +37,8 @@ public class JoinGame extends TestCase {
             onView(ViewMatchers.withId(R.id.join_game)).perform(closeSoftKeyboard()).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
             Intents.release();
+        }catch (Exception e){
+            Intents.release();
         }
 
 
