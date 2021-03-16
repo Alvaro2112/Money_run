@@ -1,6 +1,5 @@
 package sdp.moneyrun;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 
@@ -8,14 +7,10 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,11 +22,11 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 
-public class SignUpInterfaceTest {
+public class SignUpActivityTest {
 
     @Test
     public void emailCorrectlyTyped(){
-        try(ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String email = "exemple@epfl.ch";
             Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
@@ -42,7 +37,7 @@ public class SignUpInterfaceTest {
 
     @Test
     public void passwordCorrectlyTyped(){
-        try(ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String password = "abcd";
             Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
@@ -53,7 +48,7 @@ public class SignUpInterfaceTest {
 
 //    @Test
 //    public void anActivityIsStartedOnSubmit(){
-//        try(ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+//        try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
 //            Intents.init();
 //            String email = "exemple@epfl.ch";
 //            String password = "Barents$8467";
@@ -86,7 +81,7 @@ public class SignUpInterfaceTest {
 
     @Test
     public void submitWithoutEmail() {
-        try (ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try (ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             final String expected = "Email is required";
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(ViewActions.click());
@@ -97,7 +92,7 @@ public class SignUpInterfaceTest {
 
     @Test
     public void submitWithIncorrectMailFormat(){
-        try (ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try (ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String email = "exemple";
             String password = "abcd";
@@ -112,7 +107,7 @@ public class SignUpInterfaceTest {
 
     @Test
     public void submitWithoutPassword(){
-        try (ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try (ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String email = "exemple@epfl.ch";
             Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
@@ -125,7 +120,7 @@ public class SignUpInterfaceTest {
 
     @Test
     public void submitWithInsufficientPassword(){
-        try (ActivityScenario<SignUpInterface> scenario = ActivityScenario.launch(SignUpInterface.class)) {
+        try (ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String email = "exemple@epfl.ch";
             String password = "abcd";

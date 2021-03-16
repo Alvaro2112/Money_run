@@ -44,7 +44,7 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-            intended(hasComponent(SignUpInterface.class.getName()));
+            intended(hasComponent(SignUpActivity.class.getName()));
             Intents.release();
 
         }
