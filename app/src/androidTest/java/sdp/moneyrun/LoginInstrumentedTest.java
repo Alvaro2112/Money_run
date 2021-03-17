@@ -29,28 +29,6 @@ import static org.junit.Assert.assertEquals;
 
 public class LoginInstrumentedTest {
 
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("sdp.moneyrun", appContext.getPackageName());
-    }
-
-
-    @Test
-    public void signUpButtonToSignUpPage() {
-        try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
-            Intents.init();
-            Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-            intended(hasComponent(SignUpActivity.class.getName()));
-            Intents.release();
-
-        }
-
-    }
-
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     private static Matcher<View> withError(final String expected) {
         return new TypeSafeMatcher<View>() {
@@ -71,10 +49,30 @@ public class LoginInstrumentedTest {
         };
     }
 
+    @Test
+    public void useAppContext() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("sdp.moneyrun", appContext.getPackageName());
+    }
+
+    @Test
+    public void signUpButtonToSignUpPage() {
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+            intended(hasComponent(placeHolderSignUp.class.getName()));
+            Intents.release();
+
+        }
+
+    }
 
     @Test
     public void loginNoEmailError() {
-        try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             final String expected = "Email is required";
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
@@ -84,10 +82,9 @@ public class LoginInstrumentedTest {
     }
 
 
-
     @Test
     public void loginNoPasswordError() {
-        try(ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             final String email = "kk@epfl.ch";
             final String expected = "Password is required";

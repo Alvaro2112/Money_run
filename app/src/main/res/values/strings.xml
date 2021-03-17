@@ -16,6 +16,14 @@
     <string name="login_page_signup_button_text">Sign up</string>
     <string name="login_page_welcome_text">Login with your email or sign up!</string>
     <string name="login_page_keep_signed_in_text">Keep me signed in</string>
+    <string name="check_profile">check profile</string>
+    <string name="go_back_to_main_menu">Go back to Main Menu</string>
+    <string name="submit">submit</string>
+    <string name="join_game">Join Game</string>
+    <string name="game_1">Game 1</string>
+    <string name="game_2">Game 2</string>
+    <string name="game_3">Game 3</string>
+    <string name="open_games">Open Games</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

@@ -2,16 +2,11 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 public class PlayerProfileActivity extends AppCompatActivity {
     public TextView playerName;
@@ -20,6 +15,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
     public TextView playerPlayedGames;
     public TextView playerIsEmptyText;
     public Button goBackToMain;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +37,12 @@ public class PlayerProfileActivity extends AppCompatActivity {
         String[] playerInfo = playerIntent.getStringArrayExtra("profile");
         setDisplayedTexts(playerInfo);
     }
-    public void setDisplayedTexts(String[] playerInfo){
-        if(playerInfo == null || playerInfo.length == 0){
+
+    public void setDisplayedTexts(String[] playerInfo) {
+        if (playerInfo == null || playerInfo.length == 0) {
             playerIsEmptyText.setAllCaps(true);
             playerIsEmptyText.setText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER");
-        }else {
+        } else {
             playerName.setText("Player name : " + playerInfo[0]);
             playerAddress.setText("Player address : " + playerInfo[1]);
             playerDiedGames.setText("Player has died " + playerInfo[2] + " many times");
