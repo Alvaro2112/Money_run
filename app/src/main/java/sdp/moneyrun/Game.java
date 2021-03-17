@@ -45,6 +45,8 @@ public class Game {
     public static void startGame(Game game){
         game.startGame();
     }
+
+
     public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());

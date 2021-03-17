@@ -1,6 +1,13 @@
 package sdp.moneyrun;
 
-public class Player {
+import android.content.Intent;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Player extends AppCompatActivity {
     private int playerId;
     private String name;
     private String address;
@@ -53,7 +60,16 @@ public class Player {
     public String ask(String question){
         String answer = "";
         //TODO: display question on  player's screen and store the response
-        return answer;
+        TextView questionText = findViewById(R.id.playerQuestionText);
+        EditText answerText = findViewById(R.id.playerAnswerText);
+        Button answerButton = findViewById(R.id.playerAnswerButton);
+        questionText.setText(question);
+        Intent answerQuestionIntent = new Intent(Player.this, QuestionDisplayActivity.class);
+        startActivity(answerQuestionIntent);
+        while (!answerButton.isPressed()){
+
+        }
+        return answerText.getText().toString();
     }
     //TODO: add later methods related to the game itself
 }
