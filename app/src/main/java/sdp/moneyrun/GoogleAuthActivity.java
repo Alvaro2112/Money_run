@@ -32,7 +32,8 @@ public class GoogleAuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.activity_authentication);
+        //setContentView(R.layout.splash_screen);
         isAlreadyLoggedIn();
     }
 
@@ -60,7 +61,7 @@ public class GoogleAuthActivity extends AppCompatActivity {
 
         /*When the app starts, if the user is already logged in, go to the dashboard, O.W sends him
           to the authentication activity*/
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(user != null){
@@ -73,7 +74,19 @@ public class GoogleAuthActivity extends AppCompatActivity {
                     googleSignIn();
                 }
             }
-        }, 3000);
+        }, 3000);*/
+
+        if(user != null){
+            Intent dashBoardIntent = new Intent(getApplicationContext(), DashBoardActivity.class);
+            startActivity(dashBoardIntent);
+            finish();
+        }
+        else{
+            setContentView(R.layout.activity_authentication);
+            googleSignIn();
+        }
+
+
     }
 
 
