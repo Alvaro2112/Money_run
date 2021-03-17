@@ -51,6 +51,11 @@ public class TestPlayer {
             assertEquals(1, 1);
         }
     }
+    @Test
+    public void testAskPlayerReturnsEmptyString(){
+        Player player = new Player(4);
+        assertEquals("",player.ask(""));
+    }
 
 
 }
