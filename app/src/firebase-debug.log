@@ -1,0 +1,50 @@
+[debug] [2021-03-13T14:05:28.176Z] ----------------------------------------------------------------------
+[debug] [2021-03-13T14:05:28.177Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\johan\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init emulator
+[debug] [2021-03-13T14:05:28.178Z] CLI Version:   9.6.1
+[debug] [2021-03-13T14:05:28.178Z] Platform:      win32
+[debug] [2021-03-13T14:05:28.178Z] Node Version:  v14.15.5
+[debug] [2021-03-13T14:05:28.179Z] Time:          Sat Mar 13 2021 15:05:28 GMT+0100 (heure normale d’Europe centrale)
+[debug] [2021-03-13T14:05:28.179Z] ----------------------------------------------------------------------
+[debug] [2021-03-13T14:05:28.179Z] 
+[debug] [2021-03-13T14:05:28.185Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-13T14:05:28.186Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\johan\OneDrive\EPFL\Informatique\BA6\SDP\Money_run\app\src
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2021-03-13T14:06:08.783Z] ----------------------------------------------------------------------
+[debug] [2021-03-13T14:06:08.785Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\johan\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init emulator
+[debug] [2021-03-13T14:06:08.785Z] CLI Version:   9.6.1
+[debug] [2021-03-13T14:06:08.785Z] Platform:      win32
+[debug] [2021-03-13T14:06:08.785Z] Node Version:  v14.15.5
+[debug] [2021-03-13T14:06:08.786Z] Time:          Sat Mar 13 2021 15:06:08 GMT+0100 (heure normale d’Europe centrale)
+[debug] [2021-03-13T14:06:08.787Z] ----------------------------------------------------------------------
+[debug] [2021-03-13T14:06:08.787Z] 
+[debug] [2021-03-13T14:06:08.793Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-13T14:06:08.794Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\johan\OneDrive\EPFL\Informatique\BA6\SDP\Money_run\app\src
+

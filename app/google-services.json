@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "914167143030",
+    "project_id": "money-run-4f27f",
+    "storage_bucket": "money-run-4f27f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914167143030:android:3b29a55f4e1a7f4eb79d57",
+        "android_client_info": {
+          "package_name": "sdp.moneyrun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914167143030-lpule30kp6l60cgq1rtkor9lamvu333v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6YPcGhXVb4gh645qPsLui0TdqaCC0hSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914167143030-lpule30kp6l60cgq1rtkor9lamvu333v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

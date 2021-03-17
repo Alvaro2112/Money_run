@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // link from signup button to signup page
     public void signUp(View view) {
-        Intent intent = new Intent(this, placeHolderSignUp.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     passwordView.setError("Password is required");
                     passwordView.requestFocus();
                 } else {
+
                     Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
                     startActivity(menuIntent);
                 }

@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
     private Button profileButton;
+
     private Button joinGame;
     private String[] result;
     private Player player;
