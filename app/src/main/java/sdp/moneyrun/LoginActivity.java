@@ -15,9 +15,8 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button login;
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for(String permission : map.keySet()){
+        for (String permission : map.keySet()) {
             boolean isGranted = map.get(permission);
             if (isGranted) {
                 System.out.println("Permission" + permission + " granted.");
@@ -26,9 +25,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     });
-
-    private  final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+    private Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +53,23 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setLogIn(Button loginButton){
+    private void setLogIn(Button loginButton) {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clicked) {
                 EditText emailView = (EditText) findViewById(R.id.loginEmailAddress);
-                EditText passwordView = (EditText)findViewById(R.id.loginPassword);
+                EditText passwordView = (EditText) findViewById(R.id.loginPassword);
                 String email = emailView.getText().toString().trim();
                 String password = passwordView.getText().toString().trim();
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailView.setError("Email is required");
                     emailView.requestFocus();
 
-                }
-
-                else if(password.isEmpty()){
+                } else if (password.isEmpty()) {
                     passwordView.setError("Password is required");
                     passwordView.requestFocus();
-                    ;
-                }
-                else{
+                } else {
                     Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
                     startActivity(menuIntent);
                 }
@@ -84,8 +79,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher(){
+    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher() {
         return requestPermissionsLauncher;
     }
 

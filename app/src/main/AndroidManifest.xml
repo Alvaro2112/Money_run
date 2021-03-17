@@ -24,8 +24,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".placeHolderSignUp" />
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <activity
             android:name=".LoginActivity"
