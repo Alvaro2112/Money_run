@@ -1,5 +1,6 @@
 package sdp.moneyrun;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 
@@ -8,6 +9,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -21,6 +23,8 @@ import java.util.Random;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -61,16 +65,36 @@ public class SignUpActivityTest {
     public void anActivityIsStartedOnSubmit(){
         try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
-
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
             String email = getSaltString() + "@gmail.com";
             String password = "Barents$8467";
             Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            Thread.sleep(1000);
+            intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         //FirebaseAuth.getInstance().signOut();
+    }
+
+    @Test
+    public void anActivityIsNotStartedOnAlreadyUsedEmail(){
+        try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
+            Intents.init();
+            String email = "exampletofail@fail.com";
+            String password = "Barents$8467";
+            Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            Thread.sleep(1000);
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
@@ -147,6 +171,9 @@ public class SignUpActivityTest {
         }
     }
 
+    /*
+    From https://stackoverflow.com/questions/45841500/generate-random-emails/55768012
+     */
     private  String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
