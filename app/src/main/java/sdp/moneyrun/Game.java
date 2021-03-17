@@ -9,6 +9,8 @@ class Riddle{
     private String answer;
 
     public Riddle(String question, String answer){
+        if(question == null || answer == null)
+            throw new IllegalArgumentException("Null arguments in Riddle constructor");
         this.question = question;
         this.answer = answer;
     }
