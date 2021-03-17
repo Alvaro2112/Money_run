@@ -26,14 +26,29 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        //*********CHECK************
+        int playerId = getIntent().getIntegerArrayListExtra("player").get(0);
+        player = new Player(playerId);// TODO: should not create a new instance but rather get it from the database
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(player.getName()).append(player.getAddress())
+                .append(player.getNumberOfPlayedGames()).append(player.getNumberOfDiedGames());
+        //**************************
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
+        Button startGameButton = findViewById(R.id.new_game_button);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
                 playerProfileIntent.putExtra("profile", result);
                 startActivity(playerProfileIntent);
+            }
+        });
+
+        startGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

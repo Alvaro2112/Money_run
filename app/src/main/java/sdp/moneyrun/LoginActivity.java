@@ -76,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else{
                     Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
+                    int playerID = ????;
+                    menuIntent.putExtra("player",playerID);
                     startActivity(menuIntent);
                 }
             }
