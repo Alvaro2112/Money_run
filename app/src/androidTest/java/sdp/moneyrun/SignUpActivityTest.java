@@ -16,6 +16,8 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Random;
+
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -59,15 +61,16 @@ public class SignUpActivityTest {
     public void anActivityIsStartedOnSubmit(){
         try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
+
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            String email = "exemple@epfl.ch";
+            String email = getSaltString() + "@gmail.com";
             String password = "Barents$8467";
             Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Intents.release();
         }
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
     }
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
@@ -142,6 +145,19 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpPassword)).check(matches(withError(expected)));
             Intents.release();
         }
+    }
+
+    private  String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 10) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
     }
 }
 

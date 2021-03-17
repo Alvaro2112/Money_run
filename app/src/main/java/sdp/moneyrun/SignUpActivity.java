@@ -26,6 +26,10 @@ public class SignUpActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+        //Until sign Out at destroy activity is implemented
+        FirebaseAuth.getInstance().signOut();
+        ///////////////////////////////////////////////////
+
         final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
