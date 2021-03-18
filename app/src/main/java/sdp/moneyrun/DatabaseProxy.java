@@ -31,7 +31,8 @@ public class DatabaseProxy {
     }
 
     public String getPlayer(int playerId){
-        return mDataBase.child("players").child(String.valueOf(playerId)).get()
+        String retValue;
+          mDataBase.child("players").child(String.valueOf(playerId)).get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -40,6 +41,7 @@ public class DatabaseProxy {
                         }
                         else {
                             Log.d(TAG, String.valueOf(task.getResult().getValue()));
+
                         }
                     }
                 });
