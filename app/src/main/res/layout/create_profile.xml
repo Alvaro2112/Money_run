@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/submitProfile"
+        android:id="@+id/submitProfileButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/submit"
@@ -14,5 +14,49 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.904"
         tools:layout_editor_absoluteX="31dp" />
+
+    <EditText
+        android:id="@+id/registerNameText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter your Name"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.185" />
+
+    <EditText
+        android:id="@+id/registerAddressText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter your address"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.465" />
+
+    <EditText
+        android:id="@+id/registerColorText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Enter your favorite color"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/registerAnimalText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Enter your favorite animal"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
