@@ -27,7 +27,14 @@ public class DatabaseProxy {
         mDataBase.child("players").child(String.valueOf(player.getPlayerId())).setValue(player);
     }
 
-    public Task<DataSnapshot> getRawPlayerData(int playerId){
+
+    /**
+     * Get the Task from data base. The serialized string can be obtained
+     * by doing String.valueOf(task.getResult().getValue())
+     * @param playerId
+     * @return Task containing the player data
+     */
+    public Task<DataSnapshot> getPlayer(int playerId){
         Task<DataSnapshot> task = mDataBase.child("players").child(String.valueOf(playerId)).get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -46,11 +53,8 @@ public class DatabaseProxy {
 
     }
 
-    public Player getPlayer(int playerId){
-        return deserializePlayer(String.valueOf(getRawPlayerData(playerId).getResult().getValue()));
-    }
 
-    private Player deserializePlayer(String playerString ){
+    public Player deserializePlayer(String playerString ){
         String[] split = playerString.split("=");
         int length = split.length - 1;
         for (int i = 1; i < length - 1; i++){
