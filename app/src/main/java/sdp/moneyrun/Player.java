@@ -1,5 +1,7 @@
 package sdp.moneyrun;
 
+import java.util.Objects;
+
 public class Player {
     private int playerId;
     private String name;
@@ -15,6 +17,15 @@ public class Player {
     }
     public Player(int playerId){
         this.playerId = playerId;
+    }
+
+    public Player(int playerId, String name, String address, int numberOfDiedGames,
+                  int numberOfPlayedGames){
+        this(playerId);
+        this.setName(name);
+        this.setAddress(address);
+        this.numberOfDiedGames = numberOfDiedGames;
+        this.numberOfPlayedGames = numberOfPlayedGames;
     }
 
     public void setName(String name) {
@@ -55,5 +66,24 @@ public class Player {
     public int getNumberOfPlayedGames() {
         return numberOfPlayedGames;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return playerId == player.playerId &&
+                numberOfPlayedGames == player.numberOfPlayedGames &&
+                numberOfDiedGames == player.numberOfDiedGames &&
+                name.equals(player.name) &&
+                address.equals(player.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerId, name, address, numberOfPlayedGames, numberOfDiedGames);
+    }
+
+
     //TODO: add later methods related to the game itself
 }
