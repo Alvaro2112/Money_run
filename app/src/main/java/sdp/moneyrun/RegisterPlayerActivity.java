@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -54,13 +55,13 @@ public class RegisterPlayerActivity extends AppCompatActivity {
                 nameText.setError("Name field is empty");
             }
             if(address.trim().isEmpty()){
-                nameText.setError("Address field is empty");
+                addressText.setError("Address field is empty");
             }
             if(color.trim().isEmpty()){
-                nameText.setError("Color field is empty");
+                colorText.setError("Color field is empty");
             }
             if(animal.trim().isEmpty()){
-                nameText.setError("Animal field is empty");
+                animalText.setError("Animal field is empty");
             }
             return false;
         }
