@@ -10,6 +10,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RegisterPlayerActivity extends AppCompatActivity {
@@ -34,11 +35,14 @@ public class RegisterPlayerActivity extends AppCompatActivity {
                 if(checkAllFields()){
                     Random random = new Random();
                     int uniquePlayerID = random.nextInt();
+                    while(uniquePlayerID < 0)
+                        uniquePlayerID = random.nextInt();
 //                    Player player = new Player(uniquePlayerID);
                     //TODO:place it into the database with uniquePlayerID as key
                     Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
                     menuIntent.putExtra("playerId",uniquePlayerID);
                     menuIntent.putExtra("playerId"+uniquePlayerID,result);
+                    System.out.println(result+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + uniquePlayerID);
                     startActivity(menuIntent);
                 }
             }

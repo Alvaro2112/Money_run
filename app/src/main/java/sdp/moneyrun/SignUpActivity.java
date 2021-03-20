@@ -60,7 +60,6 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>(){
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        System.out.println("++++++++++++++++"+task);
                         if(task.isSuccessful()){
                             //Sign-In success
                             Log.d(MainActivity.TAG, "createUserWithEmail:success"); //Not sure about the tag thing
