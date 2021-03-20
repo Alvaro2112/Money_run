@@ -39,10 +39,10 @@ public class RegisterPlayerActivity extends AppCompatActivity {
                         uniquePlayerID = random.nextInt();
 //                    Player player = new Player(uniquePlayerID);
                     //TODO:place it into the database with uniquePlayerID as key
+                    //TODO : check if there is a player with that unique ID already in database and if there is change ID
                     Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
                     menuIntent.putExtra("playerId",uniquePlayerID);
                     menuIntent.putExtra("playerId"+uniquePlayerID,result);
-                    System.out.println(result+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" + uniquePlayerID);
                     startActivity(menuIntent);
                 }
             }
