@@ -72,7 +72,7 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
-            intended(hasComponent(MenuActivity.class.getName()));
+            intended(hasComponent(RegisterPlayerActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
