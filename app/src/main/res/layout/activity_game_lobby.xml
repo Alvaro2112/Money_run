@@ -24,10 +24,10 @@
         android:layout_marginTop="48dp"
         android:text="Players in Lobby :"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/max_players_TextView"
+        app:layout_constraintEnd_toEndOf="@+id/players_missing_TextView"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/max_players_TextView"
-        app:layout_constraintTop_toBottomOf="@+id/max_players_TextView" />
+        app:layout_constraintStart_toStartOf="@+id/players_missing_TextView"
+        app:layout_constraintTop_toBottomOf="@+id/players_missing_TextView" />
 
     <TextView
         android:id="@+id/player_list_textView"
@@ -40,12 +40,12 @@
         app:layout_constraintTop_toBottomOf="@+id/players_in_lobby_TextView" />
 
     <TextView
-        android:id="@+id/max_players_TextView"
+        android:id="@+id/players_missing_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="48dp"
-        android:text="Max players : "
+        android:text="Players Missing :"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lobby_title" />
@@ -59,7 +59,7 @@
         android:backgroundTint="#FF8A80"
         android:text="Leave"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/max_players_TextView"
+        app:layout_constraintEnd_toEndOf="@+id/players_missing_TextView"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="@+id/player_list_textView"
         app:layout_constraintTop_toBottomOf="@+id/player_list_textView"
