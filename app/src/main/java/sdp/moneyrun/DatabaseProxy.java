@@ -53,21 +53,24 @@ public class DatabaseProxy {
 
     }
 
-
+    /*
+    Format is {address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=1236}
+     */
     public Player deserializePlayer(String playerString ){
+
         String[] split = playerString.split("=");
-        int length = split.length - 1;
-        for (int i = 1; i < length - 1; i++){
+        int length = split.length;
+        for (int i = 1; i < length-1; i++){
             //Starts from 1 because first string will be without values and doesn't go to the last
             //one because there's no , at the end
             split[i] = split[i].substring(0, split[i].indexOf(","));
         }
         split[length - 1] = split[length-1].substring(0, split[length-1].length()-1);
-        String address = split[0];
-        int nbrPlayedGames = Integer.parseInt(split[1]);
-        String name = split[2];
-        int numberOfDiedGames = Integer.parseInt(split[3]);
-        int playerId = Integer.parseInt(split[4]);
+        String address = split[1];
+        int nbrPlayedGames = Integer.parseInt(split[2]);
+        String name = split[3];
+        int numberOfDiedGames = Integer.parseInt(split[4]);
+        int playerId = Integer.parseInt(split[5]);
         return new Player(playerId,name,address,numberOfDiedGames,nbrPlayedGames);
     }
 }
