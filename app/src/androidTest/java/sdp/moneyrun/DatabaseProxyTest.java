@@ -1,9 +1,7 @@
 package sdp.moneyrun;
 
-import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 
@@ -26,27 +24,10 @@ public class DatabaseProxyTest {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        //runOnUiThread(()-> {
-            Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
-           // task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>();
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            //  System.out.println(task.getResult().getValue().toString());
-            //   System.out.println(String.valueOf(task.getResult().getValue()));
-            while (!task.isComplete()){
-             //   System.out.println("Task status is " + task.isComplete());
+        }        Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
 
-            }
-            System.out.println("Task status is " + task.isComplete());
+        while (!task.isComplete()){}
         assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
-       // });
-        //assert(task.isComplete());
-        //android.awaitThat....
-
     }
 
     @Test
@@ -63,13 +44,9 @@ public class DatabaseProxyTest {
         }
         runOnUiThread(()-> {
             Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
-            task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    System.out.println("On complete");
-                     assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
+            task.addOnCompleteListener(task1 -> {
+                 assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
 
-                }
             });
         });
     }

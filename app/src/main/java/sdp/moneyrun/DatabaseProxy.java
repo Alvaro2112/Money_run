@@ -18,7 +18,7 @@ public class DatabaseProxy {
         if(db == null) {
             System.out.println("Db is null");
         }
-        mDataBase = FirebaseDatabase.getInstance("https://money-run-4f27f-default-rtdb.firebaseio.com/").getReference();
+        mDataBase = FirebaseDatabase.getInstance().getReference();
 
     }
 
@@ -45,7 +45,6 @@ public class DatabaseProxy {
                         }
                         else {
                             Log.d(TAG, String.valueOf(task.getResult().getValue()));
-                           // System.out.println(task.getResult().toString());
                         }
                     }
                 });
