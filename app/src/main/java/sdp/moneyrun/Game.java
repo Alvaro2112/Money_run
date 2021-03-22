@@ -26,16 +26,32 @@ class Riddle{
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
+    private final String name;
     private List<Player> players;
+    private int maxPlayerNumber;
     private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
 
-    public Game(List<Player> players, List<Riddle> riddles, Location startLocation ){
-        if(players == null || riddles == null || startLocation == null || players.isEmpty() || riddles.isEmpty())
+    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+        if(name == null || players == null || riddles == null || startLocation == null)
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
+        this.name = name;
         this.players = players;
+        this.maxPlayerNumber = maxPlayerNumber;
         this.riddles = riddles;
         this.startLocation = startLocation;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getPlayerNumber(){
+        return players.size();
+    }
+
+    public int getMaxPlayerNumber(){
+        return maxPlayerNumber;
     }
 
     // Launched when create game button is pressed
