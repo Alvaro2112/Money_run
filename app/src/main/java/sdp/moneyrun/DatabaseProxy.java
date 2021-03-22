@@ -56,7 +56,7 @@ public class DatabaseProxy {
     Format is {address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=1236}
      */
     public Player deserializePlayer(String playerString ){
-
+        if (playerString == null || playerString.isEmpty()) throw new IllegalArgumentException();
         String[] split = playerString.split("=");
         int length = split.length;
         for (int i = 1; i < length-1; i++){
