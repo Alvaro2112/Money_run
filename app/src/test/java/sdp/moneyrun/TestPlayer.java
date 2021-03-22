@@ -32,21 +32,18 @@ public class TestPlayer {
         player.updatePlayedGames();
         assertEquals(1,player.getNumberOfPlayedGames());
     }
-    @Test
-    public void testExceptionThrownOnSetAddressAndName(){
-        try{
-            Player p = new Player(3);
-            p.getName();
-        }catch (IllegalStateException e){
-            assertEquals(1,1);
-        }try{
-            Player p = new Player(3);
-            p.getAddress();
-        }catch (IllegalStateException e){
-            assertEquals(1,1);
-        }
+
+    @Test(expected = IllegalStateException.class)
+    public void testExceptionThrownOnSetName(){
+        Player p = new Player(3);
+        p.getName();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testExceptionThrownOnSetAddress(){
+        Player p = new Player(3);
+        p.getAddress();
+    }
     @Test
     public void constructorsReturnSamePlayer(){
         int playerId = 123;
