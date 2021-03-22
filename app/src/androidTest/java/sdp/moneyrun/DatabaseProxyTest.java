@@ -24,6 +24,7 @@ public class DatabaseProxyTest {
             e.printStackTrace();
         }        Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
 
+        Thread.sleep(1000);
         while (!task.isComplete()){}
         assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
     }
@@ -65,5 +66,26 @@ public class DatabaseProxyTest {
     public void deserializeThrowsErrorOnEmptyArgument(){
         DatabaseProxy db = new DatabaseProxy();
         db.deserializePlayer("");
+    }
+
+    @Test
+    public void deserializeReturnsNullOnWrongPlayedGamesFormat(){
+        String s = "{address=FooBarr, numberOfPlayedGames=abc, name=John Doe, numberOfDiedGames=0, playerId=1236}";
+        DatabaseProxy db = new DatabaseProxy();
+        assert(db.deserializePlayer(s) == null);
+    }
+
+    @Test
+    public void deserializeReturnsNullOnWrongDiedGamesFormat(){
+        String s = "{address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=abc, playerId=1236}";
+        DatabaseProxy db = new DatabaseProxy();
+        assert(db.deserializePlayer(s) == null);
+    }
+
+    @Test
+    public void deserializeReturnsNullOnWrongIdFormat(){
+        String s = "{address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=abc}";
+        DatabaseProxy db = new DatabaseProxy();
+        assert(db.deserializePlayer(s) == null);
     }
 }

@@ -23,14 +23,18 @@ public class DatabaseProxy {
     }
 
 
+    /**
+     * Add a player to the database. If the player id already exists, erases previously kept data
+     * @param player the player to be put in the database
+     */
     public void putPlayer(Player player){
         mDataBase.child("players").child(String.valueOf(player.getPlayerId())).setValue(player);
     }
 
 
     /**
-     * Get the Task from data base. The serialized string can be obtained
-     * by doing String.valueOf(task.getResult().getValue())
+     * Get the Task (asynchronous !) from data base. The serialized string can be obtained -
+     * once the task is completed - by doing String.valueOf(task.getResult().getValue())
      * @param playerId
      * @return Task containing the player data
      */
@@ -52,8 +56,12 @@ public class DatabaseProxy {
 
     }
 
-    /*
-    Format is {address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=1236}
+    /**
+     * Format is {address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=1236}
+     * @param playerString the string with firebase convention serialization
+     *
+     *
+     * @return a player instance if successful, null otherwise
      */
     public Player deserializePlayer(String playerString ){
         if (playerString == null || playerString.isEmpty()) throw new IllegalArgumentException();
@@ -66,10 +74,25 @@ public class DatabaseProxy {
         }
         split[length - 1] = split[length-1].substring(0, split[length-1].length()-1);
         String address = split[1];
-        int nbrPlayedGames = Integer.parseInt(split[2]);
+        int nbrPlayedGames;
+        try{
+             nbrPlayedGames = Integer.parseInt(split[2]);
+        }catch (NumberFormatException e) {
+            return null;
+        }
         String name = split[3];
-        int numberOfDiedGames = Integer.parseInt(split[4]);
-        int playerId = Integer.parseInt(split[5]);
+        int numberOfDiedGames;
+        try {
+            numberOfDiedGames = Integer.parseInt(split[4]);
+        }catch (NumberFormatException e) {
+        return null;
+        }
+        int playerId;
+        try {
+            playerId = Integer.parseInt(split[5]);
+        }catch (NumberFormatException e) {
+        return null;
+    }
         return new Player(playerId,name,address,numberOfDiedGames,nbrPlayedGames);
     }
 }
