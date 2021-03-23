@@ -25,6 +25,10 @@
     <string name="game_3">Game 3</string>
     <string name="open_games">Open Games</string>
     <string name="ask_question">Ask question</string>
+    <string name="answer_1">A</string>
+    <string name="answer_2">B</string>
+    <string name="answer_3">C</string>
+    <string name="answer_4">D</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

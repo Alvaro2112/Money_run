@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,11 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.concurrent.TimeUnit;
-
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
     private Button profileButton;
-
     private Button joinGame;
     private Button askQuestion;
     private String[] result;
@@ -41,6 +37,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             }
         });
 
+        /**
+         * Checks for clicks on the join game button and creates a popup of available games if clicked
+         */
         joinGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +47,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             }
         });
 
+        /**
+         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
+         */
         askQuestion.setOnClickListener(new View.OnClickListener() {
             //question = getQuestion();
             @Override
@@ -57,20 +59,11 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
+
+
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
 
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(layoutId, null);
-
-        // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-        // show the popup window at wanted location
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        onButtonShowPopupWindowClick(view, focusable, layoutId);
 
     }
 
@@ -88,6 +81,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     }
 
+    /**
+     *
+     * @param view Current view before click
+     * @param focusable Whether it can be dismissed by clicking outside the popup window
+     * @param layoutId Id of the popup layout that will be used
+     */
     public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
         // inflate the layout of the popup window
