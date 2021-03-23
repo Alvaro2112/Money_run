@@ -106,9 +106,9 @@ public class RegisterPlayerInstrumentedTest {
             Thread.sleep(1000);
             intended(hasComponent(PlayerProfileActivity.class.getName()));
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Player has died Green many times")));
+                    .check(matches(withText("Player has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Player has played Dog many games")));
+                    .check(matches(withText("Player has played 0 many games")));
             Espresso.onView(withId(R.id.playerAddress))
                     .check(matches(withText("Player address : New York")));
             Espresso.onView(withId(R.id.playerName))

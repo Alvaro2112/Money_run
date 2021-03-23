@@ -72,8 +72,8 @@ public class RegisterPlayerActivity extends AppCompatActivity {
             result = new String[4];
             result[0] = name;
             result[1] = address;
-            result[2] = color;
-            result[3] = animal;
+            result[2] = "0";
+            result[3] = "0";
             return true;
     }
 }
