@@ -59,7 +59,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         // show the popup window at wanted location
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-
     }
 
 //    @Override
