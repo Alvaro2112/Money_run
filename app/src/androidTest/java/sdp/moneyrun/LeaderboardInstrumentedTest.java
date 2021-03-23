@@ -46,7 +46,6 @@ public class LeaderboardInstrumentedTest {
         catch (Exception e){
             assertEquals(2,1);
         }
-
     }
 
     @Test
