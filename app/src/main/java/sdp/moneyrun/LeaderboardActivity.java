@@ -17,9 +17,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
+        //TODO
+        // Put addPlayer with local cache
     }
 
     private void addAdapter(){
+        // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this,playerList);
         ListView ldbView = (ListView) findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
@@ -33,7 +36,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     public void addPlayer(Player player){
-        // can't just add a player directly to an adapter
+        // can't just add a player directly to an adapter, need to put it in a list
         if(player == null){
             throw new NullPointerException("player is null");
         }

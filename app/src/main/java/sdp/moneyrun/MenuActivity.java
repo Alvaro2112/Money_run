@@ -14,8 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
-    private Button profileButton;
 
+    private Button profileButton;
+    private Button leaderboardButton;
     private Button joinGame;
     private String[] result;
     private Player player;
@@ -27,7 +28,26 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         joinGame = findViewById(R.id.join_game);
-        profileButton.setOnClickListener(new View.OnClickListener() {
+        leaderboardButton = findViewById(R.id.leaderboardButton);
+
+
+        linkProfileButton(profileButton);
+        linkLeaderboardButton(leaderboardButton);
+        linkJoinGameButton(joinGame);
+    }
+
+    private void linkJoinGameButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonShowPopupWindowClick(v);
+            }
+        });
+
+
+    }
+    private void linkProfileButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
@@ -36,10 +56,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             }
         });
 
-        joinGame.setOnClickListener(new View.OnClickListener() {
+    }
+    private void linkLeaderboardButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowPopupWindowClick(v);
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
             }
         });
     }
