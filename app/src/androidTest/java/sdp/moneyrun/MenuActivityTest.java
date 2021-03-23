@@ -25,7 +25,6 @@ public class MenuActivityTest {
     @Test
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
-
     }
 
     @Test
