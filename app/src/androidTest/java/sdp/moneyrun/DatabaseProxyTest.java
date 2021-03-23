@@ -22,11 +22,11 @@ public class DatabaseProxyTest {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }        Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
-
+        }
+        Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
         Thread.sleep(1000);
-        while (!task.isComplete()){}
-        assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
+        Player player2 = task.getResult().getValue(Player.class);
+        System.out.println("player value is " + player2.getAddress());
     }
 
 //    @Test
@@ -56,36 +56,5 @@ public class DatabaseProxyTest {
 //    @Rule
 //    public ExpectedException exception = ExpectedException.none();
 
-    @Test(expected = IllegalArgumentException.class)
-    public void deserializeThrowsErrorOnNullArgument(){
-            DatabaseProxy db = new DatabaseProxy();
-            db.deserializePlayer(null);
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void deserializeThrowsErrorOnEmptyArgument(){
-        DatabaseProxy db = new DatabaseProxy();
-        db.deserializePlayer("");
-    }
-
-    @Test
-    public void deserializeReturnsNullOnWrongPlayedGamesFormat(){
-        String s = "{address=FooBarr, numberOfPlayedGames=abc, name=John Doe, numberOfDiedGames=0, playerId=1236}";
-        DatabaseProxy db = new DatabaseProxy();
-        assert(db.deserializePlayer(s) == null);
-    }
-
-    @Test
-    public void deserializeReturnsNullOnWrongDiedGamesFormat(){
-        String s = "{address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=abc, playerId=1236}";
-        DatabaseProxy db = new DatabaseProxy();
-        assert(db.deserializePlayer(s) == null);
-    }
-
-    @Test
-    public void deserializeReturnsNullOnWrongIdFormat(){
-        String s = "{address=FooBarr, numberOfPlayedGames=0, name=John Doe, numberOfDiedGames=0, playerId=abc}";
-        DatabaseProxy db = new DatabaseProxy();
-        assert(db.deserializePlayer(s) == null);
-    }
 }
