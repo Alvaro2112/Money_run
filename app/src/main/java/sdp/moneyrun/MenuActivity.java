@@ -28,6 +28,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         profileButton = findViewById(R.id.go_to_profile_button);
         joinGame = findViewById(R.id.join_game);
         askQuestion = findViewById(R.id.ask_question);
+
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,10 +52,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
          * Checks for clicks on the ask question button and creates a popup of a new question of clicked
          */
         askQuestion.setOnClickListener(new View.OnClickListener() {
-            //question = getQuestion();
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(v, false, R.layout.question_popup);
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup);
             }
         });
     }

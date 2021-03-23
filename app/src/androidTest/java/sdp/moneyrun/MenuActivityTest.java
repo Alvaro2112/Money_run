@@ -30,10 +30,10 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void AAjoinGamePopupIsDisplayed() {
+    public void joinGamePopupIsDisplayed() {
         Intents.init();
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
         Intents.release();
     }
 
@@ -51,9 +51,8 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.ask_question_popup)).check(doesNotExist());
-
-
         Intents.release();
+
     }
 
 
