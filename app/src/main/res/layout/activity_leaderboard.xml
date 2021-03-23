@@ -1,53 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/leaderboard_top"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <RelativeLayout
+        android:id="@+id/leaderboard_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/leaderboard_header"
-       >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/player_position"
-            android:layout_margin="4dp"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/player_name"
-            android:layout_toRightOf="@+id/player_position"
-            android:layout_margin="4dp"
-            android:textSize="20sp"
-            android:textColor="#000"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/player_score"
-            android:layout_toRightOf="@+id/player_name"
-            android:layout_margin="4dp"
-            android:textSize="20sp"
-            />
+        android:gravity="center">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/player_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toRightOf="@+id/player_position"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/player_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toRightOf="@+id/player_name"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/scrollableContents"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="vertical"
         android:layout_below="@+id/leaderboard_header"
-        android:id="@+id/scrollableContents">
+        android:scrollbars="vertical">
 
         <ListView
             android:id="@+id/ldblistView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="100dp">
+
+        </ListView>
+
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <Button
+            android:id="@+id/leaderboard_go_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="161dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/leaderboard_go_back_button_text" />
+
+    </RelativeLayout>
 </RelativeLayout>
 
