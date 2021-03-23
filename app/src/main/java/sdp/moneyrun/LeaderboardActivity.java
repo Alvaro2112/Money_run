@@ -27,6 +27,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         // Put addPlayer with local cache
     }
 
+    public LeaderboardListAdapter getLdbAdapter(){
+        return ldbAdapter;
+    }
+
     private void linkGoBackButton(){
         goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +40,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
     }
+
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this,playerList);

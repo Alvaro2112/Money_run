@@ -49,6 +49,21 @@ public class LeaderboardInstrumentedTest {
     }
 
     @Test
+    public void addPLayerAddsPlayerToView(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a ->{
+                Player player = new Player(123);
+                player.setName("Alvaro Caudete");
+                player.setScore(8008);
+                a.addPlayer(player);
+                assertEquals( a.getLdbAdapter().getCount(), 1);
+
+            });
+        }
+    }
+
+
+    @Test
     public void addPlayerNullThrowsException(){
         exception.expect(RuntimeException.class);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
@@ -66,16 +81,41 @@ public class LeaderboardInstrumentedTest {
                 Player player = new Player(123);
                 player.setName("Alvaro Caudete");
                 player.setScore(8008);
+                Player player2 = new Player(12);
+                player2.setName("Rafa");
+                player2.setScore(8001);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
+                list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),1);
+                assertEquals(a.getPlayerList().size(),2);
             });
         }
         catch (Exception e){
             assertEquals(2,1);
         }
     }
+
+    @Test
+    public void AddPlayerListAddsAllPlayerToView(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a ->{
+                Player player = new Player(123);
+                player.setName("Alvaro Caudete");
+                player.setScore(8008);
+                Player player2 = new Player(12);
+                player2.setName("Rafa");
+                player2.setScore(8001);
+                ArrayList<Player> list = new ArrayList<>();
+                list.add(player);
+                list.add(player2);
+                a.addPlayerList(list);
+                assertEquals( a.getLdbAdapter().getCount(), 2);
+
+            });
+        }
+    }
+
 
     @Test
     public void addPlayerListThrowsNullException(){
@@ -86,6 +126,8 @@ public class LeaderboardInstrumentedTest {
             });
         }
     }
+
+
 
     @Test
     public void goBackButtonWorks() {
