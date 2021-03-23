@@ -14,9 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
-    private Button profileButton;
-    private Button joinGame;
-    private Button askQuestion;
     private String[] result;
     private Player player;
 
@@ -24,17 +21,14 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        profileButton = findViewById(R.id.go_to_profile_button);
-        joinGame = findViewById(R.id.join_game);
-        askQuestion = findViewById(R.id.ask_question);
+        Button profileButton = findViewById(R.id.go_to_profile_button);
+        Button joinGame = findViewById(R.id.join_game);
+        Button askQuestion = findViewById(R.id.ask_question);
 
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-                playerProfileIntent.putExtra("profile", result);
-                startActivity(playerProfileIntent);
+                onButtonSwitchToUserProfileActivity(v);
             }
         });
 
@@ -59,7 +53,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
+    public void onButtonSwitchToUserProfileActivity(View view) {
 
+        Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
+        playerProfileIntent.putExtra("profile", result);
+        startActivity(playerProfileIntent);
+
+    }
 
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
 
