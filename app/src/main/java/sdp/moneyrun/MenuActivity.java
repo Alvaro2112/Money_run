@@ -103,6 +103,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         tv.setText(riddle.getQuestion());
 
         int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+        TextView buttonView = tv;
 
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++){
@@ -110,8 +111,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
                 continue;
             }
-            tv = popupWindow.getContentView().findViewById(buttonIds[i]);
-            tv.setText(possibleAnswers[i]);
+            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
+            buttonView.setText(possibleAnswers[i]);
             if(possibleAnswers[i].equals(correctAnswer))
                 correctId = buttonIds[i];
         }
