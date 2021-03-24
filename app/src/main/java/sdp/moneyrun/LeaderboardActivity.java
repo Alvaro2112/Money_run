@@ -1,9 +1,6 @@
 package sdp.moneyrun;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,14 +12,11 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
-    private Button goBackButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
-        goBackButton = findViewById(R.id.leaderboard_go_back_button);
-        linkGoBackButton();
         //TODO
         // Put addPlayer with local cache
     }
@@ -31,15 +25,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         return ldbAdapter;
     }
 
-    private void linkGoBackButton(){
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goBackToMenu = new Intent(LeaderboardActivity.this, MenuActivity.class);
-                startActivity(goBackToMenu);
-            }
-        });
-    }
 
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.

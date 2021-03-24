@@ -3,9 +3,6 @@ package sdp.moneyrun;
 import android.content.Context;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
@@ -14,9 +11,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 public class LeaderboardInstrumentedTest {
@@ -36,7 +30,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 Player player = new Player(123);
-                player.setName("Alvaro Caudete");
+                player.setName("Tess");
                 player.setScore(8008);
                 a.addPlayer(player);
 
@@ -53,7 +47,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 Player player = new Player(123);
-                player.setName("Alvaro Caudete");
+                player.setName("Tess");
                 player.setScore(8008);
                 a.addPlayer(player);
                 assertEquals( a.getLdbAdapter().getCount(), 1);
@@ -79,7 +73,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 Player player = new Player(123);
-                player.setName("Alvaro Caudete");
+                player.setName("Tesa");
                 player.setScore(8008);
                 Player player2 = new Player(12);
                 player2.setName("Rafa");
@@ -101,7 +95,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 Player player = new Player(123);
-                player.setName("Alvaro Caudete");
+                player.setName("Tesa");
                 player.setScore(8008);
                 Player player2 = new Player(12);
                 player2.setName("Rafa");
@@ -128,16 +122,5 @@ public class LeaderboardInstrumentedTest {
     }
 
 
-
-    @Test
-    public void goBackButtonWorks() {
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            Intents.init();
-            Espresso.onView(withId(R.id.leaderboard_go_back_button)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            intended(hasComponent(MenuActivity.class.getName()));
-            Intents.release();
-        }
-    }
 
 }
