@@ -2,12 +2,14 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -67,12 +69,34 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     }
 
+
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
 
-        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        String question = "One of these four countries does not border the Red Sea.";
+        String correctAnswer = "Oman";
+        String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
 
-        popupWindow.getContentView().findViewById(R.id.question_choice_1).setOnClickListener(new View.OnClickListener() {
+        Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+
+        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
+        int correctId = 0;
+        tv.setText(riddle.getQuestion());
+
+        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+        for (int i = 0; i < 4; i++){
+            if(i >= possibleAnswers.length){
+                popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
+                continue;
+            }
+            tv = popupWindow.getContentView().findViewById(buttonIds[i]);
+            tv.setText(possibleAnswers[i]);
+            if(possibleAnswers[i].equals(correctAnswer))
+                correctId = buttonIds[i];
+        }
+
+        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
