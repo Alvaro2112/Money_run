@@ -6,14 +6,11 @@ public class Player {
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-<<<<<<< HEAD
     private int totalDistanceRun;
     private int maxScoreInGame;
     private String preferredColor;
     private String preferredPet;
-=======
     private int score;
->>>>>>> master
 
     public Player(int playerId) {
         this.playerId = playerId;
