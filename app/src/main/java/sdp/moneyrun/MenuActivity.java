@@ -76,7 +76,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         String question = "One of these four countries does not border the Red Sea.";
         String correctAnswer = "Oman";
         String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
-
         Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
 
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
