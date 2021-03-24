@@ -14,7 +14,7 @@ This class only holds data fundamental for the game, all the attributes of this 
 WILL be in the database, so do not add any temporary or auxiliary attributes to it if
 there is no use for them to be in the DB
  */
-public class GameData {
+public final class GameData {
     private String name;
     private List<Player> players;
     private int maxPlayerNumber;
@@ -40,7 +40,6 @@ public class GameData {
     }
 
     public GameData(){}
-
 
     public String getName() {
         return name;

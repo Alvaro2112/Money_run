@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -76,10 +77,9 @@ public class Game {
         gameRef.child("players").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                snapshot.getValue(String.class);
-                //TODO DESERIALIZE deserialize the snapshot and then add each player to the list attribute
-                //which shouldnt be that hard given that the snapshot still behaves as a DBReference
-                //so you can do .child(....).getValue(....) so maybe it helps
+                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
+                List<Player> newData = snapshot.getValue(t);
+                //gameData.setPlayers(newData);
             }
 
             @Override
@@ -89,11 +89,7 @@ public class Game {
         });
 
     }
-
-
-
-
-
+    
     public static Task<DataSnapshot> getGameDataSnapshot(String id){
         if(id == null){throw new NullPointerException();}
         DatabaseReference gamesRef = FirebaseDatabase.getInstance()
@@ -132,13 +128,14 @@ public class Game {
         }
     }
 
-    /*
+    //TODO First test the rest of the class, and test the way that addValue serializes
+    //the player list before you go on manually messing up stuff;
     /*
     Adds a player to the DB, which then adds it to all game instances with the same ID via the listener
 
     public void addPlayer(Player p){
         if(p == null){throw new NullPointerException();}
-        if(players.size() < maxPlayerNumber && !players.contains(p)){
+        if(gameData.getPlayers().size() < gameData.getMaxPlayerNumber() && !gameData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
         }
     }
@@ -149,7 +146,7 @@ public class Game {
 
     public void removePlayer(Player p){
         if(p == null){throw new NullPointerException();}
-        if(players.contains(p)){
+        if(gameData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
         }
     }
