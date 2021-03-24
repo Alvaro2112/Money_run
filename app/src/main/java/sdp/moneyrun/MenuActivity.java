@@ -66,7 +66,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup);
+                //Temporary, will be removed when questions are added to the database
+                String question = "One of these four countries does not border the Red Sea.";
+                String correctAnswer = "Oman";
+                String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
+                Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
     }
@@ -86,14 +92,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     }
 
 
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId) {
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
-
-        //Temporary, will be removed when questions are added to the database
-        String question = "One of these four countries does not border the Red Sea.";
-        String correctAnswer = "Oman";
-        String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
-        Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
 
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
