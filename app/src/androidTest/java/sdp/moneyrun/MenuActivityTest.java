@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -36,13 +37,13 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void popupIsDisplayed() {
+    public void joinGamePopupIsDisplayed() {
         Intents.init();
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.popup)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
         Intents.release();
     }
-
+    
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
@@ -53,7 +54,23 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+    
+    @Test
+    public void askQuestionPopupIsDisplayed() {
+        Intents.init();
+        onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
+        Intents.release();
+    }
 
+    @Test
+    public void askQuestionPopupClosesWhenFirstAnswerClicked() {
+        Intents.init();
+        onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.ask_question_popup)).check(doesNotExist());
+        Intents.release();
 
+    }
 
 }
