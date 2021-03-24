@@ -1,7 +1,9 @@
 package sdp.moneyrun;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 
@@ -23,38 +25,21 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
-        Thread.sleep(1000);
-        Player player2 = task.getResult().getValue(Player.class);
-        System.out.println("player value is " + player2.getAddress());
+        Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
+      //  Thread.sleep(1000);
+        testTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                   assert( player.equals(db.getPlayerFromTask(testTask)));
+                }else{
+                    assert (false);
+                }
+            }
+        });
+        while(!testTask.isComplete()){
+            System.out.println("false");
+        }
     }
-
-//    @Test
-//    public void addListenerTest() throws Throwable {
-//        final Player player = new Player(1236);
-//        player.setAddress("FooBarr");
-//        player.setName("John Doe");
-//        final DatabaseProxy db = new DatabaseProxy();
-//        db.putPlayer(player);
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        runOnUiThread(()-> {
-//            System.out.println("Entered UI thread thing");
-//            Task<DataSnapshot> task = db.getPlayer(player.getPlayerId());
-//            task.addOnCompleteListener(task1 -> {
-//                System.out.println("Entered is complete");
-//                 assert player.equals(db.deserializePlayer(task.getResult().getValue().toString()));
-//
-//            });
-//           // assert(task.isComplete());
-//        });
-//    }
-
-//    @Rule
-//    public ExpectedException exception = ExpectedException.none();
-
 
 }

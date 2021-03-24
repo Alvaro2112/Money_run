@@ -38,9 +38,9 @@ public class DatabaseProxy {
      * @param playerId
      * @return Task containing the player data
      */
-    public Task<DataSnapshot> getPlayer(int playerId){
-        Task<DataSnapshot> task = mDataBase.child("players").child(String.valueOf(playerId)).get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+    public Task<DataSnapshot> getPlayerTask(int playerId){
+            Task<DataSnapshot> task = mDataBase.child("players").child(String.valueOf(playerId)).get();
+            task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (!task.isSuccessful()) {
@@ -53,6 +53,16 @@ public class DatabaseProxy {
                     }
                 });
         return task;
+
+    }
+
+    public Player getPlayerFromTask(Task<DataSnapshot> task){
+        if(task.isComplete()){
+            return task.getResult().getValue(Player.class);
+        }
+        else {
+            return null;
+        }
 
     }
 
