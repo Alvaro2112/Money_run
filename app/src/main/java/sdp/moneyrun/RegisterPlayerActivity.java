@@ -55,7 +55,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
      */
     private boolean checkAllFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty() || address.trim().isEmpty() || color.trim().isEmpty() || animal.trim().isEmpty()){
-            setErrorForEmtpyFields(name,address,color,animal);
+            setErrorForEmptyFields(name,address,color,animal);
             return false;
         }
             result = new String[4];
@@ -65,7 +65,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
             result[3] = "0";
             return true;
     }
-    private boolean setErrorForEmtpyFields(String name, String address, String color, String animal){
+    private void setErrorForEmptyFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty()){
             nameText.setError("Name field is empty");
         }
