@@ -32,7 +32,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
       
-        addProfileButtonFunctionality();
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
