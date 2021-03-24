@@ -17,6 +17,7 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -89,6 +90,39 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.loginPassword)).check(matches(withError(expected)));
             Intents.release();
+        }
+    }
+
+    @Test
+    public void loginInvalidEmailError(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+             String email = "kkkkkk";
+            String password = "abc";
+             String expected = "Email format is invalid";
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void loginWithRegisteredUserStartsActivity(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            String email = "logintest@epfl.ch";
+            String password = "login123456789";
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            Thread.sleep(1000);
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
