@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/leaderboard_top"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/leaderboard_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/player_position"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/leaderboard_header_position"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/player_name"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@+id/player_position"
+            android:text="@string/leaderboard_header_name"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/player_score"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="4dp"
+
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginBottom="4dp"
+            android:layout_toEndOf="@+id/player_name"
+            android:text="@string/leaderboard_header_score"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/scrollableContents"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/leaderboard_header"
+        android:scrollbars="vertical">
+
+        <ListView
+            android:id="@+id/ldblistView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="100dp">
+
+        </ListView>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

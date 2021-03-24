@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     sendLogIn(email, password);
 
+
                 }
             }
         });

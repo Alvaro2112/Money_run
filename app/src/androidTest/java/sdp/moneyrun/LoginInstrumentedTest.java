@@ -66,7 +66,6 @@ public class LoginInstrumentedTest {
             intended(hasComponent(SignUpActivity.class.getName()));
             Intents.release();
         }
-
     }
 
     @Test
