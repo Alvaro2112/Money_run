@@ -6,10 +6,14 @@ public class Player {
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
+<<<<<<< HEAD
     private int totalDistanceRun;
     private int maxScoreInGame;
     private String preferredColor;
     private String preferredPet;
+=======
+    private int score;
+>>>>>>> master
 
     public Player(int playerId) {
         this.playerId = playerId;
@@ -30,6 +34,19 @@ public class Player {
     public int getPlayerId() {
         return playerId;
     }
+
+
+    public int getScore(){
+        if (name == null)
+            throw new IllegalStateException();
+
+        return score;
+    }
+
+    public void setScore(int score){
+        this.score = score;
+    }
+
 
     public String getAddress() {
         if (address == null)

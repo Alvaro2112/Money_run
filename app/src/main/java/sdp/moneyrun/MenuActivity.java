@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+
+    private Button profileButton;
+    private Button leaderboardButton;
+    private Button joinGame;
     private String[] result;
     private Player player;
 
@@ -22,38 +26,54 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        Button profileButton = findViewById(R.id.go_to_profile_button);
-        Button joinGame = findViewById(R.id.join_game);
+
+      NavigationView navigationView = findViewById(R.id.nav_view);
+        profileButton = findViewById(R.id.go_to_profile_button);
+        joinGame = findViewById(R.id.join_game);
+        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
         Button askQuestion = findViewById(R.id.ask_question);
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
 
-            }
-        });
 
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        joinGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
-            }
-        });
-
-        /**
-         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
-         */
+        linkProfileButton(profileButton);
+        linkLeaderboardButton(leaderboardButton);
+      
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup);
             }
         });
+      
+      
+          joinGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
+            }
+        });
+
     }
+
+    private void linkProfileButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonSwitchToUserProfileActivity(v);
+            }
+        });
+    }
+
+    
+    private void linkLeaderboardButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+            }
+        });
+    } 
+    
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
