@@ -23,16 +23,27 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Button profileButton = findViewById(R.id.go_to_profile_button);
-        Button joinGame = findViewById(R.id.join_game);
-        Button askQuestion = findViewById(R.id.ask_question);
 
+        addProfileButtonFunctionality();
+        addJoinGameButtonFunctionality();
+        addAskQuestionButtonFunctionality();
+    }
+
+    public void addProfileButtonFunctionality(){
+
+        Button profileButton = findViewById(R.id.go_to_profile_button);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onButtonSwitchToUserProfileActivity(v);
             }
         });
+
+    }
+
+    public void addJoinGameButtonFunctionality(){
+
+        Button joinGame = findViewById(R.id.join_game);
 
         /**
          * Checks for clicks on the join game button and creates a popup of available games if clicked
@@ -43,6 +54,11 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
             }
         });
+    }
+
+    public void addAskQuestionButtonFunctionality(){
+
+        Button askQuestion = findViewById(R.id.ask_question);
 
         /**
          * Checks for clicks on the ask question button and creates a popup of a new question of clicked
@@ -73,6 +89,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
 
+        //Temporary, will be removed when questions are added to the database
         String question = "One of these four countries does not border the Red Sea.";
         String correctAnswer = "Oman";
         String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
@@ -81,9 +98,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
         int correctId = 0;
+
+        //changes the text to the current question
         tv.setText(riddle.getQuestion());
 
         int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+
+        //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++){
             if(i >= possibleAnswers.length){
                 popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
