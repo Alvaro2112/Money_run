@@ -15,7 +15,7 @@ public class DatabaseProxyTest {
 
         final Player player = new Player(1236);
         player.setAddress("FooBarr");
-        player.setName("John Doe");
+        player.setName("Johann");
         final DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
