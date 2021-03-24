@@ -34,7 +34,7 @@ public class DatabaseProxy {
 
     /**
      * Get the Task (asynchronous !) from data base. The player instance can be retrieved -
-     * once the task is completed - by doing String.valueOf(task.getResult().getValue())
+     * once the task is completed - by using getPlayerFromTask
      * @param playerId
      * @return Task containing the player data
      */
@@ -56,6 +56,10 @@ public class DatabaseProxy {
 
     }
 
+    /**To get a player from a task
+     * @param task the task containing a player
+     * @return the player inside the task or null if the task is not complete
+     */
     public Player getPlayerFromTask(Task<DataSnapshot> task){
         if(task.isComplete()){
             return task.getResult().getValue(Player.class);

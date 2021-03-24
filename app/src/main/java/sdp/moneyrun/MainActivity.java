@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     ValueEventListener listener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            System.out.println(snapshot.getValue(Player.class).getName());
-           // et.setText(snapshot.getValue(Player.class).getName());
+          //  System.out.println(snapshot.getValue(Player.class).getName());
+            et.setText(snapshot.getValue(Player.class).getName());
         }
 
         @Override
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         DatabaseProxy db = new DatabaseProxy();
         Player player = new Player(654321,"Martin","somewhere", 0 , 0 );
         db.putPlayer(player);
-        DatabaseReference fdb = FirebaseDatabase.getInstance().getReference().child("players");
-       // fdb.addValueEventListener( listener);
+        DatabaseReference fdb = FirebaseDatabase.getInstance().getReference().child("players").child("654321");
+        fdb.addValueEventListener( listener);
         Button button = (Button) findViewById(R.id.buttonMain);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +60,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeView(){
-        db.getPlayer(1236).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//        DatabaseReference datab = FirebaseDatabase.getInstance().getReference("players").child("1236");
+//        datab.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                   et.setText(task.getResult().getValue(Player.class).getName());
+//                System.out.println(task.getResult().getValue(Player.class).getName());
+//
+//            }
+//        });
+        DatabaseProxy proxy = new DatabaseProxy();
+        proxy.getPlayerTask(1236).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-            //    et.setText(task.getResult().getValue(Player.class).getName());
+               et.setText(task.getResult().getValue(Player.class).getName());
                 System.out.println(task.getResult().getValue(Player.class).getName());
 
             }
