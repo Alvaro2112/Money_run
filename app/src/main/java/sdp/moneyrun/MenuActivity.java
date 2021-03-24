@@ -71,7 +71,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 String correctAnswer = "Oman";
                 String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
                 Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
-
                 onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
@@ -94,7 +93,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
-
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
         int correctId = 0;
@@ -113,11 +111,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             }
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
-            if(riddle.getPossibleAnswers()[i].equals(riddle.getPossibleAnswers()))
+            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
                 correctId = buttonIds[i];
         }
 
         popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
