@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
+                    //TODO: get this user's unique ID so it has a player associated with it
                     startActivity(menuIntent);
                 }
             }

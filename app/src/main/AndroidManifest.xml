@@ -38,8 +38,13 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".PlayerProfileActivity" />
+            android:label="@string/title_activity_login">
+        </activity>
+
+
+        <activity android:name=".PlayerProfileActivity"></activity>
+        <activity android:name=".RegisterPlayerActivity" android:label="Register Player"></activity>
+
     </application>
 
 </manifest>

@@ -26,6 +26,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+
       NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         joinGame = findViewById(R.id.join_game);
@@ -77,7 +78,10 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        playerProfileIntent.putExtra("profile", result);
+        int playerId = getIntent().getIntExtra("playerId",0);
+        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        playerProfileIntent.putExtra("playerId",playerId);
+        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
         startActivity(playerProfileIntent);
 
     }

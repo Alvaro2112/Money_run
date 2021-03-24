@@ -6,6 +6,10 @@ public class Player {
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
+    private int totalDistanceRun;
+    private int maxScoreInGame;
+    private String preferredColor;
+    private String preferredPet;
     private int score;
 
     public Player(int playerId) {
