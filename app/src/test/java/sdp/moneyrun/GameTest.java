@@ -47,7 +47,7 @@ public class GameTest {
     public void RiddleThrowsExceptionWhenCorrectAnswerIsNotInPossibleAnswers() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle(null, new String[]{"a"}, "Is it good?");
+            Riddle riddle = new Riddle("Is it good?", new String[]{"a"}, "Is it good?");
         });
 
     }
