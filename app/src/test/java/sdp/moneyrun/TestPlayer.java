@@ -5,32 +5,38 @@ import org.junit.Test;
 import java.util.Objects;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
     Player player = new Player(1);
+
     @Test
-    public void testNumberId(){
+    public void testNumberId() {
         assertEquals(1, player.getPlayerId());
     }
+
     @Test
-    public void testNameSetup(){
+    public void testNameSetup() {
         player.setName("Bob");
         assertEquals(player.getName(), "Bob");
     }
+
     @Test
-    public void testAddressSetup(){
+    public void testAddressSetup() {
         player.setAddress("New York");
         assertEquals("New York", player.getAddress());
     }
+
     @Test
-    public void testNumberOfDiedGames(){
+    public void testNumberOfDiedGames() {
         player.updateDiedGames();
-        assertEquals(1,player.getNumberOfDiedGames());
+        assertEquals(1, player.getNumberOfDiedGames());
     }
+
     @Test
-    public void testPlayedGames(){
+    public void testPlayedGames() {
         player.updatePlayedGames();
-        assertEquals(1,player.getNumberOfPlayedGames());
+        assertEquals(1, player.getNumberOfPlayedGames());
     }
 
     @Test(expected = IllegalStateException.class)
@@ -56,6 +62,12 @@ public class TestPlayer {
         player1.setName(name);
         Player player2 = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames);
         assertEquals(player1, player2);
+
+    }
+    @Test
+    public void testAskPlayerReturnsEmptyString(){
+        Player player = new Player(4);
+        assertEquals("",player.ask(""));
     }
 
     @Test

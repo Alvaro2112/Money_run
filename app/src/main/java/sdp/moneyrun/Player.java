@@ -3,7 +3,7 @@ package sdp.moneyrun;
 import java.util.Objects;
 
 public class Player {
-    private int playerId;
+    private  int playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
@@ -12,10 +12,9 @@ public class Player {
     /*
     For database purpose, a default constructor is needed
      */
-    public Player(){
+    public Player(){}
 
-    }
-    public Player(int playerId){
+    public Player(int playerId) {
         this.playerId = playerId;
     }
 
@@ -36,10 +35,13 @@ public class Player {
         this.address = address;
     }
 
-    public void updatePlayedGames(){
+
+
+    public void updatePlayedGames() {
         numberOfPlayedGames++;
     }
-    public void updateDiedGames(){
+
+    public void updateDiedGames() {
         numberOfDiedGames++;
     }
 
@@ -52,13 +54,13 @@ public class Player {
     }
 
     public String getAddress() {
-        if(address == null)
+        if (address == null)
             throw new IllegalStateException();
         return address;
     }
 
     public String getName() {
-        if(name == null)
+        if (name == null)
             throw new IllegalStateException();
         return name;
     }
@@ -85,5 +87,10 @@ public class Player {
     }
 
 
+    public String ask(String question){
+        String answer = "";
+        //TODO: display question on  player's screen and store the response
+        return answer;
+    }
     //TODO: add later methods related to the game itself
 }
