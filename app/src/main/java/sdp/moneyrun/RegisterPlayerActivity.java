@@ -32,7 +32,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkAllFields()){
+                if(checkAllFields(nameText.getText().toString(),addressText.getText().toString(), colorText.getText().toString(),animalText.getText().toString())){
                     Random random = new Random();
                     int uniquePlayerID = random.nextInt();
                     while(uniquePlayerID < 0)
@@ -49,11 +49,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         });
 
     }
-    private boolean checkAllFields(){
-        String name = nameText.getText().toString();
-        String address = addressText.getText().toString();
-        String color = colorText.getText().toString();
-        String animal = animalText.getText().toString();
+    private boolean checkAllFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty() || address.trim().isEmpty() || color.trim().isEmpty() || animal.trim().isEmpty()){
             if(name.trim().isEmpty()){
                 nameText.setError("Name field is empty");

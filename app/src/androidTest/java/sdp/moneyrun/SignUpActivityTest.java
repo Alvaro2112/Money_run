@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -76,6 +77,7 @@ public class SignUpActivityTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
         //FirebaseAuth.getInstance().signOut();
     }
