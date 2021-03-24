@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+
+    private Button profileButton;
+    private Button leaderboardButton;
+    private Button joinGame;
     private String[] result;
     private Player player;
 
@@ -23,23 +27,18 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+      
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        profileButton = findViewById(R.id.go_to_profile_button);
+        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
+      
         addProfileButtonFunctionality();
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
+        linkProfileButton(profileButton);
+        linkLeaderboardButton(leaderboardButton);
     }
 
-    public void addProfileButtonFunctionality(){
-
-        Button profileButton = findViewById(R.id.go_to_profile_button);
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
-            }
-        });
-
-    }
 
     public void addJoinGameButtonFunctionality(){
 
@@ -49,6 +48,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
          * Checks for clicks on the join game button and creates a popup of available games if clicked
          */
         joinGame.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
@@ -74,12 +74,37 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
+
     }
+
+    private void linkProfileButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonSwitchToUserProfileActivity(v);
+            }
+        });
+    }
+
+    
+    private void linkLeaderboardButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+            }
+        });
+    } 
+    
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        playerProfileIntent.putExtra("profile", result);
+        int playerId = getIntent().getIntExtra("playerId",0);
+        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        playerProfileIntent.putExtra("playerId",playerId);
+        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
         startActivity(playerProfileIntent);
 
     }
