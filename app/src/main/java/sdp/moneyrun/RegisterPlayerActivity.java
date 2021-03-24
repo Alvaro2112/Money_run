@@ -41,6 +41,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
                     //TODO:place it into the database with uniquePlayerID as key
                     //TODO : check if there is a player with that unique ID already in database and if there is change ID
                     Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
+                    //We are putting extra information so that once logged in the Player object can be properly instantiated
                     menuIntent.putExtra("playerId",uniquePlayerID);
                     menuIntent.putExtra("playerId"+uniquePlayerID,result);
                     startActivity(menuIntent);
@@ -49,6 +50,9 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         });
 
     }
+    /*
+     Checking on submit that each field is not left empty and raise an error and prevent from logging in if that is the case
+     */
     private boolean checkAllFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty() || address.trim().isEmpty() || color.trim().isEmpty() || animal.trim().isEmpty()){
             if(name.trim().isEmpty()){
