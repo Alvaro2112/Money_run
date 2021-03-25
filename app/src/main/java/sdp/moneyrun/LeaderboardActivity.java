@@ -17,6 +17,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
+        int playerId = getIntent().getIntExtra("playerId",0);
+        
         //TODO
         // Put addPlayer with local cache
     }

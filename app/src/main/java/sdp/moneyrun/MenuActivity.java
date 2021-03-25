@@ -18,8 +18,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Button profileButton;
     private Button leaderboardButton;
     private Button joinGame;
-    private String[] result;
+    private String[] playerInfo;
     private Player player;
+    int playerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         joinGame = findViewById(R.id.join_game);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
         Button askQuestion = findViewById(R.id.ask_question);
-
+        setPlayerObject();//creates an instance of the player Object
 
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
@@ -69,6 +70,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             @Override
             public void onClick(View v) {
                 Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                leaderboardIntent.putExtra("playerId",playerId);
                 startActivity(leaderboardIntent);
             }
         });
@@ -78,8 +80,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        int playerId = getIntent().getIntExtra("playerId",0);
-        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
         playerProfileIntent.putExtra("playerId",playerId);
         playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
         startActivity(playerProfileIntent);
@@ -130,13 +130,11 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         return popupWindow;
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.profile_button:
-////                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayerProfileFragment()).commit();
-//                break;
-//        }
-//        return false;
-//    }
+    public void setPlayerObject(){
+        playerId = getIntent().getIntExtra("playerId",0);
+        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        player = //getPlayerFromDatabase;
+        //TODO: put player in the database with playerId as primary key
+    }
+
 }
