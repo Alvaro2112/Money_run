@@ -43,7 +43,7 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
         Intents.release();
     }
-/*
+
     @Test
     public void LobbyButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
@@ -54,7 +54,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-   */
+
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
@@ -84,5 +84,4 @@ public class MenuActivityTest {
         Intents.release();
 
     }
-
 }
