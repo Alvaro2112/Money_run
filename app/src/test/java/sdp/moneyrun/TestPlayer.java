@@ -2,6 +2,9 @@ package sdp.moneyrun;
 
 import org.junit.Test;
 
+import java.util.Objects;
+
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
@@ -36,26 +39,63 @@ public class TestPlayer {
         assertEquals(1, player.getNumberOfPlayedGames());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testExceptionThrownOnSetName(){
+        Player p = new Player(3);
+        p.getName();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testExceptionThrownOnSetAddress(){
+        Player p = new Player(3);
+        p.getAddress();
+    }
     @Test
-    public void testExceptionThrownOnSetAddressAndName() {
-        try {
-            Player p = new Player(3);
-            p.getName();
-        } catch (IllegalStateException e) {
-            assertEquals(1, 1);
-        }
-        try {
-            Player p = new Player(3);
-            p.getAddress();
-        } catch (IllegalStateException e) {
-            assertEquals(1, 1);
-        }
+    public void constructorsReturnSamePlayer(){
+        int playerId = 123;
+        int nbrOfDiedGames = 0;
+        int nbrOfPlayedGames = 0;
+        String address = "Foooooooo";
+        String name = "BaaaRRfF";
+        Player player1 = new Player(playerId);
+        player1.setAddress(address);
+        player1.setName(name);
+        Player player2 = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames);
+        assertEquals(player1, player2);
+
     }
     @Test
     public void testAskPlayerReturnsEmptyString(){
         Player player = new Player(4);
         assertEquals("",player.ask(""));
     }
+
+    @Test
+    public void hashOutputsExpectedValue(){
+        int playerId = 123;
+        int nbrOfDiedGames = 0;
+        int nbrOfPlayedGames = 0;
+        String address = "Foooooooo";
+        String name = "BaaaRRfF";
+        Player player = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames);
+        assertEquals(player.hashCode(),
+                Objects.hash(playerId, name, address, nbrOfPlayedGames, nbrOfDiedGames));
+    }
+
+    @Test
+    public void equalsReturnFalseForNullObject(){
+        int playerId = 123;
+        int nbrOfDiedGames = 0;
+        int nbrOfPlayedGames = 0;
+        String address = "Foooooooo";
+        String name = "BaaaRRfF";
+        Player player1 = new Player(playerId);
+        player1.setAddress(address);
+        player1.setName(name);
+        assert (!player1.equals(null));
+    }
+
+
 
 
 }

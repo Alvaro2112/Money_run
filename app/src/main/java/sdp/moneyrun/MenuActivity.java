@@ -2,16 +2,24 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+
+import java.util.EmptyStackException;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -20,36 +28,60 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Button joinGame;
     private String[] playerInfo;
     private Player player;
-    int playerId;
+    private int playerId;
+    private DatabaseProxy db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-
-      NavigationView navigationView = findViewById(R.id.nav_view);
+      
+        NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
-        joinGame = findViewById(R.id.join_game);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
         Button askQuestion = findViewById(R.id.ask_question);
-        setPlayerObject();//creates an instance of the player Object
-
+        db = new DatabaseProxy();
+      
+        addJoinGameButtonFunctionality();
+        addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
-      
-        askQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup);
-            }
-        });
-      
-      
-          joinGame.setOnClickListener(new View.OnClickListener() {
+        setPlayerObject();//creates an instance of the player Object
+    }
+
+
+    public void addJoinGameButtonFunctionality(){
+
+        Button joinGame = findViewById(R.id.join_game);
+
+        /**
+         * Checks for clicks on the join game button and creates a popup of available games if clicked
+         */
+        joinGame.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
+            }
+        });
+    }
+
+    public void addAskQuestionButtonFunctionality(){
+
+        Button askQuestion = findViewById(R.id.ask_question);
+
+        /**
+         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
+         */
+        askQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Temporary, will be removed when questions are added to the database
+                String question = "One of these four countries does not border the Red Sea.";
+                String correctAnswer = "Oman";
+                String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
+                Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
 
@@ -92,12 +124,33 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     }
 
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
+        int correctId = 0;
 
-        popupWindow.getContentView().findViewById(R.id.question_choice_1).setOnClickListener(new View.OnClickListener() {
+        //changes the text to the current question
+        tv.setText(riddle.getQuestion());
+
+        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+        TextView buttonView = tv;
+
+        //Loops to find the ID of the button solution and assigns the text to each button
+        for (int i = 0; i < 4; i++){
+            if(i >= riddle.getPossibleAnswers().length){
+                popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
+                continue;
+            }
+            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
+            buttonView.setText(riddle.getPossibleAnswers()[i]);
+            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
+                correctId = buttonIds[i];
+        }
+
+        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
@@ -133,7 +186,23 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void setPlayerObject(){
         playerId = getIntent().getIntExtra("playerId",0);
         playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        player = //getPlayerFromDatabase;
+        DatabaseProxy db = new DatabaseProxy();
+        if(db != null) {
+            Task<DataSnapshot> t = db.getPlayerTask(playerId);
+//            player = db.getPlayerFromTask(t);
+            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()){
+                        player = db.getPlayerFromTask(t);
+                    }
+                }
+            });
+//           while(!t.isComplete()){
+//               System.out.println("Task is not ready yet");
+//           }
+            System.out.println("PLayer should be set by now");
+        }
         //TODO: put player in the database with playerId as primary key
     }
 
