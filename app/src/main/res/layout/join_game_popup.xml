@@ -32,6 +32,7 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/joing_game_popup_butt1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Game 1" />

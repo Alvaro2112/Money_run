@@ -1,5 +1,6 @@
 package sdp.moneyrun;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
@@ -22,6 +23,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Button joinGame;
     private String[] result;
     private Player player;
+    private Button lobbyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
+        addLobbyButtonFunctionality();
+    }
+
+    private void addLobbyButtonFunctionality() {
+        findViewById(R.id.button_lobby).setOnClickListener(v -> {
+                startActivity(new Intent(getApplicationContext(), GameLobbyActivity.class));
+        });
     }
 
 
@@ -47,7 +56,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
          * Checks for clicks on the join game button and creates a popup of available games if clicked
          */
         joinGame.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
@@ -110,6 +118,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
 
+
         onButtonShowPopupWindowClick(view, focusable, layoutId);
 
     }
@@ -169,7 +178,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         // show the popup window at wanted location
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
         return popupWindow;
     }
 
