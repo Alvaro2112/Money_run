@@ -43,6 +43,17 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
         Intents.release();
     }
+
+    @Test
+    public void LobbyButtonWorks() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.button_lobby)).perform(ViewActions.click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            intended(hasComponent(GameLobbyActivity.class.getName()));
+            Intents.release();
+        }
+    }
     
     @Test
     public void leaderboardButtonWorks() {
