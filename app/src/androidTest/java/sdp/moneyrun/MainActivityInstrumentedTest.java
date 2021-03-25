@@ -21,7 +21,7 @@ public class MainActivityInstrumentedTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
-
+/*
     @Test
     public void activityChangesToDashBoardAfter3Sec(){
         Intents.init();
@@ -33,4 +33,6 @@ public class MainActivityInstrumentedTest {
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();
     }
+    */
+
 }
