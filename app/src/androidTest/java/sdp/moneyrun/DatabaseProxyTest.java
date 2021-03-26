@@ -32,6 +32,7 @@ public class DatabaseProxyTest {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if(task.isSuccessful()) {
+                    System.out.println("do we get here000");
                    assert( player.equals(db.getPlayerFromTask(testTask)));
                 }else{
                     assert (false);

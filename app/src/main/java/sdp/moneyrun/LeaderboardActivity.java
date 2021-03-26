@@ -1,5 +1,6 @@
 package sdp.moneyrun;
 
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -9,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,8 +29,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
-        db = new DatabaseProxy();
-        setUserPlayer();
+//        setUserPlayer();
+        setMainPlayer();
         //TODO
         // Put addPlayer with local cache
     }
@@ -63,16 +68,52 @@ public class LeaderboardActivity extends AppCompatActivity {
         return playerList;
     }
 
-    public void setUserPlayer(){
+    public void setMainPlayer(){
         int playerId = getIntent().getIntExtra("playerId",0);
-        Task playerTask = db.getPlayerTask(playerId);
-        playerTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(playerTask.isSuccessful())
-                    userPlayer = db.getPlayerFromTask(playerTask);
-            }
-        });
-        addPlayer(userPlayer);
+        if(playerId != 0) {
+            String[] playerInfo = getIntent().getStringArrayExtra("playerId" + playerId);
+            userPlayer = new Player(playerId);
+            userPlayer.setName(playerInfo[0]);
+            userPlayer.setAddress(playerInfo[1]);
+            userPlayer.setScore(0);
+            addPlayer(userPlayer);
+        }
     }
+
+//    public void setUserPlayer2(){
+//        int playerId = getIntent().getIntExtra("playerId",0);
+//        db = new DatabaseProxy();
+//        Task<DataSnapshot> playerTask = db.getPlayerTask(playerId);
+//        playerTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                if(task.isSuccessful())
+//                    userPlayer = db.getPlayerFromTask(playerTask);
+//                else
+//                    return;//TODO: return error message
+//            }
+//        });
+//        while(!playerTask.isComplete()){System.out.println("Not");}
+//        addPlayer(userPlayer);
+//    }
+//    public void setUserPlayer(){
+//        int playerId = getIntent().getIntExtra("playerId",0);
+//        Player player = new Player(playerId);
+//        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference().child("players").child(""+playerId);
+//        dbReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Player player2 = (Player) snapshot.getValue(Player.class);
+//                player.setName(player2.getName());
+//                player.setAddress(player2.getAddress());
+//                player.setScore(0);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//        addPlayer(player);
+//    }
 }

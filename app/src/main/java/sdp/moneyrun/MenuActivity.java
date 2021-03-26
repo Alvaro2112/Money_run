@@ -103,6 +103,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             public void onClick(View v) {
                 Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
                 leaderboardIntent.putExtra("playerId",playerId);
+                leaderboardIntent.putExtra("playerId"+playerId,playerInfo);
                 startActivity(leaderboardIntent);
             }
         });
@@ -182,7 +183,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         return popupWindow;
     }
-
+    //TODO: fix it somehow: task is never completed and thus cannot get player from database
     public void setPlayerObject(){
         playerId = getIntent().getIntExtra("playerId",0);
         playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
