@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+//lol
 public class DatabaseProxy {
     private final DatabaseReference mDataBase;
     private final String TAG = DatabaseProxy.class.getSimpleName();
