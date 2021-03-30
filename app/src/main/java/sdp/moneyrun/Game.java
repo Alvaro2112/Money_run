@@ -3,26 +3,50 @@ package sdp.moneyrun;
 import android.location.Location;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+@Entity (tableName = "riddles")
 class Riddle {
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "Questions")
     private final String question;
-    private final String[] possibleAnswers;
+
+    @ColumnInfo(name = "Correct")
+    private final String firstAnswer;
+
+    @ColumnInfo(name = "A")
+    private final String secondAnswer;
+
+    @ColumnInfo(name = "B")
+    private final String thirdAnswer;
+
+    @ColumnInfo(name = "C")
+    private final String fourthAnswer;
+
+    @ColumnInfo(name = "D")
     private final String correctAnswer;
 
 
     /**
      * @param question        This is the question that the user will see and will have to solve
-     * @param possibleAnswers This is all the possible answers the users will be offered
      * @param correctAnswer   This is the unique correct answer to the question
      */
-    public Riddle(String question, String[] possibleAnswers, String correctAnswer) {
-        if (question == null || possibleAnswers == null || correctAnswer == null)
+    public Riddle(String question, String firstAnswer, String secondAnswer, String thirdAnswer, String fourthAnswer, String correctAnswer) {
+        if (question == null || firstAnswer == null || correctAnswer == null || secondAnswer == null)
             throw new IllegalArgumentException("Null arguments in Riddle constructor");
 
+        String[] possibleAnswers = {firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
         Set<String> possibleAnswersAsSet = new HashSet<>(Arrays.asList(possibleAnswers));
 
         if (!possibleAnswersAsSet.contains(correctAnswer)) {
@@ -30,8 +54,11 @@ class Riddle {
         }
 
         this.question = question;
-        this.possibleAnswers = possibleAnswers;
         this.correctAnswer = correctAnswer;
+        this.firstAnswer = firstAnswer;
+        this.secondAnswer= secondAnswer;
+        this.thirdAnswer = thirdAnswer;
+        this.fourthAnswer = fourthAnswer;
     }
 
     public String getQuestion() {
@@ -43,8 +70,29 @@ class Riddle {
     }
 
     public String[] getPossibleAnswers() {
-        return possibleAnswers;
+        return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
+
+    public String getFirstAnswer() {
+        return firstAnswer;
+    }
+
+    public String getSecondAnswer() {
+        return secondAnswer;
+    }
+
+    public String getThirdAnswer() {
+        return thirdAnswer;
+    }
+
+    public String getFourthAnswer() {
+        return fourthAnswer;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
 }
 
 

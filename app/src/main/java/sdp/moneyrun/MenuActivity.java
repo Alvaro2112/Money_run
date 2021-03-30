@@ -12,8 +12,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.File;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -25,19 +28,32 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        RiddleDatabase a = instantiateDatabase();
+        RiddleDao e = a.riddleDao();
+        Riddle[] r = e.getRiddle();
+        System.out.println(r);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-      
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
-      
+
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
     }
 
+    public RiddleDatabase instantiateDatabase(){
+
+        return Room.databaseBuilder(this.getApplicationContext(),RiddleDatabase.class,"riddles.db").
+                createFromFile(new File("C:/Users/alvar/Desktop/Money_run/app/src/main/assets/databases")).fallbackToDestructiveMigration().allowMainThreadQueries().build();
+
+    }
 
     public void addJoinGameButtonFunctionality(){
 
@@ -69,7 +85,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 String question = "One of these four countries does not border the Red Sea.";
                 String correctAnswer = "Oman";
                 String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
-                Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+                Riddle riddle = new Riddle(question, "Jordan", "Oman", "Sudan", null , correctAnswer);
                 onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
