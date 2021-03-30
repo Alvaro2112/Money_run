@@ -36,8 +36,5 @@
     <string name="answer_2">B</string>
     <string name="answer_3">C</string>
     <string name="answer_4">D</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
+    <string name="mapbox_access_token">pk.eyJ1IjoibW9uZXlydW4iLCJhIjoiY2ttdnNxMzFuMDgzdTJvbjFwaWRjdmV3ZiJ9.R-YeQNFQsgZurdrzhNEIhA</string>
 </resources>
