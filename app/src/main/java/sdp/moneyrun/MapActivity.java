@@ -36,8 +36,7 @@ public class MapActivity extends AppCompatActivity implements
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-
-            mapView.getMapAsync(this);
+        mapView.getMapAsync(this);
 
     }
 
@@ -51,8 +50,6 @@ public class MapActivity extends AppCompatActivity implements
 
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
-            mapboxMap.moveCamera(CameraUpdateFactory.zoomTo(2));
-
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager =  new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
@@ -80,8 +77,6 @@ public class MapActivity extends AppCompatActivity implements
         LatLng latLng = new LatLng(latitude,longitude);
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
-                .zoom(10)
-                .tilt(20)
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }

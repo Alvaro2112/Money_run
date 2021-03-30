@@ -69,4 +69,27 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void testSymbolManager() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+               assertEquals( a.getSymbolManager().getIconAllowOverlap(),true);
+                assertEquals( a.getSymbolManager().getTextAllowOverlap(),true);
+
+            });
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
