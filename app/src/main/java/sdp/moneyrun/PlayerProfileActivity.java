@@ -34,7 +34,8 @@ public class PlayerProfileActivity extends AppCompatActivity {
             }
         });
         Intent playerIntent = getIntent();
-        String[] playerInfo = playerIntent.getStringArrayExtra("profile");
+        int playerId = playerIntent.getIntExtra("playerId",0);
+        String[] playerInfo = playerIntent.getStringArrayExtra("playerId"+playerId);
         setDisplayedTexts(playerInfo);
     }
 

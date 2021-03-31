@@ -30,6 +30,7 @@ import java.util.List;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
     private Button profileButton;
+
     private Button joinGame;
     private Button newGame;
     private String[] result;
