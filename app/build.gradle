@@ -40,7 +40,7 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-
+    implementation 'com.opencsv:opencsv:4.6'
     // optional - RxJava support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
 

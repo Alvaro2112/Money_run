@@ -2,7 +2,6 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
+import java.io.InputStream;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -25,19 +23,14 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Button joinGame;
     private String[] result;
     private Player player;
+    private RiddlesDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        RiddleDatabase a = instantiateDatabase();
-        RiddleDao e = a.riddleDao();
-        Riddle[] r = e.getRiddle();
-        System.out.println(r);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        db = RiddlesDatabase.createInstance(getApplicationContext());
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
@@ -46,13 +39,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
-    }
-
-    public RiddleDatabase instantiateDatabase(){
-
-        return Room.databaseBuilder(this.getApplicationContext(),RiddleDatabase.class,"riddles.db").
-                createFromFile(new File("C:/Users/alvar/Desktop/Money_run/app/src/main/assets/databases")).fallbackToDestructiveMigration().allowMainThreadQueries().build();
-
     }
 
     public void addJoinGameButtonFunctionality(){
@@ -85,8 +71,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 String question = "One of these four countries does not border the Red Sea.";
                 String correctAnswer = "Oman";
                 String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
-                Riddle riddle = new Riddle(question, "Jordan", "Oman", "Sudan", null , correctAnswer);
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
+                Riddle riddle = new Riddle(question, correctAnswer, "Jordan", "Oman", "Sudan", "a" );
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
             }
         });
 
@@ -151,6 +137,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             }
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
+
             if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
                 correctId = buttonIds[i];
         }
