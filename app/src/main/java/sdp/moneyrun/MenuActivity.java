@@ -131,10 +131,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++){
-            if(i >= riddle.getPossibleAnswers().length){
-                popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
-                continue;
-            }
+
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
