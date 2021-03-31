@@ -63,15 +63,5 @@ public class MenuActivityTest {
         Intents.release();
     }
 
-    @Test
-    public void askQuestionPopupClosesWhenCorrectAnswerClicked() {
-        Intents.init();
-        String correctAnswer = "Oman";
-        onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
-        onView(ViewMatchers.withText(correctAnswer)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.ask_question_popup)).check(doesNotExist());
-        Intents.release();
-
-    }
 
 }
