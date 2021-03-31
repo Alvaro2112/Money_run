@@ -49,9 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Until sign Out at destroy activity is implemented
-        FirebaseAuth.getInstance().signOut();
-        ///////////////////////////////////////////////////
 
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
                 this,
@@ -76,6 +73,17 @@ public class LoginActivity extends AppCompatActivity {
         if(currentUser != null){
            updateUI(currentUser);
         }
+    }
+
+    /**
+     * This is needed for testing
+     * Also, since it's one of the first activity created, it's reasonable to assume that when it's
+     * destroyed the user should be signed out
+     */
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mAuth.signOut();
     }
 
     // link from signUp button to signUp page
