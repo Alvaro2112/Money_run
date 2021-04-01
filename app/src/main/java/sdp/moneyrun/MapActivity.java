@@ -1,7 +1,6 @@
 package sdp.moneyrun;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
 import android.os.Bundle;
 import android.widget.Chronometer;
 import android.widget.Toast;
@@ -10,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
-import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -32,7 +29,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements
@@ -49,9 +45,8 @@ public class MapActivity extends AppCompatActivity implements
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
     private PermissionsManager permissionsManager;
-    private LocationEngine locationEngine;
-    private LocationChangeListeningActivityLocationCallback callback =
-            new LocationChangeListeningActivityLocationCallback(this);
+    public LocationEngine locationEngine;
+    private LocationChangeListeningActivityLocationCallback callback;
 
     public Chronometer chronometer;
     @Override
@@ -78,6 +73,7 @@ public class MapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
+        callback = new LocationChangeListeningActivityLocationCallback(this);
         mapboxMap.setStyle(Style.MAPBOX_STREETS,style -> {
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager =  new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
@@ -197,53 +193,6 @@ public class MapActivity extends AppCompatActivity implements
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
         }
     }
-    private static class LocationChangeListeningActivityLocationCallback
-            implements LocationEngineCallback<LocationEngineResult> {
-
-        private final WeakReference<MapActivity> activityWeakReference;
-
-        LocationChangeListeningActivityLocationCallback(MapActivity activity) {
-            this.activityWeakReference = new WeakReference<>(activity);
-        }
-
-        /**
-         * The LocationEngineCallback interface's method which fires when the device's location has changed.
-         *
-         * @param result the LocationEngineResult object which has the last known location within it.
-         */
-        @Override
-        public void onSuccess(LocationEngineResult result) {
-            MapActivity activity = activityWeakReference.get();
-
-            if (activity != null) {
-                Location location = result.getLastLocation();
-                if (location == null) {
-                    return;
-                }
-                // changed from the original one to have less getLastLocation !!
-                // Pass the new location to the Maps SDK's LocationComponent
-                if (activity.mapboxMap != null ) {
-                    activity.mapboxMap.getLocationComponent().forceLocationUpdate(location);
-                }
-            }
-        }
-
-        /**
-         * The LocationEngineCallback interface's method which fires when the device's location can't be captured
-         *
-         * @param exception the exception message
-         */
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            MapActivity activity = activityWeakReference.get();
-            if (activity != null) {
-                Toast.makeText(activity, exception.getLocalizedMessage(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
 
     @Override
     protected void onStart() {

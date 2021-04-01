@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class MapInstrumentedTest {
 
+
         @Test
         public void AddMarkerAddsMarker() {
             try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -111,6 +112,9 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
+
+
 
     @Test
     public void chronometerTest() {
