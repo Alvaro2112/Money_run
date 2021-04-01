@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -35,27 +34,10 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
       
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
-        addLogOutButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
     }
 
-    public void addLogOutButtonFunctionality(){
-
-        Button logOut = findViewById(R.id.log_out_button);
-
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        logOut.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
-    }
 
     public void addJoinGameButtonFunctionality(){
 
