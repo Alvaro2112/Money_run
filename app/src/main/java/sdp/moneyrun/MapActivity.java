@@ -230,20 +230,12 @@ public class MapActivity extends AppCompatActivity implements
 
             if (activity != null) {
                 Location location = result.getLastLocation();
-
                 if (location == null) {
                     return;
                 }
-
-// Create a Toast which displays the new location's coordinates
-                Toast.makeText(activity, String.format(activity.getString(R.string.new_location),
-                        String.valueOf(result.getLastLocation().getLatitude()),
-                        String.valueOf(result.getLastLocation().getLongitude())),
-                        Toast.LENGTH_SHORT).show();
-
-// Pass the new location to the Maps SDK's LocationComponent
-                if (activity.mapboxMap != null && result.getLastLocation() != null) {
-                    activity.mapboxMap.getLocationComponent().forceLocationUpdate(result.getLastLocation());
+                // Pass the new location to the Maps SDK's LocationComponent
+                if (activity.mapboxMap != null ) {
+                    activity.mapboxMap.getLocationComponent().forceLocationUpdate(location);
                 }
             }
         }
