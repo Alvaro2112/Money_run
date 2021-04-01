@@ -16,7 +16,7 @@
 
         <Chronometer
             android:id="@+id/mapChronometer"
-            android:layout_width="50dp"
+            android:layout_width="100dp"
             android:layout_height="50dp"
             android:countDown="false"
             android:enabled="true"></Chronometer>

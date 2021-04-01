@@ -29,6 +29,8 @@ public class MapActivity extends AppCompatActivity implements
     private MapView mapView;
     private SymbolManager symbolManager;
     private MapboxMap mapboxMap;
+
+    private Chronometer chronometer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class MapActivity extends AppCompatActivity implements
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        setChronometer();
+        initChronometer();
     }
 
     /**
@@ -63,8 +65,9 @@ public class MapActivity extends AppCompatActivity implements
         this.mapboxMap = mapboxMap;
     }
 
-    private void setChronometer(){
-        Chronometer chronometer = (Chronometer) findViewById(R.id.mapChronometer);
+    private void initChronometer(){
+
+        chronometer = (Chronometer) findViewById(R.id.mapChronometer);
         chronometer.start();
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -75,9 +78,12 @@ public class MapActivity extends AppCompatActivity implements
                 else{
                     displayEndOfTimer();
                 }
-                chronometer.setFormat(String.valueOf(GAME_TIME - chronometerCounter));
+                chronometer.setFormat("REMAINING TIME"+String.valueOf(GAME_TIME - chronometerCounter));
             }
         });
+    }
+    public Chronometer getChronometer(){
+        return chronometer;
     }
 
     private void displayEndOfTimer(){
