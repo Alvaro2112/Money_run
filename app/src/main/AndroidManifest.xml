@@ -12,7 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".LeaderboardActivity"></activity>
+
+
+        <activity android:name=".MapActivity">
+
+        </activity>
+
+
+        <activity android:name=".LeaderboardActivity" />
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/AppTheme"
@@ -31,21 +38,20 @@
                 android:value=".placeHolderSignUp" />
         </activity>
         <activity android:name=".MainActivity">
-            <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+          
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
-        </activity>
-
-
-        <activity android:name=".PlayerProfileActivity"></activity>
-        <activity android:name=".RegisterPlayerActivity" android:label="Register Player"></activity>
-
+            android:label="@string/title_activity_login"></activity>
+        <activity android:name=".PlayerProfileActivity" />
+        <activity
+            android:name=".RegisterPlayerActivity"
+            android:label="Register Player" />
     </application>
 
 </manifest>
