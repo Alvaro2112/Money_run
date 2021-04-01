@@ -21,6 +21,14 @@ public class Player {
     public Player(){}
 
 
+    /**
+     * Constructor, returns instance of player
+     * @param playerId the unique id that identifies a player
+     * @param name
+     * @param address
+     * @param numberOfDiedGames
+     * @param numberOfPlayedGames
+     */
     public Player(int playerId, String name, String address, int numberOfDiedGames,
                   int numberOfPlayedGames){
         this.playerId = playerId;
@@ -30,33 +38,57 @@ public class Player {
         this.numberOfPlayedGames = numberOfPlayedGames;
     }
 
+    /**
+     * Setter for name. By design the player already had a name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *Setter for address. By design the player already had an address
+     * @param address
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
-
-
+    /**
+     * Increments the number of played games
+     */
     public void updatePlayedGames() {
         numberOfPlayedGames++;
     }
 
+    /**
+     * Increments the number of died games
+     */
     public void updateDiedGames() {
         numberOfDiedGames++;
     }
 
+    /**
+     *
+     * @return number of games in which the player died
+     */
     public int getNumberOfDiedGames() {
         return numberOfDiedGames;
     }
 
+    /**
+     *
+     * @return the unique player id
+     */
     public int getPlayerId() {
         return playerId;
     }
 
 
+    /**
+     *
+     * @return the score of that player
+     */
     public int getScore(){
         if (name == null)
             throw new IllegalStateException();
@@ -64,26 +96,43 @@ public class Player {
         return score;
     }
 
+    /**
+     *
+     * @param score the score that is to update
+     */
     public void setScore(int score){
         this.score = score;
     }
 
 
+    /**
+     *
+     * @return the adress of the player
+     */
     public String getAddress() {
         if (address == null)
             throw new IllegalStateException();
         return address;
     }
 
+    /**
+     *
+     * @return the name of the player
+     */
     public String getName() {
         if (name == null)
             throw new IllegalStateException();
         return name;
     }
 
+    /**
+     *
+     * @return the number of games the player played
+     */
     public int getNumberOfPlayedGames() {
         return numberOfPlayedGames;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -103,6 +152,11 @@ public class Player {
     }
 
 
+    /**
+     *
+     * @param question
+     * @return the answer of the question asked
+     */
     public String ask(String question){
         String answer = "";
         //TODO: display question on  player's screen and store the response
