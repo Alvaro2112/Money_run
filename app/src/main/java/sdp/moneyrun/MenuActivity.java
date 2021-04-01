@@ -107,7 +107,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addAskQuestionButtonFunctionality();
         addLogOutButtonFunctionality();
 
-        profileButton.setOnClickListener(v -> onButtonSwitchToUserProfileActivity(v));
+        profileButton.setOnClickListener(this::onButtonSwitchToUserProfileActivity);
 
         leaderboardButton.setOnClickListener(v -> {
             Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
