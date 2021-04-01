@@ -20,13 +20,10 @@ public class Player {
      */
     public Player(){}
 
-    public Player(int playerId) {
-        this.playerId = playerId;
-    }
 
     public Player(int playerId, String name, String address, int numberOfDiedGames,
                   int numberOfPlayedGames){
-        this(playerId);
+        this.playerId = playerId;
         this.setName(name);
         this.setAddress(address);
         this.numberOfDiedGames = numberOfDiedGames;
