@@ -29,7 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
         for (String permission : map.keySet()) {
-            boolean isGranted = map.get(permission);
+
+            Boolean isGranted = map.get(permission);
+            isGranted = isGranted != null ? isGranted : false;
+
             if (isGranted) {
                 System.out.println("Permission" + permission + " granted.");
             } else {

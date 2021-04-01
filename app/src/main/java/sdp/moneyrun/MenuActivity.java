@@ -1,7 +1,9 @@
 package sdp.moneyrun;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,18 +11,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,12 +35,18 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.permissions.PermissionsRequester;
+
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
     private final String OPEN_GAMES = "open_games";
     private final String OPEN_GAMES_GAME_ID = "gameId";
     private final String OPEN_GAMES_NAME = "name";
     private final String OPEN_GAMES_PLAYER_COUNT = "playerCount";
     private final String OPEN_GAMES_MAX_PLAYER_COUNT = "maxPlayerCount";
+    private final String GAME_START_LOCATION = "startLocation";
+
+    // Distance in meters
+    private final float MAX_DISTANCE_TO_JOIN_GAME = 500;
 
     private Button profileButton;
 
@@ -47,12 +58,18 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
+    // Get player location
+    private FusedLocationProviderClient fusedLocationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setup database instance
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
+
+        // Get player location
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         setContentView(R.layout.activity_menu);
 
@@ -99,7 +116,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * Displays every current games.
      * @param popupView
      */
-    public void onJoinGamePopupWindowLoadGameList(View popupView){
+    public void onJoinGamePopupWindowLoadGameList(View popupView) {
         LinearLayout openGamesLayout = (LinearLayout) popupView.findViewById(R.id.openGamesLayout);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
@@ -108,7 +125,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             TableLayout gameLayout = new TableLayout(this);
 
             int buttonId = 0;
-            for(GameRepresentation gameRepresentation : gameRepresentations){
+            for (GameRepresentation gameRepresentation : gameRepresentations) {
                 displayGameInterface(gameLayout, buttonId, gameRepresentation);
                 buttonId++;
             }
@@ -122,7 +139,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * @param gameRepresentations a list of the game representations.
      * @return
      */
-    public Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations){
+    public Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
                 .child(OPEN_GAMES)
@@ -130,15 +147,15 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Log.e("firebase", "Error getting data", task.getException());
-                    }else{
+                    } else {
                         gameRepresentations.clear();
 
                         DataSnapshot result = task.getResult();
-                        if(result == null){
+                        if (result == null) {
                             return;
                         }
 
-                        for(DataSnapshot dataSnapshot : result.getChildren()){
+                        for (DataSnapshot dataSnapshot : result.getChildren()) {
                             GameRepresentation gameRepresentation = defineGameFromDatabase(dataSnapshot);
                             gameRepresentations.add(gameRepresentation);
                         }
@@ -152,21 +169,22 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * @param dataSnapshot the game snapshot
      * @return
      */
-    private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot){
+    private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
         String gameId = dataSnapshot.child(OPEN_GAMES_GAME_ID).getValue(String.class);
         String name = dataSnapshot.child(OPEN_GAMES_NAME).getValue(String.class);
         Integer playerCountInteger = dataSnapshot.child(OPEN_GAMES_PLAYER_COUNT).getValue(Integer.class);
         int playerCount = 0;
-        if(playerCountInteger != null){
+        if (playerCountInteger != null) {
             playerCount = playerCountInteger;
         }
         Integer maxPlayerCountInteger = dataSnapshot.child(OPEN_GAMES_MAX_PLAYER_COUNT).getValue(Integer.class);
         int maxPlayerCount = 0;
-        if(maxPlayerCountInteger != null){
+        if (maxPlayerCountInteger != null) {
             maxPlayerCount = maxPlayerCountInteger;
         }
+        LocationRepresentation startLocation = dataSnapshot.child(GAME_START_LOCATION).getValue(LocationRepresentation.class);
 
-        return new GameRepresentation(gameId, name, playerCount, maxPlayerCount);
+        return new GameRepresentation(gameId, name, playerCount, maxPlayerCount, startLocation);
     }
 
     /**
@@ -176,7 +194,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * @param buttonId              the id of the join button
      * @param gameRepresentation    the representation of the game to display
      */
-    private void displayGameInterface(TableLayout gameLayout, int buttonId, GameRepresentation gameRepresentation){
+    private void displayGameInterface(TableLayout gameLayout, int buttonId, GameRepresentation gameRepresentation) {
         // create game layout
         TableRow gameRow = new TableRow(this);
         TableLayout.LayoutParams gameParams = new TableLayout.LayoutParams(
@@ -186,16 +204,50 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         // create join button
         Button button = new Button(this);
         button.setId(buttonId);
-        String buttonText = String.format(getResources().getString(R.string.join_game_message));
-        button.setText(buttonText);
-        button.setEnabled(gameRepresentation.getPlayerCount() < gameRepresentation.getMaxPlayerCount());
+        button.setText(getString(R.string.join_game_message));
+
+        // Modify button if the game is full
+        if(gameRepresentation.getPlayerCount() >= gameRepresentation.getMaxPlayerCount()){
+            button.setEnabled(false);
+            button.setText(getString(R.string.join_game_full_message));
+        }
+
+        // Modify button if game is too far
+        // Grant permissions if necessary
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermissions();
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null
+                        // In this case, the game cannot be instanciated
+                        if (location == null) {
+                            Log.e("location", "Error getting location");
+                        }
+                        LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+
+                        double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+
+                        if(distance > MAX_DISTANCE_TO_JOIN_GAME){
+                            button.setEnabled(false);
+                            button.setText(getString(R.string.join_game_too_far_message));
+                        }
+                    }
+                });
+
         gameRow.addView(button);
 
         // create game name display
         TextView nameView = new TextView(this);
         String nameText = String.format((getResources().getString(R.string.game_name_display)), gameRepresentation.getName());
         nameView.setText(nameText);
-        nameView.setPadding(0,0,40,0);
+        nameView.setPadding(0, 0, 40, 0);
         gameRow.addView(nameView);
 
         // create player count display
@@ -239,23 +291,23 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(LinearLayout newGameLayout){
+    public void onSubmitPostNewGame(LinearLayout newGameLayout) {
         TextView nameGameView = newGameLayout.findViewById(R.id.nameGameText);
         TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerNumber);
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
-        if(gameName.isEmpty()){
+        if (gameName.isEmpty()) {
             nameGameView.setError("This field is required");
             return;
         }
-        if(maxPlayerNumberStr.isEmpty()) {
+        if (maxPlayerNumberStr.isEmpty()) {
             maxPlayerNumberView.setError("This field is required");
             return;
         }
 
         int maxPlayerNumber = Integer.parseInt(maxPlayerNumberStr);
 
-        if(maxPlayerNumber < 1){
+        if (maxPlayerNumber < 1) {
             maxPlayerNumberView.setError("There should be at least one player in a game");
             return;
         }
@@ -270,20 +322,70 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * @param maxPlayerCount    the maximum number of players in the game
      * @return the game
      */
-    public Game postNewGame(String name, int maxPlayerCount){
+    public void postNewGame(String name, int maxPlayerCount) {
         DatabaseReference gameReference = databaseReference.child(OPEN_GAMES).push();
+        DatabaseReference startLocationReference = databaseReference.child(OPEN_GAMES).child(gameReference.getKey()).child(GAME_START_LOCATION);
 
-        String gameId = gameReference.getKey();
-        List<Player> players = new ArrayList<>();
-        List<Riddle> riddles = new ArrayList<>();
-        Location startLocation = new Location("");
-        startLocation.getLatitude();
-        startLocation.getLongitude();
+        // Grant permissions if necessary
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermissions();
+        }
 
-        Game game = new Game(gameId, name, players, maxPlayerCount, riddles, startLocation);
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null
+                        // In this case, the game cannot be instanciated
+                        if (location == null) {
+                            Log.e("location", "Error getting location");
+                        }
 
-        gameReference.setValue(game);
+                        // Build new game given fields filled by user
+                        String gameId = gameReference.getKey();
+                        List<Player> players = new ArrayList<>();
+                        List<Riddle> riddles = new ArrayList<>();
 
-        return game;
+                        Game game = new Game(gameId, name, players, maxPlayerCount, riddles, location);
+
+                        // post game to database
+                        gameReference.setValue(game);
+
+                        // Post location to database
+                        LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                        startLocationReference.setValue(locationRep);
+                    }
+                });
+    }
+
+    public void requestLocationPermissions(){
+        ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
+            for (String permission : map.keySet()) {
+
+                Boolean isGranted = map.get(permission);
+                isGranted = isGranted != null ? isGranted : false;
+
+                if (isGranted) {
+                    System.out.println("Permission" + permission + " granted.");
+                } else {
+                    System.out.println("Permission" + permission + " denied.");
+                }
+            }
+        });
+
+        String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+        String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+
+        PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
+                this,
+                requestPermissionsLauncher,
+                getString(R.string.user_location_permission_explanation),
+                false,
+                coarseLocation,
+                fineLocation);
+        locationPermissionsRequester.requestPermission();
     }
 }
