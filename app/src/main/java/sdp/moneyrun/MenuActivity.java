@@ -1,9 +1,7 @@
 package sdp.moneyrun;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,22 +16,17 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.w3c.dom.Text;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +58,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
@@ -89,6 +83,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addJoinGameButtonFunctionality();
         addNewGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
+        addLogOutButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
     }
@@ -111,6 +106,23 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
     }
 
+    public void addLogOutButtonFunctionality(){
+
+        Button logOut = findViewById(R.id.log_out_button);
+
+        /**
+         * Checks for clicks on the join game button and creates a popup of available games if clicked
+         */
+        logOut.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+            }
+        });
+    }
+
     public void addAskQuestionButtonFunctionality(){
 
         Button askQuestion = findViewById(R.id.ask_question);
@@ -121,6 +133,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         button.setOnClickListener(v -> onButtonSwitchToUserProfileActivity(v));
     }
 
+    
     private void linkLeaderboardButton(Button button){
         button.setOnClickListener(v -> {
             Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
@@ -138,6 +151,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         startActivity(playerProfileIntent);
 
     }
+
+    public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
+
+        onButtonShowPopupWindowClick(view, focusable, layoutId);
+
+    }
+
 
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
