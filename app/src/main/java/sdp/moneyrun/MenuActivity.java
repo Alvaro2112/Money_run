@@ -84,30 +84,27 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
 
-        addJoinGameButtonFunctionality();
-        addNewGameButtonFunctionality();
+        Button joinGame = findViewById(R.id.join_game);
+        joinGame.setOnClickListener(v -> onClickShowJoinGamePopupWindow(v, true, R.layout.join_game_popup));
+
+        Button newGame = findViewById(R.id.new_game);
+        newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
+
         addAskQuestionButtonFunctionality();
         addLogOutButtonFunctionality();
-        linkProfileButton(profileButton);
-        linkLeaderboardButton(leaderboardButton);
+
+        profileButton.setOnClickListener(v -> onButtonSwitchToUserProfileActivity(v));
+
+        leaderboardButton.setOnClickListener(v -> {
+            Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+            startActivity(leaderboardIntent);
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
-    }
-
-    public void addJoinGameButtonFunctionality(){
-
-        Button joinGame = findViewById(R.id.join_game);
-        joinGame.setOnClickListener(v -> onClickShowJoinGamePopupWindow(v, true, R.layout.join_game_popup));
-    }
-
-    public void addNewGameButtonFunctionality(){
-
-        Button newGame = findViewById(R.id.new_game);
-        newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
     }
 
     public void addLogOutButtonFunctionality(){
@@ -131,18 +128,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         Button askQuestion = findViewById(R.id.ask_question);
         askQuestion.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle()));
-    }
-
-    private void linkProfileButton(Button button){
-        button.setOnClickListener(v -> onButtonSwitchToUserProfileActivity(v));
-    }
-
-    
-    private void linkLeaderboardButton(Button button){
-        button.setOnClickListener(v -> {
-            Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-            startActivity(leaderboardIntent);
-        });
     }
 
     public void onButtonSwitchToUserProfileActivity(View view) {
