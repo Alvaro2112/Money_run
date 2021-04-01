@@ -18,7 +18,7 @@ public class MapInstrumentedTest {
                 float lat = 12f;
                 float lon = 12f;
                 try {
-                    Thread.sleep(2500);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -28,7 +28,7 @@ public class MapInstrumentedTest {
                     a.addMarker(lat+2f,lon);
                         });
 
-                Thread.sleep(2500);
+                Thread.sleep(10000);
                 scenario.onActivity(a ->{
                    assertEquals( a.getSymbolManager().getAnnotations().size(),2);
                 });
@@ -46,7 +46,7 @@ public class MapInstrumentedTest {
             float lat = 8f;
             float lon = 8f;
             try {
-                Thread.sleep(2500);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -54,7 +54,7 @@ public class MapInstrumentedTest {
                 a.moveCameraTo(lat,lon);
             });
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,7 +75,7 @@ public class MapInstrumentedTest {
     public void testSymbolManager() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,7 +96,7 @@ public class MapInstrumentedTest {
     public void locationTracking() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(2500);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -116,7 +116,7 @@ public class MapInstrumentedTest {
     public void chronometerTest() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(2500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

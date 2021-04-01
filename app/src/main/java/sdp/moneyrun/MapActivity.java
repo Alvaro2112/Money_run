@@ -77,20 +77,13 @@ public class MapActivity extends AppCompatActivity implements
      */
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+
+        mapboxMap.setStyle(Style.MAPBOX_STREETS,style -> {
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager =  new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-
-        });
-
-
-        mapboxMap.setStyle(Style.MAPBOX_STREETS,
-                new Style.OnStyleLoaded() {
-                    @Override public void onStyleLoaded(@NonNull Style style) {
-                        enableLocationComponent(style);
-                    }
+            enableLocationComponent(style);
                 });
 
         this.mapboxMap = mapboxMap;
