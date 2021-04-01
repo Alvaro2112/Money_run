@@ -3,6 +3,7 @@ package sdp.moneyrun;
 import org.junit.Test;
 
 import java.util.Objects;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -65,7 +66,63 @@ public class TestPlayer {
         assert (!player1.equals(null));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnNullAddress(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = null;
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnEmptyAddress(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "";
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnNullName(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "Foobar";
+        String name = null;
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnEmptyName(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "Foobar";
+        String name = "";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOn0Id(){
+        Random r = new Random();
+        int playerId = 0;
+        String address = "Foobar";
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
 }

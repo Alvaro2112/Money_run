@@ -28,9 +28,12 @@ public class Player {
      * @param address
      * @param numberOfDiedGames
      * @param numberOfPlayedGames
+     * @throws IllegalArgumentException on empty or null address or name and on player = 0
      */
     public Player(int playerId, String name, String address, int numberOfDiedGames,
                   int numberOfPlayedGames){
+        if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
+            throw new IllegalArgumentException();
         this.playerId = playerId;
         this.setName(name);
         this.setAddress(address);
