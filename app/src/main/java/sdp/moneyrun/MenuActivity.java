@@ -152,7 +152,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         playerProfileIntent.putExtra("playerId", playerId);
         playerProfileIntent.putExtra("playerId" + playerId, playerInfo);
         startActivity(playerProfileIntent);
-
     }
 
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
