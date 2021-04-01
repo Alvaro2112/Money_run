@@ -44,7 +44,7 @@ public class MapActivity extends AppCompatActivity implements
     private static final int GAME_TIME = 100;
     private static int chronometerCounter =0;
     private MapView mapView;
-    private SymbolManager symbolManager;
+    public SymbolManager symbolManager;
     private MapboxMap mapboxMap;
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity implements
     private LocationChangeListeningActivityLocationCallback callback =
             new LocationChangeListeningActivityLocationCallback(this);
 
-    private Chronometer chronometer;
+    public Chronometer chronometer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +109,6 @@ public class MapActivity extends AppCompatActivity implements
             }
         });
     }
-    public Chronometer getChronometer(){
-        return chronometer;
-    }
 
 
     private void displayEndOfTimer(){
@@ -123,9 +120,6 @@ public class MapActivity extends AppCompatActivity implements
         symbolManager.create(new SymbolOptions().withLatLng(latLng));
     }
 
-    public SymbolManager getSymbolManager(){
-        return symbolManager;
-    }
 
     public MapboxMap getMapboxMap(){
         return mapboxMap;
@@ -226,6 +220,7 @@ public class MapActivity extends AppCompatActivity implements
                 if (location == null) {
                     return;
                 }
+                // changed from the original one to have less getLastLocation !!
                 // Pass the new location to the Maps SDK's LocationComponent
                 if (activity.mapboxMap != null ) {
                     activity.mapboxMap.getLocationComponent().forceLocationUpdate(location);

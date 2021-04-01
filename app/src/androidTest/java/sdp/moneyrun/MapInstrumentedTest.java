@@ -30,7 +30,7 @@ public class MapInstrumentedTest {
 
                 Thread.sleep(10000);
                 scenario.onActivity(a ->{
-                   assertEquals( a.getSymbolManager().getAnnotations().size(),2);
+                   assertEquals( a.symbolManager.getAnnotations().size(),2);
                 });
 
             }
@@ -81,8 +81,8 @@ public class MapInstrumentedTest {
             }
 
             scenario.onActivity(a->{
-               assertEquals( a.getSymbolManager().getIconAllowOverlap(),true);
-                assertEquals( a.getSymbolManager().getTextAllowOverlap(),true);
+               assertEquals( a.symbolManager.getIconAllowOverlap(),true);
+                assertEquals( a.symbolManager.getTextAllowOverlap(),true);
 
             });
         }
@@ -122,8 +122,8 @@ public class MapInstrumentedTest {
             }
 
             scenario.onActivity(a->{
-                assertEquals(false,a.getChronometer().isCountDown());
-                assertEquals(true,a.getChronometer().getText().toString().indexOf("REMAINING TIME") != -1);
+                assertEquals(false,a.chronometer.isCountDown());
+                assertEquals(true,a.chronometer.getText().toString().indexOf("REMAINING TIME") != -1);
             });
         }
         catch (Exception e){
