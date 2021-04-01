@@ -35,14 +35,12 @@ public class MenuActivityTest {
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
     }
-
-    /*
+    
     @Test
     public void joinGamePopupIsDisplayed() {
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
     }
-    */
 
     @Test
     public void leaderboardButtonWorks() {
