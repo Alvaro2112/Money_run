@@ -96,20 +96,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
-
-        // NOTHIHNG FROM HERE
-
-        // add event to Profile button
-        profileButton = findViewById(R.id.go_to_profile_button);
-        profileButton.setOnClickListener(v -> {
-            Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-            playerProfileIntent.putExtra("profile", result);
-            startActivity(playerProfileIntent);
-        });
-
-        joinGame.setOnClickListener(this::onClickShowJoinGamePopupWindow);
-
-        newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
     }
 
     @Override

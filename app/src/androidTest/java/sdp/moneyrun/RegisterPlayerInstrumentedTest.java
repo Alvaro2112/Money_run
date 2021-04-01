@@ -57,13 +57,13 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkErrorWhenAddressIsEmpty(){
-            try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
-                Intents.init();
-                final String expected = "Address field is empty";
-                Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
-                Espresso.onView(withId(R.id.registerAddressText)).check(matches(withError(expected)));
-                Intents.release();
-            }
+        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
+            Intents.init();
+            final String expected = "Address field is empty";
+            Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.registerAddressText)).check(matches(withError(expected)));
+            Intents.release();
+        }
     }
     @Test
     public void checkErrorWhenAnimalIsEmpty(){
