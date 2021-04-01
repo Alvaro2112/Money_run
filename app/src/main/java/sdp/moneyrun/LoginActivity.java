@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     emailView.requestFocus();
                 }
                 else{
-                    sendLogIn(email, password);
+                    submitLogin(email, password);
 
 
                 }
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void sendLogIn(String email, String password){
+    private void submitLogin(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
          .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
