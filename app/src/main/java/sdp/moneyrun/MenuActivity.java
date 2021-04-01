@@ -335,29 +335,26 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         }
 
         fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null
-                        // In this case, the game cannot be instanciated
-                        if (location == null) {
-                            Log.e("location", "Error getting location");
-                        }
-
-                        // Build new game given fields filled by user
-                        String gameId = gameReference.getKey();
-                        List<Player> players = new ArrayList<>();
-                        List<Riddle> riddles = new ArrayList<>();
-
-                        Game game = new Game(gameId, name, players, maxPlayerCount, riddles, location);
-
-                        // post game to database
-                        gameReference.setValue(game);
-
-                        // Post location to database
-                        LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                        startLocationReference.setValue(locationRep);
+                .addOnSuccessListener(this, location -> {
+                    // Got last known location. In some rare situations this can be null
+                    // In this case, the game cannot be instanciated
+                    if (location == null) {
+                        Log.e("location", "Error getting location");
                     }
+
+                    // Build new game given fields filled by user
+                    String gameId = gameReference.getKey();
+                    List<Player> players = new ArrayList<>();
+                    List<Riddle> riddles = new ArrayList<>();
+
+                    Game game = new Game(gameId, name, players, maxPlayerCount, riddles, location);
+
+                    // post game to database
+                    gameReference.setValue(game);
+
+                    // Post location to database
+                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                    startLocationReference.setValue(locationRep);
                 });
     }
 

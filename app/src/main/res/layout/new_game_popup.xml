@@ -6,19 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/joinGameText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:ems="10"
-        android:text="@string/open_games"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
     <RelativeLayout
-        android:id="@+id/popup"
+        android:id="@+id/new_game_popup"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="@drawable/layout_rounded"

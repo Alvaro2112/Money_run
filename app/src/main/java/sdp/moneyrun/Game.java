@@ -56,20 +56,24 @@ public class Game {
     public static void startGame(Game game){
         game.startGame();
     }
+    /*
     public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
+    */
 
     /**
      *
      * @return returns a random riddle from all the possible riddles
      */
+    /*
     public Riddle getRandomRiddle(){
 
         int index = (int)(Math.random() * (riddles.size()));
         return riddles.get(index);
     }
+    */
 
 
 }
