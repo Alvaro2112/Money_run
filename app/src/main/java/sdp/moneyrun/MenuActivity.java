@@ -26,6 +26,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -49,11 +50,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private final float MAX_DISTANCE_TO_JOIN_GAME = 500;
 
     private Button profileButton;
-
+    private Button leaderboardButton;
     private Button joinGame;
     private Button newGame;
+
     private String[] result;
     private Player player;
+    private RiddlesDatabase db;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -64,6 +67,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu);
+
         // setup database instance
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
@@ -71,7 +76,27 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        setContentView(R.layout.activity_menu);
+        try{
+            db = RiddlesDatabase.createInstance(getApplicationContext());
+        }
+        catch(RuntimeException e){
+            db = RiddlesDatabase.getInstance();
+        }
+
+        // Every buttons, elements on the activity
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        profileButton = findViewById(R.id.go_to_profile_button);
+        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
+        joinGame = findViewById(R.id.join_game);
+        newGame = findViewById(R.id.new_game);
+
+        addJoinGameButtonFunctionality();
+        addNewGameButtonFunctionality();
+        addAskQuestionButtonFunctionality();
+        linkProfileButton(profileButton);
+        linkLeaderboardButton(leaderboardButton);
+
+        // NOTHIHNG FROM HERE
 
         // add event to Profile button
         profileButton = findViewById(R.id.go_to_profile_button);
@@ -81,13 +106,129 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             startActivity(playerProfileIntent);
         });
 
-        // add event to Join game button
-        joinGame = findViewById(R.id.join_game);
         joinGame.setOnClickListener(this::onClickShowJoinGamePopupWindow);
 
-        // add event to New game button
-        newGame = findViewById(R.id.new_game);
         newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RiddlesDatabase.reset();
+    }
+
+    public void addJoinGameButtonFunctionality(){
+
+        Button joinGame = findViewById(R.id.join_game);
+        joinGame.setOnClickListener(this::onClickShowJoinGamePopupWindow);
+    }
+
+    public void addNewGameButtonFunctionality(){
+
+        Button joinGame = findViewById(R.id.new_game);
+        joinGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
+    }
+
+    public void addAskQuestionButtonFunctionality(){
+
+        Button askQuestion = findViewById(R.id.ask_question);
+
+        /**
+         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
+         */
+        askQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
+            }
+        });
+    }
+
+    private void linkProfileButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonSwitchToUserProfileActivity(v);
+            }
+        });
+    }
+
+    private void linkLeaderboardButton(Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+            }
+        });
+    }
+
+    public void onButtonSwitchToUserProfileActivity(View view) {
+
+        Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
+        int playerId = getIntent().getIntExtra("playerId",0);
+        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        playerProfileIntent.putExtra("playerId",playerId);
+        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
+        startActivity(playerProfileIntent);
+
+    }
+
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
+
+        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
+        int correctId = 0;
+
+        //changes the text to the current question
+        tv.setText(riddle.getQuestion());
+
+        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+        TextView buttonView = tv;
+
+        //Loops to find the ID of the button solution and assigns the text to each button
+        for (int i = 0; i < 4; i++){
+
+            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
+            buttonView.setText(riddle.getPossibleAnswers()[i]);
+
+            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
+                correctId = buttonIds[i];
+        }
+
+        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     *
+     * @param view Current view before click
+     * @param focusable Whether it can be dismissed by clicking outside the popup window
+     * @param layoutId Id of the popup layout that will be used
+     */
+    public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(layoutId, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window at wanted location
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        return popupWindow;
     }
 
     /**
