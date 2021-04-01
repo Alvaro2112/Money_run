@@ -36,7 +36,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     null,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -52,7 +51,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    null,
                     "Test message",
                     false,
                     coarseLocation,
@@ -68,7 +66,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     null,
                     false,
                     coarseLocation,
@@ -84,7 +81,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false);
         });
@@ -98,7 +94,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -112,7 +107,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -123,28 +117,11 @@ public class PermissionRequesterInstrumentedTest {
     }
 
     @Test
-    public void requesterGetRequestPermissionsLauncherReturnsRightObject() {
-        activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = (LoginActivity) a;
-            PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
-                    "Test message",
-                    false,
-                    coarseLocation,
-                    fineLocation);
-
-            assertEquals(activity.getRequestPermissionsLauncher(), pr.getRequestPermissionsLauncher());
-        });
-    }
-
-    @Test
     public void requesterGetPermissionsReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -162,7 +139,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -179,7 +155,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -195,7 +170,6 @@ public class PermissionRequesterInstrumentedTest {
             LoginActivity activity = (LoginActivity) a;
             PermissionsRequester pr = new PermissionsRequester(
                     activity,
-                    activity.getRequestPermissionsLauncher(),
                     "Test message",
                     true,
                     coarseLocation,
