@@ -39,6 +39,9 @@ public class MenuActivityTest {
     @Test
     public void joinGamePopupIsDisplayed() {
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+        try {
+            Thread.sleep(5000);
+        }catch(InterruptedException e){}
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
     }
     
