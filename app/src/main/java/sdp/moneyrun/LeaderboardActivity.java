@@ -33,6 +33,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         setMainPlayer();
         //TODO
         // Put addPlayer with local cache
+        setDummyPlayers();
     }
 
     public LeaderboardListAdapter getLdbAdapter(){
@@ -78,6 +79,53 @@ public class LeaderboardActivity extends AppCompatActivity {
             userPlayer.setScore(0);
             addPlayer(userPlayer);
         }
+    }
+    /*
+    * This function will set up players in the leaderboard once we know their player ids and names
+    * it will set up dummy players before that so that we have a leaderboard nonetheless every time a player joins
+    * the game( up to 6 players for now), on data change listeners will be attached to these players here so that
+    * once real players join the leaderboard updates accordingly
+    * */
+    public void setDummyPlayers(){
+        DatabaseProxy databaseProxy = new DatabaseProxy();
+        Player dummy1 = new Player(1000000);
+        dummy1.setName("Dummy Player 1");
+        dummy1.setAddress("Here");
+        dummy1.setScore(1);
+        databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Player update = snapshot.getValue(Player.class);
+//                System.out.println(snapshot+ "Getting snapshot on data change in leaderboard class");
+                dummy1.setName(update.getName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Player dummy2 = new Player(2000000);
+        dummy2.setName("Dummy Player 2");
+        dummy2.setAddress("Here");
+        dummy2.setScore(2);
+        Player dummy3 = new Player(3000000);
+        dummy3.setName("Dummy Player 3");
+        dummy3.setAddress("Here");
+        dummy3.setScore(3);
+        Player dummy4 = new Player(4000000);
+        dummy4.setName("Dummy Player 4");
+        dummy4.setAddress("Here");
+        dummy4.setScore(4);
+        Player dummy5 = new Player(5000000);
+        dummy5.setName("Dummy Player 5");
+        dummy5.setAddress("Here");
+        dummy5.setScore(5);
+        addPlayer(dummy1);
+        addPlayer(dummy2);
+        addPlayer(dummy3);
+        addPlayer(dummy4);
+        addPlayer(dummy5);
     }
 
 //    public void setUserPlayer2(){

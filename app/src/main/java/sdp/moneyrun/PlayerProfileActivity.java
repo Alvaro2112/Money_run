@@ -37,6 +37,10 @@ public class PlayerProfileActivity extends AppCompatActivity {
         int playerId = playerIntent.getIntExtra("playerId",0);
         String[] playerInfo = playerIntent.getStringArrayExtra("playerId"+playerId);
         setDisplayedTexts(playerInfo);
+
+        Player dummy1 = new Player(1000000,"George","New Delhi",0,0);
+        DatabaseProxy databaseProxy = new DatabaseProxy();
+        databaseProxy.putPlayer(dummy1);
     }
 
     public void setDisplayedTexts(String[] playerInfo) {
