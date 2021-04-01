@@ -36,6 +36,9 @@ public class RiddlesDatabaseTest extends TestCase {
         catch(RuntimeException e)
         {
             //success
+        }finally {
+            RiddlesDatabase.reset();
+
         }
     }
 
@@ -45,11 +48,15 @@ public class RiddlesDatabaseTest extends TestCase {
         try {
             RiddlesDatabase db = RiddlesDatabase.createInstance(context);
             RiddlesDatabase db2 = RiddlesDatabase.createInstance(context);
+            Assert.fail("Should have thrown Arithmetic exception");
+
 
         } catch (RuntimeException e) {
             assertEquals(1, 1);
+        }finally {
+            RiddlesDatabase.reset();
+
         }
-        RiddlesDatabase.reset();
 
     }
 
