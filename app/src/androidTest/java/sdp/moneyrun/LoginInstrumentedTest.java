@@ -11,6 +11,8 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -25,6 +27,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(AndroidJUnit4.class)
 
@@ -120,6 +123,28 @@ public class LoginInstrumentedTest {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
             intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void logOutWorks(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            String email = "logintest@epfl.ch";
+            String password = "login123456789";
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            Thread.sleep(1000);
+            intended(hasComponent(MenuActivity.class.getName()));
+            assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
+            Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
+            Thread.sleep(1000);
+            assertEquals(FirebaseAuth.getInstance().getCurrentUser(), null);
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
