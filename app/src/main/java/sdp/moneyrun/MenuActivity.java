@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,31 +137,17 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         /**
          * Checks for clicks on the ask question button and creates a popup of a new question of clicked
          */
-        askQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
-            }
-        });
+        askQuestion.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle()));
     }
 
     private void linkProfileButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
-            }
-        });
+        button.setOnClickListener(v -> onButtonSwitchToUserProfileActivity(v));
     }
 
     private void linkLeaderboardButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                startActivity(leaderboardIntent);
-            }
+        button.setOnClickListener(v -> {
+            Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+            startActivity(leaderboardIntent);
         });
     }
 
@@ -197,13 +184,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 correctId = buttonIds[i];
         }
 
-        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        popupWindow.getContentView().findViewById(correctId).setOnClickListener(v -> popupWindow.dismiss());
 
     }
 
@@ -346,6 +327,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         Button button = new Button(this);
         button.setId(buttonId);
         button.setText(getString(R.string.join_game_message));
+        button.setOnClickListener(v -> joinLobbyFromJoinButton(v, gameRepresentation));
 
         // Modify button if the game is full
         if(gameRepresentation.getPlayerCount() >= gameRepresentation.getMaxPlayerCount()){
@@ -525,5 +507,14 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 coarseLocation,
                 fineLocation);
         locationPermissionsRequester.requestPermission();
+    }
+
+    public void joinLobbyFromJoinButton(View v, GameRepresentation gameRepresentation){
+        Intent lobbyIntent = new Intent(getApplicationContext(), GameLobbyActivity.class);
+        startActivity(lobbyIntent);
+
+        // Pass the game id to the lobby activity
+        System.out.println("HUHU" + gameRepresentation.getGameId());
+        lobbyIntent.putExtra("currentGameId", gameRepresentation.getGameId());
     }
 }
