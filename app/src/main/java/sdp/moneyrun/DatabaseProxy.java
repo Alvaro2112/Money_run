@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseProxy {
     private final DatabaseReference mDataBase;
@@ -56,7 +57,7 @@ public class DatabaseProxy {
 
     }
 
-    /**To get a player from a task
+    /** get a player from a task
      * @param task the task containing a player
      * @return the player inside the task or null if the task is not complete
      */
@@ -68,6 +69,19 @@ public class DatabaseProxy {
             return null;
         }
 
+    }
+
+    /**
+     * Will trigger an event each time the player is updated in the database
+     * This means that the player should be added first
+     * @param player the player who's database entry will be listened
+     * @param listener the listener which describes what to do on change
+     */
+    public void addPlayerListener(Player player, ValueEventListener listener){
+        if (listener == null || player == null){
+            throw new IllegalArgumentException();
+        }
+        mDataBase.child("players").child(String.valueOf(player.getPlayerId())).addValueEventListener(listener);
     }
 
 }

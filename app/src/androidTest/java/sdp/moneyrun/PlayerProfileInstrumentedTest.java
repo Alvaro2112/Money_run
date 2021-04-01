@@ -26,7 +26,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class PlayerProfileInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<MenuActivity> testRuleMenu = new ActivityScenarioRule<>(MenuActivity.class);
+    public ActivityScenarioRule<PlayerProfileActivity> testRuleMenu = new ActivityScenarioRule<>(PlayerProfileActivity.class);
 
     @Rule
     public ActivityScenarioRule<PlayerProfileActivity> testRuleProfile = new ActivityScenarioRule<>(PlayerProfileActivity.class);
