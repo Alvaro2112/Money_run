@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="46.51"
         mapbox:mapbox_cameraTargetLng="6.6"
-        mapbox:mapbox_cameraZoom="7.2"/>
+        mapbox:mapbox_cameraZoom="7.2">
+
+        <Chronometer
+            android:id="@+id/mapChronometer"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:countDown="false"
+            android:enabled="true"></Chronometer>
+
+    </com.mapbox.mapboxsdk.maps.MapView>
 
 </FrameLayout>
