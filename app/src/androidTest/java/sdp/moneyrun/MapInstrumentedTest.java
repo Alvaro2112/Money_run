@@ -116,14 +116,14 @@ public class MapInstrumentedTest {
     public void chronometerTest() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             scenario.onActivity(a->{
                 assertEquals(false,a.chronometer.isCountDown());
-                assertEquals(true,a.chronometer.getText().toString().indexOf("REMAINING TIME") != -1);
+                assertEquals(true,a.chronometer.getText().toString().contains("REMAINING TIME") );
             });
         }
         catch (Exception e){
