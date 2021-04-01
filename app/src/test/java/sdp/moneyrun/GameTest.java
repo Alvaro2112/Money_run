@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -134,8 +135,74 @@ public class GameTest {
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         Riddle riddle = game.getRandomRiddle();
         assertTrue(riddle.getClass() == Riddle.class);
+    }
 
+    @Test
+    public void getRandomQuestionReturnsNullIfNoQuestion() {
+        String gameId = "gameId";
+        String name = "name";
+        List<Riddle> riddleList = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(3));
+        Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
+        Riddle riddle = game.getRandomRiddle();
+        assertNull(riddle);
+    }
 
+    @Test
+    public void getGameIdReturnsCorrectValues(){
+        String gameId = "gameId";
+        String name = "name";
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(3));
+        Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
 
+        String gameIdRet = game.getGameId();
+        assertEquals(gameIdRet, gameId);
+    }
+
+    @Test
+    public void getNameReturnsCorrectValues(){
+        String gameId = "gameId";
+        String name = "name";
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(3));
+        Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
+
+        String nameRet = game.getName();
+        assertEquals(nameRet, name);
+
+    }
+
+    @Test
+    public void getPlayerCountReturnsCorrectValues(){
+        String gameId = "gameId";
+        String name = "name";
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(3));
+        Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
+
+        int playerCount = game.getPlayerCount();
+        assertEquals(playerCount, 1);
+    }
+
+    @Test
+    public void getMaxPlayerCountReturnsCorrectValues(){
+        String gameId = "gameId";
+        String name = "name";
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(3));
+        Game game = new Game(gameId, name, players, 12, riddleList, new Location("LocationManager#GPS_PROVIDER"));
+
+        int maxPlayerCount = game.getMaxPlayerCount();
+        assertEquals(maxPlayerCount, 12);
     }
 }
