@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //Until sign Out at destroy activity is implemented
-        FirebaseAuth.getInstance().signOut();
+    //    FirebaseAuth.getInstance().signOut();
         ///////////////////////////////////////////////////
 
         final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
@@ -54,6 +54,17 @@ public class SignUpActivity extends AppCompatActivity {
         if(currentUser != null){
             updateUI(currentUser);
         }
+    }
+
+    /**
+     *This is needed for testing
+     *Also, since it's one of the first activity created, it's reasonable to assume that when it's
+     *destroyed the user should be signed out
+     */
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mAuth.signOut();
     }
 
     private void submitSignUp(String email, String password){
