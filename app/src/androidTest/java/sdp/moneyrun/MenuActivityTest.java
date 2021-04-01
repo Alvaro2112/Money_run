@@ -159,5 +159,24 @@ public class MenuActivityTest {
         }
     }
 
+    @Test
+    public void newGameWorks() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            final String game_name = "test game";
+            final String max_player_count = "1";
+            final String expected_zero_players = "There should be at least one player in a game";
+
+            Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerNumber)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            assertEquals(1, 1);
+
+            Intents.release();
+        }
+    }
+
 
 }

@@ -156,13 +156,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     }
 
-    public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
-
-        onButtonShowPopupWindowClick(view, focusable, layoutId);
-
-    }
-
-
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
@@ -186,7 +179,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         }
 
         popupWindow.getContentView().findViewById(correctId).setOnClickListener(v -> popupWindow.dismiss());
-
     }
 
     /**
