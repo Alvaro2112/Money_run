@@ -22,7 +22,7 @@ public class Game {
     private Location startLocation; //TODO: check if we will use the existing or create a new class Location
 
     public Game(String gameId, String name, List<Player> players, int maxPlayerCount, List<Riddle> riddles, Location startLocation){
-        if(name == null || players == null || riddles == null || startLocation == null)
+        if(gameId == null || name == null || players == null || riddles == null || startLocation == null)
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         this.gameId = gameId;
         this.name = name;
