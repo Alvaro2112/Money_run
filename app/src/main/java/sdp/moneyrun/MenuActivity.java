@@ -511,10 +511,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     public void joinLobbyFromJoinButton(View v, GameRepresentation gameRepresentation){
         Intent lobbyIntent = new Intent(getApplicationContext(), GameLobbyActivity.class);
-        startActivity(lobbyIntent);
-
         // Pass the game id to the lobby activity
-        System.out.println("HUHU" + gameRepresentation.getGameId());
         lobbyIntent.putExtra("currentGameId", gameRepresentation.getGameId());
+
+        startActivity(lobbyIntent);
     }
 }
