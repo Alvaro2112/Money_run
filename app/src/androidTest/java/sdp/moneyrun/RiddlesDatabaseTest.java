@@ -5,6 +5,7 @@ import android.content.Context;
 import junit.framework.TestCase;
 import androidx.test.core.app.ApplicationProvider;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -25,16 +26,17 @@ public class RiddlesDatabaseTest extends TestCase {
 
     }
 
-    @Test
     public void testGetInstanceOnNonExistentThrowsException() {
 
-        try {
-        RiddlesDatabase db = RiddlesDatabase.getInstance();
-        } catch (RuntimeException e) {
-        assertEquals(1, 1);
+        try
+        {
+            RiddlesDatabase db = RiddlesDatabase.getInstance();
+            Assert.fail("Should have thrown Arithmetic exception");
         }
-        RiddlesDatabase.reset();
-
+        catch(RuntimeException e)
+        {
+            //success
+        }
     }
 
     @Test
