@@ -86,14 +86,4 @@ public class MenuActivityTest {
             assertEquals(State.DESTROYED, testRule.getScenario().getState());
     }
 
-    @Test
-    public void logOutButtonLogsOut() throws InterruptedException {
-        assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-        Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
-        Thread.sleep(1000);
-        assertEquals(FirebaseAuth.getInstance().getCurrentUser(), null);
-    }
-
-
-
 }
