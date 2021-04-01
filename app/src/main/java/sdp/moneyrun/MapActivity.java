@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.os.Bundle;
+import android.widget.Chronometer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,9 +24,13 @@ public class MapActivity extends AppCompatActivity implements
     private static final String ICON_ID = "ICON_ID";
     private static final String LAYER_ID = "LAYER_ID";
     private static final float ZOOM = 4;
+    private static final int GAME_TIME = 100;
+    private static int chronometerCounter =0;
     private MapView mapView;
     private SymbolManager symbolManager;
     private MapboxMap mapboxMap;
+
+    private Chronometer chronometer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class MapActivity extends AppCompatActivity implements
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        initChronometer();
     }
 
     /**
@@ -59,7 +65,31 @@ public class MapActivity extends AppCompatActivity implements
         this.mapboxMap = mapboxMap;
     }
 
+    private void initChronometer(){
 
+        chronometer = (Chronometer) findViewById(R.id.mapChronometer);
+        chronometer.start();
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                if(chronometerCounter < GAME_TIME){
+                    chronometerCounter += 1;
+                }
+                else{
+                    displayEndOfTimer();
+                }
+                chronometer.setFormat("REMAINING TIME"+String.valueOf(GAME_TIME - chronometerCounter));
+            }
+        });
+    }
+    public Chronometer getChronometer(){
+        return chronometer;
+    }
+
+    private void displayEndOfTimer(){
+        //TODO
+        // fill this function
+    }
     public void addMarker(float latitude,float longitude){
         LatLng latLng = new LatLng(latitude,longitude);
         symbolManager.create(new SymbolOptions().withLatLng(latLng));

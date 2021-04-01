@@ -41,8 +41,8 @@ public class MapInstrumentedTest {
     @Test
     public void moveCameraToWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            float lat = 12f;
-            float lon = 12f;
+            float lat = 8f;
+            float lon = 8f;
             try {
                 Thread.sleep(2500);
             } catch (InterruptedException e) {
@@ -58,8 +58,8 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a ->{
                 LatLng latLng = a.getMapboxMap().getCameraPosition().target;
-                assertEquals(latLng.getLatitude(), 12.0,0.1);
-                assertEquals(latLng.getLongitude(), 12.0,0.1);
+                assertEquals(latLng.getLatitude(), 8.0,0.1);
+                assertEquals(latLng.getLongitude(), 8.0,0.1);
                 System.out.println("LONGITUDE IS "+String.valueOf(latLng.getLatitude()));
             });
         }
@@ -89,6 +89,27 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void chronometerTest() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(false,a.getChronometer().isCountDown());
+                assertEquals(true,a.getChronometer().getText().toString().indexOf("REMAINING TIME") != -1);
+            });
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
 
 
 
