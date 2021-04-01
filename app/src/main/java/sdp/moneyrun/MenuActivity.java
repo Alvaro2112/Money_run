@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.io.InputStream;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
@@ -23,35 +23,38 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Button joinGame;
     private String[] result;
     private Player player;
-    private RiddlesDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        try{
-            db = RiddlesDatabase.createInstance(getApplicationContext());
-        }
-        catch(RuntimeException e){
-            db = RiddlesDatabase.getInstance();
-        }
-
+      
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
-
+      
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
+        addLogOutButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        RiddlesDatabase.reset();
+    public void addLogOutButtonFunctionality(){
+
+        Button logOut = findViewById(R.id.log_out_button);
+
+        /**
+         * Checks for clicks on the join game button and creates a popup of available games if clicked
+         */
+        logOut.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+            }
+        });
     }
 
     public void addJoinGameButtonFunctionality(){
@@ -80,8 +83,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
+                //Temporary, will be removed when questions are added to the database
+                String question = "One of these four countries does not border the Red Sea.";
+                String correctAnswer = "Oman";
+                String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
+                Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, riddle);
             }
         });
 
@@ -140,10 +147,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++){
-
+            if(i >= riddle.getPossibleAnswers().length){
+                popupWindow.getContentView().findViewById(buttonIds[i]).setVisibility(View.GONE);
+                continue;
+            }
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
-
             if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
                 correctId = buttonIds[i];
         }

@@ -3,7 +3,6 @@ package sdp.moneyrun;
 import java.util.Objects;
 
 public class Player {
-
     private  int playerId;
     private String name;
     private String address;
