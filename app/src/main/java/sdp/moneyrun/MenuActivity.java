@@ -102,13 +102,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void addJoinGameButtonFunctionality(){
 
         Button joinGame = findViewById(R.id.join_game);
-        joinGame.setOnClickListener(this::onClickShowJoinGamePopupWindow);
+        joinGame.setOnClickListener(v -> onClickShowJoinGamePopupWindow(v, true, R.layout.join_game_popup));
     }
 
     public void addNewGameButtonFunctionality(){
 
-        Button joinGame = findViewById(R.id.new_game);
-        joinGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
+        Button newGame = findViewById(R.id.new_game);
+        newGame.setOnClickListener(this::onClickShowNewGamePopupWindow);
     }
 
     public void addAskQuestionButtonFunctionality(){
@@ -194,21 +194,11 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      *
      * @param view the current view
      */
-    public void onClickShowJoinGamePopupWindow(View view) {
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.join_game_popup, null);
-
-        // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
-
-        // show the popup window at wanted location
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        onJoinGamePopupWindowLoadGameList(popupView);
+    public void onClickShowJoinGamePopupWindow(View view, boolean focusable, int layoutId) {
+        // Show popup
+        PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        // Load game list
+        onJoinGamePopupWindowLoadGameList(popupWindows.getContentView());
     }
 
     /**
