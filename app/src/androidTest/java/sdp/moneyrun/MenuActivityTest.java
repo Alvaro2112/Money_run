@@ -44,7 +44,6 @@ public class MenuActivityTest {
     }
     */
 
-     */
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
