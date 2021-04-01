@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -73,10 +74,9 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
+        try {
             db = RiddlesDatabase.createInstance(getApplicationContext());
-        }
-        catch(RuntimeException e){
+        } catch (RuntimeException e) {
             db = RiddlesDatabase.getInstance();
         }
 
@@ -107,7 +107,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         RiddlesDatabase.reset();
     }
 
-    public void addLogOutButtonFunctionality(){
+    public void addLogOutButtonFunctionality() {
 
         Button logOut = findViewById(R.id.log_out_button);
 
@@ -124,7 +124,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
-    public void addAskQuestionButtonFunctionality(){
+    public void addAskQuestionButtonFunctionality() {
 
         Button askQuestion = findViewById(R.id.ask_question);
         askQuestion.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle()));
@@ -133,10 +133,10 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        int playerId = getIntent().getIntExtra("playerId",0);
-        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        playerProfileIntent.putExtra("playerId",playerId);
-        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
+        int playerId = getIntent().getIntExtra("playerId", 0);
+        String[] playerInfo = getIntent().getStringArrayExtra("playerId" + playerId);
+        playerProfileIntent.putExtra("playerId", playerId);
+        playerProfileIntent.putExtra("playerId" + playerId, playerInfo);
         startActivity(playerProfileIntent);
 
     }
@@ -154,12 +154,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         TextView buttonView = tv;
 
         //Loops to find the ID of the button solution and assigns the text to each button
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
 
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
-            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
+            if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
                 correctId = buttonIds[i];
         }
 
@@ -291,65 +291,70 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        // create join button
         Button button = new Button(this);
+        createJoinButton(button, buttonId, gameRepresentation);
+
+        gameRow.addView(button);
+
+        // create game name display
+        createGameNameInfoDisplay(gameRepresentation, gameRow);
+
+        // create player count display
+        createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
+
+        gameLayout.addView(gameRow, gameParams);
+    }
+
+    @SuppressLint("MissingPermission")
+    public void createJoinButton(Button button, int buttonId, GameRepresentation gameRepresentation){
+        // create join button
         button.setId(buttonId);
         button.setText(getString(R.string.join_game_message));
         button.setOnClickListener(v -> joinLobbyFromJoinButton(v, gameRepresentation));
 
         // Modify button if the game is full
-        if(gameRepresentation.getPlayerCount() >= gameRepresentation.getMaxPlayerCount()){
+        if (gameRepresentation.getPlayerCount() >= gameRepresentation.getMaxPlayerCount()) {
             button.setEnabled(false);
             button.setText(getString(R.string.join_game_full_message));
         }
 
         // Modify button if game is too far
         // Grant permissions if necessary
-        if (
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermissions();
-        }
+        requestLocationPermissions();
 
         fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null
-                        // In this case, the game cannot be instanciated
-                        if (location == null) {
-                            Log.e("location", "Error getting location");
-                        }
-                        LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                .addOnSuccessListener(this, location -> {
+                    // Got last known location. In some rare situations this can be null
+                    // In this case, the game cannot be instanciated
+                    if (location == null) {
+                        Log.e("location", "Error getting location");
+                    }
+                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
 
-                        double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
 
-                        if(distance > MAX_DISTANCE_TO_JOIN_GAME){
-                            button.setEnabled(false);
-                            button.setText(getString(R.string.join_game_too_far_message));
-                        }
+                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
+                        button.setEnabled(false);
+                        button.setText(getString(R.string.join_game_too_far_message));
                     }
                 });
+    }
 
-        gameRow.addView(button);
-
-        // create game name display
+    public void createGameNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow){
         TextView nameView = new TextView(this);
         String nameText = String.format((getResources().getString(R.string.game_name_display)), gameRepresentation.getName());
         nameView.setText(nameText);
         nameView.setPadding(0, 0, 40, 0);
         gameRow.addView(nameView);
+    }
 
-        // create player count display
+    public void createPlayerCountNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow){
         TextView playerNumberView = new TextView(this);
         String playerNumberText = String.format((getResources().getString(R.string.game_player_number_display)),
                 gameRepresentation.getPlayerCount(),
                 gameRepresentation.getMaxPlayerCount());
         playerNumberView.setText(playerNumberText);
         gameRow.addView(playerNumberView);
-
-        gameLayout.addView(gameRow, gameParams);
     }
 
     /**
@@ -413,17 +418,13 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
      * @param maxPlayerCount    the maximum number of players in the game
      * @return the game
      */
+    @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
         DatabaseReference gameReference = databaseReference.child(OPEN_GAMES).push();
         DatabaseReference startLocationReference = databaseReference.child(OPEN_GAMES).child(gameReference.getKey()).child(GAME_START_LOCATION);
 
         // Grant permissions if necessary
-        if (
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermissions();
-        }
+        requestLocationPermissions();
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
@@ -450,31 +451,22 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     }
 
     public void requestLocationPermissions(){
-        ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-            for (String permission : map.keySet()) {
 
-                Boolean isGranted = map.get(permission);
-                isGranted = isGranted != null ? isGranted : false;
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+            String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
 
-                if (isGranted) {
-                    System.out.println("Permission" + permission + " granted.");
-                } else {
-                    System.out.println("Permission" + permission + " denied.");
-                }
-            }
-        });
-
-        String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
-        String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
-
-        PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
-                this,
-                requestPermissionsLauncher,
-                getString(R.string.user_location_permission_explanation),
-                false,
-                coarseLocation,
-                fineLocation);
-        locationPermissionsRequester.requestPermission();
+            PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
+                    this,
+                    getString(R.string.user_location_permission_explanation),
+                    false,
+                    coarseLocation,
+                    fineLocation);
+            locationPermissionsRequester.requestPermission();
+        }
     }
 
     public void joinLobbyFromJoinButton(View v, GameRepresentation gameRepresentation){

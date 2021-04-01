@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,19 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = LoginActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
 
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for (String permission : map.keySet()) {
-
-            Boolean isGranted = map.get(permission);
-            isGranted = isGranted != null ? isGranted : false;
-
-            if (isGranted) {
-                System.out.println("Permission" + permission + " granted.");
-            } else {
-                System.out.println("Permission" + permission + " denied.");
-            }
-        }
-    });
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
     private Button login;
@@ -55,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
 
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
                 this,
-                requestPermissionsLauncher,
                 "In order to work properly, this app needs to use location services.",
                 true,
                 coarseLocation,
@@ -155,9 +140,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-    public ActivityResultLauncher<String[]> getRequestPermissionsLauncher() {
-        return requestPermissionsLauncher;
     }
 
 

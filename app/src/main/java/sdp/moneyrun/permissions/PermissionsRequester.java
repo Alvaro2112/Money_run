@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -26,22 +27,17 @@ public class PermissionsRequester {
 
     /**
      * @param activity                   the current activity
-     * @param requestPermissionsLauncher the permissions launcher
      * @param requestMessage             the informative message for the user about requested permissions
      * @param forceShowRequest           a boolean forcing the appearance of the informative message
      * @param permissions                the permissions requested
      */
     public PermissionsRequester(
             AppCompatActivity activity,
-            ActivityResultLauncher<String[]> requestPermissionsLauncher,
             String requestMessage,
             boolean forceShowRequest,
             String... permissions) {
         if (activity == null) {
             throw new IllegalArgumentException("Activity should not be null.");
-        }
-        if (requestPermissionsLauncher == null) {
-            throw new IllegalArgumentException("Permissions launcher should not be null.");
         }
         if (requestMessage == null) {
             throw new IllegalArgumentException("Permissions request message should be requested.");
@@ -56,12 +52,25 @@ public class PermissionsRequester {
         }
 
         this.activity = activity;
-        this.requestPermissionsLauncher = requestPermissionsLauncher;
         this.permissions = permissions;
 
         this.requestMessage = requestMessage;
         this.forceShowRequest = forceShowRequest;
         this.alertDialog = buildAlertDialog();
+
+        requestPermissionsLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
+            for (String permission : map.keySet()) {
+
+                Boolean isGranted = map.get(permission);
+                isGranted = isGranted != null ? isGranted : false;
+
+                if (isGranted) {
+                    System.out.println("Permission" + permission + " granted.");
+                } else {
+                    System.out.println("Permission" + permission + " denied.");
+                }
+            }
+        });
     }
 
     /**
