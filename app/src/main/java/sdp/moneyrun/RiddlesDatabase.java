@@ -66,12 +66,17 @@ public class RiddlesDatabase {
         if(obj != null)
             throw new RuntimeException("Instance already exists");
 
-        return new RiddlesDatabase(context);
+        obj = new RiddlesDatabase(context);
+        return  obj;
     }
 
     public Riddle getRandomRiddle(){
         loc = (loc + 1) % db.size();
         return db.get(loc);
+    }
+
+    protected static void reset(){
+        obj = null;
     }
 
 
