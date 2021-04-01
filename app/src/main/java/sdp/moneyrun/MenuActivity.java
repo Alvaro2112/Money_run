@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +38,20 @@ import java.util.List;
 import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
+        for (String permission : map.keySet()) {
+
+            Boolean isGranted = map.get(permission);
+            isGranted = isGranted != null ? isGranted : false;
+
+            if (isGranted) {
+                System.out.println("Permission" + permission + " granted.");
+            } else {
+                System.out.println("Permission" + permission + " denied.");
+            }
+        }
+    });
+
     private final String OPEN_GAMES = "open_games";
     private final String OPEN_GAMES_GAME_ID = "gameId";
     private final String OPEN_GAMES_NAME = "name";
@@ -462,6 +475,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
             PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
                     this,
+                    requestPermissionsLauncher,
                     getString(R.string.user_location_permission_explanation),
                     false,
                     coarseLocation,
