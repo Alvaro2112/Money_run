@@ -52,8 +52,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     private Button profileButton;
     private Button leaderboardButton;
-    private Button joinGame;
-    private Button newGame;
 
     private String[] result;
     private Player player;
@@ -85,11 +83,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         }
 
         // Every buttons, elements on the activity
-        NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
-        joinGame = findViewById(R.id.join_game);
-        newGame = findViewById(R.id.new_game);
 
         addJoinGameButtonFunctionality();
         addNewGameButtonFunctionality();
@@ -119,10 +114,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void addAskQuestionButtonFunctionality(){
 
         Button askQuestion = findViewById(R.id.ask_question);
-
-        /**
-         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
-         */
         askQuestion.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle()));
     }
 
