@@ -30,7 +30,14 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        db = RiddlesDatabase.createInstance(getApplicationContext());
+
+        try{
+            db = RiddlesDatabase.createInstance(getApplicationContext());
+        }
+        catch(RuntimeException e){
+            db = RiddlesDatabase.getInstance();
+        }
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
@@ -39,6 +46,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         addAskQuestionButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RiddlesDatabase.reset();
     }
 
     public void addJoinGameButtonFunctionality(){
@@ -67,11 +80,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Temporary, will be removed when questions are added to the database
-                String question = "One of these four countries does not border the Red Sea.";
-                String correctAnswer = "Oman";
-                String[] possibleAnswers = {"Jordan", "Oman", "Sudan"};
-                Riddle riddle = new Riddle(question, correctAnswer, "Jordan", "Oman", "Sudan", "a" );
+
                 onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
             }
         });

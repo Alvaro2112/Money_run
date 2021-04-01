@@ -3,10 +3,7 @@ package sdp.moneyrun;
 import android.location.Location;
 
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+
 
 import java.util.Arrays;
 import java.util.HashSet;

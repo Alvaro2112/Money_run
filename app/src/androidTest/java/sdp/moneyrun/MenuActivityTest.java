@@ -38,10 +38,8 @@ public class MenuActivityTest {
 
     @Test
     public void joinGamePopupIsDisplayed() {
-        Intents.init();
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-        Intents.release();
     }
     
     @Test
@@ -57,10 +55,8 @@ public class MenuActivityTest {
     
     @Test
     public void askQuestionPopupIsDisplayed() {
-        Intents.init();
         onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        Intents.release();
     }
 
 
