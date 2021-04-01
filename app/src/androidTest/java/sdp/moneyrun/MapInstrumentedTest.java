@@ -3,6 +3,8 @@ package sdp.moneyrun;
 import androidx.test.core.app.ActivityScenario;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 
 import org.junit.Test;
 
@@ -82,6 +84,26 @@ public class MapInstrumentedTest {
                assertEquals( a.getSymbolManager().getIconAllowOverlap(),true);
                 assertEquals( a.getSymbolManager().getTextAllowOverlap(),true);
 
+            });
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void locationTracking() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(a.getMapboxMap().getLocationComponent().getCameraMode(), CameraMode.TRACKING) ;
+                assertEquals(a.getMapboxMap().getLocationComponent().getRenderMode(), RenderMode.COMPASS);
             });
         }
         catch (Exception e){
