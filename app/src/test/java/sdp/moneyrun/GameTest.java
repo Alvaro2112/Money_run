@@ -18,9 +18,9 @@ public class GameTest {
     public void basicRiddleTest() {
         String question = "What is the color of the sky";
         String correctAnswer = "blue";
-        String[] possibleAnswers = {"blue", "green", "yellow"};
+        String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
 
-        Riddle riddle = new Riddle(question, possibleAnswers, correctAnswer);
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
         assertEquals(question, riddle.getQuestion());
         assertEquals(correctAnswer, riddle.getAnswer());
         assertArrayEquals(possibleAnswers, riddle.getPossibleAnswers());
@@ -30,33 +30,36 @@ public class GameTest {
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle(null, new String[]{"a"}, "a");
+            Riddle riddle = new Riddle(null, "blue", "green", "yellow", "brown", "a");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", null, "very");
+            Riddle riddle = new Riddle("a", null, "green", "yellow", "brown", "very");
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Riddle riddle = new Riddle("a", "blue", null, "yellow", "brown", "very");
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Riddle riddle = new Riddle("a", "blue", "green", null, "brown", "very");
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Riddle riddle = new Riddle("a", "blue", "green", "yellow", null, "very");
         });
 
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", new String[]{"a"}, null);
+            Riddle riddle = new Riddle("a", "blue", "green", "yellow", "brown", null);
         });
-    }
-
-    @Test
-    public void RiddleThrowsExceptionWhenCorrectAnswerIsNotInPossibleAnswers() {
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("Is it good?", new String[]{"a"}, "Is it good?");
-        });
-
     }
 
 
     @Test
     public void testGameConstructorThrowsExceptionWhenNullArguments() {
         List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", new String[]{"a"}, "a"));
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
         players.add(new Player(3));
         try {
@@ -79,7 +82,7 @@ public class GameTest {
     @Test
     public void testStartGameDoesNotCrash() {
         List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", new String[]{"a"}, "a"));
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
         players.add(new Player(3));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
@@ -91,7 +94,7 @@ public class GameTest {
     @Test
     public void askPlayerQuestionShouldReturnFalse() {
         List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", new String[]{"a"}, "a"));
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
         players.add(new Player(3));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
@@ -101,7 +104,7 @@ public class GameTest {
     @Test
     public void getRandomQuestionReturnsAQuestion() {
         List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", new String[]{"a"}, "a"));
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
         players.add(new Player(3));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
