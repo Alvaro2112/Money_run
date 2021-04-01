@@ -15,8 +15,10 @@ public class RiddlesDatabase {
     private ArrayList<Riddle> db;
     private int loc;
 
-    // private constructor to force use of
-    // getInstance() to create Singleton object
+    /**\
+     *
+     * @param context the current context
+     */
     private RiddlesDatabase(Context context) {
 
 
@@ -62,6 +64,11 @@ public class RiddlesDatabase {
         return obj;
     }
 
+    /**\
+     *  Will create a unique instance of the database by loading all the riddles that are present in the text file into an array of Riddles.
+     * @param context current context
+     * @return the created instance
+     */
     public static RiddlesDatabase createInstance(Context context){
         if(obj != null)
             throw new RuntimeException("Instance already exists");
@@ -70,6 +77,10 @@ public class RiddlesDatabase {
         return  obj;
     }
 
+    /**\
+     *
+     * @return the next Riddle in the shuffled array
+     */
     public Riddle getRandomRiddle(){
         loc = (loc + 1) % db.size();
         return db.get(loc);
