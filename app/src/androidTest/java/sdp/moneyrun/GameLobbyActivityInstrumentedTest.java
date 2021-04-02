@@ -32,7 +32,7 @@ public class GameLobbyActivityInstrumentedTest {
         try {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
         }catch(InterruptedException e){
