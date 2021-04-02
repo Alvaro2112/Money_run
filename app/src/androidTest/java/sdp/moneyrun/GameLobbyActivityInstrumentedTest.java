@@ -28,7 +28,7 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
     @Test
-    public void LeaveLobbyWorks() throws InterruptedException {
+    public void LeaveLobbyWorks(){
         try {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
