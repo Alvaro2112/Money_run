@@ -27,6 +27,7 @@ public class GameLobbyActivityInstrumentedTest {
         assertEquals(Lifecycle.State.RESUMED, testRule.getScenario().getState());
     }
 
+    /*
     @Test
     public void LeaveLobbyWorks(){
         try {
@@ -40,4 +41,6 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         }
     }
+    */
+
 }
