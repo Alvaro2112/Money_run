@@ -41,15 +41,25 @@ public class LocationRepresentation {
      * @param other a location
      * @return the distance in meters from this location to another location
      */
-    public float distanceTo(LocationRepresentation other){
-        Location thisLocation = new Location("");
-        thisLocation.setLatitude(this.getLatitude());
-        thisLocation.setLongitude(this.getLongitude());
+    public double distanceTo(LocationRepresentation other){
+        // constant for meters
+        double R = 6371e3;
 
-        Location otherLocation = new Location("");
-        otherLocation.setLatitude(other.getLatitude());
-        otherLocation.setLongitude(other.getLongitude());
+        // latitudes in radians
+        double phi1 = this.latitude * Math.PI/180;
+        double phi2 = other.latitude * Math.PI/180;
+        double theta1 = this.latitude * Math.PI/180;
+        double theta2 = other.latitude * Math.PI/180;
 
-        return thisLocation.distanceTo(otherLocation);
+        // latitude, longitude differences
+        double dphi = phi1 - phi2;
+        double dtheta = theta1 - theta2;
+
+        double a = Math.sin(dphi/2) * Math.sin(dphi/2) +
+                Math.cos(phi1) * Math.cos(phi2) * Math.sin(dtheta/2) * Math.sin(dtheta/2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c;
     }
 }
