@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class GameLobbyActivityInstrumentedTest {
 
     @Rule
-    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
+    public ActivityScenarioRule<GameLobbyActivity> testRule = new ActivityScenarioRule<>(GameLobbyActivity.class);
 
     @Test
     public void activityStartsProperly() {
