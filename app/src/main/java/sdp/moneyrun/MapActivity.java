@@ -66,8 +66,8 @@ public class MapActivity extends AppCompatActivity implements
 
     /**
      * @param mapboxMap the map where everything will be done
-    *     this overried the OnMapReadyCallback in the implemented interface
-   *      We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
+     *     this overried the OnMapReadyCallback in the implemented interface
+     *      We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                    *       Then we setup the location tracking
      */
     @Override
@@ -99,7 +99,6 @@ public class MapActivity extends AppCompatActivity implements
                     chronometerCounter += 1;
                 }
                 else{
-                    displayEndOfTimer();
                 }
                 chronometer.setFormat("REMAINING TIME"+String.valueOf(GAME_TIME - chronometerCounter));
             }
@@ -107,10 +106,6 @@ public class MapActivity extends AppCompatActivity implements
     }
 
 
-    private void displayEndOfTimer(){
-        //TODO
-        // fill this function
-    }
     public void addMarker(float latitude,float longitude){
         LatLng latLng = new LatLng(latitude,longitude);
         symbolManager.create(new SymbolOptions().withLatLng(latLng));

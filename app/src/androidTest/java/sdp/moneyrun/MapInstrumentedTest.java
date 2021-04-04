@@ -8,6 +8,8 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
 public class MapInstrumentedTest {
@@ -136,7 +138,44 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void onExplanationNeededWorks() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ArrayList<String> reasons = new ArrayList<>();
+            reasons.add("e");
+            scenario.onActivity(a->{
+                a.onExplanationNeeded(reasons);
+            });
+            assertEquals(1,1);
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
 
-
-
+    @Test
+    public void onPermissionResultWorks() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            boolean granted = true;
+            scenario.onActivity(a->{
+                a.onPermissionResult(granted);
+            });
+            assertEquals(1,1);
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
 }
