@@ -38,27 +38,30 @@ public class RegisterPlayerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkAllFields(nameText.getText().toString(),addressText.getText().toString(), colorText.getText().toString(),animalText.getText().toString())){
-                    Random random = new Random();
-                    int uniquePlayerID = random.nextInt();
-                    while(uniquePlayerID < 0)
-                        uniquePlayerID = random.nextInt();
-                    Player player = new Player(uniquePlayerID);
-                    player.setName(result[0]);
-                    player.setAddress(result[1]);
-                    player.setScore(0);
-                    db = new DatabaseProxy();
-                    db.putPlayer(player);
-                    //TODO:place it into the database with uniquePlayerID as key
-                    //TODO : check if there is a player with that unique ID already in database and if there is change ID
-                    Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
-                    //We are putting extra information so that once logged in the Player object can be properly instantiated
-                    menuIntent.putExtra("playerId",uniquePlayerID);
-                    menuIntent.putExtra("playerId"+uniquePlayerID,result);
-                    startActivity(menuIntent);
+                    setRegisterFieldsForNextActivity();
                 }
             }
         });
 
+    }
+    private void setRegisterFieldsForNextActivity(){
+        Random random = new Random();
+        int uniquePlayerID = random.nextInt();
+        while(uniquePlayerID < 0)
+            uniquePlayerID = random.nextInt();
+        Player player = new Player(uniquePlayerID);
+        player.setName(result[0]);
+        player.setAddress(result[1]);
+        player.setScore(0);
+        db = new DatabaseProxy();
+        db.putPlayer(player);
+        //TODO:place it into the database with uniquePlayerID as key
+        //TODO : check if there is a player with that unique ID already in database and if there is change ID
+        Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
+        //We are putting extra information so that once logged in the Player object can be properly instantiated
+        menuIntent.putExtra("playerId",uniquePlayerID);
+        menuIntent.putExtra("playerId"+uniquePlayerID,result);
+        startActivity(menuIntent);
     }
     /*
      Checking on submit that each field is not left empty and raise an error and prevent from logging in if that is the case

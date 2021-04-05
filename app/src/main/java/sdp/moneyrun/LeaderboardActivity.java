@@ -112,27 +112,13 @@ public class LeaderboardActivity extends AppCompatActivity {
 
             }
         });
-        Player dummy2 = new Player(2000000);
-        dummy2.setName("Dummy Player 2");
-        dummy2.setAddress("Here");
-        dummy2.setScore(2);
-        Player dummy3 = new Player(3000000);
-        dummy3.setName("Dummy Player 3");
-        dummy3.setAddress("Here");
-        dummy3.setScore(3);
-        Player dummy4 = new Player(4000000);
-        dummy4.setName("Dummy Player 4");
-        dummy4.setAddress("Here");
-        dummy4.setScore(4);
-        Player dummy5 = new Player(5000000);
-        dummy5.setName("Dummy Player 5");
-        dummy5.setAddress("Here");
-        dummy5.setScore(5);
-        addPlayer(dummy1);
-        addPlayer(dummy2);
-        addPlayer(dummy3);
-        addPlayer(dummy4);
-        addPlayer(dummy5);
+        for(int i = 2; i< 6;++i){
+            Player dummy = new Player(i*1000000);
+            dummy.setName("Dummy Player "+ i);
+            dummy.setAddress("Here");
+            dummy.setScore(i);
+            addPlayer(dummy);
+        }
     }
 
 //    public void setUserPlayer2(){
