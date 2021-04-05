@@ -126,7 +126,19 @@ public class LeaderboardInstrumentedTest {
             });
         }
     }
-
+    @Test
+    public void testIfOneDummyPlayerIsSet(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a ->{
+                boolean check = false;
+                for(Player p : a.getPlayerList()){
+                    if(p.getName().equals("Dummy Player 4"))
+                        check = true;
+                }
+                assertEquals(true,check);
+            });
+        }
+    }
 
 
 }
