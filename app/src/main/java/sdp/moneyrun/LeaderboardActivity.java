@@ -103,6 +103,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
     }
     private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
+        addPlayer(dummy1);
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

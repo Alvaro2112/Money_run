@@ -121,7 +121,7 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            Thread.sleep(1000);
+            Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
