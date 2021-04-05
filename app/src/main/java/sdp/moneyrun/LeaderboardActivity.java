@@ -92,12 +92,19 @@ public class LeaderboardActivity extends AppCompatActivity {
         dummy1.setName("Dummy Player 1");
         dummy1.setAddress("Here");
         dummy1.setScore(1);
+        //db.putPlayer(dummy1);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player update = snapshot.getValue(Player.class);
-//                System.out.println(snapshot+ "Getting snapshot on data change in leaderboard class");
-                dummy1.setName(update.getName());
+               System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
+               if(update != null)
+                    dummy1.setName(update.getName());
             }
 
             @Override
