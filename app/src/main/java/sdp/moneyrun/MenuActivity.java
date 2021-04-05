@@ -17,8 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
-
-import java.util.EmptyStackException;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 
@@ -53,6 +52,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
+        addLogOutButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
         setPlayerObject();//creates an instance of the player Object
@@ -76,6 +76,23 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             @Override
             public void onClick(View v) {
                 onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
+            }
+        });
+    }
+
+    public void addLogOutButtonFunctionality(){
+
+        Button logOut = findViewById(R.id.log_out_button);
+
+        /**
+         * Checks for clicks on the join game button and creates a popup of available games if clicked
+         */
+        logOut.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                finish();
             }
         });
     }

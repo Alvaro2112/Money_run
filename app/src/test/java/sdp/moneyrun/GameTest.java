@@ -61,7 +61,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         try {
             Game game = new Game(null, riddleList, null);
         } catch (IllegalArgumentException e) {
@@ -84,7 +84,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         game.startGame();
         Game.startGame(game);
@@ -96,7 +96,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         assertEquals(game.askPlayer(players.get(0), riddleList.get(0)), false);
     }
@@ -106,7 +106,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(players, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         Riddle riddle = game.getRandomRiddle();
         assertTrue(riddle.getClass() == Riddle.class);

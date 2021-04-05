@@ -26,9 +26,7 @@ public class DatabaseProxyTest {
     @Test
     public void getPlayerFromDatabase() throws Throwable {
 
-        final Player player = new Player(1236);
-        player.setAddress("FooBarr");
-        player.setName("Johann");
+        final Player player = new Player(1236, "Johann", "FooBarr", 0, 0);
         final DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -74,13 +72,13 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         DatabaseProxy db = new DatabaseProxy();
-        Player player = new Player(1);
+        Player player = new Player(1, "a","b",0,0);
         db.addPlayerListener(player, null);
     }
 
     @Test
     public void addPlayerListenerCorrectlyUpdatesData(){
-        Player player = new Player(564123);
+        Player player = new Player(564123, "Johann", "FooBarr", 0 , 0 );
         player.setAddress("FooBarr");
         player.setName("Johann");
         final DatabaseProxy db = new DatabaseProxy();
@@ -118,9 +116,7 @@ public class DatabaseProxyTest {
     public void addPlayerListenerCorrectlyUpdatesDataCountdown(){
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player(564123);
-        player.setAddress("FooBarr");
-        player.setName("Johann");
+        Player player = new Player(564123, "Johann", "FooBarr", 0, 0);
         final DatabaseProxy db = new DatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players");
         dataB.setValue(player).addOnCompleteListener(new OnCompleteListener<Void>() {
