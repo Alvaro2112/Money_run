@@ -1,18 +1,13 @@
 package sdp.moneyrun;
 
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -98,12 +93,22 @@ public class LeaderboardActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        attachListenerToPlayer(dummy1,databaseProxy);
+        for(int i = 2; i< 6;++i){
+            Player dummy = new Player(i*1000000);
+            dummy.setName("Dummy Player "+ i);
+            dummy.setAddress("Here");
+            dummy.setScore(i);
+            addPlayer(dummy);
+        }
+    }
+    private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player update = snapshot.getValue(Player.class);
-               System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
-               if(update != null)
+                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
+                if(update != null)
                     dummy1.setName(update.getName());
             }
 
@@ -112,13 +117,6 @@ public class LeaderboardActivity extends AppCompatActivity {
 
             }
         });
-        for(int i = 2; i< 6;++i){
-            Player dummy = new Player(i*1000000);
-            dummy.setName("Dummy Player "+ i);
-            dummy.setAddress("Here");
-            dummy.setScore(i);
-            addPlayer(dummy);
-        }
     }
 
 //    public void setUserPlayer2(){
