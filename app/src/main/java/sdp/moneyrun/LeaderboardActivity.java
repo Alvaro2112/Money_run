@@ -93,7 +93,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        attachListenerToPlayer(dummy1,databaseProxy);
+       // attachListenerToPlayer(dummy1,databaseProxy);
         for(int i = 2; i< 6;++i){
             Player dummy = new Player(i*1000000);
             dummy.setName("Dummy Player "+ i);
