@@ -93,7 +93,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-       // attachListenerToPlayer(dummy1,databaseProxy);
+        addPlayer(dummy1);
+        attachListenerToPlayer(dummy1,databaseProxy);
         for(int i = 2; i< 6;++i){
             Player dummy = new Player(i*1000000);
             dummy.setName("Dummy Player "+ i);
@@ -102,24 +103,22 @@ public class LeaderboardActivity extends AppCompatActivity {
             addPlayer(dummy);
         }
     }
-    //TODO: uncomment this when time comes
-//    private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
-//        addPlayer(dummy1);
-//        databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Player update = snapshot.getValue(Player.class);
-//                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
-//                if(update != null)
-//                    dummy1.setName(update.getName());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
+    private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
+        databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Player update = snapshot.getValue(Player.class);
+                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
+                if(update != null)
+                    dummy1.setName(update.getName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 //    public void setUserPlayer2(){
 //        int playerId = getIntent().getIntExtra("playerId",0);
