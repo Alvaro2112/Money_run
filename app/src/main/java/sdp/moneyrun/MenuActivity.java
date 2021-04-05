@@ -129,19 +129,21 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             @Override
             public void onClick(View v) {
                 Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                leaderboardIntent.putExtra("playerId",playerId);
-                leaderboardIntent.putExtra("playerId"+playerId,playerInfo);
+                setPutExtraArguments(leaderboardIntent);
                 startActivity(leaderboardIntent);
             }
         });
     } 
-    
+
+    private void setPutExtraArguments(Intent intent){
+        intent.putExtra("playerId",playerId);
+        intent.putExtra("playerId"+playerId,playerInfo);
+    }
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        playerProfileIntent.putExtra("playerId",playerId);
-        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
+        setPutExtraArguments(playerProfileIntent);
         startActivity(playerProfileIntent);
 
     }
