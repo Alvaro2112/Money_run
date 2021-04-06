@@ -107,21 +107,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public void addLogOutButtonFunctionality(){
-
-
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        logOut.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
-    }
 
     public void addAskQuestionButtonFunctionality(){
 
@@ -140,26 +125,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void linkProfileButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
-            }
-        });
-    }
-
-    
-    private void linkLeaderboardButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                startActivity(leaderboardIntent);
-            }
-        });
-    } 
-    
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
