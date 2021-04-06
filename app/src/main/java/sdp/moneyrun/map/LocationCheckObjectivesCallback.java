@@ -49,11 +49,4 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
                     Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void checkCoins(Location location){
-
-
-    }
-
-
 }
