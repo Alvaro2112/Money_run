@@ -38,19 +38,7 @@ import java.util.List;
 import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for (String permission : map.keySet()) {
-
-            Boolean isGranted = map.get(permission);
-            isGranted = isGranted != null ? isGranted : false;
-
-            if (isGranted) {
-                System.out.println("Permission" + permission + " granted.");
-            } else {
-                System.out.println("Permission" + permission + " denied.");
-            }
-        }
-    });
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
     private final String OPEN_GAMES = "open_games";
     private final String OPEN_GAMES_GAME_ID = "gameId";

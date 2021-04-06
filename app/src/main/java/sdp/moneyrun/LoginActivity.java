@@ -27,19 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = LoginActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
 
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for (String permission : map.keySet()) {
-
-            Boolean isGranted = map.get(permission);
-            isGranted = isGranted != null ? isGranted : false;
-
-            if (isGranted) {
-                System.out.println("Permission" + permission + " granted.");
-            } else {
-                System.out.println("Permission" + permission + " denied.");
-            }
-        }
-    });
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
     private Button login;
