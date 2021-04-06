@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Chronometer;
 
 import androidx.annotation.NonNull;
+import androidx.collection.LongSparseArray;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -13,6 +14,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
@@ -32,7 +34,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
     private List<Coin> caughtCoins = new ArrayList<>();
-    private static final double THRESHOLD_DISTANCE = 1.;
+    private static final double THRESHOLD_DISTANCE = 5.;
     private Location currentLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param mapboxMap the map where everything will be done
      *     this overried the OnMapReadyCallback in the implemented interface
      *      We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
-     *                    *       Then we setup the location tracking
+     *      Then we setup the location tracking
      */
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
@@ -87,7 +89,24 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
-    public void addMarker(float latitude,float longitude){
+    public void addCoin(Coin coin){
+        remainingCoins.add(coin);
+        addMarker(coin.getLatitude(),coin.getLongitude());
+    }
+
+    public void removeCoin(Coin coin){
+        remainingCoins.remove(coin);
+        caughtCoins.add(coin);
+        LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
+        for(int i = 0; i< symbols.size();++i){
+            Symbol symbol = symbols.valueAt(i);
+            LatLng latLng = symbol.getLatLng();
+            if(latLng.getLongitude() == coin.getLongitude() && latLng.getLatitude() == coin.getLatitude()){
+                symbolManager.delete(symbol);
+            }
+        }
+    }
+    public void addMarker(double latitude,double longitude){
         LatLng latLng = new LatLng(latitude,longitude);
         symbolManager.create(new SymbolOptions().withLatLng(latLng));
     }
@@ -99,12 +118,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
+
+    /**
+     * @param location
+     * Used to check if location is near a coin or not
+     */
     public void  checkObjectives(Location location){
         currentLocation = location;
         int coinIdx = isNearCoin(location);
         if(coinIdx >= 0){
-            Coin caught = remainingCoins.remove(coinIdx);
-            caughtCoins.add(caught);
+            removeCoin(remainingCoins.get(coinIdx));
             // TODO :
             //  call the riddle
         }
@@ -155,7 +178,4 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         return min_index;
     }
-
-
-
 }

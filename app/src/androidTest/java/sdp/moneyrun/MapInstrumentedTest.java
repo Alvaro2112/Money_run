@@ -22,8 +22,8 @@ public class MapInstrumentedTest {
         @Test
         public void AddMarkerAddsMarker() {
             try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-                float lat = 12f;
-                float lon = 12f;
+                double lat = 12.;
+                double lon = 12.;
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
@@ -32,7 +32,7 @@ public class MapInstrumentedTest {
 
                 scenario.onActivity(a ->{
                     a.addMarker(lat,lon);
-                    a.addMarker(lat+2f,lon);
+                    a.addMarker(lat+2.,lon);
                         });
 
                 Thread.sleep(10000);
@@ -185,7 +185,7 @@ public class MapInstrumentedTest {
 
 
     @Test
-    public void catchCoinWhenNear() {
+    public void catchCoinWhenNearRemovesAndAddsFromList() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
                 Thread.sleep(10000);
@@ -195,18 +195,20 @@ public class MapInstrumentedTest {
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
                 Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
-                a.getRemainingCoins().add(coin);
+                a.addCoin(coin);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                a.addCoin(coin2);
             });
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             scenario.onActivity(a->{
-                assertEquals(0,a.getRemainingCoins().size());
+                assertEquals(1,a.getRemainingCoins().size());
                 assertEquals(1,a.getCaughtCoins().size());
             });
-
 
         }
         catch (Exception e){
@@ -214,5 +216,36 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void catchCoinWhenNearRemovesFromMap() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                a.addCoin(coin);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(0,a.getSymbolManager().getAnnotations().size());
+            });
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
 
 }
