@@ -12,9 +12,9 @@ import java.lang.ref.WeakReference;
 
 public class LocationChangeListeningActivityLocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
-    private final WeakReference<MapActivity> activityWeakReference;
+    private final WeakReference<TrackedMap> activityWeakReference;
 
-    LocationChangeListeningActivityLocationCallback(MapActivity activity) {
+    LocationChangeListeningActivityLocationCallback(TrackedMap activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
@@ -25,7 +25,7 @@ public class LocationChangeListeningActivityLocationCallback implements Location
      */
     @Override
     public void onSuccess(LocationEngineResult result) {
-        MapActivity activity = activityWeakReference.get();
+        TrackedMap activity = activityWeakReference.get();
 
         if (activity != null) {
             Location location = result.getLastLocation();
@@ -47,7 +47,7 @@ public class LocationChangeListeningActivityLocationCallback implements Location
      */
     @Override
     public void onFailure(@NonNull Exception exception) {
-        MapActivity activity = activityWeakReference.get();
+        TrackedMap activity = activityWeakReference.get();
         if (activity != null) {
             Toast.makeText(activity, exception.getLocalizedMessage(),
                     Toast.LENGTH_SHORT).show();
