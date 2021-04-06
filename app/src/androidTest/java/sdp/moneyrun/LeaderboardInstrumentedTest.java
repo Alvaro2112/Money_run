@@ -29,8 +29,9 @@ public class LeaderboardInstrumentedTest {
     public void addPlayerWorks(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
-                Player player = new Player(123);
-                player.setName("Tess");
+
+                //Address was not set here before I don't know why
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
                 player.setScore(8008);
                 a.addPlayer(player);
 
@@ -46,8 +47,8 @@ public class LeaderboardInstrumentedTest {
     public void addPLayerAddsPlayerToView(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
-                Player player = new Player(123);
-                player.setName("Tess");
+                //Address was not set here before I don't know why
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
                 player.setScore(8008);
                 a.addPlayer(player);
                 assertEquals( a.getLdbAdapter().getCount(), 1);
@@ -72,11 +73,13 @@ public class LeaderboardInstrumentedTest {
     public void AddPlayerListWorks(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
-                Player player = new Player(123);
-                player.setName("Tesa");
+
+                //Address was not set here before I don't know why
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
                 player.setScore(8008);
-                Player player2 = new Player(12);
-                player2.setName("Rafa");
+
+                //Address was not set here before I don't know why
+                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
                 player2.setScore(8001);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
@@ -94,11 +97,13 @@ public class LeaderboardInstrumentedTest {
     public void AddPlayerListAddsAllPlayerToView(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
-                Player player = new Player(123);
-                player.setName("Tesa");
+
+                //Address was not set here before I don't know why
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
                 player.setScore(8008);
-                Player player2 = new Player(12);
-                player2.setName("Rafa");
+
+                //Address was not set here before I don't know why
+                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
                 player2.setScore(8001);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);

@@ -3,12 +3,12 @@ package sdp.moneyrun;
 import org.junit.Test;
 
 import java.util.Objects;
+import java.util.Random;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
-    Player player = new Player(1);
+    Player player = new Player(1,"Bob", "New York",0,0);
 
     @Test
     public void testNumberId() {
@@ -17,13 +17,11 @@ public class TestPlayer {
 
     @Test
     public void testNameSetup() {
-        player.setName("Bob");
         assertEquals(player.getName(), "Bob");
     }
 
     @Test
     public void testAddressSetup() {
-        player.setAddress("New York");
         assertEquals("New York", player.getAddress());
     }
 
@@ -39,34 +37,8 @@ public class TestPlayer {
         assertEquals(1, player.getNumberOfPlayedGames());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testExceptionThrownOnSetName(){
-        Player p = new Player(3);
-        p.getName();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testExceptionThrownOnSetAddress(){
-        Player p = new Player(3);
-        p.getAddress();
-    }
-    @Test
-    public void constructorsReturnSamePlayer(){
-        int playerId = 123;
-        int nbrOfDiedGames = 0;
-        int nbrOfPlayedGames = 0;
-        String address = "Foooooooo";
-        String name = "BaaaRRfF";
-        Player player1 = new Player(playerId);
-        player1.setAddress(address);
-        player1.setName(name);
-        Player player2 = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames);
-        assertEquals(player1, player2);
-
-    }
     @Test
     public void testAskPlayerReturnsEmptyString(){
-        Player player = new Player(4);
         assertEquals("",player.ask(""));
     }
 
@@ -89,13 +61,68 @@ public class TestPlayer {
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
         String name = "BaaaRRfF";
-        Player player1 = new Player(playerId);
-        player1.setAddress(address);
-        player1.setName(name);
+        Player player1 = new Player(playerId,name,address,0,0);
+
         assert (!player1.equals(null));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnNullAddress(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = null;
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnEmptyAddress(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "";
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnNullName(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "Foobar";
+        String name = null;
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOnEmptyName(){
+        Random r = new Random();
+        int playerId = r.nextInt();
+        if (playerId == 0 ) playerId++;
+        String address = "Foobar";
+        String name = "";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void playerThrowsExceptionOn0Id(){
+        Random r = new Random();
+        int playerId = 0;
+        String address = "Foobar";
+        String name = "Rodric";
+        int played = r.nextInt();
+        int died = r.nextInt();
+        Player p = new Player(playerId, name, address, died, played);
+    }
 
 }

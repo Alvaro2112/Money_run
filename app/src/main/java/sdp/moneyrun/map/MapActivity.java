@@ -1,16 +1,14 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import android.os.Bundle;
 import android.widget.Chronometer;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -18,55 +16,50 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
-public class MapActivity extends AppCompatActivity implements
-        OnMapReadyCallback {
-    private static final String SOURCE_ID = "SOURCE_ID";
-    private static final String ICON_ID = "ICON_ID";
-    private static final String LAYER_ID = "LAYER_ID";
-    private static final float ZOOM = 4;
-    private static final int GAME_TIME = 100;
-    private static int chronometerCounter =0;
-    private MapView mapView;
+import sdp.moneyrun.R;
+
+public class MapActivity extends TrackedMap implements OnMapReadyCallback {
+    protected static final int GAME_TIME = 100;
+    protected static int chronometerCounter =0;
     private SymbolManager symbolManager;
-    private MapboxMap mapboxMap;
 
     private Chronometer chronometer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
-
-        setContentView(R.layout.activity_map);
-
-        mapView = (MapView) findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
+        createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);
-
         initChronometer();
     }
 
     /**
      * @param mapboxMap the map where everything will be done
-    *     this overried the OnMapReadyCallback in the implemented interface
-   *      We set up the symbol manager here that will allow us to add markers
+     *     this overried the OnMapReadyCallback in the implemented interface
+     *      We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
+     *                    *       Then we setup the location tracking
      */
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
-
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+        callback = new LocationChangeListeningActivityLocationCallback(this);
+        mapboxMap.setStyle(Style.MAPBOX_STREETS,style -> {
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager =  new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-        });
+            enableLocationComponent(style);
+                });
 
         this.mapboxMap = mapboxMap;
     }
 
+    public Chronometer getChronometer(){ return chronometer; }
+    public SymbolManager getSymbolManager(){return symbolManager;}
+    /**
+     * The chronometer will countdown from the maximum time of a game to 0
+     */
     private void initChronometer(){
-
         chronometer = (Chronometer) findViewById(R.id.mapChronometer);
         chronometer.start();
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -76,80 +69,26 @@ public class MapActivity extends AppCompatActivity implements
                     chronometerCounter += 1;
                 }
                 else{
-                    displayEndOfTimer();
                 }
                 chronometer.setFormat("REMAINING TIME"+String.valueOf(GAME_TIME - chronometerCounter));
             }
         });
     }
-    public Chronometer getChronometer(){
-        return chronometer;
-    }
 
-    private void displayEndOfTimer(){
-        //TODO
-        // fill this function
-    }
+
     public void addMarker(float latitude,float longitude){
         LatLng latLng = new LatLng(latitude,longitude);
         symbolManager.create(new SymbolOptions().withLatLng(latLng));
     }
 
-    public SymbolManager getSymbolManager(){
-        return symbolManager;
-    }
-
-    public MapboxMap getMapboxMap(){
-        return mapboxMap;
-    }
-
     public void moveCameraTo(float latitude, float longitude){
-        LatLng latLng = new LatLng(latitude,longitude);
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
 
 }

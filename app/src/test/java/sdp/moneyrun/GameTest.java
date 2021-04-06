@@ -64,7 +64,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Location startLocation = new Location("");
         try {
             Game game = new Game(null, null, null, 0, null, null);
@@ -105,7 +105,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         game.startGame();
         Game.startGame(game);
@@ -119,7 +119,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         assertEquals(game.askPlayer(players.get(0), riddleList.get(0)), false);
     }
@@ -131,7 +131,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         Riddle riddle = game.getRandomRiddle();
         assertTrue(riddle.getClass() == Riddle.class);
