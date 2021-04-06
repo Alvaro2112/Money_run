@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.InputStream;
-
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
     private Button profileButton;
@@ -135,7 +133,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         playerProfileIntent.putExtra("playerId",playerId);
         playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
         startActivity(playerProfileIntent);
-
     }
 
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
