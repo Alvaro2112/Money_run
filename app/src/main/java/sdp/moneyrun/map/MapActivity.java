@@ -1,5 +1,6 @@
 package sdp.moneyrun.map;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Chronometer;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.Coin;
+import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
 
 /*
@@ -32,7 +34,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
-    private List<Coin> collectedCoins = new ArrayList<>();
+    private ArrayList<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
     private Location currentLocation;
     @Override
@@ -82,12 +84,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 }
                 else{
                 }
-                chronometer.setFormat("REMAINING TIME"+String.valueOf(GAME_TIME - chronometerCounter));
+                chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
             }
         });
     }
 
-    public void endGame()
+    public void endGame(){
+        Intent endGameIntent = new Intent(this, EndGameActivity.class);
+        endGameIntent.putExtra("collectedCoins",collectedCoins);
+        startActivity(endGameIntent);
+
+    }
 
     /**
      * @param coin
@@ -131,6 +138,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
+
     /**
      * @param location
      * Used to check if location is near a coin or not
@@ -144,6 +152,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             //  call the riddle
         }
     }
+
+
     /**
      * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
      * @param lat_a
