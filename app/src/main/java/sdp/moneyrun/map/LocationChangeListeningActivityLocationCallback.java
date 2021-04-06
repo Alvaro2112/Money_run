@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import android.location.Location;
 import android.widget.Toast;

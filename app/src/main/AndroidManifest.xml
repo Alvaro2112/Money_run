@@ -14,7 +14,7 @@
         tools:ignore="AllowBackup">
 
 
-        <activity android:name=".MapActivity">
+        <activity android:name=".map.MapActivity">
         </activity>
 
 

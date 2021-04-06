@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import sdp.moneyrun.map.MapActivity;
+
 import static org.junit.Assert.assertEquals;
 
 public class MapInstrumentedTest {
