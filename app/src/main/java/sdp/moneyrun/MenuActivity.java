@@ -29,7 +29,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
-    private DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
+    private Button logOut;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         try{
             db = RiddlesDatabase.createInstance(getApplicationContext());
         }
@@ -45,14 +48,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             db = RiddlesDatabase.getInstance();
         }
 
-        profileButton = findViewById(R.id.go_to_profile_button);
-        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
+        logOut = findViewById(R.id.log_out_button);
 
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
-        addLogOutButtonFunctionality();
-        linkProfileButton(profileButton);
-        linkLeaderboardButton(leaderboardButton);
     }
 
     @Override
@@ -69,6 +68,17 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             case R.id.profile_button: {
                 onButtonSwitchToUserProfileActivity(item.getActionView());
                 break;
+            }
+
+            case R.id.leaderboard_button: {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+                break;
+            }
+
+            case R.id.log_out_button: {
+                FirebaseAuth.getInstance().signOut();
+                finish();
             }
         }
         //close navigation drawer
@@ -99,7 +109,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void addLogOutButtonFunctionality(){
 
-        Button logOut = findViewById(R.id.log_out_button);
 
         /**
          * Checks for clicks on the join game button and creates a popup of available games if clicked
