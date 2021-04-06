@@ -1,6 +1,5 @@
 package sdp.moneyrun.map;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Chronometer;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.Coin;
-import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
 
 /*
@@ -89,12 +87,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
-    public void endGame(){
-        Intent endGameIntent = new Intent(this, EndGameActivity.class);
-      //  endGameIntent.putExtra("collectedCoins");
-        startActivity(endGameIntent);
-
-    }
 
     /**
      * @param coin
