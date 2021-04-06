@@ -19,7 +19,27 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/activity_main_drawer" />
+        >
+
+            <com.google.android.material.navigation.NavigationView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:paddingTop="50dp"
+                android:fitsSystemWindows="true"
+                app:menu="@menu/activity_menu_drawer_top" >
+
+                <com.google.android.material.navigation.NavigationView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:fitsSystemWindows="true"
+                    app:menu="@menu/activity_menu_drawer_bot" />
+            </com.google.android.material.navigation.NavigationView>
+
+    </com.google.android.material.navigation.NavigationView>
+
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"-->

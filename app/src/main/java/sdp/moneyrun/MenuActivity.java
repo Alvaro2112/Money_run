@@ -70,16 +70,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToUserProfileActivity(item.getActionView());
                 break;
             }
-
-            case R.id.profile_button: {
-                onButtonSwitchToUserProfileActivity(item.getActionView());
-                break;
-            }
-
-            case R.id.profile_button: {
-                onButtonSwitchToUserProfileActivity(item.getActionView());
-                break;
-            }
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
