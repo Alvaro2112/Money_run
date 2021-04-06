@@ -34,7 +34,7 @@ public abstract class TrackedMap extends BaseMap implements
     private static final float ZOOM = 4;
     private PermissionsManager permissionsManager;
     public LocationEngine locationEngine;
-    protected LocationChangeListeningActivityLocationCallback callback;
+    protected LocationCheckObjectivesCallback callback;
 
 
     // source
