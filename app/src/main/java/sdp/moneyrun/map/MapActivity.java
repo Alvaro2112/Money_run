@@ -60,7 +60,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setTextAllowOverlap(true);
             enableLocationComponent(style);
                 });
-
         this.mapboxMap = mapboxMap;
     }
 

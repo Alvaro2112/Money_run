@@ -1,7 +1,5 @@
 package sdp.moneyrun;
 
-import com.mapbox.mapboxsdk.geometry.LatLng;
-
 public class Coin {
 
     private double latitude;
@@ -13,11 +11,6 @@ public class Coin {
         this.longitude = longitude;
     }
 
-    public Coin(LatLng latLng){
-        this.latitude = latLng.getLatitude();
-        this.longitude = latLng.getLongitude();
-
-    }
 
     public double getLatitude(){return  latitude;}
     public double getLongitude(){return  longitude;}

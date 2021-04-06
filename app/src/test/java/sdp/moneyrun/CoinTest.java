@@ -17,5 +17,4 @@ public class CoinTest {
         assertEquals(coin.getLongitude(),2.0,0.0001);
     }
 
-
 }
