@@ -17,4 +17,12 @@ public class CoinTest {
         assertEquals(coin.getLongitude(),2.0,0.0001);
     }
 
+    @Test
+    public void checkCoinGetSymbolOption() {
+        Coin coin = new Coin(23.0,2.0);
+        assertEquals(coin.getSymbolOption().getLatLng().getLongitude(),2.0,0.0001);
+        assertEquals(coin.getSymbolOption().getLatLng().getLatitude(),23.0,0.0001);
+
+    }
+
 }

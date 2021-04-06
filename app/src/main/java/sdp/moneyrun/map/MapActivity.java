@@ -16,7 +16,6 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import java.util.ArrayList;
@@ -89,27 +88,39 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
+    /**
+     * @param coin
+     * Adds a coins to the list of remaining coins and adds it to the map
+     */
     public void addCoin(Coin coin){
+        if(coin == null){
+            throw new NullPointerException("added coin is null");
+        }
         remainingCoins.add(coin);
-        addMarker(coin.getLatitude(),coin.getLongitude());
+        symbolManager.create(coin.getSymbolOption());
     }
 
+    /**
+     * @param coin
+     * removes a coin from the list of remaining coins, adds it to the list of caught coin
+     * and removes it from the map
+     */
     public void removeCoin(Coin coin){
+
+        if(coin == null){
+            throw new NullPointerException("removed coined is null");
+        }
         remainingCoins.remove(coin);
         caughtCoins.add(coin);
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
         for(int i = 0; i< symbols.size();++i){
             Symbol symbol = symbols.valueAt(i);
-            LatLng latLng = symbol.getLatLng();
-            if(latLng.getLongitude() == coin.getLongitude() && latLng.getLatitude() == coin.getLatitude()){
+            if(coin.getLatitude() == symbol.getLatLng().getLatitude() && coin.getLongitude() == symbol.getLatLng().getLongitude() ){
                 symbolManager.delete(symbol);
             }
         }
     }
-    public void addMarker(double latitude,double longitude){
-        LatLng latLng = new LatLng(latitude,longitude);
-        symbolManager.create(new SymbolOptions().withLatLng(latLng));
-    }
+
 
     public void moveCameraTo(float latitude, float longitude){
         CameraPosition position = new CameraPosition.Builder()
