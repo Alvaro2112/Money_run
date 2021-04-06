@@ -91,7 +91,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public void endGame(){
         Intent endGameIntent = new Intent(this, EndGameActivity.class);
-        endGameIntent.putExtra("collectedCoins")
+      //  endGameIntent.putExtra("collectedCoins");
         startActivity(endGameIntent);
 
     }
