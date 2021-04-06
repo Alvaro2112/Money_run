@@ -29,11 +29,11 @@ this map implements all the functionality we will need.
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final int GAME_TIME = 100;
     private static int chronometerCounter =0;
-    private SymbolManager symbolManager;
     private Chronometer chronometer;
-    public List<Coin> coins = new ArrayList<>();
+    private List<Coin> remainingCoins = new ArrayList<>();
+    private List<Coin> caughtCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 1.;
-
+    private Location currentLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +65,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public Chronometer getChronometer(){ return chronometer; }
-    public SymbolManager getSymbolManager(){return symbolManager;}
+    public List<Coin> getRemainingCoins(){return remainingCoins;}
+    public List<Coin> getCaughtCoins(){return caughtCoins;}
+    public Location getCurrentLocation(){return currentLocation;}
     /**
      * The chronometer will countdown from the maximum time of a game to 0
      */
@@ -99,14 +101,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void  checkObjectives(Location location){
+        currentLocation = location;
         int coinIdx = isNearCoin(location);
         if(coinIdx >= 0){
+            Coin caught = remainingCoins.remove(coinIdx);
+            caughtCoins.add(caught);
             // TODO :
-            // remove coin from list of coins and call the riddle
+            //  call the riddle
         }
-
     }
-
     /**
      * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
      * @param lat_a
@@ -143,8 +146,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         double min_dist = 10000;
         int min_index = -1;
-        for(int i=0; i< coins.size();++i){
-            Coin coin = coins.get(i);
+        for(int i=0; i< remainingCoins.size();++i){
+            Coin coin = remainingCoins.get(i);
             double cur_dist = distance(player_lat,player_long,coin.getLatitude(),coin.getLongitude());
             if( cur_dist < THRESHOLD_DISTANCE && cur_dist < min_dist ){
                 min_dist = cur_dist;

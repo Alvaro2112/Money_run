@@ -1,5 +1,7 @@
 package sdp.moneyrun;
 
+import android.location.Location;
+
 import androidx.test.core.app.ActivityScenario;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -180,4 +182,37 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void catchCoinWhenNear() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                a.getRemainingCoins().add(coin);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                assertEquals(0,a.getRemainingCoins().size());
+                assertEquals(1,a.getCaughtCoins().size());
+            });
+
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
 }
