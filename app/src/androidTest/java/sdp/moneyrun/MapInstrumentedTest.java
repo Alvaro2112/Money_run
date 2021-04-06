@@ -246,7 +246,7 @@ public class MapInstrumentedTest {
 
             scenario.onActivity(a->{
                 assertEquals(1,a.getRemainingCoins().size());
-                assertEquals(1,a.getCaughtCoins().size());
+                assertEquals(1,a.getCollectedCoins().size());
             });
 
         }

@@ -32,7 +32,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
-    private List<Coin> caughtCoins = new ArrayList<>();
+    private List<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
     private Location currentLocation;
     @Override
@@ -66,7 +66,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public Chronometer getChronometer(){ return chronometer; }
     public List<Coin> getRemainingCoins(){return remainingCoins;}
-    public List<Coin> getCaughtCoins(){return caughtCoins;}
+    public List<Coin> getCollectedCoins(){return collectedCoins;}
     public Location getCurrentLocation(){return currentLocation;}
     /**
      * The chronometer will countdown from the maximum time of a game to 0
@@ -87,6 +87,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
+    public void endGame()
 
     /**
      * @param coin
@@ -102,7 +103,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * @param coin
-     * removes a coin from the list of remaining coins, adds it to the list of caught coin
+     * removes a coin from the list of remaining coins, adds it to the list of collected coin
      * and removes it from the map
      */
     public void removeCoin(Coin coin){
@@ -111,7 +112,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("removed coined is null");
         }
         remainingCoins.remove(coin);
-        caughtCoins.add(coin);
+        collectedCoins.add(coin);
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
         for(int i = 0; i< symbols.size();++i){
             Symbol symbol = symbols.valueAt(i);
