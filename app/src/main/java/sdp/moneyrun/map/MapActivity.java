@@ -61,7 +61,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         catch(RuntimeException e){
             db = RiddlesDatabase.getInstance();
         }
-        //addAskQuestionButtonFunctionality();
+
 
 
     }
@@ -108,25 +108,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
         });
     }
-
-    public void addAskQuestionButtonFunctionality(){
-
-        Button askQuestion = findViewById(R.id.ask_question);
-
-        /**
-         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
-         */
-        askQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
-            }
-        });
-
-    }
-
-
 
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
@@ -231,8 +212,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int coinIdx = isNearCoin(location);
         if(coinIdx >= 0){
             removeCoin(remainingCoins.get(coinIdx));
-            // TODO :
-            //  call the riddle
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, db.getRandomRiddle());
         }
     }
 

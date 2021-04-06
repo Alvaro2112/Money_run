@@ -54,12 +54,6 @@ public class MenuActivityTest {
     }
     
     @Test
-    public void askQuestionPopupIsDisplayed() {
-        onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void logOutButtonWorks() throws InterruptedException {
         Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
         Thread.sleep(1000);

@@ -99,23 +99,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
-    public void addAskQuestionButtonFunctionality(){
-
-        Button askQuestion = findViewById(R.id.ask_question);
-
-        /**
-         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
-         */
-        askQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
-            }
-        });
-
-    }
-
     private void linkProfileButton(Button button){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,39 +134,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
 
         onButtonShowPopupWindowClick(view, focusable, layoutId);
-
-    }
-
-
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
-
-        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
-        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
-        int correctId = 0;
-
-        //changes the text to the current question
-        tv.setText(riddle.getQuestion());
-
-        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
-        TextView buttonView = tv;
-
-        //Loops to find the ID of the button solution and assigns the text to each button
-        for (int i = 0; i < 4; i++){
-
-            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
-            buttonView.setText(riddle.getPossibleAnswers()[i]);
-
-            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
-                correctId = buttonIds[i];
-        }
-
-        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
 
     }
 
