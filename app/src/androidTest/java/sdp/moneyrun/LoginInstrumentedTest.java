@@ -1,12 +1,14 @@
 package sdp.moneyrun;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -19,10 +21,12 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -142,6 +146,9 @@ public class LoginInstrumentedTest {
             Thread.sleep(1000);
             intended(hasComponent(MenuActivity.class.getName()));
             assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
+            onView(withId(R.id.drawer_layout))
+                    .check(matches(isClosed(Gravity.LEFT)))
+                    .perform(DrawerActions.open());
             Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
             Thread.sleep(1000);
             assertEquals(FirebaseAuth.getInstance().getCurrentUser(), null);

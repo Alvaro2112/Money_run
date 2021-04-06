@@ -101,7 +101,7 @@ public class RegisterPlayerInstrumentedTest {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
             intended(hasComponent(MenuActivity.class.getName()));
-            Espresso.onView(withId(R.id.go_to_profile_button)).perform(click());
+            Espresso.onView(withId(R.id.profile_button)).perform(click());
             Context appContext2 = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
             intended(hasComponent(PlayerProfileActivity.class.getName()));
