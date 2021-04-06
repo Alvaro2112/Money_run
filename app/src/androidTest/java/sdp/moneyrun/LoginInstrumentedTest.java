@@ -130,6 +130,7 @@ public class LoginInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
     }
 
@@ -155,6 +156,7 @@ public class LoginInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
     }
 

@@ -43,6 +43,7 @@ public class RegisterPlayerInstrumentedTest {
             Intents.release();
         }catch (Exception e){
             e.printStackTrace();
+            Intents.release();
         }
     }
     @Test
@@ -116,6 +117,7 @@ public class RegisterPlayerInstrumentedTest {
             Intents.release();
         }catch (Exception e){
             e.printStackTrace();
+            Intents.release();
         }
     }
 }
