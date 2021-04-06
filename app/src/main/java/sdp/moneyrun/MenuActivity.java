@@ -17,11 +17,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 
+import sdp.moneyrun.map.MapActivity;
+
 public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
 
     private Button profileButton;
     private Button leaderboardButton;
     private Button joinGame;
+    private Button mapButton;
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
@@ -32,20 +35,15 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        try{
-            db = RiddlesDatabase.createInstance(getApplicationContext());
-        }
-        catch(RuntimeException e){
-            db = RiddlesDatabase.getInstance();
-        }
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileButton = findViewById(R.id.go_to_profile_button);
         leaderboardButton = findViewById(R.id.menu_leaderboardButton);
+        mapButton = findViewById(R.id.map);
 
         addJoinGameButtonFunctionality();
-        addAskQuestionButtonFunctionality();
         addLogOutButtonFunctionality();
+        addMapButtonFunctionality();
         linkProfileButton(profileButton);
         linkLeaderboardButton(leaderboardButton);
     }
@@ -54,6 +52,18 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+    }
+
+    public void addMapButtonFunctionality(){
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, MapActivity.class);
+                startActivity(leaderboardIntent);
+            }
+        });
     }
 
     public void addJoinGameButtonFunctionality(){
