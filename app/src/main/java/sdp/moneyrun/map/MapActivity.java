@@ -10,6 +10,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
@@ -17,20 +18,17 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import sdp.moneyrun.R;
 
-public class MapActivity extends TrackedMap  {
+public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     protected static final int GAME_TIME = 100;
     protected static int chronometerCounter =0;
-    public SymbolManager symbolManager;
+    private SymbolManager symbolManager;
 
-    public Chronometer chronometer;
+    private Chronometer chronometer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
-
-        createMap(savedInstanceState);
-
+        createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);
         initChronometer();
     }
@@ -56,7 +54,8 @@ public class MapActivity extends TrackedMap  {
         this.mapboxMap = mapboxMap;
     }
 
-
+    public Chronometer getChronometer(){ return chronometer; }
+    public SymbolManager getSymbolManager(){return symbolManager;}
     /**
      * The chronometer will countdown from the maximum time of a game to 0
      */
@@ -82,13 +81,7 @@ public class MapActivity extends TrackedMap  {
         symbolManager.create(new SymbolOptions().withLatLng(latLng));
     }
 
-
-    public MapboxMap getMapboxMap(){
-        return mapboxMap;
-    }
-
     public void moveCameraTo(float latitude, float longitude){
-        LatLng latLng = new LatLng(latitude,longitude);
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .build();

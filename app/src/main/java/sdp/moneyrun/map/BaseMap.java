@@ -5,20 +5,28 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
-import sdp.moneyrun.R;
 
+/*
+Base class for a mapboxmap, implements base mapboxmap functions
+ */
 public class BaseMap extends AppCompatActivity {
 
     protected MapView mapView;
+    protected MapboxMap mapboxMap;
 
-    protected void createMap(Bundle savedInstanceState){
-        setContentView(R.layout.activity_map);
+    protected void createMap(Bundle savedInstanceState,int mapViewID, int contentViewID){
 
-        mapView = (MapView) findViewById(R.id.mapView);
+        setContentView(contentViewID);
+
+        mapView = (MapView) findViewById(mapViewID);
         mapView.onCreate(savedInstanceState);
     }
 
+    public MapboxMap getMapboxMap(){
+        return mapboxMap;
+    }
 
     @Override
     protected void onStart() {
