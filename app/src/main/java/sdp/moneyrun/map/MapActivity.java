@@ -18,12 +18,16 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import sdp.moneyrun.R;
 
+/*
+this map implements all the functionality we will need.
+ */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    protected static final int GAME_TIME = 100;
-    protected static int chronometerCounter =0;
+    private static final int GAME_TIME = 100;
+    private static int chronometerCounter =0;
     private SymbolManager symbolManager;
-
     private Chronometer chronometer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +91,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
-
-
 
 
 }
