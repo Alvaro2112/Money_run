@@ -30,7 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+
     private Button login;
+
     private final String ERROR_MISSING_EMAIL = "Email is required";
     private final String ERROR_MISSING_PASSWORD = "Password is required";
     private final String ERROR_INVALID_EMAIL_FORMAT = "Email format is invalid";
