@@ -8,6 +8,7 @@ public class Coin {
     private double longitude;
 
     public Coin(double latitude,double longitude){
+
         this.latitude = latitude;
         this.longitude = longitude;
     }

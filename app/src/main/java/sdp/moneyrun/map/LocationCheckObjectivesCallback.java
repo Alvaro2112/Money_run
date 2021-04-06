@@ -10,22 +10,22 @@ import com.mapbox.android.core.location.LocationEngineResult;
 
 import java.lang.ref.WeakReference;
 
-public class LocationChangeListeningActivityLocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
-    protected final WeakReference<TrackedMap> activityWeakReference;
+public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
-    LocationChangeListeningActivityLocationCallback(TrackedMap activity) {
+    private final WeakReference<MapActivity> activityWeakReference;
+
+    LocationCheckObjectivesCallback(MapActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
-    /**
-     * The LocationEngineCallback interface's method which fires when the device's location has changed.
-     *
-     * @param result the LocationEngineResult object which has the last known location within it.
-     */
+
+
+        /* Updates the location, then checks if near a coin and calls a  function accordingly
+        */
     @Override
     public void onSuccess(LocationEngineResult result) {
-        TrackedMap activity = activityWeakReference.get();
+        MapActivity activity = activityWeakReference.get();
 
         if (activity != null) {
             Location location = result.getLastLocation();
@@ -36,21 +36,24 @@ public class LocationChangeListeningActivityLocationCallback implements Location
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null) {
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
+                activity.checkObjectives(location);
             }
         }
     }
 
-    /**
-     * The LocationEngineCallback interface's method which fires when the device's location can't be captured
-     *
-     * @param exception the exception message
-     */
     @Override
     public void onFailure(@NonNull Exception exception) {
-        TrackedMap activity = activityWeakReference.get();
+        MapActivity activity = activityWeakReference.get();
         if (activity != null) {
             Toast.makeText(activity, exception.getLocalizedMessage(),
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void checkCoins(Location location){
+
+
+    }
+
+
 }
