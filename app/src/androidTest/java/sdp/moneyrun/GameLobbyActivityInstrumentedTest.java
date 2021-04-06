@@ -27,13 +27,12 @@ public class GameLobbyActivityInstrumentedTest {
         assertEquals(Lifecycle.State.RESUMED, testRule.getScenario().getState());
     }
 
-    /*
     @Test
     public void LeaveLobbyWorks(){
         try {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
-            Thread.sleep(1000);
+            Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
         }catch(InterruptedException e){
@@ -41,6 +40,4 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         }
     }
-    */
-
 }

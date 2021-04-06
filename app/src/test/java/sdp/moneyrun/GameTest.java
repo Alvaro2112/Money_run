@@ -143,7 +143,7 @@ public class GameTest {
         String name = "name";
         List<Riddle> riddleList = new ArrayList<>();
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
         Riddle riddle = game.getRandomRiddle();
         assertNull(riddle);
@@ -156,7 +156,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
 
         String gameIdRet = game.getGameId();
@@ -170,7 +170,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
 
         String nameRet = game.getName();
@@ -185,7 +185,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 0, riddleList, new Location("LocationManager#GPS_PROVIDER"));
 
         int playerCount = game.getPlayerCount();
@@ -199,7 +199,7 @@ public class GameTest {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
+        players.add(new Player(3,"Bob", "Epfl",0,0));
         Game game = new Game(gameId, name, players, 12, riddleList, new Location("LocationManager#GPS_PROVIDER"));
 
         int maxPlayerCount = game.getMaxPlayerCount();
