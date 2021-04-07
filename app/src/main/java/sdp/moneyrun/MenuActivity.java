@@ -126,7 +126,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                     public void run() {
                         synchronized (this) {
                             try {
-                                wait(12000);
+                                wait(2000);
                             } catch (InterruptedException e) {
                             }
                         }

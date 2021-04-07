@@ -55,7 +55,7 @@ public class MenuActivityTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(20000);
+            Thread.sleep(7000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
