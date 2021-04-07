@@ -1,10 +1,12 @@
 package sdp.moneyrun;
 
 import android.content.Context;
+import android.view.Gravity;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -15,8 +17,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -36,7 +40,10 @@ public class PlayerProfileInstrumentedTest {
     public void checkButtonOpenRightActivities() throws Throwable {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
-            Espresso.onView(ViewMatchers.withId(R.id.go_to_profile_button)).perform(ViewActions.click());
+            onView(withId(R.id.drawer_layout))
+                    .check(matches(isClosed(Gravity.LEFT)))
+                    .perform(DrawerActions.open());
+            Espresso.onView(ViewMatchers.withId(R.id.profile_button)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             intended(hasComponent(PlayerProfileActivity.class.getName()));

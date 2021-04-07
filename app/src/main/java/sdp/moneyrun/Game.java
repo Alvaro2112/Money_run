@@ -19,18 +19,18 @@ public class Game {
     private int playerCount;
     private int maxPlayerCount;
     private List<Riddle> riddles;
-    private Location startLocation; //TODO: check if we will use the existing or create a new class Location
+    private Location startLocation;//TODO: check if we will use the existing or create a new class Location
+    private List<Coin> coins;
 
-    public Game(String gameId, String name, List<Player> players, int maxPlayerCount, List<Riddle> riddles, Location startLocation){
-        if(gameId == null || name == null || players == null || riddles == null || startLocation == null)
+    public Game(String gameId, String name, List<Player> players, List<Riddle> riddles, List<Coin> coins, Location startLocation) {
+        if (players == null || riddles == null || startLocation == null)
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         this.gameId = gameId;
         this.name = name;
         this.players = players;
-        this.playerCount = 0;
-        this.maxPlayerCount = maxPlayerCount;
         this.riddles = riddles;
         this.startLocation = startLocation;
+        this.coins = coins;
     }
 
     public String getGameId(){

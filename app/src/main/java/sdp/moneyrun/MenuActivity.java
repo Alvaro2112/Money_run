@@ -2,18 +2,26 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,15 +35,18 @@ import sdp.moneyrun.menu.MenuImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 
 
-public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
     private Button profileButton;
     private Button leaderboardButton;
-
+    private Button joinGame;
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
+    protected DrawerLayout mDrawerLayout;
+    private Button logOut;
+
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -48,6 +59,8 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        setNavigationViewListener();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // setup database instance
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -62,9 +75,7 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             db = RiddlesDatabase.getInstance();
         }
 
-        // Every buttons, elements on the activity
-        profileButton = findViewById(R.id.go_to_profile_button);
-        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
+        logOut = findViewById(R.id.log_out_button);
 
 
         Button joinGame = findViewById(R.id.join_game);
@@ -84,14 +95,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
                 fusedLocationClient));
 
         addAskQuestionButtonFunctionality();
-        addLogOutButtonFunctionality();
-
-        profileButton.setOnClickListener(this::onButtonSwitchToUserProfileActivity);
-
-        leaderboardButton.setOnClickListener(v -> {
-            Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-            startActivity(leaderboardIntent);
-        });
     }
 
     @Override
@@ -100,28 +103,44 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         RiddlesDatabase.reset();
     }
 
-    public void addLogOutButtonFunctionality() {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        Button logOut = findViewById(R.id.log_out_button);
+        switch (item.getItemId()) {
 
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        logOut.setOnClickListener(new View.OnClickListener() {
+            case R.id.profile_button: {
+                onButtonSwitchToUserProfileActivity(item.getActionView());
+                break;
+            }
 
-            @Override
-            public void onClick(View v) {
+            case R.id.leaderboard_button: {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+                break;
+            }
+
+            case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
                 finish();
             }
-        });
+        }
+        //close navigation drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
-    public void addAskQuestionButtonFunctionality() {
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+
+    public void addAskQuestionButtonFunctionality(){
 
         Button askQuestion = findViewById(R.id.ask_question);
         askQuestion.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle()));
     }
+
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 

@@ -6,20 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 
 
 /*
 Base class for a mapboxmap, implements base mapboxmap functions
  */
-public class BaseMap extends AppCompatActivity {
+public abstract class BaseMap extends AppCompatActivity {
 
     protected MapView mapView;
     protected MapboxMap mapboxMap;
+    protected SymbolManager symbolManager;
 
     protected void createMap(Bundle savedInstanceState,int mapViewID, int contentViewID){
-
         setContentView(contentViewID);
-
         mapView = (MapView) findViewById(mapViewID);
         mapView.onCreate(savedInstanceState);
     }
@@ -27,6 +27,7 @@ public class BaseMap extends AppCompatActivity {
     public MapboxMap getMapboxMap(){
         return mapboxMap;
     }
+    public SymbolManager getSymbolManager(){return symbolManager;}
 
     @Override
     protected void onStart() {

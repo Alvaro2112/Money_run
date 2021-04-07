@@ -1,5 +1,7 @@
 package sdp.moneyrun;
 
+import android.location.Location;
+
 import androidx.test.core.app.ActivityScenario;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -17,33 +19,6 @@ import static org.junit.Assert.assertEquals;
 public class MapInstrumentedTest {
 
 
-        @Test
-        public void AddMarkerAddsMarker() {
-            try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-                float lat = 12f;
-                float lon = 12f;
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                scenario.onActivity(a ->{
-                    a.addMarker(lat,lon);
-                    a.addMarker(lat+2f,lon);
-                        });
-
-                Thread.sleep(10000);
-                scenario.onActivity(a ->{
-                   assertEquals( a.getSymbolManager().getAnnotations().size(),2);
-                });
-
-            }
-            catch (Exception e){
-                assertEquals(-1,2);
-                e.printStackTrace();
-            }
-        }
 
     @Test
     public void moveCameraToWorks() {
@@ -180,4 +155,136 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void addCoinAddsCoinToMap() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2);
+                a.addCoin(coin);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                a.addCoin(coin2);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(2,a.getSymbolManager().getAnnotations().size());
+            });
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void removeCoinRemovesCoinFromMap() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2);
+                a.addCoin(coin);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                a.addCoin(coin2);
+                a.removeCoin(coin);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(1,a.getSymbolManager().getAnnotations().size());
+            });
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void catchCoinWhenNearRemovesAndAddsFromList() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                a.addCoin(coin);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                a.addCoin(coin2);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(1,a.getRemainingCoins().size());
+                assertEquals(1,a.getCollectedCoins().size());
+            });
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void catchCoinWhenNearRemovesFromMap() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                a.addCoin(coin);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a->{
+                assertEquals(0,a.getSymbolManager().getAnnotations().size());
+            });
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+
 }
