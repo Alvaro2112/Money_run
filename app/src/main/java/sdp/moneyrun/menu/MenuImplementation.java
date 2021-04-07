@@ -2,7 +2,13 @@ package sdp.moneyrun.menu;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,5 +41,29 @@ public class MenuImplementation {
                     fineLocation);
             locationPermissionsRequester.requestPermission();
         }
+    }
+
+    /**
+     *
+     * @param view Current view before click
+     * @param focusable Whether it can be dismissed by clicking outside the popup window
+     * @param layoutId Id of the popup layout that will be used
+     */
+    public static PopupWindow onButtonShowPopupWindowClick(View view, Activity activity, Boolean focusable, int layoutId) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(layoutId, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window at wanted location
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        return popupWindow;
     }
 }
