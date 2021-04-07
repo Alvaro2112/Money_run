@@ -31,6 +31,7 @@ public final class GameData {
         this.startLocation = new Location(startLocation);
     }
 
+
     public GameData(GameData data){
         this.name = data.getName();
         this.players = data.getPlayers();
@@ -60,6 +61,9 @@ public final class GameData {
     public Location getStartLocation() {
         return new Location(startLocation);
     }
+
+    public void setPlayers(List<Player> players) {this.players = new ArrayList<>(players);}
+
 }
 
 

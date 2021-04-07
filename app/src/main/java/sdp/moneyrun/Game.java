@@ -45,21 +45,20 @@ public class Game {
         this.id = addToDB();
     }
 
+    //TODO Do we really even need this?
+    /*
     public Game(GameData data) {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
         this.gameData = new GameData(data);
         rootReference = FirebaseDatabase.getInstance().getReference();
         this.hasBeenAdded = false;
         this.id = addToDB();
-    }
+    }*/
 
-    public Game(){}
-
-
-    /*
-    Adds Game to the Database and gives it an ID
-    returns the game ID
-    */
+    /**
+     * Adds the GameData to the database
+     * @return the Id of this game in the DB
+     */
     private String addToDB(){
         DatabaseReference openGames = rootReference.child("open_games");
         id = openGames.push().getKey();
@@ -68,10 +67,10 @@ public class Game {
         return id;
     }
 
-    /*
-    Links pertinent attributes to the DB instance corresponding to its ID.
-    For now the only pertitent attribute is the player List
-   */
+    /**
+     * Links pertinent attributes to the DB instance corresponding to its ID.
+     * For now the only pertitent attribute is the player List
+     */
     private void linkAttributesToDB(){
         DatabaseReference gameRef = rootReference.child("open_games").child(id);
         gameRef.child("players").addValueEventListener(new ValueEventListener() {
@@ -79,19 +78,19 @@ public class Game {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
                 List<Player> newData = snapshot.getValue(t);
-                //gameData.setPlayers(newData);
+                gameData.setPlayers(newData);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //TODO smth
+                Log.e(TAG, "failed " + error.getMessage());
             }
         });
-
     }
-    
+
+
     public static Task<DataSnapshot> getGameDataSnapshot(String id){
-        if(id == null){throw new NullPointerException();}
+        if(id == null){throw new IllegalArgumentException();}
         DatabaseReference gamesRef = FirebaseDatabase.getInstance()
                 .getReference().child("open_games");
 
@@ -110,6 +109,7 @@ public class Game {
         });
 
         Task<DataSnapshot> returnSnap = gamesRef.child(id).get();
+
         returnSnap.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "successful " + task.getResult().getValue(String.class));
@@ -120,45 +120,48 @@ public class Game {
         return returnSnap;
     }
 
-    public GameData getGameFromSnapshot(Task<DataSnapshot> task){
+    //TODO doesn't this break asynchrony? might as well let the caller handle it.
+    /*public GameData getGameFromSnapshot(Task<DataSnapshot> task){
         if(task.isComplete()){
             return task.getResult().getValue(GameData.class);
         }else{
             return null;
         }
-    }
+    }*/
 
-    //TODO First test the rest of the class, and test the way that addValue serializes
-    //the player list before you go on manually messing up stuff;
-    /*
-    Adds a player to the DB, which then adds it to all game instances with the same ID via the listener
-
+    /**
+     * Adds a player to the Game DB representation
+     * @param p player to add to the DB
+     */
     public void addPlayer(Player p){
-        if(p == null){throw new NullPointerException();}
+        if(p == null){throw new IllegalArgumentException();}
         if(gameData.getPlayers().size() < gameData.getMaxPlayerNumber() && !gameData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
         }
     }
 
-    /*
-    Removes a player from the DB which in turn will remove it from all game instances with the same ID via
-    the listener
-
+    /**
+     * Removes a player from the Game DB representation
+     * @param p The Player to add to the game
+    */
     public void removePlayer(Player p){
-        if(p == null){throw new NullPointerException();}
+        if(p == null){throw new IllegalArgumentException();}
         if(gameData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
         }
     }
-    */
 
+    /**
+     * returns the game id
+     * @return the id of the game
+     */
     public String getGameId(){
         return id;
     }
 
     // Launched when create game button is pressed - (Rafa) Nope, launched when start game button is pressed
     public void startGame(){
-
+    //TODO fill method stub
     }
 
     public boolean askPlayer(Player player, Riddle riddle){
