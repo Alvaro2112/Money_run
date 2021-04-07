@@ -41,11 +41,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private Button logOut;
-    private Runnable startGame;
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFInished;
