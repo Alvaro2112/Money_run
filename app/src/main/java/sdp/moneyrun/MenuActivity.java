@@ -2,7 +2,10 @@ package sdp.moneyrun;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 
 import javax.security.auth.callback.Callback;
 
@@ -40,8 +45,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private Button logOut;
-    private CyclicBarrier barrier;
     private Runnable startGame;
+    private final Semaphore available = new Semaphore(1, true);
+    private int numberOfAsyncTasks;
+    private int tasksFInished;
+
 
 
 
@@ -66,7 +74,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addJoinGameButtonFunctionality();
         addMapButtonFunctionality();
         addAskQuestionButtonFunctionality();
-        initializeStartGameProcedure();
     }
 
     @Override
@@ -75,15 +82,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
-    public void initializeStartGameProcedure(){
-        startGame = new Runnable() {
-            public void run() {
-                Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-                MenuActivity.this.startActivity(mainIntent);
-                MenuActivity.this.finish();
-            }
-        };
-    }
 
 
     public void addMapButtonFunctionality(){
@@ -93,29 +91,76 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
+                //Example of how the Async tasks should be implemented
 
+                numberOfAsyncTasks = 2;
+                tasksFInished = 0;
                 setContentView(R.layout.splash_screen);
 
-                CyclicBarrier barrier = new CyclicBarrier(1, startGame);
+                Runnable x = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(5000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+                            MenuActivity.this.startActivity(mainIntent);
+                            MenuActivity.this.finish();
+                            available.release();
+                        } else {
+                            tasksFInished += 1;
+                        }
 
-                //TODO: start async functions here
+                        available.release();
+                    }
+                };
 
-                try {
-                    barrier.await();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Runnable y = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(12000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+                            MenuActivity.this.startActivity(mainIntent);
+                            MenuActivity.this.finish();
+                            available.release();
+                        } else {
+                            tasksFInished += 1;
+                        }
+
+                        available.release();
+                    }
+                };
+
+                Thread thread = new Thread(x);
+                Thread thread1 = new Thread(y);
+
+                thread.start();
+                thread1.start();
 
 
             }
 
         });
     }
-
-  /*   */
-
 
 
 
