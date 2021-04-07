@@ -83,6 +83,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void StartMapActivity(){
+        Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+        MenuActivity.this.startActivity(mainIntent);
+        MenuActivity.this.finish();
+        available.release();
+    }
+
 
     public void addMapButtonFunctionality(){
 
@@ -110,10 +117,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                             e.printStackTrace();
                         }
                         if(tasksFInished == numberOfAsyncTasks - 1){
-                            Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-                            MenuActivity.this.startActivity(mainIntent);
-                            MenuActivity.this.finish();
-                            available.release();
+                            StartMapActivity();
                         } else {
                             tasksFInished += 1;
                         }
@@ -137,10 +141,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                             e.printStackTrace();
                         }
                         if(tasksFInished == numberOfAsyncTasks - 1){
-                            Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-                            MenuActivity.this.startActivity(mainIntent);
-                            MenuActivity.this.finish();
-                            available.release();
+                            StartMapActivity();
                         } else {
                             tasksFInished += 1;
                         }
