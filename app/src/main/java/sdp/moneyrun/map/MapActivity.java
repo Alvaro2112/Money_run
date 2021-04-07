@@ -34,10 +34,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private List<Coin> remainingCoins = new ArrayList<>();
     private List<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
+    private final int SPLASH_DISPLAY_LENGTH = 1000;
     private Location currentLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_screen);
+
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);

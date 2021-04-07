@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 
+import sdp.moneyrun.map.MapActivity;
+
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button profileButton;
@@ -29,6 +31,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
+    private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private Button logOut;
 
@@ -40,7 +43,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        mapButton = findViewById(R.id.map_button);
         try{
             db = RiddlesDatabase.createInstance(getApplicationContext());
         }
@@ -51,6 +54,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         logOut = findViewById(R.id.log_out_button);
 
         addJoinGameButtonFunctionality();
+        addMapButtonFunctionality();
         addAskQuestionButtonFunctionality();
     }
 
@@ -59,6 +63,31 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         RiddlesDatabase.reset();
     }
+
+    public void addMapButtonFunctionality(){
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, MapActivity.class);
+                startActivity(leaderboardIntent);
+            }
+        });
+    }
+
+  /*          new Handler().postDelayed(new Runnable(){
+        @Override
+        public void run() {
+            /* Create an Intent that will start the Menu-Activity. *//*
+            Intent mainIntent = new Intent(Splash.this,Menu.class);
+            MapActivity.this.startActivity(mainIntent);
+            MapActivity.this.finish();
+        }
+    }, SPLASH_DISPLAY_LENGTH);*/
+
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
