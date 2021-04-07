@@ -19,16 +19,6 @@
         app:layout_constraintVertical_bias="0.967" />
 
     <Button
-        android:id="@+id/go_to_profile_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:text="@string/check_profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/ask_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,27 +46,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.968" />
 
-    <Button
-        android:id="@+id/menu_leaderboardButton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:text="@string/menu_leaderboard_button_text"
-        app:layout_constraintBottom_toTopOf="@+id/go_to_profile_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.864"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.244" />
-
-    <Button
-        android:id="@+id/log_out_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/log_out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.981"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.887" />
 </androidx.constraintlayout.widget.ConstraintLayout>
