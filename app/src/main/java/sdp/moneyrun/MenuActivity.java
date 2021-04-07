@@ -1,15 +1,12 @@
 package sdp.moneyrun;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,10 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.MenuImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
@@ -38,17 +31,9 @@ import sdp.moneyrun.menu.NewGameImplementation;
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
-    private Button profileButton;
-    private Button leaderboardButton;
-    private Button joinGame;
-    private String[] result;
-    private Player player;
     private RiddlesDatabase db;
     protected DrawerLayout mDrawerLayout;
-    private Button logOut;
 
-
-    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
     // Get player location
@@ -60,10 +45,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // setup database instance
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
         // Get player location
@@ -75,8 +60,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             db = RiddlesDatabase.getInstance();
         }
 
-        logOut = findViewById(R.id.log_out_button);
-
+        //Button logOut = findViewById(R.id.log_out_button);
 
         Button joinGame = findViewById(R.id.join_game);
         joinGame.setOnClickListener(v -> JoinGameImplementation.onClickShowJoinGamePopupWindow(v,
@@ -103,6 +87,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 

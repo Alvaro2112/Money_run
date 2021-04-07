@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.Coin;
 import sdp.moneyrun.Game;
 import sdp.moneyrun.LocationRepresentation;
 import sdp.moneyrun.Player;
@@ -126,8 +127,9 @@ public class NewGameImplementation {
                     String gameId = gameReference.getKey();
                     List<Player> players = new ArrayList<>();
                     List<Riddle> riddles = new ArrayList<>();
+                    List<Coin> coins = new ArrayList<>();
 
-                    Game game = new Game(gameId, name, players, maxPlayerCount, riddles, location);
+                    Game game = new Game(gameId, name, players, maxPlayerCount, riddles, coins, location);
 
                     // post game to database
                     gameReference.setValue(game);
