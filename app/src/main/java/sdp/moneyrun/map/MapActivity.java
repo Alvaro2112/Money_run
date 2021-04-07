@@ -44,7 +44,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private List<Coin> remainingCoins = new ArrayList<>();
     private List<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
-    private RiddlesDatabase db;
+    private RiddlesDatabase riddleDb;
     private Location currentLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +56,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
 
         try{
-            db = RiddlesDatabase.createInstance(getApplicationContext());
+            riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         }
         catch(RuntimeException e){
-            db = RiddlesDatabase.getInstance();
+            riddleDb = RiddlesDatabase.getInstance();
         }
 
 
@@ -212,7 +212,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int coinIdx = isNearCoin(location);
         if(coinIdx >= 0){
             removeCoin(remainingCoins.get(coinIdx));
-            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, db.getRandomRiddle());
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
         }
     }
 
