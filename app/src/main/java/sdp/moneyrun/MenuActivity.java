@@ -1,5 +1,6 @@
 package sdp.moneyrun;
 
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,7 +20,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.InputStream;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
+
+import javax.security.auth.callback.Callback;
 
 import sdp.moneyrun.map.MapActivity;
 
@@ -31,9 +36,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private String[] result;
     private Player player;
     private RiddlesDatabase db;
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private Button logOut;
+    private CyclicBarrier barrier;
+    private Runnable startGame;
+
 
 
     @Override
@@ -44,6 +53,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setNavigationViewListener();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mapButton = findViewById(R.id.map_button);
+
         try{
             db = RiddlesDatabase.createInstance(getApplicationContext());
         }
@@ -56,6 +66,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addJoinGameButtonFunctionality();
         addMapButtonFunctionality();
         addAskQuestionButtonFunctionality();
+        initializeStartGameProcedure();
     }
 
     @Override
@@ -64,27 +75,46 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
+    public void initializeStartGameProcedure(){
+        startGame = new Runnable() {
+            public void run() {
+                Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+                MenuActivity.this.startActivity(mainIntent);
+                MenuActivity.this.finish();
+            }
+        };
+    }
+
+
     public void addMapButtonFunctionality(){
 
         mapButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, MapActivity.class);
-                startActivity(leaderboardIntent);
+
+
+                setContentView(R.layout.splash_screen);
+
+                CyclicBarrier barrier = new CyclicBarrier(1, startGame);
+
+                //TODO: start async functions here
+
+                try {
+                    barrier.await();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
             }
+
         });
     }
 
-  /*          new Handler().postDelayed(new Runnable(){
-        @Override
-        public void run() {
-            /* Create an Intent that will start the Menu-Activity. *//*
-            Intent mainIntent = new Intent(Splash.this,Menu.class);
-            MapActivity.this.startActivity(mainIntent);
-            MapActivity.this.finish();
-        }
-    }, SPLASH_DISPLAY_LENGTH);*/
+  /*   */
 
 
 
