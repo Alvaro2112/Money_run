@@ -20,6 +20,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.map.MapActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -46,6 +48,31 @@ public class MenuActivityTest {
     public void joinGamePopupIsDisplayed() {
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void mapButtonWorks() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Thread.sleep(20000);
+            intended(hasComponent(MapActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void splashScreenShows() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Thread.sleep(1000);
+            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
     @Test

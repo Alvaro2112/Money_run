@@ -92,7 +92,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
 
                 //Example of how the Async tasks should be implemented
-
                 numberOfAsyncTasks = 2;
                 tasksFInished = 0;
                 setContentView(R.layout.splash_screen);
