@@ -4,6 +4,14 @@ package sdp.moneyrun;
 import android.location.Location;
 import android.os.Parcel;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -77,6 +85,8 @@ public class GameTest {
         assertEquals(game.askPlayer(players.get(0),riddleList.get(0)), false);
     }
     */
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
     @Test
     public void GameConstructorThrowsErrorOnNullArg(){
         assertThrows(IllegalArgumentException.class, ()->{
@@ -86,7 +96,30 @@ public class GameTest {
 
     @Test
     public void GameIsAddedToDBOnCreation(){
-        //TODO
+        Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""));
+        String id = g.getGameId();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Task<DataSnapshot> dataTask = ref.child("open_games").child(id).child("name").get();
+
+        dataTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                    assertEquals(player.equals(db.getPlayerFromTask(testTask)));
+                }else{
+                    assert (false);
+                }
+            }
+        });
+        while(!testTask.isComplete()){
+            System.out.println("false");
+        }
+
+
     }
 
     @Test
@@ -105,7 +138,7 @@ public class GameTest {
     }
 
     @Test
-    public void addPlayerAddsPlayerProperlytoDB(){
+    public void addPlayerAddsPlayerToDB(){
 
     }
 
@@ -115,7 +148,7 @@ public class GameTest {
     }
 
     @Test
-    public void getIdreturnsId(){
+    public void getIdReturnsId(){
 
     }
 
