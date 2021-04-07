@@ -181,6 +181,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
                 finish();
+                break;
             }
         }
         //close navigation drawer
