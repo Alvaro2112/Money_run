@@ -32,6 +32,7 @@ public class GameTest {
             assertEquals(1,1);
         }
     }
+    /*
     @Test
     public void testGameConstructorThrowsExceptionWhenNullArguments(){
         List<Riddle> riddleList = new ArrayList<>();
@@ -75,7 +76,7 @@ public class GameTest {
         Game game = new Game(players,riddleList,new Location("LocationManager#GPS_PROVIDER"));
         assertEquals(game.askPlayer(players.get(0),riddleList.get(0)), false);
     }
-
+    */
     @Test
     public void GameConstructorThrowsErrorOnNullArg(){
         assertThrows(IllegalArgumentException.class, ()->{

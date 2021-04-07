@@ -31,8 +31,11 @@ public class GameDataTest {
     @Test
     public void getNameReturnsName(){
         String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1));
+        players.add(new Player(2));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("1+1","2"));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
@@ -44,32 +47,26 @@ public class GameDataTest {
     @Test
     public void getPlayersReturnsPlayers(){
         String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1));
+        players.add(new Player(2));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("1+1","2"));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
-
         assertEquals(players, testData.getPlayers());
 
     }
 
     @Test
-    public void getLocationReturnsLocation(){
-        String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
-        int maxPlayers = 4;
-        Location targetLocation = new Location("");//provider name is unnecessary
-        GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
-        assertEquals(targetLocation, testData.getStartLocation());
-    }
-
-    @Test
     public void getMaxPlayersReturnsMaxPlayers(){
         String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1));
+        players.add(new Player(2));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("1+1","2"));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
@@ -80,8 +77,11 @@ public class GameDataTest {
     @Test
     public void getRiddlesReturnsRiddles(){
         String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1));
+        players.add(new Player(2));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("1+1","2"));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
@@ -92,8 +92,11 @@ public class GameDataTest {
     @Test
     public void setPlayersFailsOnNullArg(){
         String name = "game";
-        List<Player> players = new ArrayList<>(List.of(new Player(1), new Player(2)));
-        List<Riddle> riddles = new ArrayList<>(List.of(new Riddle("1+1","2")));
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1));
+        players.add(new Player(2));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("1+1","2"));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         GameData testData = new GameData(name, players, maxPlayers, riddles, targetLocation);
