@@ -166,9 +166,9 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2);
+                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2,1);
                 a.addCoin(coin);
-                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
                 a.addCoin(coin2);
             });
             try {
@@ -197,9 +197,9 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2);
+                Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2,1);
                 a.addCoin(coin);
-                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
                 a.addCoin(coin2);
                 a.removeCoin(coin);
             });
@@ -231,9 +231,9 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
                 a.addCoin(coin);
-                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100);
+                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
                 a.addCoin(coin2);
             });
             try {
@@ -264,7 +264,7 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
                 a.addCoin(coin);
             });
             try {
