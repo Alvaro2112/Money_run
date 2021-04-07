@@ -111,7 +111,8 @@ public class LeaderboardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player update = snapshot.getValue(Player.class);
-//                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
+                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
+
                 if(update != null)
                     dummy1.setName(update.getName());
             }
