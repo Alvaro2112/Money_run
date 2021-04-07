@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.map.MapActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -52,7 +54,18 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-    
+
+    @Test
+    public void mapButtonWorks() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            intended(hasComponent(MapActivity.class.getName()));
+            Intents.release();
+        }
+    }
+
     @Test
     public void logOutButtonWorks() throws InterruptedException {
         Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
