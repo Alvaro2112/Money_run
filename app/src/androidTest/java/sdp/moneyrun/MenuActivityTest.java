@@ -104,7 +104,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void logOutButtonWorks() throws InterruptedException {
+    public void logOutButtonWorks() {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
