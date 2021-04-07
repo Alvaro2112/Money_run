@@ -102,15 +102,6 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void logOutButtonWorks() throws InterruptedException {
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
-        Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
-        Thread.sleep(1000);
-        assertEquals(State.DESTROYED, testRule.getScenario().getState());
-    }
 
 
 }
