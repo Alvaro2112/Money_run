@@ -31,14 +31,19 @@ public class Game {
     private static final String TAG = Game.class.getSimpleName();
     private boolean hasBeenAdded;
 
-    /*
-    Create a Game instance by entering all its attributes -> typically used when creating a game instance
-    for the first time
+    /**
+     * Game constructor
+     * @param name game name
+     * @param players List of players
+     * @param maxPlayerNumber MAximum players
+     * @param riddles List of riddles
+     * @param startLocation game location
      */
     public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
         if(name == null || players == null || riddles == null || startLocation == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
+
         rootReference = FirebaseDatabase.getInstance().getReference();
         gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation);
         this.hasBeenAdded = false;

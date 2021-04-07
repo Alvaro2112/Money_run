@@ -75,4 +75,47 @@ public class GameTest {
         Game game = new Game(players,riddleList,new Location("LocationManager#GPS_PROVIDER"));
         assertEquals(game.askPlayer(players.get(0),riddleList.get(0)), false);
     }
+
+    @Test
+    public void GameConstructorThrowsErrorOnNullArg(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), null);
+        });
+    }
+
+    @Test
+    public void GameIsAddedToDBOnCreation(){
+        //TODO
+    }
+
+    @Test
+    public void GamePlayerListChangesWithDB(){
+        //TODO
+    }
+
+    @Test
+    public void getGameDataSnapshotFailsOnNullArg(){
+
+    }
+
+    @Test
+    public void getGameDataSnapshotFailsIfGameNotPresentInDB(){
+
+    }
+
+    @Test
+    public void addPlayerAddsPlayerProperlytoDB(){
+
+    }
+
+    @Test
+    public void removePlayerRemovesPlayerFromDB(){
+
+    }
+
+    @Test
+    public void getIdreturnsId(){
+
+    }
+
 }

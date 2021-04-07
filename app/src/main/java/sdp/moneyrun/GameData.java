@@ -33,6 +33,7 @@ public final class GameData {
 
 
     public GameData(GameData data){
+        if(data == null){throw new IllegalArgumentException();}
         this.name = data.getName();
         this.players = data.getPlayers();
         this.maxPlayerNumber = data.getMaxPlayerNumber();
@@ -62,7 +63,9 @@ public final class GameData {
         return new Location(startLocation);
     }
 
-    public void setPlayers(List<Player> players) {this.players = new ArrayList<>(players);}
+    public void setPlayers(List<Player> players) {
+        if(players == null){throw new IllegalArgumentException();}
+        this.players = new ArrayList<>(players);}
 
 }
 
