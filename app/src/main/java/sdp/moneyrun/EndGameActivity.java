@@ -6,9 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+
+/**
+ * In this activity we do everything that needs to be done to update players info
+ */
 public class EndGameActivity extends AppCompatActivity {
 
     private ArrayList<Coin> collectedCoins;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,5 +21,9 @@ public class EndGameActivity extends AppCompatActivity {
         collectedCoins = (ArrayList<Coin>) getIntent().getSerializableExtra("collectedCoins");
     }
 
+    private void updatePlayerScore(){
+
+
+    }
 
 }
