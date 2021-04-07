@@ -3,8 +3,10 @@ package sdp.moneyrun;
 
 import android.location.Location;
 import android.os.Parcel;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -12,13 +14,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+@RunWith(AndroidJUnit4.class)
 public class GameTest {
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+
     @Test
     public void basicRiddleTest(){
         String question = "What is the color of the sky";
@@ -85,42 +93,43 @@ public class GameTest {
         assertEquals(game.askPlayer(players.get(0),riddleList.get(0)), false);
     }
     */
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
     @Test
     public void GameConstructorThrowsErrorOnNullArg(){
-        assertThrows(IllegalArgumentException.class, ()->{
+        try {
             Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), null);
-        });
+        }catch(IllegalArgumentException e){
+            assertTrue(true);
+        }
     }
+
 
     @Test
     public void GameIsAddedToDBOnCreation(){
         Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""));
-        String id = g.getGameId();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        String id = g.getGameId();
         Task<DataSnapshot> dataTask = ref.child("open_games").child(id).child("name").get();
 
-        dataTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(task.isSuccessful()) {
-                    assertEquals(player.equals(db.getPlayerFromTask(testTask)));
-                }else{
-                    assert (false);
-                }
+        dataTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                assertEquals(g,Game.getGameFromTaskSnapshot(task));
+            }else{
+                assertEquals("1","0");
             }
         });
-        while(!testTask.isComplete()){
+        while(!dataTask.isComplete()){
             System.out.println("false");
         }
-
-
     }
+
+
+
+
 
     @Test
     public void GamePlayerListChangesWithDB(){

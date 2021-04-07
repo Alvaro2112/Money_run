@@ -5,6 +5,7 @@ import android.renderscript.Sampler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,15 +51,14 @@ public class Game {
         this.id = addToDB();
     }
 
-    //TODO Do we really even need this?
-    /*
-    public Game(GameData data) {
+
+
+    private Game(GameData data) {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
         this.gameData = new GameData(data);
         rootReference = FirebaseDatabase.getInstance().getReference();
         this.hasBeenAdded = false;
-        this.id = addToDB();
-    }*/
+    }
 
     /**
      * Adds the GameData to the database
@@ -125,14 +125,15 @@ public class Game {
         return returnSnap;
     }
 
-    //TODO doesn't this break asynchrony? might as well let the caller handle it.
-    /*public GameData getGameFromSnapshot(Task<DataSnapshot> task){
-        if(task.isComplete()){
-            return task.getResult().getValue(GameData.class);
+    public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
+        if(task.isSuccessful()){
+            Game retGame = new Game(task.getResult().getValue(GameData.class));
+            retGame.id = task.getResult().getKey();
+            return retGame;
         }else{
             return null;
         }
-    }*/
+    }
 
     /**
      * Adds a player to the Game DB representation
@@ -156,6 +157,9 @@ public class Game {
         }
     }
 
+
+
+
     /**
      * returns the game id
      * @return the id of the game
@@ -173,5 +177,20 @@ public class Game {
         if(player == null || riddle == null){throw new NullPointerException();}
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
+    }
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Game)){return false;}
+        return false;
     }
 }
