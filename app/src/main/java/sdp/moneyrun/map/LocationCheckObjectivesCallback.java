@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import android.location.Location;
 import android.widget.Toast;
@@ -10,19 +10,19 @@ import com.mapbox.android.core.location.LocationEngineResult;
 
 import java.lang.ref.WeakReference;
 
-public class LocationChangeListeningActivityLocationCallback implements LocationEngineCallback<LocationEngineResult> {
+
+public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
     private final WeakReference<MapActivity> activityWeakReference;
 
-    LocationChangeListeningActivityLocationCallback(MapActivity activity) {
+    LocationCheckObjectivesCallback(MapActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
-    /**
-     * The LocationEngineCallback interface's method which fires when the device's location has changed.
-     *
-     * @param result the LocationEngineResult object which has the last known location within it.
-     */
+
+
+        /* Updates the location, then checks if near a coin and calls a  function accordingly
+        */
     @Override
     public void onSuccess(LocationEngineResult result) {
         MapActivity activity = activityWeakReference.get();
@@ -36,15 +36,11 @@ public class LocationChangeListeningActivityLocationCallback implements Location
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null) {
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
+                activity.checkObjectives(location);
             }
         }
     }
 
-    /**
-     * The LocationEngineCallback interface's method which fires when the device's location can't be captured
-     *
-     * @param exception the exception message
-     */
     @Override
     public void onFailure(@NonNull Exception exception) {
         MapActivity activity = activityWeakReference.get();

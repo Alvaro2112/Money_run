@@ -2,13 +2,7 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
-
-
-
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 // The entirety of the game logic should be implemented in this class
@@ -16,14 +10,16 @@ public class Game {
     private List<Player> players;
     private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
+    private List<Coin> coins;
 
-    public Game(List<Player> players, List<Riddle> riddles, Location startLocation) {
+    public Game(List<Player> players, List<Riddle> riddles, List<Coin> coins, Location startLocation) {
         if (players == null || riddles == null || startLocation == null || players.isEmpty() || riddles.isEmpty())
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
 
         this.players = players;
         this.riddles = riddles;
         this.startLocation = startLocation;
+        this.coins = coins;
     }
 
     public static void startGame(Game game) {

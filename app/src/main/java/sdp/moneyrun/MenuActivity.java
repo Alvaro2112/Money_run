@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 
-public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button profileButton;
     private Button leaderboardButton;
@@ -30,12 +33,17 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
     private Player player;
     private int playerId;
     private RiddlesDatabase db;
+    protected DrawerLayout mDrawerLayout;
+    private Button logOut;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        setNavigationViewListener();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         try{
             db = RiddlesDatabase.createInstance(getApplicationContext());
@@ -44,24 +52,49 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
             db = RiddlesDatabase.getInstance();
         }
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        profileButton = findViewById(R.id.go_to_profile_button);
-        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
-        Button askQuestion = findViewById(R.id.ask_question);
-        //db = new DatabaseProxy();
+
+        logOut = findViewById(R.id.log_out_button);
 
         addJoinGameButtonFunctionality();
         addAskQuestionButtonFunctionality();
-        addLogOutButtonFunctionality();
-        linkProfileButton(profileButton);
-        linkLeaderboardButton(leaderboardButton);
-        setPlayerObject();//creates an instance of the player Object
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.profile_button: {
+                onButtonSwitchToUserProfileActivity(item.getActionView());
+                break;
+            }
+
+            case R.id.leaderboard_button: {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+                break;
+            }
+
+            case R.id.log_out_button: {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+            }
+        }
+        //close navigation drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     public void addJoinGameButtonFunctionality(){
@@ -80,22 +113,6 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
-    public void addLogOutButtonFunctionality(){
-
-        Button logOut = findViewById(R.id.log_out_button);
-
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        logOut.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
-    }
 
     public void addAskQuestionButtonFunctionality(){
 
@@ -114,31 +131,12 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
     }
 
-    private void linkProfileButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
-            }
-        });
-    }
-
-    
-    private void linkLeaderboardButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                setPutExtraArguments(leaderboardIntent);
-                startActivity(leaderboardIntent);
-            }
-        });
-    } 
 
     private void setPutExtraArguments(Intent intent){
         intent.putExtra("playerId",playerId);
         intent.putExtra("playerId"+playerId,playerInfo);
     }
+
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
@@ -233,5 +231,5 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         }
         //TODO: put player in the database with playerId as primary key
     }
-
+    
 }
