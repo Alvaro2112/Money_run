@@ -30,7 +30,7 @@ public class RiddlesDatabase {
             String csvLine;
             while ((csvLine = reader.readLine()) != null) {
                 String[] row = csvLine.split(";");
-                this.db.add(new Riddle(row[0].replace("\"", "").replace("\n", ""),
+                db.add(new Riddle(row[0].replace("\"", "").replace("\n", ""),
                 row[1].replace("\"", ""),
                 row[2].replace("\"", ""),
                 row[3].replace("\"", ""),
