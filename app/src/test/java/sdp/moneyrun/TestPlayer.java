@@ -27,13 +27,13 @@ public class TestPlayer {
 
     @Test
     public void testNumberOfDiedGames() {
-        player.updateDiedGames();
+        player.updateDiedGames(false);
         assertEquals(1, player.getNumberOfDiedGames());
     }
 
     @Test
     public void testPlayedGames() {
-        player.updatePlayedGames();
+        player.updatePlayedGames(false);
         assertEquals(1, player.getNumberOfPlayedGames());
     }
 
@@ -123,6 +123,22 @@ public class TestPlayer {
         int played = r.nextInt();
         int died = r.nextInt();
         Player p = new Player(playerId, name, address, died, played);
+    }
+
+    @Test
+    public void setNumberDiedGamesUpdatesAttributeCorrectly(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        int died = 43;
+        p.setNumberOfDiedGames(died,false);
+        assertEquals(died, p.getNumberOfDiedGames());
+    }
+
+    @Test
+    public void setNumberPlayedGamesUpdatesAttributeCorrectly(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        int played = 43;
+        p.setNumberOfPlayedGames(played,false);
+        assertEquals(played, p.getNumberOfPlayedGames());
     }
 
 }

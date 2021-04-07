@@ -35,8 +35,8 @@ public class Player {
         if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;
-        this.setName(name);
-        this.setAddress(address);
+        this.name = name;
+        this.address = address;
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
     }
@@ -44,31 +44,69 @@ public class Player {
     /**
      * Setter for name. By design the player already had a name
      * @param name
+     * @param dbChange whether the database entry must be updated
      */
-    public void setName(String name) {
+    public void setName(String name, boolean dbChange) {
         this.name = name;
+        dbUpdate(dbChange);
     }
 
     /**
      *Setter for address. By design the player already had an address
      * @param address
+     * @param dbChange whether the database entry must be updated
      */
-    public void setAddress(String address) {
+    public void setAddress(String address, boolean dbChange) {
         this.address = address;
+       dbUpdate(dbChange);
     }
 
     /**
      * Increments the number of played games
+     * @param dbChange whether the database entry must be updated
      */
-    public void updatePlayedGames() {
+    public void updatePlayedGames(boolean dbChange) {
         numberOfPlayedGames++;
+        dbUpdate(dbChange);
     }
 
     /**
      * Increments the number of died games
+     * @param dbChange whether the database entry must be updated
      */
-    public void updateDiedGames() {
+    public void updateDiedGames(boolean dbChange) {
         numberOfDiedGames++;
+        dbUpdate(dbChange);
+    }
+
+    /**
+     * sets the number of died games
+     * @param diedGames
+     * @param dbChange whether the database entry must be updated
+     */
+    public void setNumberOfDiedGames (int diedGames, boolean dbChange){
+        numberOfDiedGames = diedGames;
+        dbUpdate(dbChange);
+    }
+
+    /**
+     * sets the number of played games
+     * @param playedGames
+     * @param dbChange
+     */
+    public void setNumberOfPlayedGames(int playedGames, boolean dbChange){
+        numberOfPlayedGames = playedGames;
+        dbUpdate(dbChange);
+    }
+
+    /**
+     *
+     * @param score the score that is to update
+     * @param dbChange whether the database entry must be updated
+     */
+    public void setScore(int score, boolean dbChange){
+        this.score = score;
+        dbUpdate(dbChange);
     }
 
     /**
@@ -97,14 +135,6 @@ public class Player {
             throw new IllegalStateException();
 
         return score;
-    }
-
-    /**
-     *
-     * @param score the score that is to update
-     */
-    public void setScore(int score){
-        this.score = score;
     }
 
 
@@ -152,6 +182,17 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(playerId, name, address, numberOfPlayedGames, numberOfDiedGames);
+    }
+
+    /**
+     * Updates player values in the firebase database
+     * @param dbChange
+     */
+    private void dbUpdate(boolean dbChange){
+        if(dbChange){
+            DatabaseProxy db = new DatabaseProxy();
+            db.putPlayer(this);
+        }
     }
 
 

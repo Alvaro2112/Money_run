@@ -78,8 +78,6 @@ public class DatabaseProxyTest {
     @Test
     public void addPlayerListenerCorrectlyUpdatesData(){
         Player player = new Player(564123, "Johann", "FooBarr", 0 , 0 );
-        player.setAddress("FooBarr");
-        player.setName("Johann");
         final DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         String newName = "Simon";
@@ -92,7 +90,7 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                player.setName(p.getName());
+                player.setName(p.getName(), false);
 
             }
 
@@ -135,7 +133,7 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                player.setName(p.getName());
+                player.setName(p.getName(), false);
                 System.out.println("Listener executed");
                 received.countDown();
             }
@@ -147,9 +145,6 @@ public class DatabaseProxyTest {
         });
         Player p = new Player(564123,newName,"FooBarr",0,0);
         db.putPlayer(p);
-        while(received.getCount() > 0){
-            System.out.println(received.getCount());
-        }
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(received.getCount(), is(0L));
