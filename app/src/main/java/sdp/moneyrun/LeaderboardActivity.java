@@ -24,6 +24,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
+        ldbAdapter.clear();
 //        setUserPlayer();
         setMainPlayer();
         //TODO
@@ -47,7 +48,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         if(playerList == null){
             throw new NullPointerException("Player list is null");
         }
-        ldbAdapter.addAll(playerList);
+        while(!playerList.isEmpty()){
+
+        }
     }
 
     public void addPlayer(Player player){
@@ -108,7 +111,6 @@ public class LeaderboardActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player update = snapshot.getValue(Player.class);
-                System.out.println(snapshot.getValue(Player.class)+ "Getting snapshot on data change in leaderboard class");
                 if(update != null)
                     dummy1.setName(update.getName());
             }
