@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,8 +29,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-@RunWith(AndroidJUnit4.class)
 
+@RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest {
 
     @Test
@@ -72,10 +73,11 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
-            intended(hasComponent(MenuActivity.class.getName()));
+            intended(hasComponent(RegisterPlayerActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
         //FirebaseAuth.getInstance().signOut();
     }

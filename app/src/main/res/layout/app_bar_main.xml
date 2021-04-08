@@ -19,14 +19,18 @@
         app:layout_constraintVertical_bias="0.967" />
 
     <Button
-        android:id="@+id/go_to_profile_button"
+        android:id="@+id/ask_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
-        android:text="@string/check_profile"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/ask_question"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.026" />
 
     <Button
         android:id="@+id/join_game"
@@ -41,4 +45,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.968" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

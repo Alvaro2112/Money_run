@@ -13,84 +13,140 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 @RunWith(AndroidJUnit4.class)
 public class GameTest {
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
 
     @Test
-    public void basicRiddleTest(){
+    public void basicRiddleTest() {
         String question = "What is the color of the sky";
-        String answer = "blue";
-        Riddle riddle = new Riddle(question,answer);
-        assertEquals(question,riddle.getQuestion());
-        assertEquals(answer,riddle.getAnswer());
-    }
-    @Test
-    public void RiddleThrowsExceptionWhenArgumentsAreNull(){
-        try {
-            Riddle riddle = new Riddle("Is it good?", null);
-        }catch (IllegalArgumentException e){
-            assertEquals(1,1);
-        }
-        try {
-            Riddle riddle = new Riddle(null, "very");
-        }catch (IllegalArgumentException e){
-            assertEquals(1,1);
-        }
-    }
-    /*
-    @Test
-    public void testGameConstructorThrowsExceptionWhenNullArguments(){
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?","no"));
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
-        try {
-            Game game = new Game(null, riddleList, null);
-        }catch (IllegalArgumentException e){
-            assertEquals(1,1);
-        }
-        try {
-            Game game = new Game(players, null, null);
-        }catch (IllegalArgumentException e){
-            assertEquals(1,1);
-        }
-        try {
-            Game game = new Game(players, riddleList, null);
-        }catch (IllegalArgumentException e){
-            assertEquals(1,1);
-        }
-    }
-    @Test
-    public void testStartGameDoesNotCrash(){
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?","no"));
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
-        Game game = new Game(players,riddleList,new Location("LocationManager#GPS_PROVIDER"));
-        game.startGame();
-        Game.startGame(game);
-        assertEquals(1,1);
+        String correctAnswer = "blue";
+        String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
+
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        assertEquals(question, riddle.getQuestion());
+        assertEquals(correctAnswer, riddle.getAnswer());
+        assertArrayEquals(possibleAnswers, riddle.getPossibleAnswers());
     }
 
     @Test
-    public void askPlayerQuestionShouldReturnFalse(){
+    public void RiddleThrowsExceptionWhenArgumentsAreNull() {
+        try{
+            Riddle riddle = new Riddle(null, "blue", "green", "yellow", "brown", "a");
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+        try{
+            Riddle riddle = new Riddle("a", null, "green", "yellow", "brown", "a");
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+        try{
+            Riddle riddle = new Riddle("a", "blue", null, "yellow", "brown", "a");
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+        try{
+            Riddle riddle = new Riddle("a", "blue", "green", null, "brown", "a");
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+        try{
+            Riddle riddle = new Riddle("a", "blue", "green", "yellow", null, "a");
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+        try{
+            Riddle riddle = new Riddle("a", "blue", "green", "yellow", "brown", null);
+            fail();
+        }catch (IllegalArgumentException e){
+            assertTrue(true);
+        }
+
+
+    }
+    /*
+    @Test
+    public void testGameConstructorThrowsExceptionWhenNullArguments() {
         List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?","no"));
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
-        players.add(new Player(3));
-        Game game = new Game(players,riddleList,new Location("LocationManager#GPS_PROVIDER"));
-        assertEquals(game.askPlayer(players.get(0),riddleList.get(0)), false);
+        List<Coin> coins = new ArrayList<>();
+
+        players.add(new Player(3,"Bob", "Epfl",0,0));
+        try {
+            Game game = new Game(null, riddleList, null,null);
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            Game game = new Game(players, null, coins,null);
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            Game game = new Game(players, riddleList, null,new Location("LocationManager#GPS_PROVIDER"));
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+    }
+
+    @Test
+    public void testStartGameDoesNotCrash() {
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
+        players.add(new Player(3,"Bob", "Epfl",0,0));
+        Game game = new Game(players, riddleList,coins, new Location("LocationManager#GPS_PROVIDER"));
+        game.startGame();
+        Game.startGame(game);
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void askPlayerQuestionShouldReturnFalse() {
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
+        players.add(new Player(3,"Bob", "Epfl",0,0));
+        Game game = new Game(players, riddleList,coins, new Location("LocationManager#GPS_PROVIDER"));
+        assertEquals(game.askPlayer(players.get(0), riddleList.get(0)), false);
+    }
+
+    @Test
+    public void getRandomQuestionReturnsAQuestion() {
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Player> players = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
+        players.add(new Player(3,"Bob", "Epfl",0,0));
+        Game game = new Game(players, riddleList, coins,new Location("LocationManager#GPS_PROVIDER"));
+        Riddle riddle = game.getRandomRiddle();
+        assertTrue(riddle.getClass() == Riddle.class);
+
+
+
     }
     */
 

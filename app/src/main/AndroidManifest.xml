@@ -5,13 +5,17 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
+
         <activity android:name=".GameLobbyActivity"></activity>
+        <activity android:name=".map.MapActivity"></activity>
+        <activity android:name=".LeaderboardActivity" />
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/AppTheme"
@@ -40,6 +44,10 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".PlayerProfileActivity" />
+        <activity
+            android:name=".RegisterPlayerActivity"
+            android:label="Register Player" />
+
     </application>
 
 </manifest>

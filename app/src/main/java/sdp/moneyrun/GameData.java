@@ -20,10 +20,13 @@ public final class GameData {
     private Integer maxPlayerNumber;
     private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
+    private List<Coin> coins;
 
-    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation){
-        if(name == null || players == null || riddles == null || startLocation == null)
+
+    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation, List<Coin> coins){
+        if(name == null || players == null || riddles == null || startLocation == null || coins == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
+        }
         this.name = name;
         this.players = new ArrayList<>(players);
         this.maxPlayerNumber = maxPlayerNumber;
@@ -65,7 +68,12 @@ public final class GameData {
 
     public void setPlayers(List<Player> players) {
         if(players == null){throw new IllegalArgumentException();}
-        this.players = new ArrayList<>(players);}
+        this.players = new ArrayList<>(players);
+    }
+
+    public List<Coin> getCoins() {
+        return new ArrayList<>(coins);
+    }
 
 }
 

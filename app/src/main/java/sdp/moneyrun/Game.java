@@ -26,6 +26,7 @@ public class Game {
     //Attributes
     private GameData gameData;
 
+
     //Aux variables
     private DatabaseReference rootReference;
     private String id;
@@ -40,13 +41,13 @@ public class Game {
      * @param riddles List of riddles
      * @param startLocation game location
      */
-    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
-        if(name == null || players == null || riddles == null || startLocation == null) {
+    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation, List<Coin> coins){
+        if(name == null || players == null || riddles == null || startLocation == null || coins == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
 
         rootReference = FirebaseDatabase.getInstance().getReference();
-        gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation);
+        gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation, coins);
         this.hasBeenAdded = false;
         this.id = addToDB();
     }
@@ -129,14 +130,19 @@ public class Game {
         if(task.isSuccessful()){
             GenericTypeIndicator<List<Player>> gtP = new GenericTypeIndicator<List<Player>>() {};
             GenericTypeIndicator<List<Riddle>> gtR = new GenericTypeIndicator<List<Riddle>>() {};
+            GenericTypeIndicator<List<Coin>> gtC = new GenericTypeIndicator<List<Coin>>() {};
 
             DataSnapshot ds = task.getResult();
             String name = ds.child("name").getValue(String.class);
             List<Player> players = ds.child("players").getValue(gtP);
             List<Riddle> riddles = ds.child("riddles").getValue(gtR);
+            List<Coin> coins = ds.child("coins").getValue(gtC);
             //int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
+
             Location locat = ds.child("startLocation").getValue(Location.class);
-            Game retGame = new Game(name, players, 3, riddles, locat);
+
+            //TODO remove the "3" and change with the actual max player number
+            Game retGame = new Game(name, players, 3, riddles, locat, coins);
             retGame.id = ds.getKey();
             return retGame;
         }else{
@@ -168,8 +174,6 @@ public class Game {
     }
 
 
-
-
     /**
      * returns the game id
      * @return the id of the game
@@ -178,29 +182,27 @@ public class Game {
         return id;
     }
 
-    // Launched when create game button is pressed - (Rafa) Nope, launched when start game button is pressed
-    public void startGame(){
-    //TODO fill method stub
+    //Launched when start game button is pressed
+    public static void startGame(Game game) {
+        game.startGame();
     }
 
-    public boolean askPlayer(Player player, Riddle riddle){
+    // Launched when create game button is pressed
+    public void startGame() {}
+
+    public boolean askPlayer(Player player, Riddle riddle) {
         if(player == null || riddle == null){throw new NullPointerException();}
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
-
-
-
-
-
-
-
-
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if(!(obj instanceof Game)){return false;}
-        return false;
+    /**
+     *
+     * @return returns a random riddle from all the possible riddles
+     */
+    public Riddle getRandomRiddle(){
+        int index = (int)(Math.random() * (gameData.getRiddles().size()));
+        return gameData.getRiddles().get(index);
     }
+
 }

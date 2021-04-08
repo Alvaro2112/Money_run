@@ -1,8 +1,5 @@
 package sdp.moneyrun;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private final String TAG = SignUpActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //Until sign Out at destroy activity is implemented
-        FirebaseAuth.getInstance().signOut();
+    //    FirebaseAuth.getInstance().signOut();
         ///////////////////////////////////////////////////
 
         final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
@@ -55,6 +56,17 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *This is needed for testing
+     *Also, since it's one of the first activity created, it's reasonable to assume that when it's
+     *destroyed the user should be signed out
+     */
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mAuth.signOut();
+    }
+
     private void submitSignUp(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>(){
@@ -62,12 +74,12 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             //Sign-In success
-                            Log.d(MainActivity.TAG, "createUserWithEmail:success"); //Not sure about the tag thing
+                            Log.d(TAG, "createUserWithEmail:success"); //Not sure about the tag thing
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         }
                         else{
-                            Log.w(MainActivity.TAG, "CreateUserWithEmail:failure", task.getException());
+                            Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -78,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if(user != null){
-            Intent intent = new Intent (this, MenuActivity.class);
+            Intent intent = new Intent (this, RegisterPlayerActivity.class);
             startActivity(intent);
         }
     }
