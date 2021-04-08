@@ -91,7 +91,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         dummy1.setName("Dummy Player 1");
         dummy1.setAddress("Here");
         dummy1.setScore(1);
-        //db.putPlayer(dummy1);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -127,40 +126,4 @@ public class LeaderboardActivity extends AppCompatActivity {
     public Player getUserPlayer() {
         return userPlayer;
     }
-    //    public void setUserPlayer2(){
-//        int playerId = getIntent().getIntExtra("playerId",0);
-//        db = new DatabaseProxy();
-//        Task<DataSnapshot> playerTask = db.getPlayerTask(playerId);
-//        playerTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                if(task.isSuccessful())
-//                    userPlayer = db.getPlayerFromTask(playerTask);
-//                else
-//                    return;//TODO: return error message
-//            }
-//        });
-//        while(!playerTask.isComplete()){System.out.println("Not");}
-//        addPlayer(userPlayer);
-//    }
-//    public void setUserPlayer(){
-//        int playerId = getIntent().getIntExtra("playerId",0);
-//        Player player = new Player(playerId);
-//        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference().child("players").child(""+playerId);
-//        dbReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Player player2 = (Player) snapshot.getValue(Player.class);
-//                player.setName(player2.getName());
-//                player.setAddress(player2.getAddress());
-//                player.setScore(0);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        addPlayer(player);
-//    }
 }
