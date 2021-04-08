@@ -118,6 +118,7 @@ public class GameTest {
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 assertEquals(g,Game.getGameFromTaskSnapshot(task));
+                //assertEquals(new Integer(3),Game.getGameFromTaskSnapshot(task));
             }else{
                 assertEquals("1","0");
             }

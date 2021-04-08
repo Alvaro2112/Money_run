@@ -57,7 +57,7 @@ public class Game {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
         this.gameData = new GameData(data);
         rootReference = FirebaseDatabase.getInstance().getReference();
-        this.hasBeenAdded = false;
+        this.hasBeenAdded = true;
     }
 
     /**
@@ -68,7 +68,7 @@ public class Game {
         DatabaseReference openGames = rootReference.child("open_games");
         id = openGames.push().getKey();
         openGames.child(id).setValue(gameData);
-        linkAttributesToDB();
+        //linkAttributesToDB();
         return id;
     }
 
@@ -127,13 +127,23 @@ public class Game {
 
     public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
         if(task.isSuccessful()){
-            Game retGame = new Game(task.getResult().getValue(GameData.class));
-            retGame.id = task.getResult().getKey();
+            GenericTypeIndicator<List<Player>> gtP = new GenericTypeIndicator<List<Player>>() {};
+            GenericTypeIndicator<List<Riddle>> gtR = new GenericTypeIndicator<List<Riddle>>() {};
+
+            DataSnapshot ds = task.getResult();
+            String name = ds.child("name").getValue(String.class);
+            List<Player> players = ds.child("players").getValue(gtP);
+            List<Riddle> riddles = ds.child("riddles").getValue(gtR);
+            //int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
+            Location locat = ds.child("startLocation").getValue(Location.class);
+            Game retGame = new Game(name, players, 3, riddles, locat);
+            retGame.id = ds.getKey();
             return retGame;
         }else{
             return null;
         }
     }
+
 
     /**
      * Adds a player to the Game DB representation

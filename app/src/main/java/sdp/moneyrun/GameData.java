@@ -17,11 +17,11 @@ there is no use for them to be in the DB
 public final class GameData {
     private String name;
     private List<Player> players;
-    private int maxPlayerNumber;
+    private Integer maxPlayerNumber;
     private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
 
-    public GameData(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation){
         if(name == null || players == null || riddles == null || startLocation == null)
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         this.name = name;
@@ -51,7 +51,7 @@ public final class GameData {
         return new ArrayList<>(players);
     }
 
-    public int getMaxPlayerNumber() {
+    public Integer getMaxPlayerNumber() {
         return maxPlayerNumber;
     }
 
