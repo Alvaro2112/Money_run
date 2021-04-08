@@ -21,7 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.BrokenBarrierException;
@@ -38,8 +41,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Button profileButton;
     private Button leaderboardButton;
     private Button joinGame;
-    private String[] result;
+    private String[] playerInfo;
     private Player player;
+    private int playerId;
     private RiddlesDatabase db;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
@@ -67,11 +71,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             db = RiddlesDatabase.getInstance();
         }
 
+
         logOut = findViewById(R.id.log_out_button);
 
         addJoinGameButtonFunctionality();
         addMapButtonFunctionality();
         addAskQuestionButtonFunctionality();
+
     }
 
     @Override
@@ -229,13 +235,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private void setPutExtraArguments(Intent intent){
+        intent.putExtra("playerId",playerId);
+        intent.putExtra("playerId"+playerId,playerInfo);
+    }
+
+
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        int playerId = getIntent().getIntExtra("playerId",0);
-        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        playerProfileIntent.putExtra("playerId",playerId);
-        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
+        setPutExtraArguments(playerProfileIntent);
         startActivity(playerProfileIntent);
 
     }
@@ -302,16 +311,29 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         return popupWindow;
     }
-
-
-
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.profile_button:
-////                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayerProfileFragment()).commit();
-//                break;
+    //TODO: fix it somehow: task is never completed and thus cannot get player from database
+    //To come back too later
+//    public void setPlayerObject(){
+//        playerId = getIntent().getIntExtra("playerId",0);
+//        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+//        DatabaseProxy db = new DatabaseProxy();
+//        if(db != null) {
+//            Task<DataSnapshot> t = db.getPlayerTask(playerId);
+////            player = db.getPlayerFromTask(t);
+//            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        player = db.getPlayerFromTask(t);
+//                    }
+//                }
+//            });
+////           while(!t.isComplete()){
+////               System.out.println("Task is not ready yet");
+////           }
+//            System.out.println("PLayer should be set by now");
 //        }
-//        return false;
+//        //TODO: put player in the database with playerId as primary key
 //    }
+    
 }
