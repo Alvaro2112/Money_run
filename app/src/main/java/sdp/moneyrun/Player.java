@@ -52,6 +52,14 @@ public class Player {
     }
 
     /**
+     * Setter without db change
+     * @param name
+     */
+    public void setName(String name){
+        this.setName(name, false);
+    }
+
+    /**
      *Setter for address. By design the player already had an address
      * @param address
      * @param dbChange whether the database entry must be updated
@@ -62,12 +70,34 @@ public class Player {
     }
 
     /**
+     * Setter without db change
+     * @param address
+     */
+    public void setAddress(String address){
+        this.setAddress(address, false);
+    }
+
+    /**
+     * Increments the number of played games
+     */
+    public void updatePlayedGames(){
+        this.updatePlayedGames(false);
+    }
+
+    /**
      * Increments the number of played games
      * @param dbChange whether the database entry must be updated
      */
     public void updatePlayedGames(boolean dbChange) {
         numberOfPlayedGames++;
         dbUpdate(dbChange);
+    }
+
+    /**
+     * Increments the number of died games
+     */
+    public void updateDiedGames(){
+        this.updateDiedGames(false);
     }
 
     /**
@@ -90,6 +120,14 @@ public class Player {
     }
 
     /**
+     * sets the number of died games
+     * @param diedGames
+     */
+    public void setNumberOfDiedGames (int diedGames){
+        this.setNumberOfDiedGames(diedGames, false);
+    }
+
+    /**
      * sets the number of played games
      * @param playedGames
      * @param dbChange
@@ -100,7 +138,16 @@ public class Player {
     }
 
     /**
-     *
+     * sets the number of played games
+     * @param playedGames
+     */
+    public void setNumberOfPlayedGames(int playedGames){
+        this.setNumberOfPlayedGames(playedGames, false);
+    }
+
+
+    /**
+     * sets the score
      * @param score the score that is to update
      * @param dbChange whether the database entry must be updated
      */
@@ -110,9 +157,18 @@ public class Player {
     }
 
     /**
-     *
-     * @return number of games in which the player died
+     * sets the score
+     * @param score
      */
+    public void setScore(int score){
+        this.setScore(score, false);
+    }
+
+
+        /**
+         *
+         * @return number of games in which the player died
+         */
     public int getNumberOfDiedGames() {
         return numberOfDiedGames;
     }
