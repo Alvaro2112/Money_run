@@ -34,7 +34,7 @@ public class LeaderboardInstrumentedTest {
 
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0);
-                player.setScore(8008);
+                player.setScore(8008, false);
                 a.addPlayer(player);
 
                 assertEquals(a.getPlayerList().size(),6);
@@ -51,7 +51,7 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0);
-                player.setScore(8008);
+                player.setScore(8008, false);
                 a.addPlayer(player);
                 assertEquals( a.getLdbAdapter().getCount(), 6);
 
@@ -78,11 +78,11 @@ public class LeaderboardInstrumentedTest {
 
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0);
-                player.setScore(8008);
+                player.setScore(8008, false);
 
                 //Address was not set here before I don't know why
                 Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
-                player2.setScore(8001);
+                player2.setScore(8001,false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
                 list.add(player2);
@@ -103,11 +103,11 @@ public class LeaderboardInstrumentedTest {
 
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0);
-                player.setScore(8008);
+                player.setScore(8008, false);
 
                 //Address was not set here before I don't know why
                 Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
-                player2.setScore(8001);
+                player2.setScore(8001, false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
                 list.add(player2);
