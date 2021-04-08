@@ -161,4 +161,28 @@ public class DatabaseProxyTest {
         assertThat(player.getName(),is(newName));
 
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removePlayerListenerThrowsExceptionOnNullPlayer() {
+        DatabaseProxy db = new DatabaseProxy();
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                return;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.removePlayerListener(null, listener);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removePlayerListenerThrowsExceptionOnNullListener() {
+        DatabaseProxy db = new DatabaseProxy();
+        Player player = new Player(1, "a","b",0,0);
+        db.removePlayerListener(player, null);
+    }
 }

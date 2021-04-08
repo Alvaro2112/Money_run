@@ -32,10 +32,11 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
+                //player.setAddress(p.getAddress());
                 assertThat(p.getAddress(), is(newAddress));
                 updated.countDown();
             }
@@ -44,7 +45,8 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player,listener);
         player.setAddress(newAddress, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -53,6 +55,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player, listener);
     }
 
     @Test
@@ -70,7 +73,7 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+        ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -82,7 +85,9 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
+
         player.setName(newName, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -91,6 +96,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player,listener);
     }
 
     @Test
@@ -108,7 +114,8 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+
+        ValueEventListener listener =  new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -120,7 +127,9 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
+
         player.setNumberOfPlayedGames(newPlayedGames, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -129,6 +138,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player, listener);
     }
 
     @Test
@@ -146,7 +156,8 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+
+        ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -158,7 +169,9 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
+
         player.setNumberOfDiedGames(newDiedGames, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -167,6 +180,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player,listener);
     }
 
     @Test
@@ -183,7 +197,8 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -195,7 +210,8 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
         player.updatePlayedGames(true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -204,6 +220,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player,listener);
     }
 
     @Test
@@ -220,7 +237,8 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -232,7 +250,8 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
         player.updateDiedGames(true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -241,6 +260,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player,listener);
     }
 
     @Test
@@ -258,7 +278,8 @@ public class PlayerTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -270,7 +291,8 @@ public class PlayerTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
         player.setScore(score, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -279,6 +301,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        db.removePlayerListener(player,listener);
     }
 
 

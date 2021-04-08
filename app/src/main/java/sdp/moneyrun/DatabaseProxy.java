@@ -84,4 +84,18 @@ public class DatabaseProxy {
         mDataBase.child("players").child(String.valueOf(player.getPlayerId())).addValueEventListener(listener);
     }
 
+
+    /**
+     * Removes a ValueEventListener from a player entry in the db
+     * @param player
+     * @param listener
+     * @throws IllegalArgumentException on null listener or null player
+     */
+    public void removePlayerListener(Player player, ValueEventListener listener){
+        if (listener == null || player == null){
+            throw new IllegalArgumentException();
+        }
+        mDataBase.child("players").child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
+    }
+
 }
