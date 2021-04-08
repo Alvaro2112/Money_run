@@ -209,27 +209,28 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return popupWindow;
     }
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
-    public void setPlayerObject(){
-        playerId = getIntent().getIntExtra("playerId",0);
-        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        DatabaseProxy db = new DatabaseProxy();
-        if(db != null) {
-            Task<DataSnapshot> t = db.getPlayerTask(playerId);
-//            player = db.getPlayerFromTask(t);
-            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if(task.isSuccessful()){
-                        player = db.getPlayerFromTask(t);
-                    }
-                }
-            });
-//           while(!t.isComplete()){
-//               System.out.println("Task is not ready yet");
-//           }
-            System.out.println("PLayer should be set by now");
-        }
-        //TODO: put player in the database with playerId as primary key
-    }
+    //To come back too later
+//    public void setPlayerObject(){
+//        playerId = getIntent().getIntExtra("playerId",0);
+//        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+//        DatabaseProxy db = new DatabaseProxy();
+//        if(db != null) {
+//            Task<DataSnapshot> t = db.getPlayerTask(playerId);
+////            player = db.getPlayerFromTask(t);
+//            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        player = db.getPlayerFromTask(t);
+//                    }
+//                }
+//            });
+////           while(!t.isComplete()){
+////               System.out.println("Task is not ready yet");
+////           }
+//            System.out.println("PLayer should be set by now");
+//        }
+//        //TODO: put player in the database with playerId as primary key
+//    }
     
 }

@@ -86,5 +86,9 @@ public class MenuActivityTest {
         assertEquals(State.DESTROYED, testRule.getScenario().getState());
     }
 
+    @Test
+    public void checkIfSetPlayerObjectSetsThePlayerCorrectly(){
+
+    }
 
 }

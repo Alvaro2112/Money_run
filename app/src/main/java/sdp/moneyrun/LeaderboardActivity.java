@@ -25,7 +25,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer();
+        setMainPlayer(0,null);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -64,10 +64,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         return playerList;
     }
 
-    public void setMainPlayer(){
+    public void setMainPlayer(int id,String[] info){
         int playerId = getIntent().getIntExtra("playerId",0);
+        if(id != 0)
+            playerId = id;
         if(playerId != 0) {
             String[] playerInfo = getIntent().getStringArrayExtra("playerId" + playerId);
+            if(info != null)
+                playerInfo = info;
             userPlayer = new Player(playerId);
             userPlayer.setName(playerInfo[0]);
             userPlayer.setAddress(playerInfo[1]);
@@ -120,7 +124,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
     }
 
-//    public void setUserPlayer2(){
+    public Player getUserPlayer() {
+        return userPlayer;
+    }
+    //    public void setUserPlayer2(){
 //        int playerId = getIntent().getIntExtra("playerId",0);
 //        db = new DatabaseProxy();
 //        Task<DataSnapshot> playerTask = db.getPlayerTask(playerId);
