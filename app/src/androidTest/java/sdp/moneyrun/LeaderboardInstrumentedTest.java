@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,6 +13,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class LeaderboardInstrumentedTest {
 
@@ -35,7 +37,7 @@ public class LeaderboardInstrumentedTest {
                 player.setScore(8008);
                 a.addPlayer(player);
 
-                assertEquals(a.getPlayerList().size(),1);
+                assertEquals(a.getPlayerList().size(),6);
             });
         }
         catch (Exception e){
@@ -51,7 +53,7 @@ public class LeaderboardInstrumentedTest {
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0);
                 player.setScore(8008);
                 a.addPlayer(player);
-                assertEquals( a.getLdbAdapter().getCount(), 1);
+                assertEquals( a.getLdbAdapter().getCount(), 6);
 
             });
         }
@@ -85,10 +87,11 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),2);
+                assertEquals(a.getPlayerList().size(),7);
             });
         }
         catch (Exception e){
+            e.printStackTrace();
             assertEquals(2,1);
         }
     }
@@ -109,7 +112,7 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals( a.getLdbAdapter().getCount(), 2);
+                assertEquals( a.getLdbAdapter().getCount(), 7);
 
             });
         }
@@ -125,7 +128,40 @@ public class LeaderboardInstrumentedTest {
             });
         }
     }
-
+    @Test
+    public void testIfOneDummyPlayerIsSet(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a ->{
+                boolean check = false;
+                for(Player p : a.getPlayerList()){
+                    if(p.getName().equals("Dummy Player 4"))
+                        check = true;
+                }
+                assertEquals(true,check);
+            });
+        }
+    }
+    @Test
+    public void setMainPlayerGetsTheRightInfoAndSetsThePlayerAttributes(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a ->{
+               Intent intent = new Intent(a,LeaderboardActivity.class);
+               String[] info = {"John","Here"};
+               intent.putExtra("PlayerId",48390);
+               intent.putExtra("playerId" + 48390, info);
+                a.setMainPlayer(48390,info);
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Player p = a.getUserPlayer();
+               assertNotNull(p);
+               assertNotNull(p.getName());
+               assertNotNull(p.getAddress());
+            });
+        }
+    }
 
 
 }
