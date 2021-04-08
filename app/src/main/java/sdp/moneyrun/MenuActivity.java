@@ -37,7 +37,6 @@ import javax.security.auth.callback.Callback;
 import sdp.moneyrun.map.MapActivity;
 
 
-import sdp.moneyrun.map.MapActivity;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,7 +44,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Button profileButton;
     private Button leaderboardButton;
     private Button joinGame;
-    private Button mapButton;
     private String[] result;
     private String[] playerInfo;
     private Player player;
