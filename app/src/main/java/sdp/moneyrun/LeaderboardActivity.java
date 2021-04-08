@@ -31,6 +31,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         setDummyPlayers();
     }
 
+    /**
+     *
+     * @return the leaderboard adapter instance
+     */
     public LeaderboardListAdapter getLdbAdapter(){
         return ldbAdapter;
     }
@@ -42,7 +46,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         ListView ldbView = (ListView) findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
     }
-
+    /**
+     *
+     * @param playerList: players to be added to the leaderboard
+     *  Adds players to leaderboard
+     */
     public void addPlayerList(ArrayList<Player> playerList){
         if(playerList == null){
             throw new NullPointerException("Player list is null");
@@ -50,6 +58,11 @@ public class LeaderboardActivity extends AppCompatActivity {
         ldbAdapter.addAll(playerList);
     }
 
+    /**
+     *
+     * @param player: player to be added to the leaderboard
+     *  Adds player to leaderboard
+     */
     public void addPlayer(Player player){
         // can't just add a player directly to an adapter, need to put it in a list
         if(player == null){
@@ -64,6 +77,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         return playerList;
     }
 
+    /**
+     * @param id : id of the player
+     * @param info : player information such as name and address
+     *
+     *  Initializes the player object private instance
+     */
     public void setMainPlayer(int id,String[] info){
         int playerId = getIntent().getIntExtra("playerId",0);
         if(id != 0)
@@ -79,7 +98,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             addPlayer(userPlayer);
         }
     }
-    /*
+    /**
     * This function will set up players in the leaderboard once we know their player ids and names
     * it will set up dummy players before that so that we have a leaderboard nonetheless every time a player joins
     * the game( up to 6 players for now), on data change listeners will be attached to these players here so that
@@ -105,7 +124,12 @@ public class LeaderboardActivity extends AppCompatActivity {
             dummy.setScore(i);
             addPlayer(dummy);
         }
-    }
+    }/**
+        @param  dummy1: dummy representation of a player that will later evolve into a player that was in a game
+        @param databaseProxy: the proxy database that we use to access Firebase
+        Attaches a lister to a player so that once real players join the game the dummy player will represent
+        an actual person with all the player object attributes associated with it
+     */
     private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
@@ -122,7 +146,9 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+        @return: returns the player object representing the person that wants to access the leaderboard
+     */
     public Player getUserPlayer() {
         return userPlayer;
     }
