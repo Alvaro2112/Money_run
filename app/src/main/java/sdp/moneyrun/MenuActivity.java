@@ -50,10 +50,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setNavigationViewListener();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-
-
-        logOut = findViewById(R.id.log_out_button);
-
         mapButton = findViewById(R.id.map_button);
         addJoinGameButtonFunctionality();
         addMapButtonFunctionality();
