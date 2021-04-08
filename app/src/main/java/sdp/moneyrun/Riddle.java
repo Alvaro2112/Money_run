@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 class Riddle {
@@ -45,5 +46,23 @@ class Riddle {
         return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Riddle riddle = (Riddle) o;
+        return question.equals(riddle.question) &&
+                correctAnswer.equals(riddle.correctAnswer) &&
+                firstAnswer.equals(riddle.firstAnswer) &&
+                secondAnswer.equals(riddle.secondAnswer) &&
+                thirdAnswer.equals(riddle.thirdAnswer) &&
+                fourthAnswer.equals(riddle.fourthAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(question, correctAnswer, firstAnswer, secondAnswer, thirdAnswer, fourthAnswer);
+    }
 }
 

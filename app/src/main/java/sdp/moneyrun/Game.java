@@ -52,8 +52,6 @@ public class Game {
         this.id = addToDB();
     }
 
-
-
     private Game(GameData data) {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
         this.gameData = new GameData(data);

@@ -15,8 +15,8 @@ public class Player {
     private String preferredPet;
     private int score;
 
-    /*
-    For database purpose, a default constructor is needed
+    /**
+     * For database purpose, a default constructor is needed
      */
     public Player(){}
 
