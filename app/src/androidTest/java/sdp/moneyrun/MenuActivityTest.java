@@ -96,17 +96,6 @@ public class MenuActivityTest {
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
     }
-  
-    @Test
-    public void mapButtonWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
-            Intents.init();
-            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            intended(hasComponent(MapActivity.class.getName()));
-            Intents.release();
-        }
-    }
 
 
 }
