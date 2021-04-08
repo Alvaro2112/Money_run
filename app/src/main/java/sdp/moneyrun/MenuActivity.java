@@ -1,7 +1,11 @@
 package sdp.moneyrun;
 
+import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -22,7 +27,14 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.InputStream;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
+
+import javax.security.auth.callback.Callback;
+
+import sdp.moneyrun.map.MapActivity;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -33,8 +45,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Player player;
     private int playerId;
     private RiddlesDatabase db;
+    private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private Button logOut;
+    private final Semaphore available = new Semaphore(1, true);
+    private int numberOfAsyncTasks;
+    private int tasksFInished;
+
+
 
 
     @Override
@@ -44,6 +62,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mapButton = findViewById(R.id.map_button);
 
         try{
             db = RiddlesDatabase.createInstance(getApplicationContext());
@@ -56,6 +75,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         logOut = findViewById(R.id.log_out_button);
 
         addJoinGameButtonFunctionality();
+        addMapButtonFunctionality();
         addAskQuestionButtonFunctionality();
 
     }
@@ -65,6 +85,88 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         RiddlesDatabase.reset();
     }
+
+
+    public void StartMapActivity(){
+        Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+        MenuActivity.this.startActivity(mainIntent);
+        MenuActivity.this.finish();
+        available.release();
+    }
+
+
+    public void addMapButtonFunctionality(){
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //Example of how the Async tasks should be implemented
+                numberOfAsyncTasks = 2;
+                tasksFInished = 0;
+                setContentView(R.layout.splash_screen);
+
+                Runnable x = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(5000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            StartMapActivity();
+                        } else {
+                            tasksFInished += 1;
+                        }
+
+                        available.release();
+                    }
+                };
+
+                Runnable y = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(2000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            StartMapActivity();
+                        } else {
+                            tasksFInished += 1;
+                        }
+
+                        available.release();
+                    }
+                };
+
+                Thread thread = new Thread(x);
+                Thread thread1 = new Thread(y);
+
+                thread.start();
+                thread1.start();
+
+
+            }
+
+        });
+    }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -85,6 +187,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
                 finish();
+                break;
             }
         }
         //close navigation drawer
