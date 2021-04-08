@@ -20,6 +20,10 @@ public class Player {
      */
     public Player(){}
 
+    public Player(int playerId){
+        this.playerId = playerId;
+    }
+
 
     /**
      * Constructor, returns instance of player

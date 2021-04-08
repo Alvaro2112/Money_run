@@ -85,6 +85,6 @@ public class MenuActivityTest {
         Thread.sleep(1000);
         assertEquals(State.DESTROYED, testRule.getScenario().getState());
     }
-
+    
 
 }

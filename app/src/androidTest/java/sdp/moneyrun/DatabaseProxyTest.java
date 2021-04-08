@@ -34,6 +34,7 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
       //  Thread.sleep(1000);
         testTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -133,8 +134,8 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                player.setName(p.getName(), false);
-                System.out.println("Listener executed");
+
+                player.setName(p.getName());
                 received.countDown();
             }
 
