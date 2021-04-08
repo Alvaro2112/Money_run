@@ -49,6 +49,30 @@ public class MenuActivityTest {
         onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
         onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void mapButtonWorks() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Thread.sleep(7000);
+            intended(hasComponent(MapActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }    }
+
+
+    @Test
+    public void splashScreenShows() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Thread.sleep(1000);
+            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     
     @Test
     public void leaderboardButtonWorks() {
@@ -84,15 +108,5 @@ public class MenuActivityTest {
         }
     }
 
-    @Test
-    public void logOutButtonWorks() throws InterruptedException {
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
-        Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
-        Thread.sleep(1000);
-        assertEquals(State.DESTROYED, testRule.getScenario().getState());
-    }
-    
 
 }
