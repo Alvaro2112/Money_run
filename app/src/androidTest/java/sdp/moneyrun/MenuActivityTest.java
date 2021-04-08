@@ -89,17 +89,12 @@ public class MenuActivityTest {
     }
 
 
+
     @Test
     public void navigationViewOpens() {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
-    }
-
-    @Test
-    public void askQuestionPopupIsDisplayed() {
-        onView(ViewMatchers.withId(R.id.ask_question)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
     }
 
 
