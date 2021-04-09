@@ -24,7 +24,9 @@ import org.junit.runner.RunWith;
 import sdp.moneyrun.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -144,10 +146,15 @@ public class MenuActivityTest {
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
+            Thread.sleep(1000);
+
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
             Intents.release();
@@ -170,7 +177,9 @@ public class MenuActivityTest {
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected)));
 
             Intents.release();
@@ -194,8 +203,11 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one player in a game";
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected_zero_players)));
 
             Intents.release();
@@ -218,7 +230,9 @@ public class MenuActivityTest {
             final String max_player_count = String.valueOf(1);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             assertEquals(1, 1);
 
