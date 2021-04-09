@@ -84,7 +84,8 @@ public class MenuActivityTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
 
 
     @Test
@@ -126,11 +127,18 @@ public class MenuActivityTest {
                 .perform(DrawerActions.open());
     }
 
-    //@Test
+    @Test
     public void newGameEmptyNameFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+                Intents.release();
+            }
 
             final String max_player_count = String.valueOf(12);
             final String expected = "This field is required";
@@ -152,22 +160,36 @@ public class MenuActivityTest {
             Intents.init();
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
+            try {
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+                Intents.release();
+            }
+
             final String game_name = "new game";
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            //Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected)));
+            Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected)));
 
             Intents.release();
         }
     }
 
-    //@Test
+    @Test
     public void newGameZeroMaxPlayerCountFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+                Intents.release();
+            }
 
             final String game_name = "new game";
             final String max_player_count_zero = String.valueOf(0);
@@ -181,6 +203,7 @@ public class MenuActivityTest {
                 Thread.sleep(1000);
             }catch(InterruptedException e){
                 e.printStackTrace();
+                Intents.release();
             }
 
             Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected_zero_players)));
@@ -189,11 +212,18 @@ public class MenuActivityTest {
         }
     }
 
-    //@Test
+    @Test
     public void newGameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+                Intents.release();
+            }
 
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);
