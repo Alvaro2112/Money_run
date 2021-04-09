@@ -7,12 +7,13 @@ import java.util.Set;
 
 class Riddle {
 
-    private final String question;
-    private final String correctAnswer;
-    private final String firstAnswer;
-    private final String secondAnswer;
-    private final String thirdAnswer;
-    private final String fourthAnswer;
+    //They should be final, but that is incompatible with being able to add them to the DB
+    private String question;
+    private String correctAnswer;
+    private String firstAnswer;
+    private String secondAnswer;
+    private String thirdAnswer;
+    private String fourthAnswer;
 
 
 
@@ -34,6 +35,11 @@ class Riddle {
         this.fourthAnswer = fourthAnswer;
     }
 
+    /**
+     * Needed for the DataBase
+     */
+    public Riddle(){}
+
     public String getQuestion() {
         return question;
     }
@@ -45,6 +51,28 @@ class Riddle {
     public String[] getPossibleAnswers() {
         return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
+
+    //////Needed for The DataBase Code
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public String getFirstAnswer() {
+        return firstAnswer;
+    }
+
+    public String getSecondAnswer() {
+        return secondAnswer;
+    }
+
+    public String getThirdAnswer() {
+        return thirdAnswer;
+    }
+
+    public String getFourthAnswer() {
+        return fourthAnswer;
+    }
+    //////////
 
 
     @Override

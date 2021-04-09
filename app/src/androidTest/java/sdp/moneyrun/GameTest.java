@@ -24,7 +24,17 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class GameTest {
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-
+    Game getTestGame() {
+        String name = "TestGame";
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        players.add(new Player(2, "Potter", "Nyon", 3, 4));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
+        int maxPlayers = 4;
+        Location targetLocation = new Location("");//provider name is unnecessary
+        return new Game(name, players, maxPlayers, riddles, targetLocation);
+    }
 
     @Test
     public void basicRiddleTest() {
@@ -162,19 +172,30 @@ public class GameTest {
 
     @Test
     public void GameIsAddedToDBOnCreation(){
-        Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""));
+        Game g = getTestGame();
+        g.addToDB();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         String id = g.getGameId();
-        Task<DataSnapshot> dataTask = ref.child("open_games").child(id).child("name").get();
+
+        //Something went wrong, game might not have been uploaded properly
+        if(id.equals("")){
+            fail();
+        }
+
+        Task<DataSnapshot> dataTask = ref.child("open_games").child(id).get();
 
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                assertEquals(g,Game.getGameFromTaskSnapshot(task));
-                //assertEquals(new Integer(3),Game.getGameFromTaskSnapshot(task));
+                Game fromDB = Game.getGameFromTaskSnapshot(task);
+                assertEquals(g.getGameData().getName(), fromDB.getGameData().getName());
+                assertEquals(g.getGameData().getPlayers(), fromDB.getGameData().getPlayers());
+                assertEquals(g.getGameData().getMaxPlayerNumber(), fromDB.getGameData().getMaxPlayerNumber());
+               // assertEquals(g.getGameData().getStartLocation(), fromDB.getGameData().getStartLocation());
+
             }else{
                 assertEquals("1","0");
             }

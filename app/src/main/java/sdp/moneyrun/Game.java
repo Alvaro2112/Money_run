@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
@@ -41,15 +42,14 @@ public class Game {
      * @param riddles List of riddles
      * @param startLocation game location
      */
-    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation, List<Coin> coins){
-        if(name == null || players == null || riddles == null || startLocation == null || coins == null) {
+    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+        if(name == null || players == null || startLocation == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
-
         rootReference = FirebaseDatabase.getInstance().getReference();
-        gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation, coins);
+        gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation);
         this.hasBeenAdded = false;
-        this.id = addToDB();
+        this.id = "";
     }
 
     private Game(GameData data) {
@@ -60,22 +60,27 @@ public class Game {
     }
 
     /**
-     * Adds the GameData to the database
+     * Adds the GameData to the database if not already present
      * @return the Id of this game in the DB
      */
-    private String addToDB(){
-        DatabaseReference openGames = rootReference.child("open_games");
-        id = openGames.push().getKey();
-        openGames.child(id).setValue(gameData);
-        //linkAttributesToDB();
-        return id;
+    public String addToDB(){
+        if(!hasBeenAdded) {
+            DatabaseReference openGames = rootReference.child("open_games");
+            id = openGames.push().getKey();
+            openGames.child(id).setValue(gameData);
+            //TODO this thing below
+            //linkAttributesToDB();
+
+            return id;
+        }
+        return getGameId();
     }
 
     /**
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertitent attribute is the player List
      */
-    private void linkAttributesToDB(){
+    /*private void linkAttributesToDB(){
         DatabaseReference gameRef = rootReference.child("open_games").child(id);
         gameRef.child("players").addValueEventListener(new ValueEventListener() {
             @Override
@@ -91,7 +96,7 @@ public class Game {
             }
         });
     }
-
+*/
 
     public static Task<DataSnapshot> getGameDataSnapshot(String id){
         if(id == null){throw new IllegalArgumentException();}
@@ -125,22 +130,27 @@ public class Game {
     }
 
     public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
+        if(task == null){
+            throw new IllegalArgumentException("Null argument");
+        }
         if(task.isSuccessful()){
             GenericTypeIndicator<List<Player>> gtP = new GenericTypeIndicator<List<Player>>() {};
             GenericTypeIndicator<List<Riddle>> gtR = new GenericTypeIndicator<List<Riddle>>() {};
-            GenericTypeIndicator<List<Coin>> gtC = new GenericTypeIndicator<List<Coin>>() {};
 
             DataSnapshot ds = task.getResult();
             String name = ds.child("name").getValue(String.class);
             List<Player> players = ds.child("players").getValue(gtP);
-            List<Riddle> riddles = ds.child("riddles").getValue(gtR);
-            List<Coin> coins = ds.child("coins").getValue(gtC);
-            //int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
+            //List<Riddle> riddles = ds.child("riddles").getValue(gtR);
+            int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
 
-            Location locat = ds.child("startLocation").getValue(Location.class);
+            //Cant deserialize Location properly so we do it manually
+            Location locat = new Location("");
+            locat.setLatitude(ds.child("startLocation").child("latitude").getValue(Double.class));
+            locat.setLongitude(ds.child("startLocation").child("longitude").getValue(Double.class));
+
 
             //TODO remove the "3" and change with the actual max player number
-            Game retGame = new Game(name, players, 3, riddles, locat, coins);
+            Game retGame = new Game(name,players, maxPlayers, null, locat);
             retGame.id = ds.getKey();
             return retGame;
         }else{
@@ -149,7 +159,7 @@ public class Game {
     }
 
 
-    /**
+     /**
      * Adds a player to the Game DB representation
      * @param p player to add to the DB
      */
@@ -173,7 +183,7 @@ public class Game {
 
 
     /**
-     * returns the game id
+     * returns the DataBase id for this Game, if it has been added, or the empty String O.W
      * @return the id of the game
      */
     public String getGameId(){
@@ -197,10 +207,28 @@ public class Game {
     /**
      *
      * @return returns a random riddle from all the possible riddles
-     */
+     *//*
     public Riddle getRandomRiddle(){
         int index = (int)(Math.random() * (gameData.getRiddles().size()));
         return gameData.getRiddles().get(index);
+    }*/
+
+    ///////////////////////////////////////////////
+    public GameData getGameData() {
+        return gameData;
+    }
+    ////////////////////////////////////////////////
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return gameData.equals(game.gameData);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameData);
+    }
 }

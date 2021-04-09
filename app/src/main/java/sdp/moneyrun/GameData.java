@@ -4,6 +4,7 @@ import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Player;
 import sdp.moneyrun.Riddle;
@@ -18,14 +19,13 @@ public final class GameData {
     private String name;
     private List<Player> players;
     private Integer maxPlayerNumber;
-    private List<Riddle> riddles;
+    //private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
-    private List<Coin> coins;
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     //the host always has to be in it
 
-    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation, List<Coin> coins){
-        if(name == null || players == null || riddles == null || startLocation == null || coins == null) {
+    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+        if(name == null || players == null || startLocation == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         if(players.isEmpty()){
@@ -37,7 +37,7 @@ public final class GameData {
         this.name = name;
         this.players = new ArrayList<>(players);
         this.maxPlayerNumber = maxPlayerNumber;
-        this.riddles = new ArrayList<>(riddles);
+        //this.riddles = new ArrayList<>(riddles);
         this.startLocation = new Location(startLocation);
     }
 
@@ -47,7 +47,7 @@ public final class GameData {
         this.name = data.getName();
         this.players = data.getPlayers();
         this.maxPlayerNumber = data.getMaxPlayerNumber();
-        this.riddles = data.getRiddles();
+      //  this.riddles = data.getRiddles();
         this.startLocation = data.getStartLocation();
     }
 
@@ -57,17 +57,19 @@ public final class GameData {
         return name;
     }
 
+
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
+
     }
 
     public int getMaxPlayerNumber() {
         return maxPlayerNumber;
     }
 
-    public List<Riddle> getRiddles() {
+    /*public List<Riddle> getRiddles() {
         return new ArrayList<>(riddles);
-    }
+    }*/
 
     public Location getStartLocation() {
         return new Location(startLocation);
@@ -109,10 +111,21 @@ public final class GameData {
         this.players = new ArrayList<>(players);
     }
 
-    public List<Coin> getCoins() {
-        return new ArrayList<>(coins);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameData gameData = (GameData) o;
+        return name.equals(gameData.name) &&
+                players.equals(gameData.players) &&
+                maxPlayerNumber.equals(gameData.maxPlayerNumber) &&
+                startLocation.equals(gameData.startLocation);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, players, maxPlayerNumber, startLocation);
+    }
 }
 
 
