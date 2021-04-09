@@ -17,6 +17,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import java.util.ArrayList;
@@ -105,7 +106,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
         remainingCoins.add(coin);
-        symbolManager.create(coin.getSymbolOption());
+
+        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(),coin.getLongitude())));
     }
 
     /**
