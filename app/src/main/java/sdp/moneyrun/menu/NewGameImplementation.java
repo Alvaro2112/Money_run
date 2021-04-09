@@ -71,7 +71,7 @@ public class NewGameImplementation extends MenuImplementation {
      */
     public void onSubmitPostNewGame(LinearLayout newGameLayout) {
         TextView nameGameView = newGameLayout.findViewById(R.id.nameGameText);
-        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerNumber);
+        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCount);
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
         if (gameName.isEmpty()) {
