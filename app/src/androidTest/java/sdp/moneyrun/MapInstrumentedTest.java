@@ -20,6 +20,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MapInstrumentedTest {
 
@@ -110,8 +112,8 @@ public class MapInstrumentedTest {
             }
 
             scenario.onActivity(a->{
-                assertEquals(false,a.getChronometer().isCountDown());
-                assertEquals(true,a.getChronometer().getText().toString().contains("REMAINING TIME") );
+                assertFalse(a.getChronometer().isCountDown());
+                assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
             });
         }
         catch (Exception e){
@@ -286,8 +288,8 @@ public class MapInstrumentedTest {
 
         }
         catch (Exception e){
-            assertEquals(-1,2);
             e.printStackTrace();
+            assertEquals(-1,2);
         }
     }
 
