@@ -179,6 +179,13 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerNumber)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(100);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+
             Espresso.onView(withId(R.id.maxPlayerNumber)).check(matches(withError(expected_zero_players)));
 
             Intents.release();
