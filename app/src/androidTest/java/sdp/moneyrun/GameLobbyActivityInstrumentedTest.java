@@ -34,9 +34,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void LeaveLobbyWorks() {
         try {
             Intents.init();
-            onView(ViewMatchers.withId(R.id.leave_lobby_button))
-                    .perform(scrollTo())
-                    .perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
             Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
