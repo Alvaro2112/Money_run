@@ -1,12 +1,10 @@
 package sdp.moneyrun;
 
 import android.annotation.SuppressLint;
-import android.app.Service;
+import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,29 +15,20 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
-
-import javax.security.auth.callback.Callback;
 
 import sdp.moneyrun.map.MapActivity;
 
@@ -52,43 +41,33 @@ import sdp.moneyrun.menu.NewGameImplementation;
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
-    private Button profileButton;
-    private Button leaderboardButton;
-    private Button joinGame;
-    private String[] result;
     private String[] playerInfo;
-    private Player player;
     private int playerId;
     private RiddlesDatabase db;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
-    private Button logOut;
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFInished;
 
 
-    private DatabaseReference databaseReference;
-
-    // Get player location
-    private FusedLocationProviderClient fusedLocationClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mapButton = findViewById(R.id.map_button);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
 
         // Get player location
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // Get player location
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
             db = RiddlesDatabase.createInstance(getApplicationContext());
@@ -96,24 +75,27 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             db = RiddlesDatabase.getInstance();
         }
 
+        JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
+                databaseReference,
+                requestPermissionsLauncher,
+                fusedLocationClient,
+                true,
+                R.layout.join_game_popup);
+
+        NewGameImplementation newGameImplementation = new NewGameImplementation(this,
+                databaseReference,
+                requestPermissionsLauncher,
+                fusedLocationClient);
+
+        // Functionalities
         mapButton = findViewById(R.id.map_button);
         addMapButtonFunctionality();
 
         Button joinGame = findViewById(R.id.join_game);
-        joinGame.setOnClickListener(v -> JoinGameImplementation.onClickShowJoinGamePopupWindow(v,
-                this,
-                databaseReference,
-                true,
-                R.layout.join_game_popup,
-                requestPermissionsLauncher,
-                fusedLocationClient));
+        joinGame.setOnClickListener(joinGameImplementation::onClickShowJoinGamePopupWindow);
 
         Button newGame = findViewById(R.id.new_game);
-        newGame.setOnClickListener(v -> NewGameImplementation.onClickShowNewGamePopupWindow(v,
-                this,
-                databaseReference,
-                requestPermissionsLauncher,
-                fusedLocationClient));
+        newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
 
         addAskQuestionButtonFunctionality();
     }
@@ -303,7 +285,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
-        PopupWindow popupWindow = MenuImplementation.onButtonShowPopupWindowClick(view , this, focusable, layoutId);
+        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
         int correctId = 0;
 

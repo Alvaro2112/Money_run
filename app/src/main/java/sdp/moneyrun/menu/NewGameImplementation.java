@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,18 +30,21 @@ import sdp.moneyrun.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 
-public class NewGameImplementation {
+public class NewGameImplementation extends MenuImplementation {
+
+    public NewGameImplementation(Activity activity,
+                                 DatabaseReference databaseReference,
+                                 ActivityResultLauncher<String[]> requestPermissionsLauncher,
+                                 FusedLocationProviderClient fusedLocationClient){
+        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+    }
 
     /**
      * Event that occurs when the user wants to add a new game.
      *
      * @param view the current view
      */
-    public static void onClickShowNewGamePopupWindow(View view,
-                                                     Activity activity,
-                                                     DatabaseReference databaseReference,
-                                                     ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                                     FusedLocationProviderClient fusedLocationClient) {
+    public void onClickShowNewGamePopupWindow(View view) {
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -54,10 +58,10 @@ public class NewGameImplementation {
         // show the popup window at wanted location
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-        LinearLayout newGameLayout = (LinearLayout) popupView.findViewById(R.id.newGameLayout);
+        LinearLayout newGameLayout = popupView.findViewById(R.id.newGameLayout);
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
-        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(activity, databaseReference, requestPermissionsLauncher, newGameLayout, fusedLocationClient));
+        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
     }
 
     /**
@@ -65,11 +69,7 @@ public class NewGameImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public static void onSubmitPostNewGame(Activity activity,
-                                           DatabaseReference databaseReference,
-                                           ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                           LinearLayout newGameLayout,
-                                           FusedLocationProviderClient fusedLocationClient) {
+    public void onSubmitPostNewGame(LinearLayout newGameLayout) {
         TextView nameGameView = newGameLayout.findViewById(R.id.nameGameText);
         TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerNumber);
         String gameName = nameGameView.getText().toString().trim();
@@ -90,7 +90,7 @@ public class NewGameImplementation {
             return;
         }
 
-        postNewGame(activity, databaseReference, requestPermissionsLauncher, gameName, maxPlayerNumber, fusedLocationClient);
+        postNewGame(gameName, maxPlayerNumber);
     }
 
     /**
@@ -101,19 +101,14 @@ public class NewGameImplementation {
      * @return the game
      */
     @SuppressLint("MissingPermission")
-    public static void postNewGame(Activity activity,
-                                   DatabaseReference databaseReference,
-                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                   String name,
-                                   int maxPlayerCount,
-                                   FusedLocationProviderClient fusedLocationClient) {
+    public void postNewGame(String name, int maxPlayerCount) {
         DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_open_games)).push();
         DatabaseReference startLocationReference = databaseReference
                 .child(activity.getString(R.string.database_open_games))
                 .child(gameReference.getKey()).child(activity.getString(R.string.database_open_games_start_location));
 
         // Grant permissions if necessary
-        MenuImplementation.requestLocationPermissions((AppCompatActivity) activity, requestPermissionsLauncher);
+        requestLocationPermissions(requestPermissionsLauncher);
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(activity, location -> {

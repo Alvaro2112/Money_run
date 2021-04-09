@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -14,16 +15,35 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.firebase.database.DatabaseReference;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
 
 public class MenuImplementation {
+
+    protected final Activity activity;
+    protected final DatabaseReference databaseReference;
+    protected final ActivityResultLauncher<String[]> requestPermissionsLauncher;
+    protected final FusedLocationProviderClient fusedLocationClient;
+
+    public MenuImplementation(Activity activity,
+                              DatabaseReference databaseReference,
+                              ActivityResultLauncher<String[]> requestPermissionsLauncher,
+                              FusedLocationProviderClient fusedLocationClient
+                              ){
+        this.activity = activity;
+        this.databaseReference = databaseReference;
+        this.requestPermissionsLauncher = requestPermissionsLauncher;
+        this.fusedLocationClient = fusedLocationClient;
+    }
+
     /**
      * Requests location permissions to the user
-     * @param activity the current activity
      * @param requestPermissionsLauncher the permission requester
      */
-    public static void requestLocationPermissions(AppCompatActivity activity, ActivityResultLauncher<String[]> requestPermissionsLauncher){
+    public void requestLocationPermissions(ActivityResultLauncher<String[]> requestPermissionsLauncher){
 
         if (
                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -33,7 +53,7 @@ public class MenuImplementation {
             String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
 
             PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
-                    activity,
+                    (AppCompatActivity) activity,
                     requestPermissionsLauncher,
                     activity.getString(R.string.user_location_permission_explanation),
                     false,
@@ -49,7 +69,7 @@ public class MenuImplementation {
      * @param focusable Whether it can be dismissed by clicking outside the popup window
      * @param layoutId Id of the popup layout that will be used
      */
-    public static PopupWindow onButtonShowPopupWindowClick(View view, Activity activity, Boolean focusable, int layoutId) {
+    public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
