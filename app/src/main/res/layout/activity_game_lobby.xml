@@ -67,26 +67,29 @@
         android:layout_width="124dp"
         android:layout_height="67dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="212dp"
+        android:layout_marginTop="205dp"
+        android:layout_marginBottom="78dp"
         android:backgroundTint="#FF8A80"
         android:text="Leave"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/players_missing_TextView"
-        app:layout_constraintHorizontal_bias="0.347"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/player_list_textView"
-        app:layout_constraintTop_toBottomOf="@+id/player_list_textView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/players_in_lobby_TextView" />
 
     <Button
         android:id="@+id/launch_game_button"
         android:layout_width="124dp"
         android:layout_height="67dp"
         android:layout_marginStart="80dp"
+        android:layout_marginTop="357dp"
+        android:layout_marginBottom="79dp"
         android:backgroundTint="#CCFF90"
         android:text="Launch Game"
-        app:layout_constraintBaseline_toBaselineOf="@+id/leave_lobby_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/leave_lobby_button" />
+        app:layout_constraintStart_toEndOf="@+id/leave_lobby_button"
+        app:layout_constraintTop_toBottomOf="@+id/lobby_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

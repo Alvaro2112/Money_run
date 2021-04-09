@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
@@ -33,9 +34,9 @@ public class GameLobbyActivityInstrumentedTest {
     public void LeaveLobbyWorks() {
         try {
             Intents.init();
-            Espresso.closeSoftKeyboard();
-            Thread.sleep(1000);
-            onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.leave_lobby_button))
+                    .perform(scrollTo())
+                    .perform(ViewActions.click());
             Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
