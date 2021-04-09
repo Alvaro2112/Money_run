@@ -50,6 +50,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private int numberOfAsyncTasks;
     private int tasksFInished;
 
+    DatabaseReference databaseReference;
+    FusedLocationProviderClient fusedLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +66,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        databaseReference = firebaseDatabase.getReference();
 
         // Get player location
-        // Get player location
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
             db = RiddlesDatabase.createInstance(getApplicationContext());
@@ -75,6 +77,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             db = RiddlesDatabase.getInstance();
         }
 
+        runFunctionalities();
+    }
+
+    public void runFunctionalities(){
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
                 requestPermissionsLauncher,

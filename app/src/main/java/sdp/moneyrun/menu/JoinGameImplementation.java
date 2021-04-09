@@ -104,7 +104,9 @@ public class JoinGameImplementation extends MenuImplementation{
 
                         for (DataSnapshot dataSnapshot : result.getChildren()) {
                             GameRepresentation gameRepresentation = defineGameFromDatabase(dataSnapshot);
-                            gameRepresentations.add(gameRepresentation);
+                            if(gameRepresentation != null){
+                                gameRepresentations.add(gameRepresentation);
+                            }
                         }
                     }
                 });
@@ -130,6 +132,10 @@ public class JoinGameImplementation extends MenuImplementation{
             maxPlayerCount = maxPlayerCountInteger;
         }
         LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
+
+        if(gameId == null || name == null || startLocation == null){
+            return null;
+        }
 
         return new GameRepresentation(gameId, name, playerCount, maxPlayerCount, startLocation);
     }
