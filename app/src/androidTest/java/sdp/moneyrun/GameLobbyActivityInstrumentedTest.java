@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import androidx.lifecycle.Lifecycle;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -32,6 +33,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void LeaveLobbyWorks() {
         try {
             Intents.init();
+            Espresso.closeSoftKeyboard();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
             Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
