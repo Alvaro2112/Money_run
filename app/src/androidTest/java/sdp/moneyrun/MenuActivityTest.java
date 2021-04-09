@@ -177,6 +177,13 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one player in a game";
 
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
+
+            try {
+                Thread.sleep(100);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+
             Espresso.onView(withId(R.id.maxPlayerNumber)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
 
