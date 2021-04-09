@@ -35,7 +35,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/nameGameText"
+                android:id="@+id/nameGameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -43,11 +43,11 @@
                 android:inputType="text" />
 
             <EditText
-                android:id="@+id/maxPlayerCount"
+                android:id="@+id/maxPlayerCountField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter maximum player count"
+                android:hint="Enter max player count"
                 android:inputType="number" />
 
             <Button

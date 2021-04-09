@@ -6,7 +6,6 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,11 +13,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +67,8 @@ public class NewGameImplementation extends MenuImplementation {
      * @param newGameLayout the game layout
      */
     public void onSubmitPostNewGame(LinearLayout newGameLayout) {
-        TextView nameGameView = newGameLayout.findViewById(R.id.nameGameText);
-        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCount);
+        TextView nameGameView = newGameLayout.findViewById(R.id.nameGameField);
+        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
         if (gameName.isEmpty()) {

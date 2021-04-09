@@ -1,6 +1,5 @@
 package sdp.moneyrun;
 
-import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +13,6 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -146,11 +144,11 @@ public class MenuActivityTest {
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.nameGameText)).check(matches(withError(expected)));
+            Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
-            Espresso.onView(withId(R.id.maxPlayerCount)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.nameGameText)).check(matches(withError(expected)));
+            Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
             Intents.release();
         } catch (InterruptedException e) {
@@ -171,9 +169,9 @@ public class MenuActivityTest {
             final String game_name = "new game";
             final String expected = "This field is required";
 
-            Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected)));
+            Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected)));
 
             Intents.release();
         } catch (InterruptedException e) {
@@ -195,10 +193,10 @@ public class MenuActivityTest {
             final String max_player_count_zero = String.valueOf(0);
             final String expected_zero_players = "There should be at least one player in a game";
 
-            Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
-            //Espresso.onView(withId(R.id.maxPlayerCount)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
-            //Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            //Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected_zero_players)));
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected_zero_players)));
 
             Intents.release();
         } catch (InterruptedException e) {
@@ -219,8 +217,8 @@ public class MenuActivityTest {
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);
 
-            Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.maxPlayerCount)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             assertEquals(1, 1);
 
