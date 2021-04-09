@@ -132,8 +132,7 @@ public class MenuActivityTest {
             Intents.init();
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            final String game_name = "new game";
-            final String max_player_count = "12";
+            final String max_player_count = String.valueOf(12);
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
@@ -154,9 +153,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
             final String game_name = "new game";
-            final String max_player_count_zero = "0";
             final String expected = "This field is required";
-            final String expected_zero_players = "There should be at least one player in a game";
 
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
@@ -173,7 +170,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
             final String game_name = "new game";
-            final String max_player_count_zero = "0";
+            final String max_player_count_zero = String.valueOf(0);
             final String expected_zero_players = "There should be at least one player in a game";
 
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
@@ -199,8 +196,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
             final String game_name = "test game";
-            final String max_player_count = "1";
-            final String expected_zero_players = "There should be at least one player in a game";
+            final String max_player_count = String.valueOf(1);
 
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCount)).perform(typeText(max_player_count), closeSoftKeyboard());
