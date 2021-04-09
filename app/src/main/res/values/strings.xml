@@ -65,6 +65,7 @@
 
     <string name="new_location">New lat: %1$s New longitude: %2$s</string>
     <string name="log_out">Log out</string>
+    <string name="map_placeholder">map_placeholder</string>
     <string name="leaderboard">Leaderboard</string>
 
 </resources>
