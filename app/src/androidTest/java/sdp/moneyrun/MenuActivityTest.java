@@ -70,17 +70,25 @@ public class MenuActivityTest {
 
     @Test
     public void joinGamePopupIsDisplayed() {
-        onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            Intents.release();
+        }
     }
 
     @Test
-    public void mapButtonWorks() {
+    public void mapButtonAndSplashScreenWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
 
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(7000);
+            Thread.sleep(1000);
+            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
+            Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
 
             Intents.release();
@@ -90,25 +98,16 @@ public class MenuActivityTest {
         }
     }
 
-
-    @Test
-    public void splashScreenShows() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
-
-            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(1000);
-            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @Test
     public void newGamePopupIsDisplayed() {
-        onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
-        onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
+
+            Intents.release();
+        }
     }
 
     @Test
@@ -128,9 +127,15 @@ public class MenuActivityTest {
 
     @Test
     public void navigationViewOpens() {
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(withId(R.id.drawer_layout))
+                    .check(matches(isClosed(Gravity.LEFT)))
+                    .perform(DrawerActions.open());
+
+            Intents.release();
+        }
     }
 
     @Test
@@ -146,15 +151,10 @@ public class MenuActivityTest {
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
-            Thread.sleep(1000);
-
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.nameGameField)).check(matches(withError(expected)));
 
             Intents.release();
@@ -177,9 +177,7 @@ public class MenuActivityTest {
             final String expected = "This field is required";
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected)));
 
             Intents.release();
@@ -203,11 +201,8 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one player in a game";
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected_zero_players)));
 
             Intents.release();
@@ -230,9 +225,7 @@ public class MenuActivityTest {
             final String max_player_count = String.valueOf(1);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
-            Thread.sleep(1000);
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             assertEquals(1, 1);
 
