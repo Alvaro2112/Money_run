@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Enter max player count"
-                android:inputType="text" />
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/newGameSubmit"
