@@ -78,12 +78,15 @@ public class MenuActivityTest {
     public void mapButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
             Thread.sleep(7000);
             intended(hasComponent(MapActivity.class.getName()));
+
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
     }
 
@@ -91,9 +94,11 @@ public class MenuActivityTest {
     @Test
     public void splashScreenShows() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
             Thread.sleep(1000);
             onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -110,12 +115,13 @@ public class MenuActivityTest {
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
             Espresso.onView(withId(R.id.leaderboard_button)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
+
             Intents.release();
         }
     }
@@ -131,14 +137,10 @@ public class MenuActivityTest {
     public void newGameEmptyNameFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            try {
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-                Intents.release();
-            }
+            Thread.sleep(1000);
 
             final String max_player_count = String.valueOf(12);
             final String expected = "This field is required";
@@ -151,6 +153,9 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.nameGameText)).check(matches(withError(expected)));
 
             Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
         }
     }
 
@@ -158,14 +163,10 @@ public class MenuActivityTest {
     public void newGameEmptyMaxPlayerCountFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            try {
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-                Intents.release();
-            }
+            Thread.sleep(1000);
 
             final String game_name = "new game";
             final String expected = "This field is required";
@@ -175,6 +176,9 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected)));
 
             Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
         }
     }
 
@@ -182,14 +186,10 @@ public class MenuActivityTest {
     public void newGameZeroMaxPlayerCountFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            try {
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-                Intents.release();
-            }
+            Thread.sleep(1000);
 
             final String game_name = "new game";
             final String max_player_count_zero = String.valueOf(0);
@@ -198,16 +198,11 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.nameGameText)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCount)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-
-            try {
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-                Intents.release();
-            }
-
             Espresso.onView(withId(R.id.maxPlayerCount)).check(matches(withError(expected_zero_players)));
 
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
             Intents.release();
         }
     }
@@ -216,14 +211,10 @@ public class MenuActivityTest {
     public void newGameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
+
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            try {
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-                Intents.release();
-            }
+            Thread.sleep(1000);
 
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);
@@ -233,6 +224,9 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             assertEquals(1, 1);
 
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
             Intents.release();
         }
     }
