@@ -27,19 +27,12 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = LoginActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
 
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-        for (String permission : map.keySet()) {
-            boolean isGranted = map.get(permission);
-            if (isGranted) {
-                System.out.println("Permission" + permission + " granted.");
-            } else {
-                System.out.println("Permission" + permission + " denied.");
-            }
-        }
-    });
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
+
     private Button login;
+
     private final String ERROR_MISSING_EMAIL = "Email is required";
     private final String ERROR_MISSING_PASSWORD = "Password is required";
     private final String ERROR_INVALID_EMAIL_FORMAT = "Email format is invalid";
