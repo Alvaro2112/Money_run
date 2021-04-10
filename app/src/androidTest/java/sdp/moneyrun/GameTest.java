@@ -2,18 +2,14 @@ package sdp.moneyrun;
 
 
 import android.location.Location;
-import android.os.Parcel;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import org.junit.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.ArrayList;
@@ -32,10 +28,13 @@ public class GameTest {
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         int maxPlayers = 4;
-        Location targetLocation = new Location("");//provider name is unnecessary
-        return new Game(name, players, maxPlayers, riddles, targetLocation);
-    }
 
+        Location targetLocation = new Location("");//provider name is unnecessary
+        targetLocation.setLatitude(10);
+        targetLocation.setLongitude(20);
+        return new Game(name, players, maxPlayers, targetLocation);
+    }
+/*
     @Test
     public void basicRiddleTest() {
         String question = "What is the color of the sky";
@@ -46,7 +45,7 @@ public class GameTest {
         assertEquals(question, riddle.getQuestion());
         assertEquals(correctAnswer, riddle.getAnswer());
         assertArrayEquals(possibleAnswers, riddle.getPossibleAnswers());
-    }
+    }*/
 
     @Test
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
@@ -163,7 +162,7 @@ public class GameTest {
     @Test
     public void GameConstructorThrowsErrorOnNullArg(){
         try {
-            Game g = new Game("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), null);
+            Game g = new Game("name", new ArrayList<Player>(), 3, null);
         }catch(IllegalArgumentException e){
             assertTrue(true);
         }
@@ -191,13 +190,17 @@ public class GameTest {
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 Game fromDB = Game.getGameFromTaskSnapshot(task);
-                assertEquals(g.getGameData().getName(), fromDB.getGameData().getName());
-                assertEquals(g.getGameData().getPlayers(), fromDB.getGameData().getPlayers());
-                assertEquals(g.getGameData().getMaxPlayerNumber(), fromDB.getGameData().getMaxPlayerNumber());
-               // assertEquals(g.getGameData().getStartLocation(), fromDB.getGameData().getStartLocation());
+                assertEquals(g.getGameDbData().getName(), fromDB.getGameDbData().getName());
+                assertEquals(g.getGameDbData().getPlayers(), fromDB.getGameDbData().getPlayers());
+                assertEquals(g.getGameDbData().getMaxPlayerNumber(), fromDB.getGameDbData().getMaxPlayerNumber());
+                //Soooo Android.Location doesnt have a .equals() method... Have to check manually -_-
+                if(g.getGameDbData().getStartLocation().getLatitude() != fromDB.getGameDbData().getStartLocation().getLatitude() ||
+                        g.getGameDbData().getStartLocation().getLongitude() != fromDB.getGameDbData().getStartLocation().getLongitude()){
+                    fail();
+                }
 
             }else{
-                assertEquals("1","0");
+                fail();
             }
         });
         while(!dataTask.isComplete()){

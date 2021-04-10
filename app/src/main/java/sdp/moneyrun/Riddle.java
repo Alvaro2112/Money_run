@@ -15,8 +15,6 @@ class Riddle {
     private String thirdAnswer;
     private String fourthAnswer;
 
-
-
     /**
      * @param question        This is the question that the user will see and will have to solve
      * @param correctAnswer   This is the unique correct answer to the question
@@ -48,7 +46,11 @@ class Riddle {
         return correctAnswer;
     }
 
-    public String[] getPossibleAnswers() {
+
+
+
+    // For some reason this method makes the DB
+    public String[] possibleAnswers() {
         return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
 

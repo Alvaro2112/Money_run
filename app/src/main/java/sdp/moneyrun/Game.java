@@ -1,14 +1,10 @@
 package sdp.moneyrun;
 
 import android.location.Location;
-import android.renderscript.Sampler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,8 +21,7 @@ import java.util.Objects;
 // The entirety of the game logic should be implemented in this class
 public class Game {
     //Attributes
-    private GameData gameData;
-
+    private GameDbData gameDbData;
 
     //Aux variables
     private DatabaseReference rootReference;
@@ -39,22 +34,21 @@ public class Game {
      * @param name game name
      * @param players List of players
      * @param maxPlayerNumber MAximum players
-     * @param riddles List of riddles
      * @param startLocation game location
      */
-    public Game(String name, List<Player> players, int maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+    public Game(String name, List<Player> players, int maxPlayerNumber, Location startLocation){
         if(name == null || players == null || startLocation == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         rootReference = FirebaseDatabase.getInstance().getReference();
-        gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation);
+        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation);
         this.hasBeenAdded = false;
         this.id = "";
     }
 
-    private Game(GameData data) {
+    private Game(GameDbData data, List<Riddle> riddles) {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
-        this.gameData = new GameData(data);
+        this.gameDbData = new GameDbData(data);
         rootReference = FirebaseDatabase.getInstance().getReference();
         this.hasBeenAdded = true;
     }
@@ -67,7 +61,7 @@ public class Game {
         if(!hasBeenAdded) {
             DatabaseReference openGames = rootReference.child("open_games");
             id = openGames.push().getKey();
-            openGames.child(id).setValue(gameData);
+            openGames.child(id).setValue(gameDbData);
             //TODO this thing below
             //linkAttributesToDB();
 
@@ -135,12 +129,9 @@ public class Game {
         }
         if(task.isSuccessful()){
             GenericTypeIndicator<List<Player>> gtP = new GenericTypeIndicator<List<Player>>() {};
-            GenericTypeIndicator<List<Riddle>> gtR = new GenericTypeIndicator<List<Riddle>>() {};
-
             DataSnapshot ds = task.getResult();
             String name = ds.child("name").getValue(String.class);
             List<Player> players = ds.child("players").getValue(gtP);
-            //List<Riddle> riddles = ds.child("riddles").getValue(gtR);
             int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
 
             //Cant deserialize Location properly so we do it manually
@@ -149,8 +140,7 @@ public class Game {
             locat.setLongitude(ds.child("startLocation").child("longitude").getValue(Double.class));
 
 
-            //TODO remove the "3" and change with the actual max player number
-            Game retGame = new Game(name,players, maxPlayers, null, locat);
+            Game retGame = new Game(name,players, maxPlayers, locat);
             retGame.id = ds.getKey();
             return retGame;
         }else{
@@ -165,7 +155,7 @@ public class Game {
      */
     public void addPlayer(Player p){
         if(p == null){throw new IllegalArgumentException();}
-        if(gameData.getPlayers().size() < gameData.getMaxPlayerNumber() && !gameData.getPlayers().contains(p)){
+        if(gameDbData.getPlayers().size() < gameDbData.getMaxPlayerNumber() && !gameDbData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
         }
     }
@@ -176,7 +166,7 @@ public class Game {
     */
     public void removePlayer(Player p){
         if(p == null){throw new IllegalArgumentException();}
-        if(gameData.getPlayers().contains(p)){
+        if(gameDbData.getPlayers().contains(p)){
             rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
         }
     }
@@ -214,9 +204,10 @@ public class Game {
     }*/
 
     ///////////////////////////////////////////////
-    public GameData getGameData() {
-        return gameData;
+    public GameDbData getGameDbData() {
+        return new GameDbData(gameDbData);
     }
+
     ////////////////////////////////////////////////
 
     @Override
@@ -224,11 +215,11 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return gameData.equals(game.gameData);
+        return gameDbData.equals(game.gameDbData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameData);
+        return Objects.hash(gameDbData);
     }
 }

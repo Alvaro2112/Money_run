@@ -65,7 +65,7 @@
          }[m
 [31m-[m
          rootReference = FirebaseDatabase.getInstance().getReference();[m
-         gameData = new GameData(name, players, maxPlayerNumber, riddles, startLocation, coins);[m
+         gameDbData = new GameData(name, players, maxPlayerNumber, riddles, startLocation, coins);[m
          this.hasBeenAdded = false;[m
 [31m-        this.id = addToDB();[m
 [32m+[m[32m        this.id = "";[m
@@ -83,14 +83,14 @@
 [31m-    private String addToDB(){[m
 [31m-        DatabaseReference openGames = rootReference.child("open_games");[m
 [31m-        id = openGames.push().getKey();[m
-[31m-        openGames.child(id).setValue(gameData);[m
+[31m-        openGames.child(id).setValue(gameDbData);[m
 [31m-        //linkAttributesToDB();[m
 [31m-        return id;[m
 [32m+[m[32m    public String addToDB(){[m
 [32m+[m[32m        if(!hasBeenAdded) {[m
 [32m+[m[32m            DatabaseReference openGames = rootReference.child("open_games");[m
 [32m+[m[32m            id = openGames.push().getKey();[m
-[32m+[m[32m            openGames.child(id).setValue(gameData);[m
+[32m+[m[32m            openGames.child(id).setValue(gameDbData);[m
 [32m+[m[32m            //TODO this thing below[m
 [32m+[m[32m            //linkAttributesToDB();[m
 [32m+[m

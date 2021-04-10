@@ -4,16 +4,15 @@ import android.location.Location;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-public class GameDataTest {
+public class GameDbDataTest {
 
-    GameData getTestData() {
+    GameDbData getTestData() {
         String name = "game";
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
@@ -24,7 +23,7 @@ public class GameDataTest {
         coins.add(new Coin(1, 2));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
-        return new GameData(name, players, maxPlayers, riddles, targetLocation, coins);
+        return new GameDbData(name, players, maxPlayers, riddles, targetLocation);
     }
 
 
@@ -33,14 +32,14 @@ public class GameDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameData g = new GameData("name", players, 3, new ArrayList<Riddle>(), null, null);
+            GameDbData g = new GameDbData("name", players, 3, new ArrayList<Riddle>(), null);
         });
     }
 
     @Test
     public void constructorFailsOnEmptyPlayerList(){
         assertThrows(IllegalArgumentException.class, ()->{
-            GameData g = new GameData("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""), new ArrayList<Coin>());
+            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""));
         });
     }
 
@@ -49,14 +48,14 @@ public class GameDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameData g = new GameData("name", players, -4, new ArrayList<Riddle>(), new Location(""), new ArrayList<Coin>());
+            GameDbData g = new GameDbData("name", players, -4, new ArrayList<Riddle>(), new Location(""));
         });
     }
 
     @Test
     public void copyConstructorFailsOnNullArg(){
         assertThrows(IllegalArgumentException.class, ()->{
-            GameData g = new GameData(null);
+            GameDbData g = new GameDbData(null);
         });
     }
 
@@ -111,7 +110,7 @@ public class GameDataTest {
     @Test
     public void addPlayerFailsOnFullPlayerList(){
         assertThrows(IllegalArgumentException.class, () -> {
-            GameData g = getTestData();
+            GameDbData g = getTestData();
             g.addPlayer(new Player(3, "Ron", "Lausanne", 3, 4));
             g.addPlayer(new Player(4, "Wisley", "Nyon", 3, 4));
             g.addPlayer(new Player(5, "Laura", "Nyon", 3, 4));
@@ -124,7 +123,7 @@ public class GameDataTest {
         expected.add(new Player(1, "James", "Lausanne", 3, 4));
         expected.add(new Player(2, "Potter", "Nyon", 3, 4));
         expected.add(new Player(3, "Ron", "Lausanne", 3, 4));
-        GameData g = getTestData();
+        GameDbData g = getTestData();
         g.addPlayer(new Player(3, "Ron", "Lausanne", 3, 4));
         assertEquals(expected, g.getPlayers());
     }
@@ -139,7 +138,7 @@ public class GameDataTest {
 
     @Test
     public void removePlayerFailsIfOneElementLEft(){
-        GameData g = getTestData();
+        GameDbData g = getTestData();
         g.removePlayer(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, () -> {
             g.removePlayer(new Player(2, "Potter", "Nyon", 3, 4));
@@ -150,7 +149,7 @@ public class GameDataTest {
     public void removePlayerRemovesPlayerFromList(){
         List<Player> expected = new ArrayList<>();
         expected.add(new Player(1, "James", "Lausanne", 3, 4));
-        GameData g = getTestData();
+        GameDbData g = getTestData();
         g.removePlayer(new Player(2, "Potter", "Nyon", 3, 4));
         assertEquals(expected, g.getPlayers());
     }

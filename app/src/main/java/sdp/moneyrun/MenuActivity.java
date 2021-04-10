@@ -157,14 +157,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         TextView buttonView = tv;
 
         //Loops to find the ID of the button solution and assigns the text to each button
-        for (int i = 0; i < 4; i++){
+        /*for (int i = 0; i < 4; i++){
 
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
             if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
                 correctId = buttonIds[i];
-        }
+        }*/
 
         popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
 

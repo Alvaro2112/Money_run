@@ -6,25 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import sdp.moneyrun.Player;
-import sdp.moneyrun.Riddle;
 
-
-/*
-This class only holds data fundamental for the game, all the attributes of this class
-WILL be in the database, so do not add any temporary or auxiliary attributes to it if
-there is no use for them to be in the DB
+/**
+ * This class only holds attributes THAT WILL BE ON THE DB, so
+ * do not add any temporary or auxiliary attributes to it if
+ * there is no use for them to be in the DB
  */
-public final class GameData {
+public final class GameDbData {
     private String name;
     private List<Player> players;
     private Integer maxPlayerNumber;
-    //private List<Riddle> riddles;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     //the host always has to be in it
 
-    public GameData(String name, List<Player> players, Integer maxPlayerNumber, List<Riddle> riddles, Location startLocation){
+    public GameDbData(String name, List<Player> players, Integer maxPlayerNumber, Location startLocation){
         if(name == null || players == null || startLocation == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
@@ -37,21 +33,19 @@ public final class GameData {
         this.name = name;
         this.players = new ArrayList<>(players);
         this.maxPlayerNumber = maxPlayerNumber;
-        //this.riddles = new ArrayList<>(riddles);
         this.startLocation = new Location(startLocation);
     }
 
 
-    public GameData(GameData data){
+    public GameDbData(GameDbData data){
         if(data == null){throw new IllegalArgumentException();}
         this.name = data.getName();
         this.players = data.getPlayers();
         this.maxPlayerNumber = data.getMaxPlayerNumber();
-      //  this.riddles = data.getRiddles();
         this.startLocation = data.getStartLocation();
     }
 
-    public GameData(){}
+    public GameDbData(){}
 
     public String getName() {
         return name;
@@ -66,10 +60,6 @@ public final class GameData {
     public int getMaxPlayerNumber() {
         return maxPlayerNumber;
     }
-
-    /*public List<Riddle> getRiddles() {
-        return new ArrayList<>(riddles);
-    }*/
 
     public Location getStartLocation() {
         return new Location(startLocation);
@@ -115,11 +105,11 @@ public final class GameData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GameData gameData = (GameData) o;
-        return name.equals(gameData.name) &&
-                players.equals(gameData.players) &&
-                maxPlayerNumber.equals(gameData.maxPlayerNumber) &&
-                startLocation.equals(gameData.startLocation);
+        GameDbData gameDbData = (GameDbData) o;
+        return name.equals(gameDbData.name) &&
+                players.equals(gameDbData.players) &&
+                maxPlayerNumber.equals(gameDbData.maxPlayerNumber) &&
+                startLocation.equals(gameDbData.startLocation);
     }
 
     @Override
