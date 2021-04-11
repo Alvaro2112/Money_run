@@ -45,7 +45,7 @@ public class Game {
         this.id = "";
     }
 
-    private Game(GameDbData data, List<Riddle> riddles) {
+    private Game(GameDbData data) {
         if(data == null){throw new IllegalArgumentException("Argument is null");}
         this.gameDbData = new GameDbData(data);
         rootReference = FirebaseDatabase.getInstance().getReference();
