@@ -264,6 +264,7 @@ public class MapInstrumentedTest {
         }
     }
 
+
     @Test
     public void catchCoinWhenNearRemovesFromMap() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
