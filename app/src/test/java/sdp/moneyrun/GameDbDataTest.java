@@ -23,7 +23,7 @@ public class GameDbDataTest {
         coins.add(new Coin(1, 2));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
-        return new GameDbData(name, players, maxPlayers, riddles, targetLocation);
+        return new GameDbData(name, players, maxPlayers, targetLocation);
     }
 
 
@@ -32,14 +32,14 @@ public class GameDbDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, 3, new ArrayList<Riddle>(), null);
+            GameDbData g = new GameDbData("name", players, 3, null);
         });
     }
 
     @Test
     public void constructorFailsOnEmptyPlayerList(){
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new ArrayList<Riddle>(), new Location(""));
+            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new Location(""));
         });
     }
 
@@ -48,7 +48,7 @@ public class GameDbDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, -4, new ArrayList<Riddle>(), new Location(""));
+            GameDbData g = new GameDbData("name", players, -4, new Location(""));
         });
     }
 
@@ -78,13 +78,6 @@ public class GameDbDataTest {
         assertEquals(maxPlayers, getTestData().getMaxPlayerNumber());
     }
 
-    @Test
-    public void getRiddlesReturnsRiddles(){
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
-        assertEquals(riddles, getTestData().getRiddles());
-
-    }
 
     @Test
     public void setPlayersFailsOnNullArg(){

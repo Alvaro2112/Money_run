@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -184,9 +185,7 @@ public class GameTest {
         if(id.equals("")){
             fail();
         }
-
         Task<DataSnapshot> dataTask = ref.child("open_games").child(id).get();
-
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 Game fromDB = Game.getGameFromTaskSnapshot(task);
@@ -208,23 +207,110 @@ public class GameTest {
         }
     }
 
-
-
-
-
     @Test
     public void GamePlayerListChangesWithDB(){
-        //TODO
+        Game g = getTestGame();
+        g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String id = g.getGameId();
+
+        //Something went wrong, game might not have been uploaded properly
+        if(id.equals("")){
+            fail();
+        }
+        List<Player> playerss = new ArrayList<>();
+        playerss.add(new Player(5, "Ron", "Zurich", 3, 4));
+        playerss.add(new Player(6, "Wisley", "Amsterdam", 3, 4));
+        ref.child("open_games").child(id).child("players").setValue(playerss);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertEquals(playerss, g.getGameDbData().getPlayers());
+    }
+
+
+    /**
+     * This tests that the player list is in synchro with the DB
+     */
+
+    @Test
+    public void getGameDataSnapshotRetrievesGameFromDB(){
+        Game g = getTestGame();
+        g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String id = g.getGameId();
+        //Something went wrong, game might not have been uploaded properly
+        if(id.equals("")){
+            fail();
+        }
+        Task<DataSnapshot> dataTaskManually = ref.child("open_games").child(id).get();
+        Task<DataSnapshot> dataTaskFunction = Game.getGameDataSnapshot(id);
+        dataTaskManually.addOnCompleteListener(task -> {
+           if(task.isSuccessful()){
+               dataTaskFunction.addOnCompleteListener(task2 -> {
+                   if(task.isSuccessful()){
+                       String manual = task.getResult().toString();
+                       String function = task2.getResult().toString();
+                       assertEquals(manual,function);
+                   }
+               });
+           }else{
+               fail();
+           }
+        });
+
+        while(!dataTaskManually.isComplete()){
+            System.out.println("false");
+        }
+        while(!dataTaskFunction.isComplete()){
+            System.out.println("false");
+        }
     }
 
     @Test
     public void getGameDataSnapshotFailsOnNullArg(){
-
+        try{
+            Game.getGameDataSnapshot(null);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
     }
 
+/*
     @Test
     public void getGameDataSnapshotFailsIfGameNotPresentInDB(){
+        try {
+            Task<DataSnapshot> taskk = Game.getGameDataSnapshot("01234567899876543210");
+            while (!taskk.isComplete()) {
+                System.out.println("waiting");
+            }
+            Thread.sleep(3000);
+        }catch (Exception e){
+            return;
+        }
+        fail();
+    }*/
 
+    @Test
+    public void getGameFromTaskSnapShotFailsOnNullArg(){
+        try{
+            Game.getGameFromTaskSnapshot(null);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
     }
 
     @Test

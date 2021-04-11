@@ -62,9 +62,8 @@ public class Game {
             DatabaseReference openGames = rootReference.child("open_games");
             id = openGames.push().getKey();
             openGames.child(id).setValue(gameDbData);
-            //TODO this thing below
-            //linkAttributesToDB();
-
+            linkAttributesToDB();
+            hasBeenAdded = true;
             return id;
         }
         return getGameId();
@@ -74,14 +73,14 @@ public class Game {
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertitent attribute is the player List
      */
-    /*private void linkAttributesToDB(){
+    private void linkAttributesToDB(){
         DatabaseReference gameRef = rootReference.child("open_games").child(id);
         gameRef.child("players").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
                 List<Player> newData = snapshot.getValue(t);
-                gameData.setPlayers(newData);
+                gameDbData.setPlayers(newData);
             }
 
             @Override
@@ -90,15 +89,20 @@ public class Game {
             }
         });
     }
-*/
 
-    public static Task<DataSnapshot> getGameDataSnapshot(String id){
+    /**
+     * Gets a Serialized Game from the DB in an asynchronous manner
+     * @param id ID of the Game to retrieve
+     * @return a Task containing the serialized Game
+     * @throws NoSuchElementException if there is no Game with this ID in the DB
+     */
+    public static Task<DataSnapshot> getGameDataSnapshot(String id) throws NoSuchElementException{
         if(id == null){throw new IllegalArgumentException();}
         DatabaseReference gamesRef = FirebaseDatabase.getInstance()
                 .getReference().child("open_games");
 
         //check if there is a game in the DB with this ID
-        gamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+       /* gamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.hasChild(id)) {
@@ -109,13 +113,16 @@ public class Game {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "failed : "+error.getMessage());
             }
-        });
+        });*/
 
         Task<DataSnapshot> returnSnap = gamesRef.child(id).get();
 
         returnSnap.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.d(TAG, "successful " + task.getResult().getValue(String.class));
+                if(task.getResult().getValue(String.class) == null){
+                    throw new NoSuchElementException("There is no game with ID : " + id + " in the DB");
+                }
+                Log.d(TAG, "successful ");
             }else{
                 Log.e(TAG, "failed " + task.getException());
             }
@@ -123,6 +130,20 @@ public class Game {
         return returnSnap;
     }
 
+
+    /**
+     * Deserializes DB Game data into a Game instance if the Task is Successfull, returns Null otherwise
+     *     This function is to be used in combination with getGameDataSnapsho()
+     *     the former retrieves a Task with all the game data in the DB, while this function
+     *     extracts the Data and gives you a Game class once the task is complete
+     *
+     *     For this it is recommended to add a success listener on the task and call this function once it
+     *     it is ready
+     *
+     *     Due to the asynchronous code it is better for the caller to call each function independently
+     * @param task Task that you get from getGameDataSnapshot()
+     * @return A Game instance
+     */
     public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
         if(task == null){
             throw new IllegalArgumentException("Null argument");
@@ -155,8 +176,12 @@ public class Game {
      */
     public void addPlayer(Player p){
         if(p == null){throw new IllegalArgumentException();}
-        if(gameDbData.getPlayers().size() < gameDbData.getMaxPlayerNumber() && !gameDbData.getPlayers().contains(p)){
-            rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
+        if(!hasBeenAdded){
+        //TODO just modify the Data locally
+        }else{
+            if(gameDbData.getPlayers().size() < gameDbData.getMaxPlayerNumber() && !gameDbData.getPlayers().contains(p)){
+                rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
+            }
         }
     }
 
@@ -166,10 +191,20 @@ public class Game {
     */
     public void removePlayer(Player p){
         if(p == null){throw new IllegalArgumentException();}
-        if(gameDbData.getPlayers().contains(p)){
-            rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
+        if(!hasBeenAdded){
+            //TODO just modify the Data locally
+        }else{
+            if(gameDbData.getPlayers().contains(p)){
+                rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
+            }
         }
     }
+
+    public void setPlayers(List<Player> p){
+        if(p == null){throw new IllegalArgumentException();}
+        rootReference.child(id).child("players").setValue(p);
+    }
+
 
 
     /**
@@ -207,7 +242,6 @@ public class Game {
     public GameDbData getGameDbData() {
         return new GameDbData(gameDbData);
     }
-
     ////////////////////////////////////////////////
 
     @Override
