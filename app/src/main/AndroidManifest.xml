@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".GameLobbyActivity"></activity>
         <activity android:name=".map.MapActivity"></activity>
         <activity android:name=".LeaderboardActivity" />
         <activity
@@ -47,7 +46,9 @@
         <activity
             android:name=".RegisterPlayerActivity"
             android:label="Register Player" />
-
+        <activity
+            android:name=".GameLobbyActivity">
+        </activity>
     </application>
 
 </manifest>

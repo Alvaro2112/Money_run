@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-class Riddle {
+public class Riddle {
 
     //They should be final, but that is incompatible with being able to add them to the DB
     private String question;

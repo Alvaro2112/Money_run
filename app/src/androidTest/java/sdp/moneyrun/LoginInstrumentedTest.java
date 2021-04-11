@@ -104,6 +104,7 @@ public class LoginInstrumentedTest {
     public void loginInvalidEmailError(){
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
+
              String email = "kkkkkk";
             String password = "abc";
              String expected = "Email format is invalid";
@@ -111,6 +112,7 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
+
             Intents.release();
         }
     }

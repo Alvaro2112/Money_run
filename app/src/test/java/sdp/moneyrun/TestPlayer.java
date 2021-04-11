@@ -11,6 +11,12 @@ public class TestPlayer {
     Player player = new Player(1,"Bob", "New York",0,0);
 
     @Test
+    public void InstancePlayerWorks(){
+        Player player1 = new Player();
+        Player player2 = new Player(0);
+    }
+
+    @Test
     public void testNumberId() {
         assertEquals(1, player.getPlayerId());
     }
@@ -125,4 +131,45 @@ public class TestPlayer {
         Player p = new Player(playerId, name, address, died, played);
     }
 
+    @Test
+    public void setNumberDiedGamesUpdatesAttributeCorrectly(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        int died = 43;
+        p.setNumberOfDiedGames(died);
+        assertEquals(died, p.getNumberOfDiedGames());
+    }
+
+    @Test
+    public void setNumberPlayedGamesUpdatesAttributeCorrectly(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        int played = 43;
+        p.setNumberOfPlayedGames(played);
+        assertEquals(played, p.getNumberOfPlayedGames());
+    }
+
+    @Test
+    public void setAddressCorrectlyUpdatesAddress(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        String address = "Foobar";
+        p.setAddress(address);
+        assertEquals(address, p.getAddress());
+
+    }
+
+    @Test
+    public void setNameCorrectlyUpdatesName(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        String address = "Foobar";
+        p.setName(address);
+        assertEquals(address, p.getName());
+
+    }
+
+    @Test
+    public void setScoreCorrectlyUpdatesScore(){
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        int score = 8;
+        p.setScore(score);
+        assertEquals(score, p.getScore());
+    }
 }

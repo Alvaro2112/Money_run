@@ -3,6 +3,8 @@ package sdp.moneyrun;
 import android.location.Location;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -14,7 +16,12 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.map.MapActivity;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MapInstrumentedTest {
 
@@ -105,8 +112,8 @@ public class MapInstrumentedTest {
             }
 
             scenario.onActivity(a->{
-                assertEquals(false,a.getChronometer().isCountDown());
-                assertEquals(true,a.getChronometer().getText().toString().contains("REMAINING TIME") );
+                assertFalse(a.getChronometer().isCountDown());
+                assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
             });
         }
         catch (Exception e){
@@ -278,6 +285,34 @@ public class MapInstrumentedTest {
             scenario.onActivity(a->{
                 assertEquals(0,a.getSymbolManager().getAnnotations().size());
             });
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            assertEquals(-1,2);
+        }
+    }
+
+    @Test
+    public void QuestionsPopsUpWhenCoinIsCollected() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude());
+                a.addCoin(coin);
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
 
         }
         catch (Exception e){

@@ -13,7 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -201,11 +200,14 @@ public class Game {
     }
     ////////////////////////////////////////////////
 
+
     public void addGameListener(ValueEventListener l){
-        if(l == null){throw new IllegalArgumentException();}
-        if(hasBeenAdded){
-            rootReference.child("open_games").child(id).addValueEventListener(l);
-        }
+            if (l == null) {
+                throw new IllegalArgumentException();
+            }
+            if (hasBeenAdded) {
+                rootReference.child("open_games").child(id).addValueEventListener(l);
+            }
     }
 
 
