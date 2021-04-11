@@ -78,6 +78,7 @@ public class Game {
         return getGameId();
     }
 
+    
     /**
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertitent attribute is the player List
