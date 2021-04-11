@@ -78,7 +78,8 @@ public class Game {
         gameRef.child("players").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
+                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
+                };
                 List<Player> newData = snapshot.getValue(t);
                 gameDbData.setPlayers(newData);
             }
@@ -101,25 +102,11 @@ public class Game {
         DatabaseReference gamesRef = FirebaseDatabase.getInstance()
                 .getReference().child("open_games");
 
-        //check if there is a game in the DB with this ID
-       /* gamesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.hasChild(id)) {
-                    throw new NoSuchElementException("There is no game with ID : " + id + " in the DB");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "failed : "+error.getMessage());
-            }
-        });*/
-
         Task<DataSnapshot> returnSnap = gamesRef.child(id).get();
 
         returnSnap.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                if(task.getResult().getValue(String.class) == null){
+                if(task.getResult().child("name").getValue(String.class) == null){
                     throw new NoSuchElementException("There is no game with ID : " + id + " in the DB");
                 }
                 Log.d(TAG, "successful ");
@@ -163,49 +150,28 @@ public class Game {
 
             Game retGame = new Game(name,players, maxPlayers, locat);
             retGame.id = ds.getKey();
+            retGame.hasBeenAdded = true;
             return retGame;
         }else{
             return null;
         }
     }
 
-
-     /**
-     * Adds a player to the Game DB representation
-     * @param p player to add to the DB
-     */
-    public void addPlayer(Player p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(!hasBeenAdded){
-        //TODO just modify the Data locally
-        }else{
-            if(gameDbData.getPlayers().size() < gameDbData.getMaxPlayerNumber() && !gameDbData.getPlayers().contains(p)){
-                rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).setValue(p);
-            }
-        }
-    }
-
     /**
-     * Removes a player from the Game DB representation
-     * @param p The Player to add to the game
-    */
-    public void removePlayer(Player p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(!hasBeenAdded){
-            //TODO just modify the Data locally
-        }else{
-            if(gameDbData.getPlayers().contains(p)){
-                rootReference.child(id).child("players").child(Integer.toString(p.getPlayerId())).removeValue();
-            }
-        }
-    }
-
+     * Sets the players for the Game, or for both the Game and the DB if it has been added
+     * @param p New List of Players
+     */
     public void setPlayers(List<Player> p){
         if(p == null){throw new IllegalArgumentException();}
-        rootReference.child(id).child("players").setValue(p);
+        if(p.isEmpty()){throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");}
+        if(!hasBeenAdded){
+            gameDbData.setPlayers(p);
+        }else{
+            gameDbData.setPlayers(p);
+            rootReference.child("open_games").child(id).child("players").setValue(p);
+        }
+
     }
-
-
 
     /**
      * returns the DataBase id for this Game, if it has been added, or the empty String O.W
@@ -229,20 +195,19 @@ public class Game {
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
-    /**
-     *
-     * @return returns a random riddle from all the possible riddles
-     *//*
-    public Riddle getRandomRiddle(){
-        int index = (int)(Math.random() * (gameData.getRiddles().size()));
-        return gameData.getRiddles().get(index);
-    }*/
-
     ///////////////////////////////////////////////
     public GameDbData getGameDbData() {
         return new GameDbData(gameDbData);
     }
     ////////////////////////////////////////////////
+
+    public void addGameListener(ValueEventListener l){
+        if(l == null){throw new IllegalArgumentException();}
+        if(hasBeenAdded){
+            rootReference.child("open_games").child(id).addValueEventListener(l);
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

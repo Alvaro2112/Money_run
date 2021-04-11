@@ -50,7 +50,7 @@ class Riddle {
 
 
     // For some reason this method makes the DB
-    public String[] possibleAnswers() {
+    public String[] getPossibleAnswers() {
         return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
 

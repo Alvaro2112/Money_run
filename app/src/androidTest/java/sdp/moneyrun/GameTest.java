@@ -35,99 +35,13 @@ public class GameTest {
         targetLocation.setLongitude(20);
         return new Game(name, players, maxPlayers, targetLocation);
     }
-/*
-    @Test
-    public void basicRiddleTest() {
-        String question = "What is the color of the sky";
-        String correctAnswer = "blue";
-        String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
-
-        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-        assertEquals(question, riddle.getQuestion());
-        assertEquals(correctAnswer, riddle.getAnswer());
-        assertArrayEquals(possibleAnswers, riddle.getPossibleAnswers());
-    }*/
-
-    @Test
-    public void RiddleThrowsExceptionWhenArgumentsAreNull() {
-        try{
-            Riddle riddle = new Riddle(null, "blue", "green", "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
-
-        try{
-            Riddle riddle = new Riddle("a", null, "green", "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
-
-        try{
-            Riddle riddle = new Riddle("a", "blue", null, "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
-
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", null, "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
-
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", null, "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
-
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", "brown", null);
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
 
 
-    }
-    /*
-    @Test
-    public void testGameConstructorThrowsExceptionWhenNullArguments() {
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
 
-        players.add(new Player(3,"Bob", "Epfl",0,0));
-        try {
-            Game game = new Game(null, riddleList, null,null);
-        } catch (IllegalArgumentException e) {
-            assertEquals(1, 1);
-        }
-        try {
-            Game game = new Game(players, null, coins,null);
-        } catch (IllegalArgumentException e) {
-            assertEquals(1, 1);
-        }
-        try {
-            Game game = new Game(players, riddleList, null,new Location("LocationManager#GPS_PROVIDER"));
-        } catch (IllegalArgumentException e) {
-            assertEquals(1, 1);
-        }
-    }
 
     @Test
     public void testStartGameDoesNotCrash() {
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0));
-        Game game = new Game(players, riddleList,coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = getTestGame();
         game.startGame();
         Game.startGame(game);
         assertEquals(1, 1);
@@ -137,28 +51,10 @@ public class GameTest {
     public void askPlayerQuestionShouldReturnFalse() {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0));
-        Game game = new Game(players, riddleList,coins, new Location("LocationManager#GPS_PROVIDER"));
-        assertEquals(game.askPlayer(players.get(0), riddleList.get(0)), false);
+        Game game = getTestGame();
+        assertEquals(game.askPlayer(game.getGameDbData().getPlayers().get(0), riddleList.get(0)), false);
     }
 
-    @Test
-    public void getRandomQuestionReturnsAQuestion() {
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0));
-        Game game = new Game(players, riddleList, coins,new Location("LocationManager#GPS_PROVIDER"));
-        Riddle riddle = game.getRandomRiddle();
-        assertTrue(riddle.getClass() == Riddle.class);
-
-
-
-    }
-    */
 
     @Test
     public void GameConstructorThrowsErrorOnNullArg(){
@@ -207,6 +103,10 @@ public class GameTest {
         }
     }
 
+
+    /**
+     * This tests that the player list is in synchro with the DB
+     */
     @Test
     public void GamePlayerListChangesWithDB(){
         Game g = getTestGame();
@@ -233,11 +133,6 @@ public class GameTest {
         }
         assertEquals(playerss, g.getGameDbData().getPlayers());
     }
-
-
-    /**
-     * This tests that the player list is in synchro with the DB
-     */
 
     @Test
     public void getGameDataSnapshotRetrievesGameFromDB(){
@@ -288,21 +183,6 @@ public class GameTest {
         fail();
     }
 
-/*
-    @Test
-    public void getGameDataSnapshotFailsIfGameNotPresentInDB(){
-        try {
-            Task<DataSnapshot> taskk = Game.getGameDataSnapshot("01234567899876543210");
-            while (!taskk.isComplete()) {
-                System.out.println("waiting");
-            }
-            Thread.sleep(3000);
-        }catch (Exception e){
-            return;
-        }
-        fail();
-    }*/
-
     @Test
     public void getGameFromTaskSnapShotFailsOnNullArg(){
         try{
@@ -314,18 +194,84 @@ public class GameTest {
     }
 
     @Test
-    public void addPlayerAddsPlayerToDB(){
-
+    public void setPlayersFailsOnNullArg(){
+        try{
+            Game g = getTestGame();
+            g.setPlayers(null);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
     }
 
     @Test
-    public void removePlayerRemovesPlayerFromDB(){
+    public void setPlayersSetsPlayersLocally(){
+        Game g = getTestGame();
+        List<Player> p = new ArrayList<>();
+        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102);
+        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102);
+        p.add(toAdd);
+        p.add(toAdd2);
+        g.setPlayers(p);
+        assertEquals(p,g.getGameDbData().getPlayers());
+    }
 
+    @Test
+    public void setPlayersSetsPlayersOnDB(){
+        Game g = getTestGame();
+        g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<Player> p = new ArrayList<>();
+        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102);
+        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102);
+        p.add(toAdd);
+        p.add(toAdd2);
+        g.setPlayers(p);
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        assertEquals(p,g.getGameDbData().getPlayers());
     }
 
     @Test
     public void getIdReturnsId(){
-
+        Game g = getTestGame();
+        String id = g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertEquals(id, g.getGameId());
     }
 
+    @Test
+    public void getGameDataReturnsGameData(){
+        String name = "TestGame";
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        players.add(new Player(2, "Potter", "Nyon", 3, 4));
+        int maxPlayers = 4;
+        Location targetLocation = new Location("");//provider name is unnecessary
+        targetLocation.setLatitude(10);
+        targetLocation.setLongitude(20);
+        assertEquals(new GameDbData(name, players, maxPlayers, targetLocation).getPlayers().get(0), getTestGame().getGameDbData().getPlayers().get(0));
+    }
+
+    @Test
+    public void addListenerFailsOnNullArg(){
+        try{
+            Game g = getTestGame();
+            g.addGameListener(null);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
+    }
 }
