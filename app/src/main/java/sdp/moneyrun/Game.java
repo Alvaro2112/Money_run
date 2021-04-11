@@ -52,6 +52,16 @@ public class Game {
         this.hasBeenAdded = true;
     }
 
+    public Game(String name,List<Player> players,int maxPlayerNumber,List<Riddle> riddles,List<Coin> coins,Location startLocation){
+        if(name == null || players == null || startLocation == null) {
+            throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
+        }
+        rootReference = FirebaseDatabase.getInstance().getReference();
+        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation);
+        this.hasBeenAdded = false;
+        this.id = "";
+    }
+
     /**
      * Adds the GameData to the database if not already present
      * @return the Id of this game in the DB

@@ -64,11 +64,6 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void activityStartsProperly() {
-        assertEquals(State.RESUMED, testRule.getScenario().getState());
-    }
-
-    @Test
     public void joinGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
