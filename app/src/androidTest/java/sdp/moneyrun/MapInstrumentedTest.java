@@ -32,7 +32,7 @@ public class MapInstrumentedTest {
             float lat = 8f;
             float lon = 8f;
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -40,7 +40,7 @@ public class MapInstrumentedTest {
                 a.moveCameraTo(lat,lon);
             });
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,7 +61,7 @@ public class MapInstrumentedTest {
     public void testSymbolManager() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -82,7 +82,7 @@ public class MapInstrumentedTest {
     public void locationTracking() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -105,7 +105,7 @@ public class MapInstrumentedTest {
     public void chronometerTest() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -125,7 +125,7 @@ public class MapInstrumentedTest {
     public void onExplanationNeededWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -146,7 +146,7 @@ public class MapInstrumentedTest {
     public void onPermissionResultWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -166,7 +166,7 @@ public class MapInstrumentedTest {
     public void addCoinAddsCoinToMap() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -178,7 +178,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin2);
             });
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -197,7 +197,7 @@ public class MapInstrumentedTest {
     public void removeCoinRemovesCoinFromMap() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -210,7 +210,7 @@ public class MapInstrumentedTest {
                 a.removeCoin(coin);
             });
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -221,50 +221,18 @@ public class MapInstrumentedTest {
 
         }
         catch (Exception e){
-            assertEquals(-1,2);
             e.printStackTrace();
+
+            assertEquals(-1,2);
         }
     }
 
-
-    @Test
-    public void catchCoinWhenNearRemovesAndAdds() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            scenario.onActivity(a->{
-                Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
-                a.addCoin(coin);
-                Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
-                a.addCoin(coin2);
-            });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            scenario.onActivity(a->{
-                assertEquals(1,a.getRemainingCoins().size());
-                assertEquals(1,a.getCollectedCoins().size());
-            });
-
-        }
-        catch (Exception e){
-            assertEquals(-1,2);
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void catchCoinWhenNearRemovesFromMap() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -274,7 +242,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -294,7 +262,7 @@ public class MapInstrumentedTest {
     public void QuestionsPopsUpWhenCoinIsCollected() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -304,7 +272,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
