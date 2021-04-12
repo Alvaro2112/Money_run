@@ -1,9 +1,13 @@
 package sdp.moneyrun;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Random;
 
+@RunWith(AndroidJUnit4.class)
 public class PlayerBuilderInstrumentedTest {
 
     @Test(expected = IllegalArgumentException.class)
@@ -51,9 +55,12 @@ public class PlayerBuilderInstrumentedTest {
         int playerId = r.nextInt();
         int numberOfDiedGames = r.nextInt();
         int numberOfPlayedGames = r.nextInt();
-        Player player = new Player(playerId, name, address, numberOfDiedGames, numberOfPlayedGames);
+        int score = r.nextInt();
+
+        Player player = new Player(playerId, name, address, numberOfDiedGames, numberOfPlayedGames,score);
         b.setPlayerId(playerId);
         b.setName(name);
+        b.setScore(score);
         b.setAddress(address);
         b.setNumberOfDiedGames(numberOfDiedGames);
         b.setNumberOfPlayedGames(numberOfPlayedGames);

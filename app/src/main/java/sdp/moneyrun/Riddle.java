@@ -1,10 +1,6 @@
 package sdp.moneyrun;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-class Riddle {
+public class Riddle {
 
     private final String question;
     private final String correctAnswer;

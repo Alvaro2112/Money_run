@@ -3,7 +3,13 @@ package sdp.moneyrun.map;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
@@ -26,6 +32,9 @@ import java.util.List;
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
+import sdp.moneyrun.Riddle;
+import sdp.moneyrun.RiddlesDatabase;
+
 
 /*
 this map implements all the functionality we will need.
@@ -37,14 +46,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private List<Coin> remainingCoins = new ArrayList<>();
     private ArrayList<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
+    private RiddlesDatabase riddleDb;
     private Location currentLocation;
+    private int playerId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        playerId = (int)getIntent().getSerializableExtra("playerId");
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);
         initChronometer();
+
+
+        try{
+            riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
+        }
+        catch(RuntimeException e){
+            riddleDb = RiddlesDatabase.getInstance();
+        }
+
+
+
     }
 
     /**
@@ -84,18 +107,70 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     chronometerCounter += 1;
                 }
                 else{
+                    endGame();
                 }
                 chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
             }
         });
     }
 
-    public void endGame(){
+    public void endGame() {
         Intent endGameIntent = new Intent(this, EndGameActivity.class);
-        endGameIntent.putExtra("collectedCoins",collectedCoins);
+        endGameIntent.putExtra("collectedCoins", collectedCoins);
+        endGameIntent.putExtra("playerId",playerId);
         startActivity(endGameIntent);
+        this.finish();
+    }
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
+
+        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
+        int correctId = 0;
+
+        //changes the text to the current question
+        tv.setText(riddle.getQuestion());
+
+        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
+        TextView buttonView = tv;
+
+        //Loops to find the ID of the button solution and assigns the text to each button
+        for (int i = 0; i < 4; i++){
+
+            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
+            buttonView.setText(riddle.getPossibleAnswers()[i]);
+
+            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
+                correctId = buttonIds[i];
+        }
+
+        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
 
     }
+
+    public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(layoutId, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window at wanted location
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        return popupWindow;
+    }
+
 
     /**
      * @param coin
@@ -150,8 +225,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int coinIdx = isNearCoin(location);
         if(coinIdx >= 0){
             removeCoin(remainingCoins.get(coinIdx));
-            // TODO :
-            //  call the riddle
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
         }
     }
 

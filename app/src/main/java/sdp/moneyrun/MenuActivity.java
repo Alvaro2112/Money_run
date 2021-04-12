@@ -4,54 +4,190 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MenuActivity extends AppCompatActivity /*implements NavigationView.OnNavigationItemSelectedListener*/ {
+import java.util.concurrent.Semaphore;
+
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
+
+import javax.security.auth.callback.Callback;
+
+import sdp.moneyrun.map.MapActivity;
+
+
+
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
 
     private Button profileButton;
     private Button leaderboardButton;
     private Button joinGame;
     private String[] result;
+    private String[] playerInfo;
     private Player player;
+    private int playerId;
     private RiddlesDatabase db;
+    private Button mapButton;
+    protected DrawerLayout mDrawerLayout;
+    private Button logOut;
+    private final Semaphore available = new Semaphore(1, true);
+    private int numberOfAsyncTasks;
+    private int tasksFInished;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        setNavigationViewListener();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mapButton = findViewById(R.id.map_button);
 
-        try{
-            db = RiddlesDatabase.createInstance(getApplicationContext());
-        }
-        catch(RuntimeException e){
-            db = RiddlesDatabase.getInstance();
-        }
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        profileButton = findViewById(R.id.go_to_profile_button);
-        leaderboardButton = findViewById(R.id.menu_leaderboardButton);
-
+        mapButton = findViewById(R.id.map_button);
         addJoinGameButtonFunctionality();
-        addAskQuestionButtonFunctionality();
-        addLogOutButtonFunctionality();
-        linkProfileButton(profileButton);
-        linkLeaderboardButton(leaderboardButton);
+        addMapButtonFunctionality();
+
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+    }
+
+
+
+    public void StartMapActivity(){
+        Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+        mainIntent.putExtra("playerId",this.playerId);
+        MenuActivity.this.startActivity(mainIntent);
+        MenuActivity.this.finish();
+        available.release();
+    }
+
+
+
+    public void addMapButtonFunctionality(){
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+
+                //Example of how the Async tasks should be implemented
+                numberOfAsyncTasks = 2;
+                tasksFInished = 0;
+                setContentView(R.layout.splash_screen);
+
+                Runnable x = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(5000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            StartMapActivity();
+                        } else {
+                            tasksFInished += 1;
+                        }
+
+                        available.release();
+                    }
+                };
+
+                Runnable y = new Runnable() {
+                    public void run() {
+                        synchronized (this) {
+                            try {
+                                wait(2000);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+
+                        try {
+                            available.acquire();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if(tasksFInished == numberOfAsyncTasks - 1){
+                            StartMapActivity();
+                        } else {
+                            tasksFInished += 1;
+                        }
+
+                        available.release();
+                    }
+                };
+
+                Thread thread = new Thread(x);
+                Thread thread1 = new Thread(y);
+
+                thread.start();
+                thread1.start();
+
+
+            }
+
+        });
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.profile_button: {
+                onButtonSwitchToUserProfileActivity(item.getActionView());
+                break;
+            }
+
+            case R.id.leaderboard_button: {
+                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
+                startActivity(leaderboardIntent);
+                break;
+            }
+
+            case R.id.log_out_button: {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                break;
+            }
+        }
+        //close navigation drawer
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     public void addJoinGameButtonFunctionality(){
@@ -70,107 +206,23 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
         });
     }
 
-    public void addLogOutButtonFunctionality(){
 
-        Button logOut = findViewById(R.id.log_out_button);
-
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        logOut.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
+    private void setPutExtraArguments(Intent intent){
+        intent.putExtra("playerId",playerId);
+        intent.putExtra("playerId"+playerId,playerInfo);
     }
 
-    public void addAskQuestionButtonFunctionality(){
-
-        Button askQuestion = findViewById(R.id.ask_question);
-
-        /**
-         * Checks for clicks on the ask question button and creates a popup of a new question of clicked
-         */
-        askQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onButtonShowQuestionPopupWindowClick(v, true, R.layout.question_popup, db.getRandomRiddle());
-            }
-        });
-
-    }
-
-    private void linkProfileButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToUserProfileActivity(v);
-            }
-        });
-    }
-
-    
-    private void linkLeaderboardButton(Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                startActivity(leaderboardIntent);
-            }
-        });
-    } 
-    
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        int playerId = getIntent().getIntExtra("playerId",0);
-        String[] playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        playerProfileIntent.putExtra("playerId",playerId);
-        playerProfileIntent.putExtra("playerId"+playerId,playerInfo);
+        setPutExtraArguments(playerProfileIntent);
         startActivity(playerProfileIntent);
     }
 
     public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
 
         onButtonShowPopupWindowClick(view, focusable, layoutId);
-
-    }
-
-
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
-
-        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
-        TextView tv = popupWindow.getContentView().findViewById(R.id.question);
-        int correctId = 0;
-
-        //changes the text to the current question
-        tv.setText(riddle.getQuestion());
-
-        int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
-        TextView buttonView = tv;
-
-        //Loops to find the ID of the button solution and assigns the text to each button
-        for (int i = 0; i < 4; i++){
-
-            buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
-            buttonView.setText(riddle.getPossibleAnswers()[i]);
-
-            if(riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
-                correctId = buttonIds[i];
-        }
-
-        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
 
     }
 
@@ -197,14 +249,29 @@ public class MenuActivity extends AppCompatActivity /*implements NavigationView.
 
         return popupWindow;
     }
-
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.profile_button:
-////                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayerProfileFragment()).commit();
-//                break;
+    //TODO: fix it somehow: task is never completed and thus cannot get player from database
+    //To come back too later
+//    public void setPlayerObject(){
+//        playerId = getIntent().getIntExtra("playerId",0);
+//        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+//        DatabaseProxy db = new DatabaseProxy();
+//        if(db != null) {
+//            Task<DataSnapshot> t = db.getPlayerTask(playerId);
+////            player = db.getPlayerFromTask(t);
+//            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        player = db.getPlayerFromTask(t);
+//                    }
+//                }
+//            });
+////           while(!t.isComplete()){
+////               System.out.println("Task is not ready yet");
+////           }
+//            System.out.println("PLayer should be set by now");
 //        }
-//        return false;
+//        //TODO: put player in the database with playerId as primary key
 //    }
+    
 }

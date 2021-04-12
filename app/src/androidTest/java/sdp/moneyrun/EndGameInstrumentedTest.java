@@ -1,7 +1,12 @@
 package sdp.moneyrun;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
 
@@ -12,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public class EndGameInstrumentedTest {
 
+    private  long ASYNC_CALL_TIMEOUT = 5L;
 
     @Test
     public void updateTextFailsWithoutLists() {
@@ -38,6 +44,50 @@ public class EndGameInstrumentedTest {
             textBuilder = textBuilder.append("For a total score of ").append(1);
             String text = textBuilder.toString();
             Espresso.onView(withId(R.id.end_game_text)).check(matches(withText(text)));
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void updatePlayerUpdateScore() {
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            int playerid = 98732;
+            final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
+            final DatabaseProxy db = new DatabaseProxy();
+            db.putPlayer(player);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Player p = snapshot.getValue(Player.class);
+                    player.setScore(3*p.getScore() + player.getScore(), false);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    assert(false);
+                }
+            };
+            scenario.onActivity(a -> {
+                        Player p = a.updatePlayer(playerid,10);
+                    });
+            db.addPlayerListener(player,listener );
+
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            db.removePlayerListener(player, listener);
+
+            assertEquals(35,player.getScore());
         }
         catch (Exception e){
             assertEquals(-1,2);

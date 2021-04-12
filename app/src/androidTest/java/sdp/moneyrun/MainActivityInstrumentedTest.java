@@ -26,6 +26,8 @@ public class MainActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
+
         }
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();
