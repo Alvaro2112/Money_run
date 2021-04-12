@@ -51,7 +51,7 @@ public class MenuActivityTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(7000);
+            Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
@@ -67,6 +67,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
         } catch (InterruptedException e) {
             e.printStackTrace();
+            assertEquals(-1,2);
         }
     }
     
@@ -77,10 +78,16 @@ public class MenuActivityTest {
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
+            Thread.sleep(1000);
             Espresso.onView(withId(R.id.leaderboard_button)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            assertEquals(-2,1);
+
         }
     }
 
@@ -88,9 +95,16 @@ public class MenuActivityTest {
 
     @Test
     public void navigationViewOpens() {
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
+        try {
+            onView(withId(R.id.drawer_layout))
+                    .check(matches(isClosed(Gravity.LEFT)))
+                    .perform(DrawerActions.open());
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            assertEquals(-2,1);
+        }
     }
 
 
