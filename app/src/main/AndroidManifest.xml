@@ -49,6 +49,11 @@
         <activity
             android:name=".RegisterPlayerActivity"
             android:label="Register Player" />
+
+        <activity
+            android:name=".GameLobbyActivity">
+
+        </activity>
     </application>
 
 </manifest>

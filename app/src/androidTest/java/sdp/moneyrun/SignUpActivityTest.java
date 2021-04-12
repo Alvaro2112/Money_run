@@ -96,6 +96,7 @@ public class SignUpActivityTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
     }
 

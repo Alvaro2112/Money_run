@@ -65,12 +65,12 @@ public class RegisterPlayerActivity extends AppCompatActivity {
             setErrorForEmptyFields(name,address,color,animal);
             return false;
         }
-            result = new String[4];
-            result[0] = name;
-            result[1] = address;
-            result[2] = "0";
-            result[3] = "0";
-            return true;
+        result = new String[4];
+        result[0] = name;
+        result[1] = address;
+        result[2] = "0";
+        result[3] = "0";
+        return true;
     }
     private void setErrorForEmptyFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty()){

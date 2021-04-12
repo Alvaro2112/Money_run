@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Player {
 
-    private  int playerId;
+    private int playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
@@ -192,9 +192,6 @@ public class Player {
      * @return the score of that player
      */
     public int getScore(){
-        if (name == null)
-            throw new IllegalStateException();
-
         return score;
     }
 
@@ -204,8 +201,6 @@ public class Player {
      * @return the adress of the player
      */
     public String getAddress() {
-        if (address == null)
-            throw new IllegalStateException();
         return address;
     }
 
@@ -214,8 +209,6 @@ public class Player {
      * @return the name of the player
      */
     public String getName() {
-        if (name == null)
-            throw new IllegalStateException();
         return name;
     }
 
