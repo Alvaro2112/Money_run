@@ -133,6 +133,13 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 boolean check = false;
+                try {
+                    Thread.sleep(5000);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    assertEquals(-2,1);
+                }
                 for(Player p : a.getPlayerList()){
                     if(p.getName().equals("Dummy Player 4"))
                         check = true;

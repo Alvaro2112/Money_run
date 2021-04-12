@@ -52,7 +52,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        playerId = (int)getIntent().getSerializableExtra("playerId");
+        playerId = (int)getIntent().getIntExtra("playerId",0);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);
