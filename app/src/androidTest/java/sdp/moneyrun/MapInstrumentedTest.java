@@ -176,7 +176,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin2);
             });
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -208,7 +208,7 @@ public class MapInstrumentedTest {
                 a.removeCoin(coin);
             });
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -241,7 +241,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin2);
             });
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -272,7 +272,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -302,7 +302,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
