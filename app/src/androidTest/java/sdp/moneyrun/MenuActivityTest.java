@@ -56,7 +56,8 @@ public class MenuActivityTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
 
 
     @Test
