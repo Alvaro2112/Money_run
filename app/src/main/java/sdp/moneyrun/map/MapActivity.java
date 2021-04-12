@@ -1,11 +1,11 @@
 package sdp.moneyrun.map;
 
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -26,26 +27,32 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import sdp.moneyrun.Coin;
+import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 import sdp.moneyrun.RiddlesDatabase;
-import sdp.moneyrun.R;
 
 
 /*
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
+    private final String TAG = MapActivity.class.getSimpleName();
     private static final int GAME_TIME = 100;
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
     private List<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
+    private static final double ZOOM_FOR_FEATURES = 16.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
+
+    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "route cantonale");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,14 +201,21 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
-    public void moveCameraTo(float latitude, float longitude){
+    public void moveCameraTo(float latitude, float longitude, double zoom){
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
+                .zoom(zoom)
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-
+    public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom){
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .zoom(zoom)
+                .build();
+        mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
 
     /**
      * @param location
@@ -262,5 +276,88 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
         }
         return min_index;
+    }
+
+    public List<Coin> getRandomlyPlacedCoins (int number, int radius, long seed){
+        if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
+        ArrayList<Coin> coins = new ArrayList<>();
+        for(int i = 0; i<number; i++){
+            Location loc = null;
+            do{
+               loc = getRandomLocation(radius, seed);
+            }while(!isLocationAppropriate(loc));
+            coins.add(new Coin(loc.getLatitude(),loc.getLongitude()));
+        }
+        return coins;
+    }
+
+    public Location getRandomLocation(int radius, long seed){
+        if(radius<=0) throw new IllegalArgumentException();
+        double lat = currentLocation.getLatitude();
+        double lon = currentLocation.getLongitude();
+        Random random = new Random(seed);
+        double latDifference = random.nextDouble()*radius;
+        double lonDifference = random.nextDouble()*radius;
+        Location location = new Location("");
+        location.setLongitude(lon + lonDifference);
+        location.setLatitude(lat + latDifference);
+        return location;
+    }
+
+    public boolean isLocationAppropriate(Location location){
+        List<Feature> features = getFeatureAtLocation(location);
+        boolean hasAtLeastAProperty = false;
+        String [] relevantFields = new String[] {"type", "class", "name"};
+        if(features.size() > 0) {
+            for (Feature feature : features) {
+                System.out.println("Feature is " + feature);
+                if (feature != null && feature.properties() != null){
+                    if(!feature.properties().toString().equals("{}")){
+                        hasAtLeastAProperty = true;
+                    }//If none of the feature has a property field, it's probably a body of water
+
+                    System.out.println(feature.properties().toString());
+                    if(!checkIndividualFeature(feature)) return false; //A feature was deemed inappropriate
+                }// Advised by MapBox
+
+            }// A location may yield multiple feature and we check that none is inappropriate
+
+            return hasAtLeastAProperty;
+        } //If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
+        return false;
+    }
+
+
+    private boolean checkIndividualFeature(Feature feature){
+        String [] relevantFields = new String[] {"type", "class", "name"};
+        for (String field : relevantFields){
+            if (feature.properties().has(field) ) {
+                String locationType = feature.properties().get(field).toString();
+                System.out.println("Finally got there " + locationType.trim());
+                if(INAPPROPRIATE_LOCATIONS.contains(locationType.substring(1, locationType.length()-1).toLowerCase())){
+                    return false;
+                }
+            }
+        }// An inappropriate characteristics may be in different property fields
+
+        return true;
+    }
+
+    private List<Feature> getFeatureAtLocation(Location location){
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        LatLng point = new LatLng(lat,lon);
+
+      //  moveCameraWithoutAnimation(lat, lon, ZOOM_FOR_FEATURES);
+
+        // Convert LatLng coordinates to screen pixel and only query the rendered features.
+        //This is because the query feature API function only accepts pixel as an arg
+        final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
+
+
+        System.out.println(mapboxMap.getProjection().fromScreenLocation(pixel));
+        List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
+        System.out.println(features.size());
+        return features;
     }
 }
