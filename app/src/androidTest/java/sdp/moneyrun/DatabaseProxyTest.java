@@ -110,6 +110,7 @@ public class DatabaseProxyTest {
         assert(player.getName().equals(newName));
     }
 
+    
     @Test
     public void addPlayerListenerCorrectlyUpdatesDataCountdown(){
         CountDownLatch added = new CountDownLatch(1);
