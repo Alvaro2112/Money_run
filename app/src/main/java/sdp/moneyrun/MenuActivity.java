@@ -1,6 +1,9 @@
 package sdp.moneyrun;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,60 +14,87 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.Semaphore;
-
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Semaphore;
-
-import javax.security.auth.callback.Callback;
 
 import sdp.moneyrun.map.MapActivity;
 
 
+import sdp.moneyrun.menu.JoinGameImplementation;
+import sdp.moneyrun.menu.MenuImplementation;
+import sdp.moneyrun.menu.NewGameImplementation;
+
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
-
-    private Button profileButton;
-    private Button leaderboardButton;
-    private Button joinGame;
-    private String[] result;
     private String[] playerInfo;
-    private Player player;
     private int playerId;
     private RiddlesDatabase db;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
-    private Button logOut;
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFInished;
 
+    DatabaseReference databaseReference;
+    FusedLocationProviderClient fusedLocationClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mapButton = findViewById(R.id.map_button);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        // setup database instance
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
+        // Get player location
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        runFunctionalities();
+    }
+
+    public void runFunctionalities(){
+        JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
+                databaseReference,
+                requestPermissionsLauncher,
+                fusedLocationClient,
+                true,
+                R.layout.join_game_popup);
+
+        NewGameImplementation newGameImplementation = new NewGameImplementation(this,
+                databaseReference,
+                requestPermissionsLauncher,
+                fusedLocationClient);
+
+        // Functionalities
         mapButton = findViewById(R.id.map_button);
-        addJoinGameButtonFunctionality();
         addMapButtonFunctionality();
 
+        Button joinGame = findViewById(R.id.join_game);
+        joinGame.setOnClickListener(joinGameImplementation::onClickShowJoinGamePopupWindow);
 
+        Button newGame = findViewById(R.id.new_game);
+        newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
     }
 
     @Override
@@ -72,8 +102,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         RiddlesDatabase.reset();
     }
-
-
 
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
@@ -83,16 +111,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         available.release();
     }
 
-
-
     public void addMapButtonFunctionality(){
 
         mapButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-
                 //Example of how the Async tasks should be implemented
                 numberOfAsyncTasks = 2;
                 tasksFInished = 0;
@@ -129,7 +152,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                             } catch (InterruptedException e) {
                             }
                         }
-
                         try {
                             available.acquire();
                         } catch (InterruptedException e) {
@@ -150,14 +172,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
                 thread.start();
                 thread1.start();
-
-
             }
 
         });
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -190,64 +211,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void addJoinGameButtonFunctionality(){
-
-        Button joinGame = findViewById(R.id.join_game);
-
-        /**
-         * Checks for clicks on the join game button and creates a popup of available games if clicked
-         */
-        joinGame.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                onButtonShowJoinGamePopupWindowClick(v, true, R.layout.join_game_popup);
-            }
-        });
-    }
-
-
     private void setPutExtraArguments(Intent intent){
         intent.putExtra("playerId",playerId);
         intent.putExtra("playerId"+playerId,playerInfo);
     }
-
 
     public void onButtonSwitchToUserProfileActivity(View view) {
 
         Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
         setPutExtraArguments(playerProfileIntent);
         startActivity(playerProfileIntent);
-    }
-
-    public void onButtonShowJoinGamePopupWindowClick(View view, Boolean focusable, int layoutId) {
-
-        onButtonShowPopupWindowClick(view, focusable, layoutId);
-
-    }
-
-    /**
-     *
-     * @param view Current view before click
-     * @param focusable Whether it can be dismissed by clicking outside the popup window
-     * @param layoutId Id of the popup layout that will be used
-     */
-    public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
-
-        // inflate the layout of the popup window
-        LayoutInflater inflater = (LayoutInflater)
-                getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(layoutId, null);
-
-        // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-        // show the popup window at wanted location
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        return popupWindow;
     }
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
     //To come back too later
@@ -273,5 +246,4 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 //        }
 //        //TODO: put player in the database with playerId as primary key
 //    }
-    
 }

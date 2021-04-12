@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_game_popup"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:background="@drawable/layout_rounded"
+    android:fadingEdge="horizontal|vertical"
+    app:layoutDescription="@xml/new_game_popup_scene">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+
+        <LinearLayout
+            android:id="@+id/newGameLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/newGameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:text="@string/new_game"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nameGameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter game name"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/maxPlayerCountField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter max player count"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/newGameSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
