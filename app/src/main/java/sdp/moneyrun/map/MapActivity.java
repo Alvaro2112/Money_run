@@ -40,7 +40,7 @@ import sdp.moneyrun.RiddlesDatabase;
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    private static final int GAME_TIME = 100;
+    private static final int GAME_TIME = 10000;
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();

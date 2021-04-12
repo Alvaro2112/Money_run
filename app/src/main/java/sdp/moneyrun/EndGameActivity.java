@@ -5,9 +5,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-
 import java.util.ArrayList;
 
 
@@ -30,7 +27,9 @@ public class EndGameActivity extends AppCompatActivity {
         if(collectedCoins != null){
             gameScore = getTotalScore();
             updateText(collectedCoins.size(),gameScore,true);
-            updatePlayer(playerId,gameScore);
+            if(playerId != 0) {
+                updatePlayer(playerId, gameScore);
+            }
         }
         else{
             updateText(-1,-1,false);
