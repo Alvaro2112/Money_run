@@ -15,7 +15,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PlayerTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private  long ASYNC_CALL_TIMEOUT = 10L;
 
     @Test
     public void setAddressWithDBUpdateWorks(){
