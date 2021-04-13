@@ -24,9 +24,7 @@ import org.junit.runner.RunWith;
 import sdp.moneyrun.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -84,8 +82,10 @@ public class MenuActivityTest {
     public void mapButtonAndSplashScreenWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
-
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
+            Thread.sleep(100);
+
+            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
             Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
 
@@ -231,6 +231,7 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+
             assertEquals(1, 1);
 
             Intents.release();
