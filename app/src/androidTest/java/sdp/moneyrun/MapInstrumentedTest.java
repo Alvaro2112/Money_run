@@ -1,9 +1,12 @@
 package sdp.moneyrun;
 
+import android.content.Context;
 import android.location.Location;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -17,6 +20,8 @@ import sdp.moneyrun.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -283,6 +288,31 @@ public class MapInstrumentedTest {
         catch (Exception e){
             assertEquals(-1,2);
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void endGameStartsActivity() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            Intents.init();
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                a.endGame();
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+            intended(hasComponent(EndGameActivity.class.getName()));
+            Intents.release();
         }
     }
 

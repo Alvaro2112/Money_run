@@ -44,7 +44,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
-    private ArrayList<Coin> collectedCoins = new ArrayList<>();
+    private List<Coin> collectedCoins = new ArrayList<>();
     private static final double THRESHOLD_DISTANCE = 5.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
@@ -116,7 +116,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public void endGame() {
         Intent endGameIntent = new Intent(this, EndGameActivity.class);
-        endGameIntent.putExtra("collectedCoins", collectedCoins);
+        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
+        for(int i= 0; i < collectedCoins.size();++i){
+            collectedCoinsValues.add(collectedCoins.get(i).getValue());
+        }
+        endGameIntent.putExtra("collectedCoins", collectedCoinsValues);
         endGameIntent.putExtra("playerId",playerId);
         startActivity(endGameIntent);
         this.finish();
