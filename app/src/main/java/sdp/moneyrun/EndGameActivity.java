@@ -42,6 +42,10 @@ public class EndGameActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param toMenu button to link
+    *  Call this on the button to make start the Menu activity
+     */
     private void linkToMenuButton(Button toMenu){
         toMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +57,10 @@ public class EndGameActivity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * @return the sum of the values of the coins collected during the game
+     */
     private int getTotalScore(){
         int totalScore = 0;
         for(int val: collectedCoinsValues){
@@ -60,6 +68,16 @@ public class EndGameActivity extends AppCompatActivity {
         }
         return totalScore;
     }
+
+
+    /**
+     * @param numCoins number of coins colelcted
+     * @param gameScore score of the game (sum of values of coins)
+     * @param succeeded (has managed to get the list of coins from the map activity
+     *
+*        Update the Text view to display the player's score if succeeded
+     *    Else shows that it failed to get the score
+     */
     public void updateText(int numCoins, int gameScore,boolean succeeded){
         StringBuilder textBuilder = new StringBuilder();
 
