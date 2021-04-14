@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -358,5 +359,26 @@ public class GameInstrumentedTest {
         targetLocation.setLongitude(20);
         assertEquals(new GameDbData(name, players, maxPlayers, targetLocation).getPlayers().get(0), getTestGame().getGameDbData().getPlayers().get(0));
     }
+
+    @Test
+    public void equalsFailsOnNull(){
+        Game g = getTestGame();
+        assertFalse(g.equals(null));
+    }
+
+    @Test
+    public void equalsWorksOnSameRef(){
+        Game g = getTestGame();
+        Game sameRef = g;
+        assertTrue(g.equals(sameRef));
+    }
+
+    /*On the matter of testing whether equals actually works, we already test in GameDbData that
+    it works, and the Game equals method is just a call to that. Besides to test Database things
+    we need the test file to be in the InstrumentedTest folder. To test with Mockito, we need the
+    test to be in the Unit test folder. So we cannot do both without heavily modifying the class,
+    and as stated, equals is already tested in GameDbData, and this equals is litterally just
+    a call to that one*/
+
 
 }
