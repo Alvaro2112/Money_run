@@ -33,7 +33,7 @@ public final class GameDbData {
         this.name = name;
         this.players = new ArrayList<>(players);
         this.maxPlayerNumber = maxPlayerNumber;
-        this.startLocation = new Location(startLocation);
+        this.startLocation = startLocation;
     }
 
 
@@ -62,7 +62,7 @@ public final class GameDbData {
     }
 
     public Location getStartLocation() {
-        return new Location(startLocation);
+        return startLocation;
     }
 
     /**

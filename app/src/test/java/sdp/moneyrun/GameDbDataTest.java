@@ -3,6 +3,10 @@ package sdp.moneyrun;
 import android.location.Location;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +16,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GameDbDataTest {
 
     GameDbData getTestData() {
@@ -28,6 +34,9 @@ public class GameDbDataTest {
         Location targetLocation = new Location("");//provider name is unnecessary
         return new GameDbData(name, players, maxPlayers, targetLocation);
     }
+
+    @Mock
+    Location mockLocation;
 
 
     @Test
@@ -167,6 +176,31 @@ public class GameDbDataTest {
         GameDbData g = getTestData();
         g.removePlayer(new Player(2, "Potter", "Nyon", 3, 4));
         assertEquals(expected, g.getPlayers());
+    }
+
+    @Test
+    public void equalsWorksAsIntended(){
+        String name = "game";
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        players.add(new Player(2, "Potter", "Nyon", 3, 4));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(1, 2));
+        int maxPlayers = 4;
+        mockLocation = Mockito.mock(Location.class);
+        when(mockLocation.getLatitude()).thenReturn(4.0);
+        when(mockLocation.getLongitude()).thenReturn(3.0);
+
+        GameDbData g = new GameDbData(name, players, maxPlayers, mockLocation);
+        GameDbData sameRef = g;
+        GameDbData sameContent = new GameDbData(g);
+
+        assertTrue(g.equals(sameRef));
+        assertFalse(g.equals(null));
+        assertTrue(g.equals(sameContent));
+
     }
 
 
