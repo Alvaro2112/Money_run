@@ -3,7 +3,10 @@ package sdp.moneyrun;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Objects;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -66,5 +69,26 @@ public class RiddleTest {
         assertEquals(possibleAnswers, riddle.getPossibleAnswers());
     }
 
+    @Test
+    public void EqualsCompleteTest(){
+        String question = "What is the color of the sky";
+        String correctAnswer = "blue";
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Riddle sameRef = riddle;
+        Riddle sameContent = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Riddle nul = null;
+        assertTrue(riddle.equals(sameRef));
+        assertTrue(riddle.equals(sameContent));
+        assertFalse(riddle.equals(nul));
+    }
+
+    @Test
+    public void hashWorks(){
+        String question = "What is the color of the sky";
+        String correctAnswer = "blue";
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        int hash = Objects.hash(question, correctAnswer, "blue", "green", "yellow", "brown");
+        assertEquals(hash, riddle.hashCode());
+    }
 
 }

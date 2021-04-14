@@ -3,12 +3,15 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,31 +40,32 @@ public class GameTest {
     }
 
 
-
-
     @Test
-    public void testStartGameDoesNotCrash() {
-        Game game = getTestGame();
-        game.startGame();
-        Game.startGame(game);
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void askPlayerQuestionShouldReturnFalse() {
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        Game game = getTestGame();
-        assertEquals(game.askPlayer(game.getGameDbData().getPlayers().get(0), riddleList.get(0)), false);
-    }
-
-
-    @Test
-    public void GameConstructorThrowsErrorOnNullArg(){
+    public void GameShortConstructorThrowsErrorOnNullArg(){
         try {
             Game g = new Game("name", new ArrayList<Player>(), 3, null);
         }catch(IllegalArgumentException e){
             assertTrue(true);
+        }
+    }
+
+    @Test
+    public void GameLongConstructorThrowsErrorOnNullArg(){
+        try {
+            Game g = new Game("name", new ArrayList<Player>(), 3, null, null, null);
+        }catch(IllegalArgumentException e){
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void GameLongConstructorWorksProperly(){
+        try {
+            List<Player> pList = new ArrayList<Player>();
+            pList.add(new Player(34));
+            Game g = new Game("name", pList, 3, new ArrayList<Riddle>(), new ArrayList<Coin>(), new Location(""));
+        }catch(IllegalArgumentException e){
+            fail();
         }
     }
 
@@ -101,6 +105,18 @@ public class GameTest {
         while(!dataTask.isComplete()){
             System.out.println("false");
         }
+    }
+
+    public void GameCannotBeAddedTwiceToDB(){
+        Game g = getTestGame();
+        g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String id = g.getGameId();
+        assertEquals(id, g.addToDB());
     }
 
 
@@ -205,6 +221,17 @@ public class GameTest {
     }
 
     @Test
+    public void setPlayersFailsOnEmptyList(){
+        Game g = getTestGame();
+        try{
+            g.setPlayers(new ArrayList<Player>());
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
+    }
+
+    @Test
     public void setPlayersSetsPlayersLocally(){
         Game g = getTestGame();
         List<Player> p = new ArrayList<>();
@@ -252,6 +279,34 @@ public class GameTest {
     }
 
     @Test
+    public void testStartGameDoesNotCrash() {
+        Game game = getTestGame();
+        game.startGame();
+        Game.startGame(game);
+        assertEquals(1, 1);
+    }
+
+    @Test
+    public void askPlayerFailsOnNull(){
+        Game g = getTestGame();
+        try{
+            g.askPlayer(null, null);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void askPlayerQuestionShouldReturnFalse() {
+        List<Riddle> riddleList = new ArrayList<>();
+        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        Game game = getTestGame();
+        assertEquals(game.askPlayer(game.getGameDbData().getPlayers().get(0), riddleList.get(0)), false);
+    }
+
+
+    @Test
     public void getGameDataReturnsGameData(){
         String name = "TestGame";
         List<Player> players = new ArrayList<>();
@@ -265,7 +320,7 @@ public class GameTest {
     }
 
     @Test
-    public void addListenerFailsOnNullArg(){
+    public void addGameListenerFailsOnNullArg(){
         try{
             Game g = getTestGame();
             g.addGameListener(null);
@@ -273,5 +328,32 @@ public class GameTest {
             return;
         }
         fail();
+    }
+
+    @Test
+    public void addGameListenerDoesntCrash(){
+       ValueEventListener v = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        Game g = getTestGame();
+        g.addToDB();
+        try{
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try{
+            g.addGameListener(v);
+        }catch (Exception e){
+            fail();
+        }
     }
 }

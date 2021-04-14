@@ -106,10 +106,11 @@ public final class GameDbData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameDbData gameDbData = (GameDbData) o;
-        return name.equals(gameDbData.name) &&
-                players.equals(gameDbData.players) &&
-                maxPlayerNumber.equals(gameDbData.maxPlayerNumber) &&
-                startLocation.equals(gameDbData.startLocation);
+        return name.equals(gameDbData.name)&& players.equals(gameDbData.players) &&
+                maxPlayerNumber.equals(gameDbData.maxPlayerNumber)&&
+                (startLocation.getLongitude() == gameDbData.startLocation.getLongitude()) &&
+                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude());
+
     }
 
     @Override

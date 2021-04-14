@@ -6,9 +6,12 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class GameDbDataTest {
 
@@ -60,6 +63,15 @@ public class GameDbDataTest {
     }
 
     @Test
+    public void copyConstructorWorksNormally(){
+        GameDbData g = getTestData();
+        GameDbData copy = new GameDbData(g);
+        assertEquals(g.getName(), copy.getName());
+        assertEquals(g.getPlayers(), copy.getPlayers());
+        assertEquals(g.getMaxPlayerNumber(), g.getMaxPlayerNumber());
+    }
+
+    @Test
     public void getNameReturnsName(){
         assertEquals("game", getTestData().getName());
     }
@@ -91,6 +103,16 @@ public class GameDbDataTest {
         assertThrows(IllegalArgumentException.class, () -> {
             getTestData().setPlayers(new ArrayList<Player>());
         });
+    }
+
+    @Test
+    public void setPlayersWorksNormally(){
+        GameDbData g = getTestData();
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(1, "Tony Stark", "Malibu", 3, 4));
+        players.add(new Player(2, "Pepper potts", "Stark tower", 3, 4));
+        g.setPlayers(players);
+        assertEquals(players, g.getPlayers());
     }
 
     @Test

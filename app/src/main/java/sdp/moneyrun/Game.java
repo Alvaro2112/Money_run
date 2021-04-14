@@ -46,15 +46,8 @@ public class Game {
         this.id = "";
     }
 
-    private Game(GameDbData data) {
-        if(data == null){throw new IllegalArgumentException("Argument is null");}
-        this.gameDbData = new GameDbData(data);
-        rootReference = FirebaseDatabase.getInstance().getReference();
-        this.hasBeenAdded = true;
-    }
-
     public Game(String name,List<Player> players,int maxPlayerNumber,List<Riddle> riddles,List<Coin> coins,Location startLocation){
-        if(name == null || players == null || startLocation == null) {
+        if(name == null || players == null || startLocation == null || riddles == null || coins == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         rootReference = FirebaseDatabase.getInstance().getReference();
@@ -203,7 +196,7 @@ public class Game {
     public void startGame() {}
 
     public boolean askPlayer(Player player, Riddle riddle) {
-        if(player == null || riddle == null){throw new NullPointerException();}
+        if(player == null || riddle == null){throw new IllegalArgumentException();}
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }

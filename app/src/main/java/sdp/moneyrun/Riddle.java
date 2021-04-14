@@ -20,11 +20,10 @@ public class Riddle {
      * @param correctAnswer   This is the unique correct answer to the question
      */
     public Riddle(String question, String correctAnswer, String firstAnswer, String secondAnswer, String thirdAnswer, String fourthAnswer) {
-        if (question == null || correctAnswer == null)
+        if (question == null || correctAnswer == null || firstAnswer == null ||
+                secondAnswer == null || thirdAnswer == null || fourthAnswer == null) {
             throw new IllegalArgumentException("Null arguments in Riddle constructor");
-        if (firstAnswer == null || secondAnswer == null || thirdAnswer == null || fourthAnswer == null)
-            throw new IllegalArgumentException("Null arguments in Riddle constructor");
-
+        }
         this.question = question;
         this.correctAnswer = correctAnswer;
         this.firstAnswer = firstAnswer;
@@ -32,11 +31,6 @@ public class Riddle {
         this.thirdAnswer = thirdAnswer;
         this.fourthAnswer = fourthAnswer;
     }
-
-    /**
-     * Needed for the DataBase
-     */
-    public Riddle(){}
 
     public String getQuestion() {
         return question;
@@ -46,36 +40,10 @@ public class Riddle {
         return correctAnswer;
     }
 
-
-
-
     // For some reason this method makes the DB
     public String[] getPossibleAnswers() {
         return new String[]{firstAnswer, secondAnswer, thirdAnswer, fourthAnswer};
     }
-
-    //////Needed for The DataBase Code
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public String getFirstAnswer() {
-        return firstAnswer;
-    }
-
-    public String getSecondAnswer() {
-        return secondAnswer;
-    }
-
-    public String getThirdAnswer() {
-        return thirdAnswer;
-    }
-
-    public String getFourthAnswer() {
-        return fourthAnswer;
-    }
-    //////////
-
 
     @Override
     public boolean equals(Object o) {
