@@ -212,6 +212,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setPutExtraArguments(Intent intent){
+        playerId = getIntent().getIntExtra("playerId",0);
+        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+
         intent.putExtra("playerId",playerId);
         intent.putExtra("playerId"+playerId,playerInfo);
     }

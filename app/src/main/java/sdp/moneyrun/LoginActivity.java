@@ -139,6 +139,9 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
+            menuIntent.putExtra("playerId",245);
+            String[] info = {"Name","Address","0","0"};
+            menuIntent.putExtra("playerId"+245,info);
             startActivity(menuIntent);
         }
     }
