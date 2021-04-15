@@ -81,6 +81,7 @@ public class GameInstrumentedTest {
         }
     }
 
+    @Test
     public void GameCannotBeAddedTwiceToDB(){
         Game g = getTestGame();
         g.addToDB();
