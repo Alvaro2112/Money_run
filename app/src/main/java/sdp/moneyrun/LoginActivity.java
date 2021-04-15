@@ -152,9 +152,10 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     menuIntent.putExtra("playerId", playerID);
                     Player p = db.getPlayerFromTask(task);
-                    String[] info = {p.getName(), p.getAddress(), "" + p.getNumberOfDiedGames(), "" + p.getNumberOfPlayedGames()};
+                    String[] info = null;
+                    if(p != null)
+                        info = new String[]{p.getName(), p.getAddress(), "" + p.getNumberOfDiedGames(), "" + p.getNumberOfPlayedGames()};
                     menuIntent.putExtra("playerId" + playerID, info);
-                    System.out.println("DOING ASYNCHROUSNOUS DATA TRANSFER of player with name " + p.getName());
                     startActivity(menuIntent);
                 }
             }
