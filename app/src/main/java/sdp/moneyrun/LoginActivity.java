@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -139,8 +140,27 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-            startActivity(menuIntent);
+            getPlayerFromDB(user.getUid().hashCode(),menuIntent);
         }
+    }
+    private void getPlayerFromDB(int playerID,Intent menuIntent){
+        DatabaseProxy db = new DatabaseProxy();
+        Task t = db.getPlayerTask(playerID);
+        t.addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if(task.isSuccessful()) {
+                    menuIntent.putExtra("playerId", playerID);
+                    Player p = db.getPlayerFromTask(task);
+                    String[] info = null;
+                    if(p != null)
+                        info = new String[]{p.getName(), p.getAddress(), "" + p.getNumberOfDiedGames(), "" + p.getNumberOfPlayedGames()};
+                    menuIntent.putExtra("playerId" + playerID, info);
+                    startActivity(menuIntent);
+                }
+            }
+        });
+
     }
 
     private boolean isEmailValid(CharSequence email) {

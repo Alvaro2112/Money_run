@@ -40,9 +40,10 @@ public class RegisterPlayerActivity extends AppCompatActivity {
     }
     private void setRegisterFieldsForNextActivity(){
         Random random = new Random();
-        int uniquePlayerID = random.nextInt();
-        while(uniquePlayerID < 0)
-            uniquePlayerID = random.nextInt();
+//        int uniquePlayerID = random.nextInt();
+//        while(uniquePlayerID < 0)
+//            uniquePlayerID = random.nextInt();
+        int uniquePlayerID = getIntent().getIntExtra("PlayerId",0);
         Player player = new Player(uniquePlayerID);
         player.setName(result[0]);
         player.setAddress(result[1]);
@@ -55,6 +56,11 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         //We are putting extra information so that once logged in the Player object can be properly instantiated
         menuIntent.putExtra("playerId",uniquePlayerID);
         menuIntent.putExtra("playerId"+uniquePlayerID,result);
+        Player p = new Player(uniquePlayerID);
+        p.setName(result[0]);
+        p.setAddress(result[1]);
+        DatabaseProxy databaseProxy = new DatabaseProxy();
+        databaseProxy.putPlayer(p);
         startActivity(menuIntent);
     }
     /*
