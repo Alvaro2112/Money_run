@@ -76,48 +76,16 @@ public class DatabaseProxyTest {
         db.addPlayerListener(player, null);
     }
 
-    @Test
-    public void addPlayerListenerCorrectlyUpdatesData(){
-        Player player = new Player(564123, "Johann", "FooBarr", 0 , 0 );
-        final DatabaseProxy db = new DatabaseProxy();
-        db.putPlayer(player);
-        String newName = "Simon";
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        db.addPlayerListener(player, new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
-                player.setName(p.getName(), false);
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
-            }
-        });
-        Player p = new Player(564123,newName,"FooBarr",0,0);
-        db.putPlayer(p);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        assert(player.getName().equals(newName));
-    }
 
     @Test
-    public void addPlayerListenerCorrectlyUpdatesDataCountdown(){
+    public void addPlayerListenerCorrectlyUpdates(){
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann", "FooBarr", 0, 0);
         final DatabaseProxy db = new DatabaseProxy();
-        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players");
-        dataB.setValue(player).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference();
+        dataB.child("players").setValue(player).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 added.countDown();
@@ -130,7 +98,7 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        db.addPlayerListener(player, new ValueEventListener() {
+        ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -143,7 +111,8 @@ public class DatabaseProxyTest {
             public void onCancelled(@NonNull DatabaseError error) {
                 assert(false);
             }
-        });
+        };
+        db.addPlayerListener(player, listener);
         Player p = new Player(564123,newName,"FooBarr",0,0);
         db.putPlayer(p);
         try {
@@ -160,6 +129,7 @@ public class DatabaseProxyTest {
 //            assert(false);
 //        }
         assertThat(player.getName(),is(newName));
+        db.removePlayerListener(player, listener);
 
     }
 

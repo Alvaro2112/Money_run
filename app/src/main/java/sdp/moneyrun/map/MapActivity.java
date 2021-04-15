@@ -3,6 +3,7 @@ package sdp.moneyrun.map;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.R;
@@ -51,8 +54,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final double ZOOM_FOR_FEATURES = 16.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
+    private  long ASYNC_CALL_TIMEOUT = 10L;
 
-    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "route cantonale");
+    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,11 +214,30 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom){
+        CountDownLatch moved = new CountDownLatch(1);
+        MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+                Log.e(TAG, "Camera movement was cancelled");
+            }
+
+            @Override
+            public void onFinish() {
+                moved.countDown();
+            }
+        };
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .zoom(zoom)
                 .build();
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+        try {
+            moved.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assert(moved.getCount() == 0);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        System.out.println("Moved is now " + moved.getCount());
     }
 
     /**
@@ -347,9 +370,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
         LatLng point = new LatLng(lat,lon);
-
-      //  moveCameraWithoutAnimation(lat, lon, ZOOM_FOR_FEATURES);
-
+        //CountDownLatch moved =
+        moveCameraWithoutAnimation(lat, lon, ZOOM_FOR_FEATURES);
+//        try {
+//            moved.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+//
+//            assert(moved.getCount() == 0);
+//        }catch (InterruptedException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//        System.out.println("Moved is now " + moved.getCount());
         // Convert LatLng coordinates to screen pixel and only query the rendered features.
         //This is because the query feature API function only accepts pixel as an arg
         final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
