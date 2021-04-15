@@ -55,9 +55,12 @@ public class PlayerBuilderInstrumentedTest {
         int playerId = r.nextInt();
         int numberOfDiedGames = r.nextInt();
         int numberOfPlayedGames = r.nextInt();
-        Player player = new Player(playerId, name, address, numberOfDiedGames, numberOfPlayedGames);
+        int score = r.nextInt();
+
+        Player player = new Player(playerId, name, address, numberOfDiedGames, numberOfPlayedGames,score);
         b.setPlayerId(playerId);
         b.setName(name);
+        b.setScore(score);
         b.setAddress(address);
         b.setNumberOfDiedGames(numberOfDiedGames);
         b.setNumberOfPlayedGames(numberOfPlayedGames);

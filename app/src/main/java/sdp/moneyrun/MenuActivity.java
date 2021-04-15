@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
@@ -106,6 +105,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+        mainIntent.putExtra("playerId",this.playerId);
         MenuActivity.this.startActivity(mainIntent);
         MenuActivity.this.finish();
         available.release();
