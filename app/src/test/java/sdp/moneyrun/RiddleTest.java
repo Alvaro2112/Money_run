@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -14,47 +15,33 @@ import static org.junit.Assert.fail;
 public class RiddleTest {
     @Test
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
-        try{
-            Riddle riddle = new Riddle(null, "blue", "green", "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle(null, "blue", "green", "yellow", "brown", "a");
+            });
 
-        try{
-            Riddle riddle = new Riddle("a", null, "green", "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle("color of the sky?", null, "green", "yellow", "brown", "a");
+            });
 
-        try{
-            Riddle riddle = new Riddle("a", "blue", null, "yellow", "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle("color of the sky?", "blue", null, "yellow", "brown", "a");
+            });
 
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", null, "brown", "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle("color of the sky?", "blue", "green", null, "brown", "a");
+            });
 
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", null, "a");
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle("color of the sky?", "blue", "green", "yellow", null, "a");
+            });
 
-        try{
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", "brown", null);
-            fail();
-        }catch (IllegalArgumentException e){
-            assertTrue(true);
-        }
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle("color of the sky?", "blue", "green", "yellow", "brown", null);
+            });
+
+            assertThrows(IllegalArgumentException.class, () -> {
+                new Riddle(null, "blue", "green", "yellow", "brown", "a");
+            });
     }
 
     @Test
