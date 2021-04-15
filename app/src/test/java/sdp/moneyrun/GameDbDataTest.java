@@ -29,7 +29,7 @@ public class GameDbDataTest {
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         List<Coin> coins = new ArrayList<>();
-        coins.add(new Coin(1, 2));
+        coins.add(new Coin(1, 2, 3));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         return new GameDbData(name, players, maxPlayers, targetLocation);
@@ -187,7 +187,7 @@ public class GameDbDataTest {
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         List<Coin> coins = new ArrayList<>();
-        coins.add(new Coin(1, 2));
+        coins.add(new Coin(1, 2, 3));
         int maxPlayers = 4;
         mockLocation = Mockito.mock(Location.class);
         when(mockLocation.getLatitude()).thenReturn(4.0);
