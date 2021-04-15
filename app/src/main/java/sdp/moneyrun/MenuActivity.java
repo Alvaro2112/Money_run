@@ -224,12 +224,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.profile_button:
-////                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PlayerProfileFragment()).commit();
-//                break;
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
     //To come back too later
 //    public void setPlayerObject(){

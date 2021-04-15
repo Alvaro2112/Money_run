@@ -20,8 +20,10 @@ public class Riddle {
      * @param correctAnswer   This is the unique correct answer to the question
      */
     public Riddle(String question, String correctAnswer, String firstAnswer, String secondAnswer, String thirdAnswer, String fourthAnswer) {
-        if (question == null || correctAnswer == null || firstAnswer == null ||
-                secondAnswer == null || thirdAnswer == null || fourthAnswer == null) {
+        if (question == null || correctAnswer == null) {
+            throw new IllegalArgumentException("Null arguments in Riddle constructor");
+        }
+        if(firstAnswer == null || secondAnswer == null || thirdAnswer == null || fourthAnswer == null){
             throw new IllegalArgumentException("Null arguments in Riddle constructor");
         }
         this.question = question;
