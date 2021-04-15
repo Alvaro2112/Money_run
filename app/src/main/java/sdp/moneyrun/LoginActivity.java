@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-            getPlayerFromDB(1236,menuIntent);
+            getPlayerFromDB(user.getUid().hashCode(),menuIntent);
         }
     }
     private void getPlayerFromDB(int playerID,Intent menuIntent){

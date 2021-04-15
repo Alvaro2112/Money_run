@@ -46,9 +46,10 @@ public class RegisterPlayerActivity extends AppCompatActivity {
     }
     private void setRegisterFieldsForNextActivity(){
         Random random = new Random();
-        int uniquePlayerID = random.nextInt();
-        while(uniquePlayerID < 0)
-            uniquePlayerID = random.nextInt();
+//        int uniquePlayerID = random.nextInt();
+//        while(uniquePlayerID < 0)
+//            uniquePlayerID = random.nextInt();
+        int uniquePlayerID = getIntent().getIntExtra("PlayerId",0);
         Player player = new Player(uniquePlayerID);
         player.setName(result[0]);
         player.setAddress(result[1]);
