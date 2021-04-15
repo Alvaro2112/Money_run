@@ -102,6 +102,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
         if(playerId != 0 && playerInfo != null && playerInfo.length>3)
         currentPlayer = new Player(playerId,playerInfo[0],playerInfo[1],Integer.parseInt(playerInfo[2]),Integer.parseInt(playerInfo[3]));
+
     }
 
     @Override
