@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -139,11 +140,26 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-            menuIntent.putExtra("playerId",245);
-            String[] info = {"Name","Address","0","0"};
-            menuIntent.putExtra("playerId"+245,info);
-            startActivity(menuIntent);
+            getPlayerFromDB(1236,menuIntent);
         }
+    }
+    private void getPlayerFromDB(int playerID,Intent menuIntent){
+        DatabaseProxy db = new DatabaseProxy();
+        Task t = db.getPlayerTask(playerID);
+        t.addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if(task.isSuccessful()) {
+                    menuIntent.putExtra("playerId", playerID);
+                    Player p = db.getPlayerFromTask(task);
+                    String[] info = {p.getName(), p.getAddress(), "" + p.getNumberOfDiedGames(), "" + p.getNumberOfPlayedGames()};
+                    menuIntent.putExtra("playerId" + playerID, info);
+                    System.out.println("DOING ASYNCHROUSNOUS DATA TRANSFER of player with name " + p.getName());
+                    startActivity(menuIntent);
+                }
+            }
+        });
+
     }
 
     private boolean isEmailValid(CharSequence email) {

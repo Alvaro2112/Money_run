@@ -49,6 +49,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFInished;
+    private Player currentPlayer;
 
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -96,6 +97,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Button newGame = findViewById(R.id.new_game);
         newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
+
+        //Setting the current player object
+        playerId = getIntent().getIntExtra("playerId",0);
+        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        currentPlayer = new Player(playerId,playerInfo[0],playerInfo[1],Integer.parseInt(playerInfo[2]),Integer.parseInt(playerInfo[3]));
     }
 
     @Override
@@ -212,8 +218,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setPutExtraArguments(Intent intent){
-        playerId = getIntent().getIntExtra("playerId",0);
-        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
 
         intent.putExtra("playerId",playerId);
         intent.putExtra("playerId"+playerId,playerInfo);

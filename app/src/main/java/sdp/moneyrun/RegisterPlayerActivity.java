@@ -61,6 +61,11 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         //We are putting extra information so that once logged in the Player object can be properly instantiated
         menuIntent.putExtra("playerId",uniquePlayerID);
         menuIntent.putExtra("playerId"+uniquePlayerID,result);
+        Player p = new Player(uniquePlayerID);
+        p.setName(result[0]);
+        p.setAddress(result[1]);
+        DatabaseProxy databaseProxy = new DatabaseProxy();
+        databaseProxy.putPlayer(p);
         startActivity(menuIntent);
     }
     /*
