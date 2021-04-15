@@ -33,7 +33,7 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
 
@@ -50,7 +50,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
                 assertEquals( a.getLdbAdapter().getCount(), 6);
@@ -77,11 +77,11 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
 
                 //Address was not set here before I don't know why
-                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
+                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
                 player2.setScore(8001,false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
@@ -102,11 +102,11 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0);
+                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
 
                 //Address was not set here before I don't know why
-                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0);
+                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
                 player2.setScore(8001, false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
@@ -133,6 +133,13 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 boolean check = false;
+                try {
+                    Thread.sleep(5000);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    assertEquals(-2,1);
+                }
                 for(Player p : a.getPlayerList()){
                     if(p.getName().equals("Dummy Player 4"))
                         check = true;

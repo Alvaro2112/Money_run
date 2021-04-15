@@ -30,8 +30,8 @@ public class GameInstrumentedTest {
     Game getTestGame() {
         String name = "TestGame";
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
-        players.add(new Player(2, "Potter", "Nyon", 3, 4));
+        players.add(new Player(1, "James", "Lausanne", 3, 4, 0));
+        players.add(new Player(2, "Potter", "Nyon", 3, 4, 0));
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         int maxPlayers = 4;
@@ -114,8 +114,8 @@ public class GameInstrumentedTest {
             fail();
         }
         List<Player> playerss = new ArrayList<>();
-        playerss.add(new Player(5, "Ron", "Zurich", 3, 4));
-        playerss.add(new Player(6, "Wisley", "Amsterdam", 3, 4));
+        playerss.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
+        playerss.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
         ref.child("open_games").child(id).child("players").setValue(playerss);
         try {
             Thread.sleep(2000);
@@ -210,8 +210,8 @@ public class GameInstrumentedTest {
     public void setPlayersSetsPlayersLocally(){
         Game g = getTestGame();
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102);
+        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p);
@@ -228,8 +228,8 @@ public class GameInstrumentedTest {
             e.printStackTrace();
         }
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102);
+        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p);
@@ -352,8 +352,8 @@ public class GameInstrumentedTest {
     public void getGameDataReturnsGameData(){
         String name = "TestGame";
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
-        players.add(new Player(2, "Potter", "Nyon", 3, 4));
+        players.add(new Player(1, "James", "Lausanne", 3, 4, 0));
+        players.add(new Player(2, "Potter", "Nyon", 3, 4, 0));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
         targetLocation.setLatitude(10);

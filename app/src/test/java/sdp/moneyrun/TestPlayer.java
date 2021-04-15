@@ -8,7 +8,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
-    Player player = new Player(1,"Bob", "New York",0,0);
+    Player player = new Player(1,"Bob", "New York",0,0,0);
 
     @Test
     public void InstancePlayerWorks(){
@@ -55,7 +55,7 @@ public class TestPlayer {
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
         String name = "BaaaRRfF";
-        Player player = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames);
+        Player player = new Player(playerId, name, address, nbrOfDiedGames, nbrOfPlayedGames,0);
         assertEquals(player.hashCode(),
                 Objects.hash(playerId, name, address, nbrOfPlayedGames, nbrOfDiedGames));
     }
@@ -67,7 +67,7 @@ public class TestPlayer {
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
         String name = "BaaaRRfF";
-        Player player1 = new Player(playerId,name,address,0,0);
+        Player player1 = new Player(playerId,name,address,0,0,0);
 
         assert (!player1.equals(null));
     }
@@ -81,7 +81,7 @@ public class TestPlayer {
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        Player p = new Player(playerId, name, address, died, played);
+        Player p = new Player(playerId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -93,7 +93,7 @@ public class TestPlayer {
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        Player p = new Player(playerId, name, address, died, played);
+        Player p = new Player(playerId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -105,7 +105,7 @@ public class TestPlayer {
         String name = null;
         int played = r.nextInt();
         int died = r.nextInt();
-        Player p = new Player(playerId, name, address, died, played);
+        Player p = new Player(playerId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -117,7 +117,7 @@ public class TestPlayer {
         String name = "";
         int played = r.nextInt();
         int died = r.nextInt();
-        Player p = new Player(playerId, name, address, died, played);
+        Player p = new Player(playerId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -128,12 +128,12 @@ public class TestPlayer {
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        Player p = new Player(playerId, name, address, died, played);
+        Player p = new Player(playerId, name, address, died, played,0);
     }
 
     @Test
     public void setNumberDiedGamesUpdatesAttributeCorrectly(){
-        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0,0);
         int died = 43;
         p.setNumberOfDiedGames(died);
         assertEquals(died, p.getNumberOfDiedGames());
@@ -141,7 +141,7 @@ public class TestPlayer {
 
     @Test
     public void setNumberPlayedGamesUpdatesAttributeCorrectly(){
-        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0,0);
         int played = 43;
         p.setNumberOfPlayedGames(played);
         assertEquals(played, p.getNumberOfPlayedGames());
@@ -149,7 +149,7 @@ public class TestPlayer {
 
     @Test
     public void setAddressCorrectlyUpdatesAddress(){
-        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0,0);
         String address = "Foobar";
         p.setAddress(address);
         assertEquals(address, p.getAddress());
@@ -158,7 +158,7 @@ public class TestPlayer {
 
     @Test
     public void setNameCorrectlyUpdatesName(){
-        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0,0);
         String address = "Foobar";
         p.setName(address);
         assertEquals(address, p.getName());
@@ -167,7 +167,7 @@ public class TestPlayer {
 
     @Test
     public void setScoreCorrectlyUpdatesScore(){
-        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0);
+        Player p = new Player(123, "STUFF", "OTHER stuff", 0,0,0);
         int score = 8;
         p.setScore(score);
         assertEquals(score, p.getScore());

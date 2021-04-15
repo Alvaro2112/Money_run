@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,6 +48,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFInished;
+    private Player currentPlayer;
 
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -96,6 +96,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Button newGame = findViewById(R.id.new_game);
         newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
+
+        //Setting the current player object
+        playerId = getIntent().getIntExtra("playerId",0);
+        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
+        if(playerId != 0 && playerInfo != null && playerInfo.length>3)
+        currentPlayer = new Player(playerId,playerInfo[0],playerInfo[1],Integer.parseInt(playerInfo[2]),Integer.parseInt(playerInfo[3]));
     }
 
     @Override
@@ -106,6 +112,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
+        mainIntent.putExtra("playerId",this.playerId);
         MenuActivity.this.startActivity(mainIntent);
         MenuActivity.this.finish();
         available.release();
@@ -212,6 +219,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setPutExtraArguments(Intent intent){
+
         intent.putExtra("playerId",playerId);
         intent.putExtra("playerId"+playerId,playerInfo);
     }

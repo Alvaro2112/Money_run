@@ -29,12 +29,9 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
 
         if (activity != null) {
             Location location = result.getLastLocation();
-            if (location == null) {
-                return;
-            }
             // changed from the original one to have less getLastLocation !!
             // Pass the new location to the Maps SDK's LocationComponent
-            if (activity.getMapboxMap() != null) {
+            if (activity.getMapboxMap() != null && location != null) {
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                 activity.checkObjectives(location);
             }
