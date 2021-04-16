@@ -334,6 +334,11 @@ public class MapInstrumentedTest {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.close_map)).perform(ViewActions.click());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             assertEquals(Lifecycle.State.DESTROYED, scenario.getState());
 
             Intents.release();
