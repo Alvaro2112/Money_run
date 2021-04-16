@@ -95,7 +95,9 @@ public class Game {
     }
 
     // Launched when create game button is pressed
-    public void startGame(){}
+    public void startGame(){
+
+    }
 
     public static void startGame(Game game){
         game.startGame();
