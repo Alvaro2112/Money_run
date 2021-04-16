@@ -100,17 +100,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private void initChronometer(){
         chronometer = (Chronometer) findViewById(R.id.mapChronometer);
         chronometer.start();
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                if(chronometerCounter < GAME_TIME){
-                    chronometerCounter += 1;
-                }
-                else{
-                    endGame();
-                }
-                chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
+        chronometer.setOnChronometerTickListener(chronometer -> {
+            if(chronometerCounter < GAME_TIME){
+                chronometerCounter += 1;
             }
+            else{
+                endGame();
+            }
+            chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
         });
     }
 
