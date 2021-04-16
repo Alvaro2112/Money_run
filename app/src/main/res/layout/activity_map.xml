@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".map.MapActivity">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -14,41 +16,66 @@
         mapbox:mapbox_cameraTargetLng="6.6"
         mapbox:mapbox_cameraZoom="7.2">
 
-        <Chronometer
-            android:id="@+id/mapChronometer"
-            android:layout_width="95dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/layout_rounded"
-            android:countDown="false"
-            android:enabled="true"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            android:textStyle="bold"></Chronometer>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MenuActivity">
 
-        <Button
-            android:id="@+id/close_map"
-            android:layout_width="30dp"
-            android:layout_height="28dp"
-            android:layout_marginLeft="350dp"
-            android:layout_marginTop="6dp"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:background="@drawable/roundedbutton"
-            android:text="x" />
+            <Chronometer
+                android:id="@+id/mapChronometer"
+                android:layout_width="95dp"
+                android:layout_height="35dp"
+                android:background="@drawable/layout_rounded"
+                android:countDown="false"
+                android:enabled="true"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.015"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.01"
+                ></Chronometer>
 
-        <Button
-            android:id="@+id/new_question"
-            android:layout_width="105dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="6dp"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:background="@drawable/layout_rounded"
-            android:text="new_question" />
+            <Button
+                android:id="@+id/close_map"
+                android:layout_width="25dp"
+                android:layout_height="28dp"
+                android:layout_gravity="left"
+                android:background="@drawable/roundedbutton"
+                android:text="x"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.989"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.006" />
+
+            <Button
+                android:id="@+id/new_question"
+                android:layout_width="105dp"
+                android:layout_height="35dp"
+                android:background="@drawable/layout_rounded"
+                android:text="new_question"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.405"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.008" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
