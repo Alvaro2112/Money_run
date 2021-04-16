@@ -179,7 +179,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a->{
                 Location curloc = a.getCurrentLocation();
                 Coin coin = new Coin(curloc.getLatitude()/2,curloc.getLongitude()/2,1);
-                a.addCoin(coin); 
+                a.addCoin(coin);
                 Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
                 a.addCoin(coin2);
             });
