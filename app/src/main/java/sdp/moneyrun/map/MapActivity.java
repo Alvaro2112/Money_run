@@ -182,7 +182,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     Game.endGame(collectedCoins, playerId, MapActivity.this);
                 }
                 chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
-            }
         });
     }
 
