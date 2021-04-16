@@ -18,19 +18,56 @@ public class Game {
     private List<Player> players;
     private int maxPlayerCount;
     private List<Riddle> riddles;
-    private Location startLocation; //TODO: check if we will use the existing or create a new class Location
+    private final Location startLocation; //TODO: check if we will use the existing or create a new class Location
     private List<Coin> coins;
+    private boolean isVisible;
 
-    public Game(String gameId, String name, List<Player> players, int maxPlayerCount, List<Riddle> riddles, List<Coin> coins, Location startLocation) {
-        if (players == null || riddles == null || startLocation == null)
-            throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
+    public Game(String gameId,
+                String name,
+                List<Player> players,
+                int maxPlayerCount,
+                List<Riddle> riddles,
+                List<Coin> coins,
+                Location startLocation) {
+        if(gameId == null){
+            throw new IllegalArgumentException("Game id should not be null.");
+        }
+        if(name == null){
+            throw new IllegalArgumentException("Game name should not be null.");
+        }
+        if(players == null){
+            throw new IllegalArgumentException("Players should not be null.");
+        }
+        if(riddles == null){
+            throw new IllegalArgumentException("Riddles should not be null.");
+        }
+        if(coins == null){
+            throw new IllegalArgumentException("Coins should not be null.");
+        }
+        if(startLocation  == null){
+            throw new IllegalArgumentException("Start location should not be null.");
+        }
+
+        this.isVisible = true;
         this.gameId = gameId;
         this.name = name;
         this.players = players;
         this.maxPlayerCount = maxPlayerCount;
         this.riddles = riddles;
-        this.startLocation = startLocation;
         this.coins = coins;
+        this.startLocation = startLocation;
+    }
+
+    public Game(String gameId,
+                String name,
+                boolean isVisible,
+                List<Player> players,
+                int maxPlayerCount,
+                List<Riddle> riddles,
+                List<Coin> coins,
+                Location startLocation) {
+        this(gameId, name, players, maxPlayerCount, riddles, coins, startLocation);
+        this.isVisible = isVisible;
     }
 
     public String getGameId(){
@@ -41,6 +78,10 @@ public class Game {
         return name;
     }
 
+    public boolean getIsVisible(){
+        return isVisible;
+    }
+
     public int getPlayerCount(){
         return players.size();
     }
@@ -49,10 +90,13 @@ public class Game {
         return maxPlayerCount;
     }
 
-    // Launched when create game button is pressed
-    public void startGame(){
-
+    public void setIsVisible(boolean isVisible){
+        this.isVisible = isVisible;
     }
+
+    // Launched when create game button is pressed
+    public void startGame(){}
+
     public static void startGame(Game game){
         game.startGame();
     }
@@ -74,6 +118,4 @@ public class Game {
         int index = (int)(Math.random() * (riddles.size()));
         return riddles.get(index);
     }
-
-
 }

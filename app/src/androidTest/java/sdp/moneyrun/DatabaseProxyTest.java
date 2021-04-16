@@ -37,14 +37,11 @@ public class DatabaseProxyTest {
 
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
       //  Thread.sleep(1000);
-        testTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(task.isSuccessful()) {
-                   assert( player.equals(db.getPlayerFromTask(testTask)));
-                }else{
-                    assert (false);
-                }
+        testTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+               assert( player.equals(db.getPlayerFromTask(testTask)));
+            }else{
+                assert (false);
             }
         });
         while(!testTask.isComplete()){
@@ -83,13 +80,10 @@ public class DatabaseProxyTest {
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
         final DatabaseProxy db = new DatabaseProxy();
-        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference().child("players").child(String.valueOf(player.getPlayerId()));
-        dataB.setValue(player).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                added.countDown();
-            }
-        });
+
+        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players");
+        dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
+
         String newName = "Simon";
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
