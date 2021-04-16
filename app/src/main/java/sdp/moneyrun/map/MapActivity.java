@@ -1,14 +1,10 @@
 package sdp.moneyrun.map;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -16,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -31,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.Coin;
-import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.Game;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -46,9 +39,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final int GAME_TIME = 10000;
     private static final double THRESHOLD_DISTANCE = 5.;
     private static int chronometerCounter = 0;
-    private Chronometer chronometer;
     private final List<Coin> remainingCoins = new ArrayList<>();
     private final List<Coin> collectedCoins = new ArrayList<>();
+    private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
@@ -165,7 +158,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return currentLocation;
     }
 
-    public int getPlayerId() {return playerId;}
+    public int getPlayerId() {
+        return playerId;
+    }
 
     /**
      * The chronometer will countdown from the maximum time of a game to 0
@@ -173,16 +168,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private void initChronometer() {
         chronometer = findViewById(R.id.mapChronometer);
         chronometer.start();
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
+        chronometer.setOnChronometerTickListener(chronometer -> {
                 if (chronometerCounter < GAME_TIME) {
                     chronometerCounter += 1;
                 } else {
                     Game.endGame(collectedCoins, playerId, MapActivity.this);
                 }
-                chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
-            }
+                chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
         });
     }
 

@@ -4,24 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
     private final String gameId;
     private final String name;
-    private List<Player> players;
-    private int maxPlayerCount;
-    private List<Riddle> riddles;
-    private Location startLocation; //TODO: check if we will use the existing or create a new class Location
-    private List<Coin> coins;
+    private final List<Player> players;
+    private final int maxPlayerCount;
+    private final List<Riddle> riddles;
+    private final Location startLocation; //TODO: check if we will use the existing or create a new class Location
+    private final List<Coin> coins;
 
     public Game(String gameId, String name, List<Player> players, int maxPlayerCount, List<Riddle> riddles, List<Coin> coins, Location startLocation) {
         if (players == null || riddles == null || startLocation == null)
@@ -35,32 +30,8 @@ public class Game {
         this.coins = coins;
     }
 
-    public String getGameId(){
-        return gameId;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public int getPlayerCount(){
-        return players.size();
-    }
-
-    public int getMaxPlayerCount(){
-        return maxPlayerCount;
-    }
-
-    // Launched when create game button is pressed
-    public void startGame(){
-
-    }
-    public static void startGame(Game game){
+    public static void startGame(Game game) {
         game.startGame();
-    }
-    public boolean askPlayer(Player player, Riddle riddle){
-        String playerResponse = player.ask(riddle.getQuestion());
-        return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
     public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {
@@ -75,20 +46,42 @@ public class Game {
         currentActivity.finish();
     }
 
+    public String getGameId() {
+        return gameId;
+    }
 
+    public String getName() {
+        return name;
+    }
 
+    public int getPlayerCount() {
+        return players.size();
+    }
+
+    public int getMaxPlayerCount() {
+        return maxPlayerCount;
+    }
+
+    // Launched when create game button is pressed
+    public void startGame() {
+
+    }
+
+    public boolean askPlayer(Player player, Riddle riddle) {
+        String playerResponse = player.ask(riddle.getQuestion());
+        return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
+    }
 
     /**
-     *
      * @return returns a random riddle from all the possible riddles
      */
-    public Riddle getRandomRiddle(){
+    public Riddle getRandomRiddle() {
 
-        if(riddles.isEmpty()){
+        if (riddles.isEmpty()) {
             return null;
         }
 
-        int index = (int)(Math.random() * (riddles.size()));
+        int index = (int) (Math.random() * (riddles.size()));
         return riddles.get(index);
     }
 
