@@ -110,6 +110,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
+    
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
         mainIntent.putExtra("playerId",this.playerId);
