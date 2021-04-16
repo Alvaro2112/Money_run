@@ -1,14 +1,16 @@
 package sdp.moneyrun;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 
 
-
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 
 // The entirety of the game logic should be implemented in this class
@@ -60,6 +62,21 @@ public class Game {
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
+
+    public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {
+        Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
+        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
+        for (int i = 0; i < collectedCoins.size(); ++i) {
+            collectedCoinsValues.add(collectedCoins.get(i).getValue());
+        }
+        endGameIntent.putExtra("collectedCoins", collectedCoinsValues);
+        endGameIntent.putExtra("playerId", playerId);
+        currentActivity.startActivity(endGameIntent);
+        currentActivity.finish();
+    }
+
+
+
 
     /**
      *

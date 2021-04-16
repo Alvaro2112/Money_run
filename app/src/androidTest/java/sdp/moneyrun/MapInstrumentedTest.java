@@ -303,7 +303,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a->{
-                a.endGame();
+                Game.endGame(a.getCollectedCoins(), a.getPlayerId(), a);
             });
             try {
                 Thread.sleep(5000);
