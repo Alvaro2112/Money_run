@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -49,6 +50,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
+
+    private Button exitButton;
+    private Button questionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +71,41 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             riddleDb = RiddlesDatabase.getInstance();
         }
 
+        exitButton = findViewById(R.id.close_map);
+        questionButton = findViewById(R.id.new_question);
+
+        addExitButton();
+        addQuestionButton();
+
 
 
     }
+
+    /**
+     * Add the functionality of leaving the map Activity
+     */
+    private void addExitButton(){
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    /**
+     * Add functionalities to the question button so that we can see random questions popup
+     * */
+    private void addQuestionButton(){
+        questionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
+            }
+        });
+    }
+
+
 
     /**
      * @param mapboxMap the map where everything will be done
