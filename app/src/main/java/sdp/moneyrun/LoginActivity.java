@@ -156,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                     if(p != null)
                         info = new String[]{p.getName(), p.getAddress(), "" + p.getNumberOfDiedGames(), "" + p.getNumberOfPlayedGames()};
                     menuIntent.putExtra("playerId" + playerID, info);
+                    System.out.println("GOOOOOOOOING TO MENU"+p.getName());
                     startActivity(menuIntent);
                 }
             }
