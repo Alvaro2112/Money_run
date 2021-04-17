@@ -8,10 +8,12 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import sdp.moneyrun.map.MapActivity;
 
@@ -21,7 +23,21 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.assertEquals;
 
 public class MapInstrumentedTest {
+private CountDownLatch moved =null;
+    double minZoomForBuilding = 15.;
 
+private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback() {
+    @Override
+    public void onCancel() {
+        assert(false);
+    }
+
+    @Override
+    public void onFinish() {
+        assert(moved != null && moved.getCount() > 0);
+        moved.countDown();
+    }
+};
 
 
     @Test
@@ -35,7 +51,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a ->{
-                a.moveCameraTo(lat,lon,0);
+                a.moveCameraTo(lat,lon);
             });
             try {
                 Thread.sleep(10000);
@@ -320,21 +336,20 @@ public class MapInstrumentedTest {
 
     @Test
     public void LakeLemanIsDetectedAsInappropriateTest(){
-        double minZoomForBuilding = 16.;
         double lat =46.49396808615545;
         double lon =   6.638823143919147;
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            scenario.onActivity(a-> {
-//                a.moveCameraTo((float) lat, (float) lon, minZoomForBuilding);
-//            });
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
             try{
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -349,23 +364,22 @@ public class MapInstrumentedTest {
 
     @Test
     public void SwissPlasmaCenterIsDetectedAsInappropriateTest(){
-        double minZoomForBuilding = 16.;
         double lat =46.517583898897826;
         double lon =    6.565050387400619;
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            scenario.onActivity(a-> {
-//                a.moveCameraTo((float) lat, (float) lon, minZoomForBuilding);
-//            });
-            try{
+            try {
                 Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation( lat,  lon, minZoomForBuilding);
+            });
+            try{
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -379,21 +393,20 @@ public class MapInstrumentedTest {
 
     @Test
     public void RandomBuildingIsDetectedAsInappropriateTest(){
-        double minZoomForBuilding = 16.;
         double lat =46.517396499876476;
         double lon =     6.645705058098468;
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            scenario.onActivity(a-> {
-//                a.moveCameraTo((float) lat, (float) lon, minZoomForBuilding);
-//            });
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
             try{
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
@@ -415,22 +428,22 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            scenario.onActivity(a-> {
-//                a.moveCameraTo((float) lat, (float) lon, minZoomForBuilding);
-//            });
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
             try{
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             scenario.onActivity(a ->{
-            //    a.isLocationAppropriate(location);
-              //  assert(a.isLocationAppropriate(location));
+                a.isLocationAppropriate(location);
+                assert(a.isLocationAppropriate(location));
                 //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
             try{
@@ -443,7 +456,6 @@ public class MapInstrumentedTest {
 
     @Test
     public void RandomFreePlaceIsDetectedAsAppropriateTest(){
-        double minZoomForBuilding = 16.;
         double lat =46.51192799046872;
         double lon =     6.619113183264966;
         Location location = new Location("");
@@ -456,20 +468,141 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a-> {
-                a.moveCameraTo((float) lat, (float) lon, minZoomForBuilding);
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
             });
             try{
-                Thread.sleep(2000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             scenario.onActivity(a ->{
-                   // a.isLocationAppropriate(location);
-               //assert(a.isLocationAppropriate(location));
+                    a.isLocationAppropriate(location);
+               assert(a.isLocationAppropriate(location));
                 //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
+
+    @Test
+    public void sportCenterIsDetectedAsInappropriateTest(){
+        double lat =46.511488;
+        double lon =6.618642;
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lon);
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
+            try{
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a ->{
+                a.isLocationAppropriate(location);
+                assert(!a.isLocationAppropriate(location));
+                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
+            });
+        }
+    }
+
+    @Test
+    public void RouteCantonaleIsDetectedAsInappropriateTest(){
+        double lat =46.517319;
+        double lon =6.568376;
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lon);
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
+            try{
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a ->{
+                a.isLocationAppropriate(location);
+                assert(!a.isLocationAppropriate(location));
+                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
+            });
+        }
+    }
+
+    @Test
+    public void highwayIsDetectedAsInappropriateTest(){
+        double lat =46.526493;
+        double lon =6.580576;
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lon);
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a-> {
+                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+            });
+            try{
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a ->{
+                a.isLocationAppropriate(location);
+                assert(!a.isLocationAppropriate(location));
+                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
+            });
+        }
+    }
+
+    @Test
+    public void placingCoins() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a -> {
+                a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+            });
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a -> {
+                int numberOfCoins = 7;
+                a.placeRandomCoins(numberOfCoins, 100);
+                assertEquals(a.getRemainingCoins().size(), numberOfCoins);
+            });
+//            try {
+//                Thread.sleep(10000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
+
+    }
+
+
 
 
 }

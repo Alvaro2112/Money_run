@@ -3,7 +3,6 @@ package sdp.moneyrun.map;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +29,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.R;
@@ -54,9 +51,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final double ZOOM_FOR_FEATURES = 16.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
     private  long ASYNC_CALL_TIMEOUT = 10L;
 
-    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale");
+    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,39 +203,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
-    public void moveCameraTo(float latitude, float longitude, double zoom){
+    public void moveCameraTo(float latitude, float longitude){
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
-                .zoom(zoom)
                 .build();
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
     public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom){
-        CountDownLatch moved = new CountDownLatch(1);
-        MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback() {
-            @Override
-            public void onCancel() {
-                Log.e(TAG, "Camera movement was cancelled");
-            }
-
-            @Override
-            public void onFinish() {
-                moved.countDown();
-            }
-        };
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .zoom(zoom)
                 .build();
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
-        try {
-            moved.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assert(moved.getCount() == 0);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-        System.out.println("Moved is now " + moved.getCount());
     }
 
     /**
@@ -301,45 +279,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return min_index;
     }
 
-    public List<Coin> getRandomlyPlacedCoins (int number, int radius, long seed){
+    public void placeRandomCoins (int number, int radius){
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
-        ArrayList<Coin> coins = new ArrayList<>();
         for(int i = 0; i<number; i++){
             Location loc = null;
             do{
-               loc = getRandomLocation(radius, seed);
+               loc = RandomLocation.getRandomLocation(currentLocation,radius);
             }while(!isLocationAppropriate(loc));
-            coins.add(new Coin(loc.getLatitude(),loc.getLongitude()));
+          //  loc = RandomLocation.getRandomLocation(currentLocation, radius);
+            remainingCoins.add(new Coin(loc.getLatitude(),loc.getLongitude()));
         }
-        return coins;
-    }
-
-    public Location getRandomLocation(int radius, long seed){
-        if(radius<=0) throw new IllegalArgumentException();
-        double lat = currentLocation.getLatitude();
-        double lon = currentLocation.getLongitude();
-        Random random = new Random(seed);
-        double latDifference = random.nextDouble()*radius;
-        double lonDifference = random.nextDouble()*radius;
-        Location location = new Location("");
-        location.setLongitude(lon + lonDifference);
-        location.setLatitude(lat + latDifference);
-        return location;
     }
 
     public boolean isLocationAppropriate(Location location){
         List<Feature> features = getFeatureAtLocation(location);
         boolean hasAtLeastAProperty = false;
-        String [] relevantFields = new String[] {"type", "class", "name"};
         if(features.size() > 0) {
             for (Feature feature : features) {
-                System.out.println("Feature is " + feature);
                 if (feature != null && feature.properties() != null){
                     if(!feature.properties().toString().equals("{}")){
                         hasAtLeastAProperty = true;
                     }//If none of the feature has a property field, it's probably a body of water
 
-                    System.out.println(feature.properties().toString());
                     if(!checkIndividualFeature(feature)) return false; //A feature was deemed inappropriate
                 }// Advised by MapBox
 
@@ -356,7 +317,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         for (String field : relevantFields){
             if (feature.properties().has(field) ) {
                 String locationType = feature.properties().get(field).toString();
-                System.out.println("Finally got there " + locationType.trim());
                 if(INAPPROPRIATE_LOCATIONS.contains(locationType.substring(1, locationType.length()-1).toLowerCase())){
                     return false;
                 }
@@ -370,25 +330,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
         LatLng point = new LatLng(lat,lon);
-        //CountDownLatch moved =
-        moveCameraWithoutAnimation(lat, lon, ZOOM_FOR_FEATURES);
-//        try {
-//            moved.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-//
-//            assert(moved.getCount() == 0);
-//        }catch (InterruptedException e){
-//            e.printStackTrace();
-//            return null;
-//        }
-//        System.out.println("Moved is now " + moved.getCount());
+
         // Convert LatLng coordinates to screen pixel and only query the rendered features.
         //This is because the query feature API function only accepts pixel as an arg
         final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
 
 
-        System.out.println(mapboxMap.getProjection().fromScreenLocation(pixel));
         List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
-        System.out.println(features.size());
         return features;
     }
 }
