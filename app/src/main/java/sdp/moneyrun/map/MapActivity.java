@@ -1,6 +1,7 @@
 package sdp.moneyrun.map;
 
 import android.graphics.PointF;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import sdp.moneyrun.Coin;
+
+import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 import sdp.moneyrun.RiddlesDatabase;
@@ -42,7 +46,8 @@ this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final String TAG = MapActivity.class.getSimpleName();
-    private static final int GAME_TIME = 100;
+    private static final int GAME_TIME = 10000;
+
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();
@@ -55,9 +60,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private  long ASYNC_CALL_TIMEOUT = 10L;
 
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
+    private int playerId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        playerId = (int)getIntent().getIntExtra("playerId",0);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState,R.id.mapView,R.layout.activity_map);
         mapView.getMapAsync(this);
@@ -105,19 +112,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private void initChronometer(){
         chronometer = (Chronometer) findViewById(R.id.mapChronometer);
         chronometer.start();
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                if(chronometerCounter < GAME_TIME){
-                    chronometerCounter += 1;
-                }
-                else{
-                }
-                chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
+        chronometer.setOnChronometerTickListener(chronometer -> {
+            if(chronometerCounter < GAME_TIME){
+                chronometerCounter += 1;
             }
+            else{
+                endGame();
+            }
+            chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
         });
     }
 
+    public void endGame() {
+        Intent endGameIntent = new Intent(this, EndGameActivity.class);
+        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
+        for(int i= 0; i < collectedCoins.size();++i){
+            collectedCoinsValues.add(collectedCoins.get(i).getValue());
+        }
+        endGameIntent.putExtra("collectedCoins", collectedCoinsValues);
+        endGameIntent.putExtra("playerId",playerId);
+        startActivity(endGameIntent);
+        this.finish();
+    }
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
 
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
@@ -178,7 +194,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
         remainingCoins.add(coin);
-        symbolManager.create(coin.getSymbolOption());
+
+        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(),coin.getLongitude())));
     }
 
     /**

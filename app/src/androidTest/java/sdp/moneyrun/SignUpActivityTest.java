@@ -72,7 +72,7 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            Thread.sleep(1000);
+            Thread.sleep(4000);
             intended(hasComponent(RegisterPlayerActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
@@ -96,6 +96,7 @@ public class SignUpActivityTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
         }
     }
 

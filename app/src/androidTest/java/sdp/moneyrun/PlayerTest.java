@@ -15,7 +15,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PlayerTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private  long ASYNC_CALL_TIMEOUT = 10L;
 
     @Test
     public void setAddressWithDBUpdateWorks(){
@@ -24,7 +24,7 @@ public class PlayerTest {
         String address = "Somewhere";
         String newAddress = "New Address";
         int id = 1234567891;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0 ,0);
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -65,7 +65,7 @@ public class PlayerTest {
         String address = "Somewhere";
         String newName = "New Address";
         int id = 1234567892;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0,0 );
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -106,7 +106,7 @@ public class PlayerTest {
         String address = "Somewhere";
         int newPlayedGames = 75;
         int id = 1234567893;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0,0 );
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -148,7 +148,7 @@ public class PlayerTest {
         String address = "Somewhere";
         int newDiedGames = 75;
         int id = 1234567894;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0,0 );
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -189,7 +189,7 @@ public class PlayerTest {
         String name = "John Doe";
         String address = "Somewhere";
         int id = 1234567895;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0 ,0);
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -229,7 +229,7 @@ public class PlayerTest {
         String name = "John Doe";
         String address = "Somewhere";
         int id = 1234567896;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0,0 );
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -270,7 +270,7 @@ public class PlayerTest {
         String address = "Somewhere";
         int score = 75;
         int id = 1234567897;
-        Player player = new Player(id, name, address,0,0 );
+        Player player = new Player(id, name, address,0,0,0 );
         DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
