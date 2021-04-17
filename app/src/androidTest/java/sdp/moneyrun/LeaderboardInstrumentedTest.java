@@ -153,16 +153,22 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                Intent intent = new Intent(a,LeaderboardActivity.class);
-               String[] info = {"John","Here"};
-               intent.putExtra("PlayerId",48390);
-               intent.putExtra("playerId" + 48390, info);
-                a.setMainPlayer(48390,info);
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Player p = a.getUserPlayer();
+
+               int playerId = 48390;
+               String name = "John";
+               String address = "Here";
+               Player user = new Player(playerId);
+               user.setName(name);
+               user.setAddress(address);
+
+               intent.putExtra("user",user);
+               a.setMainPlayer();
+               try {
+                   Thread.sleep(4000);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+               Player p = a.getUserPlayer();
                assertNotNull(p);
                assertNotNull(p.getName());
                assertNotNull(p.getAddress());

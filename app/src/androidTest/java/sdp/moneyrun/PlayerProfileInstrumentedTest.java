@@ -57,10 +57,18 @@ public class PlayerProfileInstrumentedTest {
         //TODO: find a way to put info into result array in PlayerProfileActivity
         try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
             Intents.init();
-            String[] content = {"John", "New York", "0", "5"};
+
+            String name = "John";
+            String address = "New York";
+            int diedN = 0;
+            int playedN = 5;
+            Player user = new Player(12345);
+            user.setName(name);
+            user.setAddress(address);
+            user.setNumberOfDiedGames(diedN);
+            user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> {
-                PlayerProfileActivity playerProfileActivity = (PlayerProfileActivity) a;
-                playerProfileActivity.setDisplayedTexts(content);
+                ((PlayerProfileActivity) a).setDisplayedTexts(user);
             });
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("Player has died 0 many times")));
