@@ -32,16 +32,14 @@ public class SignUpActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////
 
         final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View clicked) {
-                EditText emailView = (EditText) findViewById(R.id.signUpEmailText);
-                EditText passwordView = (EditText)findViewById(R.id.signUpPassword);
-                String email = emailView.getText().toString().trim();
-                String password = passwordView.getText().toString().trim();
-                if(checkInput(emailView, passwordView)) {
-                    submitSignUp(email, password);
-                }
+        submitButton.setOnClickListener(clicked -> {
+            EditText emailView = findViewById(R.id.signUpEmailText);
+            EditText passwordView = findViewById(R.id.signUpPassword);
+            String email = emailView.getText().toString().trim();
+            String password = passwordView.getText().toString().trim();
+
+            if(checkInput(emailView, passwordView)) {
+                submitSignUp(email, password);
             }
         });
     }
@@ -69,19 +67,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void submitSignUp(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>(){
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            //Sign-In success
-                            Log.d(TAG, "createUserWithEmail:success"); //Not sure about the tag thing
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        }
-                        else{
-                            Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(SignUpActivity.this, task -> {
+                    if(task.isSuccessful()){
+                        //Sign-In success
+                        Log.d(TAG, "createUserWithEmail:success"); //Not sure about the tag thing
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    }
+                    else{
+                        Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
+                        Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -91,8 +86,9 @@ public class SignUpActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if(user != null){
             Intent intent = new Intent (this, RegisterPlayerActivity.class);
-            intent.putExtra("PlayerId",user.getUid().hashCode());
+            intent.putExtra("playerId", user.getUid().hashCode());
             startActivity(intent);
+            finish();
         }
     }
     private boolean isPasswordValid(CharSequence password){

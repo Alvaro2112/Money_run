@@ -17,7 +17,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
-    private Player userPlayer;
+    private Player user;
     private DatabaseProxy db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer(0,null);
+        setMainPlayer();
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -78,25 +78,12 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @param id : id of the player
-     * @param info : player information such as name and address
      *
      *  Initializes the player object private instance
      */
-    public void setMainPlayer(int id,String[] info){
-        int playerId = getIntent().getIntExtra("playerId",0);
-        if(id != 0)
-            playerId = id;
-        if(playerId != 0) {
-            String[] playerInfo = getIntent().getStringArrayExtra("playerId" + playerId);
-            if(info != null)
-                playerInfo = info;
-            userPlayer = new Player(playerId);
-            userPlayer.setName(playerInfo[0]);
-            userPlayer.setAddress(playerInfo[1]);
-            userPlayer.setScore(0);
-            addPlayer(userPlayer);
-        }
+    public void setMainPlayer(){
+        user = (Player) getIntent().getSerializableExtra("user");
+        addPlayer(user);
     }
     /**
     * This function will set up players in the leaderboard once we know their player ids and names
@@ -150,6 +137,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         @return: returns the player object representing the person that wants to access the leaderboard
      */
     public Player getUserPlayer() {
-        return userPlayer;
+        return user;
     }
 }

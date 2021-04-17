@@ -41,20 +41,17 @@ public class DatabaseProxy {
      */
     public Task<DataSnapshot> getPlayerTask(int playerId){
             Task<DataSnapshot> task = mDataBase.child("players").child(String.valueOf(playerId)).get();
-            task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e(TAG, "Error getting data", task.getException());
+            task.addOnCompleteListener(task1 -> {
+                if (!task1.isSuccessful()) {
+                    Log.e(TAG, "Error getting data", task1.getException());
 
-                        }
-                        else {
-                            Log.d(TAG, String.valueOf(task.getResult().getValue()));
-                        }
-                    }
-                });
+                }
+                else {
+                    Log.d(TAG, String.valueOf(task1.getResult().getValue()));
+                }
+            });
+
         return task;
-
     }
 
     /** get a player from a task
