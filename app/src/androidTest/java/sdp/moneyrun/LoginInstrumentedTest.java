@@ -69,7 +69,15 @@ public class LoginInstrumentedTest {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
+            try{
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
             intended(hasComponent(SignUpActivity.class.getName()));
             Intents.release();
         }
@@ -81,6 +89,13 @@ public class LoginInstrumentedTest {
             Intents.init();
             final String expected = "Email is required";
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            try{
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+
             Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
             Intents.release();
         }
@@ -95,6 +110,13 @@ public class LoginInstrumentedTest {
             final String expected = "Password is required";
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            try{
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+
             Espresso.onView(withId(R.id.loginPassword)).check(matches(withError(expected)));
             Intents.release();
         }
@@ -104,13 +126,22 @@ public class LoginInstrumentedTest {
     public void loginInvalidEmailError(){
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
+
              String email = "kkkkkk";
             String password = "abc";
              String expected = "Email format is invalid";
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            try{
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+
             Espresso.onView(withId(R.id.loginEmailAddress)).check(matches(withError(expected)));
+
             Intents.release();
         }
     }

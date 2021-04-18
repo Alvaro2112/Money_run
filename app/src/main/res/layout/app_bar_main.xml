@@ -7,7 +7,7 @@
     tools:context=".MenuActivity">
 
     <Button
-        android:id="@+id/new_game_button"
+        android:id="@+id/new_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Start_game"
@@ -18,19 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.967" />
 
-    <Button
-        android:id="@+id/ask_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/ask_question"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026" />
     <Button
         android:id="@+id/map_button"
         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ public class PlayerBuilder {
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
+    private int  score;
 
     /**
      *
@@ -47,6 +48,10 @@ public class PlayerBuilder {
         this.numberOfDiedGames = numberOfDiedGames;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
 
     /**
      * Empty constructor
@@ -61,7 +66,7 @@ public class PlayerBuilder {
     public Player build(){
         if(playerId == 0 || name == null || address == null)
             throw new IllegalStateException();
-        return new Player(playerId,name, address, numberOfDiedGames, numberOfPlayedGames);
+        return new Player(playerId,name, address, numberOfDiedGames, numberOfPlayedGames,score);
     }
 
 

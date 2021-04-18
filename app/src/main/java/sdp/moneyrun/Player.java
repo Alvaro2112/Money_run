@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Player {
 
-    private  int playerId;
+    private int playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
@@ -35,7 +35,7 @@ public class Player {
      * @throws IllegalArgumentException on empty or null address or name and on player = 0
      */
     public Player(int playerId, String name, String address, int numberOfDiedGames,
-                  int numberOfPlayedGames){
+                  int numberOfPlayedGames,int score){
         if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;
@@ -43,6 +43,7 @@ public class Player {
         this.address = address;
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
+        this.score = score;
     }
 
     /**
@@ -191,9 +192,6 @@ public class Player {
      * @return the score of that player
      */
     public int getScore(){
-        if (name == null)
-            throw new IllegalStateException();
-
         return score;
     }
 
@@ -203,8 +201,6 @@ public class Player {
      * @return the adress of the player
      */
     public String getAddress() {
-        if (address == null)
-            throw new IllegalStateException();
         return address;
     }
 
@@ -213,8 +209,6 @@ public class Player {
      * @return the name of the player
      */
     public String getName() {
-        if (name == null)
-            throw new IllegalStateException();
         return name;
     }
 

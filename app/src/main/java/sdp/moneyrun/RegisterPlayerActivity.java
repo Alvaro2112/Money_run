@@ -1,20 +1,14 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
-import android.location.Address;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 public class RegisterPlayerActivity extends AppCompatActivity {
@@ -46,9 +40,10 @@ public class RegisterPlayerActivity extends AppCompatActivity {
     }
     private void setRegisterFieldsForNextActivity(){
         Random random = new Random();
-        int uniquePlayerID = random.nextInt();
-        while(uniquePlayerID < 0)
-            uniquePlayerID = random.nextInt();
+//        int uniquePlayerID = random.nextInt();
+//        while(uniquePlayerID < 0)
+//            uniquePlayerID = random.nextInt();
+        int uniquePlayerID = getIntent().getIntExtra("PlayerId",0);
         Player player = new Player(uniquePlayerID);
         player.setName(result[0]);
         player.setAddress(result[1]);
@@ -61,6 +56,11 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         //We are putting extra information so that once logged in the Player object can be properly instantiated
         menuIntent.putExtra("playerId",uniquePlayerID);
         menuIntent.putExtra("playerId"+uniquePlayerID,result);
+        Player p = new Player(uniquePlayerID);
+        p.setName(result[0]);
+        p.setAddress(result[1]);
+        DatabaseProxy databaseProxy = new DatabaseProxy();
+        databaseProxy.putPlayer(p);
         startActivity(menuIntent);
     }
     /*
@@ -71,12 +71,12 @@ public class RegisterPlayerActivity extends AppCompatActivity {
             setErrorForEmptyFields(name,address,color,animal);
             return false;
         }
-            result = new String[4];
-            result[0] = name;
-            result[1] = address;
-            result[2] = "0";
-            result[3] = "0";
-            return true;
+        result = new String[4];
+        result[0] = name;
+        result[1] = address;
+        result[2] = "0";
+        result[3] = "0";
+        return true;
     }
     private void setErrorForEmptyFields(String name, String address, String color, String animal){
         if(name.trim().isEmpty()){

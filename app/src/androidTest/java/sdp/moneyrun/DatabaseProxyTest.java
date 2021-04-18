@@ -26,7 +26,7 @@ public class DatabaseProxyTest {
     @Test
     public void getPlayerFromDatabase() throws Throwable {
 
-        final Player player = new Player(1236, "Johann", "FooBarr", 0, 0);
+        final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
         final DatabaseProxy db = new DatabaseProxy();
         db.putPlayer(player);
         try {
@@ -37,14 +37,11 @@ public class DatabaseProxyTest {
 
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
       //  Thread.sleep(1000);
-        testTask.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(task.isSuccessful()) {
-                   assert( player.equals(db.getPlayerFromTask(testTask)));
-                }else{
-                    assert (false);
-                }
+        testTask.addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+               assert( player.equals(db.getPlayerFromTask(testTask)));
+            }else{
+                assert (false);
             }
         });
         while(!testTask.isComplete()){
@@ -72,25 +69,18 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         DatabaseProxy db = new DatabaseProxy();
-        Player player = new Player(1, "a","b",0,0);
+        Player player = new Player(1, "a","b",0,0,0);
         db.addPlayerListener(player, null);
     }
-
-
 
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player(564123, "Johann", "FooBarr", 0, 0);
+        Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
         final DatabaseProxy db = new DatabaseProxy();
-        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference();
-        dataB.child("players").setValue(player).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                added.countDown();
-            }
-        });
+        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
+        dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
         String newName = "Simon";
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -113,7 +103,8 @@ public class DatabaseProxyTest {
             }
         };
         db.addPlayerListener(player, listener);
-        Player p = new Player(564123,newName,"FooBarr",0,0);
+
+        Player p = new Player(564123,newName,"FooBarr",0,0,0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -153,7 +144,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullListener() {
         DatabaseProxy db = new DatabaseProxy();
-        Player player = new Player(1, "a","b",0,0);
+        Player player = new Player(1, "a","b",0,0,0);
         db.removePlayerListener(player, null);
     }
 }
