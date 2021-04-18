@@ -48,7 +48,6 @@ public class PlayerProfileInstrumentedTest {
 
             intended(hasComponent(PlayerProfileActivity.class.getName()));
             Intents.release();
-
         }
     }
 
@@ -89,6 +88,22 @@ public class PlayerProfileInstrumentedTest {
             Espresso.onView(withId(R.id.playerEmptyMessage))
                     .perform(click())
                     .check(matches(withText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER")));
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void buttonBackToMenuWorks(){
+        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+            Intents.init();
+            onView(withId(R.id.goBackToMainMenu)).perform(click());
+
+            Thread.sleep(1000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch(InterruptedException e){
+            e.printStackTrace();
             Intents.release();
         }
     }

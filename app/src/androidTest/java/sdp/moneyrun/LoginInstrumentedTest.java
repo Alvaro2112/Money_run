@@ -335,6 +335,7 @@ public class LoginInstrumentedTest {
             Thread.sleep(1000);
 
             assertNull(FirebaseAuth.getInstance().getCurrentUser());
+            intended(hasComponent(LoginActivity.class.getName()));
 
             db.removePlayer(playerUser);
             Intents.release();

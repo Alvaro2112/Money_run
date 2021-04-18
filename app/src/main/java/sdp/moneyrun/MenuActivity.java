@@ -189,18 +189,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.profile_button: {
-                onButtonSwitchToUserProfileActivity();
+                onButtonSwitchToActivity(PlayerProfileActivity.class, false);
                 break;
             }
 
             case R.id.leaderboard_button: {
-                onButtonSwitchToLeaderboardActivity();
+                onButtonSwitchToActivity(LeaderboardActivity.class, false);
                 break;
             }
 
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
-                onButtonSwitchToLoginActivity();
+                onButtonSwitchToActivity(LoginActivity.class, true);
                 break;
             }
         }
@@ -218,22 +218,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra("user", user);
     }
 
-    public void onButtonSwitchToUserProfileActivity() {
-        Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        setPutExtraArguments(playerProfileIntent);
-        startActivity(playerProfileIntent);
-    }
-
-    public void onButtonSwitchToLeaderboardActivity() {
-        Intent leaderboardActivity = new Intent(MenuActivity.this, LeaderboardActivity.class);
-        setPutExtraArguments(leaderboardActivity);
-        startActivity(leaderboardActivity);
-    }
-
-    public void onButtonSwitchToLoginActivity(){
-        Intent leaderboardActivity = new Intent(MenuActivity.this, LeaderboardActivity.class);
-        setPutExtraArguments(leaderboardActivity);
-        startActivity(leaderboardActivity);
+    public void onButtonSwitchToActivity(Class activityClass, boolean shouldFinish){
+        Intent switchActivity = new Intent(MenuActivity.this, activityClass);
+        setPutExtraArguments(switchActivity);
+        startActivity(switchActivity);
+        if(shouldFinish){
+            finish();
+        }
     }
 
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
