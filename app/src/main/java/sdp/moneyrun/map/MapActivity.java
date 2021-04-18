@@ -1,6 +1,8 @@
 package sdp.moneyrun.map;
 
 import android.graphics.PointF;
+
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +34,8 @@ import java.util.List;
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.Game;
 import sdp.moneyrun.Helpers;
+
+import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 import sdp.moneyrun.RiddlesDatabase;
@@ -42,7 +46,8 @@ this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final String TAG = MapActivity.class.getSimpleName();
-    private static final int GAME_TIME = 100;
+    private static final int GAME_TIME = 10000;
+
     private static int chronometerCounter =0;
     private Chronometer chronometer;
     private List<Coin> remainingCoins = new ArrayList<>();

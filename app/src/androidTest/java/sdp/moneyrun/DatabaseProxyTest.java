@@ -82,6 +82,7 @@ public class DatabaseProxyTest {
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
         String newName = "Simon";
+
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(added.getCount(), is(0L));
