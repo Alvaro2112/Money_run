@@ -1,6 +1,8 @@
 package sdp.moneyrun;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 
@@ -14,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -22,10 +25,14 @@ import java.util.Objects;
 public class Game {
     //Attributes
     private GameDbData gameDbData;
+    private  List<Coin> coins;
+    private  List<Riddle> riddles;
+
 
     //Aux variables
     private DatabaseReference rootReference;
     private String id;
+    private boolean isVisible;
     private static final String TAG = Game.class.getSimpleName();
     private boolean hasBeenAdded;
 
@@ -55,6 +62,53 @@ public class Game {
         this.hasBeenAdded = false;
         this.id = "";
     }
+
+    public Game(String gameId,
+                String name,
+                List<Player> players,
+                int maxPlayerCount,
+                List<Riddle> riddles,
+                List<Coin> coins,
+                Location startLocation) {
+        if(gameId == null){
+            throw new IllegalArgumentException("Game id should not be null.");
+        }
+        if(name == null){
+            throw new IllegalArgumentException("Game name should not be null.");
+        }
+        if(players == null){
+            throw new IllegalArgumentException("Players should not be null.");
+        }
+        if(riddles == null){
+            throw new IllegalArgumentException("Riddles should not be null.");
+        }
+        if(coins == null){
+            throw new IllegalArgumentException("Coins should not be null.");
+        }
+        if(startLocation  == null){
+            throw new IllegalArgumentException("Start location should not be null.");
+        }
+
+        this.isVisible = true;
+        this.gameDbData = new GameDbData(name, players, maxPlayerCount,startLocation);
+        this.id = gameId;
+        this.riddles = riddles;
+        this.coins = coins;
+    }
+
+    public Game(String gameId,
+                String name,
+                boolean isVisible,
+                List<Player> players,
+                int maxPlayerCount,
+                List<Riddle> riddles,
+                List<Coin> coins,
+                Location startLocation) {
+        this(gameId, name, players, maxPlayerCount, riddles, coins, startLocation);
+        this.isVisible = isVisible;
+    }
+
+
 
     /**
      * Adds the GameData to the database if not already present
@@ -187,27 +241,54 @@ public class Game {
         return id;
     }
 
-    //Launched when start game button is pressed
-    public static void startGame(Game game) {
-        game.startGame();
+    public boolean getIsVisible(){
+        return isVisible;
+    }
+
+    public int getPlayerCount(){
+        return gameDbData.getPlayers().size();
+    }
+
+    public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {
+        Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
+        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
+        for (int i = 0; i < collectedCoins.size(); ++i) {
+            collectedCoinsValues.add(collectedCoins.get(i).getValue());
+        }
+        endGameIntent.putExtra("collectedCoins", collectedCoinsValues);
+        endGameIntent.putExtra("playerId", playerId);
+        currentActivity.startActivity(endGameIntent);
+        currentActivity.finish();
+    }
+
+    public String getName() {
+        return gameDbData.getName();
+    }
+
+    public int getMaxPlayerCount() {
+        return gameDbData.getMaxPlayerNumber();
+    }
+
+    public void setIsVisible(boolean isVisible){
+        this.isVisible = isVisible;
     }
 
     // Launched when create game button is pressed
-    public void startGame() {}
+    public void startGame(){}
 
-    public boolean askPlayer(Player player, Riddle riddle) {
-        if(player == null || riddle == null){throw new IllegalArgumentException();}
+    public static void startGame(Game game){
+        game.startGame();
+    }
+
+    public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
-    ///////////////////////////////////////////////
     public GameDbData getGameDbData() {
         return new GameDbData(gameDbData);
     }
-    ////////////////////////////////////////////////
-
-
+    
     public void addGameListener(ValueEventListener l){
             if (l == null) {
                 throw new IllegalArgumentException();
@@ -216,7 +297,6 @@ public class Game {
                 rootReference.child("open_games").child(id).addValueEventListener(l);
             }
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -229,5 +309,18 @@ public class Game {
     @Override
     public int hashCode() {
         return Objects.hash(gameDbData);
+    }
+
+    /**
+     * @return returns a random riddle from all the possible riddles
+     */
+    public Riddle getRandomRiddle() {
+
+        if (riddles.isEmpty()) {
+            return null;
+        }
+
+        int index = (int) (Math.random() * (riddles.size()));
+        return riddles.get(index);
     }
 }

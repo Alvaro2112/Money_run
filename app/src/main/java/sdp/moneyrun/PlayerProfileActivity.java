@@ -31,6 +31,7 @@ public class PlayerProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MenuActivity.class);
                 startActivity(mainMenuIntent);
+                finish();
             }
         });
         Intent playerIntent = getIntent();

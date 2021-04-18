@@ -119,6 +119,7 @@ public class JoinGameImplementation extends MenuImplementation{
      * @return
      */
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
+        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_open_games_is_visible)).getValue(Boolean.class);
         String gameId = dataSnapshot.child(activity.getString(R.string.database_open_games_game_id)).getValue(String.class);
         String name = dataSnapshot.child(activity.getString(R.string.database_open_games_name)).getValue(String.class);
         Integer playerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_player_count)).getValue(Integer.class);
@@ -133,7 +134,7 @@ public class JoinGameImplementation extends MenuImplementation{
         }
         LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
 
-        if(gameId == null || name == null || startLocation == null){
+        if(isVisible == null || !isVisible ||gameId == null || name == null || startLocation == null){
             return null;
         }
 
