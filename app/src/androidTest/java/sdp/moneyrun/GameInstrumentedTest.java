@@ -329,17 +329,6 @@ public class GameInstrumentedTest {
     }
 
     @Test
-    public void askPlayerFailsOnNull(){
-        Game g = getTestGame();
-        try{
-            g.askPlayer(null, null);
-        }catch (IllegalArgumentException e){
-            return;
-        }
-        fail();
-    }
-
-    @Test
     public void askPlayerQuestionShouldReturnFalse() {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));

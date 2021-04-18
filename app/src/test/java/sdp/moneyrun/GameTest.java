@@ -111,7 +111,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
         game.startGame();
         Game.startGame(game);
 
@@ -127,7 +127,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         assertFalse(game.askPlayer(players.get(0), riddleList.get(0)));
     }
@@ -141,7 +141,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins,new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins,new Location("LocationManager#GPS_PROVIDER"));
         Riddle riddle = game.getRandomRiddle();
 
         assertSame(riddle.getClass(), Riddle.class);
@@ -155,7 +155,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         assertNull(game.getRandomRiddle());
     }
@@ -169,7 +169,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         assertEquals(game.getGameId(), gameId);
     }
@@ -183,7 +183,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,9));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         assertEquals(game.getName(), name);
     }
@@ -197,7 +197,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         assertEquals(game.getPlayerCount(), 1);
     }
@@ -211,9 +211,9 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
-        assertEquals(game.getMaxPlayerCount(), 0);
+        assertEquals(game.getMaxPlayerCount(), 1);
     }
 
     @Test
@@ -226,8 +226,8 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game1 = new Game(gameId, name, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
-        Game game2 = new Game(gameId, name, isVisible, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game1 = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game2 = new Game(gameId, name, isVisible, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
 
         boolean defaultIsVisible = true;
         assertEquals(game1.getIsVisible(), defaultIsVisible);
@@ -245,7 +245,7 @@ public class GameTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, isVisible1, players, 0, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = new Game(gameId, name, isVisible1, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
         game.setIsVisible(isVisible2);
 
         assertEquals(game.getIsVisible(), isVisible2);
