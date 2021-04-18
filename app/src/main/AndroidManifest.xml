@@ -15,7 +15,8 @@
         <activity android:name=".EndGameActivity">
 
         </activity>
-        <activity android:name=".map.MapActivity"></activity>
+        <activity android:name=".map.MapActivity">
+        </activity>
         <activity android:name=".LeaderboardActivity" />
         <activity
             android:name=".SignUpActivity"

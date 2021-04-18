@@ -1,25 +1,22 @@
 package sdp.moneyrun;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 
-
-
-
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
     private final String gameId;
     private final String name;
-    private List<Player> players;
-    private int maxPlayerCount;
-    private List<Riddle> riddles;
+    private final List<Player> players;
+    private final int maxPlayerCount;
+    private final List<Riddle> riddles;
     private final Location startLocation; //TODO: check if we will use the existing or create a new class Location
-    private List<Coin> coins;
+    private final List<Coin> coins;
     private boolean isVisible;
 
     public Game(String gameId,
@@ -70,13 +67,27 @@ public class Game {
         this.isVisible = isVisible;
     }
 
-    public String getGameId(){
+
+    public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {
+        Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
+        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
+        for (int i = 0; i < collectedCoins.size(); ++i) {
+            collectedCoinsValues.add(collectedCoins.get(i).getValue());
+        }
+        endGameIntent.putExtra("collectedCoins", collectedCoinsValues);
+        endGameIntent.putExtra("playerId", playerId);
+        currentActivity.startActivity(endGameIntent);
+        currentActivity.finish();
+    }
+
+    public String getGameId() {
         return gameId;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
+
 
     public boolean getIsVisible(){
         return isVisible;
@@ -86,7 +97,7 @@ public class Game {
         return players.size();
     }
 
-    public int getMaxPlayerCount(){
+    public int getMaxPlayerCount() {
         return maxPlayerCount;
     }
 
@@ -100,22 +111,22 @@ public class Game {
     public static void startGame(Game game){
         game.startGame();
     }
+
     public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
     /**
-     *
      * @return returns a random riddle from all the possible riddles
      */
-    public Riddle getRandomRiddle(){
+    public Riddle getRandomRiddle() {
 
-        if(riddles.isEmpty()){
+        if (riddles.isEmpty()) {
             return null;
         }
 
-        int index = (int)(Math.random() * (riddles.size()));
+        int index = (int) (Math.random() * (riddles.size()));
         return riddles.get(index);
     }
 }
