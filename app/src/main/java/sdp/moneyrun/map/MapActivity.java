@@ -1,8 +1,6 @@
 package sdp.moneyrun.map;
 
 import android.graphics.PointF;
-
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -34,8 +32,6 @@ import java.util.List;
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.Game;
 import sdp.moneyrun.Helpers;
-
-import sdp.moneyrun.EndGameActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 import sdp.moneyrun.RiddlesDatabase;
@@ -324,21 +320,25 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public boolean isLocationAppropriate(Location location){
         List<Feature> features = getFeatureAtLocation(location);
-        boolean hasAtLeastAProperty = false;
         if(features.size() > 0) {
             for (Feature feature : features) {
                 if (feature != null && feature.properties() != null){
-                    if(!feature.properties().toString().equals("{}")){
-                        hasAtLeastAProperty = true;
-                    }//If none of the feature has a property field, it's probably a body of water
-
                     if(!checkIndividualFeature(feature)) return false; //A feature was deemed inappropriate
                 }// Advised by MapBox
 
             }// A location may yield multiple feature and we check that none is inappropriate
+            return hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
 
-            return hasAtLeastAProperty;
         } //If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
+        return false;
+    }
+
+    private boolean hasAtLeasOneProperty(List<Feature> features){
+        for (Feature feature : features) {
+            if(!feature.properties().toString().equals("{}")){
+                return true;
+            }
+        }
         return false;
     }
 
