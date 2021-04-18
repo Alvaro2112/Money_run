@@ -154,27 +154,13 @@ public class Game {
     /**
      * Gets a Serialized Game from the DB in an asynchronous manner
      * @param id ID of the Game to retrieve
-     * @return a Task containing the serialized Game
-     * @throws NoSuchElementException if there is no Game with this ID in the DB
+     * @return a Task containing the serialized Game or a null value if the game not present in DB
      */
     public static Task<DataSnapshot> getGameDataSnapshot(String id) throws NoSuchElementException{
         if(id == null){throw new IllegalArgumentException();}
         DatabaseReference gamesRef = FirebaseDatabase.getInstance()
                 .getReference().child("open_games");
-
-        Task<DataSnapshot> returnSnap = gamesRef.child(id).get();
-
-        returnSnap.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if(task.getResult().child("name").getValue(String.class) == null){
-                    throw new NoSuchElementException("There is no game with ID : " + id + " in the DB");
-                }
-                Log.d(TAG, "successful ");
-            }else{
-                Log.e(TAG, "failed " + task.getException());
-            }
-        });
-        return returnSnap;
+        return gamesRef.child(id).get();
     }
 
 
