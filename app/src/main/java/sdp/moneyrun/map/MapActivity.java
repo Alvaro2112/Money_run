@@ -320,17 +320,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public boolean isLocationAppropriate(Location location){
         List<Feature> features = getFeatureAtLocation(location);
-        if(features.size() > 0) {
-            for (Feature feature : features) {
-                if (feature != null && feature.properties() != null){
-                    if(!checkIndividualFeature(feature)) return false; //A feature was deemed inappropriate
-                }// Advised by MapBox
+        if(features.size() == 0) return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
 
-            }// A location may yield multiple feature and we check that none is inappropriate
-            return hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
+        for (Feature feature : features) {
+            if (feature != null && feature.properties() != null){
+                if(!checkIndividualFeature(feature)) return false; //A feature was deemed inappropriate
+            }// Advised by MapBox
 
-        } //If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
-        return false;
+        }// A location may yield multiple feature and we check that none is inappropriate
+        return hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
     }
 
     private boolean hasAtLeasOneProperty(List<Feature> features){
