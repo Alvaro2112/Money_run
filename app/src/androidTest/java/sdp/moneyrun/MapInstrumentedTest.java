@@ -3,7 +3,9 @@ package sdp.moneyrun;
 import android.content.Context;
 import android.location.Location;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -298,7 +300,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a->{
-                a.endGame();
+                Game.endGame(a.getCollectedCoins(), a.getPlayerId(), a);
             });
             try {
                 Thread.sleep(5000);
@@ -309,6 +311,33 @@ public class MapInstrumentedTest {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             intended(hasComponent(EndGameActivity.class.getName()));
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void questionButtonWorks(){
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            onView(ViewMatchers.withId(R.id.new_question)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void closeButtonWorks(){
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.close_map)).perform(ViewActions.click());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            assertEquals(Lifecycle.State.DESTROYED, scenario.getState());
+
             Intents.release();
         }
     }

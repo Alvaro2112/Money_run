@@ -10,6 +10,9 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -100,6 +103,13 @@ public abstract class TrackedMap extends BaseMap implements
         } else {
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void moveCameraTo(float latitude, float longitude) {
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .build();
+        mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
 }
