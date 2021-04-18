@@ -86,8 +86,8 @@ public class LeaderboardActivity extends AppCompatActivity {
      *  Initializes the player object private instance
      */
     public void setMainPlayer(Player player){
-        if(user == null){
-            user = player;
+        if(user == null && player != null){
+            addPlayer(player);
         }
     }
     /**
