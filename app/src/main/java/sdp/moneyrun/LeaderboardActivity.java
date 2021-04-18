@@ -19,13 +19,17 @@ public class LeaderboardActivity extends AppCompatActivity {
     private LeaderboardListAdapter ldbAdapter;
     private Player user;
     private DatabaseProxy db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+
+        user = (Player) getIntent().getSerializableExtra("user");
+
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer();
+        setMainPlayer(null);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -81,9 +85,10 @@ public class LeaderboardActivity extends AppCompatActivity {
      *
      *  Initializes the player object private instance
      */
-    public void setMainPlayer(){
-        user = (Player) getIntent().getSerializableExtra("user");
-        addPlayer(user);
+    public void setMainPlayer(Player player){
+        if(user == null){
+            user = player;
+        }
     }
     /**
     * This function will set up players in the leaderboard once we know their player ids and names

@@ -29,7 +29,23 @@ public class DatabaseProxy {
      * @param player the player to be put in the database
      */
     public void putPlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null");
+        }
+
         mDataBase.child("players").child(String.valueOf(player.getPlayerId())).setValue(player);
+    }
+
+    /**
+     * Remove a player to the database.
+     * @param player the player to be removed in the database
+     */
+    public void removePlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null");
+        }
+
+        mDataBase.child("players").child(String.valueOf(player.getPlayerId())).removeValue();
     }
 
 
