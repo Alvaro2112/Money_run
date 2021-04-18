@@ -29,7 +29,6 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import sdp.moneyrun.Coin;
 import sdp.moneyrun.R;
@@ -51,7 +50,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final double ZOOM_FOR_FEATURES = 16.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
-    private CountDownLatch countDownLatch = new CountDownLatch(1);
     private  long ASYNC_CALL_TIMEOUT = 10L;
 
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
