@@ -107,7 +107,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-        mainIntent.putExtra("playerId", user.getPlayerId());
+        if(user != null){
+            mainIntent.putExtra("playerId", user.getPlayerId());
+        }
         MenuActivity.this.startActivity(mainIntent);
         MenuActivity.this.finish();
         available.release();
