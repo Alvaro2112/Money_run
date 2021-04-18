@@ -87,6 +87,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     public void setMainPlayer(Player player){
         if(user == null && player != null){
+            user = player;
             addPlayer(player);
         }
     }
