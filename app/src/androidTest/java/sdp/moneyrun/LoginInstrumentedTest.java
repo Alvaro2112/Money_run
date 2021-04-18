@@ -339,8 +339,8 @@ public class LoginInstrumentedTest {
             db.removePlayer(playerUser);
             Intents.release();
         } catch (InterruptedException e) {
-        e.printStackTrace();
-        Intents.init();
-    }
+            e.printStackTrace();
+            Intents.release();
+        }
     }
 }
