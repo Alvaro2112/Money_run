@@ -1,8 +1,9 @@
 package sdp.moneyrun;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Player {
+public class Player implements Serializable {
 
     private int playerId;
     private String name;
@@ -35,7 +36,7 @@ public class Player {
      * @throws IllegalArgumentException on empty or null address or name and on player = 0
      */
     public Player(int playerId, String name, String address, int numberOfDiedGames,
-                  int numberOfPlayedGames,int score){
+                  int numberOfPlayedGames, int score){
         if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;

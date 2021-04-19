@@ -1,5 +1,7 @@
 package sdp.moneyrun;
 
+import android.provider.ContactsContract;
+
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -148,5 +150,17 @@ public class DatabaseProxyTest {
         DatabaseProxy db = new DatabaseProxy();
         Player player = new Player(1, "a","b",0,0,0);
         db.removePlayerListener(player, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerWithNullInstanceThrowsException(){
+        DatabaseProxy db = new DatabaseProxy();
+        db.putPlayer(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removePlayerWithNullInstanceThrowsException(){
+        DatabaseProxy db = new DatabaseProxy();
+        db.removePlayer(null);
     }
 }

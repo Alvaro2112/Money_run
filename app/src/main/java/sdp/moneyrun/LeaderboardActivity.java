@@ -17,15 +17,19 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
-    private Player userPlayer;
+    private Player user;
     private DatabaseProxy db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+
+        user = (Player) getIntent().getSerializableExtra("user");
+
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer(0,null);
+        setMainPlayer(null);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -78,24 +82,13 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @param id : id of the player
-     * @param info : player information such as name and address
      *
      *  Initializes the player object private instance
      */
-    public void setMainPlayer(int id,String[] info){
-        int playerId = getIntent().getIntExtra("playerId",0);
-        if(id != 0)
-            playerId = id;
-        if(playerId != 0) {
-            String[] playerInfo = getIntent().getStringArrayExtra("playerId" + playerId);
-            if(info != null)
-                playerInfo = info;
-            userPlayer = new Player(playerId);
-            userPlayer.setName(playerInfo[0]);
-            userPlayer.setAddress(playerInfo[1]);
-            userPlayer.setScore(0);
-            addPlayer(userPlayer);
+    public void setMainPlayer(Player player){
+        if(user == null && player != null){
+            user = player;
+            addPlayer(player);
         }
     }
     /**
@@ -150,6 +143,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         @return: returns the player object representing the person that wants to access the leaderboard
      */
     public Player getUserPlayer() {
-        return userPlayer;
+        return user;
     }
 }
