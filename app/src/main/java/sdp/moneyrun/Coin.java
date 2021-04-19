@@ -17,7 +17,6 @@ public class Coin {
 
     }
 
-
     public double getLatitude(){return  latitude;}
     public double getLongitude(){return  longitude;}
     public int getValue(){return value;}

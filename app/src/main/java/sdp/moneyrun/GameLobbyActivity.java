@@ -23,8 +23,5 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
 
         String gameId = (String) getIntent().getSerializableExtra("currentGameId");
-
-        TextView gameName = findViewById(R.id.game_name);
-        gameName.setText(gameId);
     }
 }

@@ -27,7 +27,7 @@ public class MainActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
-
+            return;
         }
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();

@@ -121,7 +121,7 @@ public class NewGameImplementation extends MenuImplementation {
                     List<Riddle> riddles = new ArrayList<>();
                     List<Coin> coins = new ArrayList<>();
 
-                    Game game = new Game(gameId, name, players, maxPlayerCount, riddles, coins, location);
+                    Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
 
                     // post game to database
                     gameReference.setValue(game);

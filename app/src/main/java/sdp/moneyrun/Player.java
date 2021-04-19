@@ -16,8 +16,8 @@ public class Player implements Serializable {
     private String preferredPet;
     private int score;
 
-    /*
-    For database purpose, a default constructor is needed
+    /**
+     * For database purpose, a default constructor is needed
      */
     public Player(){}
 
@@ -45,6 +45,19 @@ public class Player implements Serializable {
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
         this.score = score;
+    }
+
+
+    //TODO This constructor should be removed once @Tesa fixes the merge error he created
+    public Player(int playerId, String name, String address, int numberOfDiedGames,
+                  int numberOfPlayedGames){
+        if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
+            throw new IllegalArgumentException();
+        this.playerId = playerId;
+        this.name = name;
+        this.address = address;
+        this.numberOfDiedGames = numberOfDiedGames;
+        this.numberOfPlayedGames = numberOfPlayedGames;
     }
 
     /**

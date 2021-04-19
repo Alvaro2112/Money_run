@@ -105,6 +105,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
+    
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
         if(user != null){
@@ -226,6 +227,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             finish();
         }
     }
+
 
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
     //To come back too later
