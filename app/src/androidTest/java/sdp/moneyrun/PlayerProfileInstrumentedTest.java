@@ -48,7 +48,6 @@ public class PlayerProfileInstrumentedTest {
 
             intended(hasComponent(PlayerProfileActivity.class.getName()));
             Intents.release();
-
         }
     }
 
@@ -57,10 +56,18 @@ public class PlayerProfileInstrumentedTest {
         //TODO: find a way to put info into result array in PlayerProfileActivity
         try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
             Intents.init();
-            String[] content = {"John", "New York", "0", "5"};
+
+            String name = "John";
+            String address = "New York";
+            int diedN = 0;
+            int playedN = 5;
+            Player user = new Player(12345);
+            user.setName(name);
+            user.setAddress(address);
+            user.setNumberOfDiedGames(diedN);
+            user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> {
-                PlayerProfileActivity playerProfileActivity = (PlayerProfileActivity) a;
-                playerProfileActivity.setDisplayedTexts(content);
+                ((PlayerProfileActivity) a).setDisplayedTexts(user);
             });
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("Player has died 0 many times")));
@@ -81,6 +88,22 @@ public class PlayerProfileInstrumentedTest {
             Espresso.onView(withId(R.id.playerEmptyMessage))
                     .perform(click())
                     .check(matches(withText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER")));
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void buttonBackToMenuWorks(){
+        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+            Intents.init();
+            onView(withId(R.id.goBackToMainMenu)).perform(click());
+
+            Thread.sleep(1000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch(InterruptedException e){
+            e.printStackTrace();
             Intents.release();
         }
     }

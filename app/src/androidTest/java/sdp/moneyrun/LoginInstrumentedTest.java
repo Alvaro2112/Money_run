@@ -14,12 +14,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -32,10 +35,13 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 
 public class LoginInstrumentedTest {
+
+    private final String TAG = LoginActivity.class.getSimpleName();
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     private static Matcher<View> withError(final String expected) {
@@ -106,7 +112,7 @@ public class LoginInstrumentedTest {
     public void loginNoPasswordError() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
-            final String email = "kk@epfl.ch";
+            final String email = "someone@epfl.ch";
             final String expected = "Password is required";
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
@@ -127,9 +133,9 @@ public class LoginInstrumentedTest {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
 
-             String email = "kkkkkk";
+            String email = "invalidemail";
             String password = "abc";
-             String expected = "Email format is invalid";
+            String expected = "Email format is invalid";
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
@@ -147,17 +153,127 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void loginWithRegisteredUserStartsActivity(){
+    public void loginWithRegisteredUserAndValidPlayerStartsActivity(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             String email = "logintest@epfl.ch";
             String password = "login123456789";
+            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+
+            // Define player instance given email and password user
+            scenario.onActivity(activity -> {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity, task -> {
+                            if (!task.isSuccessful()) {
+                                assertEquals(0, 1);
+                            } else {
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                int playerId = firebaseUser.getUid().hashCode();
+
+                                // Build a new instance of player for the user to create a
+                                // valid instance in the database
+                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.get().setName("Bob");
+                                playerUserRef.get().setAddress("Somewhere");
+                            }
+                        });
+            });
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.init();
+            }
+
+            Player playerUser = playerUserRef.get();
+
+            DatabaseProxy db = new DatabaseProxy();
+            db.putPlayer(playerUser);
+
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            Thread.sleep(4000);
+
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
             intended(hasComponent(MenuActivity.class.getName()));
+            db.removePlayer(playerUser);
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void loginWithRegisteredUserAndInvalidPlayerStartsActivity(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            String email = "logintest@epfl.ch";
+            String password = "login123456789";
+            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+
+            // Define player instance given email and password user
+            scenario.onActivity(activity -> {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity, task -> {
+                            if (!task.isSuccessful()) {
+                                assertEquals(0, 1);
+                            } else {
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                int playerId = firebaseUser.getUid().hashCode();
+
+                                // Build a new instance of player for the user to create a
+                                // valid instance in the database
+                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.get().setName("Bob");
+                                playerUserRef.get().setAddress("Somewhere");
+                            }
+                        });
+            });
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.init();
+            }
+
+            Player playerUser = playerUserRef.get();
+
+            DatabaseProxy db = new DatabaseProxy();
+            db.removePlayer(playerUser);
+
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(click());
+
+            Thread.sleep(4000);
+
+            intended(hasComponent(RegisterPlayerActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -167,29 +283,65 @@ public class LoginInstrumentedTest {
 
     @Test
     public void logOutWorks(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             String email = "logintest@epfl.ch";
             String password = "login123456789";
+            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+
+            // Define player instance given email and password user
+            scenario.onActivity(activity -> {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity, task -> {
+                            if (!task.isSuccessful()) {
+                                assertEquals(0, 1);
+                            } else {
+                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                int playerId = firebaseUser.getUid().hashCode();
+
+                                // Build a new instance of player for the user to create a
+                                // valid instance in the database
+                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.get().setName("Bob");
+                                playerUserRef.get().setAddress("Somewhere");
+                            }
+                        });
+            });
+
+            Thread.sleep(5000);
+
+            Player playerUser = playerUserRef.get();
+
+            DatabaseProxy db = new DatabaseProxy();
+            db.putPlayer(playerUser);
+
+            Thread.sleep(4000);
+
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            Thread.sleep(1000);
-            intended(hasComponent(MenuActivity.class.getName()));
+
+            Thread.sleep(4000);
+
             assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
             Espresso.onView(withId(R.id.log_out_button)).perform(ViewActions.click());
+
             Thread.sleep(1000);
-            assertEquals(FirebaseAuth.getInstance().getCurrentUser(), null);
+
+            assertNull(FirebaseAuth.getInstance().getCurrentUser());
+            intended(hasComponent(LoginActivity.class.getName()));
+
+            db.removePlayer(playerUser);
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
         }
     }
-
-
 }

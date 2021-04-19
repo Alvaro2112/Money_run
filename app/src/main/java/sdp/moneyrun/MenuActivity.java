@@ -40,15 +40,13 @@ import sdp.moneyrun.menu.NewGameImplementation;
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
 
-    private String[] playerInfo;
-    private int playerId;
     private RiddlesDatabase db;
     private Button mapButton;
     protected DrawerLayout mDrawerLayout;
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
-    private int tasksFInished;
-    private Player currentPlayer;
+    private int tasksFinished;
+    private Player user;
 
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -98,10 +96,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
 
         //Setting the current player object
-        playerId = getIntent().getIntExtra("playerId",0);
-        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-        if(playerId != 0 && playerInfo != null && playerInfo.length>3)
-        currentPlayer = new Player(playerId,playerInfo[0],playerInfo[1],Integer.parseInt(playerInfo[2]),Integer.parseInt(playerInfo[3]),0);
+        user = (Player) getIntent().getSerializableExtra("user");
     }
 
     @Override
@@ -112,7 +107,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-        mainIntent.putExtra("playerId",this.playerId);
+        if(user != null){
+            mainIntent.putExtra("playerId", user.getPlayerId());
+        }
         MenuActivity.this.startActivity(mainIntent);
         MenuActivity.this.finish();
         available.release();
@@ -125,7 +122,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 //Example of how the Async tasks should be implemented
                 numberOfAsyncTasks = 2;
-                tasksFInished = 0;
+                tasksFinished = 0;
                 setContentView(R.layout.splash_screen);
 
                 Runnable x = new Runnable() {
@@ -141,10 +138,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(tasksFInished == numberOfAsyncTasks - 1){
+                        if(tasksFinished == numberOfAsyncTasks - 1){
                             StartMapActivity();
                         } else {
-                            tasksFInished += 1;
+                            tasksFinished += 1;
                         }
 
                         available.release();
@@ -164,10 +161,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(tasksFInished == numberOfAsyncTasks - 1){
+                        if(tasksFinished == numberOfAsyncTasks - 1){
                             StartMapActivity();
                         } else {
-                            tasksFInished += 1;
+                            tasksFinished += 1;
                         }
 
                         available.release();
@@ -192,19 +189,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.profile_button: {
-                onButtonSwitchToUserProfileActivity(item.getActionView());
+                onButtonSwitchToActivity(PlayerProfileActivity.class, false);
                 break;
             }
 
             case R.id.leaderboard_button: {
-                Intent leaderboardIntent = new Intent(MenuActivity.this, LeaderboardActivity.class);
-                startActivity(leaderboardIntent);
+                onButtonSwitchToActivity(LeaderboardActivity.class, false);
                 break;
             }
 
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
-                finish();
+                onButtonSwitchToActivity(LoginActivity.class, true);
                 break;
             }
         }
@@ -219,17 +215,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setPutExtraArguments(Intent intent){
-
-        intent.putExtra("playerId",playerId);
-        intent.putExtra("playerId"+playerId,playerInfo);
+        intent.putExtra("user", user);
     }
 
-    public void onButtonSwitchToUserProfileActivity(View view) {
-
-        Intent playerProfileIntent = new Intent(MenuActivity.this, PlayerProfileActivity.class);
-        setPutExtraArguments(playerProfileIntent);
-        startActivity(playerProfileIntent);
+    public void onButtonSwitchToActivity(Class activityClass, boolean shouldFinish){
+        Intent switchActivity = new Intent(MenuActivity.this, activityClass);
+        setPutExtraArguments(switchActivity);
+        startActivity(switchActivity);
+        if(shouldFinish){
+            finish();
+        }
     }
+
     //TODO: fix it somehow: task is never completed and thus cannot get player from database
     //To come back too later
 //    public void setPlayerObject(){

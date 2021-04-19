@@ -94,8 +94,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         addExitButton();
         addQuestionButton();
-
-
     }
 
     /**

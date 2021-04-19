@@ -28,41 +28,30 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         addressText = findViewById(R.id.registerAddressText);
         colorText = findViewById(R.id.registerColorText);
         animalText = findViewById(R.id.registerAnimalText);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkAllFields(nameText.getText().toString(),addressText.getText().toString(), colorText.getText().toString(),animalText.getText().toString())){
-                    setRegisterFieldsForNextActivity();
-                }
+        submitButton.setOnClickListener(v -> {
+            if(checkAllFields(nameText.getText().toString(), addressText.getText().toString(),
+                    colorText.getText().toString(), animalText.getText().toString())){
+                setRegisterFieldsForNextActivity();
             }
         });
 
     }
     private void setRegisterFieldsForNextActivity(){
-        Random random = new Random();
-//        int uniquePlayerID = random.nextInt();
-//        while(uniquePlayerID < 0)
-//            uniquePlayerID = random.nextInt();
-        int uniquePlayerID = getIntent().getIntExtra("PlayerId",0);
-        Player player = new Player(uniquePlayerID);
-        player.setName(result[0]);
-        player.setAddress(result[1]);
-        player.setScore(0);
+        int playerId = getIntent().getIntExtra("playerId",0);
+        Player user = new Player(playerId);
+        user.setName(result[0]);
+        user.setAddress(result[1]);
+        user.setScore(0);
+
         db = new DatabaseProxy();
-        db.putPlayer(player);
-        //TODO:place it into the database with uniquePlayerID as key
-        //TODO : check if there is a player with that unique ID already in database and if there is change ID
+        db.putPlayer(user);
+
         Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
-        //We are putting extra information so that once logged in the Player object can be properly instantiated
-        menuIntent.putExtra("playerId",uniquePlayerID);
-        menuIntent.putExtra("playerId"+uniquePlayerID,result);
-        Player p = new Player(uniquePlayerID);
-        p.setName(result[0]);
-        p.setAddress(result[1]);
-        DatabaseProxy databaseProxy = new DatabaseProxy();
-        databaseProxy.putPlayer(p);
+        menuIntent.putExtra("user", user);
         startActivity(menuIntent);
+        finish();
     }
+
     /*
      Checking on submit that each field is not left empty and raise an error and prevent from logging in if that is the case
      */

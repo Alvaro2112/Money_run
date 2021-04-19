@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,7 +70,6 @@ public class LeaderboardInstrumentedTest {
                 a.addPlayer(null);
             });
         }
-
     }
 
     @Test
@@ -118,7 +119,6 @@ public class LeaderboardInstrumentedTest {
         }
     }
 
-
     @Test
     public void addPlayerListThrowsNullException(){
         exception.expect(RuntimeException.class);
@@ -128,6 +128,7 @@ public class LeaderboardInstrumentedTest {
             });
         }
     }
+
     @Test
     public void testIfOneDummyPlayerIsSet(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
@@ -148,27 +149,32 @@ public class LeaderboardInstrumentedTest {
             });
         }
     }
+
     @Test
     public void setMainPlayerGetsTheRightInfoAndSetsThePlayerAttributes(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
-               Intent intent = new Intent(a,LeaderboardActivity.class);
-               String[] info = {"John","Here"};
-               intent.putExtra("PlayerId",48390);
-               intent.putExtra("playerId" + 48390, info);
-                a.setMainPlayer(48390,info);
+                int playerId = 48390;
+                String name = "John";
+                String address = "Here";
+                Player user = new Player(playerId);
+                user.setName(name);
+                user.setAddress(address);
+
+                Intent intent = new Intent(a, LeaderboardActivity.class);
+                intent.putExtra("user", user);
+
+                a.setMainPlayer(user);
                 try {
                     Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 Player p = a.getUserPlayer();
-               assertNotNull(p);
-               assertNotNull(p.getName());
-               assertNotNull(p.getAddress());
+                assertNotNull(p);
+                assertNotNull(p.getName());
+                assertNotNull(p.getAddress());
             });
         }
     }
-
-
 }
