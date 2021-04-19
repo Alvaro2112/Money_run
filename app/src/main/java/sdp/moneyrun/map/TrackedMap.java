@@ -1,6 +1,8 @@
 package sdp.moneyrun.map;
 
 import android.annotation.SuppressLint;
+import android.graphics.PointF;
+import android.location.Location;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -19,6 +22,7 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import java.util.Arrays;
 import java.util.List;
 
 import sdp.moneyrun.R;
@@ -38,6 +42,8 @@ public abstract class TrackedMap extends BaseMap implements
     private PermissionsManager permissionsManager;
     public LocationEngine locationEngine;
     protected LocationCheckObjectivesCallback callback;
+    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
+
 
 
     // source
@@ -112,4 +118,43 @@ public abstract class TrackedMap extends BaseMap implements
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
+    public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom){
+        CameraPosition position = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .zoom(zoom)
+                .build();
+        mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
+
+
+
+    public boolean isLocationAppropriate(Location location){
+        List<Feature> features = getFeatureAtLocation(location);
+        if(features.size() == 0) return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
+
+        for (Feature feature : features) {
+            if (feature != null && feature.properties() != null){
+                if(!CoinGenerationHelper.checkIndividualFeature(feature, INAPPROPRIATE_LOCATIONS)) return false; //A feature was deemed inappropriate
+            }// Advised by MapBox
+
+        }// A location may yield multiple feature and we check that none is inappropriate
+        return CoinGenerationHelper.hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
+    }
+
+
+
+
+    private List<Feature> getFeatureAtLocation(Location location){
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        LatLng point = new LatLng(lat,lon);
+
+        // Convert LatLng coordinates to screen pixel and only query the rendered features.
+        //This is because the query feature API function only accepts pixel as an arg
+        final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
+
+
+        List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
+        return features;
+    }
 }

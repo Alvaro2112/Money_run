@@ -5,9 +5,7 @@ import android.location.Location;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
-
 import androidx.test.espresso.action.ViewActions;
-
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -15,7 +13,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.junit.Test;
 
@@ -37,18 +34,6 @@ public class MapInstrumentedTest {
 private CountDownLatch moved =null;
     double minZoomForBuilding = 15.;
 
-private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback() {
-    @Override
-    public void onCancel() {
-        assert(false);
-    }
-
-    @Override
-    public void onFinish() {
-        assert(moved != null && moved.getCount() > 0);
-        moved.countDown();
-    }
-};
 
 
     @Test
@@ -284,7 +269,7 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
     public void QuestionsPopsUpWhenCoinIsCollected() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(15000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -294,7 +279,7 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(15000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -383,7 +368,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             }
             scenario.onActivity(a ->{
                 assert(!a.isLocationAppropriate(location));
-              //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -411,7 +395,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             }
             scenario.onActivity(a ->{
                 assert(!a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -440,7 +423,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             }
             scenario.onActivity(a ->{
                 assert(!a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -504,7 +486,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             scenario.onActivity(a ->{
                     a.isLocationAppropriate(location);
                assert(a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -533,7 +514,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             scenario.onActivity(a ->{
                 a.isLocationAppropriate(location);
                 assert(!a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -562,7 +542,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             scenario.onActivity(a ->{
                 a.isLocationAppropriate(location);
                 assert(!a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -591,7 +570,6 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
             scenario.onActivity(a ->{
                 a.isLocationAppropriate(location);
                 assert(!a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -619,13 +597,7 @@ private MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback
                 a.placeRandomCoins(numberOfCoins, 100);
                 assertEquals(a.getRemainingCoins().size(), numberOfCoins);
             });
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
-
     }
 
 
