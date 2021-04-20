@@ -33,8 +33,6 @@ import static org.junit.Assert.assertTrue;
 
 public class MapInstrumentedTest {
 
-
-
     @Test
     public void moveCameraToWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -295,103 +293,6 @@ public class MapInstrumentedTest {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             onView(ViewMatchers.withId(R.id.new_question)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void questionWorksOnCorrectAnswer(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
-            String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
-
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-
-            scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-            });
-
-            onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
-            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
-        }
-    }
-
-    @Test
-    public void questionWorksOnWrongAnswer(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
-            String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
-
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-
-            scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-            });
-
-            onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
-            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));        }
-    }
-
-    @Test
-    public void continueRunButtonWorks(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
-
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-
-            scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-            });
-
-            onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.continue_run)).perform(ViewActions.click());
-            try {
-                onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-                assertEquals(1, 2);
-            }catch (NoMatchingViewException e){
-
-            }
-
-
-        }
-    }
-
-    @Test
-    public void collectCoinButtonWorks(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
-
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-
-            scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-            });
-
-            onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
-
-            try {
-                onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-                assertEquals(1, 2);
-            }catch (NoMatchingViewException e){
-
-            }
-
         }
     }
 
