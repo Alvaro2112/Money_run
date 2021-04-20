@@ -36,14 +36,20 @@ import sdp.moneyrun.RiddlesDatabase;
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
+    private final String TAG = MapActivity.class.getSimpleName();
     private static final int GAME_TIME = 10000;
-    private static final double THRESHOLD_DISTANCE = 5.;
-    private static int chronometerCounter = 0;
-    private final List<Coin> remainingCoins = new ArrayList<>();
-    private final List<Coin> collectedCoins = new ArrayList<>();
+
+    private static int chronometerCounter =0;
     private Chronometer chronometer;
+    private List<Coin> remainingCoins = new ArrayList<>();
+    private List<Coin> collectedCoins = new ArrayList<>();
+    public static final double THRESHOLD_DISTANCE = 5.;
+    private static final double ZOOM_FOR_FEATURES = 15.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
+    private  long ASYNC_CALL_TIMEOUT = 10L;
+
+
     private int playerId;
 
     private Button exitButton;
@@ -242,6 +248,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
+
     /**
      * @param location Used to check if location is near a coin or not
      */
@@ -275,4 +282,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         return min_index;
     }
+
+    public void placeRandomCoins (int number, int radius){
+        if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
+        for(int i = 0; i<number; i++){
+            Location loc = null;
+            do{
+                loc = CoinGenerationHelper.getRandomLocation(currentLocation,radius);
+            }while(!isLocationAppropriate(loc));
+            remainingCoins.add(new Coin(loc.getLatitude(),loc.getLongitude(),0));
+        }
+    }
+
+
 }
