@@ -43,6 +43,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static int chronometerCounter = 0;
     private final List<Coin> remainingCoins = new ArrayList<>();
     private final List<Coin> collectedCoins = new ArrayList<>();
+    private List<Coin> disabledLocalCoins = new ArrayList<>();
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
@@ -119,7 +120,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle());
+                onButtonShowQuestionPopupWindowClick(mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
             }
         });
     }
@@ -181,7 +182,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle) {
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle, Coin coin) {
 
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
@@ -201,9 +202,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
             if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer())) {
                 correctId = buttonIds[i];
-                correctAnswerListener(popupWindow, correctId);
+                correctAnswerListener(popupWindow, correctId, coin);
             } else {
-                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer());
+                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer(), coin);
             }
         }
 
@@ -218,7 +219,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
-    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, String answer) {
+    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, String answer, Coin coin) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,12 +237,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 bt.setVisibility(View.VISIBLE);
 
                 closePopupListener(popupWindow, R.id.continue_run);
+                if(coin != null){
+                disabledLocalCoins.add(coin);
+                removeCoin(coin, true);
+                }
 
             }
         });
     }
 
-    public void correctAnswerListener(PopupWindow popupWindow, int btnId) {
+    public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,6 +264,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 bt.setVisibility(View.VISIBLE);
 
                 closePopupListener(popupWindow, R.id.collect_coin);
+                if(coin != null)
+                    removeCoin(coin, false);
+                //get points
 
 
             }
@@ -274,15 +282,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
         remainingCoins.add(coin);
-
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())));
     }
+
+
+
 
     /**
      * @param coin removes a coin from the list of remaining coins, adds it to the list of collected coin
      *             and removes it from the map
      */
-    public void removeCoin(Coin coin) {
+    public void removeCoin(Coin coin, Boolean locally) {
 
         if (coin == null) {
             throw new NullPointerException("removed coined is null");
@@ -298,10 +308,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
-    public void askRiddle(Coin coin){
-        onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
-
-    }
 
 
     /**
@@ -311,8 +317,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentLocation = location;
         Coin coin = isNearCoin(location);
         if (coin != null) {
-            removeCoin(coin);
-            askRiddle(coin);
+            onButtonShowQuestionPopupWindowClick(this.mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
     }
 
