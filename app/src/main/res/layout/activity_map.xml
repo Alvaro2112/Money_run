@@ -70,6 +70,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.008" />
 
+            <TextView
+                android:id="@+id/map_score_view"
+                android:layout_width="105dp"
+                android:layout_height="35dp"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@string/map_score_default"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.816"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.008" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -45,7 +45,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
-
+    private TextView currentScoreView;
+    private int currentScore =0;
     private Button exitButton;
     private Button questionButton;
 
@@ -89,9 +90,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             riddleDb = RiddlesDatabase.getInstance();
         }
 
+        currentScoreView = findViewById(R.id.map_score_view);
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
-
         addExitButton();
         addQuestionButton();
     }
@@ -233,6 +234,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         remainingCoins.remove(coin);
         collectedCoins.add(coin);
+        currentScore += coin.getValue();
+        currentScoreView.setText("Score: "+Integer.toString(currentScore));
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
         for (int i = 0; i < symbols.size(); ++i) {
             Symbol symbol = symbols.valueAt(i);
