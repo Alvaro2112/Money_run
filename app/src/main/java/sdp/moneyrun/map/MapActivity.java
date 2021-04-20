@@ -91,6 +91,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         currentScoreView = findViewById(R.id.map_score_view);
+        String default_score = getString(R.string.map_score_text,0);
+        currentScoreView.setText(default_score);
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
         addExitButton();
@@ -235,7 +237,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         remainingCoins.remove(coin);
         collectedCoins.add(coin);
         currentScore += coin.getValue();
-        currentScoreView.setText("Score: "+Integer.toString(currentScore));
+        String default_score = getString(R.string.map_score_text,currentScore);
+        currentScoreView.setText(default_score);
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
         for (int i = 0; i < symbols.size(); ++i) {
             Symbol symbol = symbols.valueAt(i);
