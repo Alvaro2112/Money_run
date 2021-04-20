@@ -353,7 +353,11 @@ public class MapInstrumentedTest {
             onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
 
-            Intents.init();
+            onView(ViewMatchers.withId(R.id.continue_run)).perform(ViewActions.click());
+
+
+
+            Intents.release();
 
         }
     }
