@@ -324,32 +324,6 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void continueRunButtonWorks(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            onView(ViewMatchers.withId(R.id.new_question)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(1)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.continue_run)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
-
-
-        }
-    }
-
-    @Test
-    public void collectCoinButtonWorks(){
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            onView(ViewMatchers.withId(R.id.new_question)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(0)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
-
-        }
-    }
 
     @Test
     public void closeButtonWorks(){
