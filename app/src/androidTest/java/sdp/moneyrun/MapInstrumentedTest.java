@@ -329,6 +329,7 @@ public class MapInstrumentedTest {
     public void questionWorksOnWrongAnswer(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            Intents.init();
 
             String question = "What is the color of the sky";
             String correctAnswer = "blue";
@@ -351,6 +352,9 @@ public class MapInstrumentedTest {
             onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
             onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
+
+            Intents.init();
+
         }
     }
 
