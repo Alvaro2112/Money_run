@@ -120,7 +120,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
+                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
             }
         });
     }
@@ -317,7 +317,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentLocation = location;
         Coin coin = isNearCoin(location);
         if (coin != null) {
-            onButtonShowQuestionPopupWindowClick(this.mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
     }
 

@@ -189,7 +189,9 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.onActivity(a-> assertEquals(2,a.getSymbolManager().getAnnotations().size()));
+            scenario.onActivity(a->{
+                assertEquals(2,a.getSymbolManager().getAnnotations().size());
+            });
         }
         catch (Exception e){
             assertEquals(-1,2);
@@ -246,7 +248,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(15000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
