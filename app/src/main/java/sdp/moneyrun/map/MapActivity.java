@@ -51,7 +51,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
-
+    private Riddle testQuestion;
     private Button exitButton;
     private Button questionButton;
 
@@ -123,7 +123,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
+
+                if(testQuestion != null){
+                    onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, testQuestion, null);
+                }else{
+                    onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
+                }
             }
         });
     }
@@ -162,6 +167,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public Location getCurrentLocation() {
         return currentLocation;
+    }
+
+    public void setTestQuestion(Riddle riddle){
+        this.testQuestion = riddle;
     }
 
     public int getPlayerId() {
