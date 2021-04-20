@@ -124,11 +124,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                if(testQuestion != null){
-                    onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, testQuestion, null);
-                }else{
-                    onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
-                }
+                Riddle r = riddleDb.getRandomRiddle();
+                MapActivity.this.testQuestion = r;
+                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, r, null);
             }
         });
     }
@@ -169,8 +167,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return currentLocation;
     }
 
-    public void setTestQuestion(Riddle riddle){
-        this.testQuestion = riddle;
+    public Riddle getTestQuestion(){
+        return this.testQuestion;
     }
 
     public int getPlayerId() {
@@ -206,6 +204,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
         TextView buttonView = tv;
 
+        int id = 1;
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++) {
 
@@ -213,10 +212,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
             if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer())) {
-                correctId = buttonIds[i];
+                correctId = 0;
+                buttonView.setId(0);
                 correctAnswerListener(popupWindow, correctId, coin);
             } else {
-                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer(), coin);
+                buttonView.setId(id);
+                wrongAnswerListener(popupWindow, id, riddle.getAnswer(), coin);
+                id += 1;
             }
         }
 
