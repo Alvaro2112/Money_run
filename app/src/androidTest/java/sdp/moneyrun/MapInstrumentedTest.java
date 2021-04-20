@@ -312,6 +312,13 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
             onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
@@ -333,6 +340,14 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
             onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
             onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
@@ -347,11 +362,13 @@ public class MapInstrumentedTest {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.close_map)).perform(ViewActions.click());
+
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             assertEquals(Lifecycle.State.DESTROYED, scenario.getState());
 
             Intents.release();
