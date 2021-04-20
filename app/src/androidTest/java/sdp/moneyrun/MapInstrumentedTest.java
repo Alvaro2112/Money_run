@@ -336,9 +336,6 @@ public class MapInstrumentedTest {
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
-            scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-            });
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
 

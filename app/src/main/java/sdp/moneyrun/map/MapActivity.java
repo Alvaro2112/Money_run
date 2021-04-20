@@ -241,7 +241,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                 closePopupListener(popupWindow, R.id.continue_run);
                 if(coin != null){
-                disabledLocalCoins.add(coin);
+                    disabledLocalCoins.add(coin);
                 removeCoin(coin, true);
                 }
 
