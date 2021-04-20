@@ -31,9 +31,10 @@ public class NewGameImplementation extends MenuImplementation {
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
+                                 Player user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                  FusedLocationProviderClient fusedLocationClient){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
     }
 
     /**
@@ -116,12 +117,10 @@ public class NewGameImplementation extends MenuImplementation {
                     }
 
                     // Build new game given fields filled by user
-                    String gameId = gameReference.getKey();
-                    List<Player> players = new ArrayList<>();
                     List<Riddle> riddles = new ArrayList<>();
                     List<Coin> coins = new ArrayList<>();
 
-                    Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
+                    Game game = new Game(name, user, maxPlayerCount, riddles, coins, location, true);
 
                     // post game to database
                     gameReference.setValue(game);

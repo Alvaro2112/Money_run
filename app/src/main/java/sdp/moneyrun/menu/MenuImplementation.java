@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 
+import sdp.moneyrun.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
 
@@ -25,16 +26,19 @@ public class MenuImplementation {
 
     protected final Activity activity;
     protected final DatabaseReference databaseReference;
+    protected final Player user;
     protected final ActivityResultLauncher<String[]> requestPermissionsLauncher;
     protected final FusedLocationProviderClient fusedLocationClient;
 
     public MenuImplementation(Activity activity,
                               DatabaseReference databaseReference,
+                              Player user,
                               ActivityResultLauncher<String[]> requestPermissionsLauncher,
                               FusedLocationProviderClient fusedLocationClient
                               ){
         this.activity = activity;
         this.databaseReference = databaseReference;
+        this.user = user;
         this.requestPermissionsLauncher = requestPermissionsLauncher;
         this.fusedLocationClient = fusedLocationClient;
     }

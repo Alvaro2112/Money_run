@@ -73,8 +73,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void runFunctionalities(){
+        //Setting the current player object
+        user = (Player) getIntent().getSerializableExtra("user");
+
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
+                user,
                 requestPermissionsLauncher,
                 fusedLocationClient,
                 true,
@@ -82,6 +86,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         NewGameImplementation newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
+                user,
                 requestPermissionsLauncher,
                 fusedLocationClient);
 
@@ -94,9 +99,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Button newGame = findViewById(R.id.new_game);
         newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
-
-        //Setting the current player object
-        user = (Player) getIntent().getSerializableExtra("user");
     }
 
     @Override

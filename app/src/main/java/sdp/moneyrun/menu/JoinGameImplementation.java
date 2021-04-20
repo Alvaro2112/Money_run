@@ -24,6 +24,7 @@ import java.util.List;
 import sdp.moneyrun.GameLobbyActivity;
 import sdp.moneyrun.GameRepresentation;
 import sdp.moneyrun.LocationRepresentation;
+import sdp.moneyrun.Player;
 import sdp.moneyrun.R;
 
 public class JoinGameImplementation extends MenuImplementation{
@@ -36,11 +37,12 @@ public class JoinGameImplementation extends MenuImplementation{
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
+                                  Player user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
                                   int layoutId){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         this.focusable = focusable;
         this.layoutId = layoutId;
     }
