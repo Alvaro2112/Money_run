@@ -1,6 +1,7 @@
 package sdp.moneyrun.map;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.core.Tag;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
