@@ -233,36 +233,6 @@ public class MapInstrumentedTest {
 
 
     @Test
-    public void catchCoinWhenNearRemovesFromMap() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            scenario.onActivity(a->{
-                Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
-                a.addCoin(coin);
-            });
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            scenario.onActivity(a->{
-                assertEquals(0,a.getSymbolManager().getAnnotations().size());
-            });
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            assertEquals(-1,2);
-        }
-    }
-
-    @Test
     public void QuestionsPopsUpWhenCoinIsCollected() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {

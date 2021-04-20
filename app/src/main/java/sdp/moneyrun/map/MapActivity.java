@@ -331,7 +331,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double player_long = location.getLongitude();
 
         double min_dist = Integer.MAX_VALUE;
-        double curr_dist = 0;
+        double curr_dist = Integer.MAX_VALUE;
         Coin min_coin = null;
         Coin curr_coin;
 
