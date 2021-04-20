@@ -36,8 +36,7 @@
                 app:layout_constraintHorizontal_bias="0.015"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.01"
-                ></Chronometer>
+                app:layout_constraintVertical_bias="0.01"></Chronometer>
 
             <Button
                 android:id="@+id/close_map"
@@ -77,9 +76,9 @@
                 android:background="@drawable/layout_rounded"
                 android:gravity="center"
                 android:text="@string/map_score_default"
-                android:textSize="12sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
 
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.816"
