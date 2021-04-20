@@ -5,6 +5,7 @@ import android.location.Location;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -26,10 +27,11 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class MapInstrumentedTest {
 private CountDownLatch moved =null;
@@ -319,6 +321,37 @@ private CountDownLatch moved =null;
             Intents.release();
         }
     }
+
+
+    @Test
+    public void showScoreWorks() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String default_text = "Score: 0";
+            Espresso.onView(withId(R.id.map_score_view)).check(matches(withText(default_text)));
+
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
+                a.addCoin(coin);
+                a.removeCoin(coin);
+
+            });
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String updated_text = "Score: 1";
+            Espresso.onView(withId(R.id.map_score_view)).check(matches(withText(updated_text)));
+
+        }
+    }
+
 
     @Test
     public void questionButtonWorks(){
