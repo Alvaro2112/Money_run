@@ -297,6 +297,50 @@ public class MapInstrumentedTest {
     }
 
     @Test
+    public void questionWorksOnCorrectAnswer(){
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
+            String question = "What is the color of the sky";
+            String correctAnswer = "blue";
+            String[] possibleAnswers = {"blue", "green", "yellow", "brown"};
+
+            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+
+            scenario.onActivity(a -> {
+                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+            });
+
+            onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
+            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void questionWorksOnWrongAnswer(){
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
+            String question = "What is the color of the sky";
+            String correctAnswer = "blue";
+
+            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+
+            scenario.onActivity(a -> {
+                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+            });
+
+            onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
+            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
+        }
+    }
+
+
+    @Test
     public void closeButtonWorks(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
