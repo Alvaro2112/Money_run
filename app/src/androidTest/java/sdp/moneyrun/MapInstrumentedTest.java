@@ -319,7 +319,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
 
-            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
+            //onView(ViewMatchers.withId(R.id.questions)).check(matches(i));
             onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
