@@ -74,9 +74,12 @@
                 android:id="@+id/map_score_view"
                 android:layout_width="105dp"
                 android:layout_height="35dp"
+                android:background="@drawable/layout_rounded"
+                android:gravity="center"
+                android:text="@string/map_score_default"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:text="@string/map_score_default"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.816"
