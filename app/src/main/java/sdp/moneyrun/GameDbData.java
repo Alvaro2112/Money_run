@@ -15,6 +15,7 @@ import java.util.Objects;
 public final class GameDbData {
     private String name;
     private List<Player> players;
+    private Player host = null;
     private Integer maxPlayerNumber;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
@@ -36,10 +37,21 @@ public final class GameDbData {
         this.startLocation = startLocation;
     }
 
+    public GameDbData(String name,
+                      Player host,
+                      List<Player> players,
+                      Integer maxPlayerNumber,
+                      Location startLocation){
+        this(name, players, maxPlayerNumber, startLocation);
+
+        this.host = host;
+    }
+
 
     public GameDbData(GameDbData data){
         if(data == null){throw new IllegalArgumentException();}
         this.name = data.getName();
+        this.host = data.host;
         this.players = data.getPlayers();
         this.maxPlayerNumber = data.getMaxPlayerNumber();
         this.startLocation = data.getStartLocation();
@@ -51,6 +63,9 @@ public final class GameDbData {
         return name;
     }
 
+    public Player getHost(){
+        return host;
+    }
 
     public List<Player> getPlayers() {
         return new ArrayList<>(players);

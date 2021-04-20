@@ -25,14 +25,15 @@ import java.util.Objects;
 public class Game {
     //Attributes
     private GameDbData gameDbData;
-    private  List<Coin> coins;
-    private  List<Riddle> riddles;
+    private List<Coin> coins;
+    private List<Riddle> riddles;
+    private Player host = null;
 
 
     //Aux variables
     private DatabaseReference rootReference;
     private String id;
-    private boolean isVisible;
+    private boolean isVisible = true;
     private static final String TAG = Game.class.getSimpleName();
     private boolean hasBeenAdded;
 
@@ -89,7 +90,6 @@ public class Game {
             throw new IllegalArgumentException("Start location should not be null.");
         }
 
-        this.isVisible = true;
         this.gameDbData = new GameDbData(name, players, maxPlayerCount,startLocation);
         this.id = gameId;
         this.riddles = riddles;
@@ -106,6 +106,18 @@ public class Game {
                 Location startLocation) {
         this(gameId, name, players, maxPlayerCount, riddles, coins, startLocation);
         this.isVisible = isVisible;
+    }
+
+    public Game(String gameId,
+                String name,
+                Player host,
+                List<Player> players,
+                int maxPlayerCount,
+                List<Riddle> riddles,
+                List<Coin> coins,
+                Location startLocation) {
+        this(gameId, name, players, maxPlayerCount, riddles, coins, startLocation);
+        this.host = host;
     }
 
 
@@ -126,9 +138,6 @@ public class Game {
         return getGameId();
     }
 
-
-
-    
     /**
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertitent attribute is the player List
@@ -162,7 +171,6 @@ public class Game {
                 .getReference().child("open_games");
         return gamesRef.child(id).get();
     }
-
 
     /**
      * Deserializes DB Game data into a Game instance if the Task is Successfull, returns Null otherwise
@@ -216,7 +224,6 @@ public class Game {
             gameDbData.setPlayers(p);
             rootReference.child("open_games").child(id).child("players").setValue(p);
         }
-
     }
 
     /**
@@ -259,6 +266,18 @@ public class Game {
         this.isVisible = isVisible;
     }
 
+    public void setHost(Player host){
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
+        }
+
+        this.host = host;
+    }
+
+    public void resetHost(){
+        this.host = null;
+    }
+
     // Launched when create game button is pressed
     public void startGame(){}
 
@@ -274,14 +293,14 @@ public class Game {
     public GameDbData getGameDbData() {
         return new GameDbData(gameDbData);
     }
-    
+
     public void addGameListener(ValueEventListener l){
-            if (l == null) {
-                throw new IllegalArgumentException();
-            }
-            if (hasBeenAdded) {
-                rootReference.child("open_games").child(id).addValueEventListener(l);
-            }
+        if (l == null) {
+            throw new IllegalArgumentException();
+        }
+        if (hasBeenAdded) {
+            rootReference.child("open_games").child(id).addValueEventListener(l);
+        }
     }
 
     @Override
