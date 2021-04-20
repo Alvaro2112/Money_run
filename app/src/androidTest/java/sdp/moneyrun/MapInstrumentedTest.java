@@ -324,7 +324,7 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test(expected = NoMatchingViewException.class)
+    @Test
     public void continueRunButtonWorks(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -338,7 +338,7 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test(expected = NoMatchingViewException.class)
+    @Test
     public void collectCoinButtonWorks(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
