@@ -212,7 +212,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
                 Coin coin2 = new Coin(curloc.getLatitude()/3,curloc.getLongitude()/100,1);
                 a.addCoin(coin2);
-                a.removeCoin(coin);
+                a.removeCoin(coin, false);
             });
             try {
                 Thread.sleep(15000);
