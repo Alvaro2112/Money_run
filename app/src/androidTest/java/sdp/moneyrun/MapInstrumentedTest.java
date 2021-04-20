@@ -341,7 +341,7 @@ public class MapInstrumentedTest {
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));        }
     }
 
-    @Test(expected = NoMatchingViewException.class)
+    @Test
     public void continueRunButtonWorks(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -357,13 +357,18 @@ public class MapInstrumentedTest {
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.continue_run)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
+            try {
+                onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
+                assertEquals(1, 2);
+            }catch (NoMatchingViewException e){
+
+            }
 
 
         }
     }
 
-    @Test(expected = NoMatchingViewException.class)
+    @Test
     public void collectCoinButtonWorks(){
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -379,7 +384,13 @@ public class MapInstrumentedTest {
 
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
+
+            try {
+                onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
+                assertEquals(1, 2);
+            }catch (NoMatchingViewException e){
+
+            }
 
         }
     }
