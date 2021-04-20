@@ -1,6 +1,6 @@
-package sdp.moneyrun;
+package sdp.moneyrun.game;
 
-import android.location.Location;
+import sdp.moneyrun.map.LocationRepresentation;
 
 /**
  * This class implements a representation of a game, a class containing informations of

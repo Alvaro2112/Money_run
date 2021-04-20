@@ -11,6 +11,9 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.player.Player;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

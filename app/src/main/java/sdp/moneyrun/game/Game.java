@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.game;
 
 
 import android.app.Activity;
@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+
+import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.map.Riddle;
 
 // The entirety of the game logic should be implemented in this class
 public class Game {

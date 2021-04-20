@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".map.MapActivity">
+    tools:context=".ui.map.MapActivity">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".MenuActivity">
+            tools:context=".ui.menu.MenuActivity">
 
             <Chronometer
                 android:id="@+id/mapChronometer"

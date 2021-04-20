@@ -1,17 +1,11 @@
-package sdp.moneyrun;
+package sdp.moneyrun.ui.menu;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,12 +23,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.Semaphore;
 
-import sdp.moneyrun.map.MapActivity;
+import sdp.moneyrun.R;
+import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.ui.map.MapActivity;
 
 
 import sdp.moneyrun.menu.JoinGameImplementation;
-import sdp.moneyrun.menu.MenuImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
 
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

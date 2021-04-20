@@ -1,4 +1,4 @@
-package sdp.moneyrun.map;
+package sdp.moneyrun.ui.map;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -24,12 +24,14 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.Coin;
-import sdp.moneyrun.Game;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.game.Game;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
-import sdp.moneyrun.Riddle;
-import sdp.moneyrun.RiddlesDatabase;
+import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.map.LocationCheckObjectivesCallback;
+import sdp.moneyrun.map.TrackedMap;
 
 
 /*

@@ -18,6 +18,12 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

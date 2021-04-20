@@ -11,6 +11,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import sdp.moneyrun.permissions.PermissionsRequester;
+import sdp.moneyrun.ui.authentication.LoginActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

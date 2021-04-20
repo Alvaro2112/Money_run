@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.database;
 
 import android.content.Context;
 
@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import sdp.moneyrun.R;
+import sdp.moneyrun.map.Riddle;
 
 public class RiddlesDatabase {
 
@@ -86,7 +89,7 @@ public class RiddlesDatabase {
         return db.get(loc);
     }
 
-    protected static void reset(){
+    public static void reset(){
         obj = null;
     }
 

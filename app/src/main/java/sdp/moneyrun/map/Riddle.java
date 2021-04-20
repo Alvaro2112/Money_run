@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import java.util.Objects;
 

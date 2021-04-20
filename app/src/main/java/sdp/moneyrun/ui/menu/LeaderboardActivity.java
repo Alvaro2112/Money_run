@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.ui.menu;
 
 import android.os.Bundle;
 import android.widget.ListView;
@@ -11,6 +11,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.menu.LeaderboardListAdapter;
+import sdp.moneyrun.R;
+import sdp.moneyrun.player.Player;
 
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview

@@ -19,7 +19,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import sdp.moneyrun.map.MapActivity;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -75,11 +78,9 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             scenario.onActivity(a->{
                assertEquals( a.getSymbolManager().getIconAllowOverlap(),true);
                 assertEquals( a.getSymbolManager().getTextAllowOverlap(),true);
-
             });
         }
         catch (Exception e){

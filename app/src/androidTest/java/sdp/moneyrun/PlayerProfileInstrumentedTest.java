@@ -17,6 +17,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.ui.player.PlayerProfileActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;

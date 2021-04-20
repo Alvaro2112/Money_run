@@ -1,7 +1,6 @@
 package sdp.moneyrun;
 
 import androidx.lifecycle.Lifecycle;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -12,8 +11,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;

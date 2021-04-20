@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.ui;
 
 
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import sdp.moneyrun.R;
+import sdp.moneyrun.ui.authentication.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     public final static String TAG = "MainActivity";

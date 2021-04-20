@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.player;
 
 public class PlayerBuilder {
     private  int playerId;

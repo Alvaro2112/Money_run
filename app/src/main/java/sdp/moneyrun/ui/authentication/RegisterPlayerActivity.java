@@ -1,15 +1,17 @@
-package sdp.moneyrun;
+package sdp.moneyrun.ui.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Random;
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.R;
+import sdp.moneyrun.player.Player;
 
 public class RegisterPlayerActivity extends AppCompatActivity {
     private Button submitButton;

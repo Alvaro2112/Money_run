@@ -7,6 +7,9 @@ import org.junit.runner.RunWith;
 
 import java.util.Random;
 
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.player.PlayerBuilder;
+
 @RunWith(AndroidJUnit4.class)
 public class PlayerBuilderInstrumentedTest {
 

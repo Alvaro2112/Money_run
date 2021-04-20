@@ -1,10 +1,12 @@
-package sdp.moneyrun;
+package sdp.moneyrun.database;
 
 import android.location.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import sdp.moneyrun.player.Player;
 
 
 /**

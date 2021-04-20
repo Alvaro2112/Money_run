@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 

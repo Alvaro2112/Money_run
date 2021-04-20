@@ -1,6 +1,4 @@
-package sdp.moneyrun;
-
-import android.location.Location;
+package sdp.moneyrun.map;
 
 /**
  * This class implements a representation of a location, a class containing informations of

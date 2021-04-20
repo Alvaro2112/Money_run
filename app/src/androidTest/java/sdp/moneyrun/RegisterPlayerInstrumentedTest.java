@@ -11,6 +11,10 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;

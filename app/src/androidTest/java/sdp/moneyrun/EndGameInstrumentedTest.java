@@ -19,6 +19,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;

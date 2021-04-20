@@ -24,6 +24,13 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.authentication.SignUpActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;

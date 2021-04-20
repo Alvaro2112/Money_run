@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.ui.game;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+
+import sdp.moneyrun.R;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
 
 
 /**

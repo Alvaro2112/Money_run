@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.menu;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import sdp.moneyrun.R;
+import sdp.moneyrun.player.Player;
 
 public class LeaderboardListAdapter extends ArrayAdapter<Player> {
 

@@ -1,11 +1,8 @@
 package sdp.moneyrun;
 
-import android.provider.ContactsContract;
-
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +15,9 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.player.Player;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

@@ -1,7 +1,9 @@
-package sdp.moneyrun;
+package sdp.moneyrun.player;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import sdp.moneyrun.database.DatabaseProxy;
 
 public class Player implements Serializable {
 
