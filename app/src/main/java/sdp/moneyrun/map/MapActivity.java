@@ -1,10 +1,12 @@
 package sdp.moneyrun.map;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -117,7 +119,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
+                onButtonShowQuestionPopupWindowClick(mapView, false, R.layout.question_popup, riddleDb.getRandomRiddle());
             }
         });
     }
@@ -169,12 +171,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         chronometer = findViewById(R.id.mapChronometer);
         chronometer.start();
         chronometer.setOnChronometerTickListener(chronometer -> {
-                if (chronometerCounter < GAME_TIME) {
-                    chronometerCounter += 1;
-                } else {
-                    Game.endGame(collectedCoins, playerId, MapActivity.this);
-                }
-                chronometer.setFormat("REMAINING TIME "+String.valueOf(GAME_TIME - chronometerCounter));
+            if (chronometerCounter < GAME_TIME) {
+                chronometerCounter += 1;
+            } else {
+                Game.endGame(collectedCoins, playerId, MapActivity.this);
+            }
+            chronometer.setFormat("REMAINING TIME " + String.valueOf(GAME_TIME - chronometerCounter));
 
         });
     }
@@ -197,18 +199,70 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             buttonView = popupWindow.getContentView().findViewById(buttonIds[i]);
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
-            if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer()))
+            if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer())) {
                 correctId = buttonIds[i];
+                correctAnswerListener(popupWindow, correctId);
+            } else {
+                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer());
+            }
         }
 
-        popupWindow.getContentView().findViewById(correctId).setOnClickListener(new View.OnClickListener() {
+    }
 
+    public void closePopupListener(PopupWindow popupWindow, int Id) {
+        popupWindow.getContentView().findViewById(Id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
             }
         });
+    }
 
+    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, String answer) {
+
+        popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
+                TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
+                Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
+
+                tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
+                tv.setTextColor(Color.RED);
+
+                ll.setVisibility(View.GONE);
+                tv.setVisibility(View.VISIBLE);
+                bt.setVisibility(View.VISIBLE);
+
+                closePopupListener(popupWindow, R.id.continue_run);
+
+            }
+        });
+    }
+
+    public void correctAnswerListener(PopupWindow popupWindow, int btnId) {
+
+        popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
+                TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
+                Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
+
+                tv.setText(R.string.CorrectAnswerMessage);
+                tv.setTextColor(Color.GREEN);
+
+                ll.setVisibility(View.GONE);
+                tv.setVisibility(View.VISIBLE);
+                bt.setVisibility(View.VISIBLE);
+
+                closePopupListener(popupWindow, R.id.collect_coin);
+
+
+            }
+        });
     }
 
 
