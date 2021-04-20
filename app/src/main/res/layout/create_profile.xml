@@ -3,12 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#d1daa0">
 
     <Button
         android:id="@+id/submitProfileButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:outlineAmbientShadowColor="@color/cardview_dark_background"
+        android:textColorHighlight="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +26,7 @@
         android:layout_height="65dp"
         android:layout_marginEnd="16dp"
         android:hint="Enter your Name"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
