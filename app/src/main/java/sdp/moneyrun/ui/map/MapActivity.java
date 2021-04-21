@@ -40,20 +40,19 @@ import sdp.moneyrun.map.TrackedMap;
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
+    public static final double THRESHOLD_DISTANCE = 5.;
     private static final int GAME_TIME = 10000;
-    private static final double THRESHOLD_DISTANCE = 5.;
     private static final double ZOOM_FOR_FEATURES = 15.;
     private static int chronometerCounter = 0;
     private final String TAG = MapActivity.class.getSimpleName();
     private final List<Coin> remainingCoins = new ArrayList<>();
     private final List<Coin> collectedCoins = new ArrayList<>();
     private final List<Coin> disabledLocalCoins = new ArrayList<>();
+    private final long ASYNC_CALL_TIMEOUT = 10L;
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
-    private final long ASYNC_CALL_TIMEOUT = 10L;
-
     private TextView currentScoreView;
     private int currentScore = 0;
     private Button exitButton;
