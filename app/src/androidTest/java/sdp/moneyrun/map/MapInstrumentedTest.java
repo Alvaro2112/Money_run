@@ -361,7 +361,7 @@ public class MapInstrumentedTest {
                 Location curloc = a.getCurrentLocation();
                 Coin coin = new Coin(curloc.getLatitude(), curloc.getLongitude(), 1);
                 a.addCoin(coin);
-                a.removeCoin(coin, false);
+                a.removeCoin(coin, true);
 
             });
             try {
