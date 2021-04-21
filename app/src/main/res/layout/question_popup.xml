@@ -46,20 +46,17 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/question_choice_1"
-                    android:layout_weight="1"
                     android:text="@string/answer_1" />
 
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/question_choice_2"
-                    android:layout_weight="1"
                     android:text="@string/answer_2" />
 
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:id="@+id/question_choice_3"
                     android:text="@string/answer_3" />
 
@@ -67,7 +64,6 @@
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:id="@+id/question_choice_4"
                     android:text="@string/answer_4" />
 
