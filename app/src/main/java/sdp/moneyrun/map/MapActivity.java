@@ -238,51 +238,27 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
 
-                tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
-                tv.setTextColor(Color.RED);
-
-                popupWindow.getContentView().findViewById(R.id.question_choice_1).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_2).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_3).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_4).setVisibility(View.GONE);
-                tv.setVisibility(View.VISIBLE);
-                bt.setVisibility(View.VISIBLE);
-
-                closePopupListener(popupWindow, R.id.continue_run);
-                if(coin != null){
-                    disabledLocalCoins.add(coin);
-                removeCoin(coin, true);
-                }
 
             }
         });
     }
 
+    public void onCorrect(PopupWindow popupWindow, Coin coin){
+
+        TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
+        Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
+
+
+
+    }
+
     public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-
-                TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
-                Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
-
-                tv.setText(R.string.CorrectAnswerMessage);
-                tv.setTextColor(Color.GREEN);
-
-                popupWindow.getContentView().findViewById(R.id.question_choice_1).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_2).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_3).setVisibility(View.GONE);
-                popupWindow.getContentView().findViewById(R.id.question_choice_4).setVisibility(View.GONE);
-
-                tv.setVisibility(View.VISIBLE);
-                bt.setVisibility(View.VISIBLE);
-
-                closePopupListener(popupWindow, R.id.collect_coin);
-                if(coin != null)
-                    removeCoin(coin, false);
-                //get points
-
+               onCorrect(popupWindow, coin);
 
             }
         });
