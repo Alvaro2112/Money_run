@@ -351,9 +351,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void checkObjectives(Location location) {
         currentLocation = location;
-        Coin coin = isNearCoin(location);
-        if (coin != null) {
-            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+        int coinIdx = isNearCoin(location);
+        if (coinIdx >= 0) {
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), remainingCoins.get(coinIdx));
         }
     }
 
@@ -361,28 +361,21 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param location
      * @return the index of the closest coin whose distance is lower than a threshold or -1 if there are none
      */
-    public Coin isNearCoin(Location location) {
+    public int isNearCoin(Location location) {
 
         double player_lat = location.getLatitude();
         double player_long = location.getLongitude();
 
-        double min_dist = Integer.MAX_VALUE;
-        double curr_dist = Integer.MAX_VALUE;
-        Coin min_coin = null;
-        Coin curr_coin;
-
+        double min_dist = 10000;
+        int min_index = -1;
         for (int i = 0; i < remainingCoins.size(); ++i) {
-
-            curr_coin = remainingCoins.get(i);
-
-            curr_dist = distance(player_lat, player_long, curr_coin.getLatitude(), curr_coin.getLongitude());
-
-            if (curr_dist < THRESHOLD_DISTANCE && curr_dist < min_dist) {
-                min_dist = curr_dist;
-                min_coin = curr_coin;
+            Coin coin = remainingCoins.get(i);
+            double cur_dist = distance(player_lat, player_long, coin.getLatitude(), coin.getLongitude());
+            if (cur_dist < THRESHOLD_DISTANCE && cur_dist < min_dist) {
+                min_dist = cur_dist;
+                min_index = i;
             }
         }
-
-        return min_coin;
+        return min_index;
     }
 }

@@ -215,7 +215,7 @@ public class MapInstrumentedTest {
                 a.addCoin(coin);
             });
             try {
-                Thread.sleep(3000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -228,6 +228,7 @@ public class MapInstrumentedTest {
             e.printStackTrace();
         }
     }
+
 
     @Test
     public void endGameStartsActivity() {
