@@ -20,12 +20,12 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.Coin;
-import sdp.moneyrun.Game;
-import sdp.moneyrun.LocationRepresentation;
-import sdp.moneyrun.Player;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
-import sdp.moneyrun.Riddle;
+import sdp.moneyrun.map.Riddle;
 
 public class NewGameImplementation extends MenuImplementation {
 
@@ -121,7 +121,7 @@ public class NewGameImplementation extends MenuImplementation {
                     List<Riddle> riddles = new ArrayList<>();
                     List<Coin> coins = new ArrayList<>();
 
-                    Game game = new Game(gameId, name, players, maxPlayerCount, riddles, coins, location);
+                    Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
 
                     // post game to database
                     gameReference.setValue(game);

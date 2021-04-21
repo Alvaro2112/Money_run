@@ -9,6 +9,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
+
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
@@ -27,7 +30,7 @@ public class MainActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
-
+            return;
         }
         intended(hasComponent(LoginActivity.class.getName()));
         Intents.release();
