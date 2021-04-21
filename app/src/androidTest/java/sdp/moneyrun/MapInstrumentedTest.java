@@ -9,15 +9,18 @@ import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import sdp.moneyrun.map.MapActivity;
 
@@ -33,10 +36,12 @@ import static org.junit.Assert.assertTrue;
 
 public class MapInstrumentedTest {
 
+    @Rule
+    public ActivityScenarioRule<MapActivity> scenario = new ActivityScenarioRule<>(MapActivity.class);
 
     @Test
     public void moveCameraToWorks() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
             float lat = 8f;
             float lon = 8f;
             try {
@@ -44,7 +49,7 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.onActivity(a ->{
+            scenario.getScenario().onActivity(a ->{
                 a.moveCameraTo(lat,lon);
             });
             try {
@@ -52,18 +57,13 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.onActivity(a ->{
+            scenario.getScenario().onActivity(a ->{
                 LatLng latLng = a.getMapboxMap().getCameraPosition().target;
                 assertEquals(latLng.getLatitude(), 8.0,0.1);
                 assertEquals(latLng.getLongitude(), 8.0,0.1);
                 System.out.println("LONGITUDE IS "+String.valueOf(latLng.getLatitude()));
             });
         }
-        catch (Exception e){
-            assertEquals(-1,2);
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void testSymbolManager() {
@@ -260,6 +260,11 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             onView(ViewMatchers.withId(R.id.new_question)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
         }
     }
@@ -278,6 +283,11 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.correct_answer_popup)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
@@ -297,6 +307,11 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.wrong_answer_popup)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
 
@@ -320,7 +335,17 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.continue_run)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
 
 
@@ -342,7 +367,17 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(not(isDisplayed())));
 
         }
@@ -353,7 +388,6 @@ public class MapInstrumentedTest {
     public void collectCoinButtonCollectsCoin() {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
 
             String question = "What is the color of the sky";
             String correctAnswer = "blue";
@@ -379,7 +413,6 @@ public class MapInstrumentedTest {
             scenario.onActivity(a->{
                 assertEquals(0,a.getSymbolManager().getAnnotations().size());
             });
-
 
         }
     }
