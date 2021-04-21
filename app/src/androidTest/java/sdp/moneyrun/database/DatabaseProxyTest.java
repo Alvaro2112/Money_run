@@ -74,18 +74,16 @@ public class DatabaseProxyTest {
         db.addPlayerListener(player, null);
     }
 
-
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
         final DatabaseProxy db = new DatabaseProxy();
-
-        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players");
+        DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
-
         String newName = "Simon";
+
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(added.getCount(), is(0L));
@@ -107,6 +105,7 @@ public class DatabaseProxyTest {
             }
         };
         db.addPlayerListener(player, listener);
+
         Player p = new Player(564123,newName,"FooBarr",0,0,0);
         db.putPlayer(p);
         try {

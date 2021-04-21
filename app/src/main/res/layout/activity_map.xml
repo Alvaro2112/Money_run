@@ -75,7 +75,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/layout_rounded"
                 android:gravity="center"
-                android:text="@string/map_score_default"
+                android:text="@string/map_score_text"
                 android:textSize="15sp"
 
                 android:textStyle="bold"
