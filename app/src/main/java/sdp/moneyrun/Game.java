@@ -108,8 +108,6 @@ public class Game {
         this.isVisible = isVisible;
     }
 
-
-
     /**
      * Adds the GameData to the database if not already present
      * @return the Id of this game in the DB
@@ -126,9 +124,6 @@ public class Game {
         return getGameId();
     }
 
-
-
-    
     /**
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertitent attribute is the player List

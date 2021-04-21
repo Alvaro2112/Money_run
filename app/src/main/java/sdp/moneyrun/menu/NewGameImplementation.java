@@ -28,7 +28,6 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.Riddle;
 
 public class NewGameImplementation extends MenuImplementation {
-
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,

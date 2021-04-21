@@ -228,4 +228,6 @@ public class JoinGameImplementation extends MenuImplementation{
 
         activity.startActivity(lobbyIntent);
     }
+
+
 }

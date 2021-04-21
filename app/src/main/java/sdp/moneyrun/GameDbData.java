@@ -18,7 +18,7 @@ public final class GameDbData {
     private Integer maxPlayerNumber;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
-    //the host always has to be in it
+
 
     public GameDbData(String name, List<Player> players, Integer maxPlayerNumber, Location startLocation){
         if(name == null || players == null || startLocation == null) {
@@ -50,7 +50,6 @@ public final class GameDbData {
     public String getName() {
         return name;
     }
-
 
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
@@ -88,7 +87,6 @@ public final class GameDbData {
         if(players.size() == 1) { throw new IllegalArgumentException("Player List can never be empty");}
         players.remove(p);
     }
-
 
     /**
      * Set List of Players
