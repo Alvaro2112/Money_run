@@ -1,6 +1,5 @@
 package sdp.moneyrun.database;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
@@ -8,7 +7,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
 
 public class PlayerDatabaseProxy extends DatabaseProxy {
