@@ -401,8 +401,29 @@ public class MapInstrumentedTest {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, coin);
             });
 
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
 
             scenario.onActivity(a->{
                 assertEquals(0,a.getSymbolManager().getAnnotations().size());
