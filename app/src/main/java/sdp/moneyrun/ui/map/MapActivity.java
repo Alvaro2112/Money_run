@@ -40,24 +40,22 @@ import sdp.moneyrun.map.TrackedMap;
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    private final String TAG = MapActivity.class.getSimpleName();
     private static final int GAME_TIME = 10000;
     private static final double THRESHOLD_DISTANCE = 5.;
-
+    private static final double ZOOM_FOR_FEATURES = 15.;
+    private static int chronometerCounter = 0;
+    private final String TAG = MapActivity.class.getSimpleName();
     private final List<Coin> remainingCoins = new ArrayList<>();
     private final List<Coin> collectedCoins = new ArrayList<>();
     private final List<Coin> disabledLocalCoins = new ArrayList<>();
-
-    private static int chronometerCounter = 0;
     private Chronometer chronometer;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private int playerId;
-    private  long ASYNC_CALL_TIMEOUT = 10L;
+    private final long ASYNC_CALL_TIMEOUT = 10L;
 
     private TextView currentScoreView;
-    private int currentScore =0;
+    private int currentScore = 0;
     private Button exitButton;
     private Button questionButton;
 
@@ -102,7 +100,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         currentScoreView = findViewById(R.id.map_score_view);
-        String default_score = getString(R.string.map_score_text,0);
+        String default_score = getString(R.string.map_score_text, 0);
         currentScoreView.setText(default_score);
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
@@ -341,7 +339,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             remainingCoins.remove(coin);
             collectedCoins.add(coin);
             currentScore += coin.getValue();
-            String default_score = getString(R.string.map_score_text,currentScore);
+            String default_score = getString(R.string.map_score_text, currentScore);
             currentScoreView.setText(default_score);
         } else {
             remainingCoins.remove(coin);
@@ -365,7 +363,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentLocation = location;
         Coin coin = isNearCoin(location);
         if (coin != null) {
-            //onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+            //What to do when a player gets to a coin, we need the logic here of what coins the player is allowed to take
         }
     }
 
@@ -398,14 +396,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return min_coin;
     }
 
-    public void placeRandomCoins (int number, int radius){
+    public void placeRandomCoins(int number, int radius) {
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
-        for(int i = 0; i<number; i++){
+        for (int i = 0; i < number; i++) {
             Location loc = null;
-            do{
-                loc = CoinGenerationHelper.getRandomLocation(currentLocation,radius);
-            }while(!isLocationAppropriate(loc));
-            remainingCoins.add(new Coin(loc.getLatitude(),loc.getLongitude(),0));
+            do {
+                loc = CoinGenerationHelper.getRandomLocation(currentLocation, radius);
+            } while (!isLocationAppropriate(loc));
+            remainingCoins.add(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
         }
     }
 
