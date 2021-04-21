@@ -21,7 +21,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import sdp.moneyrun.map.MapActivity;
+import sdp.moneyrun.ui.map.MapActivity;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;

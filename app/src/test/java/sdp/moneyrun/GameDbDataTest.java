@@ -10,6 +10,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -41,9 +45,10 @@ public class GameDbDataTest {
     @Test
     public void constructorFailsOnNullArg(){
         List<Player> players = new ArrayList<>();
+        List<Coin> coin = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, 3, null, new ArrayList<>());
+            GameDbData g = new GameDbData("name", players, 3, null, coin);
         });
     }
 

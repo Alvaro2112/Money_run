@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Objects;
 import java.util.Random;
 
+import sdp.moneyrun.player.Player;
+
 import static org.junit.Assert.assertEquals;
 
 public class TestPlayer {
