@@ -268,7 +268,7 @@ public class Game {
             String retName = ds.child("name").getValue(String.class);
             Player retHost = ds.child("host").getValue(Player.class);
             List<Player> retPlayers = ds.child("players").getValue(new GenericTypeIndicator<List<Player>>(){});
-            Integer retMaxPlayerCount = ds.child("maxPlayerNumber").getValue(Integer.class);
+            Integer retMaxPlayerCount = ds.child("maxPlayerCount").getValue(Integer.class);
             Double retLatitude = ds.child("startLocation").child("latitude").getValue(Double.class);
             Double retLongitude = ds.child("startLocation").child("longitude").getValue(Double.class);
             Boolean retIsVisible = ds.child("isVisible").getValue(Boolean.class);
