@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import android.content.Context;
 import android.location.Location;
@@ -20,8 +20,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.game.Game;
-import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 

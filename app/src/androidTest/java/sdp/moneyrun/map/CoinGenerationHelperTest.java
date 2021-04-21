@@ -1,10 +1,9 @@
-package sdp.moneyrun;
+package sdp.moneyrun.map;
 
 import android.location.Location;
 
 import org.junit.Test;
 
-import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.ui.map.MapActivity;
 
 public class CoinGenerationHelperTest {
