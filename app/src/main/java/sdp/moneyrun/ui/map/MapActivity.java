@@ -239,8 +239,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         remainingCoins.remove(coin);
         collectedCoins.add(coin);
         currentScore += coin.getValue();
-        currentScoreView.setText(currentScore.);
-        getString(R.string.map_score_text,currentScore);
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
         for (int i = 0; i < symbols.size(); ++i) {
             Symbol symbol = symbols.valueAt(i);
