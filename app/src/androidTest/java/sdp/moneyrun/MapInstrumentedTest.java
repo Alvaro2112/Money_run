@@ -202,6 +202,34 @@ public class MapInstrumentedTest {
 
 
     @Test
+    public void QuestionsPopsUpWhenCoinIsCollected() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(a->{
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
+                a.addCoin(coin);
+            });
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
+
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void endGameStartsActivity() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             Intents.init();
