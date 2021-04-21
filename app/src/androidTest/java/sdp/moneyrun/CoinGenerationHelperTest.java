@@ -5,7 +5,7 @@ import android.location.Location;
 import org.junit.Test;
 
 import sdp.moneyrun.map.CoinGenerationHelper;
-import sdp.moneyrun.map.MapActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 
 public class CoinGenerationHelperTest {
 
