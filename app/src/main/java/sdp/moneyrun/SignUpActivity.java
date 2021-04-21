@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private final String TAG = SignUpActivity.class.getSimpleName();
+    private boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,11 @@ public class SignUpActivity extends AppCompatActivity {
             EditText passwordView = findViewById(R.id.signUpPassword);
             String email = emailView.getText().toString().trim();
             String password = passwordView.getText().toString().trim();
-
+            isClicked = !isClicked;
+            if(isClicked)
+                submitButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            else
+                submitButton.setBackgroundColor(getResources().getColor(R.color.design_default_color_background));
             if(checkInput(emailView, passwordView)) {
                 submitSignUp(email, password);
             }

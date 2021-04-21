@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
     private EditText animalText;
     private String[] result;
     private DatabaseProxy db;
+    private ProgressBar progressBarHorizontal;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,8 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         addressText = findViewById(R.id.registerAddressText);
         colorText = findViewById(R.id.registerColorText);
         animalText = findViewById(R.id.registerAnimalText);
+        progressBarHorizontal = findViewById(R.id.RegisterPlayerProgressBar2);
+
         submitButton.setOnClickListener(v -> {
             if(checkAllFields(nameText.getText().toString(), addressText.getText().toString(),
                     colorText.getText().toString(), animalText.getText().toString())){

@@ -16,6 +16,9 @@
         android:ems="10"
         android:hint="@string/EMAIL_HINT"
         android:inputType="textEmailAddress"
+        android:drawableStart="@drawable/ic_baseline_person_register"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
         app:layout_constraintBottom_toTopOf="@+id/signUpPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +35,17 @@
         android:hint="@string/PASSWORD_HINT"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/signUpSubmitButton"
+        android:drawableStart="@drawable/ic_baseline_lock_sign_up"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpEmailText" />
 
     <Button
         android:id="@+id/signUpSubmitButton"
+        android:focusable="true"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
