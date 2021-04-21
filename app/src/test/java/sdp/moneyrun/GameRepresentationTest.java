@@ -75,4 +75,21 @@ public class GameRepresentationTest {
 
         assertEquals(gr.getStartLocation(), lr);
     }
+
+    @Test
+    public void setPlayerCountFailsOnLessThanOne(){
+        LocationRepresentation lr = new LocationRepresentation(0, 1);
+        GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
+        assertThrows(IllegalArgumentException.class, () ->{
+            gr.setPlayerCount(-2);
+        });
+    }
+
+    @Test
+    public void setPlayerCountSetsPlayerCount(){
+        LocationRepresentation lr = new LocationRepresentation(0, 1);
+        GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
+        gr.setPlayerCount(4);
+        assertEquals(4, gr.getPlayerCount());
+    }
 }

@@ -68,15 +68,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginBottom="90dp"
+        android:background="#FF392E"
         android:text="Leave"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <Button
         android:id="@+id/launch_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"
+        android:background="#77dd77"
         android:text="Launch game"
         app:layout_constraintBaseline_toBaselineOf="@+id/leave_lobby_button"
         app:layout_constraintEnd_toEndOf="parent" />
