@@ -239,7 +239,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
 
-                tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
+                /*tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
                 tv.setTextColor(Color.RED);
 
                 ll.setVisibility(View.GONE);
@@ -249,7 +249,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 closePopupListener(popupWindow, R.id.continue_run);
                 if(coin != null){
                     disabledLocalCoins.add(coin);
-                removeCoin(coin, true);
+                removeCoin(coin, true);*/
                 }
 
             }
