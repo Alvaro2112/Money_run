@@ -127,7 +127,7 @@ public class GameDbDataTest {
     @Test
     public void getMaxPlayersReturnsMaxPlayers(){
         int maxPlayers = 4;
-        assertEquals(maxPlayers, getTestData().getMaxPlayerNumber());
+        assertEquals(maxPlayers, getTestData().getMaxPlayerCount());
     }
 
     @Test

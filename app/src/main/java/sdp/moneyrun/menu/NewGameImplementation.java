@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.LocationRepresentation;
@@ -123,11 +124,11 @@ public class NewGameImplementation extends MenuImplementation {
                     Game game = new Game(name, user, maxPlayerCount, riddles, coins, location, true);
 
                     // post game to database
-                    gameReference.setValue(game);
+                    game.addToDB();
 
                     // Post location to database
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                    startLocationReference.setValue(locationRep);
+                    //LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                    //startLocationReference.setValue(locationRep);
                 });
     }
 }

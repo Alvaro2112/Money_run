@@ -79,7 +79,7 @@ public final class GameDbData {
         return new ArrayList<>(players);
     }
 
-    public int getMaxPlayerNumber() {
+    public int getMaxPlayerCount() {
         return maxPlayerCount;
     }
 

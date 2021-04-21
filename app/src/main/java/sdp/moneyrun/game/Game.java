@@ -140,7 +140,7 @@ public class Game {
     }
 
     public int getMaxPlayerCount() {
-        return gameDbData.getMaxPlayerNumber();
+        return gameDbData.getMaxPlayerCount();
     }
 
     public List<Player> getPlayers(){

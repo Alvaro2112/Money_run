@@ -42,7 +42,7 @@
     <string name="database_open_games_is_visible">isVisible</string>
     <string name="database_open_games_game_id">gameId</string>
     <string name="database_open_games_name">name</string>
-    <string name="database_open_games_player_count">playerCount</string>
+    <string name="database_open_games_players">players</string>
     <string name="database_open_games_max_player_count">maxPlayerCount</string>
     <string name="database_open_games_start_location">startLocation</string>
 
