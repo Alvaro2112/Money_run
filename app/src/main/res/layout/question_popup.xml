@@ -68,39 +68,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/popup_answer"
-                android:visibility="gone"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
-                android:layout_marginTop="10dp"
-                android:text="Question"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:id="@+id/collect_coin"
-                android:text="@string/collect_coin" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-                android:id="@+id/continue_run"
-                android:text="@string/continue_run" />
-
         </LinearLayout>
 
     </ScrollView>

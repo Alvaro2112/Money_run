@@ -314,8 +314,7 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
-            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(R.id.correct_answer_popup)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
     }
@@ -334,8 +333,7 @@ public class MapInstrumentedTest {
             });
 
             onView(ViewMatchers.withId(R.id.question_choice_2)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.questions)).check(matches(not(isDisplayed())));
-            onView(ViewMatchers.withId(R.id.popup_answer)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(R.id.wrong_answer_popup)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(R.id.continue_run)).check(matches(isDisplayed()));
 
         }

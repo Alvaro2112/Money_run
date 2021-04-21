@@ -212,9 +212,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
             if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer())) {
                 correctId = buttonIds[i];
-                correctAnswerListener(popupWindow, correctId, coin);
+                correctAnswerListener(popupWindow, correctId, coin, riddle);
             } else {
-                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer(), coin);
+                wrongAnswerListener(popupWindow, buttonIds[i], coin, riddle);
             }
         }
 
@@ -229,57 +229,56 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
-    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, String answer, Coin coin) {
+    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
-                TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
-                Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
+                popupWindow.dismiss();
+                PopupWindow wrongAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.wrong_answer_popup);
+                TextView tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.question);
+                tv.setText(riddle.getQuestion());
 
-
-
-                tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
+                tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
+                tv.setText("You are incorrect!\n The answer was " + "'" + riddle.getAnswer() + "'");
                 tv.setTextColor(Color.RED);
 
-                ll.setVisibility(View.GONE);
-               /* tv.setVisibility(View.VISIBLE);
-                bt.setVisibility(View.VISIBLE);
 
-                closePopupListener(popupWindow, R.id.continue_run);
+                closePopupListener(wrongAnswerPopupWindow, R.id.continue_run);
+
                 if(coin != null){
                     disabledLocalCoins.add(coin);
                     removeCoin(coin, true);
                 }
-                */
+
 
             }
         });
     }
 
-    public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin) {
+    public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
-                TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
-                Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
+                popupWindow.dismiss();
+                PopupWindow correctAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.correct_answer_popup);
+                TextView tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.question);
+                tv.setText(riddle.getQuestion());
+
+                tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
+
 
                 tv.setText(R.string.CorrectAnswerMessage);
                 tv.setTextColor(Color.GREEN);
 
-                ll.setVisibility(View.GONE);
-/*                tv.setVisibility(View.VISIBLE);
-                bt.setVisibility(View.VISIBLE);
 
-                closePopupListener(popupWindow, R.id.collect_coin);
+                closePopupListener(correctAnswerPopupWindow, R.id.collect_coin);
                 if(coin != null)
                     removeCoin(coin, false);
-                //get points*/
+                //get points
 
 
             }
