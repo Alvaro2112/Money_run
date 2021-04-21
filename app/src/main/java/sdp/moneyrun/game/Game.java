@@ -188,118 +188,11 @@ public class Game {
     }
 
     /**
-     * Adds the GameData to the database if not already present
-     * @return the Id of this game in the DB
-     */
-    public String addToDB(){
-        if(!hasBeenAdded) {
-            DatabaseReference openGames = FirebaseDatabase.getInstance().getReference()
-                    .child("open_games");
-            id = openGames.push().getKey();
-            if(id == null){
-                throw new NullPointerException("Could not add game to database.");
-            }
-            openGames.child(id).setValue(gameDbData);
-            linkAttributesToDB();
-            hasBeenAdded = true;
-            return id;
-        }
-        return getId();
-    }
-
-    /**
-     * Links pertinent attributes to the DB instance corresponding to its ID.
-     * For now the only pertinent attribute is the player List
-     */
-    private void linkAttributesToDB(){
-        DatabaseReference gameRef = FirebaseDatabase.getInstance().getReference()
-                .child("open_games")
-                .child(id);
-        gameRef.child("players").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Player> newData = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
-                gameDbData.setPlayers(newData);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "failed " + error.getMessage());
-            }
-        });
-    }
-
-    /**
-     * Gets a Serialized Game from the DB in an asynchronous manner
-     * @param id ID of the Game to retrieve
-     * @return a Task containing the serialized Game or a null value if the game not present in DB
-     */
-    public static Task<DataSnapshot> getGameDataSnapshot(String id) throws NoSuchElementException{
-        if(id == null){
-            throw new IllegalArgumentException("id should not be null.");
-        }
-
-        DatabaseReference gamesRef = FirebaseDatabase.getInstance().getReference()
-                .child("open_games");
-        return gamesRef.child(id).get();
-    }
-
-    /**
-     * Deserializes DB Game data into a Game instance if the Task is Successfull, returns Null otherwise
-     *     This function is to be used in combination with getGameDataSnapshot()
-     *     the former retrieves a Task with all the game data in the DB, while this function
-     *     extracts the Data and gives you a Game class once the task is complete
-     *
-     *     For this it is recommended to add a success listener on the task and call this function once it
-     *     it is ready
-     *
-     *     Due to the asynchronous code it is better for the caller to call each function independently
-     * @param task Task that you get from getGameDataSnapshot()
-     * @return A Game instance
-     */
-    public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
-        if(task == null){
-            throw new IllegalArgumentException("task should not be null.");
-        }
-
-        if(task.isSuccessful()){
-            DataSnapshot ds = task.getResult();
-
-            String retName = ds.child("name").getValue(String.class);
-            Player retHost = ds.child("host").getValue(Player.class);
-            List<Player> retPlayers = ds.child("players").getValue(new GenericTypeIndicator<List<Player>>(){});
-            Integer retMaxPlayerCount = ds.child("maxPlayerCount").getValue(Integer.class);
-            Double retLatitude = ds.child("startLocation").child("latitude").getValue(Double.class);
-            Double retLongitude = ds.child("startLocation").child("longitude").getValue(Double.class);
-            Boolean retIsVisible = ds.child("isVisible").getValue(Boolean.class);
-            if(retName == null || retHost == null || retPlayers == null ||
-                    retMaxPlayerCount == null || retLatitude == null ||
-                    retLongitude == null || retIsVisible == null){
-                throw new NullPointerException("Could not retrieve attributes for game.");
-            }
-
-            //Cant deserialize Location properly so we do it manually
-            Location retLocation = new Location("");
-            retLocation.setLatitude(retLatitude);
-            retLocation.setLongitude(retLongitude);
-
-            //name, host, maxPlayerCount, startLocation, isVisible
-
-            Game retGame = new Game(retName, retHost, retPlayers, retMaxPlayerCount, retLocation, retIsVisible);
-            retGame.setId(ds.getKey());
-            retGame.setHasBeenAdded(true);
-
-            return retGame;
-        }else{
-            return null;
-        }
-    }
-
-    /**
      * Sets the players for the Game, or for both the Game and the DB if it has been added
      * @param players New List of Players
+     * @param forceLocal force the modification to be local only
      */
-    public void setPlayers(List<Player> players){
+    public void setPlayers(List<Player> players, boolean forceLocal){
         if(players == null){
             throw new IllegalArgumentException("players should not be null.");
         }
@@ -307,7 +200,7 @@ public class Game {
             throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");
         }
 
-        if(!hasBeenAdded){
+        if(!hasBeenAdded || forceLocal){
             gameDbData.setPlayers(players);
         }else{
             gameDbData.setPlayers(players);
@@ -323,7 +216,7 @@ public class Game {
      * Add a player to the game, updates it in the database if necessary
      * @param player new player
      */
-    public void addPlayer(Player player){
+    public void addPlayer(Player player, boolean forceLocal){
         if(player == null){
             throw new IllegalArgumentException("player should not be null.");
         }
@@ -334,7 +227,7 @@ public class Game {
         List<Player> players = getPlayers();
         players.add(player);
 
-        setPlayers(players);
+        setPlayers(players, forceLocal);
     }
 
     /**
@@ -342,7 +235,7 @@ public class Game {
      * @param player the player to be removed
      * @return the player previously at the specified location
      */
-    public Player removePlayer(Player player){
+    public Player removePlayer(Player player, boolean forceLocal){
         if(player == null){
             throw new IllegalArgumentException("player should not be null.");
         }
@@ -353,7 +246,7 @@ public class Game {
         List<Player> players = getPlayers();
         players.remove(player);
 
-        setPlayers(players);
+        setPlayers(players, forceLocal);
 
         return player;
     }
@@ -380,18 +273,6 @@ public class Game {
     public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
-    }
-
-    public void addGameListener(ValueEventListener l){
-        if (l == null) {
-            throw new IllegalArgumentException();
-        }
-        if (hasBeenAdded) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child("open_games")
-                    .child(id)
-                    .addValueEventListener(l);
-        }
     }
 
     @Override

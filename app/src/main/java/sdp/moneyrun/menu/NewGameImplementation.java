@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.game.Game;
@@ -101,10 +102,10 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_open_games)).push();
+        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
         DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_open_games))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_open_games_start_location));
+                .child(activity.getString(R.string.database_game))
+                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
 
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -124,7 +125,8 @@ public class NewGameImplementation extends MenuImplementation {
                     Game game = new Game(name, user, maxPlayerCount, riddles, coins, location, true);
 
                     // post game to database
-                    game.addToDB();
+                    GameDatabaseProxy gdb = new GameDatabaseProxy();
+                    gdb.putGame(game);
 
                     // Post location to database
                     //LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());

@@ -92,7 +92,7 @@ public class JoinGameImplementation extends MenuImplementation{
     private Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
-                .child(activity.getString(R.string.database_open_games))
+                .child(activity.getString(R.string.database_game))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -123,15 +123,15 @@ public class JoinGameImplementation extends MenuImplementation{
      */
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
         String gameId = dataSnapshot.getKey();
-        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_open_games_is_visible)).getValue(Boolean.class);
-        String name = dataSnapshot.child(activity.getString(R.string.database_open_games_name)).getValue(String.class);
-        int playerCount = (int) dataSnapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
-        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_max_player_count)).getValue(Integer.class);
+        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
+        String name = dataSnapshot.child(activity.getString(R.string.database_game_name)).getValue(String.class);
+        int playerCount = (int) dataSnapshot.child(activity.getString(R.string.database_game_players)).getChildrenCount();
+        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_game_max_player_count)).getValue(Integer.class);
         int maxPlayerCount = 0;
         if (maxPlayerCountInteger != null) {
             maxPlayerCount = maxPlayerCountInteger;
         }
-        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
+        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_game_start_location)).getValue(LocationRepresentation.class);
 
         if(isVisible == null || !isVisible || gameId == null || name == null || startLocation == null){
             return null;

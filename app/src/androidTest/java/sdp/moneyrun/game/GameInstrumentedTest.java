@@ -19,6 +19,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -35,6 +36,7 @@ import static org.junit.Assert.fail;
 public class GameInstrumentedTest {
 
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private final GameDatabaseProxy db = new GameDatabaseProxy();
 
     public Game getGame(){
         String name = "name";
@@ -67,7 +69,7 @@ public class GameInstrumentedTest {
     @Test
     public void GameIsAddedToDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -82,7 +84,7 @@ public class GameInstrumentedTest {
         Task<DataSnapshot> dataTask = ref.child("open_games").child(id).get();
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Game fromDB = Game.getGameFromTaskSnapshot(task);
+                Game fromDB = db.getGameFromTaskSnapshot(task);
                 assertEquals(g.getName(), fromDB.getName());
                 assertEquals(g.getPlayers(), fromDB.getPlayers());
                 assertEquals(g.getMaxPlayerCount(), fromDB.getMaxPlayerCount());
@@ -104,14 +106,14 @@ public class GameInstrumentedTest {
     @Test
     public void GameCannotBeAddedTwiceToDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         String id = g.getId();
-        assertEquals(id, g.addToDB());
+        assertEquals(id, db.putGame(g));
     }
 
 
@@ -121,7 +123,7 @@ public class GameInstrumentedTest {
     @Test
     public void GamePlayerListChangesWithDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -148,7 +150,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataSnapshotRetrievesGameFromDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -161,7 +163,7 @@ public class GameInstrumentedTest {
             fail();
         }
         Task<DataSnapshot> dataTaskManually = ref.child("open_games").child(id).get();
-        Task<DataSnapshot> dataTaskFunction = Game.getGameDataSnapshot(id);
+        Task<DataSnapshot> dataTaskFunction = db.getGameDataSnapshot(id);
         dataTaskManually.addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 dataTaskFunction.addOnCompleteListener(task2 -> {
@@ -187,7 +189,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataSnapshotFailsOnNullArg(){
         try{
-            Game.getGameDataSnapshot(null);
+            db.getGameDataSnapshot(null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -197,7 +199,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameFromTaskSnapShotFailsOnNullArg(){
         try{
-            Game.getGameFromTaskSnapshot(null);
+            db.getGameFromTaskSnapshot(null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -208,7 +210,7 @@ public class GameInstrumentedTest {
     public void setPlayersFailsOnNullArg(){
         try{
             Game g = getGame();
-            g.setPlayers(null);
+            g.setPlayers(null, false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -219,7 +221,7 @@ public class GameInstrumentedTest {
     public void addPlayerFailsOnNullArg(){
         try{
             Game g = getGame();
-            g.addPlayer(null);
+            g.addPlayer(null, false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -230,7 +232,7 @@ public class GameInstrumentedTest {
     public void removePlayerFailsOnNullArg(){
         try{
             Game g = getGame();
-            g.removePlayer(null);
+            g.removePlayer(null, false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -241,7 +243,7 @@ public class GameInstrumentedTest {
     public void setPlayersFailsOnEmptyList(){
         Game g = getGame();
         try{
-            g.setPlayers(new ArrayList<>());
+            g.setPlayers(new ArrayList<>(), false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -256,7 +258,7 @@ public class GameInstrumentedTest {
         Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
-        g.setPlayers(p);
+        g.setPlayers(p , false);
         assertEquals(p,g.getPlayers());
     }
 
@@ -268,7 +270,7 @@ public class GameInstrumentedTest {
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
-        g.addPlayer(player);
+        g.addPlayer(player, false);
         assertEquals(players, g.getPlayers());
     }
 
@@ -279,15 +281,15 @@ public class GameInstrumentedTest {
         Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
-        g.addPlayer(player);
-        g.removePlayer(player);
+        g.addPlayer(player, false);
+        g.removePlayer(player, false);
         assertEquals(players, g.getPlayers());
     }
 
     @Test
     public void setPlayersSetsPlayersOnDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -298,7 +300,7 @@ public class GameInstrumentedTest {
         Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
-        g.setPlayers(p);
+        g.setPlayers(p, false);
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e){
@@ -310,7 +312,7 @@ public class GameInstrumentedTest {
     @Test
     public void addPlayerSetsPlayersOnDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -321,7 +323,7 @@ public class GameInstrumentedTest {
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
-        g.addPlayer(player);
+        g.addPlayer(player, false);
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e){
@@ -333,7 +335,7 @@ public class GameInstrumentedTest {
     @Test
     public void removePlayerSetsPlayersOnDB(){
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -343,8 +345,8 @@ public class GameInstrumentedTest {
         Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
-        g.addPlayer(player);
-        g.removePlayer(player);
+        g.addPlayer(player, false);
+        g.removePlayer(player, false);
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e){
@@ -357,7 +359,7 @@ public class GameInstrumentedTest {
     public void addGameListenerFailsOnNullArg(){
         try{
             Game g = getGame();
-            g.addGameListener(null);
+            db.addGameListener(g, null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -378,14 +380,14 @@ public class GameInstrumentedTest {
             }
         };
         Game g = getGame();
-        g.addToDB();
+        db.putGame(g);
         try{
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         try{
-            g.addGameListener(v);
+            db.addGameListener(g, v);
         }catch (Exception e){
             fail();
         }
@@ -394,7 +396,7 @@ public class GameInstrumentedTest {
     @Test
     public void getIdReturnsId(){
         Game g = getGame();
-        String id = g.addToDB();
+        String id = db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
