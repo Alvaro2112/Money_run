@@ -4,12 +4,14 @@ package sdp.moneyrun;
 import android.location.Location;
 
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.lang.reflect.Array;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -30,14 +32,18 @@ public class GameTest {
     public Game getGame(){
         String name = "name";
         Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
         coins.add(new Coin(0., 0., 1));
         Location location = new Location("LocationManager#GPS_PROVIDER");
 
-        return new Game(name, host, 3, riddles, coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
+
+    @Mock
+    GameDbData gameData;
 
     @Test
     public void basicRiddleTest() {
@@ -205,7 +211,7 @@ public class GameTest {
     public void getIdReturnsCorrectValue(){
         Game game = getGame();
 
-        assertEquals(game.getId(), null);
+        assertNull(game.getId());
     }
 
     @Test

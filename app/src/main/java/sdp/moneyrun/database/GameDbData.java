@@ -52,6 +52,19 @@ public final class GameDbData {
         this.isVisible = isVisible;
     }
 
+    public GameDbData(GameDbData other){
+        if(other == null){
+            throw new IllegalArgumentException("other should not be null.");
+        }
+
+        this.name = other.name;
+        this.host = other.host;
+        this.players = other.players;
+        this.maxPlayerCount = other.maxPlayerCount;
+        this.startLocation = other.startLocation;
+        this.isVisible = other.isVisible;
+    }
+
     public GameDbData(){}
 
     public String getName() {

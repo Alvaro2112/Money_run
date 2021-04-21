@@ -171,6 +171,10 @@ public class Game {
         return hasBeenAdded;
     }
 
+    public GameDbData getGameDbData(){
+        return new GameDbData(gameDbData);
+    }
+
     public void setId(String id){
         if(id == null){
             throw new IllegalArgumentException("id should not be null.");
@@ -293,21 +297,65 @@ public class Game {
 
     /**
      * Sets the players for the Game, or for both the Game and the DB if it has been added
-     * @param p New List of Players
+     * @param players New List of Players
      */
-    public void setPlayers(List<Player> p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(p.isEmpty()){throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");}
+    public void setPlayers(List<Player> players){
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(players.isEmpty()){
+            throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");
+        }
+
         if(!hasBeenAdded){
-            gameDbData.setPlayers(p);
+            gameDbData.setPlayers(players);
         }else{
-            gameDbData.setPlayers(p);
+            gameDbData.setPlayers(players);
             FirebaseDatabase.getInstance().getReference()
                     .child("open_games")
                     .child(id)
                     .child("players")
-                    .setValue(p);
+                    .setValue(players);
         }
+    }
+
+    /**
+     * Add a player to the game, updates it in the database if necessary
+     * @param player new player
+     */
+    public void addPlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(getPlayers().contains(player)){
+            return;
+        }
+
+        List<Player> players = getPlayers();
+        players.add(player);
+
+        setPlayers(players);
+    }
+
+    /**
+     * Remove a player to the game, updates it in the database if necessary
+     * @param player the player to be removed
+     * @return the player previously at the specified location
+     */
+    public Player removePlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(!getPlayers().contains(player)){
+            return null;
+        }
+
+        List<Player> players = getPlayers();
+        players.remove(player);
+
+        setPlayers(players);
+
+        return player;
     }
 
     public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {

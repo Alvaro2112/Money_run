@@ -18,9 +18,9 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 
-import sdp.moneyrun.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
+import sdp.moneyrun.player.Player;
 
 public class MenuImplementation {
 

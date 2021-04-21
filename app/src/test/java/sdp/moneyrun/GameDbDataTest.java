@@ -2,6 +2,8 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
+import androidx.core.widget.TextViewCompat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,8 +40,9 @@ public class GameDbDataTest {
         List<Coin> coins = new ArrayList<>();
         coins.add(new Coin(1, 2, 3));
         int maxPlayers = 4;
-        Location targetLocation = new Location("");//provider name is unnecessary
-        return new GameDbData(name, host, players, maxPlayers, targetLocation, true);
+        mockLocation = Mockito.mock(Location.class);
+
+        return new GameDbData(name, host, players, maxPlayers, mockLocation, true);
     }
 
     @Mock
@@ -90,6 +93,19 @@ public class GameDbDataTest {
     }
 
     @Test
+    public void constructorForCloneThrowsExceptionWhenNull(){
+        assertThrows(IllegalArgumentException.class, () -> new GameDbData(null));
+        new GameDbData();
+    }
+
+    @Test
+    public void constructorForCloneWorks(){
+        GameDbData gameData = getTestData();
+
+        new GameDbData(gameData);
+    }
+
+    @Test
     public void getNameReturnsName(){
         assertEquals("game", getTestData().getName());
     }
@@ -114,6 +130,16 @@ public class GameDbDataTest {
         assertEquals(maxPlayers, getTestData().getMaxPlayerNumber());
     }
 
+    @Test
+    public void getStartLocationWorks(){
+
+        assertEquals(getTestData().getStartLocation(), mockLocation);
+    }
+
+    @Test
+    public void getIsVisibleReturnsMaxPlayers(){
+        assertTrue(getTestData().getIsVisible());
+    }
 
     @Test
     public void setPlayersFailsOnNullArg(){
@@ -213,9 +239,14 @@ public class GameDbDataTest {
         GameDbData sameRef = g;
         GameDbData sameContent = new GameDbData(name, host,players, maxPlayers, mockLocation, true);
 
-        assertTrue(g.equals(sameRef));
+        assertEquals(g, sameRef);
         assertNotEquals(null, g);
         assertEquals(g, sameContent);
+    }
+
+    @Test
+    public void hashThrowsNoException(){
+        getTestData().hashCode();
     }
 
 
