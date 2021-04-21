@@ -384,7 +384,6 @@ public class MapInstrumentedTest {
         }
     }
 
-
     @Test
     public void closeButtonWorks() {
 
