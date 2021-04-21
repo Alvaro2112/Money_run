@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.database;
 
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.player.Player;
 
 import static org.hamcrest.Matchers.is;

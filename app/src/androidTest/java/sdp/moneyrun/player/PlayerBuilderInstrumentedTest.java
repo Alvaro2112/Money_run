@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.player;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -6,9 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Random;
-
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.player.PlayerBuilder;
 
 @RunWith(AndroidJUnit4.class)
 public class PlayerBuilderInstrumentedTest {

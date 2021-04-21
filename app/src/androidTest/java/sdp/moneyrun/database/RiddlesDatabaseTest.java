@@ -1,18 +1,13 @@
-package sdp.moneyrun;
+package sdp.moneyrun.database;
 
 import android.content.Context;
 
-import junit.framework.TestCase;
 import androidx.test.core.app.ApplicationProvider;
+
+import junit.framework.TestCase;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import sdp.moneyrun.database.RiddlesDatabase;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 public class RiddlesDatabaseTest extends TestCase {

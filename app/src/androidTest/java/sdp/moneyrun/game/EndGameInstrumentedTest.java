@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.game;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
@@ -40,7 +41,7 @@ public class EndGameInstrumentedTest {
     public void updateTextFailsWithoutLists() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
 
-        Espresso.onView(withId(R.id.end_game_text)).check(matches(withText("Unfortunately the coin you collected have been lost")));
+        Espresso.onView(ViewMatchers.withId(R.id.end_game_text)).check(matches(withText("Unfortunately the coin you collected have been lost")));
         }
         catch (Exception e){
                 assertEquals(-1,2);

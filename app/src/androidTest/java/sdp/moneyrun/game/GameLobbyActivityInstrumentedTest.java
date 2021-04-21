@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.game;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.espresso.action.ViewActions;
@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 

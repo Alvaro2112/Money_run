@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.player;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.PlayerProfileActivity;
 
@@ -44,7 +44,7 @@ public class PlayerProfileInstrumentedTest {
     public void checkButtonOpenRightActivities() throws Throwable {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
-            onView(withId(R.id.drawer_layout))
+            onView(ViewMatchers.withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
             Espresso.onView(ViewMatchers.withId(R.id.profile_button)).perform(ViewActions.click());

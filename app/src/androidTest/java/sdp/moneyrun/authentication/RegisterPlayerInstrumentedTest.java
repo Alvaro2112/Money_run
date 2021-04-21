@@ -1,16 +1,18 @@
-package sdp.moneyrun;
+package sdp.moneyrun.authentication;
 import android.content.Context;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.PlayerProfileActivity;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
@@ -23,7 +25,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static sdp.moneyrun.SignUpActivityTest.withError;
+import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterPlayerInstrumentedTest {
@@ -35,7 +37,7 @@ public class RegisterPlayerInstrumentedTest {
             String address = "New York";
             String pet = "Dog";
             String color = "Green";
-            Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
+            Espresso.onView(ViewMatchers.withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerAddressText)).perform(typeText(address), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());

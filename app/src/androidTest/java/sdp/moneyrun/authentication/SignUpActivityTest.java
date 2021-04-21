@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.authentication;
 
 import android.content.Context;
 import android.view.View;
@@ -8,6 +8,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -18,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Random;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 
@@ -38,7 +40,7 @@ public class SignUpActivityTest {
         try(ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             Intents.init();
             String email = "exemple@epfl.ch";
-            Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(ViewMatchers.withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpEmailText)).check(matches(withText(email)));
             Intents.release();
         }

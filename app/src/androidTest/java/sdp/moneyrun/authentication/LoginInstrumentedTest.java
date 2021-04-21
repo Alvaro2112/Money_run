@@ -1,4 +1,4 @@
-package sdp.moneyrun;
+package sdp.moneyrun.authentication;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -10,6 +10,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -24,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
@@ -81,7 +83,7 @@ public class LoginInstrumentedTest {
     public void signUpButtonToSignUpPage() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
-            Espresso.onView(withId(R.id.signUpButton)).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withId(R.id.signUpButton)).perform(ViewActions.click());
             try{
                 Thread.sleep(100);
             }
