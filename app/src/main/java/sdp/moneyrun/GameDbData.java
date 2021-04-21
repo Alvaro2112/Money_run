@@ -76,6 +76,7 @@ public final class GameDbData {
         return isVisible;
     }
 
+
     /**
      * Adds a Player to the Player List, or does nothing if already present
      * @param player Player to add

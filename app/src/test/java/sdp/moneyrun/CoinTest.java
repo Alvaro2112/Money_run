@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class CoinTest {
 
@@ -23,7 +24,12 @@ public class CoinTest {
         assertEquals(coin.getValue(),1);
     }
 
+    @Test
+    public void equalsWorks(){
+        Coin coin1 = new Coin(23.0,2.0,1);
+        Coin coin2 = new Coin(23.0,2.0,1);
 
-
-
+        assertEquals(coin1, coin2);
+        assertNotEquals(coin1, null);
+    }
 }
