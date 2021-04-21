@@ -11,7 +11,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

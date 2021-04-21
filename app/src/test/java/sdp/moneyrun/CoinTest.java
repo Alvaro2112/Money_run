@@ -1,6 +1,9 @@
 package sdp.moneyrun;
 
 import org.junit.Test;
+
+import sdp.moneyrun.map.Coin;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 

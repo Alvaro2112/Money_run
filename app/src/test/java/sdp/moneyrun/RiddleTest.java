@@ -1,9 +1,10 @@
 package sdp.moneyrun;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Objects;
+
+import sdp.moneyrun.map.Riddle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

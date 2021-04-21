@@ -12,21 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".EndGameActivity">
+        <activity android:name=".ui.game.EndGameActivity">
 
         </activity>
-        <activity android:name=".map.MapActivity">
+        <activity android:name=".ui.map.MapActivity">
         </activity>
-        <activity android:name=".LeaderboardActivity" />
+        <activity android:name=".ui.menu.LeaderboardActivity" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".ui.authentication.SignUpActivity"
             android:theme="@style/AppTheme"
             tools:ignore="AllowBackup" />
         <activity
-            android:name=".MenuActivity"
+            android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,14 +35,14 @@
 
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.authentication.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".PlayerProfileActivity" />
+        <activity android:name=".ui.player.PlayerProfileActivity" />
         <activity
-            android:name=".RegisterPlayerActivity"
+            android:name=".ui.authentication.RegisterPlayerActivity"
             android:label="Register Player" />
         <activity
-            android:name=".GameLobbyActivity">
+            android:name=".ui.game.GameLobbyActivity">
         </activity>
     </application>
 

@@ -1,0 +1,151 @@
+package sdp.moneyrun.database;
+
+import android.location.Location;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import sdp.moneyrun.player.Player;
+
+
+/**
+ * This class only holds attributes THAT WILL BE ON THE DB, so
+ * do not add any temporary or auxiliary attributes to it if
+ * there is no use for them to be in the DB
+ */
+public final class GameDbData {
+    private String name;
+    private Player host;
+    private List<Player> players;
+    private int maxPlayerCount;
+    private Location startLocation;
+    boolean isVisible;
+
+    public GameDbData(String name,
+                      Player host,
+                      List<Player> players,
+                      int maxPlayerCount,
+                      Location startLocation,
+                      boolean isVisible){
+        if(name == null){
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(startLocation == null){
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if(maxPlayerCount <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+
+        this.name = name;
+        this.host = host;
+        this.players = players;
+        this.maxPlayerCount = maxPlayerCount;
+        this.startLocation = startLocation;
+        this.isVisible = isVisible;
+    }
+
+    public GameDbData(){}
+
+    public String getName() {
+        return name;
+    }
+
+    public Player getHost(){
+        return host;
+    }
+
+    public List<Player> getPlayers() {
+        return new ArrayList<>(players);
+    }
+
+    public int getMaxPlayerNumber() {
+        return maxPlayerCount;
+    }
+
+    public Location getStartLocation() {
+        return startLocation;
+    }
+
+    public boolean getIsVisible(){
+        return isVisible;
+    }
+
+
+    /**
+     * Adds a Player to the Player List, or does nothing if already present
+     * @param player Player to add
+     * @throws IllegalArgumentException if List already full
+     */
+    public void addPlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(players.size() == maxPlayerCount){
+            throw new IllegalArgumentException("You have already attained maxPlayerCount.");
+        }
+
+        if(!players.contains(player)){
+            players.add(player);
+        }
+    }
+
+    /**
+     * Removes a Player from the Player List
+     * @param player Player to remove
+     * @throws IllegalArgumentException if only one player left in List (and removing them would cause it to be empty)
+     */
+    public void removePlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null");
+        }
+        if(players.size() == 1) {
+            throw new IllegalArgumentException("players should not be empty");
+        }
+
+        players.remove(player);
+    }
+
+
+    /**
+     * Set List of Players
+     * @param players List of Players to set
+     * @throws IllegalArgumentException if the Player List is empty
+     */
+    public void setPlayers(List<Player> players) {
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(players.isEmpty()){
+            throw new IllegalArgumentException("players should not be empty.");
+        }
+
+        this.players = new ArrayList<>(players);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameDbData gameDbData = (GameDbData) o;
+        return name.equals(gameDbData.name) && players.equals(gameDbData.players) &&
+                (maxPlayerCount == gameDbData.maxPlayerCount) &&
+                (startLocation.getLongitude() == gameDbData.startLocation.getLongitude()) &&
+                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, players, maxPlayerCount, startLocation);
+    }
+}
+
+
+
