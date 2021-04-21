@@ -21,9 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.GameLobbyActivity;
-import sdp.moneyrun.GameRepresentation;
-import sdp.moneyrun.LocationRepresentation;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.game.GameRepresentation;
+import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.R;
 
 public class JoinGameImplementation extends MenuImplementation{

@@ -10,12 +10,14 @@ import com.mapbox.android.core.location.LocationEngineResult;
 
 import java.lang.ref.WeakReference;
 
+import sdp.moneyrun.ui.map.MapActivity;
+
 
 public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
     private final WeakReference<MapActivity> activityWeakReference;
 
-    LocationCheckObjectivesCallback(MapActivity activity) {
+    public LocationCheckObjectivesCallback(MapActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
