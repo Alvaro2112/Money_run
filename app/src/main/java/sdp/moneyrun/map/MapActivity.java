@@ -353,7 +353,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentLocation = location;
         Coin coin = isNearCoin(location);
         if (coin != null) {
-            onButtonShowQuestionPopupWindowClick(findViewById(R.id.mapView), true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+            onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
     }
 

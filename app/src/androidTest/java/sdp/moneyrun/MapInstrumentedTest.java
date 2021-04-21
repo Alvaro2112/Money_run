@@ -202,28 +202,6 @@ public class MapInstrumentedTest {
 
 
     @Test
-    public void QuestionsPopsUpWhenOnCoin() {
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            scenario.onActivity(a->{
-                Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude(),curloc.getLongitude(),1);
-                a.addCoin(coin);
-                a.checkObjectives(curloc);
-            });
-
-            onView(ViewMatchers.withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        }
-
-    }
-
-
-    @Test
     public void endGameStartsActivity() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             Intents.init();
@@ -354,12 +332,6 @@ public class MapInstrumentedTest {
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
             });
@@ -381,6 +353,39 @@ public class MapInstrumentedTest {
         }
     }
 
+
+    @Test
+    public void collectCoinButtonCollectsCoin() {
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
+            String question = "What is the color of the sky";
+            String correctAnswer = "blue";
+
+            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(a -> {
+                Location curloc = a.getCurrentLocation();
+                Coin coin = new Coin(curloc.getLatitude() / 2,curloc.getLongitude(),1);
+
+                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, coin);
+            });
+
+            onView(ViewMatchers.withId(R.id.question_choice_1)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.collect_coin)).perform(ViewActions.click());
+
+            scenario.onActivity(a->{
+                assertEquals(0,a.getSymbolManager().getAnnotations().size());
+            });
+
+        }
+    }
 
     @Test
     public void closeButtonWorks() {
