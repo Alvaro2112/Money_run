@@ -204,7 +204,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
         TextView buttonView = tv;
 
-        int id = 1;
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++) {
 
@@ -212,13 +211,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             buttonView.setText(riddle.getPossibleAnswers()[i]);
 
             if (riddle.getPossibleAnswers()[i].equals(riddle.getAnswer())) {
-                correctId = 0;
-                buttonView.setId(0);
+                correctId = buttonIds[i];
                 correctAnswerListener(popupWindow, correctId, coin);
             } else {
-                buttonView.setId(id);
-                wrongAnswerListener(popupWindow, id, riddle.getAnswer(), coin);
-                id += 1;
+                wrongAnswerListener(popupWindow, buttonIds[i], riddle.getAnswer(), coin);
             }
         }
 
@@ -239,14 +235,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
 
                 tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
                 tv.setTextColor(Color.RED);
 
-                ll.setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_1).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_2).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_3).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_4).setVisibility(View.GONE);
                 tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
 
@@ -266,14 +264,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
 
-                LinearLayout ll = popupWindow.getContentView().findViewById(R.id.questions);
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
 
                 tv.setText(R.string.CorrectAnswerMessage);
                 tv.setTextColor(Color.GREEN);
 
-                ll.setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_1).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_2).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_3).setVisibility(View.GONE);
+                popupWindow.getContentView().findViewById(R.id.question_choice_4).setVisibility(View.GONE);
+
                 tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
 

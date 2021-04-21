@@ -32,42 +32,30 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/questions"
+            <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:id="@+id/question_choice_1"
+                android:text="@string/answer_1" />
 
-                android:orientation="vertical">
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/question_choice_2"
+                android:text="@string/answer_2" />
 
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_1"
-                    android:text="@string/answer_1" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_2"
-                    android:text="@string/answer_2" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_3"
-                    android:text="@string/answer_3" />
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/question_choice_3"
+                android:text="@string/answer_3" />
 
 
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_4"
-                    android:text="@string/answer_4" />
-
-            </LinearLayout>
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/question_choice_4"
+                android:text="@string/answer_4" />
 
             <TextView
                 android:id="@+id/popup_answer"

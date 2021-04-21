@@ -1,17 +1,11 @@
 package sdp.moneyrun;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,7 +27,6 @@ import sdp.moneyrun.map.MapActivity;
 
 
 import sdp.moneyrun.menu.JoinGameImplementation;
-import sdp.moneyrun.menu.MenuImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 
 
@@ -47,7 +40,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected DrawerLayout mDrawerLayout;
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
-    private int tasksFInished;
+    private int tasksFinished;
     private Player currentPlayer;
 
     DatabaseReference databaseReference;
@@ -124,8 +117,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //Example of how the Async tasks should be implemented
-                numberOfAsyncTasks = 2;
-                tasksFInished = 0;
+                numberOfAsyncTasks = 2; //number of async tasks
+                tasksFinished = 0;
                 setContentView(R.layout.splash_screen);
 
                 Runnable x = new Runnable() {
@@ -141,10 +134,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(tasksFInished == numberOfAsyncTasks - 1){
+                        if(tasksFinished == numberOfAsyncTasks - 1){
                             StartMapActivity();
                         } else {
-                            tasksFInished += 1;
+                            tasksFinished += 1;
                         }
 
                         available.release();
@@ -164,10 +157,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        if(tasksFInished == numberOfAsyncTasks - 1){
+                        if(tasksFinished == numberOfAsyncTasks - 1){
                             StartMapActivity();
                         } else {
-                            tasksFInished += 1;
+                            tasksFinished += 1;
                         }
 
                         available.release();
