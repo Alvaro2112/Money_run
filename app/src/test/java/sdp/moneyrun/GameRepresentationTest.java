@@ -1,11 +1,9 @@
 package sdp.moneyrun;
 
-import android.location.Location;
-
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import sdp.moneyrun.game.GameRepresentation;
+import sdp.moneyrun.map.LocationRepresentation;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
