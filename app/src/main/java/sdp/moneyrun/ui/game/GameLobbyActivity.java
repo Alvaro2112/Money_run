@@ -3,6 +3,7 @@ package sdp.moneyrun.ui.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,24 +18,32 @@ public class GameLobbyActivity extends AppCompatActivity {
     String gameId;
     private ArrayList<Player> playerList = new ArrayList<>();
     private LobbyPlayerListAdapter listAdapter;
-
+    TextView playerMissingView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
+        addQuitLobbyButton();
 
+        gameId = (String) getIntent().getSerializableExtra("currentGameId");
+        addAdapter();
+
+        playerMissingView = findViewById(R.id.lobby_players_missing_TextView);
+        //TODO
+        // get number of player in the game
+        String default_score = getString(R.string.lobby_player_missing,0);
+        playerMissingView.setText(default_score);
+
+    }
+
+
+    public void addQuitLobbyButton(){
         findViewById(R.id.leave_lobby_button).setOnClickListener(v ->  {
             startActivity(new Intent(getApplicationContext(), MenuActivity.class));
             finish();
         });
 
-        gameId = (String) getIntent().getSerializableExtra("currentGameId");
-        addAdapter();
-        Player player = new Player(2,"gauthier","ok",2,2,2);
-        addPlayer(player);
     }
-
-
     public LobbyPlayerListAdapter getListAdapter(){
         return listAdapter;
     }
