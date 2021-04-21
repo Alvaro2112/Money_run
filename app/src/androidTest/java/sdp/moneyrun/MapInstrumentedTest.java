@@ -36,11 +36,10 @@ import static org.junit.Assert.assertTrue;
 
 public class MapInstrumentedTest {
 
-    @Rule
-    public ActivityScenarioRule<MapActivity> scenario = new ActivityScenarioRule<>(MapActivity.class);
 
     @Test
     public void moveCameraToWorks() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
 
             float lat = 8f;
             float lon = 8f;
@@ -49,7 +48,7 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.getScenario().onActivity(a ->{
+            scenario.onActivity(a ->{
                 a.moveCameraTo(lat,lon);
             });
             try {
@@ -57,13 +56,14 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.getScenario().onActivity(a ->{
+            scenario.onActivity(a ->{
                 LatLng latLng = a.getMapboxMap().getCameraPosition().target;
                 assertEquals(latLng.getLatitude(), 8.0,0.1);
                 assertEquals(latLng.getLongitude(), 8.0,0.1);
                 System.out.println("LONGITUDE IS "+String.valueOf(latLng.getLatitude()));
             });
         }
+    }
 
     @Test
     public void testSymbolManager() {
@@ -206,7 +206,7 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -240,8 +240,6 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
             intended(hasComponent(EndGameActivity.class.getName()));
             Intents.release();
@@ -355,6 +353,12 @@ public class MapInstrumentedTest {
             String correctAnswer = "blue";
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);

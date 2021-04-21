@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity android:name=".EndGameActivity">
-
         </activity>
         <activity android:name=".map.MapActivity">
         </activity>
