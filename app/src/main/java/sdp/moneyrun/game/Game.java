@@ -32,6 +32,9 @@ public class Game {
 
     private static final String TAG = Game.class.getSimpleName();
 
+    private final String DATABASE_GAME = "games";
+    private final String DATABASE_PLAYER = "players";
+
     //Attributes
     private final GameDbData gameDbData;
     private final List<Riddle> riddles;
@@ -205,9 +208,9 @@ public class Game {
         }else{
             gameDbData.setPlayers(players);
             FirebaseDatabase.getInstance().getReference()
-                    .child("open_games")
+                    .child(DATABASE_GAME)
                     .child(id)
-                    .child("players")
+                    .child(DATABASE_GAME)
                     .setValue(players);
         }
     }

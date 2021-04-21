@@ -38,6 +38,8 @@ public class GameInstrumentedTest {
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private final GameDatabaseProxy db = new GameDatabaseProxy();
 
+    private final String DATABASE_GAME = "games";
+
     public Game getGame(){
         String name = "name";
         Player host = new Player(3,"Bob", "Epfl",0,0,0);
@@ -81,7 +83,7 @@ public class GameInstrumentedTest {
         if(id.equals("")){
             fail();
         }
-        Task<DataSnapshot> dataTask = ref.child("open_games").child(id).get();
+        Task<DataSnapshot> dataTask = ref.child(DATABASE_GAME).child(id).get();
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 Game fromDB = db.getGameFromTaskSnapshot(task);
@@ -137,7 +139,7 @@ public class GameInstrumentedTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
         players.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
-        ref.child("open_games").child(id).child("players").setValue(players);
+        ref.child(DATABASE_GAME).child(id).child("players").setValue(players);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -161,7 +163,7 @@ public class GameInstrumentedTest {
         if(id.equals("")){
             fail();
         }
-        Task<DataSnapshot> dataTaskManually = ref.child("open_games").child(id).get();
+        Task<DataSnapshot> dataTaskManually = ref.child(DATABASE_GAME).child(id).get();
         Task<DataSnapshot> dataTaskFunction = db.getGameDataSnapshot(id);
         dataTaskManually.addOnCompleteListener(task -> {
             if(task.isSuccessful()){
