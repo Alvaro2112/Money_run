@@ -245,9 +245,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 tv.setTextColor(Color.RED);
 
                 ll.setVisibility(View.GONE);
-                tv.setVisibility(View.VISIBLE);
+               /* tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
-/*
+
                 closePopupListener(popupWindow, R.id.continue_run);
                 if(coin != null){
                     disabledLocalCoins.add(coin);
@@ -273,9 +273,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 tv.setTextColor(Color.GREEN);
 
                 ll.setVisibility(View.GONE);
-                tv.setVisibility(View.VISIBLE);
+/*                tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
-/*
+
                 closePopupListener(popupWindow, R.id.collect_coin);
                 if(coin != null)
                     removeCoin(coin, false);
