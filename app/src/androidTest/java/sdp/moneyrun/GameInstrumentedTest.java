@@ -10,13 +10,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +30,8 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameInstrumentedTest {
+    private  long ASYNC_CALL_TIMEOUT = 5L;
+
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     Game getTestGame() {
         String name = "TestGame";
@@ -39,7 +45,9 @@ public class GameInstrumentedTest {
         Location targetLocation = new Location("");//provider name is unnecessary
         targetLocation.setLatitude(10);
         targetLocation.setLongitude(20);
-        return new Game(name, players, maxPlayers, targetLocation);
+        Game g =  new Game(name, players, maxPlayers, targetLocation);
+        g.setCoins(Arrays.asList(new Coin(17,56,45)));
+        return g;
     }
 
 
@@ -347,7 +355,7 @@ public class GameInstrumentedTest {
         Location targetLocation = new Location("");//provider name is unnecessary
         targetLocation.setLatitude(10);
         targetLocation.setLongitude(20);
-        assertEquals(new GameDbData(name, players, maxPlayers, targetLocation).getPlayers().get(0), getTestGame().getGameDbData().getPlayers().get(0));
+        assertEquals(new GameDbData(name, players, maxPlayers, targetLocation, new ArrayList<>()).getPlayers().get(0), getTestGame().getGameDbData().getPlayers().get(0));
     }
 
     @Test
@@ -369,6 +377,78 @@ public class GameInstrumentedTest {
     test to be in the Unit test folder. So we cannot do both without heavily modifying the class,
     and as stated, equals is already tested in GameDbData, and this equals is litterally just
     a call to that one*/
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addCoinListenerThrowsCorrectException(){
+        Game g = getTestGame();
+        g.addCoinListener(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeCoinListenerThrowsCorrectException(){
+        Game g = getTestGame();
+        g.addCoinListener(null);
+    }
+
+    @Test
+    public void addCoinListenerCorrectlyUpdatesValues(){
+        Game g = getTestGame();
+        int firstValue = 7;
+        int updatedValue = 323324;
+        double lat = 17.;
+        double lon = 18.;
+        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)));
+
+        CountDownLatch updated = new CountDownLatch(1);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {
+                };
+                List<Coin> newCoinData = snapshot.getValue(coinIndicator);
+                assertEquals(updatedValue,g.getGameDbData().getCoins().get(0).getValue());
+                updated.countDown();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                assert(false);
+            }
+        };
+        g.addToDB();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        g.addCoinListener(listener);
+        g.setCoin(0, new Coin(lat,lon, updatedValue));
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, updated.getCount());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        g.removeCoinListener(listener);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinsThrowsException(){
+        Game g = getTestGame();
+        g.setCoins(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinThrowsException(){
+        Game g = getTestGame();
+        g.setCoin(0, null);
+    }
+
+    @Test
+    public void setCoinReturnFalseForIndexTooBig(){
+        Game data = getTestGame();
+        assert (!data.setCoin(1, new Coin()));
+    }
 
 
 }

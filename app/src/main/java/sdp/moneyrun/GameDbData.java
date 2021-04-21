@@ -17,11 +17,15 @@ public final class GameDbData {
     private List<Player> players;
     private Integer maxPlayerNumber;
     private Location startLocation;//TODO: check if we will use the existing or create a new class Location
+
+
+
+    private List<Coin> coins;
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     //the host always has to be in it
 
-    public GameDbData(String name, List<Player> players, Integer maxPlayerNumber, Location startLocation){
-        if(name == null || players == null || startLocation == null) {
+    public GameDbData(String name, List<Player> players, Integer maxPlayerNumber, Location startLocation, List<Coin> coins){
+        if(name == null || players == null || startLocation == null || coins == null) {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         if(players.isEmpty()){
@@ -30,6 +34,7 @@ public final class GameDbData {
         if(maxPlayerNumber <= 0){
             throw new IllegalArgumentException("Error : maxPlayers <= 0");
         }
+        this.coins = new ArrayList<>(coins);
         this.name = name;
         this.players = new ArrayList<>(players);
         this.maxPlayerNumber = maxPlayerNumber;
@@ -43,6 +48,7 @@ public final class GameDbData {
         this.players = data.getPlayers();
         this.maxPlayerNumber = data.getMaxPlayerNumber();
         this.startLocation = data.getStartLocation();
+        this.coins = data.getCoins();
     }
 
     public GameDbData(){}
@@ -64,6 +70,19 @@ public final class GameDbData {
     public Location getStartLocation() {
         return startLocation;
     }
+
+    public List<Coin> getCoins() {
+        return new ArrayList<>(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        if( coins.size() < index + 1) return false;
+        coins.set(index, coin);
+        return true;
+    }
+
+
 
     /**
      * Adds a Player to the Player List, or does nothing if already present
@@ -100,6 +119,13 @@ public final class GameDbData {
         if(players.isEmpty()){throw new IllegalArgumentException("Players can never be empty");}
         this.players = new ArrayList<>(players);
     }
+
+    public void setCoins(List<Coin> coins) {
+        if(coins == null) throw new IllegalArgumentException();
+        this.coins = new ArrayList<>(coins);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

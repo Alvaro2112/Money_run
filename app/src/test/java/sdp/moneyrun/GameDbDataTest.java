@@ -10,7 +10,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,7 +31,7 @@ public class GameDbDataTest {
         coins.add(new Coin(1, 2, 3));
         int maxPlayers = 4;
         Location targetLocation = new Location("");//provider name is unnecessary
-        return new GameDbData(name, players, maxPlayers, targetLocation);
+        return new GameDbData(name, players, maxPlayers, targetLocation, new ArrayList<>());
     }
 
     @Mock
@@ -44,14 +43,14 @@ public class GameDbDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, 3, null);
+            GameDbData g = new GameDbData("name", players, 3, null, new ArrayList<>());
         });
     }
 
     @Test
     public void constructorFailsOnEmptyPlayerList(){
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new Location(""));
+            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new Location(""), new ArrayList<>());
         });
     }
 
@@ -60,7 +59,7 @@ public class GameDbDataTest {
         List<Player> players = new ArrayList<>();
         players.add(new Player(1, "James", "Lausanne", 3, 4));
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, -4, new Location(""));
+            GameDbData g = new GameDbData("name", players, -4, new Location(""), new ArrayList<>());
         });
     }
 
@@ -193,7 +192,7 @@ public class GameDbDataTest {
         when(mockLocation.getLatitude()).thenReturn(4.0);
         when(mockLocation.getLongitude()).thenReturn(3.0);
 
-        GameDbData g = new GameDbData(name, players, maxPlayers, mockLocation);
+        GameDbData g = new GameDbData(name, players, maxPlayers, mockLocation, new ArrayList<>());
         GameDbData sameRef = g;
         GameDbData sameContent = new GameDbData(g);
 
@@ -201,6 +200,24 @@ public class GameDbDataTest {
         assertFalse(g.equals(null));
         assertTrue(g.equals(sameContent));
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinsThrowsException(){
+        GameDbData data= getTestData();
+        data.setCoins(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinThrowsException(){
+        GameDbData data = getTestData();
+        data.setCoin(0, null);
+    }
+
+    @Test
+    public void setCoinReturnFalseForIndexTooBig(){
+        GameDbData data = getTestData();
+        assert (!data.setCoin(0, new Coin()));
     }
 
 

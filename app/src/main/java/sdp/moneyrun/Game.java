@@ -25,7 +25,6 @@ import java.util.Objects;
 public class Game {
     //Attributes
     private GameDbData gameDbData;
-    private  List<Coin> coins;
     private  List<Riddle> riddles;
 
 
@@ -48,7 +47,7 @@ public class Game {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         rootReference = FirebaseDatabase.getInstance().getReference();
-        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation);
+        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation, new ArrayList<>());
         this.hasBeenAdded = false;
         this.id = "";
     }
@@ -58,7 +57,7 @@ public class Game {
             throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
         }
         rootReference = FirebaseDatabase.getInstance().getReference();
-        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation);
+        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation, coins);
         this.hasBeenAdded = false;
         this.id = "";
     }
@@ -90,10 +89,9 @@ public class Game {
         }
 
         this.isVisible = true;
-        this.gameDbData = new GameDbData(name, players, maxPlayerCount,startLocation);
+        this.gameDbData = new GameDbData(name, players, maxPlayerCount,startLocation, coins);
         this.id = gameId;
         this.riddles = riddles;
-        this.coins = coins;
     }
 
     public Game(String gameId,
@@ -142,6 +140,19 @@ public class Game {
                 };
                 List<Player> newData = snapshot.getValue(t);
                 gameDbData.setPlayers(newData);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "failed " + error.getMessage());
+            }
+        });
+        gameRef.child("coins").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {};
+                      List<Coin> newCoinData = snapshot.getValue(coinIndicator);
+                        gameDbData.setCoins(newCoinData);
             }
 
             @Override
@@ -203,6 +214,16 @@ public class Game {
         }
     }
 
+    public void addCoinListener(ValueEventListener listener){
+        if (listener == null) throw new IllegalArgumentException();
+        FirebaseDatabase.getInstance().getReference().child("open_games").child("coins").addValueEventListener(listener);
+    }
+
+    public void removeCoinListener(ValueEventListener listener){
+        if (listener == null) throw new IllegalArgumentException();
+        FirebaseDatabase.getInstance().getReference().child("open_games").child("coins").removeEventListener(listener);
+    }
+
     /**
      * Sets the players for the Game, or for both the Game and the DB if it has been added
      * @param p New List of Players
@@ -217,6 +238,16 @@ public class Game {
             rootReference.child("open_games").child(id).child("players").setValue(p);
         }
 
+    }
+
+    public void setCoins(List<Coin> coins){
+        if(coins == null) throw new IllegalArgumentException();
+        gameDbData.setCoins(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        return gameDbData.setCoin(index, coin);
     }
 
     /**
