@@ -116,7 +116,6 @@ public class GameInstrumentedTest {
         assertEquals(id, db.putGame(g));
     }
 
-
     /**
      * This tests that the player list is in synchro with the DB
      */
