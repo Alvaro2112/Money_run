@@ -239,11 +239,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.continue_run);
 
-                /*
+
 
                 tv.setText("You are incorrect!\n The answer was " + "'" + answer + "'");
                 tv.setTextColor(Color.RED);
-
+/*
                 ll.setVisibility(View.GONE);
                 tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
@@ -269,9 +269,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 TextView tv = popupWindow.getContentView().findViewById(R.id.popup_answer);
                 Button bt = popupWindow.getContentView().findViewById(R.id.collect_coin);
 
-               /* tv.setText(R.string.CorrectAnswerMessage);
+                tv.setText(R.string.CorrectAnswerMessage);
                 tv.setTextColor(Color.GREEN);
-
+/*
                 ll.setVisibility(View.GONE);
                 tv.setVisibility(View.VISIBLE);
                 bt.setVisibility(View.VISIBLE);
