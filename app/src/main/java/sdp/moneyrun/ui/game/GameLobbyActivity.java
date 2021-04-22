@@ -7,11 +7,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.MenuActivity;
+
+import static sdp.moneyrun.game.Game.getGameDataSnapshot;
+import static sdp.moneyrun.game.Game.getGameFromTaskSnapshot;
 
 public class GameLobbyActivity extends AppCompatActivity {
 
@@ -19,20 +27,26 @@ public class GameLobbyActivity extends AppCompatActivity {
     private ArrayList<Player> playerList = new ArrayList<>();
     private LobbyPlayerListAdapter listAdapter;
     TextView playerMissingView;
+    DatabaseProxy dbProxy;
+    private Game game;
+    private int playerInGame;
+    private int missingPlayers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
         addQuitLobbyButton();
-
-        gameId = (String) getIntent().getSerializableExtra("currentGameId");
         addAdapter();
-
+        playerInGame = 1;
+        gameId = (String) getIntent().getSerializableExtra("currentGameId");
+        Task<DataSnapshot> task = getGameDataSnapshot(gameId);
+        game = getGameFromTaskSnapshot(task);
+        if(game != null) {
+            missingPlayers = game.getMaxPlayerCount() - 1;
+        }
         playerMissingView = findViewById(R.id.lobby_players_missing_TextView);
-        //TODO
-        // get number of player in the game
-        String default_score = getString(R.string.lobby_player_missing,0);
-        playerMissingView.setText(default_score);
+        String default_player_missing = getString(R.string.lobby_player_missing, missingPlayers);
+        playerMissingView.setText(default_player_missing);
 
     }
 
