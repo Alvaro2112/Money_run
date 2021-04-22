@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
@@ -104,7 +105,12 @@ public class MenuActivityTest {
 
     @Test
     public void newGamePopupIsDisplayed() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
+
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
