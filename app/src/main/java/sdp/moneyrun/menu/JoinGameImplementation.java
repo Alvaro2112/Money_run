@@ -41,16 +41,22 @@ public class JoinGameImplementation extends MenuImplementation{
 
     private final boolean focusable;
     private final int layoutId;
+    private final Player currentUser;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
-                                  int layoutId){
+                                  int layoutId,
+                                  Player player){
         super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
         this.focusable = focusable;
         this.layoutId = layoutId;
+        if(player == null){
+            throw new IllegalArgumentException("Player is null");
+        }
+        this.currentUser = player;
     }
 
     /**
@@ -276,9 +282,34 @@ public class JoinGameImplementation extends MenuImplementation{
     }
 
     private void joinLobbyFromJoinButton(GameRepresentation gameRepresentation){
-        Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+        //This block adds the user to the player list of the game he just joined
+
+        //First get the player list, then add yourself to it, then push the player list
+        //It's kind of intensive as code, but I see no other way of doing it.
+        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_open_games))
+                .child(gameRepresentation.getGameId())
+                .child(activity.getString(R.string.database_open_games_players));
+
+         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
+                List<Player> players = snapshot.getValue(t);
+                players.add(currentUser);
+                gamePlayers.setValue(players);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error adding a player who joined the Game to the DB \n"+ error.getMessage());
+            }
+        });
+
+
+
+                Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
-        lobbyIntent.putExtra("currentGameId", gameRepresentation.getGameId());
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId());
 
         activity.startActivity(lobbyIntent);
     }

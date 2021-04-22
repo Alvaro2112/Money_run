@@ -76,7 +76,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissionsLauncher,
                 fusedLocationClient,
                 true,
-                R.layout.join_game_popup);
+                R.layout.join_game_popup, user);
 
         NewGameImplementation newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
