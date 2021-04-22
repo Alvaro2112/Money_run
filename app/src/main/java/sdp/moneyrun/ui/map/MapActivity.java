@@ -51,7 +51,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private  long ASYNC_CALL_TIMEOUT = 10L;
-
+    private final String COIN_ID = "COIN";
 
     private int playerId;
     private TextView currentScoreView;
@@ -143,6 +143,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         callback = new LocationCheckObjectivesCallback(this);
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
@@ -150,6 +151,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             enableLocationComponent(style);
         });
         this.mapboxMap = mapboxMap;
+
     }
 
     public Chronometer getChronometer() {
@@ -231,7 +233,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         remainingCoins.add(coin);
 
-        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())));
+        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())));//.withIconImage("R.drawable.baseline_paid_20.xml"));
     }
 
     /**
