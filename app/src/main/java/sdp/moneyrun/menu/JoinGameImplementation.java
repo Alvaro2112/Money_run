@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,22 +42,22 @@ public class JoinGameImplementation extends MenuImplementation{
 
     private final boolean focusable;
     private final int layoutId;
-    //private final Player currentUser;
+    private final Player currentUser;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
+                                  Player user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
-                                  int layoutId,
-                                  Player player){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+                                  int layoutId){
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         this.focusable = focusable;
         this.layoutId = layoutId;
-        /*if(player == null){
-            throw new IllegalArgumentException("Player is null");
+        if(user == null){
+            throw new IllegalArgumentException("user is null");
         }
-        this.currentUser = player;*/
+        this.currentUser = user;
     }
 
     /**
@@ -103,7 +104,7 @@ public class JoinGameImplementation extends MenuImplementation{
     private Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
-                .child(activity.getString(R.string.database_open_games))
+                .child(activity.getString(R.string.database_game))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -136,26 +137,18 @@ public class JoinGameImplementation extends MenuImplementation{
      */
 
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
-        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_open_games_is_visible)).getValue(Boolean.class);
         String gameId = dataSnapshot.getKey();
-        String name = dataSnapshot.child(activity.getString(R.string.database_open_games_name)).getValue(String.class);
-
-        GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
-        List<Player> players = dataSnapshot.child(activity.getString(R.string.database_open_games_players)).getValue(t);
-        int playerCount = 0;
-        if(players != null){
-            playerCount = players.size();
-        }
-
-
-        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_max_player_number)).getValue(Integer.class);
+        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
+        String name = dataSnapshot.child(activity.getString(R.string.database_game_name)).getValue(String.class);
+        int playerCount = (int) dataSnapshot.child(activity.getString(R.string.database_game_players)).getChildrenCount();
+        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_game_max_player_count)).getValue(Integer.class);
         int maxPlayerCount = 0;
         if (maxPlayerCountInteger != null) {
             maxPlayerCount = maxPlayerCountInteger;
         }
-        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
+        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_game_start_location)).getValue(LocationRepresentation.class);
 
-        if(isVisible == null || !isVisible ||gameId == null || name == null || startLocation == null){
+        if(isVisible == null || !isVisible || gameId == null || name == null || startLocation == null){
             return null;
         }
 
@@ -295,7 +288,7 @@ public class JoinGameImplementation extends MenuImplementation{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
                 List<Player> players = snapshot.getValue(t);
-                //players.add(currentUser);
+                players.add(currentUser);
                 gamePlayers.setValue(players);
             }
 

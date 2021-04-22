@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.LocationRepresentation;
@@ -30,9 +32,10 @@ import sdp.moneyrun.map.Riddle;
 public class NewGameImplementation extends MenuImplementation {
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
+                                 Player user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                  FusedLocationProviderClient fusedLocationClient){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
     }
 
     /**
@@ -99,11 +102,10 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
-        Game toAdd = new Game(name, host, maxPlayerCount, new ArrayList<Riddle>(), new ArrayList<Coin>(), startLocation, true);
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_open_games)).push();
+        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
         DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_open_games))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_open_games_start_location));
+                .child(activity.getString(R.string.database_game))
+                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
 
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -117,17 +119,18 @@ public class NewGameImplementation extends MenuImplementation {
                     }
 
                     // Build new game given fields filled by user
-                    String gameId = gameReference.getKey();
-                    List<Player> players = new ArrayList<>();
                     List<Riddle> riddles = new ArrayList<>();
                     List<Coin> coins = new ArrayList<>();
 
-                    Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
+                    Game game = new Game(name, user, maxPlayerCount, riddles, coins, location, true);
 
+                    // post game to database
+                    GameDatabaseProxy gdb = new GameDatabaseProxy();
+                    gdb.putGame(game);
 
                     // Post location to database
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                    startLocationReference.setValue(locationRep);
+                    //LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                    //startLocationReference.setValue(locationRep);
                 });
     }
 }

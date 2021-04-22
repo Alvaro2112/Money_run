@@ -15,9 +15,11 @@ import com.google.firebase.database.ValueEventListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -25,55 +27,72 @@ import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
 public class GameInstrumentedTest {
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    Game getTestGame() {
-        String name = "TestGame";
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4, 0));
-        players.add(new Player(2, "Potter", "Nyon", 3, 4, 0));
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
-        int maxPlayers = 4;
 
-        Location targetLocation = new Location("");//provider name is unnecessary
-        targetLocation.setLatitude(10);
-        targetLocation.setLongitude(20);
-        return new Game(name, players, maxPlayers, targetLocation);
+    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private final GameDatabaseProxy db = new GameDatabaseProxy();
+
+    private final String DATABASE_GAME = "games";
+
+    public Game getGame(){
+        String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
+    public GameDbData getGameData(){
+        String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        int maxPlayerCount = 3;
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
 
+        return new GameDbData(name, host, players, maxPlayerCount, location, true);
+    }
 
     @Test
     public void GameIsAddedToDB(){
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String id = g.getGameId();
+        String id = g.getId();
 
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
             fail();
         }
-        Task<DataSnapshot> dataTask = ref.child("open_games").child(id).get();
+        Task<DataSnapshot> dataTask = ref.child(DATABASE_GAME).child(id).get();
         dataTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Game fromDB = Game.getGameFromTaskSnapshot(task);
-                assertEquals(g.getGameDbData().getName(), fromDB.getGameDbData().getName());
-                assertEquals(g.getGameDbData().getPlayers(), fromDB.getGameDbData().getPlayers());
-                assertEquals(g.getGameDbData().getMaxPlayerNumber(), fromDB.getGameDbData().getMaxPlayerNumber());
+                Game fromDB = db.getGameFromTaskSnapshot(task);
+                assertEquals(g.getName(), fromDB.getName());
+                assertEquals(g.getPlayers(), fromDB.getPlayers());
+                assertEquals(g.getMaxPlayerCount(), fromDB.getMaxPlayerCount());
                 //Soooo Android.Location doesnt have a .equals() method... Have to check manually -_-
-                if(g.getGameDbData().getStartLocation().getLatitude() != fromDB.getGameDbData().getStartLocation().getLatitude() ||
-                        g.getGameDbData().getStartLocation().getLongitude() != fromDB.getGameDbData().getStartLocation().getLongitude()){
+                if(g.getStartLocation().getLatitude() != fromDB.getStartLocation().getLatitude() ||
+                        g.getStartLocation().getLongitude() != fromDB.getStartLocation().getLongitude()){
                     fail();
                 }
 
@@ -88,65 +107,64 @@ public class GameInstrumentedTest {
 
     @Test
     public void GameCannotBeAddedTwiceToDB(){
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String id = g.getGameId();
-        assertEquals(id, g.addToDB());
+        String id = g.getId();
+        assertEquals(id, db.putGame(g));
     }
-
 
     /**
      * This tests that the player list is in synchro with the DB
      */
     @Test
     public void GamePlayerListChangesWithDB(){
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String id = g.getGameId();
+        String id = g.getId();
 
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
             fail();
         }
-        List<Player> playerss = new ArrayList<>();
-        playerss.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
-        playerss.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
-        ref.child("open_games").child(id).child("players").setValue(playerss);
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
+        players.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
+        ref.child(DATABASE_GAME).child(id).child("players").setValue(players);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertEquals(playerss, g.getGameDbData().getPlayers());
+        assertEquals(players, g.getPlayers());
     }
 
     @Test
     public void getGameDataSnapshotRetrievesGameFromDB(){
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        String id = g.getGameId();
+        String id = g.getId();
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
             fail();
         }
-        Task<DataSnapshot> dataTaskManually = ref.child("open_games").child(id).get();
-        Task<DataSnapshot> dataTaskFunction = Game.getGameDataSnapshot(id);
+        Task<DataSnapshot> dataTaskManually = ref.child(DATABASE_GAME).child(id).get();
+        Task<DataSnapshot> dataTaskFunction = db.getGameDataSnapshot(id);
         dataTaskManually.addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 dataTaskFunction.addOnCompleteListener(task2 -> {
@@ -172,7 +190,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataSnapshotFailsOnNullArg(){
         try{
-            Game.getGameDataSnapshot(null);
+            db.getGameDataSnapshot(null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -182,7 +200,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameFromTaskSnapShotFailsOnNullArg(){
         try{
-            Game.getGameFromTaskSnapshot(null);
+            db.getGameFromTaskSnapshot(null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -192,8 +210,30 @@ public class GameInstrumentedTest {
     @Test
     public void setPlayersFailsOnNullArg(){
         try{
-            Game g = getTestGame();
-            g.setPlayers(null);
+            Game g = getGame();
+            g.setPlayers(null, false);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void addPlayerFailsOnNullArg(){
+        try{
+            Game g = getGame();
+            g.addPlayer(null, false);
+        }catch (IllegalArgumentException e){
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void removePlayerFailsOnNullArg(){
+        try{
+            Game g = getGame();
+            g.removePlayer(null, false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -202,9 +242,9 @@ public class GameInstrumentedTest {
 
     @Test
     public void setPlayersFailsOnEmptyList(){
-        Game g = getTestGame();
+        Game g = getGame();
         try{
-            g.setPlayers(new ArrayList<Player>());
+            g.setPlayers(new ArrayList<>(), false);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -213,20 +253,44 @@ public class GameInstrumentedTest {
 
     @Test
     public void setPlayersSetsPlayersLocally(){
-        Game g = getTestGame();
+        Game g = getGame();
         List<Player> p = new ArrayList<>();
         Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
         Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
-        g.setPlayers(p);
-        assertEquals(p,g.getGameDbData().getPlayers());
+        g.setPlayers(p , false);
+        assertEquals(p,g.getPlayers());
+    }
+
+    @Test
+    public void addPlayerSetsPlayersLocally(){
+        Game g = getGame();
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        players.add(player);
+        g.addPlayer(player, false);
+        assertEquals(players, g.getPlayers());
+    }
+
+    @Test
+    public void removePlayerSetsPlayersLocally(){
+        Game g = getGame();
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        g.addPlayer(player, false);
+        g.removePlayer(player, false);
+        assertEquals(players, g.getPlayers());
     }
 
     @Test
     public void setPlayersSetsPlayersOnDB(){
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -237,20 +301,66 @@ public class GameInstrumentedTest {
         Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
         p.add(toAdd);
         p.add(toAdd2);
-        g.setPlayers(p);
+        g.setPlayers(p, false);
         try{
             Thread.sleep(2000);
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        assertEquals(p,g.getGameDbData().getPlayers());
+        assertEquals(p,g.getPlayers());
+    }
+
+    @Test
+    public void addPlayerSetsPlayersOnDB(){
+        Game g = getGame();
+        db.putGame(g);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        players.add(player);
+        g.addPlayer(player, false);
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        assertEquals(players, g.getPlayers());
+    }
+
+    @Test
+    public void removePlayerSetsPlayersOnDB(){
+        Game g = getGame();
+        db.putGame(g);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        g.addPlayer(player, false);
+        g.removePlayer(player, false);
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        assertEquals(players, g.getPlayers());
     }
 
     @Test
     public void addGameListenerFailsOnNullArg(){
         try{
-            Game g = getTestGame();
-            g.addGameListener(null);
+            Game g = getGame();
+            db.addGameListener(g, null);
         }catch (IllegalArgumentException e){
             return;
         }
@@ -270,64 +380,35 @@ public class GameInstrumentedTest {
 
             }
         };
-        Game g = getTestGame();
-        g.addToDB();
+        Game g = getGame();
+        db.putGame(g);
         try{
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         try{
-            g.addGameListener(v);
+            db.addGameListener(g, v);
         }catch (Exception e){
             fail();
         }
     }
 
     @Test
-    public void GameShortConstructorThrowsErrorOnNullArg(){
-        try {
-            Game g = new Game("name", new ArrayList<Player>(), 3, null);
-        }catch(IllegalArgumentException e){
-            assertTrue(true);
-        }
-    }
-
-    @Test
-    public void GameLongConstructorThrowsErrorOnNullArg(){
-        try {
-            Game g = new Game("name", new ArrayList<Player>(), 3, null, null, null);
-        }catch(IllegalArgumentException e){
-            assertTrue(true);
-        }
-    }
-
-    @Test
-    public void GameLongConstructorWorksProperly(){
-        try {
-            List<Player> pList = new ArrayList<Player>();
-            pList.add(new Player(34));
-            Game g = new Game("name", pList, 3, new ArrayList<Riddle>(), new ArrayList<Coin>(), new Location(""));
-        }catch(IllegalArgumentException e){
-            fail();
-        }
-    }
-
-    @Test
     public void getIdReturnsId(){
-        Game g = getTestGame();
-        String id = g.addToDB();
+        Game g = getGame();
+        String id = db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        assertEquals(id, g.getGameId());
+        assertEquals(id, g.getId());
     }
 
     @Test
     public void testStartGameDoesNotCrash() {
-        Game game = getTestGame();
+        Game game = getGame();
         game.startGame();
         Game.startGame(game);
         assertEquals(1, 1);
@@ -337,35 +418,43 @@ public class GameInstrumentedTest {
     public void askPlayerQuestionShouldReturnFalse() {
         List<Riddle> riddleList = new ArrayList<>();
         riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        Game game = getTestGame();
-        assertEquals(game.askPlayer(game.getGameDbData().getPlayers().get(0), riddleList.get(0)), false);
+        Game game = getGame();
+        assertFalse(game.askPlayer(game.getPlayers().get(0), riddleList.get(0)));
     }
 
 
     @Test
     public void getGameDataReturnsGameData(){
-        String name = "TestGame";
+        String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4, 0));
-        players.add(new Player(2, "Potter", "Nyon", 3, 4, 0));
-        int maxPlayers = 4;
-        Location targetLocation = new Location("");//provider name is unnecessary
-        targetLocation.setLatitude(10);
-        targetLocation.setLongitude(20);
-        assertEquals(new GameDbData(name, players, maxPlayers, targetLocation).getPlayers().get(0), getTestGame().getGameDbData().getPlayers().get(0));
+        players.add(host);
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+
+        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true);
+
+        assertEquals(gameData, getGame().getGameDbData());
     }
 
     @Test
-    public void equalsFailsOnNull(){
-        Game g = getTestGame();
-        assertFalse(g.equals(null));
+    public void getGameDbDataWorks(){
+        Game game = getGame();
+        assertEquals(game.getGameDbData(), getGameData());
     }
 
     @Test
-    public void equalsWorksOnSameRef(){
-        Game g = getTestGame();
-        Game sameRef = g;
-        assertTrue(g.equals(sameRef));
+    public void equalsWorks(){
+        Game game1 = getGame();
+        Game game2 = getGame();
+        assertEquals(game1, game2);
+        assertNotEquals(game1, null);
     }
 
     /*On the matter of testing whether equals actually works, we already test in GameDbData that

@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
@@ -200,7 +201,7 @@ public class LoginInstrumentedTest {
 
             Player playerUser = playerUserRef.get();
 
-            DatabaseProxy db = new DatabaseProxy();
+            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.putPlayer(playerUser);
 
             try {
@@ -266,7 +267,7 @@ public class LoginInstrumentedTest {
 
             Player playerUser = playerUserRef.get();
 
-            DatabaseProxy db = new DatabaseProxy();
+            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.removePlayer(playerUser);
 
             try {
@@ -324,7 +325,7 @@ public class LoginInstrumentedTest {
 
             Player playerUser = playerUserRef.get();
 
-            DatabaseProxy db = new DatabaseProxy();
+            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.putPlayer(playerUser);
 
             Thread.sleep(4000);

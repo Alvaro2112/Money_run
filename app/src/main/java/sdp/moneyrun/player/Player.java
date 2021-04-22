@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 
 public class Player implements Serializable {
 
@@ -260,8 +261,8 @@ public class Player implements Serializable {
      */
     private void dbUpdate(boolean dbChange){
         if(dbChange){
-            DatabaseProxy db = new DatabaseProxy();
-            db.putPlayer(this);
+            PlayerDatabaseProxy pdb = new PlayerDatabaseProxy();
+            pdb.putPlayer(this);
         }
     }
 

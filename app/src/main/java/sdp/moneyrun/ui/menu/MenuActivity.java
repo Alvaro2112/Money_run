@@ -44,6 +44,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFinished;
+    private Player currentPlayer;
+    private int tasksFInished;
     private Player user;
 
     DatabaseReference databaseReference;
@@ -71,8 +73,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void runFunctionalities(){
+        //Setting the current player object
+        user = (Player) getIntent().getSerializableExtra("user");
+
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
+                user,
                 requestPermissionsLauncher,
                 fusedLocationClient,
                 true,
@@ -80,6 +86,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         NewGameImplementation newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
+                user,
                 requestPermissionsLauncher,
                 fusedLocationClient);
 
@@ -92,9 +99,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         Button newGame = findViewById(R.id.new_game);
         newGame.setOnClickListener(newGameImplementation::onClickShowNewGamePopupWindow);
-
-        //Setting the current player object
-        user = (Player) getIntent().getSerializableExtra("user");
     }
 
     @Override
@@ -120,8 +124,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //Example of how the Async tasks should be implemented
-                numberOfAsyncTasks = 2;
+                numberOfAsyncTasks = 2; //number of async tasks
                 tasksFinished = 0;
+
                 setContentView(R.layout.splash_screen);
 
                 Runnable x = new Runnable() {
