@@ -38,13 +38,31 @@
     <string name="game_name_display">%1$s</string>
     <string name="game_player_number_display">%1$d / %2$d</string>
 
-    <string name="database_open_games">open_games</string>
-    <string name="database_open_games_is_visible">isVisible</string>
-    <string name="database_open_games_game_id">gameId</string>
-    <string name="database_open_games_name">name</string>
-    <string name="database_open_games_player_count">playerCount</string>
-    <string name="database_open_games_max_player_count">maxPlayerCount</string>
-    <string name="database_open_games_start_location">startLocation</string>
+    <!--
+    Here are defined all the attribute names in the database!
+    -->
+
+    <!-- PLAYER -->
+    <string name="database_player">players</string>
+    <string name="database_player_address">address</string>
+    <string name="database_player_name">name</string>
+    <string name="database_player_number_of_died_games">numberOfDiedGames</string>
+    <string name="database_player_number_of_played_games">numberOfPlayedGames</string>
+    <string name="database_player_id">playerId</string>
+    <string name="database_player_score">score</string>
+
+    <!-- GAME -->
+    <string name="database_game">games</string>
+    <string name="database_game_host">host</string>
+    <string name="database_game_is_visible">isVisible</string>
+    <string name="database_game_max_player_count">maxPlayerCount</string>
+    <string name="database_game_name">name</string>
+    <string name="database_game_players">players</string>
+    <string name="database_game_start_location">startLocation</string>
+
+    <!-- LOCATION -->
+    <string name="database_location_latitude">latitude</string>
+    <string name="database_location_longitude">longitude</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

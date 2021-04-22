@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
@@ -36,11 +38,12 @@ public class JoinGameImplementation extends MenuImplementation{
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
+                                  Player user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
                                   int layoutId){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         this.focusable = focusable;
         this.layoutId = layoutId;
     }
@@ -89,7 +92,7 @@ public class JoinGameImplementation extends MenuImplementation{
     private Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
-                .child(activity.getString(R.string.database_open_games))
+                .child(activity.getString(R.string.database_game))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -119,22 +122,18 @@ public class JoinGameImplementation extends MenuImplementation{
      * @return
      */
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
-        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_open_games_is_visible)).getValue(Boolean.class);
-        String gameId = dataSnapshot.child(activity.getString(R.string.database_open_games_game_id)).getValue(String.class);
-        String name = dataSnapshot.child(activity.getString(R.string.database_open_games_name)).getValue(String.class);
-        Integer playerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_player_count)).getValue(Integer.class);
-        int playerCount = 0;
-        if (playerCountInteger != null) {
-            playerCount = playerCountInteger;
-        }
-        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_max_player_count)).getValue(Integer.class);
+        String gameId = dataSnapshot.getKey();
+        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
+        String name = dataSnapshot.child(activity.getString(R.string.database_game_name)).getValue(String.class);
+        int playerCount = (int) dataSnapshot.child(activity.getString(R.string.database_game_players)).getChildrenCount();
+        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_game_max_player_count)).getValue(Integer.class);
         int maxPlayerCount = 0;
         if (maxPlayerCountInteger != null) {
             maxPlayerCount = maxPlayerCountInteger;
         }
-        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
+        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_game_start_location)).getValue(LocationRepresentation.class);
 
-        if(isVisible == null || !isVisible ||gameId == null || name == null || startLocation == null){
+        if(isVisible == null || !isVisible || gameId == null || name == null || startLocation == null){
             return null;
         }
 

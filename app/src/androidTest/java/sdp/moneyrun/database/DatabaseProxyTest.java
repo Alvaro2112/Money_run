@@ -28,7 +28,7 @@ public class DatabaseProxyTest {
     public void getPlayerFromDatabase() throws Throwable {
 
         final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
-        final DatabaseProxy db = new DatabaseProxy();
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -52,7 +52,7 @@ public class DatabaseProxyTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullPlayer() {
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -69,7 +69,7 @@ public class DatabaseProxyTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         Player player = new Player(1, "a","b",0,0,0);
         db.addPlayerListener(player, null);
     }
@@ -79,7 +79,7 @@ public class DatabaseProxyTest {
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
-        final DatabaseProxy db = new DatabaseProxy();
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
         String newName = "Simon";
@@ -128,7 +128,7 @@ public class DatabaseProxyTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullPlayer() {
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -145,20 +145,20 @@ public class DatabaseProxyTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullListener() {
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         Player player = new Player(1, "a","b",0,0,0);
         db.removePlayerListener(player, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void putPlayerWithNullInstanceThrowsException(){
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerWithNullInstanceThrowsException(){
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.removePlayer(null);
     }
 }
