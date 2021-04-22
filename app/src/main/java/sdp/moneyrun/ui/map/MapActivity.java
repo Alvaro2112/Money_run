@@ -307,7 +307,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         remainingCoins.add(coin);
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
-
     }
 
 
