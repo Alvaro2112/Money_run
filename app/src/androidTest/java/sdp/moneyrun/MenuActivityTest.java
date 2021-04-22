@@ -244,6 +244,7 @@ public class MenuActivityTest {
             assertEquals(1, 1);
 
             Intents.release();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();

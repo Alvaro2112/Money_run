@@ -44,6 +44,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final Semaphore available = new Semaphore(1, true);
     private int numberOfAsyncTasks;
     private int tasksFinished;
+    private Player currentPlayer;
+    private int tasksFInished;
     private Player user;
 
     DatabaseReference databaseReference;
@@ -122,8 +124,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //Example of how the Async tasks should be implemented
-                numberOfAsyncTasks = 2;
+                numberOfAsyncTasks = 2; //number of async tasks
                 tasksFinished = 0;
+
                 setContentView(R.layout.splash_screen);
 
                 Runnable x = new Runnable() {

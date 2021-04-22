@@ -88,5 +88,8 @@
     <string name="log_out">Log out</string>
     <string name="map_placeholder">map_placeholder</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="collect_coin">Collect coin</string>
+    <string name="continue_run">Continue run</string>
+    <string name="CorrectAnswerMessage">You are correct!</string>
 
 </resources>
