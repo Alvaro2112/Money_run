@@ -17,7 +17,7 @@ import sdp.moneyrun.R;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private final String TAG = SignUpActivity.class.getSimpleName();
-    private boolean isClicked;
+    private boolean isClicked = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

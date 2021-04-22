@@ -34,7 +34,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
-//        setUserPlayer();
         setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
@@ -92,8 +91,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      *  Initializes the player object private instance
      */
     public void setMainPlayer(Player player){
-        if(user != null && player != null){
-            System.out.println("Main player is being set");
+        if(user != null || player != null){
             user = player;
             addPlayer(player);
         }
