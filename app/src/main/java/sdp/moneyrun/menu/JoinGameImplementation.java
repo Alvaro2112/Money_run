@@ -181,7 +181,7 @@ public class JoinGameImplementation extends MenuImplementation{
         button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
 
         // Modify button if the game is full
-        databaseReference.child(activity.getString(R.string.database_game))
+        /*databaseReference.child(activity.getString(R.string.database_game))
                 .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -202,7 +202,7 @@ public class JoinGameImplementation extends MenuImplementation{
                 button.setEnabled(false);
                 button.setText("Full");
             }
-        });
+        });*/
 
         // Modify button if game is too far
         // Grant permissions if necessary
@@ -242,7 +242,7 @@ public class JoinGameImplementation extends MenuImplementation{
         playerNumberView.setText(playerNumberText);
 
         //makes the playerCount dynamic so that it changes when people join and leave lobbies
-        databaseReference.child(activity.getString(R.string.database_game)).child(gameRepresentation.getGameId())
+        /*databaseReference.child(activity.getString(R.string.database_game)).child(gameRepresentation.getGameId())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -257,7 +257,7 @@ public class JoinGameImplementation extends MenuImplementation{
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e(TAG, "Error getting new Player Count from DB");
                     }
-                });
+                });*/
 
         gameRow.addView(playerNumberView);
     }

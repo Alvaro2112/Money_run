@@ -148,6 +148,7 @@ public class MenuActivityTest {
         }
     }
 
+    @Test
     public void newGameEmptyNameFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
