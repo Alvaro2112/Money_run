@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public abstract class TrackedMap extends BaseMap implements
             locationComponent.setRenderMode(RenderMode.COMPASS);
 
             initLocationEngine();
+
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
@@ -157,4 +159,60 @@ public abstract class TrackedMap extends BaseMap implements
         List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
         return features;
     }
+
+
+
+    /**
+     * @param location
+     * @return the index of the closest coin whose distance is lower than a threshold or -1 if there are none
+     */
+    public Coin nearestCoin(Location location, List<Coin> remainingCoins, double thresholdDistance) {
+
+        double player_lat = location.getLatitude();
+        double player_long = location.getLongitude();
+
+        double min_dist = Integer.MAX_VALUE;
+        double curr_dist = Integer.MAX_VALUE;
+        Coin min_coin = null;
+        Coin curr_coin;
+
+        for (int i = 0; i < remainingCoins.size(); ++i) {
+
+            curr_coin = remainingCoins.get(i);
+
+            curr_dist = distance(player_lat, player_long, curr_coin.getLatitude(), curr_coin.getLongitude());
+
+            if (curr_dist < thresholdDistance && curr_dist < min_dist) {
+                min_dist = curr_dist;
+                min_coin = curr_coin;
+            }
+        }
+
+        return min_coin;
+    }
+
+    /**
+     * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
+     *
+     * @param lat_a
+     * @param lng_a
+     * @param lat_b
+     * @param lng_b
+     * @return the distance in meters between two coordinates
+     */
+    public static double distance(double lat_a, double lng_a, double lat_b, double lng_b) {
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b - lat_a);
+        double lngDiff = Math.toRadians(lng_b - lng_a);
+        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
+                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return distance * meterConversion;
+    }
+
 }
