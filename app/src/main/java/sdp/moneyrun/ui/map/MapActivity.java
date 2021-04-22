@@ -19,7 +19,9 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Location currentLocation;
     private  long ASYNC_CALL_TIMEOUT = 10L;
     private final String COIN_ID = "COIN";
-
+    private final float ICON_SIZE = 1.5f;
+    private SymbolLayer symbolLayer;
     private int playerId;
     private TextView currentScoreView;
     private int currentScore =0;
@@ -144,13 +147,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
         callback = new LocationCheckObjectivesCallback(this);
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
 
+        mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)),true);
             enableLocationComponent(style);
+
         });
         this.mapboxMap = mapboxMap;
 
@@ -234,8 +239,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
         remainingCoins.add(coin);
+        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
 
-        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())));//.withIconImage("R.drawable.baseline_paid_20.xml"));
     }
 
     /**
@@ -268,6 +273,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(Location location) {
         currentLocation = location;
         int coinIdx = isNearCoin(location);
+
         if (coinIdx >= 0) {
             removeCoin(remainingCoins.get(coinIdx));
             onButtonShowQuestionPopupWindowClick(this.mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle());
