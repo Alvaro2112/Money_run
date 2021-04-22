@@ -58,29 +58,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Button exitButton;
     private Button questionButton;
 
-    /**
-     * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
-     *
-     * @param lat_a
-     * @param lng_a
-     * @param lat_b
-     * @param lng_b
-     * @return the distance in meters between two coordinates
-     */
-    public static double distance(double lat_a, double lng_a, double lat_b, double lng_b) {
-        double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(lat_b - lat_a);
-        double lngDiff = Math.toRadians(lng_b - lng_a);
-        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
-                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = earthRadius * c;
 
-        int meterConversion = 1609;
-
-        return distance * meterConversion;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,57 +332,27 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
-
-    /**
-     * @param location Used to check if location is near a coin or not
-     */
-    public void checkObjectives(Location location) {
-        currentLocation = location;
-        Coin coin = isNearCoin(location);
-        if (coin != null) {
-            //What to do when a player gets to a coin, we need the logic here of what coins the player is allowed to take
-        }
-    }
-
-    /**
-     * @param location
-     * @return the index of the closest coin whose distance is lower than a threshold or -1 if there are none
-     */
-    public Coin isNearCoin(Location location) {
-
-        double player_lat = location.getLatitude();
-        double player_long = location.getLongitude();
-
-        double min_dist = Integer.MAX_VALUE;
-        double curr_dist = Integer.MAX_VALUE;
-        Coin min_coin = null;
-        Coin curr_coin;
-
-        for (int i = 0; i < remainingCoins.size(); ++i) {
-
-            curr_coin = remainingCoins.get(i);
-
-            curr_dist = distance(player_lat, player_long, curr_coin.getLatitude(), curr_coin.getLongitude());
-
-            if (curr_dist < THRESHOLD_DISTANCE && curr_dist < min_dist) {
-                min_dist = curr_dist;
-                min_coin = curr_coin;
-            }
-        }
-
-        return min_coin;
-    }
-
     public void placeRandomCoins(int number, int radius) {
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
         for (int i = 0; i < number; i++) {
             Location loc = null;
             do {
-                loc = CoinGenerationHelper.getRandomLocation(currentLocation, radius);
+                loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             } while (!isLocationAppropriate(loc));
             remainingCoins.add(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
         }
     }
+    /**
+     * @param location Used to check if location is near a coin or not
+     */
+    public void checkObjectives(Location location) {
+        currentLocation = location;
+        Coin coin = nearestCoin(location, remainingCoins, THRESHOLD_DISTANCE);
+        if (coin != null) {
+            //What to do when a player gets to a coin, we need the logic here of what coins the player is allowed to take
+        }
+    }
+
 
 
 }
