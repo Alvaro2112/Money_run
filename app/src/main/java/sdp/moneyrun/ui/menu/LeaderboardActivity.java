@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
@@ -103,7 +104,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     * once real players join the leaderboard updates accordingly
     * */
     public void setDummyPlayers(){
-        DatabaseProxy databaseProxy = new DatabaseProxy();
+        PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
         Player dummy1 = new Player(1000000);
         dummy1.setName("Dummy Player 1");
         dummy1.setAddress("Here");
@@ -128,7 +129,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         Attaches a lister to a player so that once real players join the game the dummy player will represent
         an actual person with all the player object attributes associated with it
      */
-    private void attachListenerToPlayer(Player dummy1, DatabaseProxy databaseProxy){
+    private void attachListenerToPlayer(Player dummy1, PlayerDatabaseProxy databaseProxy){
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

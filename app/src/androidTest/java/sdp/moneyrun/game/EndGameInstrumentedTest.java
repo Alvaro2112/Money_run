@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -74,7 +75,7 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             int playerid = 98732;
             final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
-            final DatabaseProxy db = new DatabaseProxy();
+            final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.putPlayer(player);
             try {
                 Thread.sleep(5000);
