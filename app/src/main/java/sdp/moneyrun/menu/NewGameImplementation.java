@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 
 public class NewGameImplementation extends MenuImplementation {
     public NewGameImplementation(Activity activity,
@@ -127,6 +129,9 @@ public class NewGameImplementation extends MenuImplementation {
                     // post game to database
                     GameDatabaseProxy gdb = new GameDatabaseProxy();
                     gdb.putGame(game);
+                    Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+                    lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), game.getId());
+                    activity.startActivity(lobbyIntent);
 
                     // Post location to database
                     //LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());

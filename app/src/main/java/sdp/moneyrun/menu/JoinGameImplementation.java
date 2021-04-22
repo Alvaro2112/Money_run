@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.internal.ApiExceptionUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -193,7 +194,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
 
         // Modify button if the game is full
-        databaseReference.child(activity.getString(R.string.database_open_games))
+        databaseReference.child(activity.getString(R.string.database_games))
                 .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -254,7 +255,7 @@ public class JoinGameImplementation extends MenuImplementation{
         playerNumberView.setText(playerNumberText);
 
         //makes the playerCount dynamic so that it changes when people join and leave lobbies
-        databaseReference.child(activity.getString(R.string.database_open_games)).child(gameRepresentation.getGameId())
+        databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -279,7 +280,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
         //First get the player list, then add yourself to it, then push the player list
         //It's kind of intensive as code, but I see no other way of doing it.
-        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_open_games))
+        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games))
                 .child(gameRepresentation.getGameId())
                 .child(activity.getString(R.string.database_open_games_players));
 
@@ -303,6 +304,7 @@ public class JoinGameImplementation extends MenuImplementation{
                 Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId());
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
 
         activity.startActivity(lobbyIntent);
     }

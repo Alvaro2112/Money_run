@@ -210,7 +210,7 @@ public class Game {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
-                    .child(DATABASE_GAME)
+                    .child(DATABASE_PLAYER)
                     .setValue(players);
         }
     }
