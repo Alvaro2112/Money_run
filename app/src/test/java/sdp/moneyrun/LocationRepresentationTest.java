@@ -1,11 +1,22 @@
 package sdp.moneyrun;
 
-import org.junit.Test;
+import android.location.Location;
 
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+
+import sdp.moneyrun.map.LocationRepresentation;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class LocationRepresentationTest {
+
+    @Mock
+    Location location;
+
     @Test
     public void constructionOfLocationRepresentationWorks1(){
         LocationRepresentation lr = new LocationRepresentation(0, 0);
@@ -14,8 +25,13 @@ public class LocationRepresentationTest {
 
     @Test
     public void constructionOfLocationRepresentationWorks2(){
-        LocationRepresentation lr = new LocationRepresentation();
+        new LocationRepresentation();
         assertEquals(1, 1);
+
+        location = Mockito.mock(Location.class);
+        when(location.getLatitude()).thenReturn(4.0);
+        when(location.getLongitude()).thenReturn(3.0);
+        new LocationRepresentation(location);
     }
 
     @Test

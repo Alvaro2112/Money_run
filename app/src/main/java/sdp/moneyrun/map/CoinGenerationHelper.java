@@ -7,6 +7,8 @@ import com.mapbox.geojson.Feature;
 import java.util.List;
 import java.util.Random;
 
+import sdp.moneyrun.ui.map.MapActivity;
+
 public class CoinGenerationHelper {
 
     /**

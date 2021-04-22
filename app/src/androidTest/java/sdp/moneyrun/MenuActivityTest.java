@@ -1,11 +1,13 @@
 package sdp.moneyrun;
 
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -21,7 +23,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import sdp.moneyrun.map.MapActivity;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.map.MapActivity;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -218,7 +223,11 @@ public class MenuActivityTest {
 
     @Test
     public void newGameWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
