@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
+import android.location.Location;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +17,9 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -23,6 +27,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.game.GameRepresentation;
+import sdp.moneyrun.map.Coin;
+import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -66,6 +80,19 @@ public class MenuActivityTest {
         };
     }
 
+    public Game getGame(){
+        String name = "JoinGameImplementationTest";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 2;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+    }
+
     @Test
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
@@ -81,6 +108,42 @@ public class MenuActivityTest {
 
             Intents.release();
         }
+    }
+
+    @Test
+    public void joinGamePopupDoesntCrashAfterPlayerChange() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        gdp.putGame(game);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+
+            game.setPlayers(playerList, false);
+            Thread.sleep(3000);
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            playerList.add(new Player(6,"Heimdalr", "Epfl",0,0,0));
+            game.setPlayers(playerList, false);
+            Thread.sleep(3000);
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+            Intents.release();
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     @Test
@@ -251,4 +314,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+
+
+
 }
