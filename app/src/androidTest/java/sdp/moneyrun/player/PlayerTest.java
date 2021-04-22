@@ -12,6 +12,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -27,7 +28,7 @@ public class PlayerTest {
         String newAddress = "New Address";
         int id = 1234567891;
         Player player = new Player(id, name, address,0,0 ,0);
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -68,7 +69,7 @@ public class PlayerTest {
         String newName = "New Address";
         int id = 1234567892;
         Player player = new Player(id, name, address,0,0,0 );
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -109,7 +110,7 @@ public class PlayerTest {
         int newPlayedGames = 75;
         int id = 1234567893;
         Player player = new Player(id, name, address,0,0,0 );
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -151,7 +152,7 @@ public class PlayerTest {
         int newDiedGames = 75;
         int id = 1234567894;
         Player player = new Player(id, name, address,0,0,0 );
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -192,7 +193,7 @@ public class PlayerTest {
         String address = "Somewhere";
         int id = 1234567895;
         Player player = new Player(id, name, address,0,0 ,0);
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -232,7 +233,7 @@ public class PlayerTest {
         String address = "Somewhere";
         int id = 1234567896;
         Player player = new Player(id, name, address,0,0,0 );
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
@@ -273,7 +274,7 @@ public class PlayerTest {
         int score = 75;
         int id = 1234567897;
         Player player = new Player(id, name, address,0,0,0 );
-        DatabaseProxy db = new DatabaseProxy();
+        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
             Thread.sleep(1000);
