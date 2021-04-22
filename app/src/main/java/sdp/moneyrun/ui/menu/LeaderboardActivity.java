@@ -35,7 +35,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer(null);
+        setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -92,7 +92,8 @@ public class LeaderboardActivity extends AppCompatActivity {
      *  Initializes the player object private instance
      */
     public void setMainPlayer(Player player){
-        if(user == null && player != null){
+        if(user != null && player != null){
+            System.out.println("Main player is being set");
             user = player;
             addPlayer(player);
         }

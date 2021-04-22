@@ -3,64 +3,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgoud_for_profile">
 
     <TextView
         android:id="@+id/playerName"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
 
+        android:gravity="center"
+        android:textAppearance="@color/cardview_light_background"
+        android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintVertical_bias="0.362" />
 
     <TextView
         android:id="@+id/playerAddress"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
 
+        android:gravity="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textAppearance="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/playerName"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.404" />
+        app:layout_constraintVertical_bias="0.362" />
 
     <TextView
         android:id="@+id/playerPlayedGames"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
 
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textAppearance="@color/cardview_light_background"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.622" />
+        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintStart_toEndOf="@+id/playerDiedGames"
+        app:layout_constraintTop_toBottomOf="@+id/playerAddress"
+        app:layout_constraintVertical_bias="0.431" />
 
     <TextView
         android:id="@+id/playerDiedGames"
-        android:layout_width="411dp"
-        android:layout_height="48dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
 
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textAppearance="@color/cardview_light_background"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.852" />
+        app:layout_constraintTop_toBottomOf="@+id/playerName"
+        app:layout_constraintVertical_bias="0.438" />
 
     <TextView
         android:id="@+id/playerEmptyMessage"
         android:layout_width="409dp"
         android:layout_height="421dp"
 
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,9 +88,21 @@
         android:layout_height="wrap_content"
         android:text="@string/go_back_to_main_menu"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.039"
-        tools:layout_editor_absoluteX="27dp" />
+        app:layout_constraintVertical_bias="0.971" />
+
+    <ImageView
+        android:id="@+id/avatarProfile"
+        android:layout_width="65dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="172dp"
+        android:layout_marginBottom="160dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playerName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/profile_picture_avatar" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
