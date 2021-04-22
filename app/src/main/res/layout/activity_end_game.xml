@@ -17,11 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.186" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/end_game_button_to_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:background="@drawable/baseline_arrow_forward_18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.876"
@@ -29,6 +29,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85"
         app:strokeColor="@android:color/background_dark"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

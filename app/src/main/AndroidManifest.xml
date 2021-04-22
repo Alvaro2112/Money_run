@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <activity android:name=".ui.game.EndGameActivity">
-
         </activity>
         <activity android:name=".ui.map.MapActivity">
 
@@ -32,6 +31,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
         <activity android:name=".ui.MainActivity">
