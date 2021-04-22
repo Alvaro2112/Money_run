@@ -113,7 +113,7 @@ public class PlayerTest {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             assert(false);
         }
