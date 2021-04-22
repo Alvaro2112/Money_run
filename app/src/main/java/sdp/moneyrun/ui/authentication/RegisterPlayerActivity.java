@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         addressText = findViewById(R.id.registerAddressText);
         colorText = findViewById(R.id.registerColorText);
         animalText = findViewById(R.id.registerAnimalText);
+
         submitButton.setOnClickListener(v -> {
             if(checkAllFields(nameText.getText().toString(), addressText.getText().toString(),
                     colorText.getText().toString(), animalText.getText().toString())){
