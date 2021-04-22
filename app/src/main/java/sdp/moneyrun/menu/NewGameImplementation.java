@@ -58,6 +58,7 @@ public class NewGameImplementation extends MenuImplementation {
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
         newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
+        //TODO, post the game, but also join it and launch the lobby activity
     }
 
     /**
@@ -98,6 +99,7 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
+        Game toAdd = new Game(name, host, maxPlayerCount, new ArrayList<Riddle>(), new ArrayList<Coin>(), startLocation, true);
         DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_open_games)).push();
         DatabaseReference startLocationReference = databaseReference
                 .child(activity.getString(R.string.database_open_games))
@@ -122,8 +124,6 @@ public class NewGameImplementation extends MenuImplementation {
 
                     Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
 
-                    // post game to database
-                    gameReference.setValue(game);
 
                     // Post location to database
                     LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());

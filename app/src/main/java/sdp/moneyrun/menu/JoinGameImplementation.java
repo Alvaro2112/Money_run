@@ -41,7 +41,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
     private final boolean focusable;
     private final int layoutId;
-    private final Player currentUser;
+    //private final Player currentUser;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -53,10 +53,10 @@ public class JoinGameImplementation extends MenuImplementation{
         super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
         this.focusable = focusable;
         this.layoutId = layoutId;
-        if(player == null){
+        /*if(player == null){
             throw new IllegalArgumentException("Player is null");
         }
-        this.currentUser = player;
+        this.currentUser = player;*/
     }
 
     /**
@@ -295,7 +295,7 @@ public class JoinGameImplementation extends MenuImplementation{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
                 List<Player> players = snapshot.getValue(t);
-                players.add(currentUser);
+                //players.add(currentUser);
                 gamePlayers.setValue(players);
             }
 
