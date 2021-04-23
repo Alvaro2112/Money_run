@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +31,6 @@ import sdp.moneyrun.player.Player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -500,7 +498,9 @@ public class GameInstrumentedTest {
                 GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {
                 };
                 List<Coin> newCoinData = snapshot.getValue(coinIndicator);
-                assertEquals(updatedValue,g.getGameDbData().getCoins().get(0).getValue());
+                if (updated.getCount() == 0L) {
+                    assertEquals(updatedValue, newCoinData.get(0).getValue());
+                }
                 updated.countDown();
             }
 
@@ -518,12 +518,16 @@ public class GameInstrumentedTest {
         }
         p.addCoinListener(g,listener);
         g.setCoin(0, new Coin(lat,lon, updatedValue));
+        p.updateGameInDatabase(g, null);
+
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertEquals(0L, updated.getCount());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println(g.getGameDbData().getCoins().get(0).getValue());
+        assertEquals(updatedValue,g.getGameDbData().getCoins().get(0).getValue());
         p.removeCoinListener(g,listener);
     }
 

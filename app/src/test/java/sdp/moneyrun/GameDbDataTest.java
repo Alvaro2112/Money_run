@@ -2,24 +2,21 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
-import androidx.core.widget.TextViewCompat;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
@@ -65,7 +62,7 @@ public class GameDbDataTest {
         assertThrows(IllegalArgumentException.class, ()->{
             List<Player> players = new ArrayList<>();
             Player host = new Player(1, "James", "Lausanne", 3, 4);
-            GameDbData g = new GameDbData("name", host, new ArrayList<Player>(), 3, new Location(""),true ,new ArrayList<>() );
+            GameDbData g = new GameDbData(null, host, new ArrayList<Player>(), 3, new Location(""),true ,new ArrayList<>() );
 
         });
     }

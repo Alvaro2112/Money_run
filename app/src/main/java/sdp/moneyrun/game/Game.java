@@ -4,28 +4,18 @@ package sdp.moneyrun.game;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
@@ -237,15 +227,15 @@ public class Game {
         setPlayers(players, forceLocal);
     }
 
-        public void setCoins(List<Coin> coins){
-            if(coins == null) throw new IllegalArgumentException();
-            gameDbData.setCoins(coins);
-        }
+    public void setCoins(List<Coin> coins){
+        if(coins == null) throw new IllegalArgumentException();
+        gameDbData.setCoins(coins);
+    }
 
-        public boolean setCoin(int index, Coin coin){
-            if(index < 0  || coin == null) throw new IllegalArgumentException();
-            return gameDbData.setCoin(index, coin);
-        }
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        return gameDbData.setCoin(index, coin);
+    }
 
     /**
      * Remove a player to the game, updates it in the database if necessary

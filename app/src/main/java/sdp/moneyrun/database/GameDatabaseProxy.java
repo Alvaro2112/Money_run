@@ -4,7 +4,9 @@ import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,7 +59,6 @@ public class GameDatabaseProxy extends DatabaseProxy {
                 throw new NullPointerException("Could not add game to database.");
             }
             game.setId(id);
-
             gamesRef.child(game.getId()).setValue(game.getGameDbData());
             linkPlayersToDB(game);
             linkCoinsToDB(game);
@@ -65,6 +66,19 @@ public class GameDatabaseProxy extends DatabaseProxy {
             return id;
         }
         return game.getId();
+    }
+
+    public void updateGameInDatabase(Game game, @Nullable OnCompleteListener listener){
+        if(game == null) throw new IllegalArgumentException();
+        if(!game.getHasBeenAdded()){
+            putGame(game);
+        }
+        if(listener != null){
+            gamesRef.child(game.getId()).setValue(game.getGameDbData()).addOnCompleteListener(listener);
+        }
+        else{
+            gamesRef.child(game.getId()).setValue(game.getGameDbData());
+        }
     }
 
     /**
