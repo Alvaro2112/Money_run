@@ -175,6 +175,7 @@ public class MenuActivityTest {
             e.printStackTrace();
         }
     }
+    
 /*
     @Test
     public void joinGamePopupPlayerButtonIsDisabledWhenTooManyPlayers() {
