@@ -29,247 +29,243 @@ import sdp.moneyrun.map.Riddle;
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
-    //Attributes
-    private GameDbData gameDbData;
-    private  List<Riddle> riddles;
+    private static final String TAG = Game.class.getSimpleName();
 
+    private final String DATABASE_GAME = "games";
+    private final String DATABASE_PLAYER = "players";
+    private final String DATABASE_COINS = "coins";
+
+    //Attributes
+    private final GameDbData gameDbData;
+    private final List<Riddle> riddles;
 
     //Aux variables
-    private DatabaseReference rootReference;
     private String id;
-    private boolean isVisible;
-    private static final String TAG = Game.class.getSimpleName();
     private boolean hasBeenAdded;
 
+
     /**
-     * Game constructor
-     * @param name game name
-     * @param players List of players
-     * @param maxPlayerNumber MAximum players
-     * @param startLocation game location
+     * This constructor is used to create a game that has never been added to the database.
+     * @param name the game name
+     * @param host the game host
+     * @param maxPlayerCount maximum player count in the game
+     * @param riddles riddles of the game
+     * @param coins coins in the game
+     * @param startLocation location of the game
+     * @param isVisible visibility of game in the list
      */
-    public Game(String name, List<Player> players, int maxPlayerNumber, Location startLocation){
-        if(name == null || players == null || startLocation == null) {
-            throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
-        }
-        rootReference = FirebaseDatabase.getInstance().getReference();
-        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation, new ArrayList<>());
-        this.hasBeenAdded = false;
-        this.id = "";
-    }
-
-    public Game(String name,List<Player> players,int maxPlayerNumber,List<Riddle> riddles,List<Coin> coins,Location startLocation){
-        if(name == null || players == null || startLocation == null || riddles == null || coins == null) {
-            throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
-        }
-        rootReference = FirebaseDatabase.getInstance().getReference();
-        gameDbData = new GameDbData(name, players, maxPlayerNumber, startLocation, coins);
-        this.hasBeenAdded = false;
-        this.id = "";
-    }
-
-    public Game(String gameId,
-                String name,
-                List<Player> players,
+    public Game(String name,
+                Player host,
                 int maxPlayerCount,
                 List<Riddle> riddles,
                 List<Coin> coins,
-                Location startLocation) {
-        if(gameId == null){
-            throw new IllegalArgumentException("Game id should not be null.");
-        }
+                Location startLocation,
+                boolean isVisible) {
         if(name == null){
-            throw new IllegalArgumentException("Game name should not be null.");
+            throw new IllegalArgumentException("name should not be null.");
         }
-        if(players == null){
-            throw new IllegalArgumentException("Players should not be null.");
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
         }
         if(riddles == null){
-            throw new IllegalArgumentException("Riddles should not be null.");
+            throw new IllegalArgumentException("riddles should not be null.");
         }
         if(coins == null){
-            throw new IllegalArgumentException("Coins should not be null.");
+            throw new IllegalArgumentException("coins should not be null.");
         }
         if(startLocation  == null){
-            throw new IllegalArgumentException("Start location should not be null.");
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if(maxPlayerCount <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
 
-        this.isVisible = true;
-        this.gameDbData = new GameDbData(name, players, maxPlayerCount,startLocation, coins);
-        this.id = gameId;
+        this.id = null;
+        this.hasBeenAdded = false;
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(host);
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
     }
 
-    public Game(String gameId,
-                String name,
-                boolean isVisible,
+    /**
+     * This constructor is used to create an instance of game from retrieved information
+     * from database.
+     * @param name the game name
+     * @param host the game host
+     * @param players players in the game
+     * @param maxPlayerCount max player count in the game
+     * @param startLocation location of the game
+     * @param isVisible visibility of game in the list
+     */
+    public Game(String name,
+                Player host,
                 List<Player> players,
                 int maxPlayerCount,
-                List<Riddle> riddles,
-                List<Coin> coins,
-                Location startLocation) {
-        this(gameId, name, players, maxPlayerCount, riddles, coins, startLocation);
-        this.isVisible = isVisible;
-    }
-
-
-
-    /**
-     * Adds the GameData to the database if not already present
-     * @return the Id of this game in the DB
-     */
-    public String addToDB(){
-        if(!hasBeenAdded) {
-            DatabaseReference openGames = rootReference.child("open_games");
-            id = openGames.push().getKey();
-            openGames.child(id).setValue(gameDbData);
-            linkAttributesToDB();
-            hasBeenAdded = true;
-            return id;
+                Location startLocation,
+                boolean isVisible,
+                List<Coin> coins){
+        if(name == null){
+            throw new IllegalArgumentException("name should not be null.");
         }
-        return getGameId();
-    }
-
-
-
-    
-    /**
-     * Links pertinent attributes to the DB instance corresponding to its ID.
-     * For now the only pertitent attribute is the player List
-     */
-    private void linkAttributesToDB(){
-        DatabaseReference gameRef = rootReference.child("open_games").child(id);
-        gameRef.child("players").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
-                };
-                List<Player> newData = snapshot.getValue(t);
-                gameDbData.setPlayers(newData);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "failed " + error.getMessage());
-            }
-        });
-        gameRef.child("coins").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {};
-                      List<Coin> newCoinData = snapshot.getValue(coinIndicator);
-                        gameDbData.setCoins(newCoinData);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "failed " + error.getMessage());
-            }
-        });
-    }
-
-    /**
-     * Gets a Serialized Game from the DB in an asynchronous manner
-     * @param id ID of the Game to retrieve
-     * @return a Task containing the serialized Game or a null value if the game not present in DB
-     */
-    public static Task<DataSnapshot> getGameDataSnapshot(String id) throws NoSuchElementException{
-        if(id == null){throw new IllegalArgumentException();}
-        DatabaseReference gamesRef = FirebaseDatabase.getInstance()
-                .getReference().child("open_games");
-        return gamesRef.child(id).get();
-    }
-
-
-    /**
-     * Deserializes DB Game data into a Game instance if the Task is Successfull, returns Null otherwise
-     *     This function is to be used in combination with getGameDataSnapsho()
-     *     the former retrieves a Task with all the game data in the DB, while this function
-     *     extracts the Data and gives you a Game class once the task is complete
-     *
-     *     For this it is recommended to add a success listener on the task and call this function once it
-     *     it is ready
-     *
-     *     Due to the asynchronous code it is better for the caller to call each function independently
-     * @param task Task that you get from getGameDataSnapshot()
-     * @return A Game instance
-     */
-    public static Game getGameFromTaskSnapshot(Task<DataSnapshot> task){
-        if(task == null){
-            throw new IllegalArgumentException("Null argument");
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
         }
-        if(task.isSuccessful()){
-            GenericTypeIndicator<List<Player>> gtP = new GenericTypeIndicator<List<Player>>() {};
-            DataSnapshot ds = task.getResult();
-            String name = ds.child("name").getValue(String.class);
-            List<Player> players = ds.child("players").getValue(gtP);
-            int maxPlayers = ds.child("maxPlayerNumber").getValue(Integer.class);
-
-            //Cant deserialize Location properly so we do it manually
-            Location locat = new Location("");
-            locat.setLatitude(ds.child("startLocation").child("latitude").getValue(Double.class));
-            locat.setLongitude(ds.child("startLocation").child("longitude").getValue(Double.class));
-
-
-            Game retGame = new Game(name,players, maxPlayers, locat);
-            retGame.id = ds.getKey();
-            retGame.hasBeenAdded = true;
-            return retGame;
-        }else{
-            return null;
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
         }
-    }
-
-    public void addCoinListener(ValueEventListener listener){
-        if (listener == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference().child("open_games").child("coins").addValueEventListener(listener);
-    }
-
-    public void removeCoinListener(ValueEventListener listener){
-        if (listener == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference().child("open_games").child("coins").removeEventListener(listener);
-    }
-
-    /**
-     * Sets the players for the Game, or for both the Game and the DB if it has been added
-     * @param p New List of Players
-     */
-    public void setPlayers(List<Player> p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(p.isEmpty()){throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");}
-        if(!hasBeenAdded){
-            gameDbData.setPlayers(p);
-        }else{
-            gameDbData.setPlayers(p);
-            rootReference.child("open_games").child(id).child("players").setValue(p);
+        if(startLocation  == null){
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if(maxPlayerCount <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
+        }
+        if(coins == null){
+            throw new IllegalArgumentException("coins should not be null.");
         }
 
+        this.id = null;
+        this.hasBeenAdded = false;
+
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+        this.riddles = new ArrayList<>();
     }
 
-    public void setCoins(List<Coin> coins){
-        if(coins == null) throw new IllegalArgumentException();
-        gameDbData.setCoins(coins);
-    }
-
-    public boolean setCoin(int index, Coin coin){
-        if(index < 0  || coin == null) throw new IllegalArgumentException();
-        return gameDbData.setCoin(index, coin);
-    }
-
-    /**
-     * returns the DataBase id for this Game, if it has been added, or the empty String O.W
-     * @return the id of the game
-     */
-    public String getGameId(){
+    public String getId(){
         return id;
     }
 
+    public String getName() {
+        return gameDbData.getName();
+    }
+
+    public Player getHost(){
+        return gameDbData.getHost();
+    }
+
+    public int getMaxPlayerCount() {
+        return gameDbData.getMaxPlayerCount();
+    }
+
+    public List<Player> getPlayers(){
+        return gameDbData.getPlayers();
+    }
+
+
+    public List<Riddle> getRiddles(){
+        return new ArrayList<>(riddles);
+    }
+
+    public List<Coin> getCoins(){
+        return new ArrayList<>(gameDbData.getCoins());
+    }
+
+    public Location getStartLocation(){
+        return gameDbData.getStartLocation();
+    }
+
     public boolean getIsVisible(){
-        return isVisible;
+        return gameDbData.getIsVisible();
     }
 
     public int getPlayerCount(){
         return gameDbData.getPlayers().size();
+    }
+
+    public boolean getHasBeenAdded(){
+        return hasBeenAdded;
+    }
+
+    public GameDbData getGameDbData(){
+        return new GameDbData(gameDbData);
+    }
+
+    public void setId(String id){
+        if(id == null){
+            throw new IllegalArgumentException("id should not be null.");
+        }
+
+        this.id = id;
+    }
+
+    public void setHasBeenAdded(boolean hasBeenAdded){
+        this.hasBeenAdded = hasBeenAdded;
+    }
+
+    /**
+     * Sets the players for the Game, or for both the Game and the DB if it has been added
+     * @param players New List of Players
+     * @param forceLocal force the modification to be local only
+     */
+    public void setPlayers(List<Player> players, boolean forceLocal){
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(players.isEmpty()){
+            throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");
+        }
+
+        if(!hasBeenAdded || forceLocal){
+            gameDbData.setPlayers(players);
+        }else{
+            gameDbData.setPlayers(players);
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_GAME)
+                    .setValue(players);
+        }
+    }
+
+
+
+    /**
+     * Add a player to the game, updates it in the database if necessary
+     * @param player new player
+     */
+    public void addPlayer(Player player, boolean forceLocal){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(getPlayers().contains(player)){
+            return;
+        }
+
+        List<Player> players = getPlayers();
+        players.add(player);
+
+        setPlayers(players, forceLocal);
+    }
+
+        public void setCoins(List<Coin> coins){
+            if(coins == null) throw new IllegalArgumentException();
+            gameDbData.setCoins(coins);
+        }
+
+        public boolean setCoin(int index, Coin coin){
+            if(index < 0  || coin == null) throw new IllegalArgumentException();
+            return gameDbData.setCoin(index, coin);
+        }
+
+    /**
+     * Remove a player to the game, updates it in the database if necessary
+     * @param player the player to be removed
+     * @return the player previously at the specified location
+     */
+    public Player removePlayer(Player player, boolean forceLocal){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(!getPlayers().contains(player)){
+            return null;
+        }
+
+        List<Player> players = getPlayers();
+        players.remove(player);
+
+        setPlayers(players, forceLocal);
+
+        return player;
     }
 
     public static void endGame(List<Coin> collectedCoins, int playerId, Activity currentActivity) {
@@ -284,18 +280,6 @@ public class Game {
         currentActivity.finish();
     }
 
-    public String getName() {
-        return gameDbData.getName();
-    }
-
-    public int getMaxPlayerCount() {
-        return gameDbData.getMaxPlayerNumber();
-    }
-
-    public void setIsVisible(boolean isVisible){
-        this.isVisible = isVisible;
-    }
-
     // Launched when create game button is pressed
     public void startGame(){}
 
@@ -306,19 +290,6 @@ public class Game {
     public boolean askPlayer(Player player, Riddle riddle){
         String playerResponse = player.ask(riddle.getQuestion());
         return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
-    }
-
-    public GameDbData getGameDbData() {
-        return new GameDbData(gameDbData);
-    }
-    
-    public void addGameListener(ValueEventListener l){
-            if (l == null) {
-                throw new IllegalArgumentException();
-            }
-            if (hasBeenAdded) {
-                rootReference.child("open_games").child(id).addValueEventListener(l);
-            }
     }
 
     @Override

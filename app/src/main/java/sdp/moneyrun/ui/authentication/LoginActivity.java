@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
@@ -136,11 +137,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getPlayerFromDB(int playerId, Intent menuIntent){
-        DatabaseProxy db = new DatabaseProxy();
-        Task<DataSnapshot> t = db.getPlayerTask(playerId);
+        PlayerDatabaseProxy pdb = new PlayerDatabaseProxy();
+        Task<DataSnapshot> t = pdb.getPlayerTask(playerId);
         t.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Player user = db.getPlayerFromTask(task);
+                Player user = pdb.getPlayerFromTask(task);
 
                 // If no user has been found, we need to create a new instance in the database
                 if(user == null){

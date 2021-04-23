@@ -2,12 +2,15 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
+import androidx.core.widget.TextViewCompat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import sdp.moneyrun.database.GameDbData;
@@ -17,6 +20,7 @@ import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -27,15 +31,18 @@ public class GameDbDataTest {
     GameDbData getTestData() {
         String name = "game";
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
+        players.add(host);
         players.add(new Player(2, "Potter", "Nyon", 3, 4));
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         List<Coin> coins = new ArrayList<>();
         coins.add(new Coin(1, 2, 3));
         int maxPlayers = 4;
-        Location targetLocation = new Location("");//provider name is unnecessary
-        return new GameDbData(name, players, maxPlayers, targetLocation, new ArrayList<>());
+
+        mockLocation = Mockito.mock(Location.class);
+
+        return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
     }
 
     @Mock
@@ -46,47 +53,70 @@ public class GameDbDataTest {
     public void constructorFailsOnNullArg(){
         List<Player> players = new ArrayList<>();
         List<Coin> coin = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
+
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, 3, null, coin);
+            GameDbData g = new GameDbData("name", host, players, 3, null, true, coin);
         });
     }
 
     @Test
-    public void constructorFailsOnEmptyPlayerList(){
+    public void constructorFailsOnNullName(){
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", new ArrayList<Player>(), 3, new Location(""), new ArrayList<>());
+            List<Player> players = new ArrayList<>();
+            Player host = new Player(1, "James", "Lausanne", 3, 4);
+            GameDbData g = new GameDbData("name", host, new ArrayList<Player>(), 3, new Location(""),true ,new ArrayList<>() );
+
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNullHost(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            List<Player> players = new ArrayList<>();
+            GameDbData g = new GameDbData("name", null, players, 3, new Location(""), true, new ArrayList<>());
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNullPlayers(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            Player host = new Player(1, "James", "Lausanne", 3, 4);
+            GameDbData g = new GameDbData("name", host, null, 3, new Location(""), true, new ArrayList<>());
         });
     }
 
     @Test
     public void constructorFailsOnNegativeMaxPlayers(){
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
         assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData("name", players, -4, new Location(""), new ArrayList<>());
+            GameDbData g = new GameDbData("name", host, players, -4, new Location(""), true, new ArrayList<>());
         });
     }
 
     @Test
-    public void copyConstructorFailsOnNullArg(){
-        assertThrows(IllegalArgumentException.class, ()->{
-            GameDbData g = new GameDbData(null);
-        });
+    public void constructorForCloneThrowsExceptionWhenNull(){
+        assertThrows(IllegalArgumentException.class, () -> new GameDbData(null));
+        new GameDbData();
     }
 
     @Test
-    public void copyConstructorWorksNormally(){
-        GameDbData g = getTestData();
-        GameDbData copy = new GameDbData(g);
-        assertEquals(g.getName(), copy.getName());
-        assertEquals(g.getPlayers(), copy.getPlayers());
-        assertEquals(g.getMaxPlayerNumber(), g.getMaxPlayerNumber());
+    public void constructorForCloneWorks(){
+        GameDbData gameData = getTestData();
+
+        new GameDbData(gameData);
     }
 
     @Test
     public void getNameReturnsName(){
         assertEquals("game", getTestData().getName());
+    }
+
+    @Test
+    public void getHostReturnsHost(){
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
+        assertEquals(host, getTestData().getHost());
     }
 
     @Test
@@ -100,9 +130,19 @@ public class GameDbDataTest {
     @Test
     public void getMaxPlayersReturnsMaxPlayers(){
         int maxPlayers = 4;
-        assertEquals(maxPlayers, getTestData().getMaxPlayerNumber());
+        assertEquals(maxPlayers, getTestData().getMaxPlayerCount());
     }
 
+    @Test
+    public void getStartLocationWorks(){
+
+        assertEquals(getTestData().getStartLocation(), mockLocation);
+    }
+
+    @Test
+    public void getIsVisibleReturnsMaxPlayers(){
+        assertTrue(getTestData().getIsVisible());
+    }
 
     @Test
     public void setPlayersFailsOnNullArg(){
@@ -167,7 +207,7 @@ public class GameDbDataTest {
     @Test
     public void removePlayerFailsIfOneElementLEft(){
         GameDbData g = getTestData();
-        g.removePlayer(new Player(1, "James", "Lausanne", 3, 4));
+        g.removePlayer(g.getPlayers().get(0));
         assertThrows(IllegalArgumentException.class, () -> {
             g.removePlayer(new Player(2, "Potter", "Nyon", 3, 4));
         });
@@ -186,7 +226,8 @@ public class GameDbDataTest {
     public void equalsWorksAsIntended(){
         String name = "game";
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James", "Lausanne", 3, 4));
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
+        players.add(host);
         players.add(new Player(2, "Potter", "Nyon", 3, 4));
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
@@ -197,14 +238,18 @@ public class GameDbDataTest {
         when(mockLocation.getLatitude()).thenReturn(4.0);
         when(mockLocation.getLongitude()).thenReturn(3.0);
 
-        GameDbData g = new GameDbData(name, players, maxPlayers, mockLocation, new ArrayList<>());
+        GameDbData g = new GameDbData(name, host,players, maxPlayers, mockLocation, true, new ArrayList<>());
         GameDbData sameRef = g;
-        GameDbData sameContent = new GameDbData(g);
+        GameDbData sameContent = new GameDbData(name, host,players, maxPlayers, mockLocation, true, new ArrayList<>());
 
-        assertTrue(g.equals(sameRef));
-        assertFalse(g.equals(null));
-        assertTrue(g.equals(sameContent));
+        assertEquals(g, sameRef);
+        assertNotEquals(null, g);
+        assertEquals(g, sameContent);
+    }
 
+    @Test
+    public void hashThrowsNoException(){
+        getTestData().hashCode();
     }
 
     @Test(expected = IllegalArgumentException.class)

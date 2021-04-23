@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
@@ -20,7 +21,7 @@ public class RegisterPlayerActivity extends AppCompatActivity {
     private EditText colorText;
     private EditText animalText;
     private String[] result;
-    private DatabaseProxy db;
+    private PlayerDatabaseProxy pdb;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +46,8 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         user.setAddress(result[1]);
         user.setScore(0);
 
-        db = new DatabaseProxy();
-        db.putPlayer(user);
+        pdb = new PlayerDatabaseProxy();
+        pdb.putPlayer(user);
 
         Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
         menuIntent.putExtra("user", user);
