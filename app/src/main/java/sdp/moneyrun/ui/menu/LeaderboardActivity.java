@@ -1,9 +1,11 @@
 package sdp.moneyrun.ui.menu;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -11,6 +13,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
@@ -105,10 +110,11 @@ public class LeaderboardActivity extends AppCompatActivity {
     * */
     public void setDummyPlayers(){
         PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
+        String[] dummyPlayerNames = {"Josh,David,Helena,Chris,Bryan"};
         Player dummy1 = new Player(1000000);
-        dummy1.setName("Dummy Player 1");
+        dummy1.setName("James");
         dummy1.setAddress("Here");
-        dummy1.setScore(1);
+        dummy1.setScore(700);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -118,9 +124,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         attachListenerToPlayer(dummy1,databaseProxy);
         for(int i = 2; i< 6;++i){
             Player dummy = new Player(i*1000000);
-            dummy.setName("Dummy Player "+ i);
+            dummy.setName(dummyPlayerNames[i]);
             dummy.setAddress("Here");
-            dummy.setScore(i);
+            dummy.setScore((6-i)*100);
             addPlayer(dummy);
         }
     }/**
@@ -150,5 +156,19 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     public Player getUserPlayer() {
         return user;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static List<Player >bestToWorstPlayer(List<Player> players){
+        ArrayList<Player> sorted = new ArrayList<>();
+        players.sort(new Comparator<Player>() {
+            @Override
+            public int compare(Player o1, Player o2) {
+                if(o1.getScore() < o2.getScore())
+                    return 1;
+                return -1;
+            }
+        });
+        return players;
     }
 }
