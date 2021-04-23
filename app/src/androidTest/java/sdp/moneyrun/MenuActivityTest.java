@@ -146,7 +146,6 @@ public class MenuActivityTest {
         if(!dbGames.isSuccessful()){
             fail();
         }
-
         int visibleGames = 0;
         for(DataSnapshot d : dbGames.getResult().getChildren()){
             if(d.child("isVisible").getValue(Boolean.class)){
@@ -157,69 +156,21 @@ public class MenuActivityTest {
         playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
             Intents.init();
-
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             onView(ViewMatchers.withId(visibleGames-1)).perform(ViewActions.scrollTo());
-
-
             game.setPlayers(playerList, false);
-            Thread.sleep(3000);
+            Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             playerList.add(new Player(6,"Heimdalr", "Epfl",0,0,0));
             game.setPlayers(playerList, false);
-            Thread.sleep(3000);
+            Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             Intents.release();
-        }catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    
-/*
-    @Test
-    public void joinGamePopupPlayerButtonIsDisabledWhenTooManyPlayers() {
-        GameDatabaseProxy gdp = new GameDatabaseProxy();
-        Game game = getGame();
-        gdp.putGame(game);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //To get the Button ID of the button corresponding to this Game, we have
-        //to get all the games in the DB, and find out how many are visible, aka
-        //how many have buttons since thats how the ids are given out. Tedious but necessary.
-        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference().child("games").get();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if(!dbGames.isSuccessful()){
+        }catch (Exception e) {
             fail();
         }
-
-        int visibleGames = 0;
-        for(DataSnapshot d : dbGames.getResult().getChildren()){
-            if(d.child("isVisible").getValue(Boolean.class)){
-                visibleGames += 1;
-            }
-        }
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
-            Intents.init();
-
-            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-            Thread.sleep(3000);
-            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(visibleGames-1)).perform(ViewActions.scrollTo(), ViewActions.click());
-
-
-            Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
+    }
 
     @Test
     public void mapButtonAndSplashScreenWorks() {

@@ -188,10 +188,10 @@ public class JoinGameImplementation extends MenuImplementation{
                 int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
                 if(newPlayerCount >= gameRepresentation.getMaxPlayerCount()){
                     button.setEnabled(false);
-                    button.setText("Full");
+                    button.setText(activity.getResources().getString(R.string.join_game_full_message));
                 }else{
                     button.setEnabled(true);
-                    button.setText("Join");
+                    button.setText(activity.getResources().getString(R.string.join_game_message));
                 }
             }
 
@@ -200,7 +200,7 @@ public class JoinGameImplementation extends MenuImplementation{
                 Log.e(TAG, "Error getting new Player Count from DB");
                 //FailSafe defaults. If we couldnt get the data, let's be safe and close the game
                 button.setEnabled(false);
-                button.setText("Full");
+                button.setText(activity.getResources().getString(R.string.join_game_full_message));
             }
         });
 
