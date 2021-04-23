@@ -10,14 +10,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
@@ -28,17 +31,19 @@ import sdp.moneyrun.player.Player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
 public class GameInstrumentedTest {
+    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private final String DATABASE_GAME = "games";
 
     private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private final GameDatabaseProxy db = new GameDatabaseProxy();
 
-    private final String DATABASE_GAME = "games";
+
+
 
     public Game getGame(){
         String name = "name";
@@ -52,7 +57,8 @@ public class GameInstrumentedTest {
         location.setLatitude(10);
         location.setLongitude(20);
 
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+
+        return new Game(name, host, maxPlayerCount, riddles,coins, location, true);
     }
 
     public GameDbData getGameData(){
@@ -64,8 +70,9 @@ public class GameInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(10);
         location.setLongitude(20);
-
-        return new GameDbData(name, host, players, maxPlayerCount, location, true);
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        return new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
     }
 
     @Test
@@ -429,6 +436,7 @@ public class GameInstrumentedTest {
         Player host = new Player(3,"Bob", "Epfl",0,0,0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
+
         players.add(host);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -438,7 +446,7 @@ public class GameInstrumentedTest {
         location.setLatitude(10);
         location.setLongitude(20);
 
-        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true);
+        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
 
         assertEquals(gameData, getGame().getGameDbData());
     }
@@ -463,6 +471,83 @@ public class GameInstrumentedTest {
     test to be in the Unit test folder. So we cannot do both without heavily modifying the class,
     and as stated, equals is already tested in GameDbData, and this equals is litterally just
     a call to that one*/
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addCoinListenerThrowsCorrectException(){
+        new GameDatabaseProxy().addCoinListener(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeCoinListenerThrowsCorrectException(){
+        new GameDatabaseProxy().removeCoinListener(null, null);
+    }
+
+    @Test
+    public void addCoinListenerCorrectlyUpdatesValues(){
+        Game g = getGame();
+        int firstValue = 7;
+        int updatedValue = 323324;
+        double lat = 17.;
+        double lon = 18.;
+        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)));
+
+        CountDownLatch updated = new CountDownLatch(1);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {
+                };
+                List<Coin> newCoinData = snapshot.getValue(coinIndicator);
+                if (updated.getCount() == 0L) {
+                    assertEquals(updatedValue, newCoinData.get(0).getValue());
+                }
+                updated.countDown();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                assert(false);
+            }
+        };
+        GameDatabaseProxy p = new GameDatabaseProxy();
+        p.putGame(g);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        p.addCoinListener(g,listener);
+        g.setCoin(0, new Coin(lat,lon, updatedValue));
+        p.updateGameInDatabase(g, null);
+
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, updated.getCount());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(g.getGameDbData().getCoins().get(0).getValue());
+        assertEquals(updatedValue,g.getGameDbData().getCoins().get(0).getValue());
+        p.removeCoinListener(g,listener);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinsThrowsException(){
+        Game g = getGame();
+        g.setCoins(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setCoinThrowsException(){
+        Game g = getGame();
+        g.setCoin(0, null);
+    }
+
+    @Test
+    public void setCoinReturnFalseForIndexTooBig(){
+        Game data = getGame();
+        assert (!data.setCoin(1, new Coin()));
+    }
 
 
 }

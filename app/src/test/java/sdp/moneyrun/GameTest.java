@@ -6,8 +6,6 @@ import android.location.Location;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.lang.reflect.Array;
-import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +18,12 @@ import sdp.moneyrun.player.Player;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class GameTest {
 
@@ -100,11 +98,13 @@ public class GameTest {
         Location startLocation = new Location("");
         try {
             new Game(null, host, 3, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
             new Game(name, null, 3, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
@@ -115,16 +115,19 @@ public class GameTest {
         }
         try {
             new Game(name, host, 3, riddles, null, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
             new Game(name, host, 3, riddles, coins, null, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
             new Game(name, host, -1, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
@@ -132,29 +135,40 @@ public class GameTest {
 
 
         try {
-            new Game(null, host, players, 3, startLocation, true);
+            new Game(null, host, players, 3, startLocation, true, coins);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, null, players, 3, startLocation, true);
+            new Game(name, null, players, 3, startLocation, true, coins);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, null, 3, startLocation, true);
+            new Game(name, host, null, 3, startLocation, true, coins);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, players, 3, null, true);
+            new Game(name, host, players, 3, null, true, coins);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, players, -1, startLocation, true);
+            new Game(name, host, players, -1, startLocation, true, coins);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
+        }
+        try{
+            new Game(name, host, players, -1, startLocation, true, null);
+            fail();
+        }catch (IllegalArgumentException e){
+            assert(true);
         }
     }
 
@@ -169,7 +183,7 @@ public class GameTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
 
         Game game1 = new Game(name, host, 3, riddles, coins, location, true);
-        Game game2 = new Game(name, host, players,3, location, true);
+        Game game2 = new Game(name, host, players,3, location, true, coins);
 
         game1.startGame();
         Game.startGame(game1);

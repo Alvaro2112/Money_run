@@ -1,13 +1,13 @@
 package sdp.moneyrun.map;
 
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-
 public class Coin {
 
     private double latitude;
     private double longitude;
-    private SymbolOptions symbolOption;
     private int value;
+
+    //For database purpose
+    public Coin(){}
 
     public Coin(double latitude,double longitude,int value){
 

@@ -4,45 +4,35 @@ package sdp.moneyrun.game;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
 
 // The entirety of the game logic should be implemented in this class
 public class Game {
-
     private static final String TAG = Game.class.getSimpleName();
 
     private final String DATABASE_GAME = "games";
     private final String DATABASE_PLAYER = "players";
+    private final String DATABASE_COINS = "coins";
 
     //Attributes
     private final GameDbData gameDbData;
     private final List<Riddle> riddles;
-    private final List<Coin> coins;
 
     //Aux variables
     private String id;
     private boolean hasBeenAdded;
+
 
     /**
      * This constructor is used to create a game that has never been added to the database.
@@ -82,16 +72,14 @@ public class Game {
 
         this.id = null;
         this.hasBeenAdded = false;
-
         ArrayList<Player> players = new ArrayList<>();
         players.add(host);
-        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible);
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
-        this.coins = coins;
     }
 
     /**
-     * This constructor is used to create an instance of game from retrieved informations
+     * This constructor is used to create an instance of game from retrieved information
      * from database.
      * @param name the game name
      * @param host the game host
@@ -105,7 +93,8 @@ public class Game {
                 List<Player> players,
                 int maxPlayerCount,
                 Location startLocation,
-                boolean isVisible){
+                boolean isVisible,
+                List<Coin> coins){
         if(name == null){
             throw new IllegalArgumentException("name should not be null.");
         }
@@ -121,13 +110,15 @@ public class Game {
         if(maxPlayerCount <= 0){
             throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
+        if(coins == null){
+            throw new IllegalArgumentException("coins should not be null.");
+        }
 
         this.id = null;
         this.hasBeenAdded = false;
 
-        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible);
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
-        this.coins = new ArrayList<>();
     }
 
     public String getId(){
@@ -150,12 +141,13 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
+
     public List<Riddle> getRiddles(){
         return new ArrayList<>(riddles);
     }
 
     public List<Coin> getCoins(){
-        return new ArrayList<>(coins);
+        return new ArrayList<>(gameDbData.getCoins());
     }
 
     public Location getStartLocation(){
@@ -215,6 +207,8 @@ public class Game {
         }
     }
 
+
+
     /**
      * Add a player to the game, updates it in the database if necessary
      * @param player new player
@@ -231,6 +225,16 @@ public class Game {
         players.add(player);
 
         setPlayers(players, forceLocal);
+    }
+
+    public void setCoins(List<Coin> coins){
+        if(coins == null) throw new IllegalArgumentException();
+        gameDbData.setCoins(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        return gameDbData.setCoin(index, coin);
     }
 
     /**
