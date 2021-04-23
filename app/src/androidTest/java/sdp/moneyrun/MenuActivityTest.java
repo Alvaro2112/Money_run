@@ -2,14 +2,17 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -17,8 +20,14 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -29,8 +38,11 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.Coin;
@@ -52,6 +64,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -115,6 +128,7 @@ public class MenuActivityTest {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         gdp.putGame(game);
+        /*
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -140,10 +154,88 @@ public class MenuActivityTest {
             Intents.release();
         }catch (InterruptedException e) {
             e.printStackTrace();
+        }*/
+    }
+
+    @Test
+    public void joinGamePopupPlayerButtonIsDisabledWhenTooManyPlayers() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        gdp.putGame(game);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //To get the Button ID of the button corresponding to this Game, we have
+        //to get all the games in the DB, and find out how many are visible, aka
+        //how many have buttons
+        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference().child("games").get();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(!dbGames.isSuccessful()){
+            fail();
         }
 
+        int visibleGames = 0;
+        for(DataSnapshot d : dbGames.getResult().getChildren()){
+            if(d.child("isVisible").getValue(Boolean.class)){
+                visibleGames += 1;
+                Log.d("GAMELISTTEST", "tag of visible :"+d.getKey());
+                Log.d("GAMELISTTEST","tag of uploaded game :"+game.getId());
+            }
+
+        }
+        Log.d("GAMELISTTEST", "visible: " + visibleGames);
+        /*
+        GenericTypeIndicator<Map<String,DataSnapshot>> t = new GenericTypeIndicator<Map<String,DataSnapshot>>(){};
+        Map<String, DataSnapshot> gamesList;
+        gamesList = dbGames.getResult().getValue(t);
+        for(GameDbData g:gamesList){
+            if(g.getIsVisible()){
+                visibleGames += 1;
+            }
+        }*/
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(visibleGames)).perform(ViewActions.scrollTo(), ViewActions.click());
 
 
+            Intents.release();
+        }
+
+        /*
+
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+
+            game.setPlayers(playerList, false);
+            Thread.sleep(3000);
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            playerList.add(new Player(6,"Heimdalr", "Epfl",0,0,0));
+            game.setPlayers(playerList, false);
+            Thread.sleep(3000);
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+            Intents.release();
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Test
