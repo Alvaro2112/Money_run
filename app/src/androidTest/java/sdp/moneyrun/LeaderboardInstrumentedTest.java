@@ -140,7 +140,7 @@ public class LeaderboardInstrumentedTest {
                     assertEquals(-2,1);
                 }
                 for(Player p : a.getPlayerList()){
-                    if (p.getName().equals("Dummy Player 4")) {
+                    if (p.getName().equals("Chris")) {
                         check = true;
                         break;
                     }
