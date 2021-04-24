@@ -11,7 +11,7 @@ import sdp.moneyrun.map.LocationRepresentation;
 public class GameRepresentation {
     private final String gameId;
     private final String name;
-    private final int playerCount;
+    private  int playerCount;
     private final int maxPlayerCount;
     private final LocationRepresentation startLocation;
 
@@ -73,5 +73,10 @@ public class GameRepresentation {
      */
     public LocationRepresentation getStartLocation(){
         return startLocation;
+    }
+
+    public void setPlayerCount(int t){
+        if(t < 1){ throw new IllegalArgumentException("Tried to set playerCount to " + t + " but it may not be less than 1");}
+        playerCount = t;
     }
 }
