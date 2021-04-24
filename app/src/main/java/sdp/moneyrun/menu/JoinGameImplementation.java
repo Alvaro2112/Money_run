@@ -180,6 +180,32 @@ public class JoinGameImplementation extends MenuImplementation{
         button.setText(activity.getString(R.string.join_game_message));
         button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
 
+        //modify button if the game is full or if a space frees up
+        addFullGameListener(button, gameRepresentation);
+
+        // Modify button if game is too far
+        // Grant permissions if necessary
+        requestLocationPermissions(requestPermissionsLauncher);
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(activity, location -> {
+                    // Got last known location. In some rare situations this can be null
+                    // In this case, the game cannot be instanciated
+                    if (location == null) {
+                        Log.e("location", "Error getting location");
+                    }
+                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+
+                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+
+                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
+                        button.setEnabled(false);
+                        button.setText(activity.getString(R.string.join_game_too_far_message));
+                    }
+                });
+    }
+
+    private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
         // Modify button if the game is full
         databaseReference.child(activity.getString(R.string.database_game))
                 .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
@@ -203,27 +229,6 @@ public class JoinGameImplementation extends MenuImplementation{
                 button.setText(activity.getResources().getString(R.string.join_game_full_message));
             }
         });
-
-        // Modify button if game is too far
-        // Grant permissions if necessary
-        requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void createGameNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow){
