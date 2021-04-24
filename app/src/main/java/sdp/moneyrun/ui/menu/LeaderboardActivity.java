@@ -77,7 +77,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         ArrayList<Player> players = new ArrayList<>();
         for(int i = 0;i<ldbAdapter.getCount();++i)
             players.add(ldbAdapter.getItem(i));
-        //players.addAll(playerList);
         ldbAdapter.clear();
         bestToWorstPlayer(players);
         ldbAdapter.addAll(players);
@@ -109,10 +108,11 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setMainPlayer(Player player){
-        if(user != null || player != null){
+        if(user == null && player != null){
             user = player;
-            addPlayer(player);
         }
+        if(user != null)
+            addPlayer(user);
     }
     /**
     * This function will set up players in the leaderboard once we know their player ids and names
