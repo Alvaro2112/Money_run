@@ -52,6 +52,9 @@ public class GameBuilder {
         if(players == null){
             throw new IllegalArgumentException("players should not be null.");
         }
+        if(players.isEmpty()){
+            throw new IllegalArgumentException("players can never be empty (There should always be the host)");
+        }
 
         this.players = players;
     }

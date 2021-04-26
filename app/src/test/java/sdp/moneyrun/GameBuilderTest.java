@@ -4,6 +4,7 @@ import android.location.Location;
 
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +35,14 @@ public class GameBuilderTest {
     public void buildWorksAsExpectedWithNullRiddlesOnly(){
         GameBuilder gb = new GameBuilder();
         gb.setName("game test");
-        gb.setHost(new Player(1, "James", "Lausanne", 3, 4));
+        Player host = new Player(1, "James", "Lausanne", 3, 4);
+        gb.setHost(host);
         gb.setMaxPlayerCount(1);
         gb.setCoins(new ArrayList<>());
         gb.setStartLocation(new Location(""));
-        gb.setPlayers(new ArrayList<>());
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        gb.setPlayers(players);
         gb.build();
     }
 
@@ -52,6 +56,35 @@ public class GameBuilderTest {
         gb.setStartLocation(new Location(""));
         gb.setRiddles(new ArrayList<>());
         gb.build();
+    }
+
+    @Test
+    public void setMethodsFailWhenWrongArguments(){
+        GameBuilder gb = new GameBuilder();
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setName(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setHost(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setMaxPlayerCount(0);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setPlayers(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setPlayers(new ArrayList<>());
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setCoins(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setRiddles(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            gb.setStartLocation(null);
+        });
     }
 
     @Test
