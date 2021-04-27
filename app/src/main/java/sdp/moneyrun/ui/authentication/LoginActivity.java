@@ -56,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
         final Button loginButton = findViewById(R.id.loginButton);
         setLogIn(loginButton);
+
+        final Button guestButton = findViewById(R.id.guestButton);
+        setGuestButton(guestButton);
     }
 
     @Override
@@ -167,5 +170,23 @@ public class LoginActivity extends AppCompatActivity {
         return requestPermissionsLauncher;
     }
 
+    /**
+     * Should transfer the user to register activity so it can create a temporary
+     * profile used only in this session of login
+     *
+     * @param guestButton offline mode option
+     */
+    private void setGuestButton(Button guestButton){
+        if(guestButton == null)
+            throw new IllegalArgumentException("Guest button was clicked but was null");
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterPlayerActivity.class);
+                guestMenuIntent.putExtra("guestPlayer",true);
+                startActivity(guestMenuIntent);
+            }
+        });
+    }
 
 }

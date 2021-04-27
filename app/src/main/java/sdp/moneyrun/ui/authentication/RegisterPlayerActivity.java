@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -42,7 +44,14 @@ public class RegisterPlayerActivity extends AppCompatActivity {
 
     }
     private void setRegisterFieldsForNextActivity(){
+        boolean guestMode = getIntent().getBooleanExtra("guestPlayer",false);
         int playerId = getIntent().getIntExtra("playerId",0);
+        Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
+        if(guestMode){
+            Random random = new Random();
+            playerId = Math.abs(random.nextInt());
+            menuIntent.putExtra("guestPlayer",true);
+        }
         Player user = new Player(playerId);
         user.setName(result[0]);
         user.setAddress(result[1]);
@@ -51,7 +60,6 @@ public class RegisterPlayerActivity extends AppCompatActivity {
         pdb = new PlayerDatabaseProxy();
         pdb.putPlayer(user);
 
-        Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
         menuIntent.putExtra("user", user);
         startActivity(menuIntent);
         finish();
