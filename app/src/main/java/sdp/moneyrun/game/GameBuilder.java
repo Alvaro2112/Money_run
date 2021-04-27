@@ -26,29 +26,31 @@ public class GameBuilder {
     /**
      * @param name the game name
      */
-    public void setName(String name){
+    public GameBuilder setName(String name){
         if(name == null){
             throw new IllegalArgumentException("name should not be null.");
         }
 
         this.name = name;
+        return this;
     }
 
     /**
      * @param host the game host
      */
-    public void setHost(Player host){
+    public GameBuilder setHost(Player host){
         if(host == null){
             throw new IllegalArgumentException("host should not be null.");
         }
 
         this.host = host;
+        return this;
     }
 
     /**
      * @param players the players in the game
      */
-    public void setPlayers(List<Player> players){
+    public GameBuilder setPlayers(List<Player> players){
         if(players == null){
             throw new IllegalArgumentException("players should not be null.");
         }
@@ -57,57 +59,63 @@ public class GameBuilder {
         }
 
         this.players = players;
+        return this;
     }
 
     /**
      * @param maxPlayerCount the maximum number of players in the game
      */
-    public void setMaxPlayerCount(int maxPlayerCount){
+    public GameBuilder setMaxPlayerCount(int maxPlayerCount){
         if(maxPlayerCount <= 0){
             throw new IllegalArgumentException("max player count should be greater than 0.");
         }
 
         this.maxPlayerCount = maxPlayerCount;
+        return this;
     }
 
     /**
      * @param coins the coins located in the map for the game
      */
-    public void setCoins(List<Coin> coins){
+    public GameBuilder setCoins(List<Coin> coins){
         if(coins == null){
             throw new IllegalArgumentException("coins should not be null.");
         }
 
         this.coins = coins;
+        return this;
     }
 
     /**
      * @param riddles the game riddles
      */
-    public void setRiddles(List<Riddle> riddles){
+    public GameBuilder setRiddles(List<Riddle> riddles){
         if(riddles == null){
             throw new IllegalArgumentException("riddles should not be null.");
         }
 
         this.riddles = riddles;
+        return this;
     }
 
     /**
      * @param startLocation the start location of the game
      */
-    public void setStartLocation(Location startLocation){
+    public GameBuilder setStartLocation(Location startLocation){
         if(startLocation == null){
             throw new IllegalArgumentException("start location should not be null.");
         }
 
         this.startLocation = startLocation;
+        return this;
     }
 
     /**
      * @param isVisible The visibility of the game in the join list
      */
-    public void setIsVisible(boolean isVisible){
+    public GameBuilder setIsVisible(boolean isVisible){
         this.isVisible = isVisible;
+        return this;
     }
 
     public Game build(){

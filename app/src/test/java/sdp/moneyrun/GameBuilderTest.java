@@ -61,30 +61,14 @@ public class GameBuilderTest {
     @Test
     public void setMethodsFailWhenWrongArguments(){
         GameBuilder gb = new GameBuilder();
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setName(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setHost(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setMaxPlayerCount(0);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setPlayers(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setPlayers(new ArrayList<>());
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setCoins(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setRiddles(null);
-        });
-        assertThrows(IllegalArgumentException.class, () -> {
-            gb.setStartLocation(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> gb.setName(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setHost(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setMaxPlayerCount(0));
+        assertThrows(IllegalArgumentException.class, () -> gb.setPlayers(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setPlayers(new ArrayList<>()));
+        assertThrows(IllegalArgumentException.class, () -> gb.setCoins(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setRiddles(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setStartLocation(null));
     }
 
     @Test
