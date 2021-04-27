@@ -10,9 +10,12 @@ import sdp.moneyrun.map.Coin;
  */
 public class LocalPlayer  implements Serializable {
 
-
     private ArrayList<Coin> lostCoins;
     private ArrayList<Coin> locallyAvailableCoins;
+
+    public LocalPlayer(){
+        this.lostCoins = new ArrayList<Coin>();
+    }
 
     public ArrayList<Coin> getLocallyAvailableCoins() {
         return locallyAvailableCoins;
@@ -20,10 +23,6 @@ public class LocalPlayer  implements Serializable {
 
     public ArrayList<Coin> getLostCoins() {
         return lostCoins;
-    }
-
-    public LocalPlayer(){
-     this.lostCoins = new ArrayList<Coin>();
     }
 
     public void addLostCoin(Coin coin){
@@ -47,7 +46,7 @@ public class LocalPlayer  implements Serializable {
         this.lostCoins.removeAll(toRemove);
     }
 
-    public void computeLocallyAvailableCoins(ArrayList<Coin> availableCoins){
+    public void updateLocallyAvailableCoins(ArrayList<Coin> availableCoins, boolean locally, Coin toRemove){
         if(availableCoins == null){
             throw new IllegalArgumentException("The availableCoins cannot be null");
         }
@@ -55,8 +54,15 @@ public class LocalPlayer  implements Serializable {
             throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
         }
 
-        this.locallyAvailableCoins = availableCoins;
-        this.locallyAvailableCoins.removeAll(lostCoins);
+        if(!locally){
+            updateLostCoins(availableCoins);
+            this.locallyAvailableCoins = availableCoins;
+            this.locallyAvailableCoins.removeAll(lostCoins);
+        }else{
+            addLostCoin(toRemove);
+            this.locallyAvailableCoins.remove(toRemove);
+        }
+
     }
 
 }
