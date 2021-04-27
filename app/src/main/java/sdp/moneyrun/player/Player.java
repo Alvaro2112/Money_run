@@ -1,5 +1,7 @@
 package sdp.moneyrun.player;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -17,6 +19,8 @@ public class Player implements Serializable {
     private String preferredColor;
     private String preferredPet;
     private int score;
+    @Exclude
+    private LocalPlayer localPlayer;
 
     /**
      * For database purpose, a default constructor is needed
@@ -47,6 +51,7 @@ public class Player implements Serializable {
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
         this.score = score;
+        this.localPlayer = new LocalPlayer();
     }
 
 
@@ -88,6 +93,11 @@ public class Player implements Serializable {
     public void setAddress(String address, boolean dbChange) {
         this.address = address;
        dbUpdate(dbChange);
+    }
+
+    @Exclude
+    public LocalPlayer getLocalPlayer(){
+        return this.localPlayer;
     }
 
     /**
