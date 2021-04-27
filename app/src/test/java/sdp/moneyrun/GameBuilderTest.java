@@ -34,28 +34,29 @@ public class GameBuilderTest {
     @Test
     public void buildWorksAsExpectedWithNullRiddlesOnly(){
         GameBuilder gb = new GameBuilder();
-        gb.setName("game test");
         Player host = new Player(1, "James", "Lausanne", 3, 4);
-        gb.setHost(host);
-        gb.setMaxPlayerCount(1);
-        gb.setCoins(new ArrayList<>());
-        gb.setStartLocation(new Location(""));
         List<Player> players = new ArrayList<>();
         players.add(host);
-        gb.setPlayers(players);
-        gb.build();
+
+        gb.setName("game test")
+                .setHost(host)
+                .setMaxPlayerCount(1)
+                .setCoins(new ArrayList<>())
+                .setStartLocation(new Location(""))
+                .setPlayers(players)
+                .build();
     }
 
     @Test
     public void buildWorksAsExpectedWithNullPlayersOnly(){
         GameBuilder gb = new GameBuilder();
-        gb.setName("game test");
-        gb.setHost(new Player(1, "James", "Lausanne", 3, 4));
-        gb.setMaxPlayerCount(1);
-        gb.setCoins(new ArrayList<>());
-        gb.setStartLocation(new Location(""));
-        gb.setRiddles(new ArrayList<>());
-        gb.build();
+        gb.setName("game test")
+                .setHost(new Player(1, "James", "Lausanne", 3, 4))
+                .setMaxPlayerCount(1)
+                .setCoins(new ArrayList<>())
+                .setStartLocation(new Location(""))
+                .setRiddles(new ArrayList<>())
+                .build();
     }
 
     @Test
@@ -74,17 +75,18 @@ public class GameBuilderTest {
     @Test
     public void buildWorksAsExpected(){
         GameBuilder gb = new GameBuilder();
-        gb.setName("game test");
         Player host = new Player(1, "James", "Lausanne", 3, 4);
-        gb.setHost(host);
-        gb.setMaxPlayerCount(1);
-        gb.setCoins(new ArrayList<>());
-        gb.setStartLocation(new Location(""));
-        gb.setRiddles(new ArrayList<>());
         List<Player> players = new ArrayList<>();
         players.add(host);
-        gb.setPlayers(players);
-        gb.setIsVisible(false);
-        gb.build();
+
+        gb.setName("game test")
+                .setHost(host)
+                .setMaxPlayerCount(1)
+                .setCoins(new ArrayList<>())
+                .setStartLocation(new Location(""))
+                .setRiddles(new ArrayList<>())
+                .setPlayers(players)
+                .setIsVisible(false)
+                .build();
     }
 }
