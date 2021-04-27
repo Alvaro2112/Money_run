@@ -1,21 +1,15 @@
 package sdp.moneyrun.player;
 
-import androidx.test.espresso.NoMatchingViewException;
-
 import org.junit.Test;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import sdp.moneyrun.map.Coin;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class LocalPlayerTest {
 
     @Test
-    public void addLostCoinWorks(){
+    public void addLostCoinWorks() {
 
         LocalPlayer localPlayer = new LocalPlayer();
         Coin a = new Coin(1, 1, 1);
@@ -31,21 +25,21 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addLostCoinFailsOnNullCoin(){
+    public void addLostCoinFailsOnNullCoin() {
         LocalPlayer localPlayer = new LocalPlayer();
         localPlayer.addLostCoin(null);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLostCoinsWorksOnWrongArgument1(){
+    public void updateLostCoinsWorksOnWrongArgument1() {
         LocalPlayer localPlayer = new LocalPlayer();
         localPlayer.updateLostCoins(null);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLostCoinsWorksOnWrongArgument2(){
+    public void updateLostCoinsWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
         ArrayList<Coin> c = new ArrayList<Coin>();
         c.add(null);
@@ -54,7 +48,7 @@ public class LocalPlayerTest {
     }
 
     @Test
-    public void updateLostCoinsWorks(){
+    public void updateLostCoinsWorks() {
         LocalPlayer localPlayer = new LocalPlayer();
 
         Coin a = new Coin(1, 1, 1);
@@ -87,7 +81,7 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument1(){
+    public void updateLocallyAvailableCoinsWorksOnWrongArgument1() {
         LocalPlayer localPlayer = new LocalPlayer();
         ArrayList<Coin> availableCoins = new ArrayList<Coin>();
         localPlayer.updateLocallyAvailableCoins(availableCoins, true, null);
@@ -95,7 +89,7 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument2(){
+    public void updateLocallyAvailableCoinsWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
         localPlayer.updateLocallyAvailableCoins(null, false, null);
 
@@ -103,7 +97,7 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument3(){
+    public void updateLocallyAvailableCoinsWorksOnWrongArgument3() {
         LocalPlayer localPlayer = new LocalPlayer();
         ArrayList<Coin> availableCoins = new ArrayList<Coin>();
         availableCoins.add(null);
@@ -112,7 +106,7 @@ public class LocalPlayerTest {
     }
 
     @Test
-    public void updateLocallyAvailableCoinsWorksNotLocally(){
+    public void updateLocallyAvailableCoinsWorksNotLocally() {
         LocalPlayer localPlayer = new LocalPlayer();
 
         Coin a = new Coin(1, 1, 1);
@@ -150,7 +144,7 @@ public class LocalPlayerTest {
 
 
     @Test
-    public void updateLocallyAvailableCoinsWorksLocally(){
+    public void updateLocallyAvailableCoinsWorksLocally() {
         LocalPlayer localPlayer = new LocalPlayer();
 
         Coin a = new Coin(1, 1, 1);
