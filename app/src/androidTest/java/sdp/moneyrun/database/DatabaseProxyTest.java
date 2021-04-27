@@ -26,7 +26,7 @@ public class DatabaseProxyTest {
     private  long ASYNC_CALL_TIMEOUT = 5L;
     @Test
     public void getPlayerFromDatabase() throws Throwable {
-
+        FirebaseDatabase.getInstance().goOffline();
         final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
@@ -48,6 +48,7 @@ public class DatabaseProxyTest {
         while(!testTask.isComplete()){
             System.out.println("false");
         }
+        FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
