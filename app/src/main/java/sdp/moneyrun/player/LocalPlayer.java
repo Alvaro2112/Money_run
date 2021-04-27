@@ -25,6 +25,10 @@ public class LocalPlayer  implements Serializable {
         return lostCoins;
     }
 
+    public void setLocallyAvailableCoins(ArrayList<Coin> locallyAvailableCoins){
+        this.locallyAvailableCoins = locallyAvailableCoins;
+    }
+
     public void addLostCoin(Coin coin){
         if(coin == null){
             throw new IllegalArgumentException("The coin to be added cannot be null");
@@ -41,24 +45,29 @@ public class LocalPlayer  implements Serializable {
             throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
         }
 
-        ArrayList<Coin> toRemove = lostCoins;
-        lostCoins.removeAll(availableCoins);
+        ArrayList<Coin> toRemove = new ArrayList<Coin>(lostCoins);
+        toRemove.removeAll(availableCoins);
         this.lostCoins.removeAll(toRemove);
     }
 
     public void updateLocallyAvailableCoins(ArrayList<Coin> availableCoins, boolean locally, Coin toRemove){
-        if(availableCoins == null){
-            throw new IllegalArgumentException("The availableCoins cannot be null");
-        }
-        if(availableCoins.contains(null)){
-            throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
-        }
 
         if(!locally){
+
+            if(availableCoins == null){
+                throw new IllegalArgumentException("The availableCoins cannot be null");
+            }
+            if(availableCoins.contains(null)){
+                throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
+            }
+
             updateLostCoins(availableCoins);
             this.locallyAvailableCoins = availableCoins;
             this.locallyAvailableCoins.removeAll(lostCoins);
         }else{
+            if(toRemove == null){
+                throw new IllegalArgumentException("cannot remove a null coin");
+            }
             addLostCoin(toRemove);
             this.locallyAvailableCoins.remove(toRemove);
         }
