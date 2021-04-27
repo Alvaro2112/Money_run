@@ -3,15 +3,18 @@ package sdp.moneyrun.ui.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 
@@ -24,6 +27,7 @@ public class EndGameActivity extends AppCompatActivity {
     private int gameScore = 0;
     private TextView endText;
     private int playerId;
+    private Button resultButton;
     @Override
     protected void onCreate(Bundle  savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,8 @@ public class EndGameActivity extends AppCompatActivity {
         }
         final ImageButton toMenu = (ImageButton) findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
+        resultButton = findViewById(R.id.end_game_button_to_results);
+        linkToResult(resultButton,players);
 
     }
 
@@ -109,6 +115,28 @@ public class EndGameActivity extends AppCompatActivity {
             player.setScore(gameScore,true);
         }
         return player;
+    }
+
+    /**
+     * Should set a listener on the button when clicked and sending
+     * all the players to the leaderboard so it can display them
+     * in the correct order
+     *
+     * @param resultButton button that will link to result UI
+     * @param players all players that participated in the ended game
+     */
+    public void linkToResult(Button resultButton, List<Player> players){
+        if(resultButton == null || players == null)
+            throw new IllegalArgumentException("Button linking end to results or players list is null");
+        resultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
+                //Serialize a player as a String and then send it?
+                resultIntent.putStringArrayListExtra("players",players);
+                startActivity(resultIntent);
+            }
+        });
     }
 
 }
