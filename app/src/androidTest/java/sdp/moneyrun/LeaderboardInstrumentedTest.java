@@ -88,7 +88,7 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),7);
+                assertEquals(a.getPlayerList().size(),7); 
             });
         }
         catch (Exception e){
