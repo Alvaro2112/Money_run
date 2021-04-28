@@ -70,6 +70,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         playerId = getIntent().getIntExtra("playerId", 0);
         localPlayer = new LocalPlayer();
+
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
@@ -81,11 +82,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             riddleDb = RiddlesDatabase.getInstance();
         }
 
-        currentScoreView = findViewById(R.id.map_score_view);
         String default_score = getString(R.string.map_score_text, 0);
+        currentScoreView = findViewById(R.id.map_score_view);
         currentScoreView.setText(default_score);
+
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
+
         addExitButton();
         addQuestionButton();
     }
@@ -147,6 +150,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public Location getCurrentLocation() {
         return currentLocation;
+    }
+
+    public LocalPlayer getLocalPlayer(){
+        return localPlayer;
     }
 
     public int getPlayerId() {
@@ -292,7 +299,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void addCoin(Coin coin) {
         if (coin == null) {
-            throw new NullPointerException("added coin is null");
+            throw new NullPointerException("added coin cannot be null");
         }
 
         localPlayer.addlocallyAvailableCoinsCoin(coin);
@@ -315,15 +322,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (collected) {
             String default_score = getString(R.string.map_score_text, localPlayer.getScore());
             currentScoreView.setText(default_score);
+            //TODO: Inform database
+
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
+
         for (int i = 0; i < symbols.size(); ++i) {
             Symbol symbol = symbols.valueAt(i);
             if (coin.getLatitude() == symbol.getLatLng().getLatitude() && coin.getLongitude() == symbol.getLatLng().getLongitude()) {
                 symbolManager.delete(symbol);
             }
         }
+
 
     }
 
@@ -339,6 +350,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             //TODO: Upload to database
         }
     }
+
     /**
      * @param location Used to check if location is near a coin or not
      */
