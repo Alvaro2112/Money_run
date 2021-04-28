@@ -302,8 +302,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin cannot be null");
         }
 
-        localPlayer.addlocallyAvailableCoinsCoin(coin);
+        localPlayer.addLocallyAvailableCoin(coin);
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
+
     }
 
 
@@ -346,7 +347,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             do {
                 loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             } while (!isLocationAppropriate(loc));
-            localPlayer.addlocallyAvailableCoinsCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
+            localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
             //TODO: Upload to database
         }
     }
@@ -358,7 +359,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null) {
-            onButtonShowQuestionPopupWindowClick(findViewById(R.id.mapView), true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+            onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
     }
 

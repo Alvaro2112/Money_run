@@ -35,6 +35,29 @@ public class LocalPlayerTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addlocallyAvailableCoinsFailsOnNullCoin() {
+        LocalPlayer localPlayer = new LocalPlayer();
+        localPlayer.addLocallyAvailableCoin(null);
+
+    }
+
+    @Test
+    public void addlocallyAvailableCoinsWorks() {
+        LocalPlayer localPlayer = new LocalPlayer();
+        Coin a = new Coin(1, 1, 1);
+        Coin b = new Coin(2, 1, 1);
+        ArrayList<Coin> c = new ArrayList<Coin>();
+        c.add(a);
+        c.add(b);
+        localPlayer.addLocallyAvailableCoin(a);
+        localPlayer.addLocallyAvailableCoin(b);
+
+        assertThat(localPlayer.getLocallyAvailableCoins(), is(c));
+
+    }
+
+
     @Test
     public void addLostCollectedCoinWorks() {
 

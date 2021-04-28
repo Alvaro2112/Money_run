@@ -61,7 +61,7 @@ public class LocalPlayer implements Serializable {
         collectedCoins.add(coin);
     }
 
-    public void addlocallyAvailableCoinsCoin(Coin coin){
+    public void addLocallyAvailableCoin(Coin coin){
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
