@@ -708,7 +708,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
                 a.placeRandomCoins(numberOfCoins, 100);
-                assertEquals(a.getLocalPlayer().getCollectedCoins().size(), numberOfCoins);
+                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
             });
         }
     }
