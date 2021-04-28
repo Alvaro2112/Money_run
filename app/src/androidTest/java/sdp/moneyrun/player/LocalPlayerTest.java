@@ -81,27 +81,26 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument1() {
+    public void updateCoinsWorksOnWrongArgument() {
         LocalPlayer localPlayer = new LocalPlayer();
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
-        localPlayer.updateLocallyAvailableCoins(availableCoins, true, null);
+        localPlayer.updateCoins(null, true);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument2() {
+    public void syncAvailableCoinsFromDbWorksOnWrongArgument1() {
         LocalPlayer localPlayer = new LocalPlayer();
-        localPlayer.updateLocallyAvailableCoins(null, false, null);
+        localPlayer.updateLostCoins(null);
 
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument3() {
+    public void syncAvailableCoinsFromDbWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
         ArrayList<Coin> availableCoins = new ArrayList<Coin>();
         availableCoins.add(null);
-        localPlayer.updateLocallyAvailableCoins(availableCoins, false, null);
+        localPlayer.syncAvailableCoinsFromDb(availableCoins);
 
     }
 
@@ -127,7 +126,7 @@ public class LocalPlayerTest {
         localPlayer.addLostCoin(c);
         localPlayer.addLostCoin(d);
 
-        localPlayer.updateLocallyAvailableCoins(availableCoins, false, null);
+        localPlayer.syncAvailableCoinsFromDb(availableCoins);
 
         ArrayList<Coin> expected1 = new ArrayList<>();
         expected1.add(a);
@@ -160,7 +159,7 @@ public class LocalPlayerTest {
 
         localPlayer.addLostCoin(a);
 
-        localPlayer.updateLocallyAvailableCoins(availableCoins, true, b);
+        localPlayer.updateCoins(b, false);
 
         ArrayList<Coin> expected1 = new ArrayList<>();
         expected1.add(a);
