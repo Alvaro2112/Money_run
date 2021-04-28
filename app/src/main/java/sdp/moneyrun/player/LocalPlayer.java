@@ -61,10 +61,10 @@ public class LocalPlayer implements Serializable {
      * the locallyAvailableCoins and add it to the lostCoins. If locally is set to false, it will update both lists using the newly availableCoins
      * list from the database.
      *
-     * @param availableCoins The list of coins that are still available to EVERYONE
+     * @param availableCoins The list of coins that are still available to EVERYONE, this argument can be null when locally is set to true
      * @param locally Whether we are only removing a Coin locally or updating everything based on the list
      *                of available coins from the dataBase.
-     * @param toRemove The coin to remove if locally set to true
+     * @param toRemove The coin to remove if locally set to true, this argument can be null when locally is set to false
      */
     public void updateLocallyAvailableCoins(ArrayList<Coin> availableCoins, boolean locally, Coin toRemove) {
 
