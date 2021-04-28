@@ -224,7 +224,5 @@ public class LocalPlayerTest {
 
         assertThat(localPlayer.toSendToDb(), containsInAnyOrder(a, b, c));
 
-
-
     }
 }

@@ -61,6 +61,15 @@ public class LocalPlayer implements Serializable {
         collectedCoins.add(coin);
     }
 
+    public void addlocallyAvailableCoinsCoin(Coin coin){
+        if (coin == null) {
+            throw new IllegalArgumentException("The coin to be added cannot be null");
+        }
+
+        locallyAvailableCoins.add(coin);
+    }
+
+
     /**
      * This function will take the coins that are still available in the database and will update the lostCoins list, this is so we
      * don't keep coins in the lostCoins list that were removed for everyone after somebody else picked it up.

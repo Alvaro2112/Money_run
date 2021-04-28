@@ -48,8 +48,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static final double ZOOM_FOR_FEATURES = 15.;
     private static int chronometerCounter = 0;
     private final String TAG = MapActivity.class.getSimpleName();
-    private final List<Coin> remainingCoins = new ArrayList<>();
-    private final List<Coin> collectedCoins = new ArrayList<>();
     private final long ASYNC_CALL_TIMEOUT = 10L;
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
@@ -59,7 +57,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private SymbolLayer symbolLayer;
     private int playerId;
     private TextView currentScoreView;
-    private int currentScore = 0;
     private Button exitButton;
     private Button questionButton;
     private LocalPlayer localPlayer;
@@ -148,14 +145,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return chronometer;
     }
 
-    public List<Coin> getRemainingCoins() {
-        return remainingCoins;
-    }
-
-    public List<Coin> getCollectedCoins() {
-        return collectedCoins;
-    }
-
     public Location getCurrentLocation() {
         return currentLocation;
     }
@@ -176,7 +165,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < GAME_TIME) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(collectedCoins, playerId, MapActivity.this);
+                Game.endGame(localPlayer.getCollectedCoins().size() , localPlayer.getScore(), playerId, MapActivity.this);
             }
 
             chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
@@ -306,7 +295,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
 
-        remainingCoins.add(coin);
+        localPlayer.addlocallyAvailableCoinsCoin(coin);
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
     }
 
@@ -346,7 +335,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             do {
                 loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             } while (!isLocationAppropriate(loc));
-            remainingCoins.add(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
+            localPlayer.addlocallyAvailableCoinsCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
             //TODO: Upload to database
         }
     }
