@@ -46,6 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
+        getEndGamePlayers();
     }
 
     /**
@@ -189,5 +190,18 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
         return players;
+    }
+
+    /**
+     * Gets the players' scores once the game has ended and displays them
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void getEndGamePlayers(){
+        ldbAdapter.clear();
+        int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers",0);
+        for(int i =0;i<numberOfPlayers;++i){
+            Player player = (Player)getIntent().getSerializableExtra("players"+i);
+            addPlayer(player);
+        }
     }
 }

@@ -48,7 +48,7 @@ public class EndGameActivity extends AppCompatActivity {
         final ImageButton toMenu = (ImageButton) findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
         resultButton = findViewById(R.id.end_game_button_to_results);
-        linkToResult(resultButton,players);
+        linkToResult(resultButton);
 
     }
 
@@ -81,7 +81,7 @@ public class EndGameActivity extends AppCompatActivity {
 
 
     /**
-     * @param numCoins number of coins colelcted
+     * @param numCoins number of coins collected
      * @param gameScore score of the game (sum of values of coins)
      * @param succeeded (has managed to get the list of coins from the map activity
      *
@@ -123,20 +123,32 @@ public class EndGameActivity extends AppCompatActivity {
      * in the correct order
      *
      * @param resultButton button that will link to result UI
-     * @param players all players that participated in the ended game
      */
-    public void linkToResult(Button resultButton, List<Player> players){
+    public void linkToResult(Button resultButton){
+        List<Player> players = getPlayersFromGame();
         if(resultButton == null || players == null)
             throw new IllegalArgumentException("Button linking end to results or players list is null");
-        resultButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
-                //Serialize a player as a String and then send it?
-                resultIntent.putStringArrayListExtra("players",players);
-                startActivity(resultIntent);
+        resultButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
+            resultIntent.putExtra("numberOfPlayers",players.size());
+            for(int i = 0;i < players.size();++i) {
+                resultIntent.putExtra("players"+i, players.get(i));
             }
+            startActivity(resultIntent);
         });
+    }
+
+    /**
+     * @return players that were in the game that just ended
+     */
+    private List<Player> getPlayersFromGame(){
+        List<Player> players = new ArrayList<>();
+        int numberOfPlayers = getIntent().getIntExtra("players",0);
+        for(int i =0;i<numberOfPlayers;++i){
+            Player player = (Player)getIntent().getSerializableExtra("player"+i);
+            players.add(player);
+        }
+        return players;
     }
 
 }
