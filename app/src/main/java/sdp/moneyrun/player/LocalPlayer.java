@@ -37,6 +37,10 @@ public class LocalPlayer implements Serializable {
         return lostCoins;
     }
 
+    public ArrayList<Coin> getCollectedCoins(){
+        return collectedCoins;
+    }
+
     public int getScore(){
         return score;
     }
