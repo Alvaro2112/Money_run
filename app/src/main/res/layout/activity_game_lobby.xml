@@ -68,8 +68,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginBottom="90dp"
-        android:background="#FF392E"
         android:text="Leave"
+        android:background="#FF392E"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />

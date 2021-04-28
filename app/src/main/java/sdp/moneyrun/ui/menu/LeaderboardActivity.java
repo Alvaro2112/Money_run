@@ -1,9 +1,11 @@
 package sdp.moneyrun.ui.menu;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -11,6 +13,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
@@ -26,6 +32,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Player user;
     private DatabaseProxy db;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +42,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         addAdapter();
 //        setUserPlayer();
-        setMainPlayer(null);
+        setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
@@ -61,11 +68,18 @@ public class LeaderboardActivity extends AppCompatActivity {
      * @param playerList: players to be added to the leaderboard
      *  Adds players to leaderboard
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayerList(ArrayList<Player> playerList){
         if(playerList == null){
             throw new NullPointerException("Player list is null");
         }
         ldbAdapter.addAll(playerList);
+        ArrayList<Player> players = new ArrayList<>();
+        for(int i = 0;i<ldbAdapter.getCount();++i)
+            players.add(ldbAdapter.getItem(i));
+        ldbAdapter.clear();
+        bestToWorstPlayer(players);
+        ldbAdapter.addAll(players);
     }
 
     /**
@@ -73,6 +87,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      * @param player: player to be added to the leaderboard
      *  Adds player to leaderboard
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayer(Player player){
         // can't just add a player directly to an adapter, need to put it in a list
         if(player == null){
@@ -91,11 +106,13 @@ public class LeaderboardActivity extends AppCompatActivity {
      *
      *  Initializes the player object private instance
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setMainPlayer(Player player){
         if(user == null && player != null){
             user = player;
-            addPlayer(player);
         }
+        if(user != null)
+            addPlayer(user);
     }
     /**
     * This function will set up players in the leaderboard once we know their player ids and names
@@ -103,12 +120,16 @@ public class LeaderboardActivity extends AppCompatActivity {
     * the game( up to 6 players for now), on data change listeners will be attached to these players here so that
     * once real players join the leaderboard updates accordingly
     * */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setDummyPlayers(){
         PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
+        String[] dummyPlayerNames = {"Josh","David","Helena","Chris","Bryan"};
+        String[] playerAddresses = {"Ohio","Arizona","Paris","Budapest","Prague"};
+        ArrayList<Player> dummies = new ArrayList<>();
         Player dummy1 = new Player(1000000);
-        dummy1.setName("Dummy Player 1");
+        dummy1.setName("James");
         dummy1.setAddress("Here");
-        dummy1.setScore(1);
+        dummy1.setScore(700);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -116,13 +137,17 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
         addPlayer(dummy1);
         attachListenerToPlayer(dummy1,databaseProxy);
+        Random random = new Random();
         for(int i = 2; i< 6;++i){
             Player dummy = new Player(i*1000000);
-            dummy.setName("Dummy Player "+ i);
-            dummy.setAddress("Here");
-            dummy.setScore(i);
-            addPlayer(dummy);
+            dummy.setName(dummyPlayerNames[i-1]);
+            dummy.setAddress(playerAddresses[i-1]);
+            dummy.setScore(Math.abs(random.nextInt()%1000));
+            dummies.add(dummy);
         }
+        bestToWorstPlayer(dummies);
+        addPlayerList(dummies);
+
     }/**
         @param  dummy1: dummy representation of a player that will later evolve into a player that was in a game
         @param databaseProxy: the proxy database that we use to access Firebase
@@ -150,5 +175,19 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     public Player getUserPlayer() {
         return user;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static List<Player >bestToWorstPlayer(List<Player> players){
+        ArrayList<Player> sorted = new ArrayList<>();
+        players.sort(new Comparator<Player>() {
+            @Override
+            public int compare(Player o1, Player o2) {
+                if(o1.getScore() < o2.getScore())
+                    return 1;
+                return -1;
+            }
+        });
+        return players;
     }
 }

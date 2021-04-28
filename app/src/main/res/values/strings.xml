@@ -56,7 +56,9 @@
 
     <!-- PLAYER -->
     <string name="database_player">players</string>
+    <string name="database_open_games_players">players</string>
     <string name="database_player_address">address</string>
+    <string name="database_open_games_max_player_number">maxPlayerNumber</string>
     <string name="database_player_name">name</string>
     <string name="database_player_number_of_died_games">numberOfDiedGames</string>
     <string name="database_player_number_of_played_games">numberOfPlayedGames</string>

@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-
-import com.google.android.gms.common.internal.ApiExceptionUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -39,11 +37,10 @@ public class JoinGameImplementation extends MenuImplementation{
 
     // Distance in meters
     private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
-    private static final String TAG = Game.class.getSimpleName();
-
     private final boolean focusable;
     private final int layoutId;
     private final Player currentUser;
+    private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -192,31 +189,8 @@ public class JoinGameImplementation extends MenuImplementation{
 
         button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
 
-
-        // Modify button if the game is full
-        databaseReference.child(activity.getString(R.string.database_games))
-                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
-                if(newPlayerCount >= gameRepresentation.getMaxPlayerCount()){
-                    button.setEnabled(false);
-                    button.setText("Full");
-                }else{
-                    button.setEnabled(true);
-                    button.setText("Join");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Error getting new Player Count from DB");
-                //FailSafe defaults. If we couldnt get the data, let's be safe and close the game
-                button.setEnabled(false);
-                button.setText("Full");
-            }
-        });
-
+        //modify button if the game is full or if a space frees up
+        addFullGameListener(button, gameRepresentation);
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -227,6 +201,7 @@ public class JoinGameImplementation extends MenuImplementation{
                     // In this case, the game cannot be instanciated
                     if (location == null) {
                         Log.e("location", "Error getting location");
+                        throw new NullPointerException("Error getting location");
                     }
                     LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
 
@@ -237,6 +212,32 @@ public class JoinGameImplementation extends MenuImplementation{
                         button.setText(activity.getString(R.string.join_game_too_far_message));
                     }
                 });
+    }
+
+    private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
+        // Modify button if the game is full
+        databaseReference.child(activity.getString(R.string.database_game))
+                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
+                if(newPlayerCount >= gameRepresentation.getMaxPlayerCount()){
+                    button.setEnabled(false);
+                    button.setText(activity.getResources().getString(R.string.join_game_full_message));
+                }else{
+                    button.setEnabled(true);
+                    button.setText(activity.getResources().getString(R.string.join_game_message));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error getting new Player Count from DB");
+                //FailSafe defaults. If we couldnt get the data, let's be safe and close the game
+                button.setEnabled(false);
+                button.setText(activity.getResources().getString(R.string.join_game_full_message));
+            }
+        });
     }
 
     private void createGameNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow){
@@ -255,14 +256,23 @@ public class JoinGameImplementation extends MenuImplementation{
         playerNumberView.setText(playerNumberText);
 
         //makes the playerCount dynamic so that it changes when people join and leave lobbies
+<<<<<<< HEAD
         databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId())
                 .addValueEventListener(new ValueEventListener() {
+=======
+        databaseReference.child(activity.getString(R.string.database_game)).child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
+>>>>>>> master
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
                         String playerNumberText = String.format((activity.getResources().getString(R.string.game_player_number_display)),
+<<<<<<< HEAD
                                                                 newPlayerCount,
                                                                 gameRepresentation.getMaxPlayerCount());
+=======
+                                newPlayerCount,
+                                gameRepresentation.getMaxPlayerCount());
+>>>>>>> master
                         playerNumberView.setText(playerNumberText);
                     }
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 
 
@@ -18,6 +19,8 @@ public final class GameDbData {
     private String name;
     private Player host;
     private List<Player> players;
+    private List<Coin> coins;
+    //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     private int maxPlayerCount;
     private Location startLocation;
     boolean isVisible;
@@ -27,7 +30,8 @@ public final class GameDbData {
                       List<Player> players,
                       int maxPlayerCount,
                       Location startLocation,
-                      boolean isVisible){
+                      boolean isVisible,
+                      List<Coin> coins){
         if(name == null){
             throw new IllegalArgumentException("name should not be null.");
         }
@@ -43,7 +47,7 @@ public final class GameDbData {
         if(maxPlayerCount <= 0){
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
-
+        this.coins = new ArrayList<>(coins);
         this.name = name;
         this.host = host;
         this.players = players;
@@ -56,13 +60,13 @@ public final class GameDbData {
         if(other == null){
             throw new IllegalArgumentException("other should not be null.");
         }
-
         this.name = other.name;
         this.host = other.host;
         this.players = other.players;
         this.maxPlayerCount = other.maxPlayerCount;
         this.startLocation = other.startLocation;
         this.isVisible = other.isVisible;
+        this.coins = other.coins;
     }
 
     public GameDbData(){}
@@ -87,10 +91,21 @@ public final class GameDbData {
         return startLocation;
     }
 
+    public List<Coin> getCoins() {
+        return new ArrayList<>(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        if( coins.size() < index + 1) return false;
+        coins.set(index, coin);
+        return true;
+    }
+
+
     public boolean getIsVisible(){
         return isVisible;
     }
-
 
     /**
      * Adds a Player to the Player List, or does nothing if already present
@@ -141,6 +156,13 @@ public final class GameDbData {
 
         this.players = new ArrayList<>(players);
     }
+
+    public void setCoins(List<Coin> coins) {
+        if(coins == null) throw new IllegalArgumentException();
+        this.coins = new ArrayList<>(coins);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

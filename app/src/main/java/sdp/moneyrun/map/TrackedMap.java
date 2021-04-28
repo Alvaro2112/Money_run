@@ -72,6 +72,7 @@ public abstract class TrackedMap extends BaseMap implements
             locationComponent.setRenderMode(RenderMode.COMPASS);
 
             initLocationEngine();
+
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);

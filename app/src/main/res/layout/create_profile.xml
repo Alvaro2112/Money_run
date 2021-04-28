@@ -3,12 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#d1daa0">
 
     <Button
         android:id="@+id/submitProfileButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:outlineAmbientShadowColor="@color/cardview_dark_background"
+        android:textColorHighlight="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +26,10 @@
         android:layout_height="65dp"
         android:layout_marginEnd="16dp"
         android:hint="Enter your Name"
+        android:drawableStart="@drawable/ic_baseline_person_register"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,22 +40,30 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_house_register"
+        android:drawablePadding="12dp"
         android:hint="Enter your address"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.465" />
+        app:layout_constraintTop_toBottomOf="@+id/registerNameText"
+        app:layout_constraintVertical_bias="0.151" />
 
     <EditText
         android:id="@+id/registerColorText"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_color_lregister_player"
+        android:drawablePadding="12dp"
         android:hint="Enter your favorite color"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.949" />
 
     <EditText
         android:id="@+id/registerAnimalText"
@@ -54,9 +71,25 @@
         android:layout_height="65dp"
         android:layout_marginEnd="16dp"
         android:hint="Enter your favorite animal"
+        android:drawableStart="@drawable/ic_baseline_pets_register"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
+        android:textColorHint="@color/cardview_dark_background"
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.701" />
+
+    <ProgressBar
+        android:id="@+id/RegisterPlayerProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        app:layout_constraintBottom_toTopOf="@+id/registerNameText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.484" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -221,6 +221,12 @@ public class MapInstrumentedTest {
 
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(withId(R.id.new_question)).perform(ViewActions.click());
             try {
                 Thread.sleep(5000);
@@ -239,6 +245,11 @@ public class MapInstrumentedTest {
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
@@ -263,6 +274,11 @@ public class MapInstrumentedTest {
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
@@ -291,6 +307,11 @@ public class MapInstrumentedTest {
             String correctAnswer = "blue";
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
@@ -321,6 +342,11 @@ public class MapInstrumentedTest {
 
             String question = "What is the color of the sky";
             String correctAnswer = "blue";
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
@@ -414,6 +440,11 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             Intents.init();
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             onView(withId(R.id.close_map)).perform(ViewActions.click());
             try {

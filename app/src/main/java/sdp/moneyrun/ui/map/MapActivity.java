@@ -20,7 +20,9 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
+    private final String COIN_ID = "COIN";
+    private final float ICON_SIZE = 1.5f;
+    private SymbolLayer symbolLayer;
     private int playerId;
     private TextView currentScoreView;
     private int currentScore = 0;
@@ -63,6 +68,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
 
         playerId = getIntent().getIntExtra("playerId", 0);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
@@ -127,11 +133,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)),true);
             enableLocationComponent(style);
 
         });
 
         this.mapboxMap = mapboxMap;
+
     }
 
     public Chronometer getChronometer() {
@@ -298,7 +306,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new NullPointerException("added coin is null");
         }
         remainingCoins.add(coin);
-        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())));
+        symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
     }
 
 
