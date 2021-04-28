@@ -46,7 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
-        getEndGamePlayers();
+        //getEndGamePlayers(); //TODO: this function should be called at the end of the game
     }
 
     /**

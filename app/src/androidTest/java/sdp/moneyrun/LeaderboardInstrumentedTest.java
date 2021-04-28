@@ -80,15 +80,18 @@ public class LeaderboardInstrumentedTest {
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
-
+                System.out.println("here");
                 //Address was not set here before I don't know why
                 Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
+                System.out.println("here2");
                 player2.setScore(8001,false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
                 list.add(player2);
+                System.out.println("here3");
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),7); 
+                System.out.println("here4"+a.getPlayerList().size());
+                assertEquals(a.getPlayerList().size(),7);
             });
         }
         catch (Exception e){
