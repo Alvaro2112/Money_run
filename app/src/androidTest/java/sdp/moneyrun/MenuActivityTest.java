@@ -232,7 +232,7 @@ public class MenuActivityTest {
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);

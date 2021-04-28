@@ -96,8 +96,9 @@ public class GameDatabaseProxy extends DatabaseProxy {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Player> newData = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
-                game.setPlayers(newData, true);
-            }
+                if(newData != null){
+                    game.setPlayers(newData, true);
+                }            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

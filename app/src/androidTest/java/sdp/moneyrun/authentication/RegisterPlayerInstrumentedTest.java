@@ -9,10 +9,14 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.PlayerProfileActivity;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
@@ -29,6 +33,14 @@ import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterPlayerInstrumentedTest {
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
+
     @Test
     public void checkViewsAreUpdatedWhenCorrectTyping(){
         try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
