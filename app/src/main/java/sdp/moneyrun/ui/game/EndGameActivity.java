@@ -29,8 +29,8 @@ public class EndGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game);
         endText = findViewById(R.id.end_game_text);
-        numberOfCollectedCoins = (int) getIntent().getSerializableExtra("numberOfCollectedCoins");
-        score = (int) getIntent().getSerializableExtra("score");
+        numberOfCollectedCoins = (int) getIntent().getIntExtra("numberOfCollectedCoins", 0);
+        score = (int) getIntent().getIntExtra("score", 0);
         playerId = getIntent().getIntExtra("playerId", 0);
         updateText(numberOfCollectedCoins, score, true);
 
