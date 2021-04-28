@@ -24,9 +24,6 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
@@ -49,18 +46,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private static int chronometerCounter = 0;
     private final String TAG = MapActivity.class.getSimpleName();
     private final long ASYNC_CALL_TIMEOUT = 10L;
+    private final String COIN_ID = "COIN";
+    private final float ICON_SIZE = 1.5f;
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
-    private final String COIN_ID = "COIN";
-    private final float ICON_SIZE = 1.5f;
     private SymbolLayer symbolLayer;
     private int playerId;
     private TextView currentScoreView;
     private Button exitButton;
     private Button questionButton;
     private LocalPlayer localPlayer;
-
 
 
     @Override
@@ -135,7 +131,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)),true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)), true);
             enableLocationComponent(style);
 
         });
@@ -152,7 +148,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return currentLocation;
     }
 
-    public LocalPlayer getLocalPlayer(){
+    public LocalPlayer getLocalPlayer() {
         return localPlayer;
     }
 
@@ -172,7 +168,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < GAME_TIME) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(localPlayer.getCollectedCoins().size() , localPlayer.getScore(), playerId, MapActivity.this);
+                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), playerId, MapActivity.this);
             }
 
             chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
@@ -362,7 +358,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
     }
-
 
 
 }

@@ -12,9 +12,9 @@ import sdp.moneyrun.map.Coin;
  */
 public class LocalPlayer implements Serializable {
 
-    private ArrayList<Coin> lostCoins;
+    private final ArrayList<Coin> lostCoins;
     private ArrayList<Coin> locallyAvailableCoins;
-    private ArrayList<Coin> collectedCoins;
+    private final ArrayList<Coin> collectedCoins;
     private int score;
 
     public LocalPlayer() {
@@ -37,11 +37,11 @@ public class LocalPlayer implements Serializable {
         return lostCoins;
     }
 
-    public ArrayList<Coin> getCollectedCoins(){
+    public ArrayList<Coin> getCollectedCoins() {
         return collectedCoins;
     }
 
-    public int getScore(){
+    public int getScore() {
         return score;
     }
 
@@ -53,7 +53,7 @@ public class LocalPlayer implements Serializable {
         lostCoins.add(coin);
     }
 
-    public void addCollectedCoin(Coin coin){
+    public void addCollectedCoin(Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
@@ -61,7 +61,7 @@ public class LocalPlayer implements Serializable {
         collectedCoins.add(coin);
     }
 
-    public void addLocallyAvailableCoin(Coin coin){
+    public void addLocallyAvailableCoin(Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
@@ -90,30 +90,34 @@ public class LocalPlayer implements Serializable {
     }
 
     /**
-     * This is the function that will do all the work, if the locally parameter is set to true it will only remove the given coin from
-     * the locallyAvailableCoins and add it to the lostCoins. If locally is set to false, it will update both lists using the newly availableCoins
-     * list from the database.
+     * This function will remove the coin from the corresponding lists depending on wheter is was picked up or not and
+     * will also update the score of the player of necessary.
      *
-     * @param coin The coin to remove if locally set to true
+     * @param coin     The coin to be removed
+     * @param pickedUp whether the coins was picked up (ie. the player answered correctly to the riddle) or not
      */
     public void updateCoins(Coin coin, boolean pickedUp) {
-            if (coin == null) {
-                throw new IllegalArgumentException("cannot remove a null coin");
-            }
+        if (coin == null) {
+            throw new IllegalArgumentException("cannot remove a null coin");
+        }
 
-            if(pickedUp){
-                addCollectedCoin(coin);
-                score += coin.getValue();
-            }else{
-                addLostCoin(coin);
-            }
+        if (pickedUp) {
+            addCollectedCoin(coin);
+            score += coin.getValue();
+        } else {
+            addLostCoin(coin);
+        }
 
         locallyAvailableCoins.remove(coin);
 
-
     }
 
-    public void syncAvailableCoinsFromDb(ArrayList<Coin> availableCoins){
+    /**
+     * This function will update all variables of the LocalPlayer based on the newly received available coins.
+     *
+     * @param availableCoins Updated list of available coins received from database
+     */
+    public void syncAvailableCoinsFromDb(ArrayList<Coin> availableCoins) {
         if (availableCoins == null) {
             throw new IllegalArgumentException("The availableCoins cannot be null");
         }
@@ -126,7 +130,10 @@ public class LocalPlayer implements Serializable {
         this.locallyAvailableCoins.removeAll(lostCoins);
     }
 
-    public ArrayList<Coin> toSendToDb(){
+    /**
+     * @return This function will return the new list of available coins that needs to be shared with everyone (ie. send to DB)
+     */
+    public ArrayList<Coin> toSendToDb() {
         Set<Coin> set = new HashSet<Coin>();
 
         set.addAll(locallyAvailableCoins);

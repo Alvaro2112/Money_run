@@ -713,32 +713,5 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void questionPopupShowsOnCoinContact() {
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            scenario.onActivity(a -> {
-                Location curloc = a.getCurrentLocation();
-
-                Coin coin = new Coin(curloc.getLatitude(), curloc.getLongitude(), 1);
-                a.addCoin(coin);
-                a.checkObjectives(curloc);
-
-            });
-
-            onView(withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-
-
-
-        }
-    }
-
 
 }

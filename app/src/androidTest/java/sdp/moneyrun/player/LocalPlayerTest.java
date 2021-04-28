@@ -1,11 +1,11 @@
 package sdp.moneyrun.player;
 
 import org.junit.Test;
+
 import java.util.ArrayList;
+
 import sdp.moneyrun.map.Coin;
 
-import static org.hamcrest.Matchers.arrayContaining;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -36,14 +36,14 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addlocallyAvailableCoinsFailsOnNullCoin() {
+    public void addLocallyAvailableCoinsFailsOnNullCoin() {
         LocalPlayer localPlayer = new LocalPlayer();
         localPlayer.addLocallyAvailableCoin(null);
 
     }
 
     @Test
-    public void addlocallyAvailableCoinsWorks() {
+    public void addLocallyAvailableCoinsWorks() {
         LocalPlayer localPlayer = new LocalPlayer();
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
@@ -223,7 +223,7 @@ public class LocalPlayerTest {
     }
 
     @Test
-    public void sendToDbWorks(){
+    public void sendToDbWorks() {
         LocalPlayer localPlayer = new LocalPlayer();
 
         Coin a = new Coin(1, 1, 1);
