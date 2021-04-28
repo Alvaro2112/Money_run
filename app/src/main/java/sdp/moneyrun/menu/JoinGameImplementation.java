@@ -256,23 +256,14 @@ public class JoinGameImplementation extends MenuImplementation{
         playerNumberView.setText(playerNumberText);
 
         //makes the playerCount dynamic so that it changes when people join and leave lobbies
-<<<<<<< HEAD
-        databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId())
-                .addValueEventListener(new ValueEventListener() {
-=======
-        databaseReference.child(activity.getString(R.string.database_game)).child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
->>>>>>> master
+        databaseReference.child(activity.getString(R.string.database_game))
+                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
                         String playerNumberText = String.format((activity.getResources().getString(R.string.game_player_number_display)),
-<<<<<<< HEAD
-                                                                newPlayerCount,
-                                                                gameRepresentation.getMaxPlayerCount());
-=======
                                 newPlayerCount,
                                 gameRepresentation.getMaxPlayerCount());
->>>>>>> master
                         playerNumberView.setText(playerNumberText);
                     }
 
