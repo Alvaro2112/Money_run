@@ -60,11 +60,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                     finish();
                 });
 
-                findViewById(R.id.launch_game_button).setOnClickListener(v -> {
-                    //TODO launch game
-                });
-
-
                 TextView name = (TextView) findViewById(R.id.lobby_title);
                 name.setText(game.getName());
 

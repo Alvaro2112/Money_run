@@ -50,11 +50,11 @@ public class JoinGameImplementation extends MenuImplementation{
                                   boolean focusable,
                                   int layoutId){
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
-        this.focusable = focusable;
-        this.layoutId = layoutId;
         if(user == null){
             throw new IllegalArgumentException("user is null");
         }
+        this.focusable = focusable;
+        this.layoutId = layoutId;
         this.currentUser = user;
     }
 
@@ -300,9 +300,7 @@ public class JoinGameImplementation extends MenuImplementation{
             }
         });
 
-
-
-                Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId());
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);

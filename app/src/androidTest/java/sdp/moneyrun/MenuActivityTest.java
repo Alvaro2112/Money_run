@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,7 +21,9 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -71,8 +74,18 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
 
+    //Since the features of Menu now depend on the intent it is usually launched with
+    //We also need to launch MenuActivity with a valid intent for tests to pass
+    private Intent getStartIntent() {
+        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        return  toStart;
+    }
+
     @Rule
-    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
+    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     private static Matcher<View> withError(final String expected) {
@@ -115,7 +128,7 @@ public class MenuActivityTest {
 
     @Test
     public void joinGamePopupIsDisplayed() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
@@ -155,7 +168,7 @@ public class MenuActivityTest {
         }
         List<Player> playerList = new ArrayList<>();
         playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
@@ -175,7 +188,7 @@ public class MenuActivityTest {
 
     @Test
     public void mapButtonAndSplashScreenWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
             Thread.sleep(100);
@@ -211,7 +224,7 @@ public class MenuActivityTest {
 
     @Test
     public void leaderboardButtonWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(withId(R.id.drawer_layout))
@@ -232,7 +245,7 @@ public class MenuActivityTest {
 
     @Test
     public void navigationViewOpens() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(withId(R.id.drawer_layout))
@@ -245,7 +258,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameEmptyNameFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -271,7 +284,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameEmptyMaxPlayerCountFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -294,7 +307,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameZeroMaxPlayerCountFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -346,7 +359,4 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
-
-
 }

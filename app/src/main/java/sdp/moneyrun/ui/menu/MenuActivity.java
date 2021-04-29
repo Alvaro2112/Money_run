@@ -74,7 +74,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void runFunctionalities(){
         //Setting the current player object
+
         user = (Player) getIntent().getSerializableExtra("user");
+        //Bundle bundle = getIntent().getExtras();
+        //user = (Player) bundle.getSerializable("user");
+        if(user == null){
+            throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
+        }
 
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
