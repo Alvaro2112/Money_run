@@ -14,7 +14,29 @@
         mapbox:mapbox_cameraTargetLat="37.73359"
         mapbox:mapbox_cameraTargetLng="-119.58410"
         mapbox:mapbox_cameraZoom="10"
-        mapbox:mapbox_cameraZoomMin="10"/>
+        mapbox:mapbox_cameraZoomMin="10">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.menu.MenuActivity">
+
+            <Button
+                android:id="@+id/downloader_exit"
+                android:layout_width="75dp"
+                android:layout_height="51dp"
+                android:background="@drawable/roundedbutton"
+                android:text="x"
+
+                mapbox:layout_constraintBottom_toBottomOf="parent"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.95"
+                mapbox:layout_constraintStart_toStartOf="parent"
+                mapbox:layout_constraintTop_toTopOf="parent"
+                mapbox:layout_constraintVertical_bias="0.028" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <ProgressBar
         android:id="@+id/progress_bar_map_downloader"

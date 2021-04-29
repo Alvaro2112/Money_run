@@ -3,6 +3,7 @@ package sdp.moneyrun.ui.map;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
     private final int MAX_ZOOM = 15;
     private final int MIN_ZOOM =9;
+    private Button exitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,22 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         mapView = findViewById(R.id.mapView_downloader);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this::onMapReady);
+
+        exitButton = findViewById(R.id.downloader_exit);
+        addExitButton();
+
     }
+
+    private void addExitButton() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+
     /**
      * @param mapboxMap the map where everything will be done
      *                  this overried the OnMapReadyCallback in the implemented interface
