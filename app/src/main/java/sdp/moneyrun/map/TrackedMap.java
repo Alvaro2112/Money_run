@@ -22,7 +22,6 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -215,4 +214,6 @@ public abstract class TrackedMap extends BaseMap implements
         return distance * meterConversion;
     }
 
+
+    public abstract void checkObjectives(Location location);
 }

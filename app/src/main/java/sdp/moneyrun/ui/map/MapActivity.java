@@ -353,6 +353,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param location Used to check if location is near a coin or not
      */
+    @Override
     public void checkObjectives(Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, remainingCoins, THRESHOLD_DISTANCE);
