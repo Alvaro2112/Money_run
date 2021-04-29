@@ -1,9 +1,11 @@
 package sdp.moneyrun.player;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -42,7 +44,11 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void checkButtonOpenRightActivities() throws Throwable {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(toStart)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))

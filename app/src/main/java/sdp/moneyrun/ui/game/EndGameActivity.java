@@ -6,11 +6,17 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -51,12 +57,23 @@ public class EndGameActivity extends AppCompatActivity {
     *  Call this on the button to make start the Menu activity
      */
     private void linkToMenuButton(ImageButton toMenu){
+        PlayerDatabaseProxy pdp = new PlayerDatabaseProxy();
         toMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
-                startActivity(mainIntent);
-                finish();
+                pdp.getPlayerTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()){
+                            Player p = pdp.getPlayerFromTask(task);
+                            Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
+                            mainIntent.putExtra("user", p);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                    }
+                });
+
             }
         });
 
