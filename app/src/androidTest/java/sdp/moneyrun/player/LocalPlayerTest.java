@@ -1,8 +1,12 @@
 package sdp.moneyrun.player;
 
 import org.junit.Test;
+
 import java.util.ArrayList;
+
 import sdp.moneyrun.map.Coin;
+
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -21,6 +25,52 @@ public class LocalPlayerTest {
         localPlayer.addLostCoin(b);
 
         assertThat(localPlayer.getLostCoins(), is(c));
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addCollectedCoinFailsOnNullCoin() {
+        LocalPlayer localPlayer = new LocalPlayer();
+        localPlayer.addCollectedCoin(null);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addLocallyAvailableCoinsFailsOnNullCoin() {
+        LocalPlayer localPlayer = new LocalPlayer();
+        localPlayer.addLocallyAvailableCoin(null);
+
+    }
+
+    @Test
+    public void addLocallyAvailableCoinsWorks() {
+        LocalPlayer localPlayer = new LocalPlayer();
+        Coin a = new Coin(1, 1, 1);
+        Coin b = new Coin(2, 1, 1);
+        ArrayList<Coin> c = new ArrayList<Coin>();
+        c.add(a);
+        c.add(b);
+        localPlayer.addLocallyAvailableCoin(a);
+        localPlayer.addLocallyAvailableCoin(b);
+
+        assertThat(localPlayer.getLocallyAvailableCoins(), is(c));
+
+    }
+
+
+    @Test
+    public void addLostCollectedCoinWorks() {
+
+        LocalPlayer localPlayer = new LocalPlayer();
+        Coin a = new Coin(1, 1, 1);
+        Coin b = new Coin(2, 1, 1);
+        ArrayList<Coin> c = new ArrayList<Coin>();
+        c.add(a);
+        c.add(b);
+        localPlayer.addCollectedCoin(a);
+        localPlayer.addCollectedCoin(b);
+
+        assertThat(localPlayer.getCollectedCoins(), is(c));
 
     }
 
@@ -81,27 +131,26 @@ public class LocalPlayerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument1() {
+    public void updateCoinsWorksOnWrongArgument() {
         LocalPlayer localPlayer = new LocalPlayer();
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
-        localPlayer.updateLocallyAvailableCoins(availableCoins, true, null);
+        localPlayer.updateCoins(null, true);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument2() {
+    public void syncAvailableCoinsFromDbWorksOnWrongArgument1() {
         LocalPlayer localPlayer = new LocalPlayer();
-        localPlayer.updateLocallyAvailableCoins(null, false, null);
+        localPlayer.syncAvailableCoinsFromDb(null);
 
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void updateLocallyAvailableCoinsWorksOnWrongArgument3() {
+    public void syncAvailableCoinsFromDbWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
         ArrayList<Coin> availableCoins = new ArrayList<Coin>();
         availableCoins.add(null);
-        localPlayer.updateLocallyAvailableCoins(availableCoins, false, null);
+        localPlayer.syncAvailableCoinsFromDb(availableCoins);
 
     }
 
@@ -127,7 +176,7 @@ public class LocalPlayerTest {
         localPlayer.addLostCoin(c);
         localPlayer.addLostCoin(d);
 
-        localPlayer.updateLocallyAvailableCoins(availableCoins, false, null);
+        localPlayer.syncAvailableCoinsFromDb(availableCoins);
 
         ArrayList<Coin> expected1 = new ArrayList<>();
         expected1.add(a);
@@ -149,7 +198,6 @@ public class LocalPlayerTest {
 
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
-        Coin c = new Coin(3, 1, 1);
 
         ArrayList<Coin> availableCoins = new ArrayList<Coin>();
 
@@ -160,7 +208,7 @@ public class LocalPlayerTest {
 
         localPlayer.addLostCoin(a);
 
-        localPlayer.updateLocallyAvailableCoins(availableCoins, true, b);
+        localPlayer.updateCoins(b, false);
 
         ArrayList<Coin> expected1 = new ArrayList<>();
         expected1.add(a);
@@ -171,6 +219,33 @@ public class LocalPlayerTest {
 
         assertThat(localPlayer.getLostCoins(), is(expected1));
         assertThat(localPlayer.getLocallyAvailableCoins(), is(expected2));
+
+    }
+
+    @Test
+    public void sendToDbWorks() {
+        LocalPlayer localPlayer = new LocalPlayer();
+
+        Coin a = new Coin(1, 1, 1);
+        Coin b = new Coin(2, 1, 1);
+        Coin c = new Coin(3, 1, 1);
+
+        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+
+        availableCoins.add(a);
+        availableCoins.add(b);
+
+        localPlayer.setLocallyAvailableCoins(availableCoins);
+
+        localPlayer.addLostCoin(a);
+        localPlayer.addLostCoin(c);
+
+        ArrayList<Coin> expected = new ArrayList<>();
+        expected.add(a);
+        expected.add(b);
+        expected.add(c);
+
+        assertThat(localPlayer.toSendToDb(), containsInAnyOrder(a, b, c));
 
     }
 }
