@@ -41,8 +41,12 @@ public class EndGameInstrumentedTest {
     @BeforeClass
     public static void setPersistence(){
         if(!MainActivity.calledAlready){
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            MainActivity.calledAlready = true;
+            try {
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                MainActivity.calledAlready = true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
