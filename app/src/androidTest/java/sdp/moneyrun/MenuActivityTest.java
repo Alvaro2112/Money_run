@@ -54,6 +54,7 @@ import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -354,6 +355,29 @@ public class MenuActivityTest {
 
             Intents.release();
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void CreateGameSendsYouToLobby() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String game_name = "CreateGameTest";
+            final String max_player_count = String.valueOf(3);
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(2000);
+            intended(hasComponent(GameLobbyActivity.class.getName()));
+            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
