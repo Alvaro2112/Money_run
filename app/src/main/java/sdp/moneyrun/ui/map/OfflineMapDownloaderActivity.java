@@ -30,24 +30,27 @@ import sdp.moneyrun.map.TrackedMap;
 public class OfflineMapDownloaderActivity extends TrackedMap {
 
     private boolean isEndNotified = false;
+    private boolean hasStartedDownload = false;
     private ProgressBar progressBar;
     private MapView mapView;
     private OfflineManager offlineManager;
-    private float LAT_OFFSET = 0.1f;
-    private float LONG_OFFSET = 0.1f;
+    private final float LAT_OFFSET = 0.05f;
+    private final float LONG_OFFSET = 0.05f;
     // JSON encoding/decoding
     public static final String JSON_CHARSET = "UTF-8";
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
+    private final int MAX_ZOOM = 15;
+    private final int MIN_ZOOM =9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
-
+        createMap(savedInstanceState, R.id.mapView_downloader, R.layout.activity_offline_map_downloader);
         setContentView(R.layout.activity_offline_map_downloader);
 
-        mapView = findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView_downloader);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this::onMapReady);
     }
@@ -105,11 +108,14 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
 
-
+    public boolean getHasStartedDownload(){
+        return hasStartedDownload;
+    }
     // Progress bar methods
     private void startProgress() {
 // Start and show the progress bar
         isEndNotified = false;
+        hasStartedDownload = true;
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -132,6 +138,10 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         Toast.makeText(OfflineMapDownloaderActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * @param location the center of the donwloaded map
+     *  The map will be downloaded whne the location provider updates the location so that we download the map where the user is.
+     */
     @Override
     public void checkObjectives(Location location) {
 
@@ -139,8 +149,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
 // Create a bounding box for the offline region
-        LatLng northeast = new LatLng(location.getLatitude()-LAT_OFFSET, location.getLatitude()-LONG_OFFSET);
-        LatLng southwest = new LatLng(location.getLatitude()+LAT_OFFSET, location.getLatitude()+LONG_OFFSET);
+        LatLng northeast = new LatLng(location.getLatitude()+LAT_OFFSET, location.getLatitude()-LONG_OFFSET);
+        LatLng southwest = new LatLng(location.getLatitude()-LAT_OFFSET, location.getLatitude()+LONG_OFFSET);
         LatLngBounds latLngBounds = new LatLngBounds.Builder()
                 .include(northeast) // Northeast
                 .include(southwest) // Southwest
@@ -150,8 +160,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
                 mapboxMap.getStyle().getUri(),
                 latLngBounds,
-                10,
-                20,
+                MIN_ZOOM,
+                MAX_ZOOM,
                 OfflineMapDownloaderActivity.this.getResources().getDisplayMetrics().density);
 
 // Set the metadata
@@ -175,13 +185,12 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                         public void onCreate(OfflineRegion offlineRegion) {
                             offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE);
 
-                            progressBar = findViewById(R.id.progress_bar);
+                            progressBar = findViewById(R.id.progress_bar_map_downloader);
                             startProgress();
 
                             offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
                                 @Override
                                 public void onStatusChanged(OfflineRegionStatus status) {
-
                                     double percentage = status.getRequiredResourceCount() >= 0
                                             ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
                                             0.0;
