@@ -21,6 +21,7 @@ import sdp.moneyrun.ui.menu.LeaderboardActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class LeaderboardInstrumentedTest {
 
@@ -80,9 +81,7 @@ public class LeaderboardInstrumentedTest {
     public void addPlayerNullThrowsException(){
         exception.expect(RuntimeException.class);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a ->{
-                a.addPlayer(null);
-            });
+            scenario.onActivity(a -> a.addPlayer(null));
         }
     }
 
@@ -137,9 +136,7 @@ public class LeaderboardInstrumentedTest {
     public void addPlayerListThrowsNullException(){
         exception.expect(RuntimeException.class);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a ->{
-                a.addPlayerList(null);
-            });
+            scenario.onActivity(a -> a.addPlayerList(null));
         }
     }
 
@@ -156,10 +153,12 @@ public class LeaderboardInstrumentedTest {
                     assertEquals(-2,1);
                 }
                 for(Player p : a.getPlayerList()){
-                    if(p.getName().equals("Dummy Player 4"))
+                    if (p.getName().equals("Chris")) {
                         check = true;
+                        break;
+                    }
                 }
-                assertEquals(true,check);
+                assertTrue(check);
             });
         }
     }
@@ -190,5 +189,23 @@ public class LeaderboardInstrumentedTest {
                 assertNotNull(p.getAddress());
             });
         }
+    }
+
+    @Test
+    public void bestToWorstPlayerReturnsSortedPlayerList(){
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(new Player(1,"a0","b",0,0,0));
+        players.add(new Player(24,"a1","b",0,0,6));
+        players.add(new Player(78,"a2","b",0,0,68));
+        players.add(new Player(2,"a3","b",0,0,24));
+        players.add(new Player(9,"a4","b",0,0,11));
+        ArrayList<Player> players2 = new ArrayList<>();
+        players2.add(new Player(78,"a2","b",0,0,68));
+        players2.add(new Player(2,"a3","b",0,0,24));
+        players2.add(new Player(9,"a4","b",0,0,11));
+        players2.add(new Player(24,"a1","b",0,0,6));
+        players2.add(new Player(1,"a0","b",0,0,0));
+        LeaderboardActivity.bestToWorstPlayer(players);
+        assertEquals(players2,players);
     }
 }

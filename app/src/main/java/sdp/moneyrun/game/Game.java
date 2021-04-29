@@ -33,7 +33,6 @@ public class Game {
     private String id;
     private boolean hasBeenAdded;
 
-
     /**
      * This constructor is used to create a game that has never been added to the database.
      * @param name the game name
@@ -202,7 +201,7 @@ public class Game {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
-                    .child(DATABASE_GAME)
+                    .child(DATABASE_PLAYER)
                     .setValue(players);
         }
     }

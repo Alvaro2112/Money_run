@@ -6,6 +6,7 @@ import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class GameRepresentationTest {
     @Test
@@ -71,5 +72,23 @@ public class GameRepresentationTest {
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
         assertEquals(gr.getStartLocation(), lr);
+    }
+
+
+    @Test
+    public void setPlayerCountFailsOnLessThanOne(){
+        LocationRepresentation lr = new LocationRepresentation(0, 1);
+        GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
+        assertThrows(IllegalArgumentException.class, () ->{
+            gr.setPlayerCount(-2);
+        });
+    }
+
+    @Test
+    public void setPlayerCountSetsPlayerCount(){
+        LocationRepresentation lr = new LocationRepresentation(0, 1);
+        GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
+        gr.setPlayerCount(4);
+        assertEquals(4, gr.getPlayerCount());
     }
 }
