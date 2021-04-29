@@ -215,7 +215,7 @@ public class LeaderboardInstrumentedTest {
                     e.printStackTrace();
                 }
                 assertEquals(a.getPlayerList().size(),1);
-            });
+            }); 
             Intents.release();
         }
     }
