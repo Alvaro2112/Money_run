@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param guestButton offline mode option
      */
-    private void setGuestButton(Button guestButton){
+    public void setGuestButton(Button guestButton){
         if(guestButton == null)
             throw new IllegalArgumentException("Guest button was clicked but was null");
         guestButton.setOnClickListener(new View.OnClickListener() {
