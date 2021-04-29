@@ -84,49 +84,6 @@ public class EndGameInstrumentedTest {
         }
     }
 
-    @Test
-    public void updatePlayerUpdateScore() {
-        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            int playerid = 98732;
-            final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
-            final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            db.putPlayer(player);
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            ValueEventListener listener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Player p = snapshot.getValue(Player.class);
-                    player.setScore(3*p.getScore() + player.getScore(), false);
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    assert(false);
-                }
-            };
-            scenario.onActivity(a -> {
-                        Player p = a.updatePlayer(playerid,10);
-                    });
-            db.addPlayerListener(player,listener );
-
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            db.removePlayerListener(player, listener);
-
-            assertEquals(35,player.getScore());
-        }
-        catch (Exception e){
-            assertEquals(-1,2);
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void launchIntentWithListOfCoins() {
@@ -160,6 +117,50 @@ public class EndGameInstrumentedTest {
 
         }
 
+    }
+
+    @Test
+    public void updatePlayerUpdateScore(){
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            int playerid = 98732;
+            final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
+            final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+            db.putPlayer(player);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Player p = snapshot.getValue(Player.class);
+                    player.setScore(3*p.getScore() + player.getScore(), false);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    assert(false);
+                }
+            };
+            scenario.onActivity(a -> {
+                Player p = a.updatePlayer(playerid,10);
+            });
+            db.addPlayerListener(player,listener );
+
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            db.removePlayerListener(player, listener);
+
+            assertEquals(35,player.getScore());
+        }
+        catch (Exception e){
+            assertEquals(-1,2);
+            e.printStackTrace();
+        }
     }
 
 
