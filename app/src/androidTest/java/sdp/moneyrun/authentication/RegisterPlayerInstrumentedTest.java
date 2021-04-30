@@ -1,7 +1,10 @@
 package sdp.moneyrun.authentication;
 import android.content.Context;
+import android.content.Intent;
+import android.widget.Button;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
@@ -17,10 +20,14 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.PlayerProfileActivity;
 import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
 
+import static android.os.Trace.isEnabled;
+import static android.service.autofill.Validators.not;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -29,6 +36,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
@@ -136,6 +144,30 @@ public class RegisterPlayerInstrumentedTest {
         }catch (Exception e){
             e.printStackTrace();
             Intents.release();
+        }
+    }
+    @Test
+    public void guestModeDisablesJoinGameButtonInMenu(){
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RegisterPlayerActivity.class);
+        intent.putExtra("guestPlayer", true);
+        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            String name = "John";
+            String address = "New York";
+            String pet = "Dog";
+            String color = "Green";
+            Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.registerAddressText)).perform(typeText(address), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            intended(hasComponent(MenuActivity.class.getName()));
         }
     }
 }

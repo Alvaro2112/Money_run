@@ -214,7 +214,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a -> {
-                Game.endGame(a.getCollectedCoins(), a.getPlayerId(), a);
+                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), a);
             });
             try {
                 Thread.sleep(5000);
@@ -719,7 +719,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
                 a.placeRandomCoins(numberOfCoins, 100);
-                assertEquals(a.getRemainingCoins().size(), numberOfCoins);
+                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
             });
         }
     }

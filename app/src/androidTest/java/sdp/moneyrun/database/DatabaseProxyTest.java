@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private final long ASYNC_CALL_TIMEOUT = 5L;
     @BeforeClass
     public static void setPersistence(){
         if(!MainActivity.calledAlready){

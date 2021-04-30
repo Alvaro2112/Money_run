@@ -47,10 +47,10 @@ public class GameInstrumentedTest {
         }
     }
 
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private final long ASYNC_CALL_TIMEOUT = 5L;
     private final String DATABASE_GAME = "games";
 
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private final GameDatabaseProxy db = new GameDatabaseProxy();
 
 

@@ -20,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PlayerTest {
-    private  long ASYNC_CALL_TIMEOUT = 10L;
+    private final long ASYNC_CALL_TIMEOUT = 10L;
 
     @BeforeClass
     public static void setPersistence(){

@@ -27,7 +27,7 @@ import sdp.moneyrun.player.Player;
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
-    private ArrayList<Player> playerList = new ArrayList<>();
+    private final ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
     private Player user;
     private DatabaseProxy db;
@@ -46,6 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
+        //getEndGamePlayers(); //TODO: this function should be called at the end of the game
     }
 
     /**
@@ -60,7 +61,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this,playerList);
-        ListView ldbView = (ListView) findViewById(R.id.ldblistView);
+        ListView ldbView = findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
     }
     /**
@@ -189,5 +190,19 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
         return players;
+    }
+
+    /**
+     * Gets the players' scores once the game has ended and displays them
+     */
+    //TODO: when end game is linked to the rest of the game call this method when result button is clicked
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void getEndGamePlayers(){
+        ldbAdapter.clear();
+        int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers",0);
+        for(int i =0;i<numberOfPlayers;++i){
+            Player player = (Player)getIntent().getSerializableExtra("players"+i);
+            addPlayer(player);
+        }
     }
 }

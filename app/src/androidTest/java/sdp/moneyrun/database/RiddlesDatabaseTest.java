@@ -17,7 +17,7 @@ import sdp.moneyrun.ui.MainActivity;
 
 public class RiddlesDatabaseTest extends TestCase {
 
-    private Context context = ApplicationProvider.getApplicationContext();
+    private final Context context = ApplicationProvider.getApplicationContext();
 
 
     @BeforeClass

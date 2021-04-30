@@ -71,7 +71,7 @@ public class PlayerProfileInstrumentedTest {
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> {
-                ((PlayerProfileActivity) a).setDisplayedTexts(user);
+                a.setDisplayedTexts(user);
             });
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("Player has died 0 many times")));
