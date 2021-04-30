@@ -3,13 +3,16 @@ package sdp.moneyrun.ui.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import java.util.ArrayList;
+import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 
@@ -23,6 +26,7 @@ public class EndGameActivity extends AppCompatActivity {
     private final int gameScore = 0;
     private TextView endText;
     private int playerId;
+    private Button resultButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,8 @@ public class EndGameActivity extends AppCompatActivity {
 
         final ImageButton toMenu = (ImageButton) findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
+        resultButton = findViewById(R.id.end_game_button_to_results);
+        linkToResult(resultButton);
 
     }
 
@@ -62,7 +68,7 @@ public class EndGameActivity extends AppCompatActivity {
     }
 
     /**
-     * @param numCoins  number of coins colelcted
+     * @param numCoins number of coins collected
      * @param gameScore score of the game (sum of values of coins)
      * @param succeeded (has managed to get the list of coins from the map activity
      *                  <p>
@@ -98,6 +104,40 @@ public class EndGameActivity extends AppCompatActivity {
             player.setScore(gameScore, true);
         }
         return player;
+    }
+
+    /**
+     * Should set a listener on the button when clicked and sending
+     * all the players to the leaderboard so it can display them
+     * in the correct order
+     *
+     * @param resultButton button that will link to result UI
+     */
+    public void linkToResult(Button resultButton){
+        List<Player> players = getPlayersFromGame();
+        if(resultButton == null || players == null)
+            throw new IllegalArgumentException("Button linking end to results or players list is null");
+        resultButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
+            resultIntent.putExtra("numberOfPlayers",players.size());
+            for(int i = 0;i < players.size();++i) {
+                resultIntent.putExtra("players"+i, players.get(i));
+            }
+            startActivity(resultIntent);
+        });
+    }
+
+    /**
+     * @return players that were in the game that just ended
+     */
+    private List<Player> getPlayersFromGame(){
+        List<Player> players = new ArrayList<>();
+        int numberOfPlayers = getIntent().getIntExtra("players",0);
+        for(int i =0;i<numberOfPlayers;++i){
+            Player player = (Player)getIntent().getSerializableExtra("player"+i);
+            players.add(player);
+        }
+        return players;
     }
 
 }

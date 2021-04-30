@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -80,7 +83,6 @@ public class LeaderboardInstrumentedTest {
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
-
                 //Address was not set here before I don't know why
                 Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
                 player2.setScore(8001,false);
@@ -194,5 +196,27 @@ public class LeaderboardInstrumentedTest {
         players2.add(new Player(1,"a0","b",0,0,0));
         LeaderboardActivity.bestToWorstPlayer(players);
         assertEquals(players2,players);
+    }
+
+
+    @Test
+    public void testIfEndGamePlayerReceivesSinglePlayerWhenGivenSizeIsOne(){
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("players"+0, user);
+        intent.putExtra("numberOfPlayers", 1);
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            scenario.onActivity(a -> {
+                a.getEndGamePlayers();
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(a.getPlayerList().size(),1);
+            });
+            Intents.release();
+        }
     }
 }
