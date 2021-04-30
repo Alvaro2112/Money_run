@@ -104,9 +104,11 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-
+                System.out.println("Got there ");
                 player.setName(p.getName());
-                received.countDown();
+                if(p.getName().equals(newName)) {
+                    received.countDown();
+                }
             }
 
             @Override
@@ -131,9 +133,9 @@ public class DatabaseProxyTest {
 //            e.printStackTrace();
 //            assert(false);
 //        }
+        System.out.println("End of path and received is " + received.getCount());
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
-
     }
 
     @Test(expected = IllegalArgumentException.class)

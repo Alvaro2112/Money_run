@@ -2,17 +2,14 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -20,14 +17,9 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -38,17 +30,11 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.game.Game;
-import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.map.Riddle;
-import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -148,8 +134,10 @@ public class MenuActivityTest {
         }
         int visibleGames = 0;
         for(DataSnapshot d : dbGames.getResult().getChildren()){
-            if(d.child("isVisible").getValue(Boolean.class)){
-                visibleGames += 1;
+            if(d != null) {
+                if (d.child("isVisible").getValue(Boolean.class)) {
+                    visibleGames += 1;
+                }
             }
         }
         List<Player> playerList = new ArrayList<>();
