@@ -67,18 +67,6 @@ public class EndGameActivity extends AppCompatActivity {
 
     }
 
-//    /**
-//     * @return the sum of the values of the coins collected during the game
-//     */
-//    private int getTotalScore(){
-//        int totalScore = 0;
-//        for(int val: collectedCoinsValues){
-//            totalScore += val;
-//        }
-//        return totalScore;
-//    }
-
-
     /**
      * @param numCoins number of coins collected
      * @param gameScore score of the game (sum of values of coins)
