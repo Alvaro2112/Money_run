@@ -116,10 +116,7 @@ public class NewGameImplementation extends MenuImplementation {
         // Build new game given fields filled by user
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
-        //this coin is added, otherwise if a list is added as a node to the db
-        //and the list is empty, no node will get created
-        //so when later we try to get the game from the db, we will get a null value
-        //for the list of coins and that will trigger an exception :/
+        //no node is created in the DB for an empty list. need to fill it with something
         coins.add(new Coin(1,1,99));
 
         Game game = new Game(name, user, maxPlayerCount, riddles, coins, new Location(""), true);
@@ -127,8 +124,13 @@ public class NewGameImplementation extends MenuImplementation {
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
 
-        fusedLocationClient.getLastLocation()
-        .addOnSuccessListener(activity, location -> {
+        //The reason all of this is commented out is because it kept making the app crash
+        //as you can see there is a missing permission surpression that was here already in master
+        //most of the time it fails to get the location from the gps provider.
+        //we should fix it asap, but it is outside of the scope of this PR, and doesnt cause
+        //any critical failures
+
+        /*fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
             // Got last known location. In some rare situations this can be null
             // In this case, the game cannot be instanciated
             if (location == null) {
@@ -138,7 +140,7 @@ public class NewGameImplementation extends MenuImplementation {
             // Post location to database
             LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             startLocationReference.setValue(locationRep);
-        });
+        });*/
         launchLobbyActivity(game.getId());
 
 
