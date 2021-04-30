@@ -201,7 +201,7 @@ public class JoinGameImplementation extends MenuImplementation{
                     // In this case, the game cannot be instanciated
                     if (location == null) {
                         Log.e("location", "Error getting location");
-                        throw new NullPointerException("Error getting location");
+                        return;
                     }
                     LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -112,39 +113,42 @@ public class NewGameImplementation extends MenuImplementation {
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
 
+        // Build new game given fields filled by user
+        List<Riddle> riddles = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
+        //this coin is added, otherwise if a list is added as a node to the db
+        //and the list is empty, no node will get created
+        //so when later we try to get the game from the db, we will get a null value
+        //for the list of coins and that will trigger an exception :/
+        coins.add(new Coin(1,1,99));
+
+        Game game = new Game(name, user, maxPlayerCount, riddles, coins, new Location(""), true);
+        // post game to database
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        gdb.putGame(game);
+
         fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                    }
+        .addOnSuccessListener(activity, location -> {
+            // Got last known location. In some rare situations this can be null
+            // In this case, the game cannot be instanciated
+            if (location == null) {
+                Log.e("location", "Error getting location");
+                return;
+            }
+            // Post location to database
+            LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+            startLocationReference.setValue(locationRep);
+        });
+        launchLobbyActivity(game.getId());
 
-                    // Build new game given fields filled by user
-                    List<Riddle> riddles = new ArrayList<>();
-                    List<Coin> coins = new ArrayList<>();
 
+    }
 
-                    //this coin is added, otherwise if a list is added as a node to the db
-                    //and the list is empty, no node will get created
-                    //so when later we try to get the game from the db, we will get a null value
-                    //for the list of coins and that will trigger an exception :/
-                    coins.add(new Coin(1,1,99));
-
-                    Game game = new Game(name, user, maxPlayerCount, riddles, coins, location, true);
-
-                    // post game to database
-                    GameDatabaseProxy gdb = new GameDatabaseProxy();
-                    gdb.putGame(game);
-                    Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
-                    lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), game.getId());
-                    lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
-                    activity.startActivity(lobbyIntent);
-                    activity.finish();
-
-                    // Post location to database
-                    //LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                    //startLocationReference.setValue(locationRep);
-                });
+    private void launchLobbyActivity(String gameId){
+        Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
+        activity.startActivity(lobbyIntent);
+        activity.finish();
     }
 }
