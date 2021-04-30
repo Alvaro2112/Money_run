@@ -146,6 +146,7 @@ public class NewGameImplementation extends MenuImplementation {
 
     }
 
+    
     private void launchLobbyActivity(String gameId){
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
