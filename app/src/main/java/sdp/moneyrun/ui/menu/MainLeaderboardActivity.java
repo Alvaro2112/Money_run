@@ -53,12 +53,17 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         return playerList;
     }
 
+    public int getMaxPlayerNumber(){
+        return NUM_PLAYERS_LEADERBOARD;
+    }
+
 
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new MainLeaderboardListAdapter(this, playerList, user);
         ListView ldbView = findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
+        ldbAdapter.clear();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
