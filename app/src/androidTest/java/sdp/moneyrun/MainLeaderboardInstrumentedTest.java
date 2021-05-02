@@ -55,9 +55,6 @@ public class MainLeaderboardInstrumentedTest {
                     e.printStackTrace();
                 }
 
-                for(int i = 0;i<a.getLdbAdapter().getCount();++i)
-                    System.out.println("PLAYERHUHU" + a.getLdbAdapter().getItem(i).getName());
-
                 assertTrue(a.getPlayerList().size() <= a.getMaxPlayerNumber() + 1);
             });
         }
@@ -112,7 +109,7 @@ public class MainLeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),2);
+                assertTrue(a.getPlayerList().size() <= a.getMaxPlayerNumber() + 2);
             });
         }
         catch (Exception e){
