@@ -14,6 +14,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
     private final String TAG = PlayerDatabaseProxy.class.getSimpleName();
 
     private final String DATABASE_PLAYER = "players";
+    private final String DATABASE_PLAYER_SCORE = "score";
 
     private final DatabaseReference playersRef;
 
@@ -108,5 +109,15 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
             throw new IllegalArgumentException();
         }
         playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
+    }
+
+    public Task<DataSnapshot> getLeaderboardPlayers(int n){
+        if(n < 0){
+            throw new IllegalArgumentException("n should not be negative.");
+        }
+
+        return playersRef.orderByChild(DATABASE_PLAYER_SCORE)
+                .limitToLast(n)
+                .get();
     }
 }
