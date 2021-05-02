@@ -18,6 +18,7 @@ import sdp.moneyrun.player.Player;
 public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
 
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
+    private final int COLOR_GOLD = Color.rgb(255, 204, 51);
 
     Player user;
 
@@ -48,7 +49,7 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
         player_position.setText(text_position);
         player_name.setText(String.valueOf(player.getName()));
         if(user.equals(player)){
-            player_name.setTextColor(Color.rgb(255, 204, 51));
+            player_name.setTextColor(COLOR_GOLD);
             player_name.setTypeface(player_name.getTypeface(), Typeface.BOLD);
         }
         player_score.setText(String.valueOf(player.getScore()));
