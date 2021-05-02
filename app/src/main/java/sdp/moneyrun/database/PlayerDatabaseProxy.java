@@ -111,6 +111,11 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
     }
 
+    /**
+     * Returns the top players ordered by their score from the database.
+     * @param n the number of players to retrieve from the database
+     * @return the task
+     */
     public Task<DataSnapshot> getLeaderboardPlayers(int n){
         if(n < 0){
             throw new IllegalArgumentException("n should not be negative.");
