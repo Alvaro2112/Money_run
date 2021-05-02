@@ -82,7 +82,7 @@ public class OfflineMapDownloaderTest {
     }
 
     @Test
-    public void downloadsMap() {
+    public void downloadsOneMap() {
 
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
 
@@ -98,7 +98,7 @@ public class OfflineMapDownloaderTest {
                 offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback(){
                     @Override
                     public void onList(OfflineRegion[] offlineRegions) {
-                        assertEquals(offlineRegions.length > 0,true);
+                        assertEquals(offlineRegions.length == 1,true);
                         String name;
                         try {
                             name = new JSONObject(new String(offlineRegions[0].getMetadata(), Charset.forName(OfflineMapDownloaderActivity.JSON_CHARSET)))
@@ -120,4 +120,5 @@ public class OfflineMapDownloaderTest {
     }
 
     }
+
 }
