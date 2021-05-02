@@ -112,10 +112,6 @@ public class MainLeaderboardInstrumentedTest {
                 assertTrue(a.getPlayerList().size() <= a.getMaxPlayerNumber() + 2);
             });
         }
-        catch (Exception e){
-            e.printStackTrace();
-            assertEquals(2,1);
-        }
     }
 
     @Test
