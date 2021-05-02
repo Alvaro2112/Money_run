@@ -13,12 +13,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +106,6 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param name              the game name
      * @param maxPlayerCount    the maximum number of players in the game
-     * @return the game
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
@@ -116,8 +120,6 @@ public class NewGameImplementation extends MenuImplementation {
         // Build new game given fields filled by user
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
-        //no node is created in the DB for an empty list. need to fill it with something
-        coins.add(new Coin(1,1,99));
 
         Game game = new Game(name, user, maxPlayerCount, riddles, coins, new Location(""), true);
         // post game to database
@@ -146,7 +148,7 @@ public class NewGameImplementation extends MenuImplementation {
 
     }
 
-    
+
     private void launchLobbyActivity(String gameId){
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
