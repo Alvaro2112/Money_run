@@ -46,6 +46,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 
@@ -354,4 +355,17 @@ public class LoginInstrumentedTest {
             Intents.release();
         }
     }
+    @Test
+    public void guestButtonStartsRegisterPlayerWhenNotNull(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.guestButton)).perform(ViewActions.click());
+            Thread.sleep(4000);
+            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            Intents.release();
+        }catch (Exception e){
+            fail();
+        }
+    }
+
 }

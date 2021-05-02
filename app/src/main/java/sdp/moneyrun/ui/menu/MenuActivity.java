@@ -75,6 +75,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void runFunctionalities(){
         //Setting the current player object
         user = (Player) getIntent().getSerializableExtra("user");
+        boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer",false);
+        setGuestPlayerFields(guestPlayer);
 
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
@@ -233,6 +235,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         startActivity(switchActivity);
         if(shouldFinish){
             finish();
+        }
+    }
+
+    public void setGuestPlayerFields(boolean guest){
+        if(guest){
+            Button joinGame = findViewById(R.id.join_game);
+            joinGame.setEnabled(false);
         }
     }
 
