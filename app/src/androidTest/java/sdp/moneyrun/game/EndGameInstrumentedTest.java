@@ -24,6 +24,7 @@ import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -149,6 +150,18 @@ public class EndGameInstrumentedTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void toLeaderboardButtonWorks(){
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            intended(hasComponent(LeaderboardActivity.class.getName()));
+            Intents.release();
+
+        }
     }
 
 

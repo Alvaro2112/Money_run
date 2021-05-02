@@ -78,6 +78,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if(user == null){
             throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
         }
+        boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer",false);
+        setGuestPlayerFields(guestPlayer);
 
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
@@ -231,6 +233,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         startActivity(switchActivity);
         if(shouldFinish){
             finish();
+        }
+    }
+
+    public void setGuestPlayerFields(boolean guest){
+        if(guest){
+            Button joinGame = findViewById(R.id.join_game);
+            joinGame.setEnabled(false);
         }
     }
 
