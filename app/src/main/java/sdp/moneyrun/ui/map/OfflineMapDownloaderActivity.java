@@ -163,7 +163,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
             byte[] metadata;
             try {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(JSON_FIELD_REGION_NAME, R.string.offline_map_name);
+                jsonObject.put(JSON_FIELD_REGION_NAME, getString(R.string.offline_map_name));
                 String json = jsonObject.toString();
                 metadata = json.getBytes(JSON_CHARSET);
             } catch (Exception exception) {
