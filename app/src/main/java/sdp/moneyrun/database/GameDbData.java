@@ -141,7 +141,6 @@ public final class GameDbData {
         players.remove(player);
     }
 
-
     /**
      * Set List of Players
      * @param players List of Players to set
