@@ -18,30 +18,30 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 public class OfflineMapDownloaderTest {
 
     @Test
-    public void DownloadsAfterStartingActivity() {
+    public void DownloadsAfterStartingActivityTest() {
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
             try {
-                Thread.sleep(15000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             scenario.onActivity(a -> {
                 assertEquals(a.getHasStartedDownload(),true);
             });
+        }catch (Exception e) {
+        e.printStackTrace();
+        assertEquals(1,2);
         }
     }
 
     @Test
-    public void closeButtonWorks() {
+    public void closeButtonWorksTest() {
 
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
             Intents.init();
@@ -63,26 +63,9 @@ public class OfflineMapDownloaderTest {
         }
     }
 
-    @Test
-    public void loadBarIsDisplayedTest() {
-
-        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
-            scenario.onActivity(activity -> {
-                if (!activity.getIsEndNotified()) {
-                    onView(withId(R.id.progress_bar_map_downloader)).check(matches(not(isDisplayed())));
-
-                }
-                else{
-                    onView(withId(R.id.progress_bar_map_downloader)).check(matches(not(isDisplayed())));
-                }
-
-            });
-
-        }
-    }
 
     @Test
-    public void downloadsOneMap() {
+    public void downloadsOneMapTest() {
 
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
 
@@ -91,7 +74,6 @@ public class OfflineMapDownloaderTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 
             scenario.onActivity(activity -> {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
@@ -117,7 +99,10 @@ public class OfflineMapDownloaderTest {
             );
 
         });
-    }
+    }catch (Exception e) {
+            e.printStackTrace();
+            assertEquals(1,2);
+        }
 
     }
 

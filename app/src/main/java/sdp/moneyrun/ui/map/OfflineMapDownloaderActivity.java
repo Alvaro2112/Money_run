@@ -151,7 +151,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     .include(northeast) // Northeast
                     .include(southwest) // Southwest
                     .build();
-            Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(),northeast.toString() + southwest.toString() , Toast.LENGTH_SHORT).show();
         // Define the offline region
             OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
                     mapboxMap.getStyle().getUri(),

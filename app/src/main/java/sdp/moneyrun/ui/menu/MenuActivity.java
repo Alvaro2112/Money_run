@@ -78,7 +78,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class,true);
+                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class,false);
             }});
     }
 
@@ -87,7 +87,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         offline_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonSwitchToActivity(OfflineMapActivity.class,true);
+                onButtonSwitchToActivity(OfflineMapActivity.class,false);
             }});
     }
 
