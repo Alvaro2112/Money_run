@@ -97,6 +97,7 @@ public class OfflineMapDownloaderTest {
                     }
                 }
             );
+                assertEquals(activity.getIsEndNotified(),true);
 
         });
     }catch (Exception e) {

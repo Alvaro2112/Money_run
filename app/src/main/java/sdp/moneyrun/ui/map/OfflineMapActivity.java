@@ -28,6 +28,7 @@ public class OfflineMapActivity extends BaseMap {
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
     private final int MIN_ZOOM = 9;
 
+    private boolean hasFoundMap = false;
     private Button exitButton;
     private OfflineManager offlineManager;
     @Override
@@ -58,6 +59,7 @@ public class OfflineMapActivity extends BaseMap {
         });
     }
 
+    public boolean getHasFoundMap(){return hasFoundMap;}
 
 
     // We only allow one downloaded map
@@ -67,13 +69,13 @@ public class OfflineMapActivity extends BaseMap {
             @Override
             public void onList(OfflineRegion[] offlineRegions) {
                 if (offlineRegions == null || offlineRegions.length == 0) {
+                    hasFoundMap = false;
                     Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else{
-                    Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
 
+                hasFoundMap = true;
                 ArrayList<String> offlineRegionsNames = new ArrayList<>();
                 for (OfflineRegion offlineRegion : offlineRegions) {
                     offlineRegionsNames.add(getRegionName(offlineRegion));
