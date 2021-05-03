@@ -4,21 +4,31 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PlayerTest {
-    private  long ASYNC_CALL_TIMEOUT = 10L;
+    private final long ASYNC_CALL_TIMEOUT = 10L;
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     @Test
     public void setAddressWithDBUpdateWorks(){
@@ -40,8 +50,10 @@ public class PlayerTest {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
                 //player.setAddress(p.getAddress());
-                assertThat(p.getAddress(), is(newAddress));
-                updated.countDown();
+                if(p.getAddress().equals(newAddress)) {
+                    assertThat(p.getAddress(), is(newAddress));
+                    updated.countDown();
+                }
             }
 
             @Override
@@ -80,8 +92,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getName(), is(newName));
-                updated.countDown();
+                if (p.getName().equals(newName)) {
+                    assertThat(p.getName(), is(newName));
+                    updated.countDown();
+                }
             }
 
             @Override
@@ -110,6 +124,8 @@ public class PlayerTest {
         int newPlayedGames = 75;
         int id = 1234567893;
         Player player = new Player(id, name, address,0,0,0 );
+        Player player2 = new Player(id, name, address,0,0,0 );
+
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
@@ -122,8 +138,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getNumberOfPlayedGames(), is(newPlayedGames));
-                updated.countDown();
+                if (p.getNumberOfPlayedGames() == 75) {
+                    updated.countDown();
+                }
+                player2.setNumberOfPlayedGames(newPlayedGames);
             }
 
             @Override
@@ -141,6 +159,8 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
+        assertThat(player2.getNumberOfPlayedGames(), is(newPlayedGames));
+
         db.removePlayerListener(player, listener);
     }
 
@@ -164,8 +184,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getNumberOfDiedGames(), is(newDiedGames));
-                updated.countDown();
+                if(p.getNumberOfDiedGames() == newDiedGames) {
+                    assertThat(p.getNumberOfDiedGames(), is(newDiedGames));
+                    updated.countDown();
+                }
             }
 
             @Override
@@ -205,8 +227,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getNumberOfPlayedGames(), is(1));
-                updated.countDown();
+                if(p.getNumberOfPlayedGames()==1) {
+                    assertThat(p.getNumberOfPlayedGames(), is(1));
+                    updated.countDown();
+                }
             }
 
             @Override
@@ -245,8 +269,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getNumberOfDiedGames(), is(1));
-                updated.countDown();
+                if(p.getNumberOfDiedGames() == 1) {
+                    assertThat(p.getNumberOfDiedGames(), is(1));
+                    updated.countDown();
+                }
             }
 
             @Override
@@ -286,8 +312,10 @@ public class PlayerTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                assertThat(p.getScore(), is(score));
-                updated.countDown();
+                if(p.getScore() == score){
+                    assertThat(p.getScore(), is(score));
+                    updated.countDown();
+                }
             }
 
             @Override

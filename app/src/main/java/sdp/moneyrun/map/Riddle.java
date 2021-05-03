@@ -6,12 +6,12 @@ import java.util.Objects;
 public class Riddle {
 
     //They should be final, but that is incompatible with being able to add them to the DB
-    private String question;
-    private String correctAnswer;
-    private String firstAnswer;
-    private String secondAnswer;
-    private String thirdAnswer;
-    private String fourthAnswer;
+    private final String question;
+    private final String correctAnswer;
+    private final String firstAnswer;
+    private final String secondAnswer;
+    private final String thirdAnswer;
+    private final String fourthAnswer;
 
     /**
      * @param question        This is the question that the user will see and will have to solve

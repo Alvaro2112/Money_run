@@ -39,8 +39,8 @@ public class EndGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game);
         endText = findViewById(R.id.end_game_text);
-        numberOfCollectedCoins = (int) getIntent().getIntExtra("numberOfCollectedCoins", 0);
-        score = (int) getIntent().getIntExtra("score", 0);
+        numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
+        score = getIntent().getIntExtra("score", 0);
         playerId = getIntent().getIntExtra("playerId", 0);
         updateText(numberOfCollectedCoins, score, true);
 
@@ -50,7 +50,7 @@ public class EndGameActivity extends AppCompatActivity {
             updateText(-1, -1, false);
         }
 
-        final ImageButton toMenu = (ImageButton) findViewById(R.id.end_game_button_to_menu);
+        final ImageButton toMenu = findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);

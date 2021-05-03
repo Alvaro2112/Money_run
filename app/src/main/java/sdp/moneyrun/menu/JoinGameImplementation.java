@@ -77,7 +77,7 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param popupView
      */
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
-        LinearLayout openGamesLayout = (LinearLayout) popupView.findViewById(R.id.openGamesLayout);
+        LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);

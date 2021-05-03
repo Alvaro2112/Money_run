@@ -4,16 +4,29 @@ import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import junit.framework.TestCase;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import sdp.moneyrun.ui.MainActivity;
 
 
 public class RiddlesDatabaseTest extends TestCase {
 
-    private Context context = ApplicationProvider.getApplicationContext();
+    private final Context context = ApplicationProvider.getApplicationContext();
 
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     @Test
     public void testGetInstance() {

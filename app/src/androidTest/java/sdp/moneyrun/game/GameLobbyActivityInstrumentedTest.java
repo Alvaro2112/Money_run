@@ -11,6 +11,9 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
@@ -23,6 +26,7 @@ import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -37,6 +41,15 @@ import static org.junit.Assert.assertEquals;
 public class GameLobbyActivityInstrumentedTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
 
     private Intent getStartIntent() {
