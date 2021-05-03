@@ -8,13 +8,11 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -47,8 +45,7 @@ public class GameLobbyActivityInstrumentedTest {
         }
     }
 
-    @Rule
-    public ActivityScenarioRule<GameLobbyActivity> testRule = new ActivityScenarioRule<>(GameLobbyActivity.class);
+
     private Intent getStartIntent() {
         Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
                 , 0, 0, 0);

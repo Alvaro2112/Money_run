@@ -11,7 +11,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
@@ -231,18 +230,15 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     public void addCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
                 .addValueEventListener(listener);
     }
 
     public void removeCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
-                .removeEventListener(listener);    }
+                .removeEventListener(listener);
+    }
 }
