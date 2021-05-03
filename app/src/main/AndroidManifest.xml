@@ -14,6 +14,8 @@
         tools:ignore="AllowBackup">
         <activity android:name=".ui.game.EndGameActivity">
         </activity>
+        <activity android:name=".ui.map.MapActivity">
+        </activity>
 
         <activity android:name=".ui.menu.LeaderboardActivity" />
 
@@ -27,8 +29,6 @@
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" >
-
-
         </activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
@@ -45,9 +45,7 @@
         <activity
             android:name=".ui.authentication.RegisterPlayerActivity"
             android:label="Register Player" />
-        <activity
-            android:name=".ui.game.GameLobbyActivity">
-        </activity>
+        <activity android:name=".ui.game.GameLobbyActivity" />
     </application>
 
 </manifest>
