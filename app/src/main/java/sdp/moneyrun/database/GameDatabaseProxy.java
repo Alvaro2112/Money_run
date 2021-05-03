@@ -230,18 +230,15 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     public void addCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
                 .addValueEventListener(listener);
     }
 
     public void removeCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
-                .removeEventListener(listener);    }
+                .removeEventListener(listener);
+    }
 }

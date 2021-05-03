@@ -207,6 +207,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
 
+            case R.id.main_leaderboard_button: {
+                onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
+                break;
+            }
+
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
                 onButtonSwitchToActivity(LoginActivity.class, true);
