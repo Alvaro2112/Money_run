@@ -10,10 +10,10 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Rule;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
@@ -224,32 +224,6 @@ public class GameLobbyActivityInstrumentedTest {
         }
     }
 
-
-    @Test
-    public void AddPlayerListAddsAllPlayerToView(){
-        Intent intent = getStartIntent();
-        GameDatabaseProxy gdp = new GameDatabaseProxy();
-        Game game = getGame();
-        String id = gdp.putGame(game);
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        intent.putExtra("currentGameId", id);
-
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
-            scenario.onActivity(a ->{
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
-                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
-                ArrayList<Player> list = new ArrayList<>();
-                list.add(player);
-                list.add(player2);
-                a.addPlayerList(list);
-                assertEquals( a.getListAdapter().getCount(), 3);//host +2 joins
-            });
-        }
-    }
 
     @Test
     public void LeaveLobbyWorks() {
