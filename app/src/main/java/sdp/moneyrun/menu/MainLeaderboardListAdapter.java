@@ -17,6 +17,7 @@ import sdp.moneyrun.player.Player;
 
 public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
 
+    // Medal emojis
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
     private final int COLOR_GOLD = Color.rgb(255, 204, 51);
 
