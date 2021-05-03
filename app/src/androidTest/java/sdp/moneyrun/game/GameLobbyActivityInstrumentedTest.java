@@ -5,7 +5,6 @@ import android.location.Location;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -31,7 +30,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
@@ -193,15 +191,20 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     @Test
-    public void playerMissingTextViewWorks() {
-        String default_text = "Players Missing: 0";
-        Espresso.onView(withId(R.id.lobby_players_missing_TextView)).check(matches(withText(default_text)));
-    }
-
-    @Test
-    public void addPLayerFailsWhenNull(){
+    public void addPlayerFailsWhenNull(){
         exception.expect(RuntimeException.class);
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(GameLobbyActivity.class)) {
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        String id = gdp.putGame(game);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
                 a.addPlayer(null);
             });
@@ -211,7 +214,18 @@ public class GameLobbyActivityInstrumentedTest {
     @Test
     public void addPlayerListFailsWhenNull(){
         exception.expect(RuntimeException.class);
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(GameLobbyActivity.class)) {
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        String id = gdp.putGame(game);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
                 a.addPlayerList(null);
             });
@@ -221,7 +235,18 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void AddPlayerListAddsAllPlayerToView(){
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(GameLobbyActivity.class)) {
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        String id = gdp.putGame(game);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
