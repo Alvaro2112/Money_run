@@ -26,6 +26,7 @@ import sdp.moneyrun.map.BaseMap;
 public class OfflineMapActivity extends BaseMap {
     public static final String JSON_CHARSET = "UTF-8";
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
+    private final int MIN_ZOOM = 9;
 
     private Button exitButton;
     private OfflineManager offlineManager;
@@ -69,6 +70,10 @@ public class OfflineMapActivity extends BaseMap {
                     Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
+                }
+
                 ArrayList<String> offlineRegionsNames = new ArrayList<>();
                 for (OfflineRegion offlineRegion : offlineRegions) {
                     offlineRegionsNames.add(getRegionName(offlineRegion));
@@ -82,6 +87,7 @@ public class OfflineMapActivity extends BaseMap {
                         .target(bounds.getCenter())
                         .zoom(regionZoom)
                         .build();
+                Toast.makeText(getApplicationContext(), bounds.toString(), Toast.LENGTH_SHORT).show();
 
                 // Move camera to new position
                 mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

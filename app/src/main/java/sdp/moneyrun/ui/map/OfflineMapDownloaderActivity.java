@@ -36,8 +36,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     private ProgressBar progressBar;
     private MapView mapView;
     private OfflineManager offlineManager;
-    private final float LAT_OFFSET = 0.05f;
-    private final float LONG_OFFSET = 0.05f;
+    private final float LAT_OFFSET = 0.1f;
+    private final float LONG_OFFSET = 0.1f;
     // JSON encoding/decoding
     public static final String JSON_CHARSET = "UTF-8";
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
@@ -96,7 +96,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         super.onPause();
         mapView.onPause();
         if (offlineManager != null) {
-            deleteMapsFrom(1);
+            deleteOlderMaps();
         }
     }
 
@@ -130,7 +130,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         Context context = getApplicationContext();
 
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        deleteMapsFrom(1);
+        deleteOlderMaps();
     }
 
     /**
@@ -140,7 +140,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     @Override
     public void checkObjectives(Location location) {
 
-        if (!isEndNotified) {
+        if (!isEndNotified && !hasStartedDownload) {
             offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
 // Create a bounding box for the offline region
@@ -151,6 +151,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     .include(northeast) // Northeast
                     .include(southwest) // Southwest
                     .build();
+            Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(),latLngBounds.toString() , Toast.LENGTH_SHORT).show();
         // Define the offline region
             OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
                     mapboxMap.getStyle().getUri(),
@@ -222,25 +223,29 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
 
     /**
-     * @param from first index in the array of offline regions to be deleted.
-     * Deletes offline regions from the device from 'from' to the end of the array
+     * Deletes all offline regions except the last from the device
      */
-    private void deleteMapsFrom(int from) {
+    private void deleteOlderMaps() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
             @Override
             public void onList(OfflineRegion[] offlineRegions) {
 
-                if (offlineRegions.length > from) {
+                if (offlineRegions.length > 1) {
                     // delete the last item in the offlineRegions list which will be yosemite offline map
-                    for (int i = from; i < offlineRegions.length; ++i) {
+                    for (int i = 0; i < offlineRegions.length -1 ; ++i) {
+                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(),offlineRegions[i].getDefinition().getBounds().toString() , Toast.LENGTH_SHORT).show();
+
                         offlineRegions[i].delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                             @Override
                             public void onDelete() {
-                                Toast.makeText(
+
+                            /*    Toast.makeText(
                                         OfflineMapDownloaderActivity.this,
                                         getString(R.string.offline_map_deleted),
                                         Toast.LENGTH_LONG
                                 ).show();
+                                */
+
                             }
 
                             @Override

@@ -93,6 +93,8 @@
     <string name="offline_end_progress_success">Map downloaded successfully.</string>
     <string name="offline_map_deleted">Older maps deleted successfully.</string>
     <string name="no_offline_regions">No downloaded maps.</string>
+    <string name="found_offline_regions">Found one downloaded map.</string>
+
     <string name="offline_map_name">offline map</string>
     <string name="menu_to_offline_map_button">Offline game</string>
     <string name="menu_to_map_downloader_button">Download map</string>
