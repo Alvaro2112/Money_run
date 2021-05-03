@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 
 
@@ -16,35 +17,56 @@ import sdp.moneyrun.player.Player;
  */
 public final class GameDbData {
     private String name;
+    private Player host;
     private List<Player> players;
-    private Integer maxPlayerNumber;
-    private Location startLocation;//TODO: check if we will use the existing or create a new class Location
+    private List<Coin> coins;
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
-    //the host always has to be in it
+    private int maxPlayerCount;
+    private Location startLocation;
+    boolean isVisible;
 
-    public GameDbData(String name, List<Player> players, Integer maxPlayerNumber, Location startLocation){
-        if(name == null || players == null || startLocation == null) {
-            throw new IllegalArgumentException("Null parameter passed as argument in Game constructor");
+    public GameDbData(String name,
+                      Player host,
+                      List<Player> players,
+                      int maxPlayerCount,
+                      Location startLocation,
+                      boolean isVisible,
+                      List<Coin> coins){
+        if(name == null){
+            throw new IllegalArgumentException("name should not be null.");
         }
-        if(players.isEmpty()){
-            throw new IllegalArgumentException("Player List must have at least one player (The host)");
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
         }
-        if(maxPlayerNumber <= 0){
-            throw new IllegalArgumentException("Error : maxPlayers <= 0");
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
         }
+        if(startLocation == null){
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if(maxPlayerCount <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        this.coins = new ArrayList<>(coins);
         this.name = name;
-        this.players = new ArrayList<>(players);
-        this.maxPlayerNumber = maxPlayerNumber;
+        this.host = host;
+        this.players = players;
+        this.maxPlayerCount = maxPlayerCount;
         this.startLocation = startLocation;
+        this.isVisible = isVisible;
     }
 
-
-    public GameDbData(GameDbData data){
-        if(data == null){throw new IllegalArgumentException();}
-        this.name = data.getName();
-        this.players = data.getPlayers();
-        this.maxPlayerNumber = data.getMaxPlayerNumber();
-        this.startLocation = data.getStartLocation();
+    public GameDbData(GameDbData other){
+        if(other == null){
+            throw new IllegalArgumentException("other should not be null.");
+        }
+        this.name = other.name;
+        this.host = other.host;
+        this.players = other.players;
+        this.maxPlayerCount = other.maxPlayerCount;
+        this.startLocation = other.startLocation;
+        this.isVisible = other.isVisible;
+        this.coins = other.coins;
     }
 
     public GameDbData(){}
@@ -53,44 +75,71 @@ public final class GameDbData {
         return name;
     }
 
+    public Player getHost(){
+        return host;
+    }
 
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
-
     }
 
-    public int getMaxPlayerNumber() {
-        return maxPlayerNumber;
+    public int getMaxPlayerCount() {
+        return maxPlayerCount;
     }
 
     public Location getStartLocation() {
         return startLocation;
     }
 
+    public List<Coin> getCoins() {
+        return new ArrayList<>(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin){
+        if(index < 0  || coin == null) throw new IllegalArgumentException();
+        if( coins.size() < index + 1) return false;
+        coins.set(index, coin);
+        return true;
+    }
+
+
+    public boolean getIsVisible(){
+        return isVisible;
+    }
+
     /**
      * Adds a Player to the Player List, or does nothing if already present
-     * @param p Player to add
+     * @param player Player to add
      * @throws IllegalArgumentException if List already full
      */
-    public void addPlayer(Player p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(players.size() == maxPlayerNumber){throw new IllegalArgumentException("You have already attained MaxPlayerNumber");}
-        if(!players.contains(p)){
-            players.add(p);
+    public void addPlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null.");
+        }
+        if(players.size() == maxPlayerCount){
+            throw new IllegalArgumentException("You have already attained maxPlayerCount.");
+        }
+
+        if(!players.contains(player)){
+            players.add(player);
         }
     }
 
     /**
      * Removes a Player from the Player List
-     * @param p Player to remove
+     * @param player Player to remove
      * @throws IllegalArgumentException if only one player left in List (and removing them would cause it to be empty)
      */
-    public void removePlayer(Player p){
-        if(p == null){throw new IllegalArgumentException();}
-        if(players.size() == 1) { throw new IllegalArgumentException("Player List can never be empty");}
-        players.remove(p);
-    }
+    public void removePlayer(Player player){
+        if(player == null){
+            throw new IllegalArgumentException("player should not be null");
+        }
+        if(players.size() == 1) {
+            throw new IllegalArgumentException("players should not be empty");
+        }
 
+        players.remove(player);
+    }
 
     /**
      * Set List of Players
@@ -98,26 +147,37 @@ public final class GameDbData {
      * @throws IllegalArgumentException if the Player List is empty
      */
     public void setPlayers(List<Player> players) {
-        if(players == null){throw new IllegalArgumentException();}
-        if(players.isEmpty()){throw new IllegalArgumentException("Players can never be empty");}
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(players.isEmpty()){
+            throw new IllegalArgumentException("players should not be empty.");
+        }
+
         this.players = new ArrayList<>(players);
     }
+
+    public void setCoins(List<Coin> coins) {
+        if(coins == null) throw new IllegalArgumentException();
+        this.coins = new ArrayList<>(coins);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameDbData gameDbData = (GameDbData) o;
-        return name.equals(gameDbData.name)&& players.equals(gameDbData.players) &&
-                maxPlayerNumber.equals(gameDbData.maxPlayerNumber)&&
+        return name.equals(gameDbData.name) && players.equals(gameDbData.players) &&
+                (maxPlayerCount == gameDbData.maxPlayerCount) &&
                 (startLocation.getLongitude() == gameDbData.startLocation.getLongitude()) &&
                 (startLocation.getLatitude() == gameDbData.startLocation.getLatitude());
-
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, players, maxPlayerNumber, startLocation);
+        return Objects.hash(name, players, maxPlayerCount, startLocation);
     }
 }
 

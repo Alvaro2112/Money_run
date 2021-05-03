@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,14 +14,20 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
@@ -30,19 +37,25 @@ public class JoinGameImplementation extends MenuImplementation{
 
     // Distance in meters
     private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
-
     private final boolean focusable;
     private final int layoutId;
+    private final Player currentUser;
+    private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
+                                  Player user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
                                   int layoutId){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+        if(user == null){
+            throw new IllegalArgumentException("user is null");
+        }
         this.focusable = focusable;
         this.layoutId = layoutId;
+        this.currentUser = user;
     }
 
     /**
@@ -89,7 +102,7 @@ public class JoinGameImplementation extends MenuImplementation{
     private Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
-                .child(activity.getString(R.string.database_open_games))
+                .child(activity.getString(R.string.database_game))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
@@ -110,7 +123,9 @@ public class JoinGameImplementation extends MenuImplementation{
                         }
                     }
                 });
+
     }
+
 
     /**
      * Get a representation of a game from the database.
@@ -118,23 +133,20 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param dataSnapshot the game snapshot
      * @return
      */
+
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
-        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_open_games_is_visible)).getValue(Boolean.class);
-        String gameId = dataSnapshot.child(activity.getString(R.string.database_open_games_game_id)).getValue(String.class);
-        String name = dataSnapshot.child(activity.getString(R.string.database_open_games_name)).getValue(String.class);
-        Integer playerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_player_count)).getValue(Integer.class);
-        int playerCount = 0;
-        if (playerCountInteger != null) {
-            playerCount = playerCountInteger;
-        }
-        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_open_games_max_player_count)).getValue(Integer.class);
+        String gameId = dataSnapshot.getKey();
+        Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
+        String name = dataSnapshot.child(activity.getString(R.string.database_game_name)).getValue(String.class);
+        int playerCount = (int) dataSnapshot.child(activity.getString(R.string.database_game_players)).getChildrenCount();
+        Integer maxPlayerCountInteger = dataSnapshot.child(activity.getString(R.string.database_game_max_player_count)).getValue(Integer.class);
         int maxPlayerCount = 0;
         if (maxPlayerCountInteger != null) {
             maxPlayerCount = maxPlayerCountInteger;
         }
-        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_open_games_start_location)).getValue(LocationRepresentation.class);
+        LocationRepresentation startLocation = dataSnapshot.child(activity.getString(R.string.database_game_start_location)).getValue(LocationRepresentation.class);
 
-        if(isVisible == null || !isVisible ||gameId == null || name == null || startLocation == null){
+        if(isVisible == null || !isVisible || gameId == null || name == null || startLocation == null){
             return null;
         }
 
@@ -174,14 +186,11 @@ public class JoinGameImplementation extends MenuImplementation{
         // create join button
         button.setId(buttonId);
         button.setText(activity.getString(R.string.join_game_message));
+
         button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
 
-        // Modify button if the game is full
-        if (gameRepresentation.getPlayerCount() >= gameRepresentation.getMaxPlayerCount()) {
-            button.setEnabled(false);
-            button.setText(activity.getString(R.string.join_game_full_message));
-        }
-
+        //modify button if the game is full or if a space frees up
+        addFullGameListener(button, gameRepresentation);
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -192,6 +201,7 @@ public class JoinGameImplementation extends MenuImplementation{
                     // In this case, the game cannot be instanciated
                     if (location == null) {
                         Log.e("location", "Error getting location");
+                        return;
                     }
                     LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
 
@@ -202,6 +212,32 @@ public class JoinGameImplementation extends MenuImplementation{
                         button.setText(activity.getString(R.string.join_game_too_far_message));
                     }
                 });
+    }
+
+    private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
+        // Modify button if the game is full
+        databaseReference.child(activity.getString(R.string.database_game))
+                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
+                if(newPlayerCount >= gameRepresentation.getMaxPlayerCount()){
+                    button.setEnabled(false);
+                    button.setText(activity.getResources().getString(R.string.join_game_full_message));
+                }else{
+                    button.setEnabled(true);
+                    button.setText(activity.getResources().getString(R.string.join_game_message));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error getting new Player Count from DB");
+                //FailSafe defaults. If we couldnt get the data, let's be safe and close the game
+                button.setEnabled(false);
+                button.setText(activity.getResources().getString(R.string.join_game_full_message));
+            }
+        });
     }
 
     private void createGameNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow){
@@ -218,14 +254,47 @@ public class JoinGameImplementation extends MenuImplementation{
                 gameRepresentation.getPlayerCount(),
                 gameRepresentation.getMaxPlayerCount());
         playerNumberView.setText(playerNumberText);
+
+        //makes the playerCount dynamic so that it changes when people join and leave lobbies
+        databaseReference.child(activity.getString(R.string.database_game))
+                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
+                        String playerNumberText = String.format((activity.getResources().getString(R.string.game_player_number_display)),
+                                newPlayerCount,
+                                gameRepresentation.getMaxPlayerCount());
+                        playerNumberView.setText(playerNumberText);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Error getting new Player Count from DB");
+                    }
+                });
+
         gameRow.addView(playerNumberView);
     }
 
     private void joinLobbyFromJoinButton(GameRepresentation gameRepresentation){
+        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
+         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
+                players.add(currentUser);
+                gamePlayers.setValue(players);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error adding a player who joined the Game to the DB \n"+ error.getMessage());
+            }
+        });
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
-        lobbyIntent.putExtra("currentGameId", gameRepresentation.getGameId());
-
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
         activity.startActivity(lobbyIntent);
     }
+
+
 }

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/white_black_backgroud">
 
     <EditText
         android:id="@+id/loginEmailAddress"
@@ -14,8 +15,12 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/login_page_email_input_hint"
+        android:drawableStart="@drawable/ic_baseline_person_register"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
+
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -30,6 +35,9 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/login_page_password_input_hint"
+        android:drawableStart="@drawable/ic_baseline_lock_sign_up"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +51,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="96dp"
         android:text="@string/login_page_login_button_text"
+        android:background="@drawable/layout_rounded"
         app:layout_constraintBaseline_toBaselineOf="@+id/signUpButton"
         app:layout_constraintEnd_toEndOf="@+id/welcomeText"
         app:layout_constraintStart_toEndOf="@+id/signUpButton" />
@@ -54,10 +63,36 @@
         android:layout_marginStart="8dp"
         android:onClick="signUp"
         android:text="@string/login_page_signup_button_text"
+        android:background="@drawable/layout_rounded"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/welcomeText"
         app:layout_constraintTop_toBottomOf="@+id/keepSigned"
         app:layout_constraintVertical_bias="0.284" />
+
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="50dp"
+        android:background="@drawable/layout_rounded"
+        android:id="@+id/guestButton"
+        android:text="Guest"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/loginButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/signUpButton"
+        app:layout_constraintTop_toBottomOf="@+id/keepSigned"
+        app:layout_constraintVertical_bias="0.772" />
+
+    <TextView
+        android:id="@+id/guestModeWelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(For offline mode)"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guestButton"
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/welcomeText"
@@ -88,6 +123,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPassword"
         app:layout_constraintVertical_bias="0.083" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

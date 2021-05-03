@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
@@ -55,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
 
         final Button loginButton = findViewById(R.id.loginButton);
         setLogIn(loginButton);
+
+        final Button guestButton = findViewById(R.id.guestButton);
+        setGuestButton(guestButton);
     }
 
     @Override
@@ -136,11 +140,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getPlayerFromDB(int playerId, Intent menuIntent){
-        DatabaseProxy db = new DatabaseProxy();
-        Task<DataSnapshot> t = db.getPlayerTask(playerId);
+        PlayerDatabaseProxy pdb = new PlayerDatabaseProxy();
+        Task<DataSnapshot> t = pdb.getPlayerTask(playerId);
         t.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Player user = db.getPlayerFromTask(task);
+                Player user = pdb.getPlayerFromTask(task);
 
                 // If no user has been found, we need to create a new instance in the database
                 if(user == null){
@@ -166,5 +170,23 @@ public class LoginActivity extends AppCompatActivity {
         return requestPermissionsLauncher;
     }
 
+    /**
+     * Should transfer the user to register activity so it can create a temporary
+     * profile used only in this session of login
+     *
+     * @param guestButton offline mode option
+     */
+    public void setGuestButton(Button guestButton){
+        if(guestButton == null)
+            throw new IllegalArgumentException("Guest button was clicked but was null");
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterPlayerActivity.class);
+                guestMenuIntent.putExtra("guestPlayer",true);
+                startActivity(guestMenuIntent);
+            }
+        });
+    }
 
 }

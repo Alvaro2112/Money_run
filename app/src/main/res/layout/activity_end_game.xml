@@ -17,15 +17,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.186" />
 
-    <Button
+    <ImageButton
         android:id="@+id/end_game_button_to_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/end_game_to_menu_button_text"
+        android:background="@drawable/baseline_arrow_forward_18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.876"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintVertical_bias="0.85"
+        app:strokeColor="@android:color/background_dark"
+        app:strokeWidth="10dp" />
+
+    <Button
+        android:id="@+id/end_game_button_to_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/layout_rounded"
+        android:text=" Game Results"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/end_game_button_to_menu"
+        app:layout_constraintHorizontal_bias="0.651"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/end_game_text"
+        app:layout_constraintVertical_bias="0.845" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

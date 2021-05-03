@@ -4,10 +4,12 @@ package sdp.moneyrun;
 import android.location.Location;
 
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -16,12 +18,31 @@ import sdp.moneyrun.player.Player;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class GameTest {
+
+    public Game getGame(){
+        String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+    }
+
+    @Mock
+    GameDbData gameData;
+
     @Test
     public void basicRiddleTest() {
         String question = "What is the color of the sky";
@@ -38,221 +59,262 @@ public class GameTest {
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle(null, "blue", "green", "yellow", "brown", "a");
+            new Riddle(null, "blue", "green", "yellow", "brown", "a");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", null, "green", "yellow", "brown", "very");
+            new Riddle("a", null, "green", "yellow", "brown", "very");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", "blue", null, "yellow", "brown", "very");
+            new Riddle("a", "blue", null, "yellow", "brown", "very");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", "blue", "green", null, "brown", "very");
+            new Riddle("a", "blue", "green", null, "brown", "very");
         });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", null, "very");
+            new Riddle("a", "blue", "green", "yellow", null, "very");
         });
 
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Riddle riddle = new Riddle("a", "blue", "green", "yellow", "brown", null);
+            new Riddle("a", "blue", "green", "yellow", "brown", null);
         });
     }
 
 
     @Test
-    public void testGameConstructorThrowsExceptionWhenNullArguments() {
-        String gameId = "gameId";
+    public void testGameConstructorThrowsExceptionWhenInvalidArguments() {
         String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
 
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
+        players.add(host);
         Location startLocation = new Location("");
         try {
-            Game game = new Game(null, name, players, 0, riddles, coins, new Location("LocationManager#GPS_PROVIDER"));
+            new Game(null, host, 3, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            Game game = new Game(gameId, null, players, 0, riddles, coins, new Location("LocationManager#GPS_PROVIDER"));
+            new Game(name, null, 3, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            Game game = new Game(gameId, name, null, 0, riddles, coins, new Location("LocationManager#GPS_PROVIDER"));
+            new Game(name, host, 3, null, coins, startLocation, true);
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            Game game = new Game(gameId, name, players, 0, null, coins, new Location("LocationManager#GPS_PROVIDER"));
+            new Game(name, host, 3, riddles, null, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            Game game = new Game(gameId, name, players, 0, riddles, null, new Location("LocationManager#GPS_PROVIDER"));
+            new Game(name, host, 3, riddles, coins, null, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            Game game = new Game(gameId, name, players, 0, riddles, coins, null);
+            new Game(name, host, -1, riddles, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
+        }
+
+
+
+        try {
+            new Game(null, host, players, 3, startLocation, true, coins);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, null, players, 3, startLocation, true, coins);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, host, null, 3, startLocation, true, coins);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, host, players, 3, null, true, coins);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, host, players, -1, startLocation, true, coins);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try{
+            new Game(name, host, players, -1, startLocation, true, null);
+            fail();
+        }catch (IllegalArgumentException e){
+            assert(true);
         }
     }
 
     @Test
     public void testStartGameDoesNotCrash() {
-        String gameId = "gameId";
         String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
         List<Player> players = new ArrayList<>();
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
-        game.startGame();
-        Game.startGame(game);
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+
+        Game game1 = new Game(name, host, 3, riddles, coins, location, true);
+        Game game2 = new Game(name, host, players,3, location, true, coins);
+
+        game1.startGame();
+        Game.startGame(game1);
+        game2.startGame();
+        Game.startGame(game2);
 
         assertEquals(1, 1);
     }
 
     @Test
     public void askPlayerQuestionShouldReturnFalse() {
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = getGame();
 
-        assertFalse(game.askPlayer(players.get(0), riddleList.get(0)));
+        assertFalse(game.askPlayer(game.getPlayers().get(0), game.getRiddles().get(0)));
     }
 
     @Test
     public void getRandomQuestionReturnsAQuestion() {
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins,new Location("LocationManager#GPS_PROVIDER"));
-        Riddle riddle = game.getRandomRiddle();
+        Game game = getGame();
 
+        Riddle riddle = game.getRandomRiddle();
         assertSame(riddle.getClass(), Riddle.class);
     }
 
     @Test
     public void getRandomQuestionReturnsNullIfNoQuestion() {
-        String gameId = "gameId";
         String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        List<Player> players = new ArrayList<>();
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+
+        Game game = new Game(name, host, 3, riddles, coins, location, true);
 
         assertNull(game.getRandomRiddle());
     }
 
     @Test
-    public void getGameIdReturnsCorrectValues(){
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+    public void getIdReturnsCorrectValue(){
+        Game game = getGame();
 
-        assertEquals(game.getGameId(), gameId);
+        assertNull(game.getId());
     }
 
     @Test
     public void getNameGameReturnsCorrectValues(){
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,9));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = getGame();
 
-        assertEquals(game.getName(), name);
+        assertEquals(game.getName(), "name");
+    }
+
+    @Test
+    public void getHostReturnsCorrectValue(){
+        Game game = getGame();
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+
+        assertEquals(game.getHost(), host);
     }
 
     @Test
     public void getPlayerCountReturnsCorrectValues(){
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = getGame();
 
         assertEquals(game.getPlayerCount(), 1);
     }
 
     @Test
     public void getMaxPlayerCountReturnsCorrectValues(){
-        String gameId = "gameId";
-        String name = "name";
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        Game game = getGame();
 
-        assertEquals(game.getMaxPlayerCount(), 1);
+        assertEquals(game.getMaxPlayerCount(), 3);
     }
 
     @Test
-    public void getIsVisibleReturnsCorrectValues(){
-        String gameId = "gameId";
-        String name = "name";
-        boolean isVisible = false;
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
+    public void getCoinsReturnsCorrectValue(){
+        Game game = getGame();
         List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game1 = new Game(gameId, name, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
-        Game game2 = new Game(gameId, name, isVisible, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
+        coins.add(new Coin(0., 0., 1));
 
-        boolean defaultIsVisible = true;
-        assertEquals(game1.getIsVisible(), defaultIsVisible);
-        assertEquals(game2.getIsVisible(), isVisible);
+        assertEquals(game.getCoins(), coins);
     }
 
     @Test
-    public void setIsVisibleModifiesValue(){
-        String gameId = "gameId";
-        String name = "name";
-        boolean isVisible1 = false;
-        boolean isVisible2 = false;
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Player> players = new ArrayList<>();
-        List<Coin> coins = new ArrayList<>();
-        players.add(new Player(3,"Bob", "Epfl",0,0,0));
-        Game game = new Game(gameId, name, isVisible1, players, 1, riddleList, coins, new Location("LocationManager#GPS_PROVIDER"));
-        game.setIsVisible(isVisible2);
+    public void getRiddlesReturnsCorrectValue(){
+        Game game = getGame();
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
 
-        assertEquals(game.getIsVisible(), isVisible2);
+        assertEquals(game.getRiddles(), riddles);
+    }
+
+    @Test
+    public void getStartLocationReturnsCorrectValue(){
+        Game game = getGame();
+
+        assertNotNull(game.getStartLocation());
+    }
+
+    @Test
+    public void getIsVisibleReturnsCorrectValue(){
+        Game game = getGame();
+
+        assertTrue(game.getIsVisible());
+    }
+
+    @Test
+    public void getHasBeenAddedReturnsCorrectValue(){
+        Game game = getGame();
+
+        assertFalse(game.getHasBeenAdded());
+    }
+
+    @Test
+    public void setIdWorks(){
+        Game game = getGame();
+        game.setId("gameId");
+
+        assertEquals(game.getId(), "gameId");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setIdFailsOnNullArgument(){
+        Game game = getGame();
+        game.setId(null);
+    }
+
+    @Test
+    public void setHasBeenAddedWorks(){
+        Game game = getGame();
+        game.setHasBeenAdded(true);
+
+        assertTrue(game.getHasBeenAdded());
     }
 }

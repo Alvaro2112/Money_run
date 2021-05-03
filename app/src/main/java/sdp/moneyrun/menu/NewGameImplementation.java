@@ -3,6 +3,8 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,29 +13,37 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 
 public class NewGameImplementation extends MenuImplementation {
-
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
+                                 Player user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                  FusedLocationProviderClient fusedLocationClient){
-        super(activity, databaseReference, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
     }
 
     /**
@@ -59,6 +69,7 @@ public class NewGameImplementation extends MenuImplementation {
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
         newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
+        //TODO, post the game, but also join it and launch the lobby activity
     }
 
     /**
@@ -95,40 +106,54 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param name              the game name
      * @param maxPlayerCount    the maximum number of players in the game
-     * @return the game
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_open_games)).push();
+        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
         DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_open_games))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_open_games_start_location));
+                .child(activity.getString(R.string.database_game))
+                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
 
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
 
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                    }
+        // Build new game given fields filled by user
+        List<Riddle> riddles = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
 
-                    // Build new game given fields filled by user
-                    String gameId = gameReference.getKey();
-                    List<Player> players = new ArrayList<>();
-                    List<Riddle> riddles = new ArrayList<>();
-                    List<Coin> coins = new ArrayList<>();
+        Game game = new Game(name, user, maxPlayerCount, riddles, coins, new Location(""), true);
+        // post game to database
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        gdb.putGame(game);
 
-                    Game game = new Game(name, players, maxPlayerCount, riddles, coins, location);
+        //The reason all of this is commented out is because it kept making the app crash
+        //as you can see there is a missing permission surpression that was here already in master
+        //most of the time it fails to get the location from the gps provider.
+        //we should fix it asap, but it is outside of the scope of this PR, and doesnt cause
+        //any critical failures
 
-                    // post game to database
-                    gameReference.setValue(game);
+        /*fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
+            // Got last known location. In some rare situations this can be null
+            // In this case, the game cannot be instanciated
+            if (location == null) {
+                Log.e("location", "Error getting location");
+                return;
+            }
+            // Post location to database
+            LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+            startLocationReference.setValue(locationRep);
+        });*/
+        launchLobbyActivity(game.getId());
 
-                    // Post location to database
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                    startLocationReference.setValue(locationRep);
-                });
+
+    }
+
+
+    private void launchLobbyActivity(String gameId){
+        Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
+        activity.startActivity(lobbyIntent);
+        activity.finish();
     }
 }

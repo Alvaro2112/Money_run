@@ -21,8 +21,10 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
+import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -74,7 +76,7 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             int playerid = 98732;
             final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
-            final DatabaseProxy db = new DatabaseProxy();
+            final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.putPlayer(player);
             try {
                 Thread.sleep(5000);
@@ -114,19 +116,20 @@ public class EndGameInstrumentedTest {
     }
 
     @Test
-    public void launchIntentWithListOfCoins() {
+    public void launchIntentWithScoreOfCoins() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         Intent endGameIntent = new Intent( appContext,EndGameActivity.class);
         ArrayList<Integer> coins = new ArrayList<>();
-        coins.add(1);
-        endGameIntent.putExtra("collectedCoins",coins);
+        endGameIntent.putExtra("score",3);
+        endGameIntent.putExtra("numberOfCollectedCoins",2);
+
         endGameIntent.putExtra("playerId",10);
         try(ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
-            textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
+            textBuilder = textBuilder.append("You have gathered").append(2).append("coins");
             textBuilder = textBuilder.append("\n");
-            textBuilder = textBuilder.append("For a total score of ").append(1);
+            textBuilder = textBuilder.append("For a total score of ").append(3);
             String text = textBuilder.toString();
             Espresso.onView(withId(R.id.end_game_text)).check(matches(withText(text)));
 
@@ -139,12 +142,26 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
+            Thread.sleep(2000);
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void toLeaderboardButtonWorks(){
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            intended(hasComponent(LeaderboardActivity.class.getName()));
+            Intents.release();
+
+        }
     }
 
 
