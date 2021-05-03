@@ -8,6 +8,9 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -27,9 +31,18 @@ public class LeaderboardInstrumentedTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
+
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("sdp.moneyrun", appContext.getPackageName());
     }

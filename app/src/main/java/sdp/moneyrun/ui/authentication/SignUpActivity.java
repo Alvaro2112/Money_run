@@ -29,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     //    FirebaseAuth.getInstance().signOut();
         ///////////////////////////////////////////////////
 
-        final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
+        final Button submitButton = findViewById(R.id.signUpSubmitButton);
         submitButton.setOnClickListener(clicked -> {
             EditText emailView = findViewById(R.id.signUpEmailText);
             EditText passwordView = findViewById(R.id.signUpPassword);

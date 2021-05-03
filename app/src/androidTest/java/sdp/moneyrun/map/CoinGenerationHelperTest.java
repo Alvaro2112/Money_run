@@ -2,11 +2,23 @@ package sdp.moneyrun.map;
 
 import android.location.Location;
 
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 
 public class CoinGenerationHelperTest {
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void randomLocThrowsCorrectErrorForNegativeRadius() {

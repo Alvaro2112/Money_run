@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +28,7 @@ import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,10 +38,19 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameInstrumentedTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
+
+    private final long ASYNC_CALL_TIMEOUT = 5L;
     private final String DATABASE_GAME = "games";
 
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private final GameDatabaseProxy db = new GameDatabaseProxy();
 
 

@@ -9,20 +9,26 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -33,11 +39,26 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
+@RunWith(AndroidJUnit4.class)
 public class EndGameInstrumentedTest {
 
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            try {
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                MainActivity.calledAlready = true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private final long ASYNC_CALL_TIMEOUT = 5L;
 
     @Test
     public void updateTextFailsWithoutLists() {
@@ -71,9 +92,30 @@ public class EndGameInstrumentedTest {
         }
     }
 
+
+
+
+
+
     @Test
-    public void updatePlayerUpdateScore() {
+    public void toMenuButtonWorks() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
+            Thread.sleep(2000);
+            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void updatePlayerUpdateScoreTest(){
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            CountDownLatch updated = new CountDownLatch(2);
             int playerid = 98732;
             final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
             final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
@@ -87,23 +129,25 @@ public class EndGameInstrumentedTest {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Player p = snapshot.getValue(Player.class);
-                    player.setScore(3*p.getScore() + player.getScore(), false);
-                }
+                    updated.countDown();
+                    if(player.getScore() < 35) {
+                        player.setScore(3 * p.getScore() + player.getScore(), false);
+                    }                }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     assert(false);
                 }
             };
             scenario.onActivity(a -> {
-                        Player p = a.updatePlayer(playerid,10);
-                    });
+                Player p = a.updatePlayer(playerid,10);
+            });
             db.addPlayerListener(player,listener );
-
-
             try {
-                Thread.sleep(5000);
+                updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+                assertThat(updated.getCount(), is(0L));
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                assert(false);
             }
             db.removePlayerListener(player, listener);
 
@@ -137,20 +181,8 @@ public class EndGameInstrumentedTest {
 
     }
 
-    @Test
-    public void toMenuButtonWorks() {
-        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            Intents.init();
-            onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
-            Thread.sleep(2000);
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            intended(hasComponent(MenuActivity.class.getName()));
-            Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-    }
+
 
     @Test
     public void toLeaderboardButtonWorks(){
@@ -163,6 +195,7 @@ public class EndGameInstrumentedTest {
 
         }
     }
+
 
 
 }

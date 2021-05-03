@@ -224,7 +224,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 

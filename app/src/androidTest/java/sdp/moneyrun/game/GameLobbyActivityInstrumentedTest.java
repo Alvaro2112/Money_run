@@ -3,20 +3,16 @@ package sdp.moneyrun.game;
 import android.content.Intent;
 import android.location.Location;
 
-import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.junit.Rule;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,6 +24,7 @@ import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -35,13 +32,19 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameLobbyActivityInstrumentedTest {
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
+
 
     private Intent getStartIntent() {
         Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
