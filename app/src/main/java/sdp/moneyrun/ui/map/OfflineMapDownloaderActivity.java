@@ -151,7 +151,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     .include(northeast) // Northeast
                     .include(southwest) // Southwest
                     .build();
-            Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(),latLngBounds.toString() , Toast.LENGTH_SHORT).show();
         // Define the offline region
             OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
                     mapboxMap.getStyle().getUri(),
@@ -200,20 +199,21 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
                                     @Override
                                     public void onError(OfflineRegionError error) {
-                                        //     Timber.e("onError reason: %s", error.getReason());
-                                        //     Timber.e("onError message: %s", error.getMessage());
+                                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error.getReason(), Toast.LENGTH_SHORT).show();
+
                                     }
 
                                     @Override
                                     public void mapboxTileCountLimitExceeded(long limit) {
-                                        //       Timber.e("Mapbox tile count limit exceeded: %s", limit);
+                                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), getString(R.string.tile_limit_exceeded), Toast.LENGTH_SHORT).show();
+
                                     }
                                 });
                             }
 
                             @Override
                             public void onError(String error) {
-                                //  Timber.e("Error: %s", error);
+                                Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -239,12 +239,12 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                             @Override
                             public void onDelete() {
 
-                            /*    Toast.makeText(
+                                Toast.makeText(
                                         OfflineMapDownloaderActivity.this,
                                         getString(R.string.offline_map_deleted),
                                         Toast.LENGTH_LONG
                                 ).show();
-                                */
+
 
                             }
 
@@ -259,7 +259,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
             @Override
             public void onError(String error) {
-                //   Timber.e("onListError: %s", error);
             }
         });
     }
