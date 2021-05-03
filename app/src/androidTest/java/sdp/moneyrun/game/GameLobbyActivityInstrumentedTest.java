@@ -254,7 +254,7 @@ public class GameLobbyActivityInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals( a.getListAdapter().getCount(), 2);
+                assertEquals( a.getListAdapter().getCount(), 3);//host +2 joins
             });
         }
     }
