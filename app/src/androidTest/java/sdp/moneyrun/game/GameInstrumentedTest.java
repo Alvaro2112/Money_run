@@ -550,4 +550,43 @@ public class GameInstrumentedTest {
     }
 
 
+    /**
+     * The basis for this test is that empty List<> objects do not get added to the
+     * DB when you use the .setValue() function. As in, a node isnt created for them.
+     * So when getting the Game back from the DB if the coin list was empty,
+     * you will get a null pointer when getting it.
+     *
+     * Behaviour was added to circumvent this
+     */
+    @Test
+    public void getGameFromTaskSnapshotWorksOnEmptyCoinsList(){
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String name = "name";
+        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+        Game g = new Game(name, host, maxPlayerCount, riddles,coins, location, true);
+        gdp.putGame(g);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Task<DataSnapshot> g2 = gdp.getGameDataSnapshot(g.getId());
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Game gg2 = gdp.getGameFromTaskSnapshot(g2);
+        assertEquals(gg2, g);
+
+    }
+
+
 }
