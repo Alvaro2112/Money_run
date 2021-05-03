@@ -32,6 +32,7 @@ import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 
 
