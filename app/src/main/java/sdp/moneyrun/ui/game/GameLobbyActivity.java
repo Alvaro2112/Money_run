@@ -84,20 +84,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         listAdapter.addAll(playerList);
     }
 
-    /**
-     *
-     * @param player: player to be added to the leaderboard
-     *  Adds player to leaderboard
-     */
-    public void addPlayer(Player player){
-        // can't just add a player directly to an adapter, need to put it in a list
-        if(player == null){
-            throw new IllegalArgumentException("player is null");
-        }
-        ArrayList<Player> to_add = new ArrayList<>();
-        to_add.add(player);
-        addPlayerList(to_add);
-    }
 
     public ArrayList<Player> getPlayerList(){
         return playerList;

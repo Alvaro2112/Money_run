@@ -191,27 +191,6 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     @Test
-    public void addPlayerFailsWhenNull(){
-        exception.expect(RuntimeException.class);
-        Intent intent = getStartIntent();
-        GameDatabaseProxy gdp = new GameDatabaseProxy();
-        Game game = getGame();
-        String id = gdp.putGame(game);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        intent.putExtra("currentGameId", id);
-
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
-            scenario.onActivity(a ->{
-                a.addPlayer(null);
-            });
-        }
-
-    }
-    @Test
     public void addPlayerListFailsWhenNull(){
         exception.expect(RuntimeException.class);
         Intent intent = getStartIntent();
