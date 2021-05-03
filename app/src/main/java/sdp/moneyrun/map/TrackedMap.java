@@ -32,7 +32,7 @@ import sdp.moneyrun.R;
  extend this map to have a map where the device is tracked
  */
 public abstract class TrackedMap extends BaseMap implements
-         PermissionsListener {
+        PermissionsListener {
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
     private static final String SOURCE_ID = "SOURCE_ID";
@@ -45,13 +45,13 @@ public abstract class TrackedMap extends BaseMap implements
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
 
 
-
     // source
     // https://docs.mapbox.com/android/maps/examples/location-change-listening/
+
     /**
      * Initialize the Maps SDK's LocationComponent
      */
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     protected void enableLocationComponent(@NonNull Style loadedMapStyle) {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
 
@@ -98,6 +98,7 @@ public abstract class TrackedMap extends BaseMap implements
         Toast.makeText(this, R.string.user_location_permission_explanation,
                 Toast.LENGTH_LONG).show();
     }
+
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
@@ -119,7 +120,7 @@ public abstract class TrackedMap extends BaseMap implements
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-    public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom){
+    public void moveCameraWithoutAnimation(double latitude, double longitude, double zoom) {
         CameraPosition position = new CameraPosition.Builder()
                 .target(new LatLng(latitude, longitude))
                 .zoom(zoom)
@@ -128,14 +129,15 @@ public abstract class TrackedMap extends BaseMap implements
     }
 
 
-
-    public boolean isLocationAppropriate(Location location){
+    public boolean isLocationAppropriate(Location location) {
         List<Feature> features = getFeatureAtLocation(location);
-        if(features.size() == 0) return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
+        if (features.size() == 0)
+            return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
 
         for (Feature feature : features) {
-            if (feature != null && feature.properties() != null){
-                if(!CoinGenerationHelper.checkIndividualFeature(feature, INAPPROPRIATE_LOCATIONS)) return false; //A feature was deemed inappropriate
+            if (feature != null && feature.properties() != null) {
+                if (!CoinGenerationHelper.checkIndividualFeature(feature, INAPPROPRIATE_LOCATIONS))
+                    return false; //A feature was deemed inappropriate
             }// Advised by MapBox
 
         }// A location may yield multiple feature and we check that none is inappropriate
@@ -143,12 +145,10 @@ public abstract class TrackedMap extends BaseMap implements
     }
 
 
-
-
-    private List<Feature> getFeatureAtLocation(Location location){
+    private List<Feature> getFeatureAtLocation(Location location) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
-        LatLng point = new LatLng(lat,lon);
+        LatLng point = new LatLng(lat, lon);
 
         // Convert LatLng coordinates to screen pixel and only query the rendered features.
         //This is because the query feature API function only accepts pixel as an arg
@@ -158,7 +158,6 @@ public abstract class TrackedMap extends BaseMap implements
         List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
         return features;
     }
-
 
 
     /**
