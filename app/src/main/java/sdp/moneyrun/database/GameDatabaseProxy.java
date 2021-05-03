@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -166,6 +167,9 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Player retHost = ds.child(DATABASE_GAME_HOST).getValue(Player.class);
             List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>(){});
             List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>(){});
+            if(retCoin == null){
+                retCoin = new ArrayList<>();
+            }
             Integer retMaxPlayerCount = ds.child(DATABASE_GAME_MAX_PLAYER_COUNT).getValue(Integer.class);
             Double retLatitude = ds.child(DATABASE_GAME_START_LOCATION)
                     .child(DATABASE_LOCATION_LATITUDE)
