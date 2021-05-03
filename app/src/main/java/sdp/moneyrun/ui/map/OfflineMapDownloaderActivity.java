@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
-import sdp.moneyrun.map.TrackedMap;
 
 public class OfflineMapDownloaderActivity extends TrackedMap {
 
