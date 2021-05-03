@@ -98,17 +98,17 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+      //  try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
 
-            Thread.sleep(1000);
+          //  Thread.sleep(1000);
 
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-        } catch(InterruptedException e){
-            e.printStackTrace();
-            Intents.release();
-        }
+     //   } catch(InterruptedException e){
+         //   e.printStackTrace();
+       //     Intents.release();
+       // }
     }
 }

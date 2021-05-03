@@ -2,6 +2,7 @@ package sdp.moneyrun.database;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,16 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         }
 
         playersRef.child(String.valueOf(player.getPlayerId())).setValue(player);
+    }
+
+    public void putPlayer(Player player, OnCompleteListener listener){
+        if(player == null || listener == null){
+            throw new IllegalArgumentException();
+        }
+        playersRef.child(String.valueOf(player.getPlayerId()))
+                .setValue(player)
+                .addOnCompleteListener(listener);
+
     }
 
     /**

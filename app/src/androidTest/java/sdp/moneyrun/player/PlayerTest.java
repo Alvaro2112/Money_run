@@ -11,11 +11,12 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class PlayerTest {
     private  long ASYNC_CALL_TIMEOUT = 10L;
@@ -29,11 +30,13 @@ public class PlayerTest {
         int id = 1234567891;
         Player player = new Player(id, name, address,0,0 ,0);
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -70,11 +73,13 @@ public class PlayerTest {
         int id = 1234567892;
         Player player = new Player(id, name, address,0,0,0 );
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
         ValueEventListener listener =new ValueEventListener() {
             @Override
@@ -111,11 +116,13 @@ public class PlayerTest {
         int id = 1234567893;
         Player player = new Player(id, name, address,0,0,0 );
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
 
         ValueEventListener listener =  new ValueEventListener() {
@@ -153,13 +160,14 @@ public class PlayerTest {
         int id = 1234567894;
         Player player = new Player(id, name, address,0,0,0 );
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
-
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -194,13 +202,14 @@ public class PlayerTest {
         int id = 1234567895;
         Player player = new Player(id, name, address,0,0 ,0);
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -234,11 +243,13 @@ public class PlayerTest {
         int id = 1234567896;
         Player player = new Player(id, name, address,0,0,0 );
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
 
         ValueEventListener listener = new ValueEventListener() {
@@ -275,11 +286,13 @@ public class PlayerTest {
         int id = 1234567897;
         Player player = new Player(id, name, address,0,0,0 );
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putPlayer(player, task -> added.countDown());
         try {
-            Thread.sleep(1000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            assert(false);
+            fail();
         }
 
         ValueEventListener listener = new ValueEventListener() {

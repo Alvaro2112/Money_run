@@ -3,6 +3,7 @@ package sdp.moneyrun.database;
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,24 +21,28 @@ import sdp.moneyrun.player.Player;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
     private  long ASYNC_CALL_TIMEOUT = 5L;
     @Test
     public void getPlayerFromDatabase() throws Throwable {
-
         final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        db.putPlayer(player);
+
+        //adding to db
+        CountDownLatch added = new CountDownLatch(1);
+        OnCompleteListener listener = task -> added.countDown();
+        db.putPlayer(player, listener);
         try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertThat(added.getCount(), is(0L));
+        }catch (InterruptedException e){
+            fail();
         }
 
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
-      //  Thread.sleep(1000);
         testTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                assert( player.equals(db.getPlayerFromTask(testTask)));
@@ -76,20 +81,22 @@ public class DatabaseProxyTest {
 
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
-        CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
-        dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
-        String newName = "Simon";
-
+        CountDownLatch added = new CountDownLatch(1);
+        OnCompleteListener addedListener = task -> added.countDown();
+        db.putPlayer(player, addedListener);
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(added.getCount(), is(0L));
-        } catch (InterruptedException e) {
-            assert(false);
+        }catch (InterruptedException e){
+            fail();
         }
+        String newName = "Simon";
+
+
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -115,12 +122,7 @@ public class DatabaseProxyTest {
             e.printStackTrace();
             assert(false);
         }
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            assert(false);
-//        }
+
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
 

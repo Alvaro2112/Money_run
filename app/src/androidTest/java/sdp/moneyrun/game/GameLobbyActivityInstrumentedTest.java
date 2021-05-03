@@ -34,15 +34,15 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void LeaveLobbyWorks() {
-        try {
+      //  try {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            //Thread.sleep(4000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Intents.release();
-        }
+       // } catch (InterruptedException e) {
+           // e.printStackTrace();
+           // Intents.release();
+       // }
     }
 }
