@@ -2,8 +2,10 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,7 +21,9 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +54,7 @@ import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -70,8 +75,18 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
 
+    //Since the features of Menu now depend on the intent it is usually launched with
+    //We also need to launch MenuActivity with a valid intent for tests to pass
+    private Intent getStartIntent() {
+        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
     @Rule
-    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(MenuActivity.class);
+    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     private static Matcher<View> withError(final String expected) {
@@ -93,9 +108,9 @@ public class MenuActivityTest {
         };
     }
 
-    public Game getGame(){
+    public Game getGame() {
         String name = "JoinGameImplementationTest";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3, "Bob", "Epfl", 0, 0, 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -114,7 +129,7 @@ public class MenuActivityTest {
 
     @Test
     public void joinGamePopupIsDisplayed() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
@@ -123,6 +138,30 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+
+    @Test
+    public void CreateGameSendsYouToLobby() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String game_name = "CreateGameTest";
+            final String max_player_count = String.valueOf(3);
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Thread.sleep(2000);
+            intended(hasComponent(GameLobbyActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
 
     @Test
     public void joinGamePopupDoesntCrashAfterPlayerChange() {
@@ -143,38 +182,39 @@ public class MenuActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(!dbGames.isSuccessful()){
+        if (!dbGames.isSuccessful()) {
             fail();
         }
         int visibleGames = 0;
-        for(DataSnapshot d : dbGames.getResult().getChildren()){
-            if(d.child("isVisible").getValue(Boolean.class)){
+        for (DataSnapshot d : dbGames.getResult().getChildren()) {
+            if (d.child("isVisible").getValue(Boolean.class)) {
                 visibleGames += 1;
             }
         }
         List<Player> playerList = new ArrayList<>();
-        playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        playerList.add(new Player(5, "Aragon", "Epfl", 0, 0, 0));
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            Thread.sleep(5000);
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(visibleGames-1)).perform(ViewActions.scrollTo());
+            onView(ViewMatchers.withId(visibleGames - 1)).perform(ViewActions.scrollTo());
             game.setPlayers(playerList, false);
             Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-            playerList.add(new Player(6,"Heimdalr", "Epfl",0,0,0));
+            playerList.add(new Player(6, "Heimdalr", "Epfl", 0, 0, 0));
             game.setPlayers(playerList, false);
             Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             Intents.release();
-        }catch (Exception e) {
+        } catch (Exception e) {
             fail();
         }
     }
 
     @Test
     public void mapButtonAndSplashScreenWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
             Thread.sleep(100);
@@ -193,7 +233,12 @@ public class MenuActivityTest {
 
     @Test
     public void newGamePopupIsDisplayed() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        Player user = new Player(3, "Bob", "Epfl", 0, 0, 0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
+
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -205,7 +250,7 @@ public class MenuActivityTest {
 
     @Test
     public void leaderboardButtonWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(withId(R.id.drawer_layout))
@@ -216,17 +261,16 @@ public class MenuActivityTest {
             intended(hasComponent(LeaderboardActivity.class.getName()));
 
             Intents.release();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            assertEquals(-2,1);
+            assertEquals(-2, 1);
 
         }
     }
 
     @Test
     public void navigationViewOpens() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(withId(R.id.drawer_layout))
@@ -239,7 +283,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameEmptyNameFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -265,7 +309,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameEmptyMaxPlayerCountFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -288,7 +332,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameZeroMaxPlayerCountFieldError() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -314,7 +358,7 @@ public class MenuActivityTest {
     @Test
     public void newGameWorks() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        Player user = new Player(3, "Bob", "Epfl", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
@@ -341,6 +385,49 @@ public class MenuActivityTest {
         }
     }
 
-
-
+    /*
+    @Test
+    public void joinLobbyFromJoinButtonIntentIsSent(){
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        gdp.putGame(game);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //To get the Button ID of the button corresponding to this Game, we have
+        //to get all the games in the DB, and find out how many are visible, aka
+        //how many have buttons since thats how the ids are given out. Tedious but necessary.
+        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference().child("games").get();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!dbGames.isSuccessful()) {
+            fail();
+        }
+        int visibleGames = 0;
+        for (DataSnapshot d : dbGames.getResult().getChildren()) {
+            if (d.child("isVisible").getValue(Boolean.class)) {
+                visibleGames += 1;
+            }
+        }
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            Thread.sleep(5000);
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(visibleGames - 1)).perform(ViewActions.scrollTo());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(visibleGames - 1)).perform(ViewActions.click());
+            Thread.sleep(2000);
+            intended(hasComponent(GameLobbyActivity.class.getName()));
+            Intents.release();
+        } catch (Exception e) {
+            fail();
+        }
+    }
+    */
 }

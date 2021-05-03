@@ -74,7 +74,6 @@ public class GameRepresentationTest {
         assertEquals(gr.getStartLocation(), lr);
     }
 
-
     @Test
     public void setPlayerCountFailsOnLessThanOne(){
         LocationRepresentation lr = new LocationRepresentation(0, 1);

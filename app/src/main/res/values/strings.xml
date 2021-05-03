@@ -38,16 +38,26 @@
     <string name="join_game_too_far_message">Too far</string>
     <string name="game_name_display">%1$s</string>
     <string name="game_player_number_display">%1$d / %2$d</string>
+    <string name="join_game_lobby_intent_extra_id">currentGameId</string>
+    <string name="join_game_lobby_intent_extra_user">currentUser</string>
 
+
+    <string name="database_games">games</string>
+    <string name="database_open_games_is_visible">isVisible</string>
+    <string name="database_open_games_game_id">gameId</string>
+    <string name="database_open_games_name">name</string>
+    <string name="database_open_games_player_count">playerCount</string>
+    <string name="database_open_games_players">players</string>
+    <string name="database_open_games_max_player_count">maxPlayerCount</string>
+    <string name="database_open_games_max_player_number">maxPlayerNumber</string>
+    <string name="database_open_games_start_location">startLocation</string>
     <!--
     Here are defined all the attribute names in the database!
     -->
 
     <!-- PLAYER -->
     <string name="database_player">players</string>
-    <string name="database_open_games_players">players</string>
     <string name="database_player_address">address</string>
-    <string name="database_open_games_max_player_number">maxPlayerNumber</string>
     <string name="database_player_name">name</string>
     <string name="database_player_number_of_died_games">numberOfDiedGames</string>
     <string name="database_player_number_of_played_games">numberOfPlayedGames</string>

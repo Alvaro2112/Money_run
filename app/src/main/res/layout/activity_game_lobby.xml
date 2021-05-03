@@ -71,17 +71,17 @@
         android:text="Leave"
         android:background="#FF392E"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <Button
         android:id="@+id/launch_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="88dp"
-        android:text="Launch game"
         android:background="#77dd77"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Launch game"
+        app:layout_constraintBaseline_toBaselineOf="@+id/leave_lobby_button"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
