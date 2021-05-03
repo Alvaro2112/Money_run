@@ -85,11 +85,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Player> getPlayerList(){
-        return playerList;
-    }
-
-
     private void runFunctionalities(){
         setAllFieldsAccordingToGame();
 
