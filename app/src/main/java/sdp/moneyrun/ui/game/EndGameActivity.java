@@ -117,7 +117,7 @@ public class EndGameActivity extends AppCompatActivity {
      * @param gameScore score to be added
      */
     public Player updatePlayer(int playerId, int gameScore) {
-        final Player player = new Player(playerId, "name", "address", 0, 0, gameScore);
+        final Player player = new Player(playerId, "name", gameScore);
         if (player != null) {
             player.setScore(gameScore, true);
         }

@@ -1,7 +1,6 @@
 package sdp.moneyrun.authentication;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -20,14 +19,10 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.PlayerProfileActivity;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 
-import static android.os.Trace.isEnabled;
-import static android.service.autofill.Validators.not;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -51,7 +46,7 @@ public class RegisterPlayerInstrumentedTest {
 
     @Test
     public void checkViewsAreUpdatedWhenCorrectTyping(){
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
             Intents.init();
             String name = "John";
             String address = "New York";
@@ -74,7 +69,7 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkErrorWhenNameIsEmpty() {
-        try (ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)) {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             final String expected = "Name field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -84,7 +79,7 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkErrorWhenAddressIsEmpty(){
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
             Intents.init();
             final String expected = "Address field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -94,7 +89,7 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkErrorWhenAnimalIsEmpty(){
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
             Intents.init();
             final String expected = "Animal field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -104,7 +99,7 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkErrorWhenColorIsEmpty(){
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)){
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
             Intents.init();
             final String expected = "Color field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -114,7 +109,7 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void checkProfileHasCorrectAttributesWhenPlayerRegisters(){
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(RegisterPlayerActivity.class)) {
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
             String address = "New York";
@@ -131,7 +126,7 @@ public class RegisterPlayerInstrumentedTest {
             Espresso.onView(withId(R.id.profile_button)).perform(click());
             Context appContext2 = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
-            intended(hasComponent(PlayerProfileActivity.class.getName()));
+            intended(hasComponent(UserProfileActivity.class.getName()));
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("Player has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
@@ -148,9 +143,9 @@ public class RegisterPlayerInstrumentedTest {
     }
     @Test
     public void guestModeDisablesJoinGameButtonInMenu(){
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RegisterPlayerActivity.class);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RegisterUserActivity.class);
         intent.putExtra("guestPlayer", true);
-        try(ActivityScenario<RegisterPlayerActivity> scenario = ActivityScenario.launch(intent)) {
+        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             String name = "John";
             String address = "New York";

@@ -31,7 +31,7 @@ import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
 
@@ -198,7 +198,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.profile_button: {
-                onButtonSwitchToActivity(PlayerProfileActivity.class, false);
+                onButtonSwitchToActivity(UserProfileActivity.class, false);
                 break;
             }
 

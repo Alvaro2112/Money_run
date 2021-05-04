@@ -32,7 +32,7 @@ import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -293,7 +293,7 @@ public class LoginInstrumentedTest {
 
             Thread.sleep(4000);
 
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -370,7 +370,7 @@ public class LoginInstrumentedTest {
             Intents.init();
             Espresso.onView(withId(R.id.guestButton)).perform(ViewActions.click());
             Thread.sleep(4000);
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         }catch (Exception e){
             fail();

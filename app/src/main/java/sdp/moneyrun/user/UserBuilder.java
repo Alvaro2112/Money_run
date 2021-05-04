@@ -1,7 +1,7 @@
-package sdp.moneyrun.player;
+package sdp.moneyrun.user;
 
-public class PlayerBuilder {
-    private  int playerId;
+public class UserBuilder {
+    private  int userId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
@@ -10,10 +10,10 @@ public class PlayerBuilder {
 
     /**
      *
-     * @param playerId the unique player Id
+     * @param userId the unique user Id
      */
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     /**
@@ -56,17 +56,17 @@ public class PlayerBuilder {
     /**
      * Empty constructor
      */
-    public PlayerBuilder(){}
+    public UserBuilder(){}
 
     /**
-     * Builds current instance. Address and name cannot be null or empty and playerId cannot be 0
-     * @return the player built with the attributes set
-     * @throws IllegalStateException if the adress or name is null or empty, if the playerId is null
+     * Builds current instance. Address and name cannot be null or empty and userId cannot be 0
+     * @return the user built with the attributes set
+     * @throws IllegalStateException if the adress or name is null or empty, if the userId is null
      */
-    public Player build(){
-        if(playerId == 0 || name == null || address == null)
+    public User build(){
+        if(userId == 0 || name == null || address == null)
             throw new IllegalStateException();
-        return new Player(playerId, name, score);
+        return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames);
     }
 
 

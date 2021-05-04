@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.player.UserProfileActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -38,16 +38,16 @@ public class PlayerProfileInstrumentedTest {
     private Intent getStartIntent() {
         Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), PlayerProfileActivity.class);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
     }
 
     @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+    public ActivityScenarioRule<UserProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
     @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
+    public ActivityScenarioRule<UserProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
 
 
     @Test
@@ -64,15 +64,15 @@ public class PlayerProfileInstrumentedTest {
             Espresso.onView(ViewMatchers.withId(R.id.profile_button)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-            intended(hasComponent(PlayerProfileActivity.class.getName()));
+            intended(hasComponent(UserProfileActivity.class.getName()));
             Intents.release();
         }
     }
 
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists() {
-        //TODO: find a way to put info into result array in PlayerProfileActivity
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        //TODO: find a way to put info into result array in UserProfileActivity
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             String name = "John";
@@ -102,7 +102,7 @@ public class PlayerProfileInstrumentedTest {
     @Test
     public void checkNoInfoDisplayedWhenPlayerDoesNotExist() {
 
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.playerEmptyMessage))
                     .perform(click())
@@ -113,7 +113,7 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
 
