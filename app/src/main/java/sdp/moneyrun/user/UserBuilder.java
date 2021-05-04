@@ -66,7 +66,7 @@ public class UserBuilder {
     public User build(){
         if(userId == 0 || name == null || address == null)
             throw new IllegalStateException();
-        return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames);
+        return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames, score);
     }
 
 

@@ -53,7 +53,7 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
+                Player player = new Player(123, "Tess",0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
 
@@ -70,7 +70,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a ->{
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
+                Player player = new Player(123, "Tess",0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
                 assertEquals( a.getLdbAdapter().getCount(), 6);
@@ -94,10 +94,10 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
+                Player player = new Player(123, "Tess",0);
                 player.setScore(8008, false);
                 //Address was not set here before I don't know why
-                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
+                Player player2 = new Player(12, "Rafa",0);
                 player2.setScore(8001,false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
@@ -118,11 +118,11 @@ public class LeaderboardInstrumentedTest {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
+                Player player = new Player(123, "Tess",0);
                 player.setScore(8008, false);
 
                 //Address was not set here before I don't know why
-                Player player2 = new Player(12, "Rafa", "SomeAdress", 0,0,0);
+                Player player2 = new Player(12, "Rafa",0);
                 player2.setScore(8001, false);
                 ArrayList<Player> list = new ArrayList<>();
                 list.add(player);
@@ -174,7 +174,6 @@ public class LeaderboardInstrumentedTest {
                 String address = "Here";
                 Player user = new Player(playerId);
                 user.setName(name);
-                user.setAddress(address);
 
                 Intent intent = new Intent(a, LeaderboardActivity.class);
                 intent.putExtra("user", user);
@@ -188,7 +187,6 @@ public class LeaderboardInstrumentedTest {
                 Player p = a.getUserPlayer();
                 assertNotNull(p);
                 assertNotNull(p.getName());
-                assertNotNull(p.getAddress());
             });
         }
     }
@@ -196,17 +194,17 @@ public class LeaderboardInstrumentedTest {
     @Test
     public void bestToWorstPlayerReturnsSortedPlayerList(){
         ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player(1,"a0","b",0,0,0));
-        players.add(new Player(24,"a1","b",0,0,6));
-        players.add(new Player(78,"a2","b",0,0,68));
-        players.add(new Player(2,"a3","b",0,0,24));
-        players.add(new Player(9,"a4","b",0,0,11));
+        players.add(new Player(1,"a0",0));
+        players.add(new Player(24,"a1",6));
+        players.add(new Player(78,"a2",68));
+        players.add(new Player(2,"a3",24));
+        players.add(new Player(9,"a4",11));
         ArrayList<Player> players2 = new ArrayList<>();
-        players2.add(new Player(78,"a2","b",0,0,68));
-        players2.add(new Player(2,"a3","b",0,0,24));
-        players2.add(new Player(9,"a4","b",0,0,11));
-        players2.add(new Player(24,"a1","b",0,0,6));
-        players2.add(new Player(1,"a0","b",0,0,0));
+        players2.add(new Player(78,"a2",68));
+        players2.add(new Player(2,"a3",24));
+        players2.add(new Player(9,"a4",11));
+        players2.add(new Player(24,"a1",6));
+        players2.add(new Player(1,"a0",0));
         LeaderboardActivity.bestToWorstPlayer(players);
         assertEquals(players2,players);
     }
@@ -215,7 +213,7 @@ public class LeaderboardInstrumentedTest {
     @Test
     public void testIfEndGamePlayerReceivesSinglePlayerWhenGivenSizeIsOne(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
-        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        Player user = new Player(3,"Bob",0);
         intent.putExtra("players"+0, user);
         intent.putExtra("numberOfPlayers", 1);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {

@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -36,8 +37,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class PlayerProfileInstrumentedTest {
 
     private Intent getStartIntent() {
-        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                ,  0, 0,0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
@@ -52,8 +53,8 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void checkButtonOpenRightActivities() throws Throwable {
-        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                , 0, 0,0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(toStart)) {
@@ -79,7 +80,7 @@ public class PlayerProfileInstrumentedTest {
             String address = "New York";
             int diedN = 0;
             int playedN = 5;
-            Player user = new Player(12345);
+            User user = new User(12345);
             user.setName(name);
             user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
@@ -87,14 +88,15 @@ public class PlayerProfileInstrumentedTest {
             scenario.onActivity(a -> {
                 a.setDisplayedTexts(user);
             });
+
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Player has died 0 many times")));
+                    .check(matches(withText("User has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Player has played 5 many games")));
+                    .check(matches(withText("User has played 5 many games")));
             Espresso.onView(withId(R.id.playerAddress))
-                    .check(matches(withText("Player address : New York")));
+                    .check(matches(withText("User address : New York")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText("Player name : John")));
+                    .check(matches(withText("User name : John")));
             Intents.release();
         }
     }

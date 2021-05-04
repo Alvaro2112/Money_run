@@ -117,7 +117,7 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             CountDownLatch updated = new CountDownLatch(2);
             int playerid = 98732;
-            final Player player = new Player(playerid, "O", "FooBarr", 0, 0,5);
+            final Player player = new Player(playerid, "O",5);
             final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             db.putPlayer(player);
             try {
@@ -168,7 +168,7 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("score",3);
         endGameIntent.putExtra("numberOfCollectedCoins",2);
 
-        endGameIntent.putExtra("playerId",10);
+        endGameIntent.putExtra("playerId",1234567891);
         try(ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(2).append("coins");

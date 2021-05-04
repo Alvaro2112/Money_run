@@ -58,7 +58,7 @@ public class GameInstrumentedTest {
 
     public Game getGame(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -74,7 +74,7 @@ public class GameInstrumentedTest {
 
     public GameDbData getGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         int maxPlayerCount = 3;
@@ -155,8 +155,8 @@ public class GameInstrumentedTest {
             fail();
         }
         List<Player> players = new ArrayList<>();
-        players.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
-        players.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
+        players.add(new Player(5, "Ron", 0));
+        players.add(new Player(6, "Wisley", 0));
         ref.child(DATABASE_GAME).child(id).child("players").setValue(players);
         try {
             Thread.sleep(2000);
@@ -273,8 +273,8 @@ public class GameInstrumentedTest {
     public void setPlayersSetsPlayersLocally(){
         Game g = getGame();
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
+        Player toAdd = new Player(542, "Iron Man", 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p , false);
@@ -284,8 +284,8 @@ public class GameInstrumentedTest {
     @Test
     public void addPlayerSetsPlayersLocally(){
         Game g = getGame();
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
@@ -296,8 +296,8 @@ public class GameInstrumentedTest {
     @Test
     public void removePlayerSetsPlayersLocally(){
         Game g = getGame();
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
@@ -315,8 +315,8 @@ public class GameInstrumentedTest {
             e.printStackTrace();
         }
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
+        Player toAdd = new Player(542, "Iron Man", 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p, false);
@@ -337,8 +337,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man",  0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
@@ -360,8 +360,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
@@ -444,7 +444,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataReturnsGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob", 0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
 
@@ -573,7 +573,7 @@ public class GameInstrumentedTest {
     public void getGameFromTaskSnapshotWorksOnEmptyCoinsList(){
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));

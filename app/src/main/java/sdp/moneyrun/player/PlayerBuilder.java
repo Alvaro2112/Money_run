@@ -64,7 +64,7 @@ public class PlayerBuilder {
      * @throws IllegalStateException if the adress or name is null or empty, if the playerId is null
      */
     public Player build(){
-        if(playerId == 0 || name == null || address == null)
+        if(playerId == 0 || name == null)
             throw new IllegalStateException();
         return new Player(playerId, name, score);
     }

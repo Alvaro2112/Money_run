@@ -22,13 +22,7 @@ public class PlayerBuilderInstrumentedTest {
         b.setName(null);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void buildWithNonCompleteAddressFieldThrowsStateException(){
-        PlayerBuilder b = new PlayerBuilder();
-        b.setName("Stuff");
-        b.setPlayerId(7);
-        b.build();
-    }
+
 
     @Test(expected = IllegalStateException.class)
     public void buildWithNonCompleteNameFieldThrowsStateException(){
@@ -50,20 +44,14 @@ public class PlayerBuilderInstrumentedTest {
     public void buildWithAppropriateProcessReturnsCorrectPlayer(){
         Random r = new Random();
         PlayerBuilder b = new PlayerBuilder();
-        String address = "Something";
         String name = "Other stuff";
         int playerId = r.nextInt();
-        int numberOfDiedGames = r.nextInt();
-        int numberOfPlayedGames = r.nextInt();
         int score = r.nextInt();
 
-        Player player = new Player(playerId, name, address, numberOfDiedGames, numberOfPlayedGames,score);
+        Player player = new Player(playerId, name, score);
         b.setPlayerId(playerId);
         b.setName(name);
         b.setScore(score);
-        b.setAddress(address);
-        b.setNumberOfDiedGames(numberOfDiedGames);
-        b.setNumberOfPlayedGames(numberOfPlayedGames);
         assert(player.equals(b.build()));
     }
 }

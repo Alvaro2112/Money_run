@@ -19,6 +19,18 @@ public class User implements Serializable {
         return maxScoreInGame;
     }
 
+    public void setMaxScoreInGame(int maxScoreInGame,  boolean dbChange) {
+        this.maxScoreInGame = maxScoreInGame;
+        dbUpdate(dbChange);
+
+    }
+
+    public void setMaxScoreInGame(int maxScoreInGame) {
+        setMaxScoreInGame(maxScoreInGame, false);
+    }
+
+
+
     private int maxScoreInGame;
         private String preferredColor;
         private String preferredPet;
@@ -43,15 +55,15 @@ public class User implements Serializable {
          * @throws IllegalArgumentException on empty or null address or name and on user = 0
          */
         public User(int userId, String name, String address, int numberOfDiedGames,
-                      int numberOfPlayedGames){
-            if (userId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
+                      int numberOfPlayedGames, int maxScoreInGame){
+            if (userId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty() || maxScoreInGame < 0)
                 throw new IllegalArgumentException();
             this.userId = userId;
             this.name = name;
             this.address = address;
             this.numberOfDiedGames = numberOfDiedGames;
             this.numberOfPlayedGames = numberOfPlayedGames;
-            this.maxScoreInGame = 0;
+            this.maxScoreInGame = maxScoreInGame;
             this.totalDistanceRun = 0;
         }
 

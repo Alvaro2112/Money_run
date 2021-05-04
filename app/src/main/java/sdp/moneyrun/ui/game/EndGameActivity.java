@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 
 /**
@@ -46,6 +48,7 @@ public class EndGameActivity extends AppCompatActivity {
 
         if (playerId != 0) {
             updatePlayer(playerId, gameScore);
+            updateUser(playerId, gameScore);
         } else {
             updateText(-1, -1, false);
         }
@@ -63,15 +66,15 @@ public class EndGameActivity extends AppCompatActivity {
      */
 
     private void linkToMenuButton(ImageButton toMenu){
-        PlayerDatabaseProxy pdp = new PlayerDatabaseProxy();
+        UserDatabaseProxy pdp = new UserDatabaseProxy();
         toMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pdp.getPlayerTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()){
-                            Player p = pdp.getPlayerFromTask(task);
+                            User p = pdp.getUserFromTask(task);
                             Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
                             mainIntent.putExtra("user", p);
                             startActivity(mainIntent);
@@ -123,6 +126,21 @@ public class EndGameActivity extends AppCompatActivity {
         }
         return player;
     }
+
+    public void updateUser(int playerId, int gameScore) {
+        UserDatabaseProxy pdp = new UserDatabaseProxy();
+        pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    User p = pdp.getUserFromTask(task);
+                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                }
+            }
+        });
+
+    }
+
 
     /**
      * Should set a listener on the button when clicked and sending
