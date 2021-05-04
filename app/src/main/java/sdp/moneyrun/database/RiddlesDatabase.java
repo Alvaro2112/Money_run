@@ -15,7 +15,7 @@ import sdp.moneyrun.map.Riddle;
 public class RiddlesDatabase {
 
     private static RiddlesDatabase obj;
-    private ArrayList<Riddle> db;
+    private final ArrayList<Riddle> db;
     private int loc;
 
     /**\

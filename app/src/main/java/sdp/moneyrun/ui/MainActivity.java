@@ -9,18 +9,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
-    public final static String TAG = "MainActivity";
+    public final static String TAG = MainActivity.class.getSimpleName();
     private TextView mTextView;
-
+    public static boolean calledAlready = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(!calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            calledAlready = true;
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

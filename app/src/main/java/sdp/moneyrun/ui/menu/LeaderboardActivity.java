@@ -27,7 +27,7 @@ import sdp.moneyrun.player.Player;
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
-    private ArrayList<Player> playerList = new ArrayList<>();
+    private final ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
     private Player user;
     private DatabaseProxy db;
@@ -61,7 +61,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this,playerList);
-        ListView ldbView = (ListView) findViewById(R.id.ldblistView);
+        ListView ldbView = findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
     }
     /**

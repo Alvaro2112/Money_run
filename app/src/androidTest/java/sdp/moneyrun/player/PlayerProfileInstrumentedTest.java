@@ -1,9 +1,11 @@
 package sdp.moneyrun.player;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -33,16 +35,28 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class PlayerProfileInstrumentedTest {
 
-    @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRuleMenu = new ActivityScenarioRule<>(PlayerProfileActivity.class);
+    private Intent getStartIntent() {
+        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), PlayerProfileActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
 
     @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRuleProfile = new ActivityScenarioRule<>(PlayerProfileActivity.class);
+    public ActivityScenarioRule<PlayerProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+
+    @Rule
+    public ActivityScenarioRule<PlayerProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
 
 
     @Test
     public void checkButtonOpenRightActivities() throws Throwable {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(toStart)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
@@ -58,7 +72,7 @@ public class PlayerProfileInstrumentedTest {
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists() {
         //TODO: find a way to put info into result array in PlayerProfileActivity
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             String name = "John";
@@ -71,7 +85,7 @@ public class PlayerProfileInstrumentedTest {
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> {
-                ((PlayerProfileActivity) a).setDisplayedTexts(user);
+                a.setDisplayedTexts(user);
             });
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("Player has died 0 many times")));
@@ -87,6 +101,7 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void checkNoInfoDisplayedWhenPlayerDoesNotExist() {
+
         try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.playerEmptyMessage))
@@ -98,17 +113,18 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
-      //  try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+
+        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
 
-          //  Thread.sleep(1000);
+            Thread.sleep(1000);
 
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-     //   } catch(InterruptedException e){
-         //   e.printStackTrace();
-       //     Intents.release();
-       // }
+        } catch(InterruptedException e){
+            e.printStackTrace();
+            Intents.release();
+        }
     }
 }

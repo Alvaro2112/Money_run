@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,6 +19,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -25,9 +27,18 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private final long ASYNC_CALL_TIMEOUT = 5L;
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
     @Test
     public void getPlayerFromDatabase() throws Throwable {
+
+     //   FirebaseDatabase.getInstance().goOffline();
         final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
 
@@ -36,6 +47,7 @@ public class DatabaseProxyTest {
         OnCompleteListener listener = task -> added.countDown();
         db.putPlayer(player, listener);
         try {
+            Thread.sleep(1000);
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(added.getCount(), is(0L));
         }catch (InterruptedException e){
@@ -53,6 +65,7 @@ public class DatabaseProxyTest {
         while(!testTask.isComplete()){
             System.out.println("false");
         }
+     //   FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -101,9 +114,11 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-
+                System.out.println("Got there ");
                 player.setName(p.getName());
-                received.countDown();
+                if(p.getName().equals(newName)) {
+                    received.countDown();
+                }
             }
 
             @Override
@@ -123,9 +138,14 @@ public class DatabaseProxyTest {
             assert(false);
         }
 
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//            assert(false);
+//        }
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
-
     }
 
     @Test(expected = IllegalArgumentException.class)

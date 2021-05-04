@@ -75,6 +75,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void runFunctionalities(){
         //Setting the current player object
         user = (Player) getIntent().getSerializableExtra("user");
+        if(user == null){
+            throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
+        }
         boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer",false);
         setGuestPlayerFields(guestPlayer);
 
@@ -204,6 +207,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
 
+            case R.id.main_leaderboard_button: {
+                onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
+                break;
+            }
+
             case R.id.log_out_button: {
                 FirebaseAuth.getInstance().signOut();
                 onButtonSwitchToActivity(LoginActivity.class, true);
@@ -216,7 +224,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 

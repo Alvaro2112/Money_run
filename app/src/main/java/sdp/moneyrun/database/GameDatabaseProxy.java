@@ -11,10 +11,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -96,8 +96,9 @@ public class GameDatabaseProxy extends DatabaseProxy {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Player> newData = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
-                game.setPlayers(newData, true);
-            }
+                if(newData != null){
+                    game.setPlayers(newData, true);
+                }            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -165,6 +166,9 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Player retHost = ds.child(DATABASE_GAME_HOST).getValue(Player.class);
             List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>(){});
             List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>(){});
+            if(retCoin == null){
+                retCoin = new ArrayList<>();
+            }
             Integer retMaxPlayerCount = ds.child(DATABASE_GAME_MAX_PLAYER_COUNT).getValue(Integer.class);
             Double retLatitude = ds.child(DATABASE_GAME_START_LOCATION)
                     .child(DATABASE_LOCATION_LATITUDE)
@@ -226,18 +230,15 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     public void addCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
                 .addValueEventListener(listener);
     }
 
     public void removeCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
-        FirebaseDatabase.getInstance().getReference()
-                .child(DATABASE_GAME)
-                .child(game.getId())
+        gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
-                .removeEventListener(listener);    }
+                .removeEventListener(listener);
+    }
 }

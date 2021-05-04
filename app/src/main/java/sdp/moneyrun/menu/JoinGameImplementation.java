@@ -15,17 +15,18 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.game.GameRepresentation;
@@ -36,9 +37,9 @@ public class JoinGameImplementation extends MenuImplementation{
 
     // Distance in meters
     private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
-
     private final boolean focusable;
     private final int layoutId;
+    private final Player currentUser;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     public JoinGameImplementation(Activity activity,
@@ -49,8 +50,12 @@ public class JoinGameImplementation extends MenuImplementation{
                                   boolean focusable,
                                   int layoutId){
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+        if(user == null){
+            throw new IllegalArgumentException("user is null");
+        }
         this.focusable = focusable;
         this.layoutId = layoutId;
+        this.currentUser = user;
     }
 
     /**
@@ -72,7 +77,7 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param popupView
      */
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
-        LinearLayout openGamesLayout = (LinearLayout) popupView.findViewById(R.id.openGamesLayout);
+        LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
@@ -118,7 +123,9 @@ public class JoinGameImplementation extends MenuImplementation{
                         }
                     }
                 });
+
     }
+
 
     /**
      * Get a representation of a game from the database.
@@ -126,6 +133,7 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param dataSnapshot the game snapshot
      * @return
      */
+
     private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
         String gameId = dataSnapshot.getKey();
         Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
@@ -178,11 +186,11 @@ public class JoinGameImplementation extends MenuImplementation{
         // create join button
         button.setId(buttonId);
         button.setText(activity.getString(R.string.join_game_message));
+
         button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
 
         //modify button if the game is full or if a space frees up
         addFullGameListener(button, gameRepresentation);
-
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -193,7 +201,7 @@ public class JoinGameImplementation extends MenuImplementation{
                     // In this case, the game cannot be instanciated
                     if (location == null) {
                         Log.e("location", "Error getting location");
-                        throw new NullPointerException("Error getting location");
+                        return;
                     }
                     LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
 
@@ -248,7 +256,8 @@ public class JoinGameImplementation extends MenuImplementation{
         playerNumberView.setText(playerNumberText);
 
         //makes the playerCount dynamic so that it changes when people join and leave lobbies
-        databaseReference.child(activity.getString(R.string.database_game)).child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
+        databaseReference.child(activity.getString(R.string.database_game))
+                .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         int newPlayerCount = (int) snapshot.child(activity.getString(R.string.database_open_games_players)).getChildrenCount();
@@ -268,10 +277,24 @@ public class JoinGameImplementation extends MenuImplementation{
     }
 
     private void joinLobbyFromJoinButton(GameRepresentation gameRepresentation){
+        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
+         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
+                players.add(currentUser);
+                gamePlayers.setValue(players);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error adding a player who joined the Game to the DB \n"+ error.getMessage());
+            }
+        });
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
-        lobbyIntent.putExtra("currentGameId", gameRepresentation.getGameId());
-
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
         activity.startActivity(lobbyIntent);
     }
+
+
 }

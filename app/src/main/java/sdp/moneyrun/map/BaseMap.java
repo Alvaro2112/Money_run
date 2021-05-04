@@ -20,7 +20,7 @@ public abstract class BaseMap extends AppCompatActivity {
 
     protected void createMap(Bundle savedInstanceState,int mapViewID, int contentViewID){
         setContentView(contentViewID);
-        mapView = (MapView) findViewById(mapViewID);
+        mapView = findViewById(mapViewID);
         mapView.onCreate(savedInstanceState);
     }
 

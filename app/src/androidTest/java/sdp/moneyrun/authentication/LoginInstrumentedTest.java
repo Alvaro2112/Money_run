@@ -16,21 +16,23 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
@@ -51,6 +53,13 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 
 public class LoginInstrumentedTest {
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     private final String TAG = LoginActivity.class.getSimpleName();
 

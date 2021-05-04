@@ -8,9 +8,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,38 +15,33 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class LeaderboardInstrumentedTest {
+public class MainLeaderboardInstrumentedTest {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            MainActivity.calledAlready = true;
-        }
-    }
-
     @Test
     public void useAppContext() {
         // Context of the app under test.
-
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("sdp.moneyrun", appContext.getPackageName());
     }
 
     @Test
     public void addPlayerWorks(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
@@ -57,23 +49,30 @@ public class LeaderboardInstrumentedTest {
                 player.setScore(8008, false);
                 a.addPlayer(player);
 
-                assertEquals(a.getPlayerList().size(),6);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                assertTrue(a.getPlayerList().size() <= a.getMaxPlayerNumber() + 1);
             });
-        }
-        catch (Exception e){
-            assertEquals(2,1);
         }
     }
 
     @Test
     public void addPLayerAddsPlayerToView(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
                 //Address was not set here before I don't know why
                 Player player = new Player(123, "Tess", "SomeAdress", 0,0,0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
-                assertEquals( a.getLdbAdapter().getCount(), 6);
+                assertTrue( a.getLdbAdapter().getCount() <= a.getMaxPlayerNumber() + 1);
 
             });
         }
@@ -83,14 +82,21 @@ public class LeaderboardInstrumentedTest {
     @Test
     public void addPlayerNullThrowsException(){
         exception.expect(RuntimeException.class);
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addPlayer(null));
         }
     }
 
     @Test
     public void AddPlayerListWorks(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
@@ -103,18 +109,18 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(),7);
+                assertTrue(a.getPlayerList().size() <= a.getMaxPlayerNumber() + 2);
             });
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            assertEquals(2,1);
         }
     }
 
     @Test
     public void AddPlayerListAddsAllPlayerToView(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
@@ -128,7 +134,14 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals( a.getLdbAdapter().getCount(), 7);
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                assertTrue( a.getLdbAdapter().getCount() <= a.getMaxPlayerNumber() + 2);
 
             });
         }
@@ -137,59 +150,12 @@ public class LeaderboardInstrumentedTest {
     @Test
     public void addPlayerListThrowsNullException(){
         exception.expect(RuntimeException.class);
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        Player user = new Player(3,"Bob", "Epfl",0,0,0);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addPlayerList(null));
-        }
-    }
-
-    @Test
-    public void testIfOneDummyPlayerIsSet(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a ->{
-                boolean check = false;
-                try {
-                    Thread.sleep(5000);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                    assertEquals(-2,1);
-                }
-                for(Player p : a.getPlayerList()){
-                    if (p.getName().equals("Chris")) {
-                        check = true;
-                        break;
-                    }
-                }
-                assertTrue(check);
-            });
-        }
-    }
-
-    @Test
-    public void setMainPlayerGetsTheRightInfoAndSetsThePlayerAttributes(){
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a ->{
-                int playerId = 48390;
-                String name = "John";
-                String address = "Here";
-                Player user = new Player(playerId);
-                user.setName(name);
-                user.setAddress(address);
-
-                Intent intent = new Intent(a, LeaderboardActivity.class);
-                intent.putExtra("user", user);
-
-                a.setMainPlayer(user);
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Player p = a.getUserPlayer();
-                assertNotNull(p);
-                assertNotNull(p.getName());
-                assertNotNull(p.getAddress());
-            });
         }
     }
 
@@ -207,7 +173,7 @@ public class LeaderboardInstrumentedTest {
         players2.add(new Player(9,"a4","b",0,0,11));
         players2.add(new Player(24,"a1","b",0,0,6));
         players2.add(new Player(1,"a0","b",0,0,0));
-        LeaderboardActivity.bestToWorstPlayer(players);
+        MainLeaderboardActivity.bestToWorstPlayer(players);
         assertEquals(players2,players);
     }
 
