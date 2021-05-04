@@ -22,7 +22,7 @@ public class UserBuilderInstrumentedTest {
         b.setName(null);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void buildWithNonCompleteAddressFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setName("Stuff");
@@ -30,7 +30,7 @@ public class UserBuilderInstrumentedTest {
         b.build();
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void buildWithNonCompleteNameFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setAddress("Stuff");
@@ -38,7 +38,7 @@ public class UserBuilderInstrumentedTest {
         b.build();
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void buildWithNonCompletePlayerIdFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setName("Stuff");
