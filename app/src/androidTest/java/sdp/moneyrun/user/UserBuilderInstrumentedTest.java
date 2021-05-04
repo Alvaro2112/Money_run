@@ -22,7 +22,7 @@ public class UserBuilderInstrumentedTest {
         b.setName(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void buildWithNonCompleteAddressFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setName("Stuff");
@@ -30,7 +30,7 @@ public class UserBuilderInstrumentedTest {
         b.build();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void buildWithNonCompleteNameFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setAddress("Stuff");
@@ -38,7 +38,7 @@ public class UserBuilderInstrumentedTest {
         b.build();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalStateException.class)
     public void buildWithNonCompletePlayerIdFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setName("Stuff");
@@ -52,18 +52,14 @@ public class UserBuilderInstrumentedTest {
         UserBuilder b = new UserBuilder();
         String address = "Something";
         String name = "Other stuff";
-        int playerId = r.nextInt();
-        int numberOfDiedGames = r.nextInt();
-        int numberOfPlayedGames = r.nextInt();
-        int score = r.nextInt();
 
-        User player = new User(playerId, name, address, numberOfDiedGames, numberOfPlayedGames,score);
-        b.setUserId(playerId);
+        User player = new User(1, name, address, 2, 3,4);
+        b.setUserId(1);
         b.setName(name);
-        b.setScore(score);
+        b.setScore(4);
         b.setAddress(address);
-        b.setNumberOfDiedGames(numberOfDiedGames);
-        b.setNumberOfPlayedGames(numberOfPlayedGames);
+        b.setNumberOfDiedGames(2);
+        b.setNumberOfPlayedGames(3);
         assert(player.equals(b.build()));
     }
 }
