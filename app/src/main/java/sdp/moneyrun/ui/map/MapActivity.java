@@ -379,9 +379,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
         for (int i = 0; i < number; i++) {
             Location loc = null;
-            do {
-                loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
-            } while (!isLocationAppropriate(loc));
+            loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
         }
     }
@@ -397,7 +395,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         if(!addedCoins){
-            //placeRandomCoins(1, 100000);
+            placeRandomCoins(2, 6);
             addedCoins = true;
             if(gameId != null){
             initializeGame(gameId);

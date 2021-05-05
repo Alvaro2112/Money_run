@@ -10,6 +10,9 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.BeforeClass;
@@ -34,6 +37,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameLobbyActivityInstrumentedTest {
@@ -106,6 +111,52 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void StartGameAsHosdtWorks() {
+        Player host = new Player(3,"Bob",0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        intent.putExtra("currentUser", host);
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+        System.out.println(id);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Thread.sleep(4000);
+            onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
+            Thread.sleep(4000);
+            Intents.release();
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            final GameDatabaseProxy db = new GameDatabaseProxy();
+
+            Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
+            dataTask.addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    Game fromDB = db.getGameFromTaskSnapshot(task);
+                    assertEquals(fromDB.getCoins().size(), 2);
+                }else{
+                    fail();
+                }
+            });
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
