@@ -19,11 +19,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -135,21 +135,21 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-            getPlayerFromDB(user.getUid().hashCode(), menuIntent);
+            getUserFromDB(user.getUid().hashCode(), menuIntent);
         }
     }
 
-    private void getPlayerFromDB(int playerId, Intent menuIntent){
-        PlayerDatabaseProxy pdb = new PlayerDatabaseProxy();
-        Task<DataSnapshot> t = pdb.getPlayerTask(playerId);
+    private void getUserFromDB(int userId, Intent menuIntent){
+        UserDatabaseProxy pdb = new UserDatabaseProxy();
+        Task<DataSnapshot> t = pdb.getUserTask(userId);
         t.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                Player user = pdb.getPlayerFromTask(task);
+                User user = pdb.getUserFromTask(task);
 
                 // If no user has been found, we need to create a new instance in the database
                 if(user == null){
-                    Intent intent = new Intent (this, RegisterPlayerActivity.class);
-                    intent.putExtra("playerId", playerId);
+                    Intent intent = new Intent (this, RegisterUserActivity.class);
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
 
@@ -182,8 +182,8 @@ public class LoginActivity extends AppCompatActivity {
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterPlayerActivity.class);
-                guestMenuIntent.putExtra("guestPlayer",true);
+                Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
+                guestMenuIntent.putExtra("guestUser",true);
                 startActivity(guestMenuIntent);
             }
         });

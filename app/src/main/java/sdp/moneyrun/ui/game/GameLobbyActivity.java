@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
@@ -20,9 +22,11 @@ import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 
 public class GameLobbyActivity extends AppCompatActivity {
@@ -84,6 +88,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void setAllFieldsAccordingToGame(){
         GameDatabaseProxy proxyG = new GameDatabaseProxy();
+
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 game = proxyG.getGameFromTaskSnapshot(task);
@@ -91,10 +96,20 @@ public class GameLobbyActivity extends AppCompatActivity {
                 //Find all the views and assign them values
                 findViewById(R.id.leave_lobby_button).setOnClickListener(v -> {
                     game.removePlayer(user,false);
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                    finish();
+                    UserDatabaseProxy pdp = new UserDatabaseProxy();
+                    pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                User user = pdp.getUserFromTask(task);
+                                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
+
                 });
 
                 TextView name = (TextView) findViewById(R.id.lobby_title);

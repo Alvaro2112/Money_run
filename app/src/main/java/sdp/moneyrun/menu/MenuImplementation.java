@@ -21,18 +21,19 @@ import com.google.firebase.database.DatabaseReference;
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
 public class MenuImplementation {
 
     protected final Activity activity;
     protected final DatabaseReference databaseReference;
-    protected final Player user;
+    protected final User user;
     protected final ActivityResultLauncher<String[]> requestPermissionsLauncher;
     protected final FusedLocationProviderClient fusedLocationClient;
 
     public MenuImplementation(Activity activity,
                               DatabaseReference databaseReference,
-                              Player user,
+                              User user,
                               ActivityResultLauncher<String[]> requestPermissionsLauncher,
                               FusedLocationProviderClient fusedLocationClient
                               ){
