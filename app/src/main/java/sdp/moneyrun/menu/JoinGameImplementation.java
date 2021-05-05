@@ -291,7 +291,7 @@ public class JoinGameImplementation extends MenuImplementation{
             }
         });
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
-        // Pass the game id to the lobby activity
+        // Pass the game id to the lobby activity as well as the user currently logged in
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
         activity.startActivity(lobbyIntent);
     }

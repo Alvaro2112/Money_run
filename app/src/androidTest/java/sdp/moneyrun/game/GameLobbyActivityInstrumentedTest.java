@@ -54,7 +54,7 @@ public class GameLobbyActivityInstrumentedTest {
     public Game getGame(){
         String name = "LobbyActivityInstrumentedTest";
         Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        int maxPlayerCount = 2;
+        int maxPlayerCount = 4;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
@@ -182,7 +182,6 @@ public class GameLobbyActivityInstrumentedTest {
         }
     }
 
-
     @Test
     public void LeaveLobbyWorks() {
         Intent intent = getStartIntent();
@@ -207,4 +206,36 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         }
     }
+
+    @Test
+    public void WhenGameIsDeletedPlayerLeavesLobby(){
+        Game g = getGame();
+        g.addPlayer(new Player(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0), true);
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("currentGameId", id);
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Thread.sleep(10000);
+            g.setIsDeleted(true, false);
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void LeaveIsDeleteForHost(){}
+
+    @Test
+    public void LeaveIsLeaveForPlayer(){}
 }

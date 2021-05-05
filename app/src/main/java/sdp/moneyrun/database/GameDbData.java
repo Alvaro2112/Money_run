@@ -24,6 +24,7 @@ public final class GameDbData {
     private int maxPlayerCount;
     private Location startLocation;
     boolean isVisible;
+    boolean isDeleted;
 
     public GameDbData(String name,
                       Player host,
@@ -54,6 +55,7 @@ public final class GameDbData {
         this.maxPlayerCount = maxPlayerCount;
         this.startLocation = startLocation;
         this.isVisible = isVisible;
+        this.isDeleted = false;
     }
 
     public GameDbData(GameDbData other){
@@ -67,6 +69,7 @@ public final class GameDbData {
         this.startLocation = other.startLocation;
         this.isVisible = other.isVisible;
         this.coins = other.coins;
+        this.isDeleted = false;
     }
 
     public GameDbData(){}
@@ -100,6 +103,14 @@ public final class GameDbData {
         if( coins.size() < index + 1) return false;
         coins.set(index, coin);
         return true;
+    }
+
+    public void setIsDeleted(boolean b){
+        this.isDeleted = b;
+    }
+
+    public boolean getIsDeleted(){
+        return isDeleted;
     }
 
 

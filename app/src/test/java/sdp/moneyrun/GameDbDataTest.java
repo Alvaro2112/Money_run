@@ -272,4 +272,17 @@ public class GameDbDataTest {
     public void setPlayersFailsWhenHostNotPresent(){
         //TODO
     }
+
+    @Test
+    public void isDeletedIsFalseWhenCreated(){
+        GameDbData g = getTestData();
+        assertEquals(false, g.getIsDeleted());
+    }
+
+    @Test
+    public void setIsDeletedWorks(){
+        GameDbData g = getTestData();
+        g.setIsDeleted(true);
+        assertEquals(true, g.getIsDeleted());
+    }
 }

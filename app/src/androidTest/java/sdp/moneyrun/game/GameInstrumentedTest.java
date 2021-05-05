@@ -31,6 +31,7 @@ import sdp.moneyrun.player.Player;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -586,6 +587,56 @@ public class GameInstrumentedTest {
         Game gg2 = gdp.getGameFromTaskSnapshot(g2);
         assertEquals(gg2, g);
 
+    }
+
+    @Test
+    public void getIsDeletedIsFalseOnConstruction(){
+        Game g = getGame();
+        assertFalse(g.getIsDeleted());
+    }
+
+    @Test
+    public void setIsDeletedSetsvalueLocally(){
+        Game g = getGame();
+        g.setIsDeleted(true, true);
+        assertTrue(g.getIsDeleted());
+    }
+
+    @Test
+    public void setIsDeletedSetsValueInDB(){
+        Game g = getGame();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.putGame(g);
+        try{
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        g.setIsDeleted(true, false);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        Task<DataSnapshot> dbr = FirebaseDatabase.getInstance().getReference()
+                .child("games")
+                .child(g.getId())
+                .child("isDeleted")
+                .get();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        if(dbr.isSuccessful()){
+            boolean b = (boolean) dbr.getResult().getValue();
+            assertTrue(b);
+        }else{
+            fail();
+        }
     }
 
 
