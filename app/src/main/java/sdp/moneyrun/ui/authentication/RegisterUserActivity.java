@@ -4,27 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
-import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
-public class RegisterPlayerActivity extends AppCompatActivity {
+public class RegisterUserActivity extends AppCompatActivity {
     private Button submitButton;
     private EditText nameText;
     private EditText addressText;
     private EditText colorText;
     private EditText animalText;
     private String[] result;
-    private PlayerDatabaseProxy pdb;
+    private UserDatabaseProxy pdb;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,21 +42,20 @@ public class RegisterPlayerActivity extends AppCompatActivity {
 
     }
     private void setRegisterFieldsForNextActivity(){
-        boolean guestMode = getIntent().getBooleanExtra("guestPlayer",false);
-        int playerId = getIntent().getIntExtra("playerId",0);
-        Intent menuIntent = new Intent(RegisterPlayerActivity.this, MenuActivity.class);
+        boolean guestMode = getIntent().getBooleanExtra("guestUser",false);
+        int userId = getIntent().getIntExtra("userId",0);
+        Intent menuIntent = new Intent(RegisterUserActivity.this, MenuActivity.class);
         if(guestMode){
             Random random = new Random();
-            playerId = Math.abs(random.nextInt());
-            menuIntent.putExtra("guestPlayer",true);
+            userId = Math.abs(random.nextInt());
+            menuIntent.putExtra("guestUser",true);
         }
-        Player user = new Player(playerId);
+        User user = new User(userId);
         user.setName(result[0]);
         user.setAddress(result[1]);
-        user.setScore(0);
 
-        pdb = new PlayerDatabaseProxy();
-        pdb.putPlayer(user);
+        pdb = new UserDatabaseProxy();
+        pdb.putUser(user);
 
         menuIntent.putExtra("user", user);
         startActivity(menuIntent);

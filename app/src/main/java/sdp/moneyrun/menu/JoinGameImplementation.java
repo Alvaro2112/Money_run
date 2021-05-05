@@ -32,6 +32,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.R;
+import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation{
 
@@ -39,12 +40,12 @@ public class JoinGameImplementation extends MenuImplementation{
     private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
     private final boolean focusable;
     private final int layoutId;
-    private final Player currentUser;
+    private final User currentUser;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
-                                  Player user,
+                                  User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
@@ -282,7 +283,7 @@ public class JoinGameImplementation extends MenuImplementation{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
-                players.add(currentUser);
+                players.add(new Player(currentUser.getUserId(), currentUser.getName(), 0));
                 gamePlayers.setValue(players);
             }
             @Override

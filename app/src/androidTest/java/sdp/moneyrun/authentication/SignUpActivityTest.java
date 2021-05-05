@@ -24,7 +24,7 @@ import java.util.Random;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 
 import static androidx.test.espresso.action.ViewActions.click;
@@ -86,7 +86,7 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(4000);
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
