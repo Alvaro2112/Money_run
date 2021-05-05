@@ -13,15 +13,15 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     private final String TAG = UserDatabaseProxy.class.getSimpleName();
 
-    private final String DATABASE_PLAYER = "users";
-    private final String DATABASE_PLAYER_SCORE = "score";
+    private final String DATABASE_USER = "users";
+    private final String DATABASE_USER_SCORE = "score";
 
     private final DatabaseReference usersRef;
 
     public UserDatabaseProxy(){
         super();
 
-        usersRef = getReference().child(DATABASE_PLAYER);
+        usersRef = getReference().child(DATABASE_USER);
     }
 
     /**
@@ -121,7 +121,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
             throw new IllegalArgumentException("n should not be negative.");
         }
 
-        return usersRef.orderByChild(DATABASE_PLAYER_SCORE)
+        return usersRef.orderByChild(DATABASE_USER_SCORE)
                 .limitToLast(n)
                 .get();
     }
