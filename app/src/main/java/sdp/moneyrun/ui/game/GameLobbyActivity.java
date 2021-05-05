@@ -76,8 +76,6 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 //Find all the views and assign them values
                 findViewById(R.id.launch_game_button).setOnClickListener(v -> {
-                    System.out.println(player.getName());
-                    System.out.println(game.getHost().getName());
 
                     if(game.getHost().equals(player)){
                         game.setStarted(true, false);

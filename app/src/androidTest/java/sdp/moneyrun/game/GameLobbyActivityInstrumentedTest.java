@@ -103,13 +103,15 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
 
