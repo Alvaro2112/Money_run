@@ -16,10 +16,6 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.BaseMap;
 
@@ -76,10 +72,6 @@ public class OfflineMapActivity extends BaseMap {
                 Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
 
                 hasFoundMap = true;
-                ArrayList<String> offlineRegionsNames = new ArrayList<>();
-                for (OfflineRegion offlineRegion : offlineRegions) {
-                    offlineRegionsNames.add(getRegionName(offlineRegion));
-                }
                 // Create new camera position
                 int regionSelected = 0;
                 LatLngBounds bounds = (offlineRegions[regionSelected].getDefinition()).getBounds();
@@ -99,20 +91,6 @@ public class OfflineMapActivity extends BaseMap {
                 Toast.makeText(OfflineMapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-    private String getRegionName(OfflineRegion offlineRegion) {
-        // Get the region name from the offline region metadata
-        String regionName;
-
-        try {
-            byte[] metadata = offlineRegion.getMetadata();
-            String json = new String(metadata, JSON_CHARSET);
-            JSONObject jsonObject = new JSONObject(json);
-            regionName = jsonObject.getString(JSON_FIELD_REGION_NAME);
-        } catch (Exception exception) {
-            regionName = String.format(getString(R.string.region_name), offlineRegion.getID());
-        }
-        return regionName;
     }
 
 
