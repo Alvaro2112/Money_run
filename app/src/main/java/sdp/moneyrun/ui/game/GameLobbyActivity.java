@@ -152,9 +152,4 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
-
 }
