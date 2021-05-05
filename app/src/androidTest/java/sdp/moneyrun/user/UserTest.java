@@ -1,4 +1,4 @@
-package sdp.moneyrun.player;
+package sdp.moneyrun.user;
 
 import androidx.annotation.NonNull;
 
@@ -14,14 +14,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.user.User;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class PlayerTest {
+public class UserTest {
     private final long ASYNC_CALL_TIMEOUT = 10L;
 
     @BeforeClass
@@ -39,20 +42,20 @@ public class PlayerTest {
         String address = "Somewhere";
         String newAddress = "New Address";
         int id = 1234567891;
-        Player player = new Player(id, name, address,0,0 ,0);
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+        User player = new User(id, name, address,0 ,0,0);
+        UserDatabaseProxy db = new UserDatabaseProxy();CountDownLatch added = new CountDownLatch(1);
+        db.putUser(player);
+//
+//        try {
+//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+//            assertEquals(0L, added.getCount());
+//        } catch (InterruptedException e) {
+//            fail();
+//        }
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
+                User p = snapshot.getValue(User.class);
                 //player.setAddress(p.getAddress());
                 if(p.getAddress().equals(newAddress)) {
                     assertThat(p.getAddress(), is(newAddress));
@@ -65,7 +68,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player,listener);
+        db.addUserListener(player,listener);
         player.setAddress(newAddress, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -74,7 +77,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player, listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
@@ -84,16 +87,11 @@ public class PlayerTest {
         String address = "Somewhere";
         String newName = "New Address";
         int id = 1234567892;
-        Player player = new Player(id, name, address,0,0,0 );
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+
+        User player = new User(id, name, address,0,0 ,0);
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
+
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +107,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
+        db.addUserListener(player, listener);
 
         player.setName(newName, true);
         try {
@@ -119,7 +117,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player,listener);
+        db.removeUserListener(player,listener);
     }
 
     @Test
@@ -129,23 +127,17 @@ public class PlayerTest {
         String address = "Somewhere";
         int newPlayedGames = 75;
         int id = 1234567893;
-        Player player = new Player(id, name, address,0,0,0 );
-        Player player2 = new Player(id, name, address,0,0,0 );
+        User player = new User(id, name, address,0,0,0 );
+        User player2 = new User(id, name, address,0,0,0 );
 
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
 
         ValueEventListener listener =  new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
+                User p = snapshot.getValue(User.class);
                 if (p.getNumberOfPlayedGames() == 75) {
                     updated.countDown();
                 }
@@ -157,7 +149,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
+        db.addUserListener(player, listener);
 
         player.setNumberOfPlayedGames(newPlayedGames, true);
         try {
@@ -169,7 +161,7 @@ public class PlayerTest {
         }
         assertThat(player2.getNumberOfPlayedGames(), is(newPlayedGames));
 
-        db.removePlayerListener(player, listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
@@ -179,20 +171,14 @@ public class PlayerTest {
         String address = "Somewhere";
         int newDiedGames = 75;
         int id = 1234567894;
-        Player player = new Player(id, name, address,0,0,0 );
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+
+        User player = new User(id, name, address,0,0,0 );
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
+                User p = snapshot.getValue(User.class);
                 if(p.getNumberOfDiedGames() == newDiedGames) {
                     assertThat(p.getNumberOfDiedGames(), is(newDiedGames));
                     updated.countDown();
@@ -204,7 +190,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
+        db.addUserListener(player, listener);
 
         player.setNumberOfDiedGames(newDiedGames, true);
         try {
@@ -214,7 +200,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player,listener);
+        db.removeUserListener(player,listener);
     }
 
     @Test
@@ -223,20 +209,14 @@ public class PlayerTest {
         String name = "John Doe";
         String address = "Somewhere";
         int id = 1234567895;
-        Player player = new Player(id, name, address,0,0 ,0);
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+
+        User player = new User(id, name, address,0 ,0,0);
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
+                User p = snapshot.getValue(User.class);
                 if(p.getNumberOfPlayedGames()==1) {
                     assertThat(p.getNumberOfPlayedGames(), is(1));
                     updated.countDown();
@@ -248,7 +228,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
+        db.addUserListener(player, listener);
         player.updatePlayedGames(true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -257,7 +237,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player,listener);
+        db.removeUserListener(player,listener);
     }
 
     @Test
@@ -266,21 +246,14 @@ public class PlayerTest {
         String name = "John Doe";
         String address = "Somewhere";
         int id = 1234567896;
-        Player player = new Player(id, name, address,0,0,0 );
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+        User player = new User(id, name, address,0,0 ,0);
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
 
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
+                User p = snapshot.getValue(User.class);
                 if(p.getNumberOfDiedGames() == 1) {
                     assertThat(p.getNumberOfDiedGames(), is(1));
                     updated.countDown();
@@ -292,7 +265,7 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
+        db.addUserListener(player, listener);
         player.updateDiedGames(true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -301,7 +274,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player,listener);
+        db.removeUserListener(player,listener);
     }
 
     @Test
@@ -311,23 +284,17 @@ public class PlayerTest {
         String address = "Somewhere";
         int score = 75;
         int id = 1234567897;
-        Player player = new Player(id, name, address,0,0,0 );
-        PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
-        db.putPlayer(player, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+
+        User player = new User(id, name, address,0,0,0 );
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
 
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player p = snapshot.getValue(Player.class);
-                if(p.getScore() == score){
-                    assertThat(p.getScore(), is(score));
+                User p = snapshot.getValue(User.class);
+                if(p.getMaxScoreInGame() == score){
+                    assertThat(p.getMaxScoreInGame(), is(score));
                     updated.countDown();
                 }
             }
@@ -337,8 +304,10 @@ public class PlayerTest {
                 assert(false);
             }
         };
-        db.addPlayerListener(player, listener);
-        player.setScore(score, true);
+
+        db.addUserListener(player, listener);
+        player.setMaxScoreInGame(score, true);
+
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(updated.getCount(), is(0L));
@@ -346,7 +315,7 @@ public class PlayerTest {
             e.printStackTrace();
             assert(false);
         }
-        db.removePlayerListener(player,listener);
+        db.removeUserListener(player,listener);
     }
 
 

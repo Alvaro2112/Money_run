@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Time;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,7 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -36,18 +38,16 @@ public class DatabaseProxyTest {
         }
     }
     @Test
-    public void getPlayerFromDatabase() throws Throwable {
-
+    public void getPlayerFromDatabase() {
      //   FirebaseDatabase.getInstance().goOffline();
-        final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
+        final Player player = new Player(1236, "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-
+        CountDownLatch updated = new CountDownLatch(1);
         //adding to db
         CountDownLatch added = new CountDownLatch(1);
         OnCompleteListener listener = task -> added.countDown();
         db.putPlayer(player, listener);
         try {
-            Thread.sleep(1000);
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(added.getCount(), is(0L));
         }catch (InterruptedException e){
@@ -58,14 +58,19 @@ public class DatabaseProxyTest {
         testTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                assert( player.equals(db.getPlayerFromTask(testTask)));
+               updated.countDown();
             }else{
                 assert (false);
             }
         });
-        while(!testTask.isComplete()){
-            System.out.println("false");
+
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, updated.getCount());
+        } catch (InterruptedException e) {
+            fail();
         }
-     //   FirebaseDatabase.getInstance().goOnline();
+        //   FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -88,14 +93,14 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a","b",0,0,0);
+        Player player = new Player(1, "a",0);
         db.addPlayerListener(player, null);
     }
 
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
+        Player player = new Player(564123, "Johann",0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         CountDownLatch added = new CountDownLatch(1);
@@ -128,7 +133,7 @@ public class DatabaseProxyTest {
         };
         db.addPlayerListener(player, listener);
 
-        Player p = new Player(564123,newName,"FooBarr",0,0,0);
+        Player p = new Player(564123,newName,0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -168,7 +173,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a","b",0,0,0);
+        Player player = new Player(1, "a", 0);
         db.removePlayerListener(player, null);
     }
 

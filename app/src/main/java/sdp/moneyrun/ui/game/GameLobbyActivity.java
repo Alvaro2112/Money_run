@@ -22,9 +22,11 @@ import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 public class GameLobbyActivity extends AppCompatActivity {
     private Game game;
@@ -54,10 +56,20 @@ public class GameLobbyActivity extends AppCompatActivity {
                 //Find all the views and assign them values
                 findViewById(R.id.leave_lobby_button).setOnClickListener(v -> {
                     game.removePlayer(user,false);
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                    finish();
+                    UserDatabaseProxy pdp = new UserDatabaseProxy();
+                    pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                User user = pdp.getUserFromTask(task);
+                                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
+
                 });
 
                 TextView name = (TextView) findViewById(R.id.lobby_title);

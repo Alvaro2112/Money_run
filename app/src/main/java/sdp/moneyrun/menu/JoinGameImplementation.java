@@ -32,6 +32,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.R;
+import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation{
 
@@ -39,12 +40,12 @@ public class JoinGameImplementation extends MenuImplementation{
     private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
     private final boolean focusable;
     private final int layoutId;
-    private final Player currentUser;
+    private final User currentUser;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
-                                  Player user,
+                                  User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
@@ -278,21 +279,27 @@ public class JoinGameImplementation extends MenuImplementation{
 
     private void joinLobbyFromJoinButton(GameRepresentation gameRepresentation){
         DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
+        final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
          gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>(){});
-                players.add(currentUser);
+                players.add(newPlayer);
                 gamePlayers.setValue(players);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "Error adding a player who joined the Game to the DB \n"+ error.getMessage());
             }
+
         });
+
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
-        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
+        if(newPlayer == null){
+            throw new IllegalArgumentException();
+        }
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer);
         activity.startActivity(lobbyIntent);
     }
 
