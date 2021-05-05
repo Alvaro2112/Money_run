@@ -163,9 +163,6 @@ public class Game {
         return gameDbData.getHost();
     }
 
-    public void setHost(Player host){
-        gameDbData.setHost(host);
-    }
 
     public int getMaxPlayerCount() {
         return gameDbData.getMaxPlayerCount();
@@ -175,9 +172,6 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
-    public boolean getStarted() {
-        return gameDbData.getStarted();
-    }
 
     public void setStarted(boolean started, boolean forceLocal) {
         gameDbData.setStarted(started);

@@ -109,10 +109,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton = findViewById(R.id.new_question);
 
         addExitButton();
-
-        if(gameId != null) {
-            initializeGame(gameId);
-        }
     }
 
     public void initializeGame(String gameId){
@@ -403,7 +399,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if(!addedCoins){
             //placeRandomCoins(1, 100000);
             addedCoins = true;
+            if(gameId != null){
             initializeGame(gameId);
+            }
         }
     }
 
