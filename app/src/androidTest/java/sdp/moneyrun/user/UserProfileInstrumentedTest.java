@@ -1,4 +1,4 @@
-package sdp.moneyrun.player;
+package sdp.moneyrun.user;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +34,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class PlayerProfileInstrumentedTest {
+public class UserProfileInstrumentedTest {
 
     private Intent getStartIntent() {
         User currentUser = new User(999, "CURRENT_USER", "Epfl"

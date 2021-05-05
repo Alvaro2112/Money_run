@@ -1,4 +1,4 @@
-package sdp.moneyrun.player;
+package sdp.moneyrun.user;
 
 import androidx.annotation.NonNull;
 
@@ -15,13 +15,14 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.user.User;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class PlayerTest {
+public class UserTest {
     private final long ASYNC_CALL_TIMEOUT = 10L;
 
     @BeforeClass

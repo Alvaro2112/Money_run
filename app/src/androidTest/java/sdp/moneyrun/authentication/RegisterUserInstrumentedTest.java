@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
-public class RegisterPlayerInstrumentedTest {
+public class RegisterUserInstrumentedTest {
     @BeforeClass
     public static void setPersistence(){
         if(!MainActivity.calledAlready){
