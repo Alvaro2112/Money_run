@@ -500,7 +500,7 @@ public class GameInstrumentedTest {
         int updatedValue = 323324;
         double lat = 17.;
         double lon = 18.;
-        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)));
+        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)), false);
 
         CountDownLatch updated = new CountDownLatch(1);
         ValueEventListener listener = new ValueEventListener() {
@@ -545,7 +545,7 @@ public class GameInstrumentedTest {
     @Test(expected = IllegalArgumentException.class)
     public void setCoinsThrowsException(){
         Game g = getGame();
-        g.setCoins(null);
+        g.setCoins(null, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
