@@ -110,8 +110,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         addExitButton();
 
-        initializeGame(gameId);
-
+        if(gameId != null) {
+            initializeGame(gameId);
+        }
     }
 
     public void initializeGame(String gameId){
@@ -124,12 +125,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
             }else{
 
-
-
             }
-
-
-
         } else {
             Log.e(Game.class.getSimpleName(), task.getException().getMessage());
         }

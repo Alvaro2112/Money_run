@@ -26,6 +26,7 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -77,6 +78,42 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
     @Test
+    public void StartGameAsHostWorks() {
+        Player host = new Player(3,"Bob",0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        intent.putExtra("currentUser", host);
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+        System.out.println(id);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Thread.sleep(4000);
+            onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
+            Thread.sleep(4000);
+            intended(hasComponent(MapActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @Test
     public void nameDisplaysProperly(){
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
@@ -111,6 +148,7 @@ public class GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
         }
         intent.putExtra("currentGameId", id);
+        intent.putExtra("currentUser", justJoined);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Thread.sleep(4000);

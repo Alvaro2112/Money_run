@@ -163,6 +163,10 @@ public class Game {
         return gameDbData.getHost();
     }
 
+    public void setHost(Player host){
+        gameDbData.setHost(host);
+    }
+
     public int getMaxPlayerCount() {
         return gameDbData.getMaxPlayerCount();
     }

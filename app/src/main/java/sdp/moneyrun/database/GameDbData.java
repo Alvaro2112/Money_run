@@ -86,6 +86,10 @@ public final class GameDbData {
         isStarted = started;
     }
 
+    public void setHost(Player host){
+        this.host = host;
+    }
+
     public boolean getStarted(){
         return isStarted;
     }

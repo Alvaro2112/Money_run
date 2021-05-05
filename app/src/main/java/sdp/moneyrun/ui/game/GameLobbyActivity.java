@@ -38,6 +38,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_lobby);
         gameId = (String) getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         player = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
+
         runFunctionalities();
     }
 
@@ -75,6 +76,9 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 //Find all the views and assign them values
                 findViewById(R.id.launch_game_button).setOnClickListener(v -> {
+                    System.out.println(player.getName());
+                    System.out.println(game.getHost().getName());
+
                     if(game.getHost().equals(player)){
                         game.setStarted(true, false);
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
@@ -102,8 +106,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                         List<Player> newPlayers = snapshot.child(getResources().getString(R.string.database_game_players))
                                 .getValue(t);
 
-                        boolean started =  snapshot.child("started").getValue(r);
-
                         StringBuilder str = new StringBuilder();
                         String prefix = "";
                         for (Player p : newPlayers) {
@@ -116,14 +118,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                         String newPlayersMissing = "Players missing: " + (game.getMaxPlayerCount() - newPlayers.size());
                         playersMissing.setText(newPlayersMissing);
 
-
-                        if(!player.equals(game.getHost()) && started){
-                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                            intent.putExtra("player", player);
-                            intent.putExtra("gameId", gameId);
-                            startActivity(intent);
-                            finish();
-                        }
                     }
 
                     @Override
