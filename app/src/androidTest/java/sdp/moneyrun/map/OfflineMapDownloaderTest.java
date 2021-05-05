@@ -63,18 +63,14 @@ public class OfflineMapDownloaderTest {
         }
     }
 
-
     @Test
     public void downloadsOneMapTest() {
-
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
-
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             scenario.onActivity(activity -> {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
                 offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback(){
@@ -93,7 +89,6 @@ public class OfflineMapDownloaderTest {
                     }
                     @Override
                     public void onError(String error) {
-
                     }
                 }
             );
@@ -104,7 +99,5 @@ public class OfflineMapDownloaderTest {
             e.printStackTrace();
             assertEquals(1,2);
         }
-
     }
-
 }

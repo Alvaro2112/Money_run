@@ -29,7 +29,7 @@ public class GameTest {
 
     public Game getGame(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob", 0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -88,7 +88,7 @@ public class GameTest {
     @Test
     public void testGameConstructorThrowsExceptionWhenInvalidArguments() {
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
@@ -175,7 +175,7 @@ public class GameTest {
     @Test
     public void testStartGameDoesNotCrash() {
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         List<Player> players = new ArrayList<>();
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -211,7 +211,7 @@ public class GameTest {
     @Test
     public void getRandomQuestionReturnsNullIfNoQuestion() {
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Location location = new Location("LocationManager#GPS_PROVIDER");
@@ -238,7 +238,7 @@ public class GameTest {
     @Test
     public void getHostReturnsCorrectValue(){
         Game game = getGame();
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
 
         assertEquals(game.getHost(), host);
     }

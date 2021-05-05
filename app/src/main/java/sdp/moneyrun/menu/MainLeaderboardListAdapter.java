@@ -13,18 +13,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
-public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
+public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
 
     // Medal emojis
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
     private final int COLOR_GOLD = Color.rgb(255, 204, 51);
 
-    Player user;
+    User user;
 
-    public MainLeaderboardListAdapter(Activity context, ArrayList<Player> playerList, Player user) {
-        super(context,0 , playerList);
+    public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
+        super(context,0 , userList);
         if(user == null){
             throw new IllegalArgumentException("user should not be null.");
         }
@@ -35,10 +35,10 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
     @SuppressLint("ViewHolder")
     public View getView(int position, View view, ViewGroup parent) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.main_leaderboard_item_layout, null, true);
-        Player player = getItem(position);
-        TextView player_position = view.findViewById(R.id.main_player_position);
-        TextView player_name = view.findViewById(R.id.main_player_name);
-        TextView player_score = view.findViewById(R.id.main_player_score);
+        User user = getItem(position);
+        TextView user_position = view.findViewById(R.id.main_player_position);
+        TextView user_name = view.findViewById(R.id.main_player_name);
+        TextView user_score = view.findViewById(R.id.main_player_score);
 
         String text_position;
         if(position < rank.length){
@@ -47,13 +47,13 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<Player> {
             text_position = " " + (position + 1);
         }
 
-        player_position.setText(text_position);
-        player_name.setText(String.valueOf(player.getName()));
-        if(user.equals(player)){
-            player_name.setTextColor(COLOR_GOLD);
-            player_name.setTypeface(player_name.getTypeface(), Typeface.BOLD);
+        user_position.setText(text_position);
+        user_name.setText(String.valueOf(user.getName()));
+        if(user.equals(user)){
+            user_name.setTextColor(COLOR_GOLD);
+            user_name.setTypeface(user_name.getTypeface(), Typeface.BOLD);
         }
-        player_score.setText(String.valueOf(player.getScore()));
+        user_score.setText(String.valueOf(user.getMaxScoreInGame()));
 
         return view;
     }

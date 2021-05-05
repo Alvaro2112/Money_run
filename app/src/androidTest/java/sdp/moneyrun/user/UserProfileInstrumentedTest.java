@@ -1,4 +1,4 @@
-package sdp.moneyrun.player;
+package sdp.moneyrun.user;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +21,8 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -33,27 +34,27 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class PlayerProfileInstrumentedTest {
+public class UserProfileInstrumentedTest {
 
     private Intent getStartIntent() {
-        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), PlayerProfileActivity.class);
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                ,  0, 0,0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
     }
 
     @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+    public ActivityScenarioRule<UserProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
     @Rule
-    public ActivityScenarioRule<PlayerProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
+    public ActivityScenarioRule<UserProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
 
 
     @Test
     public void checkButtonOpenRightActivities() throws Throwable {
-        Player currentUser = new Player(999, "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                , 0, 0,0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(toStart)) {
@@ -64,37 +65,38 @@ public class PlayerProfileInstrumentedTest {
             Espresso.onView(ViewMatchers.withId(R.id.profile_button)).perform(ViewActions.click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-            intended(hasComponent(PlayerProfileActivity.class.getName()));
+            intended(hasComponent(UserProfileActivity.class.getName()));
             Intents.release();
         }
     }
 
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists() {
-        //TODO: find a way to put info into result array in PlayerProfileActivity
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        //TODO: find a way to put info into result array in UserProfileActivity
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             String name = "John";
             String address = "New York";
             int diedN = 0;
             int playedN = 5;
-            Player user = new Player(12345);
+            User user = new User(12345);
             user.setName(name);
             user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> {
-                ((PlayerProfileActivity) a).setDisplayedTexts(user);
+                a.setDisplayedTexts(user);
             });
+
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Player has died 0 many times")));
+                    .check(matches(withText("User has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Player has played 5 many games")));
+                    .check(matches(withText("User has played 5 many games")));
             Espresso.onView(withId(R.id.playerAddress))
-                    .check(matches(withText("Player address : New York")));
+                    .check(matches(withText("User address : New York")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText("Player name : John")));
+                    .check(matches(withText("User name : John")));
             Intents.release();
         }
     }
@@ -102,7 +104,7 @@ public class PlayerProfileInstrumentedTest {
     @Test
     public void checkNoInfoDisplayedWhenPlayerDoesNotExist() {
 
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(PlayerProfileActivity.class)) {
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.playerEmptyMessage))
                     .perform(click())
@@ -113,7 +115,7 @@ public class PlayerProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
-        try (ActivityScenario<PlayerProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
 

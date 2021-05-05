@@ -92,7 +92,7 @@ dependencies {
 
     //Mockito
     testImplementation 'org.mockito:mockito-core:3.7.7'
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    androidTestImplementation 'junit:junit:4.12'
 
 }
 

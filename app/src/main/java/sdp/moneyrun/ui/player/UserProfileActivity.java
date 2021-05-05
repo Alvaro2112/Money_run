@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.R;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
-public class PlayerProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
     public TextView playerName;
     public TextView playerAddress;
     public TextView playerDiedGames;
@@ -31,10 +31,10 @@ public class PlayerProfileActivity extends AppCompatActivity {
         goBackToMain = findViewById(R.id.goBackToMainMenu);
 
         Intent playerIntent = getIntent();
-        Player user = (Player) playerIntent.getSerializableExtra("user");
+        User user = (User) playerIntent.getSerializableExtra("user");
 
         goBackToMain.setOnClickListener(v -> {
-            Intent mainMenuIntent = new Intent(PlayerProfileActivity.this, MenuActivity.class);
+            Intent mainMenuIntent = new Intent(UserProfileActivity.this, MenuActivity.class);
             mainMenuIntent.putExtra("user", user);
             startActivity(mainMenuIntent);
             finish();
@@ -43,15 +43,15 @@ public class PlayerProfileActivity extends AppCompatActivity {
         setDisplayedTexts(user);
     }
 
-    public void setDisplayedTexts(Player user) {
+    public void setDisplayedTexts(User user) {
         if (user == null) {
             playerIsEmptyText.setAllCaps(true);
             playerIsEmptyText.setText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER");
         } else {
-            playerName.setText("Player name : " + user.getName());
-            playerAddress.setText("Player address : " + user.getAddress());
-            playerDiedGames.setText("Player has died " + user.getNumberOfDiedGames() + " many times");
-            playerPlayedGames.setText("Player has played " + user.getNumberOfPlayedGames() + " many games");
+            playerName.setText("User name : " + user.getName());
+            playerAddress.setText("User address : " + user.getAddress());
+            playerDiedGames.setText("User has died " + user.getNumberOfDiedGames() + " many times");
+            playerPlayedGames.setText("User has played " + user.getNumberOfPlayedGames() + " many games");
         }
     }
 }

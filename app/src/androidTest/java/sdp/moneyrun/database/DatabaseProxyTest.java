@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,17 +18,25 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+    private final long ASYNC_CALL_TIMEOUT = 5L;
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
     @Test
     public void getPlayerFromDatabase() throws Throwable {
-
-        final Player player = new Player(1236, "Johann", "FooBarr", 0, 0,0);
+        FirebaseDatabase.getInstance().goOffline();
+        final Player player = new Player(1236, "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(player);
         try {
@@ -48,6 +57,7 @@ public class DatabaseProxyTest {
         while(!testTask.isComplete()){
             System.out.println("false");
         }
+        FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -70,7 +80,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a","b",0,0,0);
+        Player player = new Player(1, "a",0);
         db.addPlayerListener(player, null);
     }
 
@@ -78,7 +88,7 @@ public class DatabaseProxyTest {
     public void addPlayerListenerCorrectlyUpdates(){
         CountDownLatch added = new CountDownLatch(1);
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player(564123, "Johann", "FooBarr", 0, 0,0);
+        Player player = new Player(564123, "Johann",0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         dataB.setValue(player).addOnCompleteListener(task -> added.countDown());
@@ -94,9 +104,11 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-
+                System.out.println("Got there ");
                 player.setName(p.getName());
-                received.countDown();
+                if(p.getName().equals(newName)) {
+                    received.countDown();
+                }
             }
 
             @Override
@@ -106,7 +118,7 @@ public class DatabaseProxyTest {
         };
         db.addPlayerListener(player, listener);
 
-        Player p = new Player(564123,newName,"FooBarr",0,0,0);
+        Player p = new Player(564123,newName,0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -121,9 +133,9 @@ public class DatabaseProxyTest {
 //            e.printStackTrace();
 //            assert(false);
 //        }
+        System.out.println("End of path and received is " + received.getCount());
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -146,7 +158,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a","b",0,0,0);
+        Player player = new Player(1, "a", 0);
         db.removePlayerListener(player, null);
     }
 

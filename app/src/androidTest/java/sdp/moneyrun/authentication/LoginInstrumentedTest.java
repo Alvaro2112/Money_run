@@ -16,23 +16,27 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -51,6 +55,13 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 
 public class LoginInstrumentedTest {
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     private final String TAG = LoginActivity.class.getSimpleName();
 
@@ -172,7 +183,7 @@ public class LoginInstrumentedTest {
             Intents.init();
             String email = "logintest@epfl.ch";
             String password = "login123456789";
-            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+            AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
             scenario.onActivity(activity -> {
@@ -186,7 +197,7 @@ public class LoginInstrumentedTest {
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database
-                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.set(new User(playerId));
                                 playerUserRef.get().setName("Bob");
                                 playerUserRef.get().setAddress("Somewhere");
                             }
@@ -200,10 +211,10 @@ public class LoginInstrumentedTest {
                 Intents.init();
             }
 
-            Player playerUser = playerUserRef.get();
+            User playerUser = playerUserRef.get();
 
-            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            db.putPlayer(playerUser);
+            UserDatabaseProxy db = new UserDatabaseProxy();
+            db.putUser(playerUser);
 
             try {
                 Thread.sleep(4000);
@@ -224,7 +235,7 @@ public class LoginInstrumentedTest {
             }
 
             intended(hasComponent(MenuActivity.class.getName()));
-            db.removePlayer(playerUser);
+            db.removeUser(playerUser);
             Intents.release();
         }
     }
@@ -238,7 +249,7 @@ public class LoginInstrumentedTest {
             Intents.init();
             String email = "logintest@epfl.ch";
             String password = "login123456789";
-            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+            AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
             scenario.onActivity(activity -> {
@@ -252,7 +263,7 @@ public class LoginInstrumentedTest {
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database
-                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.set(new User(playerId));
                                 playerUserRef.get().setName("Bob");
                                 playerUserRef.get().setAddress("Somewhere");
                             }
@@ -266,10 +277,10 @@ public class LoginInstrumentedTest {
                 Intents.init();
             }
 
-            Player playerUser = playerUserRef.get();
+            User playerUser = playerUserRef.get();
 
-            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            db.removePlayer(playerUser);
+            UserDatabaseProxy db = new UserDatabaseProxy();
+            db.removeUser(playerUser);
 
             try {
                 Thread.sleep(4000);
@@ -284,7 +295,7 @@ public class LoginInstrumentedTest {
 
             Thread.sleep(4000);
 
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -301,7 +312,7 @@ public class LoginInstrumentedTest {
             Intents.init();
             String email = "logintest@epfl.ch";
             String password = "login123456789";
-            AtomicReference<Player> playerUserRef = new AtomicReference<>();
+            AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
             scenario.onActivity(activity -> {
@@ -315,7 +326,7 @@ public class LoginInstrumentedTest {
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database
-                                playerUserRef.set(new Player(playerId));
+                                playerUserRef.set(new User(playerId));
                                 playerUserRef.get().setName("Bob");
                                 playerUserRef.get().setAddress("Somewhere");
                             }
@@ -324,10 +335,10 @@ public class LoginInstrumentedTest {
 
             Thread.sleep(5000);
 
-            Player playerUser = playerUserRef.get();
+            User playerUser = playerUserRef.get();
 
-            PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            db.putPlayer(playerUser);
+            UserDatabaseProxy db = new UserDatabaseProxy();
+            db.putUser(playerUser);
 
             Thread.sleep(4000);
 
@@ -348,7 +359,7 @@ public class LoginInstrumentedTest {
             assertNull(FirebaseAuth.getInstance().getCurrentUser());
             intended(hasComponent(LoginActivity.class.getName()));
 
-            db.removePlayer(playerUser);
+            db.removeUser(playerUser);
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -361,7 +372,7 @@ public class LoginInstrumentedTest {
             Intents.init();
             Espresso.onView(withId(R.id.guestButton)).perform(ViewActions.click());
             Thread.sleep(4000);
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         }catch (Exception e){
             fail();

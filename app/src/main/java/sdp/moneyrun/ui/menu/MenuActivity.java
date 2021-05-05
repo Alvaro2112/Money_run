@@ -32,7 +32,9 @@ import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
-import sdp.moneyrun.ui.player.PlayerProfileActivity;
+import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.user.User;
 
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,7 +48,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private int tasksFinished;
     private Player currentPlayer;
     private int tasksFInished;
-    private Player user;
+    private User user;
+
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
 
@@ -94,7 +97,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     public void runFunctionalities(){
         //Setting the current player object
-        user = (Player) getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("user");
         if(user == null){
             throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
         }
@@ -136,7 +139,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
         if(user != null){
-            mainIntent.putExtra("playerId", user.getPlayerId());
+            mainIntent.putExtra("playerId", user.getUserId());
         }
         MenuActivity.this.startActivity(mainIntent);
         MenuActivity.this.finish();
@@ -218,14 +221,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.profile_button: {
-                onButtonSwitchToActivity(PlayerProfileActivity.class, false);
+                onButtonSwitchToActivity(UserProfileActivity.class, false);
                 break;
             }
 
-            case R.id.leaderboard_button: {
-                onButtonSwitchToActivity(LeaderboardActivity.class, false);
-                break;
-            }
 
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
@@ -244,7 +243,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 

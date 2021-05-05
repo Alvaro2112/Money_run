@@ -44,9 +44,9 @@
         <activity
             android:name=".ui.authentication.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".ui.player.PlayerProfileActivity" />
+        <activity android:name=".ui.player.UserProfileActivity" />
         <activity
-            android:name=".ui.authentication.RegisterPlayerActivity"
+            android:name=".ui.authentication.RegisterUserActivity"
             android:label="Register Player" />
         <activity android:name=".ui.game.GameLobbyActivity" />
     </application>
