@@ -40,7 +40,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-        addQuitLobbyButton();
         addAdapter();
         playerInGame = 1;
         playerMissingView = findViewById(R.id.lobby_players_missing_TextView);
@@ -52,14 +51,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     }
 
-
-    public void addQuitLobbyButton(){
-        findViewById(R.id.leave_lobby_button).setOnClickListener(v ->  {
-            startActivity(new Intent(getApplicationContext(), MenuActivity.class));
-            finish();
-        });
-
-    }
+    
     public LobbyPlayerListAdapter getListAdapter(){
         return listAdapter;
     }
