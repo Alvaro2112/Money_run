@@ -51,7 +51,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     }
 
-    
+
     public LobbyPlayerListAdapter getListAdapter(){
         return listAdapter;
     }
