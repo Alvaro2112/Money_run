@@ -15,17 +15,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
 public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
 
-    private ArrayList<Player> playerList = new ArrayList<>();
+    private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
-    private Player user;
+    private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -33,10 +33,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_leaderboard);
 
-        user = (Player) getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("user");
 
         addAdapter();
-        addPlayersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
+        addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
     }
 
     /**
@@ -47,29 +47,29 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @return the player list
+     * @return the user list
      */
-    public ArrayList<Player> getPlayerList(){
-        return playerList;
+    public ArrayList<User> getUserList(){
+        return userList;
     }
 
-    public int getMaxPlayerNumber(){
+    public int getMaxUserNumber(){
         return NUM_PLAYERS_LEADERBOARD;
     }
 
 
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
-        ldbAdapter = new MainLeaderboardListAdapter(this, playerList, user);
+        ldbAdapter = new MainLeaderboardListAdapter(this, userList, user);
         ListView ldbView = findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
         ldbAdapter.clear();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void addPlayersToLeaderboard(int n){
-        PlayerDatabaseProxy dp = new PlayerDatabaseProxy();
-        dp.getLeaderboardPlayers(n).addOnCompleteListener(task -> {
+    private void addUsersToLeaderboard(int n){
+        UserDatabaseProxy dp = new UserDatabaseProxy();
+        dp.getLeaderboardUsers(n).addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 Log.e("firebase", "Error getting data", task.getException());
             } else {
@@ -79,9 +79,9 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 }
 
                 for (DataSnapshot dataSnapshot : result.getChildren()) {
-                    Player player = dataSnapshot.getValue(Player.class);
-                    if(player != null){
-                        addPlayer(player);
+                    User user = dataSnapshot.getValue(User.class);
+                    if(user != null){
+                        addUser(user);
                     }
                 }
             }
@@ -89,47 +89,47 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @param playerList: players to be added to the leaderboard
-     *  Adds players to leaderboard
+     * @param userList: users to be added to the leaderboard
+     *  Adds users to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addPlayerList(List<Player> playerList){
-        if(playerList == null){
-            throw new NullPointerException("player list should not be null.");
+    public void addUserList(List<User> userList){
+        if(userList == null){
+            throw new NullPointerException("user list should not be null.");
         }
 
-        ldbAdapter.addAll(playerList);
-        ArrayList<Player> players = new ArrayList<>();
+        ldbAdapter.addAll(userList);
+        ArrayList<User> users = new ArrayList<>();
         for(int i = 0;i<ldbAdapter.getCount();++i)
-            players.add(ldbAdapter.getItem(i));
+            users.add(ldbAdapter.getItem(i));
         ldbAdapter.clear();
-        bestToWorstPlayer(players);
-        ldbAdapter.addAll(players);
+        bestToWorstUser(users);
+        ldbAdapter.addAll(users);
     }
 
     /**
-     * @param player: player to be added to the leaderboard
-     *  Adds player to leaderboard
+     * @param user: user to be added to the leaderboard
+     *  Adds user to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addPlayer(Player player){
-        if(player == null){
-            throw new IllegalArgumentException("player should not be null.");
+    public void addUser(User user){
+        if(user == null){
+            throw new IllegalArgumentException("user should not be null.");
         }
 
-        List<Player> to_add = new ArrayList<>();
-        to_add.add(player);
-        addPlayerList(to_add);
+        List<User> to_add = new ArrayList<>();
+        to_add.add(user);
+        addUserList(to_add);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<Player >bestToWorstPlayer(List<Player> players){
-        ArrayList<Player> sorted = new ArrayList<>();
-        players.sort((o1, o2) -> {
-            if(o1.getScore() < o2.getScore())
+    public static List<User >bestToWorstUser(List<User> users){
+        ArrayList<User> sorted = new ArrayList<>();
+        users.sort((o1, o2) -> {
+            if(o1.getMaxScoreInGame() < o2.getMaxScoreInGame())
                 return 1;
             return -1;
         });
-        return players;
+        return users;
     }
 }
