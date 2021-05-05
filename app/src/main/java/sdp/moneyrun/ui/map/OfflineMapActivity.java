@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import com.mapbox.mapboxsdk.offline.OfflineRegion;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.BaseMap;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 public class OfflineMapActivity extends BaseMap {
     public static final String JSON_CHARSET = "UTF-8";
@@ -27,10 +30,12 @@ public class OfflineMapActivity extends BaseMap {
     private boolean hasFoundMap = false;
     private Button exitButton;
     private OfflineManager offlineManager;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
+        user = (User) getIntent().getSerializableExtra("user");
 
         createMap(savedInstanceState, R.id.mapView_offline, R.layout.activity_offline_map);
         mapView.getMapAsync(this::onMapReady);
@@ -50,6 +55,9 @@ public class OfflineMapActivity extends BaseMap {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent mainIntent = new Intent(OfflineMapActivity.this, MenuActivity.class);
+                mainIntent.putExtra("user", user);
+                startActivity(mainIntent);
                 finish();
             }
         });

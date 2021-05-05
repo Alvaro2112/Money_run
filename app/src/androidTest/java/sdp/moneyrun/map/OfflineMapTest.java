@@ -1,7 +1,10 @@
 package sdp.moneyrun.map;
 
+import android.content.Intent;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 
@@ -12,17 +15,25 @@ import org.junit.Test;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 public class OfflineMapTest {
+    private Intent getStartIntent() {
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
 
     @Test
     public void closeButtonWorksTest() {
 
-        try (ActivityScenario<OfflineMapActivity> scenario = ActivityScenario.launch(OfflineMapActivity.class)) {
+        try (ActivityScenario<OfflineMapActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             try {
                 Thread.sleep(15000);
@@ -46,7 +57,7 @@ public class OfflineMapTest {
     @Test
     public void downloadsOneMapTest() {
 
-        try (ActivityScenario<OfflineMapActivity> scenario = ActivityScenario.launch(OfflineMapActivity.class)) {
+        try (ActivityScenario<OfflineMapActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
             try {
                 Thread.sleep(30000);

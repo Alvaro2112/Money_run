@@ -1,7 +1,10 @@
 package sdp.moneyrun.map;
 
+import android.content.Intent;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 
@@ -16,6 +19,7 @@ import java.nio.charset.Charset;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -23,9 +27,17 @@ import static org.junit.Assert.assertEquals;
 
 public class OfflineMapDownloaderTest {
 
+    private Intent getStartIntent() {
+        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
     @Test
     public void DownloadsAfterStartingActivityTest() {
-        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
+        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             try {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
@@ -43,7 +55,7 @@ public class OfflineMapDownloaderTest {
     @Test
     public void closeButtonWorksTest() {
 
-        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
+        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             try {
                 Thread.sleep(15000);
@@ -65,7 +77,7 @@ public class OfflineMapDownloaderTest {
 
     @Test
     public void downloadsOneMapTest() {
-        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
+        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) {

@@ -1,6 +1,7 @@
 package sdp.moneyrun.ui.map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,8 @@ import org.json.JSONObject;
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.TrackedMap;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 public class OfflineMapDownloaderActivity extends TrackedMap {
 
@@ -44,6 +47,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     private final int MAX_ZOOM = 15;
     private final int MIN_ZOOM = 9;
     private Button exitButton;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         createMap(savedInstanceState, R.id.mapView_downloader, R.layout.activity_offline_map_downloader);
         setContentView(R.layout.activity_offline_map_downloader);
 
+        user = (User) getIntent().getSerializableExtra("user");
         mapView = findViewById(R.id.mapView_downloader);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this::onMapReady);
@@ -66,6 +71,9 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent mainIntent = new Intent(OfflineMapDownloaderActivity.this, MenuActivity.class);
+                mainIntent.putExtra("user", user);
+                startActivity(mainIntent);
                 finish();
             }
         });
@@ -143,7 +151,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         if (!isEndNotified && !hasStartedDownload) {
             offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
-// Create a bounding box for the offline region
+            // Create a bounding box for the offline region
             LatLng northeast = new LatLng((double)location.getLatitude() + LAT_OFFSET, (double)location.getLongitude() + LONG_OFFSET);
             LatLng southwest = new LatLng((double)location.getLatitude() - LAT_OFFSET, (double)location.getLongitude() - LONG_OFFSET);
 
@@ -151,7 +159,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     .include(northeast) // Northeast
                     .include(southwest) // Southwest
                     .build();
-        // Define the offline region
+            // Define the offline region
             OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
                     mapboxMap.getStyle().getUri(),
                     latLngBounds,
@@ -159,7 +167,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     MAX_ZOOM,
                     OfflineMapDownloaderActivity.this.getResources().getDisplayMetrics().density);
 
-// Set the metadata
+            // Set the metadata
             byte[] metadata;
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -170,7 +178,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                 metadata = null;
             }
 
-// Create the region asynchronously
+            // Create the region asynchronously
             if (metadata != null) {
                 offlineManager.createOfflineRegion(
                         definition,
@@ -200,7 +208,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                                     @Override
                                     public void onError(OfflineRegionError error) {
                                         Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error.getReason(), Toast.LENGTH_SHORT).show();
-
                                     }
 
                                     @Override
