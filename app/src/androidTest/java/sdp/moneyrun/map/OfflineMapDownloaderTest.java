@@ -88,7 +88,7 @@ public class OfflineMapDownloaderTest {
                 offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback(){
                     @Override
                     public void onList(OfflineRegion[] offlineRegions) {
-                        assertEquals(offlineRegions.length == 1,true);
+                        assertEquals(offlineRegions.length ,1);
                         String name;
                         try {
                             name = new JSONObject(new String(offlineRegions[0].getMetadata(), Charset.forName(OfflineMapDownloaderActivity.JSON_CHARSET)))
