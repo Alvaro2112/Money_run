@@ -66,10 +66,18 @@ public class MapInstrumentedTest {
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
-                                LatLng latLng = a.getMapboxMap().getCameraPosition().target;
-                                assertEquals(latLng.getLatitude(), 8.0, 0.1);
-                                assertEquals(latLng.getLongitude(), 8.0, 0.1);
-                                finished.set(true);
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            LatLng latLng = a.getMapboxMap().getCameraPosition().target;
+                                            assertEquals(latLng.getLatitude(), 8.0, 0.1);
+                                            assertEquals(latLng.getLongitude(), 8.0, 0.1);
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+
                             }
                         });
 
@@ -1108,11 +1116,16 @@ public class MapInstrumentedTest {
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
-                                finished.set(true);
-
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
                             }
                         });
-
                         a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
 
                     }
