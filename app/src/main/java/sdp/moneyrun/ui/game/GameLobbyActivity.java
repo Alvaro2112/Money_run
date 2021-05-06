@@ -25,6 +25,7 @@ import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
@@ -37,7 +38,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     private LobbyPlayerListAdapter listAdapter;
     TextView playerMissingView;
     DatabaseProxy dbProxy;
-    private int playerInGame;
     private int missingPlayers;
     private ListView playerListView;
     @Override
@@ -45,14 +45,12 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
-        playerInGame = 1;
         playerMissingView = findViewById(R.id.lobby_players_missing_TextView);
         String default_player_missing = getString(R.string.lobby_player_missing, missingPlayers);
         playerMissingView.setText(default_player_missing);
         gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         runFunctionalities();
-
     }
 
 
@@ -112,11 +110,24 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 });
 
+                findViewById(R.id.launch_game_button).setOnClickListener(v -> {
+
+                    if(game.getHost().equals(user)){
+                        game.setStarted(true, false);
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.putExtra("player", user);
+                        intent.putExtra("gameId", gameId);
+                        intent.putExtra("host", true);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
                 TextView name = (TextView) findViewById(R.id.lobby_title);
                 name.setText(game.getName());
 
                 //Player List is dynamic with DB
-               // TextView playerList = (TextView) findViewById(R.id.player_list_textView);
+                // TextView playerList = (TextView) findViewById(R.id.player_list_textView);
                 TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
                 proxyG.addGameListener(game, new ValueEventListener() {
                     @Override
@@ -126,16 +137,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                                 .getValue(t);
                         listAdapter.clear();
                         addPlayerList(new ArrayList<Player>(newPlayers));
-                        /*
-                        StringBuilder str = new StringBuilder();
-                        String prefix = "";
-                        for(Player p: newPlayers){
-                            str.append(prefix);
-                            prefix = "\n";
-                            str.append(p.getName());
-                        }
-                        playerList.setText(str.toString());
-                         */
                         String newPlayersMissing = getString(R.string.lobby_player_missing,game.getMaxPlayerCount() - newPlayers.size());
 
                         playersMissing.setText(newPlayersMissing);
