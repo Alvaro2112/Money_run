@@ -79,7 +79,7 @@ public class OfflineMapDownloaderTest {
     public void downloadsOneMapTest() {
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             try {
-                Thread.sleep(30000);
+                Thread.sleep(45000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
