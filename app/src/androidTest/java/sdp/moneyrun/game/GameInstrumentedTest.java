@@ -5,6 +5,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,6 +29,7 @@ import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,10 +40,19 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameInstrumentedTest {
-    private  long ASYNC_CALL_TIMEOUT = 5L;
+
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
+
+    private final long ASYNC_CALL_TIMEOUT = 5L;
     private final String DATABASE_GAME = "games";
 
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private final GameDatabaseProxy db = new GameDatabaseProxy();
 
 
@@ -48,7 +60,7 @@ public class GameInstrumentedTest {
 
     public Game getGame(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -64,7 +76,7 @@ public class GameInstrumentedTest {
 
     public GameDbData getGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         int maxPlayerCount = 3;
@@ -79,11 +91,16 @@ public class GameInstrumentedTest {
     @Test
     public void GameIsAddedToDB(){
         Game g = getGame();
+        CountDownLatch added = new CountDownLatch(1);
+        CountDownLatch updated = new CountDownLatch(1);
+        OnCompleteListener addedListener = task -> added.countDown();
         db.putGame(g);
+        db.updateGameInDatabase(g, addedListener);
         try {
-            Thread.sleep(2000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
         String id = g.getId();
 
@@ -107,21 +124,25 @@ public class GameInstrumentedTest {
             }else{
                 fail();
             }
+            updated.countDown();
         });
-        while(!dataTask.isComplete()){
-            System.out.println("false");
-        }
+       try{
+           updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+           assertEquals(0l,updated.getCount());
+       } catch (InterruptedException e) {
+           fail();
+       }
     }
 
     @Test
     public void GameCannotBeAddedTwiceToDB(){
         Game g = getGame();
         db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         String id = g.getId();
         assertEquals(id, db.putGame(g));
     }
@@ -132,11 +153,14 @@ public class GameInstrumentedTest {
     @Test
     public void GamePlayerListChangesWithDB(){
         Game g = getGame();
+        CountDownLatch added = new CountDownLatch(1);
         db.putGame(g);
+        db.updateGameInDatabase(g, task -> added.countDown());
         try {
-            Thread.sleep(2000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, added.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
         String id = g.getId();
 
@@ -144,14 +168,16 @@ public class GameInstrumentedTest {
         if(id.equals("")){
             fail();
         }
+        CountDownLatch readded = new CountDownLatch(1);
         List<Player> players = new ArrayList<>();
-        players.add(new Player(5, "Ron", "Zurich", 3, 4, 0));
-        players.add(new Player(6, "Wisley", "Amsterdam", 3, 4, 0));
-        ref.child(DATABASE_GAME).child(id).child("players").setValue(players);
+        players.add(new Player(5, "Ron", 0));
+        players.add(new Player(6, "Wisley", 0));
+        ref.child(DATABASE_GAME).child(id).child("players").setValue(players).addOnCompleteListener(task -> readded.countDown());
         try {
-            Thread.sleep(2000);
+            readded.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, readded.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
         assertEquals(players, g.getPlayers());
     }
@@ -160,25 +186,32 @@ public class GameInstrumentedTest {
     public void getGameDataSnapshotRetrievesGameFromDB(){
         Game g = getGame();
         db.putGame(g);
+        CountDownLatch added = new CountDownLatch(1);
+        db.putGame(g);
+        db.updateGameInDatabase(g, task -> added.countDown());
         try {
-            Thread.sleep(2000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, added.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
-
         String id = g.getId();
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
             fail();
         }
+        CountDownLatch got = new CountDownLatch(1);
+        CountDownLatch got2 = new CountDownLatch(1);
         Task<DataSnapshot> dataTaskManually = ref.child(DATABASE_GAME).child(id).get();
         Task<DataSnapshot> dataTaskFunction = db.getGameDataSnapshot(id);
         dataTaskManually.addOnCompleteListener(task -> {
             if(task.isSuccessful()){
+                got.countDown();
                 dataTaskFunction.addOnCompleteListener(task2 -> {
                     if(task.isSuccessful()){
                         String manual = task.getResult().toString();
                         String function = task2.getResult().toString();
+                        got2.countDown();
                         assertEquals(manual,function);
                     }
                 });
@@ -187,11 +220,17 @@ public class GameInstrumentedTest {
             }
         });
 
-        while(!dataTaskManually.isComplete()){
-            System.out.println("false");
+        try {
+            got.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, got.getCount());
+        } catch (InterruptedException e) {
+            fail();
         }
-        while(!dataTaskFunction.isComplete()){
-            System.out.println("false");
+        try {
+            got2.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, got2.getCount());
+        } catch (InterruptedException e) {
+            fail();
         }
     }
 
@@ -224,6 +263,44 @@ public class GameInstrumentedTest {
             return;
         }
         fail();
+    }
+
+    @Test
+    public void setIsVisibleSetsItInDB(){
+        Game g = getGame();
+        db.putGame(g);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        g.setIsVisible(false, false);
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        Task<DataSnapshot> task = FirebaseDatabase.getInstance().getReference()
+                .child(DATABASE_GAME)
+                .child(g.getId())
+                .child("isVisible")
+                .get();
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        if(!task.isSuccessful()){
+            fail();
+        }
+        boolean visible = task.getResult().getValue(boolean.class);
+        assertFalse(visible);
+    }
+
+    @Test
+    public void getIsVisibleGetsIt(){
+        Game g = getGame();
+        assertTrue(g.getIsVisible());
     }
 
     @Test
@@ -263,8 +340,8 @@ public class GameInstrumentedTest {
     public void setPlayersSetsPlayersLocally(){
         Game g = getGame();
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
+        Player toAdd = new Player(542, "Iron Man", 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p , false);
@@ -274,8 +351,8 @@ public class GameInstrumentedTest {
     @Test
     public void addPlayerSetsPlayersLocally(){
         Game g = getGame();
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
@@ -286,8 +363,8 @@ public class GameInstrumentedTest {
     @Test
     public void removePlayerSetsPlayersLocally(){
         Game g = getGame();
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
@@ -305,8 +382,8 @@ public class GameInstrumentedTest {
             e.printStackTrace();
         }
         List<Player> p = new ArrayList<>();
-        Player toAdd = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
-        Player toAdd2 = new Player(544, "Pepper Pots", "malibu California", 99, 102, 0);
+        Player toAdd = new Player(542, "Iron Man", 0);
+        Player toAdd2 = new Player(544, "Pepper Pots", 0);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p, false);
@@ -327,8 +404,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man",  0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
@@ -350,8 +427,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
-        Player player = new Player(542, "Iron Man", "malibu California", 99, 102, 0);
+        Player host = new Player(3,"Bob",0);
+        Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
@@ -434,7 +511,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataReturnsGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob", 0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
 
@@ -490,7 +567,7 @@ public class GameInstrumentedTest {
         int updatedValue = 323324;
         double lat = 17.;
         double lon = 18.;
-        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)));
+        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)), true);
 
         CountDownLatch updated = new CountDownLatch(1);
         ValueEventListener listener = new ValueEventListener() {
@@ -512,10 +589,13 @@ public class GameInstrumentedTest {
         };
         GameDatabaseProxy p = new GameDatabaseProxy();
         p.putGame(g);
+        CountDownLatch added = new CountDownLatch(1);
+        p.updateGameInDatabase(g, task -> added.countDown());
         try {
-            Thread.sleep(2000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, added.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+           fail();
         }
         p.addCoinListener(g,listener);
         g.setCoin(0, new Coin(lat,lon, updatedValue));
@@ -525,17 +605,57 @@ public class GameInstrumentedTest {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertEquals(0L, updated.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
-        System.out.println(g.getGameDbData().getCoins().get(0).getValue());
         assertEquals(updatedValue,g.getGameDbData().getCoins().get(0).getValue());
         p.removeCoinListener(g,listener);
     }
 
+    @Test
+    public void setStartedCorrectlyUpdatesDb(){
+        Game g = getGame();
+        CountDownLatch updated = new CountDownLatch(1);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
+                };
+                boolean started = snapshot.child("started").getValue(coinIndicator);
+                if (updated.getCount() == 0L) {
+                    assertEquals(true, started);
+                }
+                updated.countDown();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                assert(false);
+            }
+        };
+        GameDatabaseProxy p = new GameDatabaseProxy();
+        p.putGame(g);
+        g.setStarted(true, false);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        p.addGameListener(g, listener);
+
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, updated.getCount());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Test(expected = IllegalArgumentException.class)
     public void setCoinsThrowsException(){
         Game g = getGame();
-        g.setCoins(null);
+        g.setCoins(null, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -563,7 +683,7 @@ public class GameInstrumentedTest {
     public void getGameFromTaskSnapshotWorksOnEmptyCoinsList(){
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String name = "name";
-        Player host = new Player(3,"Bob", "Epfl",0,0,0);
+        Player host = new Player(3,"Bob",0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));

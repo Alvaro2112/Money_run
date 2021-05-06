@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,14 +21,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 
 public class GameLobbyActivity extends AppCompatActivity {
@@ -36,6 +42,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
 
+    private LobbyPlayerListAdapter listAdapter;
     private Game game;
     private String gameId;
     private Player user;
@@ -45,14 +52,41 @@ public class GameLobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-        gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
+
+        addAdapter();
+
+        gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
+
         this.thisGame = FirebaseDatabase.getInstance().getReference()
-                        .child(this.getString(R.string.database_games)).child(gameId);
+                .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
     }
 
-    private void getGameFromDb(){
+    public LobbyPlayerListAdapter getListAdapter() {
+        return listAdapter;
+    }
+
+    private void addAdapter() {
+        // The adapter lets us add item to a ListView easily.
+        ArrayList<Player> playerList = new ArrayList<>();
+        listAdapter = new LobbyPlayerListAdapter(this, playerList);
+        ListView playerListView = (ListView) findViewById(R.id.lobby_player_list_view);
+        playerListView.setAdapter(listAdapter);
+    }
+
+    /**
+     * @param playerList: players to be added to the leaderboard
+     *                    Adds players to leaderboard
+     */
+    public void addPlayerList(ArrayList<Player> playerList) {
+        if (playerList == null) {
+            throw new NullPointerException("Player list is null");
+        }
+        listAdapter.addAll(playerList);
+    }
+
+    private void getGameFromDb() {
         GameDatabaseProxy proxyG = new GameDatabaseProxy();
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -60,26 +94,35 @@ public class GameLobbyActivity extends AppCompatActivity {
                 setAllFieldsAccordingToGame();
                 listenToIsDeleted();
                 createDeleteOrLeaveButton();
-            }else{
+            } else {
                 Log.e(TAG, task.getException().getMessage());
             }
         });
     }
 
-
-    private void listenToIsDeleted(){
+    private void listenToIsDeleted() {
         if (!user.equals(game.getHost())) {
             thisGame.child(DB_IS_DELETED).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if ((boolean) snapshot.getValue()) {
                         game.removePlayer(user, false);
-                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
-                        finish();
+                        UserDatabaseProxy pdp = new UserDatabaseProxy();
+                        pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    User user = pdp.getUserFromTask(task);
+                                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                                    intent.putExtra("user", user);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
@@ -88,38 +131,46 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
-    private void createDeleteOrLeaveButton(){
-        if(user.equals(game.getHost())){
-           Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
-           leaveButton.setText("Delete");
-           leaveButton.setOnClickListener(getDeleteClickListener());
-        }else{
+    private void createDeleteOrLeaveButton() {
+        if (user.equals(game.getHost())) {
+            Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
+            leaveButton.setText("Delete");
+            leaveButton.setOnClickListener(getDeleteClickListener());
+        } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
         }
     }
 
-    private void setAllFieldsAccordingToGame(){
+    private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
         TextView name = (TextView) findViewById(R.id.lobby_title);
         name.setText(game.getName());
 
+        findViewById(R.id.launch_game_button).setOnClickListener(v -> {
+            if (game.getHost().equals(user)) {
+                game.setStarted(true, false);
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                intent.putExtra("player", user);
+                intent.putExtra("gameId", gameId);
+                intent.putExtra("host", true);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         //Player List is dynamic with DB
-        TextView playerList = (TextView) findViewById(R.id.player_list_textView);
         TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
-        thisGame.child(DB_PLAYERS).addValueEventListener( new ValueEventListener() {
+        thisGame.child(DB_PLAYERS).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
-                List<Player> newPlayers = snapshot.getValue(t);
-                StringBuilder str = new StringBuilder();
-                String prefix = "";
-                for(Player p: newPlayers){
-                    str.append(prefix);
-                    prefix = "\n";
-                    str.append(p.getName());
-                }
-                playerList.setText(str.toString());
-                String newPlayersMissing = "Players missing: " + Integer.toString(game.getMaxPlayerCount() - newPlayers.size());
+                GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
+                };
+                List<Player> newPlayers = snapshot.child(getResources().getString(R.string.database_game_players))
+                        .getValue(t);
+                listAdapter.clear();
+                addPlayerList(new ArrayList<Player>(newPlayers));
+                String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
+
                 playersMissing.setText(newPlayersMissing);
             }
 
@@ -130,37 +181,56 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
     }
 
-    private View.OnClickListener getDeleteClickListener(){
-       return v -> {
+    private View.OnClickListener getDeleteClickListener() {
+        return v -> {
             game.setIsDeleted(true, false);
             thisGame.child(DB_PLAYERS).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>(){};
+                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
                     List<Player> players = snapshot.getValue(t);
-                    if(players.size() == 1){
-                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                        intent.putExtra("user", user);
-                        intent.putExtra("toDelete", game.getId());
-                        startActivity(intent);
-                        finish();
+                    if (players.size() == 1) {
+                        UserDatabaseProxy pdp = new UserDatabaseProxy();
+                        pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    User user = pdp.getUserFromTask(task);
+                                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                                    intent.putExtra("user", user);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            }
+                        });
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
                 }
             });
-       };
+        };
     }
 
-    private View.OnClickListener getLeaveClickListener(){
+    private View.OnClickListener getLeaveClickListener() {
         return v -> {
-            game.removePlayer(user,false);
-            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-            finish();
+            game.removePlayer(user, false);
+            UserDatabaseProxy pdp = new UserDatabaseProxy();
+            pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        User user = pdp.getUserFromTask(task);
+                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
         };
     }
 

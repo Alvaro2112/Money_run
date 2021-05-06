@@ -29,8 +29,6 @@
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" >
-
-
         </activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
@@ -40,16 +38,17 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".ui.map.OfflineMapActivity">
+        </activity>
+        <activity android:name=".ui.map.OfflineMapDownloaderActivity"/>
         <activity
             android:name=".ui.authentication.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".ui.player.PlayerProfileActivity" />
+        <activity android:name=".ui.player.UserProfileActivity" />
         <activity
-            android:name=".ui.authentication.RegisterPlayerActivity"
+            android:name=".ui.authentication.RegisterUserActivity"
             android:label="Register Player" />
-        <activity
-            android:name=".ui.game.GameLobbyActivity">
-        </activity>
+        <activity android:name=".ui.game.GameLobbyActivity" />
     </application>
 
 </manifest>

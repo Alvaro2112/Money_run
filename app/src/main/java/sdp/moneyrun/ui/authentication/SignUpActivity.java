@@ -29,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     //    FirebaseAuth.getInstance().signOut();
         ///////////////////////////////////////////////////
 
-        final Button submitButton = (Button) findViewById(R.id.signUpSubmitButton);
+        final Button submitButton = findViewById(R.id.signUpSubmitButton);
         submitButton.setOnClickListener(clicked -> {
             EditText emailView = findViewById(R.id.signUpEmailText);
             EditText passwordView = findViewById(R.id.signUpPassword);
@@ -85,8 +85,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if(user != null){
-            Intent intent = new Intent (this, RegisterPlayerActivity.class);
-            intent.putExtra("playerId", user.getUid().hashCode());
+            Intent intent = new Intent (this, RegisterUserActivity.class);
+            intent.putExtra("userId", user.getUid().hashCode());
             startActivity(intent);
             finish();
         }

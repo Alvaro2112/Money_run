@@ -27,7 +27,7 @@ import sdp.moneyrun.player.Player;
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
-    private ArrayList<Player> playerList = new ArrayList<>();
+    private final ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
     private Player user;
     private DatabaseProxy db;
@@ -61,7 +61,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this,playerList);
-        ListView ldbView = (ListView) findViewById(R.id.ldblistView);
+        ListView ldbView = findViewById(R.id.ldblistView);
         ldbView.setAdapter(ldbAdapter);
     }
     /**
@@ -125,11 +125,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     public void setDummyPlayers(){
         PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
         String[] dummyPlayerNames = {"Josh","David","Helena","Chris","Bryan"};
-        String[] playerAddresses = {"Ohio","Arizona","Paris","Budapest","Prague"};
         ArrayList<Player> dummies = new ArrayList<>();
         Player dummy1 = new Player(1000000);
         dummy1.setName("James");
-        dummy1.setAddress("Here");
         dummy1.setScore(700);
         try {
             Thread.sleep(1000);
@@ -142,7 +140,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         for(int i = 2; i< 6;++i){
             Player dummy = new Player(i*1000000);
             dummy.setName(dummyPlayerNames[i-1]);
-            dummy.setAddress(playerAddresses[i-1]);
             dummy.setScore(Math.abs(random.nextInt()%1000));
             dummies.add(dummy);
         }

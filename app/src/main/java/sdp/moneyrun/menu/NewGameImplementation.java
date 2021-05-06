@@ -36,11 +36,12 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
-                                 Player user,
+                                 User user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                  FusedLocationProviderClient fusedLocationClient){
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
@@ -120,8 +121,8 @@ public class NewGameImplementation extends MenuImplementation {
         // Build new game given fields filled by user
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
-
-        Game game = new Game(name, user, maxPlayerCount, riddles, coins, new Location(""), true);
+        Player player = new Player(user.getUserId(), user.getName(), 0);
+        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true);
         // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
@@ -143,14 +144,15 @@ public class NewGameImplementation extends MenuImplementation {
             LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             startLocationReference.setValue(locationRep);
         });*/
-        launchLobbyActivity(game.getId());
+        launchLobbyActivity(game.getId(), player);
+
     }
 
 
-    private void launchLobbyActivity(String gameId){
+    private void launchLobbyActivity(String gameId, Player player){
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
-        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), user);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);
         activity.startActivity(lobbyIntent);
         activity.finish();
     }

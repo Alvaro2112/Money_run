@@ -25,6 +25,7 @@ public final class GameDbData {
     private Location startLocation;
     boolean isVisible;
     boolean isDeleted;
+    boolean isStarted;
 
     public GameDbData(String name,
                       Player host,
@@ -56,6 +57,7 @@ public final class GameDbData {
         this.startLocation = startLocation;
         this.isVisible = isVisible;
         this.isDeleted = false;
+        this.isStarted = false;
     }
 
     public GameDbData(GameDbData other){
@@ -70,6 +72,7 @@ public final class GameDbData {
         this.isVisible = other.isVisible;
         this.coins = other.coins;
         this.isDeleted = false;
+        this.isStarted = other.isStarted;
     }
 
     public GameDbData(){}
@@ -80,6 +83,10 @@ public final class GameDbData {
 
     public Player getHost(){
         return host;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
     }
 
     public List<Player> getPlayers() {
@@ -112,6 +119,8 @@ public final class GameDbData {
     public boolean getIsDeleted(){
         return isDeleted;
     }
+
+    public void setIsVisible(boolean b){isVisible = b;}
 
 
     public boolean getIsVisible(){

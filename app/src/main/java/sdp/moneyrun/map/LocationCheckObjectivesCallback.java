@@ -11,23 +11,27 @@ import com.mapbox.android.core.location.LocationEngineResult;
 import java.lang.ref.WeakReference;
 
 import sdp.moneyrun.ui.map.MapActivity;
+import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 
 
 public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
-    private final WeakReference<MapActivity> activityWeakReference;
+    private final WeakReference<TrackedMap> activityWeakReference;
 
     public LocationCheckObjectivesCallback(MapActivity activity) {
-        this.activityWeakReference = new WeakReference<>(activity);
+        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
     }
 
+    public LocationCheckObjectivesCallback(OfflineMapDownloaderActivity activity) {
+        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
+    }
 
 
         /* Updates the location, then checks if near a coin and calls a  function accordingly
         */
     @Override
     public void onSuccess(LocationEngineResult result) {
-        MapActivity activity = activityWeakReference.get();
+        TrackedMap activity = activityWeakReference.get();
 
         if (activity != null) {
             Location location = result.getLastLocation();
@@ -42,7 +46,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
 
     @Override
     public void onFailure(@NonNull Exception exception) {
-        MapActivity activity = activityWeakReference.get();
+        TrackedMap activity = activityWeakReference.get();
         if (activity != null) {
             Toast.makeText(activity, exception.getLocalizedMessage(),
                     Toast.LENGTH_SHORT).show();

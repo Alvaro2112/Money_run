@@ -12,15 +12,19 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Random;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.ui.authentication.RegisterPlayerActivity;
+import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.authentication.SignUpActivity;
 
 import static androidx.test.espresso.action.ViewActions.click;
@@ -34,6 +38,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest {
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     @Test
     public void emailCorrectlyTyped(){
@@ -75,7 +86,7 @@ public class SignUpActivityTest {
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(4000);
-            intended(hasComponent(RegisterPlayerActivity.class.getName()));
+            intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
