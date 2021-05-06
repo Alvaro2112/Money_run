@@ -15,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.sql.Time;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +38,7 @@ public class DatabaseProxyTest {
     }
     @Test
     public void getPlayerFromDatabase() {
-     //   FirebaseDatabase.getInstance().goOffline();
+       FirebaseDatabase.getInstance().goOffline();
         final Player player = new Player(1236, "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         CountDownLatch updated = new CountDownLatch(1);
@@ -47,30 +46,26 @@ public class DatabaseProxyTest {
         CountDownLatch added = new CountDownLatch(1);
         OnCompleteListener listener = task -> added.countDown();
         db.putPlayer(player, listener);
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertThat(added.getCount(), is(0L));
-        }catch (InterruptedException e){
-            fail();
-        }
-
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
         testTask.addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                assert( player.equals(db.getPlayerFromTask(testTask)));
                updated.countDown();
             }else{
+                System.out.println(task.getException());
                 assert (false);
             }
         });
-
+        while(!testTask.isComplete()){
+            System.out.println("false");
+        }
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertEquals(0l, updated.getCount());
         } catch (InterruptedException e) {
             fail();
         }
-        //   FirebaseDatabase.getInstance().goOnline();
+          FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
