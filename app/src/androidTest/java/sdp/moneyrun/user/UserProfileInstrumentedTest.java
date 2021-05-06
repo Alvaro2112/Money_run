@@ -115,6 +115,7 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
+
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
