@@ -3,6 +3,7 @@ package sdp.moneyrun.ui.map;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -24,8 +29,12 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
@@ -57,6 +66,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Button exitButton;
     private Button questionButton;
     private LocalPlayer localPlayer;
+    private String gameId;
+    private Game game;
+    private GameDatabaseProxy proxyG;
+    private final String DATABASE_COIN = "coins";
 
 
     @Override
@@ -66,7 +79,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         playerId = getIntent().getIntExtra("playerId", 0);
         localPlayer = new LocalPlayer();
-
+        gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
+        proxyG = new GameDatabaseProxy();
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
@@ -87,6 +101,35 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         addExitButton();
         addQuestionButton();
+        addCoinsListener();
+    }
+
+
+    /**
+     * Adds a coin listener to the game that updates the map whenever a coin
+     */
+    private void addCoinsListener(){
+        proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                 game = proxyG.getGameFromTaskSnapshot(task);
+                proxyG.addCoinListener(game,new ValueEventListener(){
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>(){};
+                        List<Coin> newCoins = snapshot.child(DATABASE_COIN).getValue(t);
+                        localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
+                        symbolManager.deleteAll();
+                        for(Coin coin : newCoins){
+                            addCoin(coin,false);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(Game.class.getSimpleName(), error.getMessage());
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -293,12 +336,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param coin Adds a coins to the list of remaining coins and adds it to the map
      */
-    public void addCoin(Coin coin) {
+    public void addCoin(Coin coin,boolean addToPlayer) {
         if (coin == null) {
             throw new NullPointerException("added coin cannot be null");
         }
-
-        localPlayer.addLocallyAvailableCoin(coin);
+        if(addToPlayer){
+            localPlayer.addLocallyAvailableCoin(coin);
+        }
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
 
     }
@@ -320,9 +364,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             String default_score = getString(R.string.map_score_text, localPlayer.getScore());
             currentScoreView.setText(default_score);
             //TODO: Inform database
-
+            game.setCoins(localPlayer.toSendToDb());
+            proxyG.updateGameInDatabase(game,null);
         }
-
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 
         for (int i = 0; i < symbols.size(); ++i) {
@@ -331,8 +375,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-
-
     }
 
     public void placeRandomCoins(int number, int radius) {
@@ -346,6 +388,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
             //TODO: Upload to database
         }
+        game.setCoins(localPlayer.toSendToDb());
+        proxyG.updateGameInDatabase(game,null);
     }
 
     /**
