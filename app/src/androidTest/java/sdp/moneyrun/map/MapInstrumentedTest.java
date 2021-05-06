@@ -740,6 +740,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -798,6 +805,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -850,6 +864,12 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
                     break;
                 }
             }
@@ -902,6 +922,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -955,6 +982,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -1007,6 +1041,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -1059,6 +1100,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -1109,6 +1157,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
@@ -1156,6 +1211,13 @@ public class MapInstrumentedTest {
                     assertEquals(-1,2);
                 }
                 if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
                     break;
                 }
             }
