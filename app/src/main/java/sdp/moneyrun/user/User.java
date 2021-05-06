@@ -219,7 +219,7 @@ public class User implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             User user = (User) o;
-            return userId == user.userId &&
+            return userId.equals(user.userId) &&
                     numberOfPlayedGames == user.numberOfPlayedGames &&
                     numberOfDiedGames == user.numberOfDiedGames &&
                     name.equals(user.name) &&
