@@ -114,7 +114,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(10000);
+            Thread.sleep(4000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
@@ -208,15 +208,11 @@ public class GameLobbyActivityInstrumentedTest {
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Thread.sleep(4000);
-          //  onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
-            scenario.onActivity(activity -> {
-                assertEquals( activity.getListAdapter().getCount(), 1);
-
-            });
+            onView(ViewMatchers.withId(R.id.lobby_players_missing_TextView)).check(matches(withText(game.getHost().getName())));
 
             game.setPlayers(players, false);
             Thread.sleep(4000);
-            onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName() + "\n" + justJoined.getName())));
+            onView(ViewMatchers.withId(R.id.lobby_players_missing_TextView)).check(matches(withText(game.getHost().getName() + "\n" + justJoined.getName())));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
