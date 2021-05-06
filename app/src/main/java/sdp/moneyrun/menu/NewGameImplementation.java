@@ -144,8 +144,6 @@ public class NewGameImplementation extends MenuImplementation {
             startLocationReference.setValue(locationRep);
         });*/
         launchLobbyActivity(game.getId());
-
-
     }
 
 

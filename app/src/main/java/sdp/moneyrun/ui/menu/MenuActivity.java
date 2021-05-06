@@ -75,6 +75,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void runFunctionalities(){
         //Setting the current player object
         user = (Player) getIntent().getSerializableExtra("user");
+        /*
+        String toDelete = getIntent().getStringExtra("toDelete");
+        if(toDelete != null){
+            FirebaseDatabase.getInstance().getReference().child("games").child(toDelete).removeValue();
+        }
+        */
         if(user == null){
             throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
         }

@@ -36,6 +36,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
 
+    private Game game;
     private String gameId;
     private Player user;
     private DatabaseReference thisGame;
@@ -55,10 +56,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         GameDatabaseProxy proxyG = new GameDatabaseProxy();
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Game game = proxyG.getGameFromTaskSnapshot(task);
-                setAllFieldsAccordingToGame(game);
-                listenToIsDeleted(game);
-                createDeleteOrLeaveButton(game);
+                this.game = proxyG.getGameFromTaskSnapshot(task);
+                setAllFieldsAccordingToGame();
+                listenToIsDeleted();
+                createDeleteOrLeaveButton();
             }else{
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -66,13 +67,13 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
 
-    private void listenToIsDeleted(Game g){
-        if (!user.equals(g.getHost())) {
+    private void listenToIsDeleted(){
+        if (!user.equals(game.getHost())) {
             thisGame.child(DB_IS_DELETED).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if ((boolean) snapshot.getValue()) {
-                        g.removePlayer(user, false);
+                        game.removePlayer(user, false);
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
@@ -87,20 +88,20 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
-    private void createDeleteOrLeaveButton(Game g){
-        if(user.equals(g.getHost())){
+    private void createDeleteOrLeaveButton(){
+        if(user.equals(game.getHost())){
            Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
            leaveButton.setText("Delete");
-           leaveButton.setOnClickListener(getDeleteClickListener(g));
+           leaveButton.setOnClickListener(getDeleteClickListener());
         }else{
-            findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener(g));
+            findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
         }
     }
 
-    private void setAllFieldsAccordingToGame(Game g){
+    private void setAllFieldsAccordingToGame(){
         //Find all the views and assign them values
         TextView name = (TextView) findViewById(R.id.lobby_title);
-        name.setText(g.getName());
+        name.setText(game.getName());
 
         //Player List is dynamic with DB
         TextView playerList = (TextView) findViewById(R.id.player_list_textView);
@@ -118,7 +119,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     str.append(p.getName());
                 }
                 playerList.setText(str.toString());
-                String newPlayersMissing = "Players missing: " + Integer.toString(g.getMaxPlayerCount() - newPlayers.size());
+                String newPlayersMissing = "Players missing: " + Integer.toString(game.getMaxPlayerCount() - newPlayers.size());
                 playersMissing.setText(newPlayersMissing);
             }
 
@@ -129,9 +130,9 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
     }
 
-    private View.OnClickListener getDeleteClickListener(Game g){
+    private View.OnClickListener getDeleteClickListener(){
        return v -> {
-            g.setIsDeleted(true, false);
+            game.setIsDeleted(true, false);
             thisGame.child(DB_PLAYERS).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -140,9 +141,9 @@ public class GameLobbyActivity extends AppCompatActivity {
                     if(players.size() == 1){
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         intent.putExtra("user", user);
+                        intent.putExtra("toDelete", game.getId());
                         startActivity(intent);
                         finish();
-                        thisGame.removeValue();
                     }
                 }
                 @Override
@@ -153,13 +154,15 @@ public class GameLobbyActivity extends AppCompatActivity {
        };
     }
 
-    private View.OnClickListener getLeaveClickListener(Game g){
+    private View.OnClickListener getLeaveClickListener(){
         return v -> {
-            g.removePlayer(user,false);
+            game.removePlayer(user,false);
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
             finish();
         };
     }
+
+
 }
