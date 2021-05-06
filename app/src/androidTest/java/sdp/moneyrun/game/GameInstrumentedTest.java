@@ -500,7 +500,7 @@ public class GameInstrumentedTest {
         int updatedValue = 323324;
         double lat = 17.;
         double lon = 18.;
-        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)), false);
+        g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)), true);
 
         CountDownLatch updated = new CountDownLatch(1);
         ValueEventListener listener = new ValueEventListener() {

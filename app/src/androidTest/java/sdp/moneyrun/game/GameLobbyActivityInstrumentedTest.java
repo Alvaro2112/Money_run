@@ -94,7 +94,6 @@ public class GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-        System.out.println(id);
 
         try {
             Thread.sleep(4000);
