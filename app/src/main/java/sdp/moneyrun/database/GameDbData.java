@@ -24,6 +24,7 @@ public final class GameDbData {
     private int maxPlayerCount;
     private Location startLocation;
     boolean isVisible;
+    boolean isStarted;
 
     public GameDbData(String name,
                       Player host,
@@ -54,6 +55,7 @@ public final class GameDbData {
         this.maxPlayerCount = maxPlayerCount;
         this.startLocation = startLocation;
         this.isVisible = isVisible;
+        this.isStarted = false;
     }
 
     public GameDbData(GameDbData other){
@@ -67,6 +69,7 @@ public final class GameDbData {
         this.startLocation = other.startLocation;
         this.isVisible = other.isVisible;
         this.coins = other.coins;
+        this.isStarted = other.isStarted;
     }
 
     public GameDbData(){}
@@ -77,6 +80,10 @@ public final class GameDbData {
 
     public Player getHost(){
         return host;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
     }
 
     public List<Player> getPlayers() {

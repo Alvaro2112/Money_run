@@ -1,8 +1,11 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -12,6 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -24,9 +33,15 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
@@ -34,13 +49,16 @@ import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 
 /*
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    public static final double THRESHOLD_DISTANCE = 5.;
+    public static final double THRESHOLD_DISTANCE = 5;
     private static final int GAME_TIME = 10000;
     private static final double ZOOM_FOR_FEATURES = 15.;
     private static int chronometerCounter = 0;
@@ -52,20 +70,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private SymbolLayer symbolLayer;
-    private int playerId;
+    private Player player;
     private TextView currentScoreView;
     private Button exitButton;
     private Button questionButton;
     private LocalPlayer localPlayer;
+    private Game game;
+    private String gameId;
+    private boolean addedCoins = false;
+    public static int COINS_TO_PLACE = 2;
+    private boolean host = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
 
-        playerId = getIntent().getIntExtra("playerId", 0);
-        localPlayer = new LocalPlayer();
+        player = (Player) getIntent().getSerializableExtra("player");
+        gameId = getIntent().getStringExtra("gameId");
+        host = getIntent().getBooleanExtra("host", false);
 
+
+        localPlayer = new LocalPlayer();
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
@@ -87,6 +113,24 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         addExitButton();
         addQuestionButton();
     }
+
+    public void initializeGame(String gameId){
+        GameDatabaseProxy proxyG = new GameDatabaseProxy();
+        proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+            game = proxyG.getGameFromTaskSnapshot(task);
+
+            if(player.equals(game.getHost())){
+                game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
+            }else{
+
+            }
+        } else {
+            Log.e(Game.class.getSimpleName(), task.getException().getMessage());
+        }
+    });
+}
+
 
     /**
      * Add the functionality of leaving the map Activity
@@ -130,7 +174,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)), true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), true);
             enableLocationComponent(style);
 
         });
@@ -152,7 +196,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public int getPlayerId() {
-        return playerId;
+        return player.getPlayerId();
     }
 
     /**
@@ -167,7 +211,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < GAME_TIME) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), playerId, MapActivity.this);
+                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
             }
 
             chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
@@ -335,15 +379,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void placeRandomCoins(int number, int radius) {
-        //TODO: Only if host
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
         for (int i = 0; i < number; i++) {
             Location loc = null;
-            do {
-                loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
-            } while (!isLocationAppropriate(loc));
+            loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
+            System.out.println(localPlayer.getLocallyAvailableCoins().size());
             localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
-            //TODO: Upload to database
         }
     }
 
@@ -356,6 +397,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null) {
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+        }
+
+        if(!addedCoins && host){
+            placeRandomCoins(COINS_TO_PLACE, 6);
+            addedCoins = true;
+            if(gameId != null){
+            initializeGame(gameId);
+            }
         }
     }
 

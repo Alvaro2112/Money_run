@@ -25,6 +25,7 @@ import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
@@ -109,11 +110,24 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 });
 
+                findViewById(R.id.launch_game_button).setOnClickListener(v -> {
+
+                    if(game.getHost().equals(user)){
+                        game.setStarted(true, false);
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        intent.putExtra("player", user);
+                        intent.putExtra("gameId", gameId);
+                        intent.putExtra("host", true);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
                 TextView name = (TextView) findViewById(R.id.lobby_title);
                 name.setText(game.getName());
 
                 //Player List is dynamic with DB
-               // TextView playerList = (TextView) findViewById(R.id.player_list_textView);
+                // TextView playerList = (TextView) findViewById(R.id.player_list_textView);
                 TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
                 proxyG.addGameListener(game, new ValueEventListener() {
                     @Override
