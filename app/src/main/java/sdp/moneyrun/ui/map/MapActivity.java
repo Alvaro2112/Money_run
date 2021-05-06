@@ -78,6 +78,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Game game;
     private String gameId;
     private boolean addedCoins = false;
+    public static int COINS_TO_PLACE = 2;
+    private boolean host = false;
 
 
     @Override
@@ -87,9 +89,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         player = (Player) getIntent().getSerializableExtra("player");
         gameId = getIntent().getStringExtra("gameId");
+        host = getIntent().getBooleanExtra("host", false);
+
 
         localPlayer = new LocalPlayer();
-
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
@@ -381,6 +384,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
+            System.out.println(localPlayer.getLocallyAvailableCoins().size());
             localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
         }
     }
@@ -395,8 +399,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
-        if(!addedCoins){
-            placeRandomCoins(2, 6);
+        if(!addedCoins && host){
+            placeRandomCoins(COINS_TO_PLACE, 6);
             addedCoins = true;
             if(gameId != null){
             initializeGame(gameId);

@@ -82,6 +82,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("player", player);
                         intent.putExtra("gameId", gameId);
+                        intent.putExtra("host", true);
                         startActivity(intent);
                         finish();
                     }

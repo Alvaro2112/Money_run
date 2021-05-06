@@ -87,6 +87,8 @@ public class GameLobbyActivityInstrumentedTest {
         Player host = new Player(3, "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
+        intent.putExtra("host", true);
+
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 
@@ -121,6 +123,7 @@ public class GameLobbyActivityInstrumentedTest {
         Player host = new Player(3, "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
+        intent.putExtra("host", true);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 
@@ -150,7 +153,7 @@ public class GameLobbyActivityInstrumentedTest {
             dataTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
-                    assertEquals(fromDB.getCoins().size(), 2);
+                    assertEquals(fromDB.getCoins().size(), MapActivity.COINS_TO_PLACE);
                 } else {
                     fail();
                 }

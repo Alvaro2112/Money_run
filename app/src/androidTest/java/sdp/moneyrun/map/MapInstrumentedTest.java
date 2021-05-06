@@ -1,9 +1,11 @@
 package sdp.moneyrun.map;
 
+import android.content.Intent;
 import android.location.Location;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
@@ -22,8 +24,10 @@ import java.util.concurrent.CountDownLatch;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -206,10 +210,13 @@ public class MapInstrumentedTest {
 
     @Test
     public void endGameStartsActivity() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Player host = new Player(1234567891, "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             try {
-                Thread.sleep(15000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -700,6 +707,11 @@ public class MapInstrumentedTest {
 
     @Test
     public void placingCoins() {
+
+        Player host = new Player(1234567891, "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             try {
                 Thread.sleep(10000);
