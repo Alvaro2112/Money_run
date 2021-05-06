@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -129,7 +130,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-         //   style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)), true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getResources().getDrawable(R.drawable.coin_image)), true);
             enableLocationComponent(style);
 
         });
