@@ -38,6 +38,9 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".ui.map.OfflineMapActivity">
+        </activity>
+        <activity android:name=".ui.map.OfflineMapDownloaderActivity"/>
         <activity
             android:name=".ui.authentication.LoginActivity"
             android:label="@string/title_activity_login" />

@@ -239,7 +239,6 @@ public class GameLobbyActivityInstrumentedTest {
         intent.putExtra("currentUser", new Player(1234567891, "alex", 0));
 
 
-
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());

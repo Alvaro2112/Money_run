@@ -13,12 +13,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.maps.MapView;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.Game;
@@ -56,40 +58,79 @@ public class MapInstrumentedTest {
 
             float lat = 8f;
             float lon = 8f;
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> {
-                a.moveCameraTo(lat, lon);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            LatLng latLng = a.getMapboxMap().getCameraPosition().target;
+                                            assertEquals(latLng.getLatitude(), 8.0, 0.1);
+                                            assertEquals(latLng.getLongitude(), 8.0, 0.1);
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+
+                        a.moveCameraTo(lat, lon);
+                    }
+                });
             });
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
-            scenario.onActivity(a -> {
-                LatLng latLng = a.getMapboxMap().getCameraPosition().target;
-                assertEquals(latLng.getLatitude(), 8.0, 0.1);
-                assertEquals(latLng.getLongitude(), 8.0, 0.1);
-                System.out.println("LONGITUDE IS " + latLng.getLatitude());
-            });
+        }catch(Exception e){
+            e.printStackTrace();
+            assertEquals(-1,2);
         }
     }
 
     @Test
     public void testSymbolManager() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
             scenario.onActivity(a -> {
-                assertEquals(a.getSymbolManager().getIconAllowOverlap(), true);
-                assertEquals(a.getSymbolManager().getTextAllowOverlap(), true);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        assertEquals(a.getSymbolManager().getIconAllowOverlap(), true);
+                        assertEquals(a.getSymbolManager().getTextAllowOverlap(), true);
+                        finished.set(true);
+                    }
+
+                });
             });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+
         } catch (Exception e) {
             assertEquals(-1, 2);
             e.printStackTrace();
@@ -99,16 +140,29 @@ public class MapInstrumentedTest {
     @Test
     public void locationTracking() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        assertEquals(a.getMapboxMap().getLocationComponent().getCameraMode(), CameraMode.TRACKING);
+                        assertEquals(a.getMapboxMap().getLocationComponent().getRenderMode(), RenderMode.COMPASS);
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
-            scenario.onActivity(a -> {
-                assertEquals(a.getMapboxMap().getLocationComponent().getCameraMode(), CameraMode.TRACKING);
-                assertEquals(a.getMapboxMap().getLocationComponent().getRenderMode(), RenderMode.COMPASS);
-            });
         } catch (Exception e) {
             assertEquals(-1, 2);
             e.printStackTrace();
@@ -119,16 +173,30 @@ public class MapInstrumentedTest {
     @Test
     public void chronometerTest() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        assertFalse(a.getChronometer().isCountDown());
+                        assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
-            scenario.onActivity(a -> {
-                assertFalse(a.getChronometer().isCountDown());
-                assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
-            });
         } catch (Exception e) {
             assertEquals(-1, 2);
             e.printStackTrace();
@@ -138,13 +206,9 @@ public class MapInstrumentedTest {
     @Test
     public void onExplanationNeededWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             ArrayList<String> reasons = new ArrayList<>();
             reasons.add("e");
+
             scenario.onActivity(a -> {
                 a.onExplanationNeeded(reasons);
             });
@@ -158,16 +222,29 @@ public class MapInstrumentedTest {
     @Test
     public void onPermissionResultWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
             boolean granted = true;
+
             scenario.onActivity(a -> {
-                a.onPermissionResult(granted);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        a.onPermissionResult(granted);
+                        finished.set(true);
+                    }
+                });
             });
-            assertEquals(1, 1);
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
         } catch (Exception e) {
             assertEquals(-1, 2);
             e.printStackTrace();
@@ -177,20 +254,34 @@ public class MapInstrumentedTest {
     @Test
     public void addCoinAddsCoinToMap() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
             scenario.onActivity(a -> {
-                Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
-                a.addCoin(coin);
-                Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
-                a.addCoin(coin2);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        Location curloc = a.getCurrentLocation();
+                        Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
+                        a.addCoin(coin);
+                        Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
+                        a.addCoin(coin2);
+                        finished.set(true);
+                    }
+                });
             });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
             try {
-                Thread.sleep(15000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -198,8 +289,8 @@ public class MapInstrumentedTest {
                 assertEquals(2, a.getSymbolManager().getAnnotations().size());
             });
         } catch (Exception e) {
-            assertEquals(-1, 2);
             e.printStackTrace();
+            assertEquals(-1, 2);
         }
     }
 
@@ -208,20 +299,33 @@ public class MapInstrumentedTest {
     public void endGameStartsActivity() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             Intents.init();
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            scenario.onActivity(a -> {
-                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), a);
-            });
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), a);
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             intended(hasComponent(EndGameActivity.class.getName()));
             Intents.release();
         }
@@ -232,10 +336,26 @@ public class MapInstrumentedTest {
 
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
             onView(withId(R.id.new_question)).perform(ViewActions.click());
@@ -256,19 +376,33 @@ public class MapInstrumentedTest {
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+
+                        finished.set(true);
+                    }
+                });
             });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
 
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -285,19 +419,33 @@ public class MapInstrumentedTest {
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                        finished.set(true);
+                    }
+                });
             });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+
 
             onView(withId(R.id.question_choice_2)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -318,15 +466,28 @@ public class MapInstrumentedTest {
             String correctAnswer = "blue";
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                        finished.set(true);
+                    }
+                });
             });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
 
             onView(withId(R.id.question_choice_2)).perform(ViewActions.click());
             try {
@@ -353,10 +514,26 @@ public class MapInstrumentedTest {
 
             String question = "What is the color of the sky";
             String correctAnswer = "blue";
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
@@ -386,10 +563,26 @@ public class MapInstrumentedTest {
     @Test
     public void showScoreWorks() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
             String default_text = "Score: 0";
             Espresso.onView(withId(R.id.map_score_view)).check(matches(withText(default_text)));
@@ -423,10 +616,26 @@ public class MapInstrumentedTest {
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
 
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
             scenario.onActivity(a -> {
@@ -451,10 +660,26 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             Intents.init();
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
             }
 
             onView(withId(R.id.close_map)).perform(ViewActions.click());
@@ -477,19 +702,55 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+
+
+                            }
+                        });
+
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+
+                    }}
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
+
             scenario.onActivity(a -> {
                 assert (!a.isLocationAppropriate(location));
             });
@@ -504,18 +765,55 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+
+                                    }
+
+                                });
+
+
+                            }
+                        });
+
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+
+                    }}
+                });
             });
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 assert (!a.isLocationAppropriate(location));
@@ -532,18 +830,48 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
+                    }
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 assert (!a.isLocationAppropriate(location));
@@ -560,29 +888,55 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
+                    }
+                });
             });
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
                 assert (a.isLocationAppropriate(location));
                 //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -594,18 +948,49 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                        finished.set(true);
+                                    }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
+                    }
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
@@ -622,18 +1007,49 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
+                    }
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
@@ -650,18 +1066,49 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
+                    }
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
@@ -678,18 +1125,47 @@ public class MapInstrumentedTest {
         location.setLatitude(lat);
         location.setLongitude(lon);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
             scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }}
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
@@ -701,19 +1177,49 @@ public class MapInstrumentedTest {
     @Test
     public void placingCoins() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            scenario.onActivity(a -> {
-                a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                            @Override
+                            public void onCameraDidChange(boolean animated) {
+                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                    @Override
+                                    public void onDidFinishRenderingFrame(boolean fully) {
+                                        if(fully){
+                                            finished.set(true);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                    }}
+                });
             });
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
             }
 
             scenario.onActivity(a -> {
