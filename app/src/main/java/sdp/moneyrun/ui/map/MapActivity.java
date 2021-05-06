@@ -85,12 +85,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         gameId = getIntent().getStringExtra("currentGameId");
         if(gameId == null){
             gameId = getIntent().getStringExtra("gameId");
-
         }
         host = getIntent().getBooleanExtra("host", false);
         useDB = getIntent().getBooleanExtra("useDB", false);
 
-         proxyG = new GameDatabaseProxy();
+        proxyG = new GameDatabaseProxy();
 
         localPlayer = new LocalPlayer();
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
@@ -114,7 +113,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         addExitButton();
         addQuestionButton();
         if(useDB){
-            addCoinsListener();
+            addDBProxyGame();
         }
     }
 
@@ -125,45 +124,58 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                 if(player.equals(game.getHost())){
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
+                    addCoinsListener();
                 }else{
-
                 }
             } else {
                 Log.e(Game.class.getSimpleName(), task.getException().getMessage());
             }
         });
     }
-    private  void addCoinsListener(){
-        proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                game = proxyG.getGameFromTaskSnapshot(task);
-
-                proxyG.addCoinListener(game,new ValueEventListener(){
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>(){};
-                        List<Coin> newCoins = snapshot.child(DATABASE_COIN).getValue(t);
-                        if(newCoins == null){
-                            return;
-                        }
-                        localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
-                        symbolManager.deleteAll();
-                        for(Coin coin : newCoins){
-                            addCoin(coin,false);
-                        }
+    private void addDBProxyGame(){
+            proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    game = proxyG.getGameFromTaskSnapshot(task);
+                    if(!host) {
+                        addCoinsListener();
                     }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(Game.class.getSimpleName(), error.getMessage());
-                    }
-                });
+                } else {
+                    Log.e(Game.class.getSimpleName(), task.getException().getMessage());
+                }
+            });
 
 
-            } else {
-                Log.e(Game.class.getSimpleName(), task.getException().getMessage());
-            }
-        });
     }
+    private  void addCoinsListener(){
+
+        proxyG.addCoinListener(game,new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>(){};
+                List<Coin> newCoins = snapshot.getValue(t);
+                if(newCoins == null){
+                    return;
+                }
+                System.out.println("ICICICICICI");
+                System.out.println(localPlayer.getLocallyAvailableCoins().toString());
+                localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
+                System.out.println("ICICICICICI2");
+
+                System.out.println(localPlayer.getLocallyAvailableCoins().toString());
+
+                symbolManager.deleteAll();
+                for(Coin coin : newCoins){
+                    addCoin(coin,false);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(Game.class.getSimpleName(), error.getMessage());
+            }
+
+        });
+
+}
 
 
     /**
@@ -186,7 +198,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
-
             }
         });
     }
@@ -247,9 +258,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } else {
                 Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
             }
-
             chronometer.setFormat("REMAINING TIME " + (GAME_TIME - chronometerCounter));
-
         });
     }
 
@@ -358,10 +367,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 tv.setTextColor(Color.GREEN);
 
                 closePopupListener(correctAnswerPopupWindow, R.id.collect_coin);
-
                 if (coin != null)
                     removeCoin(coin, true);
-
             }
         });
     }
@@ -423,9 +430,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
-            System.out.println(localPlayer.getLocallyAvailableCoins().size());
-
-            localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 0));
+            localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
         }
     }
 

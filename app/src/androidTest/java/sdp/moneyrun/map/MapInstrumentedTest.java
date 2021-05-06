@@ -1271,7 +1271,7 @@ public class MapInstrumentedTest {
 
 
     @Test
-    public void RemovingACoinRemovesCoinFromDBTest() {
+    public void CollectingACoinRemovesCoinFromDBTest() {
             Player host = new Player(3, "Bob", 0);
             Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
             intent.putExtra("player", host);
@@ -1315,7 +1315,6 @@ public class MapInstrumentedTest {
                         break;
                     }
                 }
-
                 final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                 final GameDatabaseProxy db = new GameDatabaseProxy();
                 //FIRST CHECK THAT IT IS INITIALIZED WELL
@@ -1324,7 +1323,6 @@ public class MapInstrumentedTest {
                     if (task.isSuccessful()) {
                         Game fromDB = db.getGameFromTaskSnapshot(task);
                         assertEquals(fromDB.getCoins().size(), 2);
-
                         scenario.onActivity(activity -> {
                             activity.removeCoin(fromDB.getCoins().get(0),true);
                         });
@@ -1351,5 +1349,80 @@ public class MapInstrumentedTest {
 
             }
         }
+
+    @Test
+    public void RemovingACoinFromDBRemovesCoinFromActivityTest() {
+        Player host = new Player(3, "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            final GameDatabaseProxy db = new GameDatabaseProxy();
+            //FIRST CHECK THAT IT IS INITIALIZED WELL
+            Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
+            dataTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Game fromDB = db.getGameFromTaskSnapshot(task);
+                    assertEquals(fromDB.getCoins().size(), 2);
+                    ArrayList<Coin> newCoins =   new ArrayList<Coin>();
+                    newCoins.add(fromDB.getCoins().get(0));
+                    fromDB.setCoins(newCoins,true);
+                    db.updateGameInDatabase(fromDB, null);
+                } else {
+                    fail();
+                }
+            });
+
+            try{
+                Thread.sleep(10000);
+            }catch (Exception e){
+                e.printStackTrace();
+                fail();
+            }
+            System.out.println("OKOKOO");
+            scenario.onActivity(activity -> {
+               assertEquals(1 ,activity.getLocalPlayer().getLocallyAvailableCoins().size());
+            });
+        }
+    }
+
 
 }
