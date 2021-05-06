@@ -35,6 +35,8 @@ public class Game {
     private String id;
     private boolean hasBeenAdded;
 
+
+    //Wether the game has started
     public boolean isStarted() {
         return started;
     }

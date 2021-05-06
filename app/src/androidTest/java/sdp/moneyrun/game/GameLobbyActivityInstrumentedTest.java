@@ -79,13 +79,6 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
 
-    /* @Rule
-     public ActivityScenarioRule<GameLobbyActivity> testRule = new ActivityScenarioRule<>(GameLobbyActivity.class);
- */
-    @Test
-    public void activityStartsProperly() {
-        //assertEquals(Lifecycle.State.RESUMED, testRule.getScenario().getState());
-    }
 
     @Test
     public void StartGameAsHostWorks() {
