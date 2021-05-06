@@ -109,6 +109,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         questionButton = findViewById(R.id.new_question);
 
         addExitButton();
+        addQuestionButton();
     }
 
     public void initializeGame(String gameId){

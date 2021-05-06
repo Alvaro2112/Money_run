@@ -44,8 +44,8 @@ import static org.junit.Assert.fail;
 public class GameLobbyActivityInstrumentedTest {
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -53,15 +53,15 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     private Intent getStartIntent() {
-        Player currentUser = new Player(999, "CURRENT_USER",0);
+        Player currentUser = new Player(999, "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
-        return  toStart;
+        return toStart;
     }
 
-    public Game getGame(){
+    public Game getGame() {
         String name = "LobbyActivityInstrumentedTest";
-        Player host = new Player(3,"Bob",0);
+        Player host = new Player(3, "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -74,9 +74,9 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
 
-   /* @Rule
-    public ActivityScenarioRule<GameLobbyActivity> testRule = new ActivityScenarioRule<>(GameLobbyActivity.class);
-*/
+    /* @Rule
+     public ActivityScenarioRule<GameLobbyActivity> testRule = new ActivityScenarioRule<>(GameLobbyActivity.class);
+ */
     @Test
     public void activityStartsProperly() {
         //assertEquals(Lifecycle.State.RESUMED, testRule.getScenario().getState());
@@ -84,7 +84,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void StartGameAsHostWorks() {
-        Player host = new Player(3,"Bob",0);
+        Player host = new Player(3, "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
@@ -117,8 +117,8 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     @Test
-    public void StartGameAsHosdtWorks() {
-        Player host = new Player(3,"Bob",0);
+    public void InitializeGameAddsCoinsToDB() {
+        Player host = new Player(3, "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
@@ -128,7 +128,6 @@ public class GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-        System.out.println(id);
 
         try {
             Thread.sleep(4000);
@@ -149,10 +148,10 @@ public class GameLobbyActivityInstrumentedTest {
 
             Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
             dataTask.addOnCompleteListener(task -> {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
                     assertEquals(fromDB.getCoins().size(), 2);
-                }else{
+                } else {
                     fail();
                 }
             });
@@ -162,11 +161,8 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
 
-
-
-
     @Test
-    public void nameDisplaysProperly(){
+    public void nameDisplaysProperly() {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -185,11 +181,11 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
     @Test
-    public void playerListUpdatesWithDB(){
+    public void playerListUpdatesWithDB() {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
-        Player justJoined = new Player(3,"justJoined",0);
+        Player justJoined = new Player(3, "justJoined", 0);
         List<Player> players = game.getPlayers();
         players.add(justJoined);
 
@@ -207,7 +203,7 @@ public class GameLobbyActivityInstrumentedTest {
             onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
             game.setPlayers(players, false);
             Thread.sleep(4000);
-            onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName()+"\n"+justJoined.getName())));
+            onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName() + "\n" + justJoined.getName())));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -215,7 +211,7 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
     @Test
-    public void playersMissingDisplaysProperly(){
+    public void playersMissingDisplaysProperly() {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -239,11 +235,11 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
     @Test
-    public void playersMissingUpdatesWithDB(){
+    public void playersMissingUpdatesWithDB() {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
-        Player justJoined = new Player(3,"justJoined",0);
+        Player justJoined = new Player(3, "justJoined", 0);
         List<Player> players = game.getPlayers();
         players.add(justJoined);
 
@@ -288,7 +284,6 @@ public class GameLobbyActivityInstrumentedTest {
         }
         intent.putExtra("currentGameId", id);
         intent.putExtra("currentUser", new Player(1234567891, "alex", 0));
-
 
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {

@@ -542,6 +542,47 @@ public class GameInstrumentedTest {
         p.removeCoinListener(g,listener);
     }
 
+    @Test
+    public void setStartedCorrectlyUpdatesDb(){
+        Game g = getGame();
+        CountDownLatch updated = new CountDownLatch(1);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
+                };
+                boolean started = snapshot.child("started").getValue(coinIndicator);
+                if (updated.getCount() == 0L) {
+                    assertEquals(true, started);
+                }
+                updated.countDown();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                assert(false);
+            }
+        };
+        GameDatabaseProxy p = new GameDatabaseProxy();
+        p.putGame(g);
+        g.setStarted(true, false);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        p.addGameListener(g, listener);
+
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, updated.getCount());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Test(expected = IllegalArgumentException.class)
     public void setCoinsThrowsException(){
         Game g = getGame();

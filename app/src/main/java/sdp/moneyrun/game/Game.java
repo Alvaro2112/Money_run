@@ -34,6 +34,11 @@ public class Game {
     //Aux variables
     private String id;
     private boolean hasBeenAdded;
+
+    public boolean isStarted() {
+        return started;
+    }
+
     private boolean started;
 
     /**

@@ -98,8 +98,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
                         };
-                        GenericTypeIndicator<Boolean> r = new GenericTypeIndicator<Boolean>() {
-                        };
 
                         List<Player> newPlayers = snapshot.child(getResources().getString(R.string.database_game_players))
                                 .getValue(t);
