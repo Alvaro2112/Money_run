@@ -709,7 +709,9 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
                                 a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
@@ -727,7 +729,7 @@ public class MapInstrumentedTest {
 
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
 
-                    }
+                    }}
                 });
             });
             while(true){
@@ -763,7 +765,9 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
                                 a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
@@ -783,7 +787,7 @@ public class MapInstrumentedTest {
 
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
 
-                    }
+                    }}
                 });
             });
             while(true){
@@ -819,6 +823,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -833,6 +838,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
                     }
                 });
             });
@@ -869,6 +875,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -883,6 +890,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
                     }
                 });
             });
@@ -920,6 +928,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -934,6 +943,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
                     }
                 });
             });
@@ -970,6 +980,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -984,6 +995,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
                     }
                 });
             });
@@ -1020,6 +1032,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -1034,6 +1047,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                    }
                     }
                 });
             });
@@ -1069,6 +1083,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
@@ -1083,7 +1098,7 @@ public class MapInstrumentedTest {
                             }
                         });
                         a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                    }}
                 });
             });
             while(true){
@@ -1113,7 +1128,9 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
                             @Override
                             public void onCameraDidChange(boolean animated) {
                                 a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
@@ -1128,7 +1145,7 @@ public class MapInstrumentedTest {
                         });
                         a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
 
-                    }
+                    }}
                 });
             });
             while(true){
