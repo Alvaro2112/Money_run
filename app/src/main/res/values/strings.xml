@@ -42,6 +42,10 @@
     <string name="join_game_lobby_intent_extra_user">currentUser</string>
 
 
+    <string name="lobby_player_missing">Players missing: %1$d</string>
+    <string name="lobby_player_in">Players in lobby:</string>
+
+    <string name="database_open_games">open_games</string>
     <string name="database_games">games</string>
     <string name="database_open_games_is_visible">isVisible</string>
     <string name="database_open_games_game_id">gameId</string>

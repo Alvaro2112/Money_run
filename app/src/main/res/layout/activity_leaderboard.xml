@@ -51,7 +51,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/scrollableContents"
+        android:id="@+id/scrollableContents_leaderboard"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/leaderboard_header"
