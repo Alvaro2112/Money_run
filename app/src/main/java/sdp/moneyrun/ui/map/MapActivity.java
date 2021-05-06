@@ -81,7 +81,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static int COINS_TO_PLACE = 2;
     private boolean host = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -392,6 +391,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param location Used to check if location is near a coin or not
      */
+    @Override
     public void checkObjectives(Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);

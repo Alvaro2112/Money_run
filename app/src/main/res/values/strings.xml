@@ -94,9 +94,19 @@
     <string name="answer_4">D</string>
     <string name="mapbox_access_token">pk.eyJ1IjoibW9uZXlydW4iLCJhIjoiY2ttdnNxMzFuMDgzdTJvbjFwaWRjdmV3ZiJ9.R-YeQNFQsgZurdrzhNEIhA</string>
     <string name="map_score_text">Score: %1$d</string>
+    <string name="offline_end_progress_success">Map downloaded successfully.</string>
+    <string name="offline_map_deleted">Older maps deleted successfully.</string>
+    <string name="no_offline_regions">No downloaded maps.</string>
+    <string name="found_offline_regions">Found one downloaded map.</string>
+    <string name="tile_limit_exceeded">Tile limit exceeded download failed.</string>
+
+    <string name="offline_map_name">offline map</string>
+    <string name="menu_to_offline_map_button">Offline game</string>
+    <string name="menu_to_map_downloader_button">Download map</string>
 
     <string name="user_location_permission_explanation">This app needs location permissions in order to work.</string>
     <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
+    <string name="region_name">Region %1$d</string>
 
     <string name="location_component_fragment_text">User\'s current location on a map fragment</string>
     <string name="end_game_to_menu_button_text">Return to menu</string>
@@ -108,5 +118,11 @@
     <string name="collect_coin">Collect coin</string>
     <string name="continue_run">Continue run</string>
     <string name="CorrectAnswerMessage">You are correct!</string>
+    <string name="title_activity_offline_map">OfflineMapActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 
 </resources>

@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,12 +25,13 @@ import java.util.concurrent.Semaphore;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
-import sdp.moneyrun.ui.map.MapActivity;
-
-
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.map.MapActivity;
+import sdp.moneyrun.ui.map.OfflineMapActivity;
+import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.user.User;
@@ -71,7 +72,28 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         runFunctionalities();
+        addDownloadButton();
+        addOfflineMapButton();
     }
+
+    public void addDownloadButton(){
+        Button download = findViewById(R.id.download_map);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class,false);
+            }});
+    }
+
+    public void addOfflineMapButton(){
+        Button offline_map = findViewById(R.id.offline_map_menu);
+        offline_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonSwitchToActivity(OfflineMapActivity.class,false);
+            }});
+    }
+
 
     public void runFunctionalities(){
         //Setting the current player object

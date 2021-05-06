@@ -51,7 +51,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         runFunctionalities();
-
     }
 
 
