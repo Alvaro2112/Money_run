@@ -1351,7 +1351,7 @@ public class MapInstrumentedTest {
         }
 
     @Test
-    public void RemovingACoinFromDBRemovesCoinFromActivityTest() {
+    public void RemovingACoinFromDBRemovesCoinFromTheMapTest() {
         Player host = new Player(3, "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
@@ -1420,6 +1420,8 @@ public class MapInstrumentedTest {
             System.out.println("OKOKOO");
             scenario.onActivity(activity -> {
                assertEquals(1 ,activity.getLocalPlayer().getLocallyAvailableCoins().size());
+                assertEquals(1 ,activity.symbolManager.getAnnotations().size());
+
             });
         }
     }

@@ -117,6 +117,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * @param gameId The game ID to fetch the game from the DB
+     *    place the coins that have juste been created by placeCoins in the DB
+     *    adds a listener for the coins
+     */
     public void initializeGame(String gameId){
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -132,6 +137,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
         });
     }
+
+    /**
+     * Adds a database proxy to the map
+     * Also adds a coin listener if the user is not host
+     * (It is added in initializeGame for the host
+     */
     private void addDBProxyGame(){
             proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -156,12 +167,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 if(newCoins == null){
                     return;
                 }
-                System.out.println("ICICICICICI");
-                System.out.println(localPlayer.getLocallyAvailableCoins().toString());
                 localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
-                System.out.println("ICICICICICI2");
-
-                System.out.println(localPlayer.getLocallyAvailableCoins().toString());
 
                 symbolManager.deleteAll();
                 for(Coin coin : newCoins){
