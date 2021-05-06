@@ -119,6 +119,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
     }
 
@@ -165,6 +166,7 @@ public class GameLobbyActivityInstrumentedTest {
             });
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
     }
 
@@ -187,13 +189,12 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         }
     }
-
     @Test
-    public void playerListUpdatesWithDB() {
+    public void playerListUpdatesWithDB(){
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
-        Player justJoined = new Player(3, "justJoined", 0);
+        Player justJoined = new Player(3,"justJoined",0);
         List<Player> players = game.getPlayers();
         players.add(justJoined);
 
@@ -204,15 +205,24 @@ public class GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
         }
         intent.putExtra("currentGameId", id);
-        intent.putExtra("currentUser", justJoined);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Thread.sleep(4000);
-            onView(ViewMatchers.withId(R.id.lobby_players_missing_TextView)).check(matches(withText(game.getHost().getName())));
+            //  onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
+            scenario.onActivity(activity -> {
+                assertEquals( activity.getListAdapter().getCount(), 1);
+
+            });
 
             game.setPlayers(players, false);
             Thread.sleep(4000);
-            onView(ViewMatchers.withId(R.id.lobby_players_missing_TextView)).check(matches(withText(game.getHost().getName() + "\n" + justJoined.getName())));
+            scenario.onActivity(activity -> {
+                assertEquals( activity.getListAdapter().getCount(), 2);
+
+            });
+            Thread.sleep(4000);
+
+            //   onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName()+"\n"+justJoined.getName())));
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
