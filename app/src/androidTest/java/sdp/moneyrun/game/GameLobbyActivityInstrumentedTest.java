@@ -16,7 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
@@ -42,6 +44,9 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameLobbyActivityInstrumentedTest {
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
 
     @BeforeClass
     public static void setPersistence() {
@@ -203,7 +208,12 @@ public class GameLobbyActivityInstrumentedTest {
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Thread.sleep(4000);
-            onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
+          //  onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
+            scenario.onActivity(activity -> {
+                assertEquals( activity.getListAdapter().getCount(), 1);
+
+            });
+
             game.setPlayers(players, false);
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName() + "\n" + justJoined.getName())));
@@ -270,6 +280,28 @@ public class GameLobbyActivityInstrumentedTest {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void addPlayerListFailsWhenNull(){
+        exception.expect(RuntimeException.class);
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        String id = gdp.putGame(game);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            scenario.onActivity(a ->{
+                a.addPlayerList(null);
+            });
         }
     }
 

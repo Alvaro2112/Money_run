@@ -43,7 +43,7 @@ public class CoinGenerationHelper {
 
             foundLatitude = y0 + y;
             foundLongitude = x0 + new_x;
-        }while (MapActivity.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < MapActivity.THRESHOLD_DISTANCE);
+        }while (TrackedMap.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < MapActivity.THRESHOLD_DISTANCE);
 
         Location copy = new Location("");
         copy.setLatitude(foundLatitude);
