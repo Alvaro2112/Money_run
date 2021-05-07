@@ -196,7 +196,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return localPlayer;
     }
 
-    public int getPlayerId() {
+    public String getPlayerId() {
         return player.getPlayerId();
     }
 

@@ -7,7 +7,7 @@ import sdp.moneyrun.database.PlayerDatabaseProxy;
 
 public class Player implements Serializable {
 
-    private int playerId;
+    private String playerId;
     private String name;
     private int score;
 
@@ -16,7 +16,7 @@ public class Player implements Serializable {
      */
     public Player(){}
 
-    public Player(int playerId){
+    public Player(String playerId){
         this.playerId = playerId;
     }
 
@@ -27,8 +27,8 @@ public class Player implements Serializable {
      * @param name
      * @throws IllegalArgumentException on empty or null address or name and on player = 0
      */
-    public Player(int playerId, String name, int score){
-        if (playerId == 0 || name == null || name.isEmpty())
+    public Player(String playerId, String name, int score){
+        if (playerId == null || name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;
         this.name = name;
@@ -37,8 +37,8 @@ public class Player implements Serializable {
 
 
     //TODO This constructor should be removed once @Tesa fixes the merge error he created
-    public Player(int playerId, String name, String address){
-        if (playerId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty())
+    public Player(String playerId, String name, String address){
+        if (playerId == null || name == null || name.isEmpty() || address == null ||address.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;
         this.name = name;
@@ -85,7 +85,7 @@ public class Player implements Serializable {
      *
      * @return the unique player id
      */
-    public int getPlayerId() {
+    public String getPlayerId() {
         return playerId;
     }
 
@@ -113,7 +113,7 @@ public class Player implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return playerId == player.playerId &&
+        return playerId.equals(player.playerId) &&
                 name.equals(player.name);
     }
 

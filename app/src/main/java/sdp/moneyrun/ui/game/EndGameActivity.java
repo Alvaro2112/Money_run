@@ -33,7 +33,7 @@ public class EndGameActivity extends AppCompatActivity {
     private int numberOfCollectedCoins;
     private final int gameScore = 0;
     private TextView endText;
-    private int playerId;
+    private String playerId;
     private Button resultButton;
 
     @Override
@@ -43,13 +43,14 @@ public class EndGameActivity extends AppCompatActivity {
         endText = findViewById(R.id.end_game_text);
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
         score = getIntent().getIntExtra("score", 0);
-        playerId = getIntent().getIntExtra("playerId", 0);
+        playerId = getIntent().getStringExtra("playerId");
         updateText(numberOfCollectedCoins, score, true);
 
-        if (playerId != 0) {
+        if (playerId != null) {
             updatePlayer(playerId, gameScore);
             updateUser(playerId, gameScore);
         } else {
+            playerId = "";
             updateText(-1, -1, false);
         }
 
@@ -119,7 +120,7 @@ public class EndGameActivity extends AppCompatActivity {
      * @param playerId  player to update
      * @param gameScore score to be added
      */
-    public Player updatePlayer(int playerId, int gameScore) {
+    public Player updatePlayer(String playerId, int gameScore) {
         final Player player = new Player(playerId, "name", gameScore);
         if (player != null) {
             player.setScore(gameScore, true);
@@ -127,7 +128,7 @@ public class EndGameActivity extends AppCompatActivity {
         return player;
     }
 
-    public void updateUser(int playerId, int gameScore) {
+    public void updateUser(String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
