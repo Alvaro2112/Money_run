@@ -1315,6 +1315,13 @@ public class MapInstrumentedTest {
                         break;
                     }
                 }
+                try {
+                    Thread.sleep(4000);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+
                 final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                 final GameDatabaseProxy db = new GameDatabaseProxy();
                 //FIRST CHECK THAT IT IS INITIALIZED WELL
@@ -1394,6 +1401,13 @@ public class MapInstrumentedTest {
                     break;
                 }
             }
+            try {
+                Thread.sleep(4000);
+            }
+            catch (Exception e){
+                assertEquals(-1,2);
+            }
+
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             final GameDatabaseProxy db = new GameDatabaseProxy();
             //FIRST CHECK THAT IT IS INITIALIZED WELL

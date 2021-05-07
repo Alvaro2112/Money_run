@@ -19,6 +19,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -113,50 +114,44 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         addExitButton();
         addQuestionButton();
         if(useDB){
-            addDBProxyGame();
+        mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+            @Override
+            public void onDidFinishRenderingMap(boolean fully) {
+                if(gameId != null){
+                    initializeGame(gameId);
+                }
+            }
+        });
         }
     }
 
     /**
      * @param gameId The game ID to fetch the game from the DB
-     *    place the coins that have juste been created by placeCoins in the DB
-     *    adds a listener for the coins
+     *    Place the coins if user is host and coins have not been placed yet
+     *     It then finds the game and put the coins in it, the databse is then updated
+     *    finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId){
+
+        if(!addedCoins && host){
+            placeRandomCoins(COINS_TO_PLACE, 6);
+            addedCoins = true;
+        }
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
 
                 if(player.equals(game.getHost())){
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
-                    addCoinsListener();
-                }else{
                 }
+
+                addCoinsListener();
             } else {
-                Log.e(Game.class.getSimpleName(), task.getException().getMessage());
+                Log.e(TAG, task.getException().getMessage());
             }
         });
     }
 
-    /**
-     * Adds a database proxy to the map
-     * Also adds a coin listener if the user is not host
-     * (It is added in initializeGame for the host
-     */
-    private void addDBProxyGame(){
-            proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    game = proxyG.getGameFromTaskSnapshot(task);
-                    if(!host) {
-                        addCoinsListener();
-                    }
-                } else {
-                    Log.e(Game.class.getSimpleName(), task.getException().getMessage());
-                }
-            });
-
-
-    }
     private  void addCoinsListener(){
 
         proxyG.addCoinListener(game,new ValueEventListener(){
@@ -392,7 +387,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             localPlayer.addLocallyAvailableCoin(coin);
         }
         symbolManager.create(new SymbolOptions().withLatLng(new LatLng(coin.getLatitude(), coin.getLongitude())).withIconImage(COIN_ID).withIconSize(ICON_SIZE));
-
     }
 
 
@@ -436,7 +430,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
-            localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
+            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1),true);
+           // localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
         }
     }
 
@@ -451,13 +446,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
-        if(!addedCoins && host){
-            placeRandomCoins(COINS_TO_PLACE, 6);
-            addedCoins = true;
-            if(gameId != null){
-                initializeGame(gameId);
-            }
-        }
     }
 
 
