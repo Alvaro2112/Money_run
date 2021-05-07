@@ -75,7 +75,7 @@ public class GameInstrumentedTest {
 
     public GameDbData getGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob",0);
+        Player host = new Player("3","Bob",0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         int maxPlayerCount = 3;
@@ -388,8 +388,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Player host = new Player(3,"Bob",0);
-        Player player = new Player(542, "Iron Man", 0);
+        Player host = new Player("3","Bob",0);
+        Player player = new Player("542", "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
@@ -472,7 +472,7 @@ public class GameInstrumentedTest {
     @Test
     public void getGameDataReturnsGameData(){
         String name = "name";
-        Player host = new Player(3,"Bob", 0);
+        Player host = new Player("3","Bob", 0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
 
@@ -644,7 +644,7 @@ public class GameInstrumentedTest {
     public void getGameFromTaskSnapshotWorksOnEmptyCoinsList(){
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String name = "name";
-        Player host = new Player(3,"Bob",0);
+        Player host = new Player("3","Bob",0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));

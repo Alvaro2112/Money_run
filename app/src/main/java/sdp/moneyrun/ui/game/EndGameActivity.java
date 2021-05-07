@@ -46,7 +46,7 @@ public class EndGameActivity extends AppCompatActivity {
         playerId = getIntent().getStringExtra("playerId");
         updateText(numberOfCollectedCoins, score, true);
 
-        if (playerId != "") {
+        if (playerId != null) {
             updatePlayer(playerId, gameScore);
             updateUser(playerId, gameScore);
         } else {

@@ -28,9 +28,9 @@ public class GameDbDataTest {
     GameDbData getTestData() {
         String name = "game";
         List<Player> players = new ArrayList<>();
-        Player host = new Player(1, "James", 4);
+        Player host = new Player("1", "James", 4);
         players.add(host);
-        players.add(new Player(2, "Potter", 4));
+        players.add(new Player("2", "Potter", 4));
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         List<Coin> coins = new ArrayList<>();
@@ -51,7 +51,7 @@ public class GameDbDataTest {
         List<Player> players = new ArrayList<>();
         List<Coin> coin = new ArrayList<>();
 
-        Player host = new Player(1, "James",  4);
+        Player host = new Player("1", "James",  4);
         assertThrows(IllegalArgumentException.class, ()->{
             GameDbData g = new GameDbData("name", host, players, 3, null, true, coin);
         });
@@ -61,7 +61,7 @@ public class GameDbDataTest {
     public void constructorFailsOnNullName(){
         assertThrows(IllegalArgumentException.class, ()->{
             List<Player> players = new ArrayList<>();
-            Player host = new Player(1, "James", 4);
+            Player host = new Player("1", "James", 4);
             GameDbData g = new GameDbData(null, host, new ArrayList<Player>(), 3, new Location(""),true ,new ArrayList<>() );
 
         });
@@ -78,7 +78,7 @@ public class GameDbDataTest {
     @Test
     public void constructorFailsOnNullPlayers(){
         assertThrows(IllegalArgumentException.class, ()->{
-            Player host = new Player(1, "James", 4);
+            Player host = new Player("1", "James", 4);
             GameDbData g = new GameDbData("name", host, null, 3, new Location(""), true, new ArrayList<>());
         });
     }
@@ -86,7 +86,7 @@ public class GameDbDataTest {
     @Test
     public void constructorFailsOnNegativeMaxPlayers(){
         List<Player> players = new ArrayList<>();
-        Player host = new Player(1, "James", 4);
+        Player host = new Player("1", "James", 4);
         assertThrows(IllegalArgumentException.class, ()->{
             GameDbData g = new GameDbData("name", host, players, -4, new Location(""), true, new ArrayList<>());
         });
@@ -112,15 +112,15 @@ public class GameDbDataTest {
 
     @Test
     public void getHostReturnsHost(){
-        Player host = new Player(1, "James", 4);
+        Player host = new Player("1", "James", 4);
         assertEquals(host, getTestData().getHost());
     }
 
     @Test
     public void getPlayersReturnsPlayers(){
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "James",  4));
-        players.add(new Player(2, "Potter",  4));
+        players.add(new Player("1", "James",  4));
+        players.add(new Player("2", "Potter",  4));
         assertEquals(players, getTestData().getPlayers());
     }
 
@@ -159,8 +159,8 @@ public class GameDbDataTest {
     public void setPlayersWorksNormally(){
         GameDbData g = getTestData();
         List<Player> players = new ArrayList<>();
-        players.add(new Player(1, "Tony Stark", 4));
-        players.add(new Player(2, "Pepper potts",  4));
+        players.add(new Player("1", "Tony Stark", 4));
+        players.add(new Player("2", "Pepper potts",  4));
         g.setPlayers(players);
         assertEquals(players, g.getPlayers());
     }
@@ -176,20 +176,20 @@ public class GameDbDataTest {
     public void addPlayerFailsOnFullPlayerList(){
         assertThrows(IllegalArgumentException.class, () -> {
             GameDbData g = getTestData();
-            g.addPlayer(new Player(3, "Ron",  4));
-            g.addPlayer(new Player(4, "Wisley",  4));
-            g.addPlayer(new Player(5, "Laura",  4));
+            g.addPlayer(new Player("3", "Ron",  4));
+            g.addPlayer(new Player("4", "Wisley",  4));
+            g.addPlayer(new Player("5", "Laura",  4));
         });
     }
 
     @Test
     public void addPlayerAddsPlayerToList(){
         List<Player> expected = new ArrayList<>();
-        expected.add(new Player(1, "James", 4));
-        expected.add(new Player(2, "Potter", 4));
-        expected.add(new Player(3, "Ron",  4));
+        expected.add(new Player("1", "James", 4));
+        expected.add(new Player("2", "Potter", 4));
+        expected.add(new Player("3", "Ron",  4));
         GameDbData g = getTestData();
-        g.addPlayer(new Player(3, "Ron",  4));
+        g.addPlayer(new Player("3", "Ron",  4));
         assertEquals(expected, g.getPlayers());
     }
 
@@ -206,16 +206,16 @@ public class GameDbDataTest {
         GameDbData g = getTestData();
         g.removePlayer(g.getPlayers().get(0));
         assertThrows(IllegalArgumentException.class, () -> {
-            g.removePlayer(new Player(2, "Potter", 4));
+            g.removePlayer(new Player("2", "Potter", 4));
         });
     }
 
     @Test
     public void removePlayerRemovesPlayerFromList(){
         List<Player> expected = new ArrayList<>();
-        expected.add(new Player(1, "James",  4));
+        expected.add(new Player("1", "James",  4));
         GameDbData g = getTestData();
-        g.removePlayer(new Player(2, "Potter",  4));
+        g.removePlayer(new Player("2", "Potter",  4));
         assertEquals(expected, g.getPlayers());
     }
 
@@ -223,9 +223,9 @@ public class GameDbDataTest {
     public void equalsWorksAsIntended(){
         String name = "game";
         List<Player> players = new ArrayList<>();
-        Player host = new Player(1, "James",  4);
+        Player host = new Player("1", "James",  4);
         players.add(host);
-        players.add(new Player(2, "Potter",  4));
+        players.add(new Player("2", "Potter",  4));
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
         List<Coin> coins = new ArrayList<>();

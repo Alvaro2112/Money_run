@@ -301,7 +301,7 @@ public class MapInstrumentedTest {
 
     @Test
     public void endGameStartsActivity() {
-        Player host = new Player(1234567891, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
@@ -1185,7 +1185,7 @@ public class MapInstrumentedTest {
     @Test
     public void placingCoins() {
 
-        Player host = new Player(1234567891, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);

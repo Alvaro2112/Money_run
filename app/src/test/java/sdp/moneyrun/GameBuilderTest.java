@@ -21,7 +21,7 @@ public class GameBuilderTest {
         assertThrows(IllegalStateException.class, gb::build);
         gb.setName("game test");
         assertThrows(IllegalStateException.class, gb::build);
-        gb.setHost(new Player(1, "James", 4));
+        gb.setHost(new Player("1", "James", 4));
         assertThrows(IllegalStateException.class, gb::build);
         gb.setMaxPlayerCount(1);
         assertThrows(IllegalStateException.class, gb::build);
@@ -34,7 +34,7 @@ public class GameBuilderTest {
     @Test
     public void buildWorksAsExpectedWithNullRiddlesOnly(){
         GameBuilder gb = new GameBuilder();
-        Player host = new Player(1, "James", 4);
+        Player host = new Player("1", "James", 4);
         List<Player> players = new ArrayList<>();
         players.add(host);
 
@@ -51,7 +51,7 @@ public class GameBuilderTest {
     public void buildWorksAsExpectedWithNullPlayersOnly(){
         GameBuilder gb = new GameBuilder();
         gb.setName("game test")
-                .setHost(new Player(1, "James",4))
+                .setHost(new Player("1", "James",4))
                 .setMaxPlayerCount(1)
                 .setCoins(new ArrayList<>())
                 .setStartLocation(new Location(""))
@@ -75,7 +75,7 @@ public class GameBuilderTest {
     @Test
     public void buildWorksAsExpected(){
         GameBuilder gb = new GameBuilder();
-        Player host = new Player(1, "James", 4);
+        Player host = new Player("1", "James", 4);
         List<Player> players = new ArrayList<>();
         players.add(host);
 
