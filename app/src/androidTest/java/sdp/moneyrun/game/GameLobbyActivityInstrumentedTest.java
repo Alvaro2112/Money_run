@@ -58,7 +58,7 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     private Intent getStartIntent() {
-        Player currentUser = new Player(999, "CURRENT_USER", 0);
+        Player currentUser = new Player("999", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
         return toStart;
@@ -66,7 +66,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     public Game getGame() {
         String name = "LobbyActivityInstrumentedTest";
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -82,7 +82,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void StartGameAsHostWorks() {
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -119,7 +119,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void InitializeGameAddsCoinsToDB() {
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -187,7 +187,7 @@ public class GameLobbyActivityInstrumentedTest {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
-        Player justJoined = new Player(3,"justJoined",0);
+        Player justJoined = new Player("3","justJoined",0);
         List<Player> players = game.getPlayers();
         players.add(justJoined);
 
@@ -251,7 +251,7 @@ public class GameLobbyActivityInstrumentedTest {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
-        Player justJoined = new Player(3, "justJoined", 0);
+        Player justJoined = new Player("3", "justJoined", 0);
         List<Player> players = game.getPlayers();
         players.add(justJoined);
 
@@ -317,7 +317,7 @@ public class GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
         }
         intent.putExtra("currentGameId", id);
-        intent.putExtra("currentUser", new Player(1234567891, "alex", 0));
+        intent.putExtra("currentUser", new Player("1234567891", "alex", 0));
 
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {

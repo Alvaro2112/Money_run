@@ -2,6 +2,7 @@ package sdp.moneyrun.database;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +37,16 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         playersRef.child(String.valueOf(player.getPlayerId())).setValue(player);
     }
 
+    public void putPlayer(Player player, OnCompleteListener listener){
+        if(player == null || listener == null){
+            throw new IllegalArgumentException();
+        }
+        playersRef.child(String.valueOf(player.getPlayerId()))
+                .setValue(player)
+                .addOnCompleteListener(listener);
+
+    }
+
     /**
      * Remove a player to the database.
      * @param player the player to be removed in the database
@@ -54,7 +65,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param playerId
      * @return Task containing the player data
      */
-    public Task<DataSnapshot> getPlayerTask(int playerId){
+    public Task<DataSnapshot> getPlayerTask(String playerId){
         Task<DataSnapshot> task = playersRef.child(String.valueOf(playerId)).get();
 
         task.addOnCompleteListener(task1 -> {

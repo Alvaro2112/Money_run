@@ -2,7 +2,6 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,11 +66,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
+    private  long ASYNC_CALL_TIMEOUT = 10L;
 
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
     private Intent getStartIntent() {
-        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -103,7 +103,7 @@ public class MenuActivityTest {
 
     public Game getGame() {
         String name = "JoinGameImplementationTest";
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -137,19 +137,30 @@ public class MenuActivityTest {
 //        GameDatabaseProxy gdp = new GameDatabaseProxy();
 //        Game game = getGame();
 //        gdp.putGame(game);
+//        CountDownLatch added = new CountDownLatch(1);
+//        gdp.updateGameInDatabase(game, task -> added.countDown());
 //        try {
-//            Thread.sleep(2000);
+//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+//            assertEquals(0l, added.getCount());
 //        } catch (InterruptedException e) {
-//            e.printStackTrace();
+//            fail();
 //        }
+//
+//        CountDownLatch gotten = new CountDownLatch(1);
 //        //To get the Button ID of the button corresponding to this Game, we have
 //        //to get all the games in the DB, and find out how many are visible, aka
 //        //how many have buttons since thats how the ids are given out. Tedious but necessary.
-//        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference().child("games").get();
+//        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference()
+//                .child("games")
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    gotten.countDown();
+//                });
 //        try {
-//            Thread.sleep(10000);
+//            gotten.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+//            assertEquals(0l, gotten.getCount());
 //        } catch (InterruptedException e) {
-//            e.printStackTrace();
+//            fail();
 //        }
 //        if(!dbGames.isSuccessful()){
 //            fail();
@@ -181,6 +192,7 @@ public class MenuActivityTest {
 //            fail();
 //        }
 //    }
+
     @Test
     public void CreateGameSendsYouToLobby() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -228,7 +240,7 @@ public class MenuActivityTest {
     @Test
     public void newGamePopupIsDisplayed() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User(3, "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
@@ -352,7 +364,7 @@ public class MenuActivityTest {
     @Test
     public void newGameWorks() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User(3, "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {

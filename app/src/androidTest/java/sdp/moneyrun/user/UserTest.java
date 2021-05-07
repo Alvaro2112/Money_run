@@ -20,7 +20,9 @@ import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.user.User;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class UserTest {
     private final long ASYNC_CALL_TIMEOUT = 10L;
@@ -39,15 +41,17 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         String newAddress = "New Address";
-        int id = 1234567891;
+        String id = "1234567891";
         User player = new User(id, name, address,0 ,0,0);
-        UserDatabaseProxy db = new UserDatabaseProxy();
+        UserDatabaseProxy db = new UserDatabaseProxy();CountDownLatch added = new CountDownLatch(1);
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
+//
+//        try {
+//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+//            assertEquals(0L, added.getCount());
+//        } catch (InterruptedException e) {
+//            fail();
+//        }
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -82,15 +86,12 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         String newName = "New Address";
-        int id = 1234567892;
+        String id = "1234567892";
+
         User player = new User(id, name, address,0,0 ,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
+
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -125,17 +126,13 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int newPlayedGames = 75;
-        int id = 1234567893;
+        String id = "1234567893";
         User player = new User(id, name, address,0,0,0 );
         User player2 = new User(id, name, address,0,0,0 );
 
+
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
 
         ValueEventListener listener =  new ValueEventListener() {
             @Override
@@ -173,16 +170,11 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int newDiedGames = 75;
-        int id = 1234567894;
+        String id = "1234567894";
+
         User player = new User(id, name, address,0,0,0 );
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
-
         ValueEventListener listener =new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -216,16 +208,11 @@ public class UserTest {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
-        int id = 1234567895;
+        String id = "1234567895";
+
         User player = new User(id, name, address,0 ,0,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -258,15 +245,10 @@ public class UserTest {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
-        int id = 1234567896;
+        String id = "1234567896";
         User player = new User(id, name, address,0,0 ,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
 
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -301,15 +283,11 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int score = 75;
-        int id = 1234567897;
+        String id = "1234567897";
+
         User player = new User(id, name, address,0,0,0 );
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            assert(false);
-        }
 
         ValueEventListener listener = new ValueEventListener() {
             @Override

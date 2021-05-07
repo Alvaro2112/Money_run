@@ -60,7 +60,7 @@ public class MapInstrumentedTest {
         }
     }
     private Intent getStartIntent() {
-        Player currentUser = new Player(999, "CURRENT_USER", 0);
+        Player currentUser = new Player("999", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
         return toStart;
@@ -68,7 +68,7 @@ public class MapInstrumentedTest {
 
     public Game getGame() {
         String name = "Game";
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -329,7 +329,7 @@ public class MapInstrumentedTest {
 
     @Test
     public void endGameStartsActivity() {
-        Player host = new Player(1234567891, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
@@ -1212,7 +1212,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void placingCoins() {
-        Player host = new Player(1234567891, "Bob", 0);
+
+        Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", false);
@@ -1272,7 +1273,7 @@ public class MapInstrumentedTest {
 
     @Test
     public void CollectingACoinRemovesCoinFromDBTest() {
-            Player host = new Player(3, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
             Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
             intent.putExtra("player", host);
             intent.putExtra("host", true);
@@ -1359,7 +1360,7 @@ public class MapInstrumentedTest {
 
     @Test
     public void RemovingACoinFromDBRemovesCoinFromTheMapTest() {
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);

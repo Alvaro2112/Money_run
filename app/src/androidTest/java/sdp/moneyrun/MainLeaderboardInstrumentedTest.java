@@ -39,14 +39,14 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void addPlayerWorks(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0,0,0);
+        User user = new User("3","Bob", "Epfl",0,0,0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                User player = new User(123, "Tess", "SomeAdress", 0,0,0);
+                User player = new User("123", "Tess", "SomeAdress", 0,0,0);
                 player.setMaxScoreInGame(8008, false);
                 a.addUser(player);
 
@@ -64,13 +64,13 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void addPLayerAddsPlayerToView(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0,0,0);
+        User user = new User("3","Bob", "Epfl",0,0,0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
                 //Address was not set here before I don't know why
-                User player = new User(123, "Tess", "SomeAdress",0,0,0);
+                User player = new User("123", "Tess", "SomeAdress",0,0,0);
                 player.setMaxScoreInGame(8008, false);
                 a.addUser(player);
                 assertTrue( a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 1);
@@ -84,7 +84,7 @@ public class MainLeaderboardInstrumentedTest {
     public void addPlayerNullThrowsException(){
         exception.expect(RuntimeException.class);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0,0,0);
+        User user = new User("3","Bob", "Epfl",0,0,0);
         intent.putExtra("user", user);
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addUser(null));
@@ -94,17 +94,17 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void AddPlayerListWorks(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0, 0,0);
+        User user = new User("3","Bob", "Epfl",0, 0,0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                User player = new User(123, "Tess", "SomeAdress",0,0,0);
+                User player = new User("123", "Tess", "SomeAdress",0,0,0);
                 player.setMaxScoreInGame(8008, false);
                 //Address was not set here before I don't know why
-                User player2 = new User(12, "Rafa", "SomeAdress", 0,0,0);
+                User player2 = new User("12", "Rafa", "SomeAdress", 0,0,0);
                 player2.setMaxScoreInGame(8001,false);
                 ArrayList<User> list = new ArrayList<>();
                 list.add(player);
@@ -118,18 +118,18 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void AddPlayerListAddsAllPlayerToView(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0,0,0);
+        User user = new User("3","Bob", "Epfl",0,0,0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a ->{
 
                 //Address was not set here before I don't know why
-                User player = new User(123, "Tess", "SomeAdress",0,0,0);
+                User player = new User("123", "Tess", "SomeAdress",0,0,0);
                 player.setMaxScoreInGame(8008, false);
 
                 //Address was not set here before I don't know why
-                User player2 = new User(12, "Rafa", "SomeAdress",0,0,0);
+                User player2 = new User("12", "Rafa", "SomeAdress",0,0,0);
                 player2.setMaxScoreInGame(8001, false);
                 ArrayList<User> list = new ArrayList<>();
                 list.add(player);
@@ -152,7 +152,7 @@ public class MainLeaderboardInstrumentedTest {
     public void addPlayerListThrowsNullException(){
         exception.expect(RuntimeException.class);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User(3,"Bob", "Epfl",0,0,0);
+        User user = new User("3","Bob", "Epfl",0,0,0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
@@ -163,17 +163,17 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void bestToWorstPlayerReturnsSortedPlayerList(){
         ArrayList<User> players = new ArrayList<>();
-        players.add(new User(1,"a0","b",0,0,0));
-        players.add(new User(24,"a1","b",0,0,6));
-        players.add(new User(78,"a2","b",0,0,68));
-        players.add(new User(2,"a3","b",0,0,24));
-        players.add(new User(9,"a4","b",0,0,11));
+        players.add(new User("1","a0","b",0,0,0));
+        players.add(new User("24","a1","b",0,0,6));
+        players.add(new User("78","a2","b",0,0,68));
+        players.add(new User("2","a3","b",0,0,24));
+        players.add(new User("9","a4","b",0,0,11));
         ArrayList<User> players2 = new ArrayList<>();
-        players2.add(new User(78,"a2","b",0,0,68));
-        players2.add(new User(2,"a3","b",0,0,24));
-        players2.add(new User(9,"a4","b",0,0,11));
-        players2.add(new User(24,"a1","b",0,0,6));
-        players2.add(new User(1,"a0","b",0,0,0));
+        players2.add(new User("78","a2","b",0,0,68));
+        players2.add(new User("2","a3","b",0,0,24));
+        players2.add(new User("9","a4","b",0,0,11));
+        players2.add(new User("24","a1","b",0,0,6));
+        players2.add(new User("1","a0","b",0,0,0));
         MainLeaderboardActivity.bestToWorstUser(players);
         assertEquals(players2,players);
     }
@@ -182,7 +182,7 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void testIfEndGamePlayerReceivesSinglePlayerWhenGivenSizeIsOne(){
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
-        Player user = new Player(3,"Bob",0);
+        Player user = new Player("3","Bob",0);
         intent.putExtra("players"+0, user);
         intent.putExtra("numberOfPlayers", 1);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {

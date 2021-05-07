@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,6 +43,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class EndGameInstrumentedTest {
@@ -115,46 +117,45 @@ public class EndGameInstrumentedTest {
     @Test
     public void updatePlayerUpdateScoreTest(){
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            CountDownLatch updated = new CountDownLatch(2);
-            int playerid = 98732;
+            String playerid = "98732";
             final Player player = new Player(playerid, "O",5);
             final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            db.putPlayer(player);
+            CountDownLatch added = new CountDownLatch(1);
+            OnCompleteListener addedListener = task -> added.countDown();
+            db.putPlayer(player, addedListener);
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+                assertThat(added.getCount(), is(0L));
+            }catch (InterruptedException e){
+                fail();
             }
+            CountDownLatch updated = new CountDownLatch(1);
             ValueEventListener listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Player p = snapshot.getValue(Player.class);
-                    updated.countDown();
-                    if(player.getScore() < 35) {
-                        player.setScore(3 * p.getScore() + player.getScore(), false);
-                    }                }
+                    if(p.getScore() == 10) {
+                        assertEquals(p.getScore(),10);
+                        updated.countDown();
+                    }
+                }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     assert(false);
                 }
             };
             scenario.onActivity(a -> {
-                Player p = a.updatePlayer(playerid,10);
-            });
-            db.addPlayerListener(player,listener );
-            try {
-                updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-                assertThat(updated.getCount(), is(0L));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                assert(false);
-            }
+                        Player p = a.updatePlayer(playerid,10);
+                    });
+            db.addPlayerListener(player,listener);
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+
             db.removePlayerListener(player, listener);
 
-            assertEquals(35,player.getScore());
         }
         catch (Exception e){
-            assertEquals(-1,2);
+            fail();
             e.printStackTrace();
         }
     }
@@ -168,7 +169,7 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("score",3);
         endGameIntent.putExtra("numberOfCollectedCoins",2);
 
-        endGameIntent.putExtra("playerId",1234567891);
+        endGameIntent.putExtra("playerId","1234567891");
         try(ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(2).append("coins");

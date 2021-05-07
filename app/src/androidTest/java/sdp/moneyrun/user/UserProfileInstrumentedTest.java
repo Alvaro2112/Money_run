@@ -37,7 +37,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class UserProfileInstrumentedTest {
 
     private Intent getStartIntent() {
-        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 ,  0, 0,0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
@@ -53,7 +53,7 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void checkButtonOpenRightActivities() throws Throwable {
-        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0,0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -80,7 +80,7 @@ public class UserProfileInstrumentedTest {
             String address = "New York";
             int diedN = 0;
             int playedN = 5;
-            User user = new User(12345);
+            User user = new User("12345");
             user.setName(name);
             user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
@@ -115,6 +115,7 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void buttonBackToMenuWorks(){
+
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
             onView(withId(R.id.goBackToMainMenu)).perform(click());
