@@ -46,6 +46,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private Game game;
     private String gameId;
     private Player user;
+    private User actualUser;
     private DatabaseReference thisGame;
 
     @Override
@@ -57,7 +58,10 @@ public class GameLobbyActivity extends AppCompatActivity {
 
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
-
+        actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
+        if(actualUser == null){
+            throw new IllegalStateException("AHHHHHHHH");
+        }
         this.thisGame = FirebaseDatabase.getInstance().getReference()
                 .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
@@ -106,26 +110,20 @@ public class GameLobbyActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if ((boolean) snapshot.getValue()) {
+                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                        if(actualUser == null){
+                            throw new IllegalStateException("FUCK ME");
+                        }
+                        intent.putExtra("user", actualUser);
+                        startActivity(intent);
+                        finish();
                         game.removePlayer(user, false);
-                        UserDatabaseProxy pdp = new UserDatabaseProxy();
-                        pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    User user = pdp.getUserFromTask(task);
-                                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                                    intent.putExtra("user", user);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            }
-                        });
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, error.getMessage());
+                    Log.e(TAG, error.getMessage().toString());
                 }
             });
         }
@@ -165,8 +163,7 @@ public class GameLobbyActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
                 };
-                List<Player> newPlayers = snapshot.child(getResources().getString(R.string.database_game_players))
-                        .getValue(t);
+                List<Player> newPlayers = snapshot.getValue(t);
                 listAdapter.clear();
                 addPlayerList(new ArrayList<Player>(newPlayers));
                 String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
@@ -181,6 +178,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
     }
 
+
     private View.OnClickListener getDeleteClickListener() {
         return v -> {
             game.setIsDeleted(true, false);
@@ -190,23 +188,13 @@ public class GameLobbyActivity extends AppCompatActivity {
                     GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
                     List<Player> players = snapshot.getValue(t);
                     if (players.size() == 1) {
-                        UserDatabaseProxy pdp = new UserDatabaseProxy();
-                        pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    User user = pdp.getUserFromTask(task);
-                                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                                    intent.putExtra("user", user);
-                                    startActivity(intent);
-                                    finish();
-
-                                }
-                            }
-                        });
+                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                        intent.putExtra("user", actualUser);
+                        startActivity(intent);
+                        finish();
+                        game.setIsVisible(false, false);
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
@@ -218,19 +206,10 @@ public class GameLobbyActivity extends AppCompatActivity {
     private View.OnClickListener getLeaveClickListener() {
         return v -> {
             game.removePlayer(user, false);
-            UserDatabaseProxy pdp = new UserDatabaseProxy();
-            pdp.getUserTask(user.getPlayerId()).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        User user = pdp.getUserFromTask(task);
-                        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            });
+            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+            intent.putExtra("user", actualUser);
+            startActivity(intent);
+            finish();
         };
     }
 

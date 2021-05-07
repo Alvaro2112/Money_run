@@ -40,6 +40,7 @@
     <string name="game_player_number_display">%1$d / %2$d</string>
     <string name="join_game_lobby_intent_extra_id">currentGameId</string>
     <string name="join_game_lobby_intent_extra_user">currentUser</string>
+    <string name="join_game_lobby_intent_extra_type_user">UserTypeCurrentUser</string>
 
 
     <string name="lobby_player_missing">Players missing: %1$d</string>

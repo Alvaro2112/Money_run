@@ -153,6 +153,7 @@ public class NewGameImplementation extends MenuImplementation {
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), user);
         activity.startActivity(lobbyIntent);
         activity.finish();
     }

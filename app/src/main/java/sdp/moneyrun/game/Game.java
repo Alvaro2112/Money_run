@@ -27,7 +27,7 @@ public class Game {
     private final String DATABASE_PLAYER = "players";
     private final String DATABASE_COINS = "coins";
     private final String DATABASE_IS_DELETED = "isDeleted";
-    private final String DATABASE_IS_VISIBLE = "isDeleted";
+    private final String DATABASE_IS_VISIBLE = "isVisible";
     private final String DATABASE_STARTED = "started";
     //Attributes
     private final GameDbData gameDbData;
