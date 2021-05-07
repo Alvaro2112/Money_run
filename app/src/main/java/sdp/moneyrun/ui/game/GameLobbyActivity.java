@@ -142,7 +142,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 name.setText(game.getName());
 
                 //Player List is dynamic with DB
-                // TextView playerList = (TextView) findViewById(R.id.player_list_textView);
                 TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
                 proxyG.addGameListener(game, new ValueEventListener() {
                     @Override
@@ -155,9 +154,9 @@ public class GameLobbyActivity extends AppCompatActivity {
                         String newPlayersMissing = getString(R.string.lobby_player_missing,game.getMaxPlayerCount() - newPlayers.size());
 
                         playersMissing.setText(newPlayersMissing);
-                        GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
+                        GenericTypeIndicator<Boolean> startIndicator = new GenericTypeIndicator<Boolean>() {
                         };
-                        boolean started = snapshot.child("started").getValue(coinIndicator);
+                        boolean started = snapshot.child("started").getValue(startIndicator);
                         if(started){
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                             startActivity(intent);
