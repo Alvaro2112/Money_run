@@ -122,9 +122,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                 if(player.equals(game.getHost())){
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
-                }else{
-                    List<Coin> coins = game.getCoins();
-                    List<Coin> localCoins = localPlayer.getLocallyAvailableCoins();
                 }
             }else {
                 Log.e(Game.class.getSimpleName(), task.getException().getMessage());

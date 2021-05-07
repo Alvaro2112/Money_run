@@ -53,7 +53,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         runFunctionalities();
-        //setStartedValueForGameCreation(gameId);
+        setStartedValueForGameCreation(gameId);
     }
 
     private void setStartedValueForGameCreation(String gameId){
@@ -159,10 +159,10 @@ public class GameLobbyActivity extends AppCompatActivity {
                         boolean started = snapshot.child("started").getValue(startIndicator);
                         if(started){
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                            startActivity(intent);
                             UserDatabaseProxy pdp = new UserDatabaseProxy();
                             User user = pdp.getUserFromTask(task);
                             intent.putExtra("user", user);
+                            startActivity(intent);
                         }
                     }
 
