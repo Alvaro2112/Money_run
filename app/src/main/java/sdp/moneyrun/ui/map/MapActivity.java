@@ -117,19 +117,20 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void initializeGame(String gameId){
         GameDatabaseProxy proxyG = new GameDatabaseProxy();
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
-        if (task.isSuccessful()) {
-            game = proxyG.getGameFromTaskSnapshot(task);
+            if (task.isSuccessful()) {
+                game = proxyG.getGameFromTaskSnapshot(task);
 
-            if(player.equals(game.getHost())){
-                game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
-            }else{
-
-            }
-        } else {
-            Log.e(Game.class.getSimpleName(), task.getException().getMessage());
-        }
-    });
-}
+                if(player.equals(game.getHost())){
+                    game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
+                }else{
+                    List<Coin> coins = game.getCoins();
+                    
+                }
+            } else {
+                Log.e(Game.class.getSimpleName(), task.getException().getMessage());
+                }
+        });
+    }
 
 
     /**
@@ -405,6 +406,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if(gameId != null){
             initializeGame(gameId);
             }
+        }
+        if(!host){
+
         }
     }
 
