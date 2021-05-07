@@ -8,7 +8,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 
 public class User implements Serializable {
 
-        private int userId;
+        private String userId;
         private String name;
         private String address;
         private int numberOfPlayedGames;
@@ -40,7 +40,7 @@ public class User implements Serializable {
          */
         public User(){}
 
-        public User(int userId){
+        public User(String userId){
             this.userId = userId;
         }
 
@@ -54,9 +54,9 @@ public class User implements Serializable {
          * @param numberOfPlayedGames
          * @throws IllegalArgumentException on empty or null address or name and on user = 0
          */
-        public User(int userId, String name, String address, int numberOfDiedGames,
+        public User(String userId, String name, String address, int numberOfDiedGames,
                       int numberOfPlayedGames, int maxScoreInGame){
-            if (userId == 0 || name == null || name.isEmpty() || address == null ||address.isEmpty() || maxScoreInGame < 0)
+            if (userId == null || name == null || name.isEmpty() || address == null ||address.isEmpty() || maxScoreInGame < 0)
                 throw new IllegalArgumentException();
             this.userId = userId;
             this.name = name;
@@ -185,7 +185,7 @@ public class User implements Serializable {
          *
          * @return the unique user id
          */
-        public int getUserId() {
+        public String getUserId() {
             return userId;
         }
 
@@ -219,7 +219,7 @@ public class User implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             User user = (User) o;
-            return userId == user.userId &&
+            return userId.equals(user.userId) &&
                     numberOfPlayedGames == user.numberOfPlayedGames &&
                     numberOfDiedGames == user.numberOfDiedGames &&
                     name.equals(user.name) &&

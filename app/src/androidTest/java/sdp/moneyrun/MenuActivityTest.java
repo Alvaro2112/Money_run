@@ -71,7 +71,7 @@ public class MenuActivityTest {
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
     private Intent getStartIntent() {
-        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -103,7 +103,7 @@ public class MenuActivityTest {
 
     public Game getGame() {
         String name = "JoinGameImplementationTest";
-        Player host = new Player(3, "Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -240,7 +240,7 @@ public class MenuActivityTest {
     @Test
     public void newGamePopupIsDisplayed() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User(3, "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
@@ -364,7 +364,7 @@ public class MenuActivityTest {
     @Test
     public void newGameWorks() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User(3, "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
