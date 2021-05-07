@@ -143,7 +143,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            Thread.sleep(20000);
             Intents.release();
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             final GameDatabaseProxy db = new GameDatabaseProxy();

@@ -133,6 +133,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", true);
+                        intent.putExtra("useDB", true);
                         startActivity(intent);
                         finish();
                     }
