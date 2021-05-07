@@ -114,14 +114,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         addExitButton();
         addQuestionButton();
         if(useDB){
-        mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-            @Override
-            public void onDidFinishRenderingMap(boolean fully) {
-                if(gameId != null){
-                    initializeGame(gameId);
+            mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                @Override
+                public void onDidFinishRenderingMap(boolean fully) {
+                    if(gameId != null){
+                        initializeGame(gameId);
+                    }
                 }
-            }
-        });
+            });
         }
     }
 
