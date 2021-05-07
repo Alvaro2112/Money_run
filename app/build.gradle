@@ -93,6 +93,7 @@ dependencies {
     //Mockito
     testImplementation 'org.mockito:mockito-core:3.7.7'
     androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'junit:junit:4.12'
 
 }
 
