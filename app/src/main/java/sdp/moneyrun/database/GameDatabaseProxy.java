@@ -57,12 +57,12 @@ public class GameDatabaseProxy extends DatabaseProxy {
             String id = game.getId();
             if(id == null){
                 id = gamesRef.push().getKey();
-                game.setId(id);
+                if(id == null){
+                    throw new IllegalArgumentException("Could not add game to database, id is null.");
+                }
             }
-            if(id == null){
-                throw new IllegalArgumentException("game id should not be null.");
-            }
-            gamesRef.child(game.getId()).setValue(game.getGameDbData());
+            game.setId(id);
+            gamesRef.child(id).setValue(game.getGameDbData());
             linkPlayersToDB(game);
             linkCoinsToDB(game);
             game.setHasBeenAdded(true);
