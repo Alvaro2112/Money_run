@@ -53,8 +53,21 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         runFunctionalities();
+        //setStartedValueForGameCreation(gameId);
     }
 
+    private void setStartedValueForGameCreation(String gameId){
+        if(gameId==null){
+            GameDatabaseProxy gameDatabaseProxy = new GameDatabaseProxy();
+            gameDatabaseProxy.getGameDataSnapshot(gameId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    Game game = gameDatabaseProxy.getGameFromTaskSnapshot(task);
+                    game.setStarted(false,false);
+                }
+            });
+        }
+    }
 
     public LobbyPlayerListAdapter getListAdapter(){
         return listAdapter;
