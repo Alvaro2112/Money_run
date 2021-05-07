@@ -50,6 +50,7 @@ public class EndGameActivity extends AppCompatActivity {
             updatePlayer(playerId, gameScore);
             updateUser(playerId, gameScore);
         } else {
+            playerId = "";
             updateText(-1, -1, false);
         }
 

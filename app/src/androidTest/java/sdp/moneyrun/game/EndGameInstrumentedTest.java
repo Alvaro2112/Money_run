@@ -169,7 +169,7 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("score",3);
         endGameIntent.putExtra("numberOfCollectedCoins",2);
 
-        endGameIntent.putExtra("playerId",1234567891);
+        endGameIntent.putExtra("playerId","1234567891");
         try(ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(2).append("coins");
