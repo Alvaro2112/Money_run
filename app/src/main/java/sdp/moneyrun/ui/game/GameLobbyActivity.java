@@ -59,9 +59,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
-        if(actualUser == null){
-            throw new IllegalStateException("AHHHHHHHH");
-        }
         this.thisGame = FirebaseDatabase.getInstance().getReference()
                 .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
@@ -111,9 +108,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if ((boolean) snapshot.getValue()) {
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                        if(actualUser == null){
-                            throw new IllegalStateException("FUCK ME");
-                        }
                         intent.putExtra("user", actualUser);
                         startActivity(intent);
                         finish();
