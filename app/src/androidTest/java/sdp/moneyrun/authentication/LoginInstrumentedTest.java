@@ -193,7 +193,7 @@ public class LoginInstrumentedTest {
                                 assertEquals(0, 1);
                             } else {
                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                int playerId = firebaseUser.getUid().hashCode();
+                                String playerId = firebaseUser.getUid();
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database
@@ -259,7 +259,7 @@ public class LoginInstrumentedTest {
                                 assertEquals(0, 1);
                             } else {
                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                int playerId = firebaseUser.getUid().hashCode();
+                                String playerId = firebaseUser.getUid();
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database
@@ -322,7 +322,7 @@ public class LoginInstrumentedTest {
                                 assertEquals(0, 1);
                             } else {
                                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                int playerId = firebaseUser.getUid().hashCode();
+                                String playerId = firebaseUser.getUid();
 
                                 // Build a new instance of player for the user to create a
                                 // valid instance in the database

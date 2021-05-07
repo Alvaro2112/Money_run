@@ -117,7 +117,7 @@ public class EndGameInstrumentedTest {
     @Test
     public void updatePlayerUpdateScoreTest(){
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            int playerid = 98732;
+            String playerid = "98732";
             final Player player = new Player(playerid, "O",5);
             final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             CountDownLatch added = new CountDownLatch(1);
