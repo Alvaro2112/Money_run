@@ -93,7 +93,7 @@ public class GameLobbyActivityInstrumentedTest {
         List<Player> players = game.getPlayers();
         players.add(host);
 
-        String id = gdp.putGame(game); 
+        String id = gdp.putGame(game);  
 
         try {
             Thread.sleep(4000);
