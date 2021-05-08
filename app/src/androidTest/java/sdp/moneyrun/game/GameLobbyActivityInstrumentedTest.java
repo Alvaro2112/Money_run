@@ -93,7 +93,7 @@ public class GameLobbyActivityInstrumentedTest {
         List<Player> players = game.getPlayers();
         players.add(host);
 
-        String id = gdp.putGame(game);
+        String id = gdp.putGame(game); 
 
         try {
             Thread.sleep(4000);
@@ -107,7 +107,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            Thread.sleep(8000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
