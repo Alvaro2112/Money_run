@@ -121,7 +121,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void joinGamePopupIsDisplayed() {
+    public void joinGamePopupIsDisplayed() { 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
