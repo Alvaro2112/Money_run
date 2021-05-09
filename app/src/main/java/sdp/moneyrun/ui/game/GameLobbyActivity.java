@@ -141,6 +141,16 @@ public class GameLobbyActivity extends AppCompatActivity {
                         String newPlayersMissing = getString(R.string.lobby_player_missing,game.getMaxPlayerCount() - newPlayers.size());
 
                         playersMissing.setText(newPlayersMissing);
+                        GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
+                        };
+                        boolean started = snapshot.child("started").getValue(coinIndicator);
+                        if(started){
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            startActivity(intent);
+                            UserDatabaseProxy pdp = new UserDatabaseProxy();
+                            User user = pdp.getUserFromTask(task);
+                            intent.putExtra("user", user);
+                        }
                     }
 
                     @Override
