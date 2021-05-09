@@ -113,11 +113,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         addExitButton();
         addQuestionButton();
+        System.out.println("db is not set?"+useDB);
         if(useDB){
+            System.out.println("Check if we are using DB");
             mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                 @Override
                 public void onDidFinishRenderingMap(boolean fully) {
+                    System.out.println("Checking if Map Rendered");
                     if(gameId != null){
+                        System.out.println("Map Rendered");
                         initializeGame(gameId);
                     }
                 }
@@ -132,8 +136,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *    finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId){
-
+        System.out.println("entered initialize game");
         if(!addedCoins && host){
+            System.out.println("Placing coins");
             placeRandomCoins(COINS_TO_PLACE, 6);
             addedCoins = true;
         }

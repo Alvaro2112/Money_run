@@ -121,8 +121,9 @@ public class GameLobbyActivityInstrumentedTest {
     public void InitializeGameAddsCoinsToDB() {
         Player host = new Player("3", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        intent.putExtra("currentUser", host);
+        intent.putExtra("currentUser", host); 
         intent.putExtra("host", true);
+        intent.putExtra("useDB",true);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 
@@ -143,7 +144,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(20000);
+            Thread.sleep(10000);
             Intents.release();
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             final GameDatabaseProxy db = new GameDatabaseProxy();

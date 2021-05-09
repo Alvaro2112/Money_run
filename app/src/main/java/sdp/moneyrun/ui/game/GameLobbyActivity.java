@@ -128,12 +128,14 @@ public class GameLobbyActivity extends AppCompatActivity {
                 findViewById(R.id.launch_game_button).setOnClickListener(v -> {
 
                     if(game.getHost().equals(user)){
+                        System.out.println("Got the host");
                         game.setStarted(true, false);
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", true);
                         intent.putExtra("useDB", true);
+                        System.out.println("All Extras are set");
                         startActivity(intent);
                         finish();
                     }
