@@ -113,15 +113,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         addExitButton();
         addQuestionButton();
-        System.out.println("db is not set?"+useDB);
         if(useDB){
-            System.out.println("Check if we are using DB");
             mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                 @Override
                 public void onDidFinishRenderingMap(boolean fully) {
-                    System.out.println("Checking if Map Rendered");
                     if(gameId != null){
-                        System.out.println("Map Rendered");
                         initializeGame(gameId);
                     }
                 }

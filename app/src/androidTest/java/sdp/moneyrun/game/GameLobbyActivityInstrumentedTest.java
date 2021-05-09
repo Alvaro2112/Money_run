@@ -121,7 +121,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void InitializeGameAddsCoinsToDB() {
         Player host = new Player("3", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        intent.putExtra("currentUser", host); 
+        intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB",true);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
