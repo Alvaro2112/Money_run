@@ -63,6 +63,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             linkPlayersToDB(game);
             linkCoinsToDB(game);
             game.setHasBeenAdded(true);
+            game.setStarted(false,false);
             return id;
         }
         return game.getId();
