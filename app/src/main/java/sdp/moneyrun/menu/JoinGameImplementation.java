@@ -76,6 +76,11 @@ public class JoinGameImplementation extends MenuImplementation{
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(activity, selfLocation -> {
+                    // If the location cannot be retrieved, do not load the game list.
+                    if(selfLocation == null){
+                        Log.e("location", "Error getting location.");
+                        return;
+                    }
                     onJoinGamePopupWindowLoadGameList(popupWindows.getContentView(), selfLocation);
                 });
     }
