@@ -143,13 +143,16 @@ public class GameLobbyActivity extends AppCompatActivity {
                         playersMissing.setText(newPlayersMissing);
                         GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
                         };
-                        boolean started = snapshot.child("started").getValue(coinIndicator);
-                        if(started){
-                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                            startActivity(intent);
-                            UserDatabaseProxy pdp = new UserDatabaseProxy();
-                            User user = pdp.getUserFromTask(task);
-                            intent.putExtra("user", user);
+                        if(!game.getHost().equals(user)) {
+                            boolean started = snapshot.child("started").getValue(coinIndicator);
+                            if (started) {
+                                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                                UserDatabaseProxy pdp = new UserDatabaseProxy();
+                                User user = pdp.getUserFromTask(task);
+                                intent.putExtra("user", user);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
                     }
 
