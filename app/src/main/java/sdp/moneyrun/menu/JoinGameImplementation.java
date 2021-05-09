@@ -64,20 +64,27 @@ public class JoinGameImplementation extends MenuImplementation{
      *
      * @param view the current view
      */
+    @SuppressLint("MissingPermission")
     public void onClickShowJoinGamePopupWindow(View view) {
 
 
         // Show popup
         PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list
-        onJoinGamePopupWindowLoadGameList(popupWindows.getContentView());
+        // Grant permissions if necessary
+        requestLocationPermissions(requestPermissionsLauncher);
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(activity, selfLocation -> {
+                    onJoinGamePopupWindowLoadGameList(popupWindows.getContentView(), selfLocation);
+                });
     }
 
     /**
      * Displays every current games.
      * @param popupView
      */
-    private void onJoinGamePopupWindowLoadGameList(View popupView) {
+    private void onJoinGamePopupWindowLoadGameList(View popupView, Location selfLocation) {
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
@@ -87,7 +94,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
             int buttonId = 0;
             for (GameRepresentation gameRepresentation : gameRepresentations) {
-                displayGameInterface(gameLayout, buttonId, gameRepresentation);
+                displayGameInterface(gameLayout, buttonId, gameRepresentation, selfLocation);
                 buttonId++;
             }
             openGamesLayout.addView(gameLayout);
@@ -161,7 +168,9 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param buttonId              the id of the join button
      * @param gameRepresentation    the representation of the game to display
      */
-    private void displayGameInterface(TableLayout gameLayout, int buttonId, GameRepresentation gameRepresentation) {
+    private void displayGameInterface(TableLayout gameLayout, int buttonId,
+                                      GameRepresentation gameRepresentation,
+                                      Location selfLocation) {
         // create game layout
         TableRow gameRow = new TableRow(activity);
         TableLayout.LayoutParams gameParams = new TableLayout.LayoutParams(
@@ -179,10 +188,18 @@ public class JoinGameImplementation extends MenuImplementation{
         // create player count display
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
-        gameLayout.addView(gameRow, gameParams);
+        // Do not add game if game is too far
+        // Grant permissions if necessary
+        requestLocationPermissions(requestPermissionsLauncher);
+        LocationRepresentation locationRep = new LocationRepresentation(selfLocation.getLatitude(), selfLocation.getLongitude());
+
+        double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+
+        if (distance <= MAX_DISTANCE_TO_JOIN_GAME) {
+            gameLayout.addView(gameRow, gameParams);
+        }
     }
 
-    @SuppressLint("MissingPermission")
     private void createJoinButton(Button button, int buttonId, GameRepresentation gameRepresentation){
         // create join button
         button.setId(buttonId);
@@ -192,27 +209,6 @@ public class JoinGameImplementation extends MenuImplementation{
 
         //modify button if the game is full or if a space frees up
         addFullGameListener(button, gameRepresentation);
-        // Modify button if game is too far
-        // Grant permissions if necessary
-        requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                        return;
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
