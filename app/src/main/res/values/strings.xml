@@ -36,6 +36,8 @@
     <string name="join_game_message">Join</string>
     <string name="join_game_full_message">Full</string>
     <string name="join_game_too_far_message">Too far</string>
+    <string name="join_game_filter_message">Search game</string>
+    <string name="join_game_filter_button">Filter</string>
     <string name="game_name_display">%1$s</string>
     <string name="game_player_number_display">%1$d / %2$d</string>
     <string name="join_game_lobby_intent_extra_id">currentGameId</string>
