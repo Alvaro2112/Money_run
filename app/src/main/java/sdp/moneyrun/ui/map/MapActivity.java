@@ -87,6 +87,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         getSupportActionBar().hide();
 
         player = (Player) getIntent().getSerializableExtra("player");
+
         gameId = getIntent().getStringExtra("currentGameId");
         if(gameId == null){
             gameId = getIntent().getStringExtra("gameId");
@@ -443,9 +444,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if(useDB) {
                   game.setCoins(localPlayer.toSendToDb(),true);
                   proxyG.updateGameInDatabase(game,null);
-
+                  player.setScore(localPlayer.getScore(),true);
             }
-            player.setScore(localPlayer.getScore(),true);
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
