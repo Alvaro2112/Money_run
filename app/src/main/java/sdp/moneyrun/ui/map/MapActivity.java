@@ -428,9 +428,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void placeRandomCoins(int number, int radius) {
         if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
         for (int i = 0; i < number; i++) {
-            Location loc = null;
-            loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
-            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1),true);
+            Location coinLoc = null;
+            coinLoc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
+            addCoin(new Coin(coinLoc.getLatitude(), coinLoc.getLongitude(), CoinGenerationHelper.coinValue(coinLoc,getCurrentLocation())),true);
            // localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
         }
     }
