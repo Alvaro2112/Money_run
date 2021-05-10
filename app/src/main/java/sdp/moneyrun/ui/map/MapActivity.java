@@ -411,6 +411,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                   proxyG.updateGameInDatabase(game,null);
 
             }
+            player.setScore(player.getScore()+coin.getValue(),true);
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
