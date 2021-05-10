@@ -325,9 +325,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
-                for(Player p : playerList){
-                    System.out.println(p);
-                }
                 ldbListAdapter = new MapPlayerListAdapter(this,playerList);
                 ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
                 leaderboard.setAdapter(ldbListAdapter);

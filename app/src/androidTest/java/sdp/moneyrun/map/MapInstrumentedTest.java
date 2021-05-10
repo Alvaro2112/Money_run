@@ -1504,6 +1504,11 @@ public class MapInstrumentedTest {
             System.out.println("ICH BIN AQUI");
             scenario.onActivity(activity -> {
                 MapPlayerListAdapter listAdapter = activity.getLdbListAdapter();
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 assertEquals(2,listAdapter.getCount());
             });
 
