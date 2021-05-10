@@ -1,6 +1,5 @@
 package sdp.moneyrun.ui.map;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -35,7 +34,6 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import sdp.moneyrun.Helpers;
@@ -197,6 +195,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     private void addLeaderboardButton() {
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 onButtonShowLeaderboard(mapView,true,R.layout.in_game_scores);
@@ -328,7 +327,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
     }
-    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void onButtonShowLeaderboard(View view, Boolean focusable, int layoutId){
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
 

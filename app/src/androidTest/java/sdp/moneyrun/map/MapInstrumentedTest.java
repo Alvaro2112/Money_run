@@ -842,7 +842,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -901,7 +901,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -959,7 +959,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1019,7 +1019,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1078,7 +1078,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1137,7 +1137,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1194,7 +1194,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
