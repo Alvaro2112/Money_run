@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -327,7 +328,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
     }
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("NewApi")
     public void onButtonShowLeaderboard(View view, Boolean focusable, int layoutId){
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
 
