@@ -4,18 +4,18 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.player.PlayerListAdapter;
 
-public class LobbyPlayerListAdapter extends ArrayAdapter<Player> {
+public class LobbyPlayerListAdapter extends PlayerListAdapter {
 
     public LobbyPlayerListAdapter(Activity context, ArrayList<Player> playerList) {
-        super(context, 0, playerList);
+        super(context,  playerList);
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -25,7 +25,6 @@ public class LobbyPlayerListAdapter extends ArrayAdapter<Player> {
         player_name.setText(String.valueOf(player.getName()));
         return view;
     }
-
 }
 
 

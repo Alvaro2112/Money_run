@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
+import sdp.moneyrun.map.MapPlayerListAdapter;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
@@ -68,6 +70,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private TextView currentScoreView;
     private Button exitButton;
     private Button questionButton;
+    private Button leaderboardButton;
     private LocalPlayer localPlayer;
     private Game game;
     private String gameId;
@@ -76,6 +79,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean host = false;
     private final String DATABASE_COIN = "coins";
     private boolean useDB;
+    private MapPlayerListAdapter ldbListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +114,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
-
+        leaderboardButton = findViewById(R.id.in_game_scores_button);
         addExitButton();
         addQuestionButton();
+
         if(useDB){
+            addLeaderboardButton();
             mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                 @Override
                 public void onDidFinishRenderingMap(boolean fully) {
@@ -177,6 +183,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
 
 }
+
+
+    private void addLeaderboardButton() {
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonShowLeaderboard(mapView,true,R.layout.in_game_scores);
+            }
+        });
+    }
 
 
     /**
@@ -245,6 +261,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return player.getPlayerId();
     }
 
+    public MapPlayerListAdapter getLdbListAdapter(){return ldbListAdapter;}
     /**
      * The chronometer will countdown from the maximum time of a game to 0
      */
@@ -299,6 +316,26 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 wrongAnswerListener(popupWindow, buttonIds[i], coin, riddle);
             }
         }
+
+    }
+    public void onButtonShowLeaderboard(View view,Boolean focusable, int layoutId){
+        PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
+
+        proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                game = proxyG.getGameFromTaskSnapshot(task);
+                ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
+                for(Player p : playerList){
+                    System.out.println(p);
+                }
+                ldbListAdapter = new MapPlayerListAdapter(this,playerList);
+                ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
+                leaderboard.setAdapter(ldbListAdapter);
+
+            } else {
+                Log.e(TAG, task.getException().getMessage());
+            }
+        });
 
     }
 
@@ -411,7 +448,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                   proxyG.updateGameInDatabase(game,null);
 
             }
-            player.setScore(player.getScore()+coin.getValue(),true);
+            player.setScore(localPlayer.getScore(),true);
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();

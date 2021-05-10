@@ -1441,5 +1441,75 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void leaderBoardWorks() {
+        Player host = new Player("1234567891", "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        List<Player> players = game.getPlayers();
+        Player justJoined = new Player("3", "Gaston", 0);
+        players.add(justJoined);
+        game.setPlayers(players,false);
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(activity -> {
+                activity.onButtonShowLeaderboard(activity.findViewById(R.id.mapView), true, R.layout.in_game_scores);
+            });
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("ICH BIN AQUI");
+            scenario.onActivity(activity -> {
+                MapPlayerListAdapter listAdapter = activity.getLdbListAdapter();
+                assertEquals(2,listAdapter.getCount());
+            });
+
+        }
+    }
+
+
 
 }
