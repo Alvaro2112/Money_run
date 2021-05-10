@@ -1448,11 +1448,12 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
+        intent.putExtra("coinsToPlace", 0);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         List<Player> players = game.getPlayers();
-        Player justJoined = new Player("3", "Gaston", 0);
+        Player justJoined = new Player("3", "Gaston", 2);
         players.add(justJoined);
         game.setPlayers(players,false);
         String id = gdp.putGame(game);
@@ -1505,11 +1506,12 @@ public class MapInstrumentedTest {
             scenario.onActivity(activity -> {
                 MapPlayerListAdapter listAdapter = activity.getLdbListAdapter();
                 try {
-                    Thread.sleep(20000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 assertEquals(2,listAdapter.getCount());
+                assert listAdapter.getItem(0).getScore() > listAdapter.getItem(1).getScore();
             });
 
         }

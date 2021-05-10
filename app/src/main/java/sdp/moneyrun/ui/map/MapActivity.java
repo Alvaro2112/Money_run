@@ -2,6 +2,7 @@ package sdp.moneyrun.ui.map;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import sdp.moneyrun.Helpers;
@@ -80,6 +83,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final String DATABASE_COIN = "coins";
     private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
+    private int coinsToPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         host = getIntent().getBooleanExtra("host", false);
         useDB = getIntent().getBooleanExtra("useDB", false);
+        coinsToPlace = getIntent().getIntExtra("coinsToPlace", -1);
+        if(coinsToPlace == -1){
+            coinsToPlace = COINS_TO_PLACE;
+        }
 
         proxyG = new GameDatabaseProxy();
 
@@ -141,7 +149,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void initializeGame(String gameId){
 
         if(!addedCoins && host){
-            placeRandomCoins(COINS_TO_PLACE, 6);
+            placeRandomCoins(coinsToPlace, 6);
             addedCoins = true;
         }
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
@@ -319,17 +327,27 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
     }
-    public void onButtonShowLeaderboard(View view,Boolean focusable, int layoutId){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void onButtonShowLeaderboard(View view, Boolean focusable, int layoutId){
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
 
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
-                ldbListAdapter = new MapPlayerListAdapter(this,playerList);
-                ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
-                leaderboard.setAdapter(ldbListAdapter);
+                playerList.sort((o1, o2) -> {
+                    if(o1.getScore() < o2.getScore())
+                        return 1;
+                    return -1;
+                });
 
+                for(Player p : playerList){
+                    System.out.println(p.getName()+String.valueOf(p.getScore()));
+                }
+                ldbListAdapter = new MapPlayerListAdapter(this,new ArrayList<Player>());
+                ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
+                ldbListAdapter.addAll(playerList);
+                leaderboard.setAdapter(ldbListAdapter);
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -461,13 +479,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void placeRandomCoins(int number, int radius) {
-        if (number <= 0 || radius <= 0) throw new IllegalArgumentException();
+        if (number < 0 || radius <= 0) throw new IllegalArgumentException("Number of coins to place is less than 0 ");
+        if ( radius <= 0) throw new IllegalArgumentException("Radius to place coins is less than or equal to 0 ");
+
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1),true);
            // localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
         }
+        System.out.print("PLACED"+String.valueOf(number));
     }
 
     /**
