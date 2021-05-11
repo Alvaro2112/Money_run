@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
@@ -81,13 +82,11 @@ public class JoinGameImplementation extends MenuImplementation{
 
         Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
 
-        System.out.println("FILTER BUTTON " + filterButton);
-
         filterButton.setOnClickListener(v -> {
             EditText filterEditText = popupView.findViewById(R.id.join_game_text_filter);
             openGamesLayout.removeAllViews();
 
-            String filterText = filterEditText.getText().toString().trim().toLowerCase();
+            String filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
             loadGameListGivenFilter(popupView, openGamesLayout, filterText);
         });
 
@@ -196,7 +195,7 @@ public class JoinGameImplementation extends MenuImplementation{
         // create player count display
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
-        String lowerName = gameRepresentation.getName().toLowerCase();
+        String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
         if(filterText == null || lowerName.contains(filterText)){
             gameLayout.addView(gameRow, gameParams);
         }
