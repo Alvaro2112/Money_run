@@ -88,8 +88,8 @@ public class OpenWeatherMap {
         String result = null;
         try {
             connection = (HttpsURLConnection) url.openConnection();
-            connection.setReadTimeout(3000);
-            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
             connection.setRequestMethod("GET");
 
             connection.setDoInput(true);
