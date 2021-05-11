@@ -10,6 +10,8 @@ import org.junit.Test;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 
+import static org.junit.Assert.assertEquals;
+
 public class CoinGenerationHelperTest {
 
     @BeforeClass
@@ -51,5 +53,34 @@ public class CoinGenerationHelperTest {
 
     }
 
+    @Test
+    public void coinValueWorks() {
+        Location centerLoc = new Location("");
+        centerLoc.setLatitude(0);
+        centerLoc.setLongitude(0);
+        Location coinLoc = new Location("");
+        centerLoc.setLatitude(1);
+        centerLoc.setLongitude(1);
+        double distance = (double) MapActivity.distance(coinLoc.getLatitude(),coinLoc.getLongitude(),centerLoc.getLatitude(),centerLoc.getLongitude());
+        int value = CoinGenerationHelper.coinValue(coinLoc,centerLoc);
+        assertEquals(Math.ceil((distance)/CoinGenerationHelper.VALUE_RADIUS),value,0);
+    }
+    @Test(expected = NullPointerException.class)
+    public void coinValuesFailsOnNullCoinLoc() {
+        Location centerLoc = new Location("");
+        centerLoc.setLatitude(0);
+        centerLoc.setLongitude(0);
+        int value = CoinGenerationHelper.coinValue(null,centerLoc);
+
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void coinValuesFailsOnNullCenterLoc() {
+        Location coinLoc = new Location("");
+        coinLoc.setLatitude(0);
+        coinLoc.setLongitude(0);
+        int value = CoinGenerationHelper.coinValue(coinLoc,null);
+
+    }
 
 }
