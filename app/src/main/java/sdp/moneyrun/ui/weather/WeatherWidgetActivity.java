@@ -58,7 +58,6 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-            System.out.println(loc.getLatitude());
             WeatherForecast forecast = openWeatherMap.getForecast(loc);
             Address address = addressGeocoder.getAddress(loc);
 
