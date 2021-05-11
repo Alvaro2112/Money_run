@@ -27,6 +27,8 @@ public class WeatherWidgetActivity extends AppCompatActivity {
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
     private OpenWeatherMap openWeatherMap;
     private AddressGeocoder addressGeocoder;
+    private WeatherForecast currentForecast;
+    private LocationRepresentation currentLocation;
 
     LocationListener locationListenerGPS = this::loadWeather;
 
@@ -54,11 +56,13 @@ public class WeatherWidgetActivity extends AppCompatActivity {
             return;
         }
 
-
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-            WeatherForecast forecast = openWeatherMap.getForecast(loc);
+            this.currentLocation = loc;
+            System.out.println(loc.getLatitude());
+            this.currentForecast = openWeatherMap.getForecast(loc);
+
             Address address = addressGeocoder.getAddress(loc);
 
         } catch (IOException e) {
@@ -66,4 +70,12 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         }
     }
 
+    public WeatherForecast getCurrentForecast() {
+        return this.currentForecast;
+    }
+
+
+    public LocationRepresentation getCurrentLocation() {
+        return this.currentLocation;
+    }
 }

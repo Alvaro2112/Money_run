@@ -35,4 +35,15 @@ public class WeatherForecastTest {
         assertEquals(weatherForecast.getWeatherReport(WeatherForecast.Day.AFTER_TOMORROW), weatherReport4);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void WeatherReportWorksFailsCorrectly() {
+        WeatherReport weatherReport1 = new WeatherReport(1, 1, 1, "sunny", "aa");
+        WeatherReport weatherReport2 = new WeatherReport(2, 1, 1, "sunny", "aa");
+
+        WeatherReport[] reports1 = {weatherReport1, weatherReport2};
+
+        WeatherForecast weatherForecast = new WeatherForecast(reports1);
+
+    }
+
 }
