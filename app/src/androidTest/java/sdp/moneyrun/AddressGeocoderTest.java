@@ -1,4 +1,4 @@
-package sdp.moneyrun.weather;
+package sdp.moneyrun;
 
 import android.content.Context;
 
@@ -11,6 +11,8 @@ import java.io.IOException;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
+import sdp.moneyrun.weather.Address;
+import sdp.moneyrun.weather.AddressGeocoder;
 
 import static org.junit.Assert.assertEquals;
 
