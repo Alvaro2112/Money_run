@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -545,7 +546,9 @@ public class MapInstrumentedTest {
 
     @Test(expected = NoMatchingViewException.class)
     public void collectCoinButtonWorks() {
+         ExpectedException exception = ExpectedException.none();
 
+        exception.expect(NoMatchingViewException.class);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
 
             String question = "What is the color of the sky";
