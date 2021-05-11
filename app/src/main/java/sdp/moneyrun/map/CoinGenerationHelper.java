@@ -11,6 +11,7 @@ import sdp.moneyrun.ui.map.MapActivity;
 
 public class CoinGenerationHelper {
 
+    public static  final double  VALUE_RADIUS = 100;
     /**
      https://stackoverflow.com/a/36919707
      * @param currentLocation
@@ -72,6 +73,18 @@ public class CoinGenerationHelper {
             }
         }
         return false;
+    }
+
+    public static int coinValue(Location coinLoc, Location centerLoc){
+        if(coinLoc == null){
+            throw new NullPointerException("coin loc is null");
+        }
+        if(centerLoc == null){
+            throw new NullPointerException("center location is null");
+        }
+        double dist = TrackedMap.distance(coinLoc.getLatitude(),coinLoc.getLongitude(),centerLoc.getLatitude(),centerLoc.getLongitude());
+        int score = (int) Math.ceil(dist/VALUE_RADIUS);
+        return score;
     }
 }
 

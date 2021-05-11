@@ -483,7 +483,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1),true);
         }
-        System.out.print("PLACED"+String.valueOf(number));
     }
 
     /**
