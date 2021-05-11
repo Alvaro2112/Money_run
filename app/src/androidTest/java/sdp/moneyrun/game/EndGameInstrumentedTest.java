@@ -191,8 +191,8 @@ public class EndGameInstrumentedTest {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
-
         }
+
     }
 
 
