@@ -47,7 +47,7 @@ public class DatabaseProxyTest {
 
     @Test
     public void getPlayerFromDatabase() {
-        final Player player = new Player(1236, "Johann", 0);
+        final Player player = new Player("1236", "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         CountDownLatch updated = new CountDownLatch(1);
         //adding to db
@@ -95,7 +95,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a",0);
+        Player player = new Player("1", "a",0);
         db.addPlayerListener(player, null);
     }
 
@@ -103,7 +103,7 @@ public class DatabaseProxyTest {
     public void addPlayerListenerCorrectlyUpdates(){
         FirebaseDatabase.getInstance().goOffline();
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player(564123, "Johann",0);
+        Player player = new Player("564123", "Johann",0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         CountDownLatch added = new CountDownLatch(1);
@@ -131,7 +131,7 @@ public class DatabaseProxyTest {
         };
         db.addPlayerListener(player, listener);
 
-        Player p = new Player(564123,newName,0);
+        Player p = new Player("564123",newName,0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -165,7 +165,7 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void removePlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player(1, "a", 0);
+        Player player = new Player("1", "a", 0);
         db.removePlayerListener(player, null);
     }
 

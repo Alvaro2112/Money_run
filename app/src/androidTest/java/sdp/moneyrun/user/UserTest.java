@@ -37,7 +37,7 @@ public class UserTest {
         String name = "John Doe";
         String address = "Someeewhere";
         String newAddress = "New Address";
-        int id = 1234567891;
+        String id = "1234567891";
         User player = new User(id, name, address,0 ,0,0);
         UserDatabaseProxy db = new UserDatabaseProxy();CountDownLatch added = new CountDownLatch(1);
         db.putUser(player, task -> added.countDown());
@@ -83,7 +83,7 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         String newName = "New Address";
-        int id = 1234567892;
+        String id = "1234567892";
 
         User player = new User(id, name, address,0,0 ,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -123,7 +123,7 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int newPlayedGames = 75;
-        int id = 1234567893;
+        String id = "1234567893";
         User player = new User(id, name, address,0,0,0 );
         User player2 = new User(id, name, address,0,0,0 );
 
@@ -167,7 +167,7 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int newDiedGames = 75;
-        int id = 1234567894;
+        String id = "1234567894";
 
         User player = new User(id, name, address,0,0,0 );
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -205,7 +205,7 @@ public class UserTest {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
-        int id = 1234567895;
+        String id = "1234567895";
 
         User player = new User(id, name, address,0 ,0,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -242,7 +242,7 @@ public class UserTest {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
-        int id = 1234567896;
+        String id = "1234567896";
         User player = new User(id, name, address,0,0 ,0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
@@ -280,7 +280,7 @@ public class UserTest {
         String name = "John Doe";
         String address = "Somewhere";
         int score = 75;
-        int id = 1234567897;
+        String id = "1234567897";
 
         User player = new User(id, name, address,0,0,0 );
         UserDatabaseProxy db = new UserDatabaseProxy();

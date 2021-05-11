@@ -65,8 +65,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param userId
      * @return Task containing the user data
      */
-    public Task<DataSnapshot> getUserTask(int userId){
-        Task<DataSnapshot> task = usersRef.child(String.valueOf(userId)).get();
+    public Task<DataSnapshot> getUserTask(String userId){
+        Task<DataSnapshot> task = usersRef.child(userId).get();
 
         task.addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {

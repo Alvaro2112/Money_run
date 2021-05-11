@@ -94,6 +94,8 @@
     <string name="answer_4">D</string>
     <string name="mapbox_access_token">pk.eyJ1IjoibW9uZXlydW4iLCJhIjoiY2ttdnNxMzFuMDgzdTJvbjFwaWRjdmV3ZiJ9.R-YeQNFQsgZurdrzhNEIhA</string>
     <string name="map_score_text">Score: %1$d</string>
+    <string name="map_in_game_scores">Leaderboard</string>
+
     <string name="offline_end_progress_success">Map downloaded successfully.</string>
     <string name="offline_map_deleted">Older maps deleted successfully.</string>
     <string name="no_offline_regions">No downloaded maps.</string>

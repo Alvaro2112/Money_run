@@ -135,11 +135,11 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
-            getUserFromDB(user.getUid().hashCode(), menuIntent);
+            getUserFromDB(user.getUid(), menuIntent);
         }
     }
 
-    private void getUserFromDB(int userId, Intent menuIntent){
+    private void getUserFromDB(String userId, Intent menuIntent){
         UserDatabaseProxy pdb = new UserDatabaseProxy();
         Task<DataSnapshot> t = pdb.getUserTask(userId);
         t.addOnCompleteListener(task -> {

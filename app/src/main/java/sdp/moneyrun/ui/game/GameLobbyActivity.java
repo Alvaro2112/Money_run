@@ -118,6 +118,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", true);
+                        intent.putExtra("useDB", true);
                         startActivity(intent);
                         finish();
                     }
@@ -140,6 +141,18 @@ public class GameLobbyActivity extends AppCompatActivity {
                         String newPlayersMissing = getString(R.string.lobby_player_missing,game.getMaxPlayerCount() - newPlayers.size());
 
                         playersMissing.setText(newPlayersMissing);
+                        GenericTypeIndicator<Boolean> isGameStartedIndicator = new GenericTypeIndicator<Boolean>() {
+                        };
+                        if(!game.getHost().equals(user)) {
+                            boolean started = snapshot.child("started").getValue(isGameStartedIndicator);
+                            if (started) {
+                                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                                UserDatabaseProxy pdp = new UserDatabaseProxy();
+                                intent.putExtra("player", user);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
                     }
 
                     @Override

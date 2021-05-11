@@ -126,7 +126,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
         String[] dummyPlayerNames = {"Josh","David","Helena","Chris","Bryan"};
         ArrayList<Player> dummies = new ArrayList<>();
-        Player dummy1 = new Player(1000000);
+        Player dummy1 = new Player(Integer.toString(1000000));
         dummy1.setName("James");
         dummy1.setScore(700);
         try {
@@ -138,7 +138,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         attachListenerToPlayer(dummy1,databaseProxy);
         Random random = new Random();
         for(int i = 2; i< 6;++i){
-            Player dummy = new Player(i*1000000);
+            Player dummy = new Player(Integer.toString(i*1000000));
             dummy.setName(dummyPlayerNames[i-1]);
             dummy.setScore(Math.abs(random.nextInt()%1000));
             dummies.add(dummy);
