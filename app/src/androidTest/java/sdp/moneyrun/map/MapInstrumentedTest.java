@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -545,7 +546,9 @@ public class MapInstrumentedTest {
 
     @Test(expected = NoMatchingViewException.class)
     public void collectCoinButtonWorks() {
+         ExpectedException exception = ExpectedException.none();
 
+        exception.expect(NoMatchingViewException.class);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
 
             String question = "What is the color of the sky";
@@ -573,6 +576,11 @@ public class MapInstrumentedTest {
             }
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
@@ -580,13 +588,13 @@ public class MapInstrumentedTest {
 
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             onView(withId(R.id.collect_coin)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -842,7 +850,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -901,7 +909,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -959,7 +967,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1019,7 +1027,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1078,7 +1086,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1137,7 +1145,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1194,7 +1202,7 @@ public class MapInstrumentedTest {
                 }
                 if (finished.get()){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         assertEquals(-1,2);
@@ -1440,6 +1448,82 @@ public class MapInstrumentedTest {
             });
         }
     }
+
+    @Test
+    public void leaderBoardWorks() {
+        Player host = new Player("1234567891", "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+        intent.putExtra("coinsToPlace", 0);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+        List<Player> players = game.getPlayers();
+        Player justJoined = new Player("3", "Gaston", 2);
+        players.add(justJoined);
+        game.setPlayers(players,false);
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    break;
+                }
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            scenario.onActivity(activity -> {
+                activity.onButtonShowLeaderboard(activity.findViewById(R.id.mapView), true, R.layout.in_game_scores);
+            });
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenario.onActivity(activity -> {
+                MapPlayerListAdapter listAdapter = activity.getLdbListAdapter();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(2,listAdapter.getCount());
+                assert listAdapter.getItem(0).getScore() > listAdapter.getItem(1).getScore();
+            });
+
+        }
+    }
+
 
 
 }
