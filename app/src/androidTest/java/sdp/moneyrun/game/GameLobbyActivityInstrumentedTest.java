@@ -403,10 +403,10 @@ public class GameLobbyActivityInstrumentedTest {
         }
     }
 
-       @Test
+
+   @Test
     public void LeaveIsDeleteForHost(){
         Game g = getGame();
-        g.addPlayer(new Player("999", "CURRENT_USER", 0), true);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("3","Bob", 0);
         toStart.putExtra("currentUser", host);
@@ -421,17 +421,17 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
         toStart.putExtra("currentGameId", id);
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)) {
-            Thread.sleep(1000);
+        try(ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)){
+            Intents.init();
+            Thread.sleep(3000);
             onView(withId(R.id.leave_lobby_button)).check(matches(withText("Delete")));
             Thread.sleep(2000);
+            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-
-
+    
 
     @Test
     public void WhenGameIsDeletedPlayerLeavesLobby(){
@@ -476,7 +476,13 @@ public class GameLobbyActivityInstrumentedTest {
         }
         intent.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Thread.sleep(3000);
             onView(withId(R.id.leave_lobby_button)).check(matches(withText("Leave")));
+            Thread.sleep(2000);
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -519,4 +525,6 @@ public class GameLobbyActivityInstrumentedTest {
         }
         assertNull(deleted.getResult().getValue());
     }
+
 }
+

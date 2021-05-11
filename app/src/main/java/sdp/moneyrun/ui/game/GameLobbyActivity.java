@@ -41,6 +41,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private final String DB_HOST = "host";
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
+    private final String DB_STARTED = "started";
 
     private LobbyPlayerListAdapter listAdapter;
     private Game game;
@@ -53,6 +54,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     ValueEventListener isDeletedListener;
     ValueEventListener getDeleteListener;
     ValueEventListener playerListListener;
+    ValueEventListener isStartedListener;
 
 
     @Override
@@ -99,6 +101,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 this.game = proxyG.getGameFromTaskSnapshot(task);
                 setAllFieldsAccordingToGame();
                 listenToIsDeleted();
+                listenToStarted();
                 createDeleteOrLeaveButton();
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -170,18 +173,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
 
                 playersMissing.setText(newPlayersMissing);
-                GenericTypeIndicator<Boolean> isGameStartedIndicator = new GenericTypeIndicator<Boolean>() {
-                };
-                if(!game.getHost().equals(user)) {
-                    boolean started = snapshot.child("started").getValue(isGameStartedIndicator);
-                    if (started) {
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        UserDatabaseProxy pdp = new UserDatabaseProxy();
-                        intent.putExtra("player", user);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
             }
 
             @Override
@@ -190,6 +181,30 @@ public class GameLobbyActivity extends AppCompatActivity {
             }
         };
         thisGame.child(DB_PLAYERS).addValueEventListener(playerListListener);
+    }
+
+    private void listenToStarted(){
+        if(!game.getHost().equals(user)) {
+            isStartedListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean started = snapshot.getValue(boolean.class);
+                    if (started) {
+                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        UserDatabaseProxy pdp = new UserDatabaseProxy();
+                        intent.putExtra("player", user);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, error.getMessage());
+                }
+            };
+            thisGame.child(DB_STARTED).addValueEventListener(isStartedListener);
+        }
     }
 
 
@@ -236,9 +251,13 @@ public class GameLobbyActivity extends AppCompatActivity {
 
         if (!user.equals(game.getHost())) {
             thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+            thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
         }else {
-            thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
-            thisGame.removeValue();
+            //otherwise it will also remove it from the DB when it is launched
+            if(game.getIsDeleted()) {
+                thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+                thisGame.removeValue();
+            }
         }
     }
 }
