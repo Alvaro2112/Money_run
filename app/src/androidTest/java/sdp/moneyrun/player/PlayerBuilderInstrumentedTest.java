@@ -28,7 +28,7 @@ public class PlayerBuilderInstrumentedTest {
     public void buildWithNonCompleteNameFieldThrowsStateException(){
         PlayerBuilder b = new PlayerBuilder();
         b.setAddress("Stuff");
-        b.setPlayerId(7);
+        b.setPlayerId("7");
         b.build();
     }
 
@@ -45,7 +45,7 @@ public class PlayerBuilderInstrumentedTest {
         Random r = new Random();
         PlayerBuilder b = new PlayerBuilder();
         String name = "Other stuff";
-        int playerId = r.nextInt();
+        String playerId = Integer.toString(r.nextInt());
         int score = r.nextInt();
 
         Player player = new Player(playerId, name, score);

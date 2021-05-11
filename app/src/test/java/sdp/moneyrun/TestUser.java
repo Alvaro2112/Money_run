@@ -10,17 +10,17 @@ import sdp.moneyrun.user.User;
 import static org.junit.Assert.assertEquals;
 
 public class TestUser {
-    User user = new User(1,"Bob", "New York",0,0,0);
+    User user = new User("1","Bob", "New York",0,0,0);
 
     @Test
     public void InstanceUserWorks(){
         User user1 = new User();
-        User user2 = new User(0);
+        User user2 = new User("0");
     }
 
     @Test
     public void testNumberId() {
-        assertEquals(1, user.getUserId());
+        assertEquals("1", user.getUserId());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TestUser {
 
     @Test
     public void hashOutputsExpectedValue(){
-        int userId = 123;
+        String userId = "123";
         int nbrOfDiedGames = 0;
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
@@ -64,7 +64,7 @@ public class TestUser {
 
     @Test
     public void equalsReturnFalseForNullObject(){
-        int userId = 123;
+        String userId = "123";
         int nbrOfDiedGames = 0;
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
@@ -79,11 +79,12 @@ public class TestUser {
         Random r = new Random();
         int userId = r.nextInt();
         if (userId == 0 ) userId++;
+        String stringId = Integer.toString(userId);
         String address = null;
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(userId, name, address, died, played,0);
+        User p = new User(stringId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -91,11 +92,12 @@ public class TestUser {
         Random r = new Random();
         int userId = r.nextInt();
         if (userId == 0 ) userId++;
+        String strId = Integer.toString(userId);
         String address = "";
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(userId, name, address, died, played,0);
+        User p = new User(strId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -103,11 +105,12 @@ public class TestUser {
         Random r = new Random();
         int userId = r.nextInt();
         if (userId == 0 ) userId++;
+        String strId = Integer.toString(userId);
         String address = "Foobar";
         String name = null;
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(userId, name, address, died, played,0);
+        User p = new User(strId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -115,17 +118,18 @@ public class TestUser {
         Random r = new Random();
         int userId = r.nextInt();
         if (userId == 0 ) userId++;
+        String strId = Integer.toString(userId);
         String address = "Foobar";
         String name = "";
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(userId, name, address, died, played,0);
+        User p = new User(strId, name, address, died, played,0);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void userThrowsExceptionOn0Id(){
+    public void userThrowsExceptionOnNullId(){
         Random r = new Random();
-        int userId = 0;
+        String userId = null;
         String address = "Foobar";
         String name = "Rodric";
         int played = r.nextInt();
@@ -135,7 +139,7 @@ public class TestUser {
 
     @Test
     public void setNumberDiedGamesUpdatesAttributeCorrectly(){
-        User p = new User(123, "STUFF", "OTHER stuff", 0,0,0);
+        User p = new User("123", "STUFF", "OTHER stuff", 0,0,0);
         int died = 43;
         p.setNumberOfDiedGames(died);
         assertEquals(died, p.getNumberOfDiedGames());
@@ -143,7 +147,7 @@ public class TestUser {
 
     @Test
     public void setNumberPlayedGamesUpdatesAttributeCorrectly(){
-        User p = new User(123, "STUFF", "OTHER stuff", 0,0,0);
+        User p = new User("123", "STUFF", "OTHER stuff", 0,0,0);
         int played = 43;
         p.setNumberOfPlayedGames(played);
         assertEquals(played, p.getNumberOfPlayedGames());
@@ -151,7 +155,7 @@ public class TestUser {
 
     @Test
     public void setAddressCorrectlyUpdatesAddress(){
-        User p = new User(123, "STUFF", "OTHER stuff", 0,0,0);
+        User p = new User("123", "STUFF", "OTHER stuff", 0,0,0);
         String address = "Foobar";
         p.setAddress(address);
         assertEquals(address, p.getAddress());
@@ -160,7 +164,7 @@ public class TestUser {
 
     @Test
     public void setNameCorrectlyUpdatesName(){
-        User p = new User(123, "STUFF", "OTHER stuff", 0,0,0);
+        User p = new User("123", "STUFF", "OTHER stuff", 0,0,0);
         String address = "Foobar";
         p.setName(address);
         assertEquals(address, p.getName());
@@ -169,7 +173,7 @@ public class TestUser {
 
     @Test
     public void setScoreCorrectlyUpdatesScore(){
-        User p = new User(123, "STUFF", "OTHER stuff", 0,0,0);
+        User p = new User("123", "STUFF", "OTHER stuff", 0,0,0);
         int score = 8;
         p.setMaxScoreInGame(score);
         assertEquals(score, p.getMaxScoreInGame());

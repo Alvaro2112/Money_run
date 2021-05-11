@@ -1,7 +1,7 @@
 package sdp.moneyrun.player;
 
 public class PlayerBuilder {
-    private  int playerId;
+    private  String playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
@@ -12,7 +12,7 @@ public class PlayerBuilder {
      *
      * @param playerId the unique player Id
      */
-    public void setPlayerId(int playerId) {
+    public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
 
@@ -64,7 +64,7 @@ public class PlayerBuilder {
      * @throws IllegalStateException if the adress or name is null or empty, if the playerId is null
      */
     public Player build(){
-        if(playerId == 0 || name == null)
+        if(playerId == null || name == null)
             throw new IllegalStateException();
         return new Player(playerId, name, score);
     }

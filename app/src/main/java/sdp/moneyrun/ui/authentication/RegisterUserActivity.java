@@ -43,11 +43,11 @@ public class RegisterUserActivity extends AppCompatActivity {
     }
     private void setRegisterFieldsForNextActivity(){
         boolean guestMode = getIntent().getBooleanExtra("guestUser",false);
-        int userId = getIntent().getIntExtra("userId",0);
+        String userId = getIntent().getStringExtra("userId");
         Intent menuIntent = new Intent(RegisterUserActivity.this, MenuActivity.class);
         if(guestMode){
             Random random = new Random();
-            userId = Math.abs(random.nextInt());
+            userId = Integer.toString(Math.abs(random.nextInt()));
             menuIntent.putExtra("guestUser",true);
         }
         User user = new User(userId);

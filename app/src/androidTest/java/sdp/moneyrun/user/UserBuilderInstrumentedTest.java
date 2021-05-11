@@ -26,7 +26,7 @@ public class UserBuilderInstrumentedTest {
     public void buildWithNonCompleteAddressFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setName("Stuff");
-        b.setUserId(7);
+        b.setUserId("7");
         b.build();
     }
 
@@ -34,7 +34,7 @@ public class UserBuilderInstrumentedTest {
     public void buildWithNonCompleteNameFieldThrowsStateException(){
         UserBuilder b = new UserBuilder();
         b.setAddress("Stuff");
-        b.setUserId(7);
+        b.setUserId("7");
         b.build();
     }
 
@@ -53,8 +53,8 @@ public class UserBuilderInstrumentedTest {
         String address = "Something";
         String name = "Other stuff";
 
-        User player = new User(1, name, address, 2, 3,4);
-        b.setUserId(1);
+        User player = new User("1", name, address, 2, 3,4);
+        b.setUserId("1");
         b.setName(name);
         b.setScore(4);
         b.setAddress(address);

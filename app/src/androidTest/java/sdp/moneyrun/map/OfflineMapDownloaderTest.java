@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 public class OfflineMapDownloaderTest {
 
     private Intent getStartIntent() {
-        User currentUser = new User(999, "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
         toStart.putExtra("user", currentUser);

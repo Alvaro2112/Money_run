@@ -136,7 +136,7 @@ public class Game {
 
     }
 
-    public static void endGame(int numberOfCollectedCoins, int score, int playerId, Activity currentActivity) {
+    public static void endGame(int numberOfCollectedCoins, int score, String playerId, Activity currentActivity) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
         ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
