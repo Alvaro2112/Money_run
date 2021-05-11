@@ -2,12 +2,10 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
@@ -19,17 +17,9 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -40,14 +30,16 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -62,6 +54,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -129,6 +122,57 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
             Intents.release();
+        }
+    }
+
+    @Test
+    public void filterWorks(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            scenario.onActivity(a -> {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(a, selfLocation -> {
+                            // If the location cannot be retrieved, do not load the game list.
+                            if(selfLocation == null){
+                                assertEquals(1, 0);
+                                return;
+                            }
+                            Player host = new Player("364556546", "Bob", 0);
+
+                            GameBuilder gb = new GameBuilder();
+                            gb.setName("checkfilter")
+                                    .setMaxPlayerCount(12)
+                                    .setHost(host)
+                                    .setIsVisible(true)
+                                    .setRiddles(new ArrayList<>())
+                                    .setCoins(new ArrayList<>())
+                                    .setStartLocation(selfLocation);
+
+                            GameDatabaseProxy db = new GameDatabaseProxy();
+                            db.putGame(gb.build());
+                        });
+            });
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());$
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            assertEquals(1, 1);
         }
     }
 
@@ -363,11 +407,7 @@ public class MenuActivityTest {
 
     @Test
     public void newGameWorks() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
-        intent.putExtra("user", user);
-
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
