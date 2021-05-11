@@ -335,11 +335,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
-                playerList.sort((o1, o2) -> {
-                    if(o1.getScore() < o2.getScore())
-                        return 1;
-                    return -1;
-                });
+                playerList.sort((o1, o2) -> {return Integer.compare(o1.getScore(),o2.getScore()); });
 
                 for(Player p : playerList){
                     System.out.println(p.getName()+String.valueOf(p.getScore()));
@@ -486,7 +482,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1),true);
-           // localPlayer.addLocallyAvailableCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1));
         }
         System.out.print("PLACED"+String.valueOf(number));
     }

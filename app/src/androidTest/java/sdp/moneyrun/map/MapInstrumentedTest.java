@@ -1502,7 +1502,6 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("ICH BIN AQUI");
             scenario.onActivity(activity -> {
                 MapPlayerListAdapter listAdapter = activity.getLdbListAdapter();
                 try {
