@@ -335,7 +335,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
-                playerList.sort((o1, o2) -> {return Integer.compare(o1.getScore(),o2.getScore()); });
+                playerList.sort((o1, o2) -> Integer.compare(o2.getScore(),o1.getScore()));
 
                 for(Player p : playerList){
                     System.out.println(p.getName()+String.valueOf(p.getScore()));
