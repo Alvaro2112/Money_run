@@ -3,12 +3,7 @@ package sdp.moneyrun.weather;
 import androidx.annotation.NonNull;
 
 public final class WeatherForecast {
-    public void setReports(WeatherReport[] reports) {
-        this.reports = reports;
-    }
-
-    private  WeatherReport[] reports;
-
+    private WeatherReport[] reports;
 
     WeatherForecast(WeatherReport[] reports) {
         if (reports.length < 3) {
@@ -18,12 +13,16 @@ public final class WeatherForecast {
         this.reports = reports;
     }
 
-    public enum Day {
-        TODAY, TOMORROW, AFTER_TOMORROW;
+    public void setReports(WeatherReport[] reports) {
+        this.reports = reports;
     }
-
 
     public WeatherReport getWeatherReport(@NonNull Day offset) {
         return this.reports[offset.ordinal()];
+    }
+
+
+    public enum Day {
+        TODAY, TOMORROW, AFTER_TOMORROW
     }
 }

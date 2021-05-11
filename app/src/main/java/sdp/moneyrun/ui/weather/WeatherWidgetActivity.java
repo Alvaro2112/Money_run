@@ -9,10 +9,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import java.io.IOException;
 
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.weather.Address;
@@ -20,17 +20,15 @@ import sdp.moneyrun.weather.AddressGeocoder;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 
-import java.io.IOException;
-
 
 public class WeatherWidgetActivity extends AppCompatActivity {
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
+    private OpenWeatherMap openWeatherMap;
+    private AddressGeocoder addressGeocoder;
 
-    private OpenWeatherMap mWeatherService;
-    private AddressGeocoder mGeocodingService;
-    private LocationManager locationManager;
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-    });
+    LocationListener locationListenerGPS = this::loadWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,31 +36,16 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
         Criteria criteria = new Criteria();
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, (float) 0.00001, locationListenerGPS);
-        mWeatherService = OpenWeatherMap.build();
-        mGeocodingService = AddressGeocoder.fromContext(this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+        openWeatherMap = OpenWeatherMap.build();
+        addressGeocoder = AddressGeocoder.fromContext(this);
 
     }
-
-    LocationListener locationListenerGPS = new LocationListener() {
-        @Override
-        public void onLocationChanged(android.location.Location location) {
-            loadWeather(location);
-        }
-    };
-
 
     private void loadWeather(android.location.Location location) {
 
@@ -75,8 +58,9 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-            WeatherForecast forecast = mWeatherService.getForecast(loc);
-            Address address = mGeocodingService.getAddress(loc);
+            System.out.println(loc.getLatitude());
+            WeatherForecast forecast = openWeatherMap.getForecast(loc);
+            Address address = addressGeocoder.getAddress(loc);
 
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);

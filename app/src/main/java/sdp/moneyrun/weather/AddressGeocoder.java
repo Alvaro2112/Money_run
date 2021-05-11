@@ -12,7 +12,7 @@ import java.util.List;
 
 import sdp.moneyrun.map.LocationRepresentation;
 
-public class AddressGeocoder{
+public class AddressGeocoder {
 
     private final Geocoder geocoder;
 
@@ -20,13 +20,14 @@ public class AddressGeocoder{
         this.geocoder = geocoder;
     }
 
-    public static final AddressGeocoder fromContext(Context context) {
+    public static AddressGeocoder fromContext(Context context) {
         return new AddressGeocoder(new Geocoder(context));
     }
 
 
     /**
      * This function will return an usable address from a Location
+     *
      * @param location The location of the address to be fount
      * @return The address
      * @throws IOException

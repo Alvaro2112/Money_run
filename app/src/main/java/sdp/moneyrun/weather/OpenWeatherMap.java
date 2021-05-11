@@ -1,11 +1,8 @@
 package sdp.moneyrun.weather;
 
 
-import android.content.Context;
 import android.os.StrictMode;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +22,7 @@ import javax.net.ssl.HttpsURLConnection;
 import sdp.moneyrun.map.LocationRepresentation;
 
 
-public class OpenWeatherMap{
+public class OpenWeatherMap {
     private static final String API_ENDPOINT = "https://api.openweathermap.org/data/2.5/onecall";
     private static final String TEMP_UNIT = "metric";
     private static final WeatherReport NO_DATA = new WeatherReport(0, 0, 0, "N/A", "N/A");
@@ -42,7 +39,6 @@ public class OpenWeatherMap{
         String key = "052c4316c52f5d7f619a05a0a09a7636";
         return new OpenWeatherMap(key);
     }
-
 
 
     private WeatherReport parseReport(JSONObject report) throws JSONException {
