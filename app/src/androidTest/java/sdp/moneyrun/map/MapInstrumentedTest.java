@@ -573,6 +573,11 @@ public class MapInstrumentedTest {
             }
 
             Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
@@ -580,13 +585,13 @@ public class MapInstrumentedTest {
 
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             onView(withId(R.id.collect_coin)).perform(ViewActions.click());
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
