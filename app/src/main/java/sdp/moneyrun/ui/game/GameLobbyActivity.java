@@ -49,11 +49,16 @@ public class GameLobbyActivity extends AppCompatActivity {
     private User actualUser;
     private DatabaseReference thisGame;
 
+    //Listeners
+    ValueEventListener isDeletedListener;
+    ValueEventListener getDeleteListener;
+    ValueEventListener playerListListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-
         addAdapter();
 
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
@@ -103,7 +108,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void listenToIsDeleted() {
         if (!user.equals(game.getHost())) {
-            thisGame.child(DB_IS_DELETED).addValueEventListener(new ValueEventListener() {
+            isDeletedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if ((boolean) snapshot.getValue()) {
@@ -119,7 +124,8 @@ public class GameLobbyActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage().toString());
                 }
-            });
+            };
+            thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
         }
     }
 
@@ -152,7 +158,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
         //Player List is dynamic with DB
         TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
-        thisGame.child(DB_PLAYERS).addValueEventListener(new ValueEventListener() {
+        playerListListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
@@ -169,14 +175,15 @@ public class GameLobbyActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, error.getMessage());
             }
-        });
+        };
+        thisGame.child(DB_PLAYERS).addValueEventListener(playerListListener);
     }
 
 
     private View.OnClickListener getDeleteClickListener() {
         return v -> {
             game.setIsDeleted(true, false);
-            thisGame.child(DB_PLAYERS).addValueEventListener(new ValueEventListener() {
+            getDeleteListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
@@ -186,14 +193,14 @@ public class GameLobbyActivity extends AppCompatActivity {
                         intent.putExtra("user", actualUser);
                         startActivity(intent);
                         finish();
-                        game.setIsVisible(false, false);
                     }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
                 }
-            });
+            };
+            thisGame.child(DB_PLAYERS).addValueEventListener(getDeleteListener);
         };
     }
 
@@ -205,6 +212,21 @@ public class GameLobbyActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         };
+    }
+
+
+    //remove all the listeners so that we may delete the activity from the Database
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
+
+        if (!user.equals(game.getHost())) {
+            thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+        }else {
+            thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+            thisGame.removeValue();
+        }
     }
 
 

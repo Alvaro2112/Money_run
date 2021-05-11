@@ -86,7 +86,7 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
 
-
+/*
     @Test
     public void StartGameAsHostWorks() {
         Player host = new Player(3, "Bob", 0);
@@ -351,7 +351,7 @@ public class GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
-    }
+    }*/
 
        @Test
     public void LeaveIsDeleteForHost(){
@@ -372,12 +372,16 @@ public class GameLobbyActivityInstrumentedTest {
         }
         toStart.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)) {
+            Thread.sleep(1000);
             onView(withId(R.id.leave_lobby_button)).check(matches(withText("Delete")));
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
 
-
+/*
 
     @Test
     public void WhenGameIsDeletedPlayerLeavesLobby(){
@@ -444,8 +448,9 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
         toStart.putExtra("currentGameId", id);
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)) {
+        try(ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)){
             Intents.init();
+            Thread.sleep(2000);
             onView(withId(R.id.leave_lobby_button)).perform(ViewActions.click());
             Thread.sleep(2000);
             intended(hasComponent(MenuActivity.class.getName()));
@@ -455,14 +460,13 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
 
-        Task<DataSnapshot> invisible =FirebaseDatabase.getInstance().getReference()
-                .child("games").child(g.getId()).child("isVisible").get();
+        Task<DataSnapshot> deleted =FirebaseDatabase.getInstance().getReference()
+                .child("games").child(g.getId()).get();
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        boolean notVisible = invisible.getResult().getValue(boolean.class);
-        assertFalse(notVisible);
-    }
+        assertNull(deleted.getResult().getValue());
+    }*/
 }
