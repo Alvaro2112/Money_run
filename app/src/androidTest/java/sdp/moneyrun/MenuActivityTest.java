@@ -164,7 +164,7 @@ public class MenuActivityTest {
             }
 
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
-            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());$
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
                 Thread.sleep(1000);
