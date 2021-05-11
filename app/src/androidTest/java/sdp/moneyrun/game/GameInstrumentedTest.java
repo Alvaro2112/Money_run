@@ -5,7 +5,6 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +46,12 @@ public class GameInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+        FirebaseDatabase.getInstance().goOffline();
+    }
+
+    @AfterClass
+    public static void after(){
+        FirebaseDatabase.getInstance().goOnline();
     }
 
     private final long ASYNC_CALL_TIMEOUT = 5L;
@@ -89,20 +95,11 @@ public class GameInstrumentedTest {
 
     @Test
     public void GameIsAddedToDB(){
+        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
-        CountDownLatch added = new CountDownLatch(1);
         CountDownLatch updated = new CountDownLatch(1);
-        OnCompleteListener addedListener = task -> added.countDown();
         db.putGame(g);
-        db.updateGameInDatabase(g, addedListener);
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
         String id = g.getId();
-
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
             fail();
@@ -137,11 +134,6 @@ public class GameInstrumentedTest {
     public void GameCannotBeAddedTwiceToDB(){
         Game g = getGame();
         db.putGame(g);
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         String id = g.getId();
         assertEquals(id, db.putGame(g));
     }
@@ -151,16 +143,9 @@ public class GameInstrumentedTest {
      */
     @Test
     public void GamePlayerListChangesWithDB(){
+
         Game g = getGame();
-        CountDownLatch added = new CountDownLatch(1);
         db.putGame(g);
-        db.updateGameInDatabase(g, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
         String id = g.getId();
 
         //Something went wrong, game might not have been uploaded properly
@@ -174,7 +159,6 @@ public class GameInstrumentedTest {
         ref.child(DATABASE_GAME).child(id).child("players").setValue(players).addOnCompleteListener(task -> readded.countDown());
         try {
             readded.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, readded.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -185,15 +169,7 @@ public class GameInstrumentedTest {
     public void getGameDataSnapshotRetrievesGameFromDB(){
         Game g = getGame();
         db.putGame(g);
-        CountDownLatch added = new CountDownLatch(1);
         db.putGame(g);
-        db.updateGameInDatabase(g, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
         String id = g.getId();
         //Something went wrong, game might not have been uploaded properly
         if(id.equals("")){
@@ -335,24 +311,16 @@ public class GameInstrumentedTest {
 
     @Test
     public void setPlayersSetsPlayersOnDB(){
+      //  FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         List<Player> p = new ArrayList<>();
         Player toAdd = new Player(542, "Iron Man", 0);
         Player toAdd2 = new Player(544, "Pepper Pots", 0);
+        CountDownLatch complete = new CountDownLatch(1);
         p.add(toAdd);
         p.add(toAdd2);
         g.setPlayers(p, false);
-        try{
-            Thread.sleep(2000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
         assertEquals(p,g.getPlayers());
     }
 
@@ -360,22 +328,12 @@ public class GameInstrumentedTest {
     public void addPlayerSetsPlayersOnDB(){
         Game g = getGame();
         db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Player host = new Player(3,"Bob",0);
         Player player = new Player(542, "Iron Man",  0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         players.add(player);
         g.addPlayer(player, false);
-        try{
-            Thread.sleep(2000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
         assertEquals(players, g.getPlayers());
     }
 
@@ -383,22 +341,12 @@ public class GameInstrumentedTest {
     public void removePlayerSetsPlayersOnDB(){
         Game g = getGame();
         db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Player host = new Player(3,"Bob",0);
         Player player = new Player(542, "Iron Man", 0);
         List<Player> players = new ArrayList<>();
         players.add(host);
         g.addPlayer(player, false);
         g.removePlayer(player, false);
-        try{
-            Thread.sleep(2000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
         assertEquals(players, g.getPlayers());
     }
 
@@ -429,11 +377,6 @@ public class GameInstrumentedTest {
         Game g = getGame();
         db.putGame(g);
         try{
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try{
             db.addGameListener(g, v);
         }catch (Exception e){
             fail();
@@ -444,11 +387,6 @@ public class GameInstrumentedTest {
     public void getIdReturnsId(){
         Game g = getGame();
         String id = db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         assertEquals(id, g.getId());
     }
 
@@ -475,7 +413,6 @@ public class GameInstrumentedTest {
         Player host = new Player(3,"Bob", 0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
-
         players.add(host);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -529,7 +466,6 @@ public class GameInstrumentedTest {
         double lat = 17.;
         double lon = 18.;
         g.setCoins(Arrays.asList(new Coin(lat,lon, firstValue), new Coin(456456,4564,222)), true);
-
         CountDownLatch updated = new CountDownLatch(1);
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -550,14 +486,6 @@ public class GameInstrumentedTest {
         };
         GameDatabaseProxy p = new GameDatabaseProxy();
         p.putGame(g);
-        CountDownLatch added = new CountDownLatch(1);
-        p.updateGameInDatabase(g, task -> added.countDown());
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
-        } catch (InterruptedException e) {
-           fail();
-        }
         p.addCoinListener(g,listener);
         g.setCoin(0, new Coin(lat,lon, updatedValue));
         p.updateGameInDatabase(g, null);
@@ -596,20 +524,7 @@ public class GameInstrumentedTest {
         GameDatabaseProxy p = new GameDatabaseProxy();
         p.putGame(g);
         g.setStarted(true, false);
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        p.addGameListener(g, listener);
-
-        try {
-            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, updated.getCount());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        p.removeGameListener(g, listener);
     }
 
 
@@ -654,16 +569,13 @@ public class GameInstrumentedTest {
         location.setLongitude(20);
         Game g = new Game(name, host, maxPlayerCount, riddles,coins, location, true);
         gdp.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        CountDownLatch gotten = new CountDownLatch(1);
         Task<DataSnapshot> g2 = gdp.getGameDataSnapshot(g.getId());
+        g2.addOnCompleteListener(task -> gotten.countDown());
         try {
-            Thread.sleep(4000);
+            gotten.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
         Game gg2 = gdp.getGameFromTaskSnapshot(g2);
         assertEquals(gg2, g);

@@ -2,10 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,17 +16,6 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -47,7 +33,6 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;

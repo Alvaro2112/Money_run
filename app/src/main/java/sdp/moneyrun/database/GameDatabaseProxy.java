@@ -228,6 +228,16 @@ public class GameDatabaseProxy extends DatabaseProxy {
         }
     }
 
+    public void removeGameListener(Game game, ValueEventListener listener){
+        if(game == null){
+            throw new IllegalArgumentException("game should not be null.");
+        }
+        if (listener == null) {
+            throw new IllegalArgumentException("event listener should not be null.");
+        }
+
+    }
+
     public void addCoinListener(Game game, ValueEventListener listener){
         if (listener == null || game == null) throw new IllegalArgumentException();
         gamesRef.child(game.getId())

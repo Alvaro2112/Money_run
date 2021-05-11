@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -261,6 +262,26 @@ public class Game {
                     .child(id)
                     .child(DATABASE_PLAYER)
                     .setValue(players);
+        }
+    }
+
+    public void setPlayers(List<Player> players, boolean forceLocal, OnCompleteListener listener) {
+        if (players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if (players.isEmpty()) {
+            throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");
+        }
+
+        if (!hasBeenAdded || forceLocal) {
+            gameDbData.setPlayers(players);
+        } else {
+            gameDbData.setPlayers(players);
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_PLAYER)
+                    .setValue(players).addOnCompleteListener(listener);
         }
     }
 

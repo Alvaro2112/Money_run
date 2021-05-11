@@ -2,6 +2,7 @@ package sdp.moneyrun.database;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +35,16 @@ public class UserDatabaseProxy extends DatabaseProxy {
         }
 
         usersRef.child(String.valueOf(user.getUserId())).setValue(user);
+    }
+
+    public void putUser(User user, OnCompleteListener listener){
+        if(user == null){
+            throw new IllegalArgumentException("user should not be null");
+        }
+        if(listener == null){
+            throw new IllegalArgumentException("listener should not be null");
+        }
+        usersRef.child(String.valueOf(user.getUserId())).setValue(user).addOnCompleteListener(listener);
     }
 
     /**
@@ -76,6 +87,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      */
     public User getUserFromTask(Task<DataSnapshot> task){
         if(task.isComplete()){
+            System.out.println(task);
             return task.getResult().getValue(User.class);
         }
         else {

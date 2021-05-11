@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,10 +36,17 @@ public class DatabaseProxyTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
+
+   @AfterClass
+   public static void afterTests(){
+        FirebaseDatabase.getInstance().goOnline();
+   }
+
+
     @Test
     public void getPlayerFromDatabase() {
-       FirebaseDatabase.getInstance().goOffline();
         final Player player = new Player(1236, "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         CountDownLatch updated = new CountDownLatch(1);
@@ -65,7 +73,6 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             fail();
         }
-          FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -94,6 +101,7 @@ public class DatabaseProxyTest {
 
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
+        FirebaseDatabase.getInstance().goOffline();
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player(564123, "Johann",0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
@@ -101,12 +109,7 @@ public class DatabaseProxyTest {
         CountDownLatch added = new CountDownLatch(1);
         OnCompleteListener addedListener = task -> added.countDown();
         db.putPlayer(player, addedListener);
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertThat(added.getCount(), is(0L));
-        }catch (InterruptedException e){
-            fail();
-        }
+
         String newName = "Simon";
 
 
@@ -137,15 +140,9 @@ public class DatabaseProxyTest {
             e.printStackTrace();
             assert(false);
         }
-
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            assert(false);
-//        }
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
+        FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)

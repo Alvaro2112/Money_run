@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,11 +50,17 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     @BeforeClass
-    public static void setPersistence() {
-        if (!MainActivity.calledAlready) {
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+   //     FirebaseDatabase.getInstance().goOffline();
+    }
+
+    @AfterClass
+    public static void afterTests(){
+  //      FirebaseDatabase.getInstance().goOnline();
     }
 
 
