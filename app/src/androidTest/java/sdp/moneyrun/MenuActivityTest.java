@@ -198,6 +198,79 @@ public class MenuActivityTest {
         }
     }
 
+    @Test
+    public void OnlyNearGamesShowUp(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            String filter = "onlythistest887655677888";
+            String nearGameName = "nearGame_" + filter;
+            String farGameName = "farGame_" + filter;
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            scenario.onActivity(a -> {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(a, selfLocation -> {
+                            if(selfLocation == null){
+                                assertEquals(1, 0);
+                                return;
+                            }
+                            Player host = new Player("364556546", "Bob", 0);
+
+                            GameDatabaseProxy db = new GameDatabaseProxy();
+                            // Near game
+                            GameBuilder gb = new GameBuilder();
+                            gb.setName(nearGameName)
+                                    .setMaxPlayerCount(12)
+                                    .setHost(host)
+                                    .setIsVisible(true)
+                                    .setRiddles(new ArrayList<>())
+                                    .setCoins(new ArrayList<>())
+                                    .setStartLocation(selfLocation);
+
+                            db.putGame(gb.build());
+
+                            Location farLocation = new Location("");
+                            farLocation.setLatitude(selfLocation.getLatitude() + 10.);
+                            farLocation.setLongitude(selfLocation.getLongitude() + 10.);
+                            // Far game
+                            GameBuilder gb2 = new GameBuilder();
+                            gb2.setName(farGameName)
+                                    .setMaxPlayerCount(12)
+                                    .setHost(host)
+                                    .setIsVisible(true)
+                                    .setRiddles(new ArrayList<>())
+                                    .setCoins(new ArrayList<>())
+                                    .setStartLocation(farLocation);
+
+                            db.putGame(gb2.build());
+                        });
+            });
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // The id of the names in the list are their hashcode values + the button value!
+            // Here, we check for the first occurrence of a game
+            onView(ViewMatchers.withId(nearGameName.hashCode())).check(matches(isDisplayed()));
+            onView(ViewMatchers.withId(farGameName.hashCode())).check(doesNotExist());
+        }
+    }
+
 //    @Test
 //    public void joinGamePopupDoesntCrashAfterPlayerChange() {
 //        GameDatabaseProxy gdp = new GameDatabaseProxy();

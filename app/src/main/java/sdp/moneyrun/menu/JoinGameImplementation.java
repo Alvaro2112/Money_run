@@ -96,21 +96,42 @@ public class JoinGameImplementation extends MenuImplementation{
         loadGameListGivenFilter(popupView, openGamesLayout, null);
     }
 
+    @SuppressLint("MissingPermission")
     private void loadGameListGivenFilter(View popupView, LinearLayout openGamesLayout, String filterText){
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
             TableLayout gameLayout = new TableLayout(activity);
 
-            buttonId = 0;
-            for (GameRepresentation gameRepresentation : gameRepresentations) {
-                String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-                if(filterText == null || lowerName.contains(filterText)){
-                    displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
-                    buttonId++;
-                }
-            }
-            openGamesLayout.addView(gameLayout);
+            // Grant permissions if necessary
+            requestLocationPermissions(requestPermissionsLauncher);
+
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(activity, location -> {
+                        // Got last known location. In some rare situations this can be null
+                        // In this case, the game cannot be instanciated
+                        LocationRepresentation locationRep;
+
+                        if (location == null) {
+                            locationRep = new LocationRepresentation(0, 0);
+                        }else{
+                            locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                        }
+
+                        buttonId = 0;
+                        for (GameRepresentation gameRepresentation : gameRepresentations) {
+                            // Do not show games that do not match filter
+                            String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
+                            // Do not show far away game
+                            double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+
+                            if((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME){
+                                displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
+                                buttonId++;
+                            }
+                        }
+                        openGamesLayout.addView(gameLayout);
+                    });
         });
     }
 
@@ -203,7 +224,6 @@ public class JoinGameImplementation extends MenuImplementation{
         gameLayout.addView(gameRow, gameParams);
     }
 
-    @SuppressLint("MissingPermission")
     private void createJoinButton(Button button, int buttonId, GameRepresentation gameRepresentation){
         // create join button
         button.setId(buttonId);
@@ -213,27 +233,6 @@ public class JoinGameImplementation extends MenuImplementation{
 
         //modify button if the game is full or if a space frees up
         addFullGameListener(button, gameRepresentation);
-        // Modify button if game is too far
-        // Grant permissions if necessary
-        requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                        return;
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
@@ -267,6 +266,7 @@ public class JoinGameImplementation extends MenuImplementation{
         String nameText = String.format((activity.getResources().getString(R.string.game_name_display)), gameRepresentation.getName());
         nameView.setText(nameText);
         nameView.setPadding(0, 0, 40, 0);
+        nameView.setId(nameText.hashCode() + buttonId);
         gameRow.addView(nameView);
     }
 
