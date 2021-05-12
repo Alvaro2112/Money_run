@@ -43,7 +43,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class GameLobbyActivityInstrumentedTest {
+public class    GameLobbyActivityInstrumentedTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -115,7 +115,7 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
 
-            Player nonHost = new Player("3", "Carl", 0);
+            Player nonHost = new Player("4", "Carl", 0);
             Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
             intent2.putExtra("currentUser", nonHost);
             intent2.putExtra("currentGameId", id);
