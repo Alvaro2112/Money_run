@@ -55,6 +55,7 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
@@ -176,7 +177,7 @@ public class MenuActivityTest {
                 e.printStackTrace();
             }
 
-            onView(withId(R.id.openGamesLayout)).check(matches(hasChildCount(1)));
+            onView(withId(R.id.openGamesLayout)).check(matches(hasMinimumChildCount(1)));
 
             FirebaseDatabase.getInstance().goOnline();
         }
