@@ -45,7 +45,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
-        playerMissingView = findViewById(R.id.lobby_players_missing_TextView);
+        playerMissingView = findViewById(R.id.players_missing_TextView);
         String default_player_missing = getString(R.string.lobby_player_missing, missingPlayers);
         playerMissingView.setText(default_player_missing);
         gameId = (String) getIntent().getStringExtra (getResources().getString(R.string.join_game_lobby_intent_extra_id));
