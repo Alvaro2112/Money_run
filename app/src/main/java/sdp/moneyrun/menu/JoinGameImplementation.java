@@ -45,6 +45,8 @@ public class JoinGameImplementation extends MenuImplementation{
     private final User currentUser;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
+    private int buttonId;
+
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
                                   User user,
@@ -100,10 +102,13 @@ public class JoinGameImplementation extends MenuImplementation{
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
             TableLayout gameLayout = new TableLayout(activity);
 
-            int buttonId = 0;
+            buttonId = 0;
             for (GameRepresentation gameRepresentation : gameRepresentations) {
-                displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
-                buttonId++;
+                String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
+                if(filterText == null || lowerName.contains(filterText)){
+                    displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
+                    buttonId++;
+                }
             }
             openGamesLayout.addView(gameLayout);
         });
@@ -195,10 +200,7 @@ public class JoinGameImplementation extends MenuImplementation{
         // create player count display
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
-        String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-        if(filterText == null || lowerName.contains(filterText)){
-            gameLayout.addView(gameRow, gameParams);
-        }
+        gameLayout.addView(gameRow, gameParams);
     }
 
     @SuppressLint("MissingPermission")

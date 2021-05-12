@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Location;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -47,6 +48,7 @@ import sdp.moneyrun.user.User;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
@@ -54,6 +56,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -136,7 +139,6 @@ public class MenuActivityTest {
                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(a, selfLocation -> {
-                            // If the location cannot be retrieved, do not load the game list.
                             if(selfLocation == null){
                                 assertEquals(1, 0);
                                 return;
@@ -158,7 +160,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -167,12 +169,35 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            assertEquals(1, 1);
+            onView(ViewMatchers.withId(0)).perform(ViewActions.scrollTo());
+            onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void filterWithNotExistingNameWorks(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            String filter = "randomNameThatWillNeverOccur56903645734657260287345260874523048732648";
+            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(0)).check(doesNotExist());
+
         }
     }
 
