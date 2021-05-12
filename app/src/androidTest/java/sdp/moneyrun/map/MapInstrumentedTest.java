@@ -438,7 +438,6 @@ public class MapInstrumentedTest {
                     break;
                 }
             }
-            onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -452,6 +451,12 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             onView(withId(R.id.correct_answer_popup)).check(matches(isDisplayed()));
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
     }
