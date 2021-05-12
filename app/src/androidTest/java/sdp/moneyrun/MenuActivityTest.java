@@ -1,17 +1,21 @@
 package sdp.moneyrun;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.text.Layout;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -54,9 +58,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -161,7 +168,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -170,12 +177,12 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
+            onView(withId(R.id.openGamesLayout)).check(matches(hasChildCount(1)));
 
             FirebaseDatabase.getInstance().goOnline();
         }
