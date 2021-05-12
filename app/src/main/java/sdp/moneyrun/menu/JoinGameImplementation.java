@@ -39,7 +39,7 @@ import sdp.moneyrun.user.User;
 public class JoinGameImplementation extends MenuImplementation{
 
     // Distance in meters
-    private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
+    private final static float MAX_DISTANCE_TO_JOIN_GAME = 1000;
     private final boolean focusable;
     private final int layoutId;
     private final User currentUser;
