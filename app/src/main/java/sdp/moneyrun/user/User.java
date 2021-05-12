@@ -21,7 +21,6 @@ public class User implements Serializable {
     private int totalDistanceRun;
     // By default, user has no friend. But we still add a default invalid id
     // to make the node appear in the database.
-    private final String DEFAULT_FRIEND_ID = "null";
     private List<String> friendIdList;
 
     public int getMaxScoreInGame() {
@@ -46,16 +45,10 @@ public class User implements Serializable {
     /**
      * For database purpose, a default constructor is needed
      */
-    public User() {
-        this.friendIdList = new ArrayList<>();
-        this.friendIdList.add(DEFAULT_FRIEND_ID);
-    }
+    public User() { }
 
     public User(String userId) {
         this.userId = userId;
-
-        this.friendIdList = new ArrayList<>();
-        this.friendIdList.add(DEFAULT_FRIEND_ID);
     }
 
 
@@ -80,9 +73,6 @@ public class User implements Serializable {
         this.numberOfPlayedGames = numberOfPlayedGames;
         this.maxScoreInGame = maxScoreInGame;
         this.totalDistanceRun = 0;
-
-        this.friendIdList = new ArrayList<>();
-        this.friendIdList.add(DEFAULT_FRIEND_ID);
     }
 
 
