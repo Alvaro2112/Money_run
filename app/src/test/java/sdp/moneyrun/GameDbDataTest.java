@@ -11,12 +11,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
@@ -137,8 +139,15 @@ public class GameDbDataTest {
     }
 
     @Test
-    public void getIsVisibleReturnsMaxPlayers(){
+    public void getIsVisiblegetsIsVisible(){
         assertTrue(getTestData().getIsVisible());
+    }
+
+    @Test
+    public void setIsVisibleSetsIsVisible(){
+        GameDbData test = getTestData();
+        test.setIsVisible(false);
+        assertFalse(test.getIsVisible());
     }
 
     @Test
@@ -271,5 +280,18 @@ public class GameDbDataTest {
     @Test
     public void setPlayersFailsWhenHostNotPresent(){
         //TODO
+    }
+
+    @Test
+    public void isDeletedIsFalseWhenCreated(){
+        GameDbData g = getTestData();
+        assertEquals(false, g.getIsDeleted());
+    }
+
+    @Test
+    public void setIsDeletedWorks(){
+        GameDbData g = getTestData();
+        g.setIsDeleted(true);
+        assertEquals(true, g.getIsDeleted());
     }
 }

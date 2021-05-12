@@ -451,11 +451,6 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             onView(withId(R.id.correct_answer_popup)).check(matches(isDisplayed()));
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             onView(withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
