@@ -46,6 +46,9 @@ public class AddressGeocoder {
     }
 
     public Address convertToAddress(android.location.Address address) {
+        if(address == null){
+            throw new NullPointerException();
+        }
         List<String> addressLines = new ArrayList<>();
         for (int i = 0; i <= address.getMaxAddressLineIndex(); ++i)
             addressLines.add(address.getAddressLine(i));
