@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -130,6 +131,8 @@ public class MenuActivityTest {
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
+            FirebaseDatabase.getInstance().goOffline();
+
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
@@ -173,6 +176,8 @@ public class MenuActivityTest {
             }
 
             onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
+
+            FirebaseDatabase.getInstance().goOnline();
         }
     }
 
