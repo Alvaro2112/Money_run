@@ -1,14 +1,11 @@
-package sdp.moneyrun.user;
+package sdp.moneyrun.aaweather;
 
-import android.os.Handler;
+import android.location.LocationManager;
 
 import androidx.test.core.app.ActivityScenario;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,10 +16,12 @@ public class WeatherWidgetTest {
     public void onExplanationNeededWorks() {
         try (ActivityScenario<WeatherWidgetActivity> scenario = ActivityScenario.launch(WeatherWidgetActivity.class)) {
 
-            Thread.sleep(5000);
 
                     scenario.onActivity(a -> {
-
+                        android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
+                        location.setLatitude(40.741895);
+                        location.setLongitude(-73.989308);
+                        a.loadWeather(location);
                         assertNotNull(a.getCurrentForecast());
                         assertNotNull(a.getCurrentLocation());
 
