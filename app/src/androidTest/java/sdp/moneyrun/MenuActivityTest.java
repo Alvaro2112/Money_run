@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,8 +61,10 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -182,7 +185,7 @@ public class MenuActivityTest {
                 e.printStackTrace();
             }
 
-            onView(withId(R.id.openGamesLayout)).check(matches(hasChildCount(1)));
+            onView(withTagValue(Matchers.is((Object) 1))).check(matches(isDisplayed()));
 
             FirebaseDatabase.getInstance().goOnline();
         }
@@ -197,21 +200,23 @@ public class MenuActivityTest {
 
             String filter = "randomNameThatWillNeverOccur56903645734657260287345260874523048732648";
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
-            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+            //onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            onView(ViewMatchers.withId(0)).check(doesNotExist());
+            onView(withTagValue(Matchers.is((Object) 0))).check(doesNotExist());
         }
     }
 
     @Test
     public void OnlyNearGamesShowUp(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            FirebaseDatabase.getInstance().goOffline();
 
             String filter = "onlythistest887655677888";
             String nearGameName = "nearGame_" + filter;
@@ -277,8 +282,9 @@ public class MenuActivityTest {
 
             // The id of the names in the list are their hashcode values + the button value!
             // Here, we check for the first occurrence of a game
-            onView(ViewMatchers.withId(nearGameName.hashCode())).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(farGameName.hashCode())).check(doesNotExist());
+            onView(withTagValue(Matchers.is((Object) 1))).check(matches(isDisplayed()));
+
+            FirebaseDatabase.getInstance().goOnline();
         }
     }
 
