@@ -7,6 +7,7 @@ import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
@@ -42,6 +44,8 @@ public class JoinGameImplementation extends MenuImplementation{
     private final int layoutId;
     private final User currentUser;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
+
+    private int buttonId;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -65,8 +69,6 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param view the current view
      */
     public void onClickShowJoinGamePopupWindow(View view) {
-
-
         // Show popup
         PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list
@@ -80,15 +82,33 @@ public class JoinGameImplementation extends MenuImplementation{
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
+        Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
+
+        filterButton.setOnClickListener(v -> {
+            EditText filterEditText = popupView.findViewById(R.id.join_game_text_filter);
+            openGamesLayout.removeAllViews();
+
+            String filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
+            loadGameListGivenFilter(popupView, openGamesLayout, filterText);
+        });
+
+        // First load the game list without any filter.
+        loadGameListGivenFilter(popupView, openGamesLayout, null);
+    }
+
+    private void loadGameListGivenFilter(View popupView, LinearLayout openGamesLayout, String filterText){
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
             TableLayout gameLayout = new TableLayout(activity);
 
-            int buttonId = 0;
+            buttonId = 0;
             for (GameRepresentation gameRepresentation : gameRepresentations) {
-                displayGameInterface(gameLayout, buttonId, gameRepresentation);
-                buttonId++;
+                String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
+                if(filterText == null || lowerName.contains(filterText)){
+                    displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
+                    buttonId++;
+                }
             }
             openGamesLayout.addView(gameLayout);
         });
@@ -124,9 +144,7 @@ public class JoinGameImplementation extends MenuImplementation{
                         }
                     }
                 });
-
     }
-
 
     /**
      * Get a representation of a game from the database.
@@ -161,7 +179,10 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param buttonId              the id of the join button
      * @param gameRepresentation    the representation of the game to display
      */
-    private void displayGameInterface(TableLayout gameLayout, int buttonId, GameRepresentation gameRepresentation) {
+    private void displayGameInterface(TableLayout gameLayout,
+                                      int buttonId,
+                                      GameRepresentation gameRepresentation,
+                                      String filterText) {
         // create game layout
         TableRow gameRow = new TableRow(activity);
         TableLayout.LayoutParams gameParams = new TableLayout.LayoutParams(

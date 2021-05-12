@@ -6,31 +6,55 @@
     android:background="@drawable/layout_rounded"
     android:fadingEdge="horizontal|vertical">
 
+    <EditText
+        android:id="@+id/join_game_text_filter"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/join_game_filter_message"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:drawableStart="@drawable/baseline_search_24"
+        android:drawablePadding="12dp"
+        android:background="@drawable/inputs_register_profile" />
+
+    <Button
+        android:id="@+id/join_game_button_filter"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="240dp"
+        android:background="@drawable/layout_rounded"
+        android:text="@string/join_game_filter_button"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/openGamesText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:text="@string/open_games"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="300dp"
         android:layout_height="450dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="10dp">
-
 
         <LinearLayout
             android:id="@+id/openGamesLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/openGamesText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
-                android:text="@string/open_games"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
 
         </LinearLayout>

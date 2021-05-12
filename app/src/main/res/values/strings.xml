@@ -36,6 +36,8 @@
     <string name="join_game_message">Join</string>
     <string name="join_game_full_message">Full</string>
     <string name="join_game_too_far_message">Too far</string>
+    <string name="join_game_filter_message">Search game</string>
+    <string name="join_game_filter_button">Filter</string>
     <string name="game_name_display">%1$s</string>
     <string name="game_player_number_display">%1$d / %2$d</string>
     <string name="join_game_lobby_intent_extra_id">currentGameId</string>
@@ -94,6 +96,8 @@
     <string name="answer_4">D</string>
     <string name="mapbox_access_token">pk.eyJ1IjoibW9uZXlydW4iLCJhIjoiY2ttdnNxMzFuMDgzdTJvbjFwaWRjdmV3ZiJ9.R-YeQNFQsgZurdrzhNEIhA</string>
     <string name="map_score_text">Score: %1$d</string>
+    <string name="map_in_game_scores">Leaderboard</string>
+
     <string name="offline_end_progress_success">Map downloaded successfully.</string>
     <string name="offline_map_deleted">Older maps deleted successfully.</string>
     <string name="no_offline_regions">No downloaded maps.</string>
