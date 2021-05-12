@@ -126,7 +126,7 @@ public class MenuActivityTest {
         }
     }
 
-   /* @Test
+   @Test
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
@@ -158,7 +158,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -175,7 +175,6 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
         }
     }
-*/
 
     @Test
     public void filterWithNotExistingNameWorks(){
@@ -188,14 +187,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             onView(ViewMatchers.withId(0)).check(doesNotExist());
-
         }
     }
 
@@ -251,7 +243,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
