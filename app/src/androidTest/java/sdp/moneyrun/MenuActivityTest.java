@@ -142,8 +142,10 @@ public class MenuActivityTest {
                             }
                             Player host = new Player("364556546", "Bob", 0);
 
+                            // near game
+                            GameDatabaseProxy db = new GameDatabaseProxy();
                             GameBuilder gb = new GameBuilder();
-                            gb.setName("game t")
+                            gb.setName("popup test")
                                     .setMaxPlayerCount(12)
                                     .setHost(host)
                                     .setIsVisible(true)
@@ -151,8 +153,24 @@ public class MenuActivityTest {
                                     .setCoins(new ArrayList<>())
                                     .setStartLocation(selfLocation);
 
-                            GameDatabaseProxy db = new GameDatabaseProxy();
                             db.putGame(gb.build());
+
+                            // Location far away from the user
+                            Location farLocation = new Location("");
+                            farLocation.setLatitude(selfLocation.getLatitude() + 10.);
+                            farLocation.setLongitude(selfLocation.getLongitude() + 10.);
+
+                            // far away game, and full
+                            GameBuilder gb2 = new GameBuilder();
+                            gb2.setName("popup test 2")
+                                    .setMaxPlayerCount(1)
+                                    .setHost(host)
+                                    .setIsVisible(true)
+                                    .setRiddles(new ArrayList<>())
+                                    .setCoins(new ArrayList<>())
+                                    .setStartLocation(farLocation);
+
+                            db.putGame(gb2.build());
                         });
             });
 
