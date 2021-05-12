@@ -128,5 +128,7 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+    <string name="open_weather_key">052c4316c52f5d7f619a05a0a09a7636</string>
+
 
 </resources>
