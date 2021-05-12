@@ -161,8 +161,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
-            Thread.sleep(2000);
-
+            Thread.sleep(5000);
 
             Intents.release();
         } catch (InterruptedException e) {
