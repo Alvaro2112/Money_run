@@ -57,11 +57,6 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
     public void loadWeather(android.location.Location location) {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE);
-            return;
-        }
-
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());

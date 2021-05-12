@@ -33,7 +33,15 @@ public class AddressGeocoder {
      * @throws IOException
      */
     public android.location.Address getAddress(@NonNull LocationRepresentation location) throws IOException {
-        android.location.Address address = this.geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1).get(0);
+        List<android.location.Address> addressList = this.geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        android.location.Address address;
+
+        if(addressList.size() > 0) {
+            address = addressList.get(0);
+        }else {
+            address = null;
+        }
+
         return address;
     }
 
