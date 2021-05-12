@@ -123,6 +123,8 @@ public class    GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(8000);
             intended(hasComponent(MapActivity.class.getName()));
+            Thread.sleep(8000);
+
             Intents.release();
         }catch (InterruptedException e) {
             e.printStackTrace();

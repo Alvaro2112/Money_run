@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
@@ -37,7 +36,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     private ArrayList<Player> playerList = new ArrayList<>();
     private LobbyPlayerListAdapter listAdapter;
     TextView playerMissingView;
-    DatabaseProxy dbProxy;
     private int missingPlayers;
     private ListView playerListView;
     @Override
