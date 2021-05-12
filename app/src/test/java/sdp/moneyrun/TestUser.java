@@ -1,10 +1,15 @@
 package sdp.moneyrun;
 
+import android.service.autofill.UserData;
+
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.user.User;
 
 import static org.junit.Assert.assertEquals;
@@ -177,5 +182,74 @@ public class TestUser {
         int score = 8;
         p.setMaxScoreInGame(score);
         assertEquals(score, p.getMaxScoreInGame());
+    }
+
+    @Test
+    public void setPlayerListWorks(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+        List<String> friendIdList = new ArrayList<>();
+        friendIdList.add("123456");
+
+        user.setFriendIdList(friendIdList);
+
+        assertEquals(user.getFriendIdList(), friendIdList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setPlayerFailsWithNullList(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        user.setFriendIdList(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setPlayerFailsWithNullFriend(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        List<String> friendIdList = new ArrayList<>();
+        friendIdList.add(null);
+
+        user.setFriendIdList(friendIdList);
+    }
+
+    @Test
+    public void addFriendWorks(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        List<String> friendIdList = new ArrayList<>();
+        friendIdList.add("jgf978g93");
+
+        user.addFriendId("jgf978g93");
+
+        assertEquals(user.getFriendIdList(), friendIdList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addNullFriendFails(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        user.addFriendId(null);
+    }
+
+    @Test
+    public void removeFriendWorks(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        List<String> friendIdList = new ArrayList<>();
+        friendIdList.add("7834g4tg78t43");
+        user.setFriendIdList(friendIdList);
+
+        user.removeFriendId("7834g4tg78t43");
+        assertEquals(user.getFriendIdList(), new ArrayList<>());
+
+        user.removeFriendId("7834g4tg78t43");
+        assertEquals(user.getFriendIdList(), new ArrayList<>());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeNullFriendFails(){
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0,0,0);
+
+        user.removeFriendId(null);
     }
 }
