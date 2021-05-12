@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 public final class WeatherForecast {
     private WeatherReport[] reports;
 
-    WeatherForecast(WeatherReport[] reports) {
+    public WeatherForecast(WeatherReport[] reports) {
         if (reports.length < 3) {
             throw new IllegalArgumentException("reports array must contain at least 3 elements.");
         }
