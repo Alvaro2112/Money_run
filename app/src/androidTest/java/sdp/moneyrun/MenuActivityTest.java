@@ -167,11 +167,10 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             onView(ViewMatchers.withId(0)).perform(ViewActions.scrollTo());
             onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
         }
