@@ -1,8 +1,8 @@
-package sdp.moneyrun.aaweather;
-import static org.junit.Assert.assertEquals;
+package sdp.moneyrun.weather;
+
 import org.junit.Test;
 
-import sdp.moneyrun.weather.WeatherReport;
+import static org.junit.Assert.assertEquals;
 
 public class WeatherReportTest {
 

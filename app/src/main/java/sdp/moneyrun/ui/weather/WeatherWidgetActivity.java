@@ -44,9 +44,9 @@ public class WeatherWidgetActivity extends AppCompatActivity {
             return;
         }
 
-        try{
-           locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-        }catch(Exception e){
+        try {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+        } catch (Exception e) {
             System.out.println("Your device does not have network capabilities");
         }
 
@@ -65,7 +65,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
             android.location.Address addr = addressGeocoder.getAddress(loc);
             Address address;
-            if(addr != null){
+            if (addr != null) {
                 address = addressGeocoder.convertToAddress(addr);
             }
 

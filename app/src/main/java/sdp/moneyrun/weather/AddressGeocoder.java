@@ -36,16 +36,16 @@ public class AddressGeocoder {
         List<android.location.Address> addressList = this.geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         android.location.Address address;
 
-        if(addressList.size() > 0) {
+        if (addressList.size() > 0) {
             address = addressList.get(0);
-        }else {
+        } else {
             address = null;
         }
 
         return address;
     }
 
-    public Address convertToAddress(android.location.Address address){
+    public Address convertToAddress(android.location.Address address) {
         List<String> addressLines = new ArrayList<>();
         for (int i = 0; i <= address.getMaxAddressLineIndex(); ++i)
             addressLines.add(address.getAddressLine(i));

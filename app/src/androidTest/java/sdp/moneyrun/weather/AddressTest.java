@@ -1,10 +1,8 @@
-package sdp.moneyrun.aaweather;
+package sdp.moneyrun.weather;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
-
-import sdp.moneyrun.weather.Address;
 
 import static org.junit.Assert.assertEquals;
 
