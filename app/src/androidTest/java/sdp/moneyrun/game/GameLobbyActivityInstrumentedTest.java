@@ -218,6 +218,8 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void nameDisplaysProperly() {
+        //I don't have the slightest idea why but having the db offline crashes this test
+        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -233,6 +235,7 @@ public class GameLobbyActivityInstrumentedTest {
             onView(ViewMatchers.withId(R.id.lobby_title)).check(matches(withText(game.getName())));
             Intents.release();
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
     @Test
     public void playerListUpdatesWithDB(){
@@ -276,6 +279,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void playersMissingDisplaysProperly() {
+        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -296,6 +300,7 @@ public class GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
 
     @Test
@@ -359,6 +364,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void LeaveLobbyWorks() {
+        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();

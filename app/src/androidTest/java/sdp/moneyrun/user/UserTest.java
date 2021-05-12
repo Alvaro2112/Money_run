@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.MainActivity;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -21,13 +23,14 @@ import static org.junit.Assert.assertThat;
 public class UserTest {
     private final long ASYNC_CALL_TIMEOUT = 10L;
 
-//    @BeforeClass
-//    public static void setPersistence(){
-//        if(!MainActivity.calledAlready){
-//            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-//            MainActivity.calledAlready = true;
-//        }
-//    }
+    @BeforeClass
+    public static void setPersistence(){
+        if(!MainActivity.calledAlready){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+        FirebaseDatabase.getInstance().goOffline();
+    }
 
     @Test
     public void setAddressWithDBUpdateWorks(){
