@@ -117,6 +117,55 @@ public class MenuActivityTest {
     }
 
     @Test
+    public void filterWorks(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            scenario.onActivity(a -> {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(a, selfLocation -> {
+                            if(selfLocation == null){
+                                assertEquals(1, 0);
+                                return;
+                            }
+                            Player host = new Player("364556546", "Bob", 0);
+
+                            GameBuilder gb = new GameBuilder();
+                            gb.setName("checkfilter")
+                                    .setMaxPlayerCount(12)
+                                    .setHost(host)
+                                    .setIsVisible(true)
+                                    .setRiddles(new ArrayList<>())
+                                    .setCoins(new ArrayList<>())
+                                    .setStartLocation(selfLocation);
+
+                            GameDatabaseProxy db = new GameDatabaseProxy();
+                            db.putGame(gb.build());
+                        });
+            });
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            onView(ViewMatchers.withId(0)).perform(ViewActions.scrollTo());
+            onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
+        }
+    }
+
     public void filterWithNotExistingNameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
