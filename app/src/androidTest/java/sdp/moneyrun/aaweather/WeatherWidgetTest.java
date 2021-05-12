@@ -25,16 +25,9 @@ public class WeatherWidgetTest {
 
                     });
 
-                    Thread.sleep(5000);
-
-                    scenario.onActivity(a -> {
-                        assertNotNull(a.getCurrentForecast());
-                        assertNotNull(a.getCurrentLocation());
-
-                    });
 
 
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             assertEquals(1, 2);
             e.printStackTrace();
         }
