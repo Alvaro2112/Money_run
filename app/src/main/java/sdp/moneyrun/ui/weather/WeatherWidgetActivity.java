@@ -45,7 +45,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         }
 
         try{
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+           locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
         }catch(Exception e){
             System.out.println("Your device does not have network capabilities");
         }
@@ -66,10 +66,10 @@ public class WeatherWidgetActivity extends AppCompatActivity {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             this.currentLocation = loc;
-            System.out.println(loc.getLatitude());
             this.currentForecast = openWeatherMap.getForecast(loc);
 
-            Address address = addressGeocoder.getAddress(loc);
+            android.location.Address addr = addressGeocoder.getAddress(loc);
+            Address address = addressGeocoder.convertToAddress(addr);
 
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);

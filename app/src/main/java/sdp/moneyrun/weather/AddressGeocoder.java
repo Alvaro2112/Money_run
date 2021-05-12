@@ -32,13 +32,16 @@ public class AddressGeocoder {
      * @return The address
      * @throws IOException
      */
-    public Address getAddress(@NonNull LocationRepresentation location) throws IOException {
+    public android.location.Address getAddress(@NonNull LocationRepresentation location) throws IOException {
         android.location.Address address = this.geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1).get(0);
+        return address;
+    }
+
+    public Address convertToAddress(android.location.Address address){
         List<String> addressLines = new ArrayList<>();
         for (int i = 0; i <= address.getMaxAddressLineIndex(); ++i)
             addressLines.add(address.getAddressLine(i));
 
         return new Address(addressLines);
-
     }
 }
