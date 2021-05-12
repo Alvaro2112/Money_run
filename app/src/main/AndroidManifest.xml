@@ -16,7 +16,8 @@
         </activity>
         <activity android:name=".ui.map.MapActivity">
         </activity>
-
+        <activity android:name=".ui.weather.WeatherWidgetActivity">
+        </activity>
         <activity android:name=".ui.menu.LeaderboardActivity" />
 
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
