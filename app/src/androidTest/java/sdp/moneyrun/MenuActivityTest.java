@@ -171,7 +171,6 @@ public class MenuActivityTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             onView(ViewMatchers.withId(0)).perform(ViewActions.scrollTo());
             onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
         }
