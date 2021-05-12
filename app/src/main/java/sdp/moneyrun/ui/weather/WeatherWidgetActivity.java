@@ -64,7 +64,10 @@ public class WeatherWidgetActivity extends AppCompatActivity {
             this.currentForecast = openWeatherMap.getForecast(loc);
 
             android.location.Address addr = addressGeocoder.getAddress(loc);
-            Address address = addressGeocoder.convertToAddress(addr);
+            Address address;
+            if(addr != null){
+                address = addressGeocoder.convertToAddress(addr);
+            }
 
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);
