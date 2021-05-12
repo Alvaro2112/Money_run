@@ -21,16 +21,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
@@ -49,6 +53,8 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
+
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 
 
 /*
@@ -137,6 +143,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 }
             });
         }
+        drawCircle();
     }
 
     /**
@@ -496,6 +503,47 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
+    }
+
+    /**
+     * Draws a circle around the players, this is where the players should be allowed to be during a game
+     */
+    public void drawCircle(){
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                mapboxMap.addPolygon(generatePerimeter(
+                        new LatLng(0.0, 0.0),
+                        1,
+                        64));
+            }
+        });
+    }
+
+    private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
+        List<LatLng> positions = new ArrayList<>();
+        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
+        double distanceY = radiusInKilometers / 110.574;
+
+        double slice = (2 * Math.PI) / numberOfSides;
+
+        double theta;
+        double x;
+        double y;
+        LatLng position;
+        for (int i = 0; i < numberOfSides; ++i) {
+            theta = i * slice;
+            x = distanceX * Math.cos(theta);
+            y = distanceY * Math.sin(theta);
+
+            position = new LatLng(centerCoordinates.getLatitude() + y,
+                    centerCoordinates.getLongitude() + x);
+            positions.add(position);
+        }
+        return new PolygonOptions()
+                .addAll(positions)
+                .fillColor(Color.BLUE)
+                .alpha(0.4f);
     }
 
 
