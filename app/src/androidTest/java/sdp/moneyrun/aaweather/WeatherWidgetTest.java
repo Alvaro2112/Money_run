@@ -19,6 +19,8 @@ public class WeatherWidgetTest {
 
                     scenario.onActivity(a -> {
                         android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
+                        location.setLatitude(40.741895);
+                        location.setLongitude(-73.989308);
 
                     });
 
