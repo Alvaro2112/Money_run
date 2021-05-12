@@ -52,7 +52,7 @@ public class EndGameInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
-        FirebaseDatabase.getInstance().goOnline();
+        FirebaseDatabase.getInstance().goOffline();
     }
 
 
@@ -101,12 +101,12 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
-            Thread.sleep(2000);
+         //   Thread.sleep(2000);
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
         }
 
     }
