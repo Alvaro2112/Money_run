@@ -70,4 +70,26 @@ public class WeatherReportTest {
         weatherReport.setWeatherIcon("bb");
         assertEquals(weatherReport.getWeatherIcon(), "bb");
     }
+
+    @Test(expected = NullPointerException.class)
+    public void setWeatherTypeFailsCorrectly() {
+        WeatherReport weatherReport = new WeatherReport(1, 1, 1, "sunny", "aa");
+        weatherReport.setWeatherType(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void setWeatherIconFailsCorrectly() {
+        WeatherReport weatherReport = new WeatherReport(1, 1, 1, "sunny", "aa");
+        weatherReport.setWeatherIcon(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void constructorFailsCorrectly1() {
+        WeatherReport weatherReport = new WeatherReport(1, 1, 1, null, "aa");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void constructorFailsCorrectly2() {
+        WeatherReport weatherReport = new WeatherReport(1, 1, 1, "sunny", null);
+    }
 }

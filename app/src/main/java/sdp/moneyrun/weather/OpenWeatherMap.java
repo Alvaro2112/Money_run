@@ -43,6 +43,10 @@ public class OpenWeatherMap {
 
 
     private WeatherReport parseReport(JSONObject report) throws JSONException {
+        if(report == null){
+            throw  new NullPointerException();
+        }
+
         JSONObject weather = report.getJSONArray("weather").getJSONObject(0);
 
         return new WeatherReport(
@@ -56,6 +60,9 @@ public class OpenWeatherMap {
     }
 
     private WeatherForecast parseForecast(JSONObject forecast) throws JSONException {
+        if(forecast == null){
+            throw new NullPointerException();
+        }
         JSONArray daily = forecast.getJSONArray("daily");
         WeatherReport[] reports = new WeatherReport[Math.max(3, daily.length())];
 
