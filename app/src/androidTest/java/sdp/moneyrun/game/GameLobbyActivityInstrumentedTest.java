@@ -39,16 +39,14 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class GameLobbyActivityInstrumentedTest {
+public class    GameLobbyActivityInstrumentedTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -122,7 +120,7 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
 
-            Player nonHost = new Player("3", "Carl", 0);
+            Player nonHost = new Player("4", "Carl", 0);
             Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
             intent2.putExtra("currentUser", nonHost);
             intent2.putExtra("currentGameId", id);
@@ -130,6 +128,8 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(8000);
             intended(hasComponent(MapActivity.class.getName()));
+            Thread.sleep(8000);
+
             Intents.release();
         }catch (InterruptedException e) {
             e.printStackTrace();

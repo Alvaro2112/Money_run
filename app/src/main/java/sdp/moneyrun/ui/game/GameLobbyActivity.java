@@ -1,5 +1,33 @@
 package sdp.moneyrun.ui.game;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import sdp.moneyrun.R;
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.map.MapActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +62,9 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
+
+
+
 
 
 public class GameLobbyActivity extends AppCompatActivity {
