@@ -3,7 +3,7 @@ package sdp.moneyrun.weather;
 
 import android.os.StrictMode;
 import android.util.Log;
-import sdp.moneyrun.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +26,7 @@ public class OpenWeatherMap {
     private static final String API_ENDPOINT = "https://api.openweathermap.org/data/2.5/onecall";
     private static final String TEMP_UNIT = "metric";
     private static final WeatherReport NO_DATA = new WeatherReport(0, 0, 0, "N/A", "N/A");
+    public static final String open_weather_key = "052c4316c52f5d7f619a05a0a09a7636";
 
     private final String apiKey;
 
@@ -36,7 +37,7 @@ public class OpenWeatherMap {
     }
 
     public static OpenWeatherMap build() {
-        String key = Integer.toString(R.string.open_weather_key);
+        String key = open_weather_key;
         return new OpenWeatherMap(key);
     }
 

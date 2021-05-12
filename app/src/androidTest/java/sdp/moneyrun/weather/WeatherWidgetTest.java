@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class WeatherWidgetTest {
 
     @Test
-    public void onExplanationNeededWorks() {
+    public void loadWeatherWorks() {
         try (ActivityScenario<WeatherWidgetActivity> scenario = ActivityScenario.launch(WeatherWidgetActivity.class)) {
 
 
@@ -35,7 +35,7 @@ public class WeatherWidgetTest {
             });
 
 
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | InterruptedException e) {
             assertEquals(1, 2);
             e.printStackTrace();
         }

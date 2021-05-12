@@ -125,7 +125,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
+/*
     @Test
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -176,6 +176,8 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
         }
     }
+    */
+
 
     @Test
     public void filterWithNotExistingNameWorks(){
