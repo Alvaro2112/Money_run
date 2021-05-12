@@ -120,10 +120,8 @@ public class MenuActivityTest {
     public void joinGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
-
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-
             Intents.release();
         }
     }
