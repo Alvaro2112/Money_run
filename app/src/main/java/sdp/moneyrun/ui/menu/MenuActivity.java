@@ -67,6 +67,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
+        String toDeleteId = getIntent().getStringExtra("deleteGame");
 
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
