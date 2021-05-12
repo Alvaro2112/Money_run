@@ -187,6 +187,12 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(ViewMatchers.withId(0)).check(doesNotExist());
         }
     }
