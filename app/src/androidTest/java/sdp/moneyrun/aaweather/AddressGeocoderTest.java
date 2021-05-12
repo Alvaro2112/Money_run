@@ -19,6 +19,7 @@ public class AddressGeocoderTest {
     @Test
     public void getWeatherReportWorks() {
         try (ActivityScenario<WeatherWidgetActivity> scenario = ActivityScenario.launch(WeatherWidgetActivity.class)) {
+            Thread.sleep(5000);
             scenario.onActivity(a-> {
                         AddressGeocoder addressGeocoder = AddressGeocoder.fromContext(a);
                         try {
@@ -30,6 +31,8 @@ public class AddressGeocoderTest {
                     }
             );
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
