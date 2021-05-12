@@ -21,7 +21,7 @@ public class User implements Serializable {
     private int totalDistanceRun;
     // By default, user has no friend. But we still add a default invalid id
     // to make the node appear in the database.
-    private List<String> friendIdList;
+    private List<String> friendIdList = new ArrayList<>();
 
     public int getMaxScoreInGame() {
         return maxScoreInGame;
