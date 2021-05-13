@@ -419,9 +419,11 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                        if(fully){
+                            a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
 
-                        finished.set(true);
+                            finished.set(true);
+                        }
                     }
                 });
             });
@@ -436,6 +438,11 @@ public class MapInstrumentedTest {
                     break;
                 }
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
@@ -444,6 +451,7 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
             }
             onView(withId(R.id.correct_answer_popup)).check(matches(isDisplayed()));
+
             onView(withId(R.id.collect_coin)).check(matches(isDisplayed()));
         }
     }

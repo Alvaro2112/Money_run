@@ -321,7 +321,9 @@ public class JoinGameImplementation extends MenuImplementation{
         if(newPlayer == null){
             throw new IllegalArgumentException();
         }
-        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId()).putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer);
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId())
+                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer)
+                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser);
         activity.startActivity(lobbyIntent);
     }
 
