@@ -143,14 +143,15 @@ public class JoinGameImplementation extends MenuImplementation{
                 activity.getIntent().putExtra("number_of_results", -100);
                 LocationRepresentation locationRep = new LocationRepresentation(0, 0);
                 LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
-            });
-            */
+                });
+
             fusedLocationClient.getLastLocation()
                     .addOnFailureListener(task -> {
                         activity.getIntent().putExtra("number_of_results", -101);
                         LocationRepresentation locationRep = new LocationRepresentation(0, 0);
                         LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
                     });
+             */
         });
     }
 
