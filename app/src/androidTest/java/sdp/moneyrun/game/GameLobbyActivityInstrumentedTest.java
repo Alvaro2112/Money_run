@@ -499,6 +499,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void deleteGameDeletesItFromDB(){
+        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("3","Bob", 0);
@@ -534,6 +535,7 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
         }
         assertNull(deleted.getResult().getValue());
+        FirebaseDatabase.getInstance().goOffline();
     }
 
 }

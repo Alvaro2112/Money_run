@@ -243,6 +243,7 @@ public class GameInstrumentedTest {
 
     @Test
     public void setIsVisibleSetsItInDB(){
+        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         db.putGame(g);
         try {
@@ -271,6 +272,7 @@ public class GameInstrumentedTest {
         }
         boolean visible = task.getResult().getValue(boolean.class);
         assertFalse(visible);
+        FirebaseDatabase.getInstance().goOffline();
     }
 
     @Test
@@ -635,6 +637,7 @@ public class GameInstrumentedTest {
 
     @Test
     public void setIsDeletedSetsValueInDB(){
+        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         gdp.putGame(g);
@@ -668,6 +671,7 @@ public class GameInstrumentedTest {
         }else{
             fail();
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
 
 
