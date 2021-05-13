@@ -164,8 +164,6 @@ public class MenuActivityTest {
 
                             GameDatabaseProxy db = new GameDatabaseProxy();
                             db.putGame(gb.build());
-
-
                         });
             });
 
