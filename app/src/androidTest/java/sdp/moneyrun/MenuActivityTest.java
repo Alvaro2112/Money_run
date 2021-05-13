@@ -171,7 +171,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -180,7 +180,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -200,15 +200,15 @@ public class MenuActivityTest {
 
             String filter = "randomNameThatWillNeverOccur56903645734657260287345260874523048732648";
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
-            //onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            onView(withTagValue(Matchers.is((Object) 0))).check(doesNotExist());
+            onView(withTagValue(Matchers.is((Object) 0))).check(matches(isDisplayed()));
         }
     }
 
@@ -266,7 +266,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -275,13 +275,12 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            // The id of the names in the list are their hashcode values + the button value!
-            // Here, we check for the first occurrence of a game
+            // The tag is defined as the number of games showed
             onView(withTagValue(Matchers.is((Object) 1))).check(matches(isDisplayed()));
 
             FirebaseDatabase.getInstance().goOnline();

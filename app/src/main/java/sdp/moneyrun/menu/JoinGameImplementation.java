@@ -130,7 +130,7 @@ public class JoinGameImplementation extends MenuImplementation{
                                 buttonId++;
                             }
                         }
-                        openGamesLayout.setTag(buttonId);
+                        popupView.setTag(buttonId);
                         openGamesLayout.addView(gameLayout);
                     });
         });
