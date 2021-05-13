@@ -140,12 +140,6 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             scenario.onActivity(a -> {
                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
                 fusedLocationClient.getLastLocation()
@@ -178,7 +172,6 @@ public class MenuActivityTest {
 
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.join_game_button_filter)).check(matches(isClickable()));
 
             try {
                 Thread.sleep(10000);
@@ -200,6 +193,8 @@ public class MenuActivityTest {
     public void filterWithNotExistingNameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
+            FirebaseDatabase.getInstance().goOffline();
+
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
@@ -218,6 +213,8 @@ public class MenuActivityTest {
 
                 assertEquals(0, n);
             });
+
+            FirebaseDatabase.getInstance().goOnline();
         }
     }
 

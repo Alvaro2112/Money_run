@@ -107,7 +107,9 @@ public class JoinGameImplementation extends MenuImplementation{
         activity.getIntent().putExtra("number_of_results", -14);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
+        activity.getIntent().putExtra("number_of_results", -17);
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
+        activity.getIntent().putExtra("number_of_results", -18);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
             activity.getIntent().putExtra("number_of_results", -15);
 
