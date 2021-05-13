@@ -143,9 +143,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     if(gameId != null){
                         initializeGame(gameId);
                     }
-                    drawCircle(new LatLng( 45.522585,-122.685699), 20,64,mapboxMap);
+                    //drawCircle(new LatLng( 45.522585,-122.685699), 20,64,mapboxMap);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
-                            mapboxMap,1.3,1);
+                            mapboxMap,0.01,1);
                 }
             });
         }
@@ -512,11 +517,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void shrinkCircle(long paceInMillis, double initialRadius,LatLng center,int numberOfSides,MapboxMap map,double shrinkPace,double epsilon){
+        drawCircle(center,initialRadius,numberOfSides,map);
         if(initialRadius < epsilon)
             return;
         long initTime = currentTimeMillis();
         while(currentTimeMillis() - initTime < paceInMillis){}
         drawCircle(center,initialRadius*shrinkPace,numberOfSides,map);
+        //shrinkCircle(paceInMillis,initialRadius*shrinkPace,center,numberOfSides,map,shrinkPace,epsilon);
     }
 
 
