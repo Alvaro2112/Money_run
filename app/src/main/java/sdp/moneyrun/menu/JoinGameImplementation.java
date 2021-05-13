@@ -107,9 +107,9 @@ public class JoinGameImplementation extends MenuImplementation{
             requestLocationPermissions(requestPermissionsLauncher);
 
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(activity, location -> {
+                    .addOnSuccessListener(location -> {
                         // Got last known location. In some rare situations this can be null
-                        // In this case, the game cannot be instanciated
+                        // In this case, define a default location (0, 0)
                         LocationRepresentation locationRep;
 
                         if (location == null) {
