@@ -134,7 +134,6 @@ public class MenuActivityTest {
         }
     }
 
-    /*
     @Test
     public void newGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -144,7 +143,6 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-    */
 
     @Test
     public void filterWorks(){
@@ -231,13 +229,6 @@ public class MenuActivityTest {
     @Test
     public void OnlyNearGamesShowUp(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Intents.release();
-            }
 
             Random rand = new Random();
             String filter = String.valueOf(rand.nextInt(1000000000));
