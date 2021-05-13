@@ -70,12 +70,6 @@ public class MenuActivityTest {
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
-        toStart.putExtra("isLocationMocked", true);
-
-        Location mockLocation = new Location("");
-        mockLocation.setLatitude(0);
-        mockLocation.setLongitude(0);
-        toStart.putExtra("mockLocation", mockLocation);
         return toStart;
     }
 
@@ -131,6 +125,14 @@ public class MenuActivityTest {
     public void joinGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             Intents.release();
@@ -142,6 +144,13 @@ public class MenuActivityTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
             Intents.init();
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
@@ -203,6 +212,13 @@ public class MenuActivityTest {
 
             Intents.init();
 
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
@@ -232,6 +248,13 @@ public class MenuActivityTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
             Intents.init();
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
 
             Random rand = new Random();
             String filter = String.valueOf(rand.nextInt(1000000000));
@@ -422,6 +445,13 @@ public class MenuActivityTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
 
             Intents.init();
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
