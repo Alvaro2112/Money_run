@@ -1523,7 +1523,15 @@ public class MapInstrumentedTest {
 
         }
     }
-
+    @Test
+    public void checkIfShrinkCircleDrawsSmallerCircleWithCorrectShrinkPace(){
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            scenario.onActivity(a ->
+                    a.shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
+                            a.mapboxMap,0.01,1)
+                    );
+        }
+    }
 
 
 }

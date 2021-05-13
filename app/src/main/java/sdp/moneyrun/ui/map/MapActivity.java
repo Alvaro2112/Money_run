@@ -143,14 +143,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     if(gameId != null){
                         initializeGame(gameId);
                     }
-                    //drawCircle(new LatLng( 45.522585,-122.685699), 20,64,mapboxMap);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
-                            mapboxMap,0.01,1);
                 }
             });
         }
@@ -248,7 +240,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * @param mapboxMap the map where everything will be done
-     *                  this overried the OnMapReadyCallback in the implemented interface
+     *                  this override the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                  Then we setup the location tracking
      */
@@ -516,6 +508,18 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
+
+    /**
+     *
+     * @param paceInMillis the rate of the shrinking radius
+     * @param initialRadius the starting radius inside which coins will appear
+     * @param center the starting position of the host
+     * @param numberOfSides to have as smooth of a circle
+     * @param map the map where the circle will be drawn
+     * @param shrinkPace bz how much the radius shrinks
+     * @param epsilon if under this threshold there is no circle anymore
+     */
+
     public void shrinkCircle(long paceInMillis, double initialRadius,LatLng center,int numberOfSides,MapboxMap map,double shrinkPace,double epsilon){
         drawCircle(center,initialRadius,numberOfSides,map);
         if(initialRadius < epsilon)
@@ -523,7 +527,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         long initTime = currentTimeMillis();
         while(currentTimeMillis() - initTime < paceInMillis){}
         drawCircle(center,initialRadius*shrinkPace,numberOfSides,map);
-        //shrinkCircle(paceInMillis,initialRadius*shrinkPace,center,numberOfSides,map,shrinkPace,epsilon);
     }
 
 
@@ -553,37 +556,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     centerCoordinates.getLongitude() + x);
             positions.add(position);
         }
-
-
-
-
-
         List<List<Point>> POINTS = new ArrayList<>();
         List<Point> OUTER_POINTS = new ArrayList<>();
-
          {
-//            OUTER_POINTS.add(Point.fromLngLat(-122.685699, 45.522585));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.708873, 45.534611));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.678833, 45.530883));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.667503, 45.547115));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.660121, 45.530643));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.636260, 45.533529));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.659091, 45.521743));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.648792, 45.510677));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.664070, 45.515008));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.669048, 45.502496));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.678489, 45.515369));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.702007, 45.506346));
-//            OUTER_POINTS.add(Point.fromLngLat(-122.685699, 45.522585));
              for(int i = 0;i<positions.size();++i){
                  OUTER_POINTS.add(Point.fromLngLat(positions.get(i).getLongitude(),positions.get(i).getLatitude()));
              }
             POINTS.add(OUTER_POINTS);
         }
-        //mapView.getMapAsync(new OnMapReadyCallback() {
-            //@Override
-            //public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(@NonNull final MapboxMap mapboxMap) {
                 map.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
@@ -593,8 +576,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                         );
                     }
                 });
-            //}
-        //});
+
+            }
+        });
     }
 
 }
