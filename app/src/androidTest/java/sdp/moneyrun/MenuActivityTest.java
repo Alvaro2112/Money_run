@@ -141,6 +141,8 @@ public class MenuActivityTest {
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
+            Intents.init();
+
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
@@ -172,6 +174,7 @@ public class MenuActivityTest {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Intents.release();
             }
 
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
@@ -181,6 +184,7 @@ public class MenuActivityTest {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Intents.release();
             }
 
             scenario.onActivity(a -> {
@@ -188,12 +192,16 @@ public class MenuActivityTest {
 
                 assertTrue(n >= 1);
             });
+
+            Intents.release();
         }
     }
 
     @Test
     public void filterWithNotExistingNameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            Intents.init();
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
@@ -206,6 +214,7 @@ public class MenuActivityTest {
                 Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Intents.release();
             }
 
             scenario.onActivity(a -> {
@@ -213,12 +222,16 @@ public class MenuActivityTest {
 
                 assertEquals(0, n);
             });
+
+            Intents.release();
         }
     }
 
     @Test
     public void OnlyNearGamesShowUp(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            Intents.init();
 
             Random rand = new Random();
             String filter = String.valueOf(rand.nextInt(1000000000));
@@ -272,6 +285,7 @@ public class MenuActivityTest {
                 Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Intents.release();
             }
 
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
@@ -281,6 +295,7 @@ public class MenuActivityTest {
                 Thread.sleep(7000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Intents.release();
             }
 
             scenario.onActivity(a -> {
@@ -288,6 +303,8 @@ public class MenuActivityTest {
 
                 assertEquals(1, n);
             });
+
+            Intents.release();
         }
     }
 
