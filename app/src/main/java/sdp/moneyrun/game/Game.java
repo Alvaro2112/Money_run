@@ -3,10 +3,9 @@ package sdp.moneyrun.game;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
+
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
