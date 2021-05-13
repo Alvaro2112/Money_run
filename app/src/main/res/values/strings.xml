@@ -42,6 +42,7 @@
     <string name="game_player_number_display">%1$d / %2$d</string>
     <string name="join_game_lobby_intent_extra_id">currentGameId</string>
     <string name="join_game_lobby_intent_extra_user">currentUser</string>
+    <string name="join_game_lobby_intent_extra_type_user">UserTypeCurrentUser</string>
 
 
     <string name="lobby_player_missing">Players missing: %1$d</string>
@@ -49,6 +50,7 @@
 
     <string name="database_open_games">open_games</string>
     <string name="database_games">games</string>
+    <string name="database_games_isDeleted">isDeleted</string>
     <string name="database_open_games_is_visible">isVisible</string>
     <string name="database_open_games_game_id">gameId</string>
     <string name="database_open_games_name">name</string>
@@ -128,5 +130,6 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+
 
 </resources>
