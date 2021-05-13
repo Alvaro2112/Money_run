@@ -17,7 +17,7 @@ public class JoinGameTest {
     @Test
     public void constructorFailsOnNullUser(){
         try{
-            new JoinGameImplementation(null, null, null, null, null, true, 1);
+            new JoinGameImplementation(null, null, null, null, null, true, 1, false);
         }catch (IllegalArgumentException e){
             return;
         }

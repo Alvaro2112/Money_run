@@ -116,13 +116,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer",false);
         setGuestPlayerFields(guestPlayer);
 
+        boolean isLocationMocked = getIntent().getBooleanExtra("isLocationMocked", false);
+
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
                 fusedLocationClient,
                 true,
-                R.layout.join_game_popup);
+                R.layout.join_game_popup,
+                isLocationMocked);
 
         NewGameImplementation newGameImplementation = new NewGameImplementation(this,
                 databaseReference,

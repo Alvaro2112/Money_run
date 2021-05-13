@@ -43,6 +43,7 @@ public class JoinGameImplementation extends MenuImplementation{
     private final boolean focusable;
     private final int layoutId;
     private final User currentUser;
+    private final boolean isLocationMocked;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
 
     private int buttonId;
@@ -53,7 +54,8 @@ public class JoinGameImplementation extends MenuImplementation{
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
-                                  int layoutId){
+                                  int layoutId,
+                                  boolean isLocationMocked){
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         if(user == null){
             throw new IllegalArgumentException("user is null");
@@ -61,6 +63,7 @@ public class JoinGameImplementation extends MenuImplementation{
         this.focusable = focusable;
         this.layoutId = layoutId;
         this.currentUser = user;
+        this.isLocationMocked = isLocationMocked;
     }
 
     /**
@@ -69,7 +72,6 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param view the current view
      */
     public void onClickShowJoinGamePopupWindow(View view) {
-        activity.getIntent().putExtra("number_of_results", -10);
         // Show popup
         PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list
@@ -81,14 +83,11 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param popupView
      */
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
-        activity.getIntent().putExtra("number_of_results", -11);
-
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
 
         filterButton.setOnClickListener(v -> {
-            activity.getIntent().putExtra("number_of_results", -13);
 
             EditText filterEditText = popupView.findViewById(R.id.join_game_text_filter);
             openGamesLayout.removeAllViews();
@@ -97,72 +96,52 @@ public class JoinGameImplementation extends MenuImplementation{
             loadGameListGivenFilter(popupView, openGamesLayout, filterText);
         });
 
-        activity.getIntent().putExtra("number_of_results", -12);
         // First load the game list without any filter.
         loadGameListGivenFilter(popupView, openGamesLayout, null);
     }
 
     @SuppressLint("MissingPermission")
     private void loadGameListGivenFilter(View popupView, LinearLayout openGamesLayout, String filterText){
-        activity.getIntent().putExtra("number_of_results", -14);
 
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
-        activity.getIntent().putExtra("number_of_results", -17);
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
-        activity.getIntent().putExtra("number_of_results", -18);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
-            activity.getIntent().putExtra("number_of_results", -15);
 
             TableLayout gameLayout = new TableLayout(activity);
 
             // Grant permissions if necessary
-            activity.getIntent().putExtra("number_of_results", -21);
             requestLocationPermissions(requestPermissionsLauncher);
-            activity.getIntent().putExtra("number_of_results", -22);
 
             fusedLocationClient.getLastLocation()
                     .addOnFailureListener(task -> {
-                        activity.getIntent().putExtra("number_of_results", -101);
                         LocationRepresentation locationRep = new LocationRepresentation(0, 0);
-                        LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
+                        loadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
                     });
 
-            fusedLocationClient.getLastLocation()
-                    .addOnCompleteListener(task -> {
+            if(isLocationMocked){
+                LocationRepresentation location = new LocationRepresentation(0, 0);
+                loadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, location, gameRepresentations);
+            }else{
+                fusedLocationClient.getLastLocation()
+                        .addOnCompleteListener(task -> {
 
-                        // Got last known location. In some rare situations this can be null
-                        // In this case, define a default location (0, 0)
-                        LocationRepresentation locationRep;
-                        if (!task.isSuccessful() || task.getResult() == null) {
-                            locationRep = new LocationRepresentation(0, 0);
-                        }else {
-                            Location location = task.getResult();
-                            locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                        }
-                        activity.getIntent().putExtra("number_of_results", -16);
+                            // Got last known location. In some rare situations this can be null
+                            // In this case, define a default location (0, 0)
+                            LocationRepresentation locationRep;
+                            if (!task.isSuccessful() || task.getResult() == null) {
+                                locationRep = new LocationRepresentation(0, 0);
+                            }else {
+                                Location location = task.getResult();
+                                locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                            }
 
-                        LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
-                    });
-
-            /*
-            fusedLocationClient.getLastLocation()
-                    .addOnCanceledListener( () -> {
-                activity.getIntent().putExtra("number_of_results", -100);
-                LocationRepresentation locationRep = new LocationRepresentation(0, 0);
-                LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
-                });
-
-            fusedLocationClient.getLastLocation()
-                    .addOnFailureListener(task -> {
-                        activity.getIntent().putExtra("number_of_results", -101);
-                        LocationRepresentation locationRep = new LocationRepresentation(0, 0);
-                        LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
-                    });
-             */
+                            loadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
+                        });
+            }
         });
     }
 
-    private void LoadGameListWithLocation(View popupView,
+    private void loadGameListWithLocation(View popupView,
                                           TableLayout gameLayout,
                                           LinearLayout openGamesLayout,
                                           String filterText,

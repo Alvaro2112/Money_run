@@ -70,6 +70,7 @@ public class MenuActivityTest {
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
+        toStart.putExtra("isLocationMocked", true);
 
         Location mockLocation = new Location("");
         mockLocation.setLatitude(0);
