@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -161,6 +162,10 @@ public class JoinGameImplementation extends MenuImplementation{
         }
         // Put extra to give the number of elements found
         activity.getIntent().putExtra("number_of_results", buttonId);
+
+        if(gameLayout.getParent() != null) {
+            ((ViewGroup)gameLayout.getParent()).removeView(gameLayout);
+        }
         openGamesLayout.addView(gameLayout);
     }
 
@@ -242,6 +247,9 @@ public class JoinGameImplementation extends MenuImplementation{
         Button button = new Button(activity);
         createJoinButton(button, buttonId, gameRepresentation);
 
+        if(button.getParent() != null) {
+            ((ViewGroup)button.getParent()).removeView(button);
+        }
         gameRow.addView(button);
 
         // create game name display
@@ -250,6 +258,9 @@ public class JoinGameImplementation extends MenuImplementation{
         // create player count display
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
+        if(gameRow.getParent() != null) {
+            ((ViewGroup)gameRow.getParent()).removeView(gameRow);
+        }
         gameLayout.addView(gameRow, gameParams);
     }
 
@@ -296,6 +307,10 @@ public class JoinGameImplementation extends MenuImplementation{
         nameView.setText(nameText);
         nameView.setPadding(0, 0, 40, 0);
         nameView.setId(nameText.hashCode() + buttonId);
+
+        if(nameView.getParent() != null) {
+            ((ViewGroup)nameView.getParent()).removeView(nameView);
+        }
         gameRow.addView(nameView);
     }
 
@@ -324,6 +339,9 @@ public class JoinGameImplementation extends MenuImplementation{
                     }
                 });
 
+        if(playerNumberView.getParent() != null) {
+            ((ViewGroup)playerNumberView.getParent()).removeView(playerNumberView);
+        }
         gameRow.addView(playerNumberView);
     }
 
