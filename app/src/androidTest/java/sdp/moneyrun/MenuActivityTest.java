@@ -132,6 +132,7 @@ public class MenuActivityTest {
         }
     }
 
+    /*
     @Test
     public void newGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -141,6 +142,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+    */
 
     @Test
     public void filterWorks(){
