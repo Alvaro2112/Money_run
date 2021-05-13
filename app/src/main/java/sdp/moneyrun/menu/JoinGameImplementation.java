@@ -104,7 +104,7 @@ public class JoinGameImplementation extends MenuImplementation{
             TableLayout gameLayout = new TableLayout(activity);
 
             // Grant permissions if necessary
-            requestLocationPermissions(requestPermissionsLauncher);
+            //requestLocationPermissions(requestPermissionsLauncher);
 
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(activity, location -> {
