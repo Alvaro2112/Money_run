@@ -120,6 +120,11 @@ public class JoinGameImplementation extends MenuImplementation{
             requestLocationPermissions(requestPermissionsLauncher);
             activity.getIntent().putExtra("number_of_results", -22);
 
+            Location theLoc = fusedLocationClient.getLastLocation().getResult();
+            if(theLoc == null){
+                throw new IllegalArgumentException("loc is null!!");
+            }
+
             fusedLocationClient.getLastLocation()
                     .addOnCompleteListener(task -> {
 
