@@ -134,24 +134,38 @@ public class JoinGameImplementation extends MenuImplementation{
                         }
                         activity.getIntent().putExtra("number_of_results", -16);
 
-                        buttonId = 0;
-                        for (GameRepresentation gameRepresentation : gameRepresentations) {
-                            // Do not show games that do not match filter
-                            String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-                            // Do not show far away game
-                            double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                            if((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME){
-                                displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
-                                buttonId++;
-                            }
-                        }
-                        // Put extra to give the number of elements found
-                        activity.getIntent().putExtra("number_of_results", buttonId);
-
-                        openGamesLayout.addView(gameLayout);
+                        LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
                     });
+
+            fusedLocationClient.getLastLocation().addOnCanceledListener( () -> {
+                activity.getIntent().putExtra("number_of_results", -100);
+                LocationRepresentation locationRep = new LocationRepresentation(0, 0);
+                LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
+            });
         });
+    }
+
+    private void LoadGameListWithLocation(View popupView,
+                                          TableLayout gameLayout,
+                                          LinearLayout openGamesLayout,
+                                          String filterText,
+                                          LocationRepresentation locationRep,
+                                          List<GameRepresentation> gameRepresentations){
+        buttonId = 0;
+        for (GameRepresentation gameRepresentation : gameRepresentations) {
+            // Do not show games that do not match filter
+            String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
+            // Do not show far away game
+            double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
+
+            if((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME){
+                displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
+                buttonId++;
+            }
+        }
+        // Put extra to give the number of elements found
+        activity.getIntent().putExtra("number_of_results", buttonId);
+        openGamesLayout.addView(gameLayout);
     }
 
     /**
