@@ -70,6 +70,8 @@ public class MenuActivityTest {
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
+
+        // Location is mocked, always at location (0, 0)
         toStart.putExtra("isLocationMocked", true);
         return toStart;
     }
@@ -151,29 +153,23 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
-            scenario.onActivity(a -> {
-                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(a, selfLocation -> {
-                            if(selfLocation == null){
-                                assertEquals(1, 0);
-                                return;
-                            }
-                            Player host = new Player("364556546", "Bob", 0);
+            Location location = new Location("");
+            location.setLongitude(0);
+            location.setLatitude(0);
 
-                            GameBuilder gb = new GameBuilder();
-                            gb.setName("checkfilter")
-                                    .setMaxPlayerCount(12)
-                                    .setHost(host)
-                                    .setIsVisible(true)
-                                    .setRiddles(new ArrayList<>())
-                                    .setCoins(new ArrayList<>())
-                                    .setStartLocation(selfLocation);
+            Player host = new Player("364556546", "Bob", 0);
 
-                            GameDatabaseProxy db = new GameDatabaseProxy();
-                            db.putGame(gb.build());
-                        });
-            });
+            GameBuilder gb = new GameBuilder();
+            gb.setName("checkfilter")
+                    .setMaxPlayerCount(12)
+                    .setHost(host)
+                    .setIsVisible(true)
+                    .setRiddles(new ArrayList<>())
+                    .setCoins(new ArrayList<>())
+                    .setStartLocation(location);
+
+            GameDatabaseProxy db = new GameDatabaseProxy();
+            db.putGame(gb.build());
 
             try {
                 Thread.sleep(10000);
@@ -251,45 +247,39 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
-            scenario.onActivity(a -> {
-                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(a, selfLocation -> {
-                            if(selfLocation == null){
-                                assertEquals(1, 0);
-                                return;
-                            }
-                            Player host = new Player("364556546", "Bob", 0);
+            Location nearLocation = new Location("");
+            nearLocation.setLongitude(0);
+            nearLocation.setLatitude(0);
 
-                            GameDatabaseProxy db = new GameDatabaseProxy();
-                            // Near game
-                            GameBuilder gb = new GameBuilder();
-                            gb.setName(nearGameName)
-                                    .setMaxPlayerCount(12)
-                                    .setHost(host)
-                                    .setIsVisible(true)
-                                    .setRiddles(new ArrayList<>())
-                                    .setCoins(new ArrayList<>())
-                                    .setStartLocation(selfLocation);
+            Player host = new Player("364556546", "Bob", 0);
 
-                            db.putGame(gb.build());
+            GameDatabaseProxy db = new GameDatabaseProxy();
+            // Near game
+            GameBuilder gb = new GameBuilder();
+            gb.setName(nearGameName)
+                    .setMaxPlayerCount(12)
+                    .setHost(host)
+                    .setIsVisible(true)
+                    .setRiddles(new ArrayList<>())
+                    .setCoins(new ArrayList<>())
+                    .setStartLocation(nearLocation);
 
-                            Location farLocation = new Location("");
-                            farLocation.setLatitude(selfLocation.getLatitude() + 10.);
-                            farLocation.setLongitude(selfLocation.getLongitude() + 10.);
-                            // Far game
-                            GameBuilder gb2 = new GameBuilder();
-                            gb2.setName(farGameName)
-                                    .setMaxPlayerCount(12)
-                                    .setHost(host)
-                                    .setIsVisible(true)
-                                    .setRiddles(new ArrayList<>())
-                                    .setCoins(new ArrayList<>())
-                                    .setStartLocation(farLocation);
+            db.putGame(gb.build());
 
-                            db.putGame(gb2.build());
-                        });
-            });
+            Location farLocation = new Location("");
+            farLocation.setLatitude(nearLocation.getLatitude() + 10.);
+            farLocation.setLongitude(nearLocation.getLongitude() + 10.);
+            // Far game
+            GameBuilder gb2 = new GameBuilder();
+            gb2.setName(farGameName)
+                    .setMaxPlayerCount(12)
+                    .setHost(host)
+                    .setIsVisible(true)
+                    .setRiddles(new ArrayList<>())
+                    .setCoins(new ArrayList<>())
+                    .setStartLocation(farLocation);
+
+            db.putGame(gb2.build());
 
             try {
                 Thread.sleep(7000);
