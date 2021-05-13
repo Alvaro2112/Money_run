@@ -149,7 +149,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         RiddlesDatabase.reset();
     }
-
     
     public void StartMapActivity(){
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
