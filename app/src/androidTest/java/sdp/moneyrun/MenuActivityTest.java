@@ -125,14 +125,6 @@ public class MenuActivityTest {
     public void joinGamePopupIsDisplayed() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Intents.release();
-            }
-
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             Intents.release();
@@ -142,15 +134,6 @@ public class MenuActivityTest {
     @Test
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            Intents.init();
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Intents.release();
-            }
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
@@ -201,17 +184,12 @@ public class MenuActivityTest {
 
                 assertTrue(n >= 1);
             });
-
-            Intents.release();
         }
     }
 
     @Test
     public void filterWithNotExistingNameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            Intents.init();
-
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -238,16 +216,12 @@ public class MenuActivityTest {
 
                 assertEquals(0, n);
             });
-
-            Intents.release();
         }
     }
 
     @Test
     public void OnlyNearGamesShowUp(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            Intents.init();
 
             try {
                 Thread.sleep(5000);
@@ -326,8 +300,6 @@ public class MenuActivityTest {
 
                 assertEquals(1, n);
             });
-
-            Intents.release();
         }
     }
 
@@ -444,19 +416,8 @@ public class MenuActivityTest {
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
 
-            Intents.init();
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Intents.release();
-            }
-
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
-
-            Intents.release();
         }
     }
 
