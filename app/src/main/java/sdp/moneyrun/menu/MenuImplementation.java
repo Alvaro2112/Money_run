@@ -79,7 +79,7 @@ public class MenuImplementation {
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(layoutId, null);
+        View popupView = inflater.inflate(layoutId, null, false);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
