@@ -1535,6 +1535,7 @@ public class MapInstrumentedTest {
     public void checkIfShrinkCircleDrawsSmallerCircleWithCorrectShrinkPace(){
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             scenario.onActivity(a ->
+                    // draws a circle that after 0.6 seconds shrinks, located at Portland
                     a.shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
                             a.mapboxMap,0.01,1)
                     );
