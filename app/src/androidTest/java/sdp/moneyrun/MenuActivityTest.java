@@ -133,6 +133,16 @@ public class MenuActivityTest {
     }
 
     @Test
+    public void newGamePopupIsDisplayed() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
+            Intents.release();
+        }
+    }
+
+    @Test
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
@@ -406,19 +416,6 @@ public class MenuActivityTest {
             e.printStackTrace();
 
             Intents.release();
-        }
-    }
-
-    @Test
-    public void newGamePopupIsDisplayed() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
-        intent.putExtra("user", user);
-
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
-
-            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
         }
     }
 
