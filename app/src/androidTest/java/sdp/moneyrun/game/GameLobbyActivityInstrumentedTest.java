@@ -386,8 +386,8 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void LeaveLobbyWorks() {
-        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
+        FirebaseDatabase.getInstance().goOnline();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         String id = gdp.putGame(game);
@@ -406,16 +406,19 @@ public class    GameLobbyActivityInstrumentedTest {
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
             Thread.sleep(2000);
             intended(hasComponent(MenuActivity.class.getName()));
-            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
+        }
+        finally {
+            Intents.release();
         }
     }
 
 
    @Test
     public void LeaveIsDeleteForHost(){
+        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("3","Bob", 0);
@@ -440,6 +443,7 @@ public class    GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
     
 
