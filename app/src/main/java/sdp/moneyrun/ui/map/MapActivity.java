@@ -20,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -55,6 +57,7 @@ import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
+import static java.lang.System.currentTimeMillis;
 
 
 /*
@@ -131,22 +134,21 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         leaderboardButton = findViewById(R.id.in_game_scores_button);
         addExitButton();
         addQuestionButton();
-        System.out.println("before db check " +" from player "+player.getName());
 
         if(useDB){
-            System.out.println("using db" +" from player "+player.getName());
             addLeaderboardButton();
             mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                 @Override
                 public void onDidFinishRenderingMap(boolean fully) {
-                    System.out.println("onFinishRendering " +" from player "+player.getName());
                     if(gameId != null){
                         initializeGame(gameId);
                     }
+                    drawCircle(new LatLng( 45.522585,-122.685699), 20,64,mapboxMap);
+                    shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
+                            mapboxMap,1.3,1);
                 }
             });
         }
-        drawCircle();
     }
 
     /**
@@ -178,18 +180,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     private  void addCoinsListener(){
-        System.out.println("Entering coin listener " +" from player "+player.getName());
 
         proxyG.addCoinListener(game,new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Entering data change " +" from player "+player.getName());
                 GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>(){};
                 List<Coin> newCoins = snapshot.getValue(t);
                 if(newCoins == null){
                     return;
                 }
-                System.out.println("getting new coins of size " + newCoins.size()+" from player "+player.getName());
                 localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
 
                 symbolManager.deleteAll();
@@ -512,26 +511,22 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
+    public void shrinkCircle(long paceInMillis, double initialRadius,LatLng center,int numberOfSides,MapboxMap map,double shrinkPace,double epsilon){
+        if(initialRadius < epsilon)
+            return;
+        long initTime = currentTimeMillis();
+        while(currentTimeMillis() - initTime < paceInMillis){}
+        drawCircle(center,initialRadius*shrinkPace,numberOfSides,map);
+    }
+
+
     /**
      * Draws a circle around the players, this is where the players should be allowed to be during a game
      */
-    public void drawCircle(){
-        //double lat = currentLocation.getLatitude();
-        //double longi = currentLocation.getLongitude();
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                System.out.println("Map is ready for drawing the circle");
-                mapboxMap.addPolygon(generatePerimeter(
-                        new LatLng(0.0,0.0),
-                        1,
-                        64));
-            }
-        });
 
-    }
+    // TODO: use this to draw filled circle in Portland : drawCircle(new LatLng( 45.522585,-122.685699), 20,64);
+    public void drawCircle(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides,MapboxMap map){
 
-    private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
         List<LatLng> positions = new ArrayList<>();
         double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
         double distanceY = radiusInKilometers / 110.574;
@@ -551,11 +546,48 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     centerCoordinates.getLongitude() + x);
             positions.add(position);
         }
-        return new PolygonOptions()
-                .addAll(positions)
-                .fillColor(Color.BLUE)
-                .alpha(0.4f);
-    }
 
+
+
+
+
+        List<List<Point>> POINTS = new ArrayList<>();
+        List<Point> OUTER_POINTS = new ArrayList<>();
+
+         {
+//            OUTER_POINTS.add(Point.fromLngLat(-122.685699, 45.522585));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.708873, 45.534611));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.678833, 45.530883));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.667503, 45.547115));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.660121, 45.530643));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.636260, 45.533529));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.659091, 45.521743));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.648792, 45.510677));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.664070, 45.515008));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.669048, 45.502496));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.678489, 45.515369));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.702007, 45.506346));
+//            OUTER_POINTS.add(Point.fromLngLat(-122.685699, 45.522585));
+             for(int i = 0;i<positions.size();++i){
+                 OUTER_POINTS.add(Point.fromLngLat(positions.get(i).getLongitude(),positions.get(i).getLatitude()));
+             }
+            POINTS.add(OUTER_POINTS);
+        }
+        //mapView.getMapAsync(new OnMapReadyCallback() {
+            //@Override
+            //public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+
+                map.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        style.addSource(new GeoJsonSource("source-id", Polygon.fromLngLats(POINTS)));
+                        style.addLayerBelow(new FillLayer("layer-id", "source-id").withProperties(
+                                fillColor(Color.parseColor("#3bb2d0"))), "settlement-label"
+                        );
+                    }
+                });
+            //}
+        //});
+    }
 
 }
