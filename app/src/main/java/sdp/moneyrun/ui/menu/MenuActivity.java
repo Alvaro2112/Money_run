@@ -83,27 +83,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Define mock location
-        Location mockLocation = (Location) getIntent().getSerializableExtra("mockLocation");
-        if (mockLocation != null) {
-            PermissionsRequester permissionsRequester = new PermissionsRequester(this,
-                    requestPermissionsLauncher,
-                    getString(R.string.user_location_permission_explanation),
-                    false,
-                    coarseLocation,
-                    fineLocation);
-
-            permissionsRequester.requestPermission();
-            fusedLocationClient.setMockMode(true);
-            fusedLocationClient.setMockLocation(mockLocation);
-        }
-
-        //Location loc = new Location("");
-        //loc.setLongitude(0);
-        //loc.setLatitude(0);
-        //fusedLocationClient.setMockLocation(loc);
-        //fusedLocationClient.setMockMode(true);
-
         runFunctionalities();
         addDownloadButton();
         addOfflineMapButton();

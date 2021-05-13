@@ -121,17 +121,18 @@ public class JoinGameImplementation extends MenuImplementation{
             activity.getIntent().putExtra("number_of_results", -22);
 
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(location -> {
-                        activity.getIntent().putExtra("number_of_results", -16);
+                    .addOnCompleteListener(task -> {
+
                         // Got last known location. In some rare situations this can be null
                         // In this case, define a default location (0, 0)
                         LocationRepresentation locationRep;
-
-                        if (location == null) {
+                        if (!task.isSuccessful() || task.getResult() == null) {
                             locationRep = new LocationRepresentation(0, 0);
-                        }else{
+                        }else {
+                            Location location = task.getResult();
                             locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
                         }
+                        activity.getIntent().putExtra("number_of_results", -16);
 
                         buttonId = 0;
                         for (GameRepresentation gameRepresentation : gameRepresentations) {
