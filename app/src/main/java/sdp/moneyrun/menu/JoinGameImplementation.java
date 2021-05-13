@@ -84,6 +84,7 @@ public class JoinGameImplementation extends MenuImplementation{
      */
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
+        openGamesLayout.removeAllViews();
 
         Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
 
