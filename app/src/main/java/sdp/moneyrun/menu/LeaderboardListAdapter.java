@@ -19,7 +19,7 @@ public class LeaderboardListAdapter extends ArrayAdapter<Player> {
         }
 
         public View getView(int position, View view, ViewGroup parent) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.leaderboard_item_layout, null, true);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.leaderboard_item_layout, null, false);
             Player player = getItem(position);
             TextView player_position = view.findViewById(R.id.player_position);
             TextView player_name = view.findViewById(R.id.player_name);

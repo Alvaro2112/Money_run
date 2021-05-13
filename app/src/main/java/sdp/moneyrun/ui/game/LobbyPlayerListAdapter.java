@@ -19,7 +19,7 @@ public class LobbyPlayerListAdapter extends PlayerListAdapter {
     }
 
     public View getView(int position, View view, ViewGroup parent) {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.lobby_player_item_layout, null, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.lobby_player_item_layout, null, false);
         Player player = getItem(position);
         TextView player_name = (TextView) view.findViewById(R.id.player_name_lobby_item);
         player_name.setText(String.valueOf(player.getName()));

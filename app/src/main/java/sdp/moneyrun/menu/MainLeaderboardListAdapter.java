@@ -34,7 +34,7 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
 
     @SuppressLint("ViewHolder")
     public View getView(int position, View view, ViewGroup parent) {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.main_leaderboard_item_layout, null, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.main_leaderboard_item_layout, null, false);
         User user = getItem(position);
         TextView user_position = view.findViewById(R.id.main_player_position);
         TextView user_name = view.findViewById(R.id.main_player_name);
