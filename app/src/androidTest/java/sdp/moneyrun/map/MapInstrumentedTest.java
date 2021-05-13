@@ -15,11 +15,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -50,6 +53,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import com.mapbox.turf.TurfJoins;
 
 public class MapInstrumentedTest {
 
@@ -1532,13 +1537,53 @@ public class MapInstrumentedTest {
         }
     }
     @Test
-    public void checkIfShrinkCircleDrawsSmallerCircleWithCorrectShrinkPace(){
+    public void checkIfPointNotInCircle(){
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            scenario.onActivity(a ->
-                    // draws a circle that after 0.6 seconds shrinks, located at Portland
-                    a.shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
-                            a.mapboxMap,0.01,1)
-                    );
+            scenario.onActivity(a ->{
+                // draws a circle that after 0.6 seconds shrinks, located at Portland
+                double radiusInKilometers = 20;
+                LatLng centerCoordinates = new LatLng( 45.522585,-122.685699);
+                int numberOfSides = 64;
+
+                List<LatLng> positions = new ArrayList<>();
+                double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
+                double distanceY = radiusInKilometers / 110.574;
+
+                double slice = (2 * Math.PI) / numberOfSides;
+
+                double theta;
+                double x;
+                double y;
+                LatLng position;
+                for (int i = 0; i < numberOfSides; ++i) {
+                    theta = i * slice;
+                    x = distanceX * Math.cos(theta);
+                    y = distanceY * Math.sin(theta);
+
+                    position = new LatLng(centerCoordinates.getLatitude() + y,
+                            centerCoordinates.getLongitude() + x);
+                    positions.add(position);
+                }
+                List<List<Point>> POINTS = new ArrayList<>();
+                List<Point> OUTER_POINTS = new ArrayList<>();
+                {
+                    for(int i = 0;i<positions.size();++i){
+                        OUTER_POINTS.add(Point.fromLngLat(positions.get(i).getLongitude(),positions.get(i).getLatitude()));
+                    }
+                    POINTS.add(OUTER_POINTS);
+
+                }
+                Polygon polygon = Polygon.fromLngLats(POINTS);
+                a.shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
+                        a.mapboxMap,0.01,1);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(TurfJoins.inside(Point.fromLngLat(0,0), polygon),false);
+
+            });
         }
     }
 
