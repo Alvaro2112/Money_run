@@ -33,17 +33,20 @@ import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class GameLobbyActivityInstrumentedTest {
+public class    GameLobbyActivityInstrumentedTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -58,9 +61,11 @@ public class GameLobbyActivityInstrumentedTest {
 
 
     private Intent getStartIntent() {
+        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         Player currentUser = new Player("999", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
+        toStart.putExtra("UserTypeCurrentUser", actualUser);
         return toStart;
     }
 
@@ -115,7 +120,7 @@ public class GameLobbyActivityInstrumentedTest {
             fail();
         }
 
-            Player nonHost = new Player("3", "Carl", 0);
+            Player nonHost = new Player("4", "Carl", 0);
             Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
             intent2.putExtra("currentUser", nonHost);
             intent2.putExtra("currentGameId", id);
@@ -123,6 +128,8 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(8000);
             intended(hasComponent(MapActivity.class.getName()));
+            Thread.sleep(8000);
+
             Intents.release();
         }catch (InterruptedException e) {
             e.printStackTrace();
@@ -136,6 +143,9 @@ public class GameLobbyActivityInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
+        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        intent.putExtra("UserTypeCurrentUser", actualUser);
+
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -173,6 +183,8 @@ public class GameLobbyActivityInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
+        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        intent.putExtra("UserTypeCurrentUser", actualUser);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 
@@ -224,12 +236,15 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
-            Intents.init();
+            Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.lobby_title)).check(matches(withText(game.getName())));
-            Intents.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
     @Test
@@ -246,6 +261,7 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
@@ -269,6 +285,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
     }
 
@@ -282,6 +299,7 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
@@ -293,6 +311,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
     }
 
@@ -311,6 +330,7 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
@@ -329,9 +349,9 @@ public class GameLobbyActivityInstrumentedTest {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
     }
-
 
     @Test
     public void addPlayerListFailsWhenNull(){
@@ -365,6 +385,7 @@ public class GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
         intent.putExtra("currentUser", new Player("1234567891", "alex", 0));
@@ -378,7 +399,132 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Intents.release();
+            fail();
         }
     }
+
+
+   @Test
+    public void LeaveIsDeleteForHost(){
+        Game g = getGame();
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        Player host = new Player("3","Bob", 0);
+        toStart.putExtra("currentUser", host);
+        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        toStart.putExtra("UserTypeCurrentUser", actualUser);
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        toStart.putExtra("currentGameId", id);
+        try(ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)){
+            Intents.init();
+            Thread.sleep(3000);
+            onView(withId(R.id.leave_lobby_button)).check(matches(withText("Delete")));
+            Thread.sleep(2000);
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    @Test
+    public void WhenGameIsDeletedPlayerLeavesLobby(){
+        Game g = getGame();
+        g.addPlayer(new Player("999", "CURRENT_USER", 0), true);
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        intent.putExtra("currentGameId", id);
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            g.setIsDeleted(true, false);
+            Thread.sleep(2000);
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+
+
+    @Test
+    public void LeaveIsLeaveForPlayer(){
+        Game g = getGame();
+        g.addPlayer(new Player("999", "CURRENT_USER", 0), true);
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        intent.putExtra("currentGameId", id);
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Thread.sleep(3000);
+            onView(withId(R.id.leave_lobby_button)).check(matches(withText("Leave")));
+            Thread.sleep(2000);
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void deleteGameDeletesItFromDB(){
+        Game g = getGame();
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        Player host = new Player("3","Bob", 0);
+        toStart.putExtra("currentUser", host);
+        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        toStart.putExtra("UserTypeCurrentUser", actualUser);
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        toStart.putExtra("currentGameId", id);
+        try(ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(toStart)){
+            Intents.init();
+            Thread.sleep(2000);
+            onView(withId(R.id.leave_lobby_button)).perform(ViewActions.click());
+            Thread.sleep(2000);
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Task<DataSnapshot> deleted =FirebaseDatabase.getInstance().getReference()
+                .child("games").child(g.getId()).get();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertNull(deleted.getResult().getValue());
+    }
+
 }
+
