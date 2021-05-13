@@ -81,11 +81,15 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param popupView
      */
     private void onJoinGamePopupWindowLoadGameList(View popupView) {
+        activity.getIntent().putExtra("number_of_results", -11);
+
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
 
         filterButton.setOnClickListener(v -> {
+            activity.getIntent().putExtra("number_of_results", -13);
+
             EditText filterEditText = popupView.findViewById(R.id.join_game_text_filter);
             openGamesLayout.removeAllViews();
 
@@ -93,15 +97,20 @@ public class JoinGameImplementation extends MenuImplementation{
             loadGameListGivenFilter(popupView, openGamesLayout, filterText);
         });
 
+        activity.getIntent().putExtra("number_of_results", -12);
         // First load the game list without any filter.
         loadGameListGivenFilter(popupView, openGamesLayout, null);
     }
 
     @SuppressLint("MissingPermission")
     private void loadGameListGivenFilter(View popupView, LinearLayout openGamesLayout, String filterText){
+        activity.getIntent().putExtra("number_of_results", -14);
+
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
+            activity.getIntent().putExtra("number_of_results", -15);
+
             TableLayout gameLayout = new TableLayout(activity);
 
             // Grant permissions if necessary
@@ -109,6 +118,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(location -> {
+                        activity.getIntent().putExtra("number_of_results", -16);
                         // Got last known location. In some rare situations this can be null
                         // In this case, define a default location (0, 0)
                         LocationRepresentation locationRep;

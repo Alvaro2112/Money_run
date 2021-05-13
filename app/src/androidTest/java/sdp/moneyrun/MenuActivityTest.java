@@ -140,6 +140,12 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             scenario.onActivity(a -> {
                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
                 fusedLocationClient.getLastLocation()
@@ -165,7 +171,7 @@ public class MenuActivityTest {
             });
 
             try {
-                Thread.sleep(7000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -175,7 +181,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).check(matches(isClickable()));
 
             try {
-                Thread.sleep(7000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
