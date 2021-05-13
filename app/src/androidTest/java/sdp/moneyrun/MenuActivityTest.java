@@ -135,8 +135,6 @@ public class MenuActivityTest {
     public void filterWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
-            FirebaseDatabase.getInstance().goOffline();
-
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
 
@@ -184,16 +182,12 @@ public class MenuActivityTest {
 
                 assertEquals(1, n);
             });
-
-            FirebaseDatabase.getInstance().goOnline();
         }
     }
 
     @Test
     public void filterWithNotExistingNameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            FirebaseDatabase.getInstance().goOffline();
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
@@ -213,16 +207,12 @@ public class MenuActivityTest {
 
                 assertEquals(0, n);
             });
-
-            FirebaseDatabase.getInstance().goOnline();
         }
     }
 
     @Test
     public void OnlyNearGamesShowUp(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            FirebaseDatabase.getInstance().goOffline();
 
             String filter = "onlythistest887655677888";
             String nearGameName = "nearGame_" + filter;
@@ -291,8 +281,6 @@ public class MenuActivityTest {
 
                 assertEquals(1, n);
             });
-
-            FirebaseDatabase.getInstance().goOnline();
         }
     }
 
