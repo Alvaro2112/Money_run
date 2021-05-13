@@ -131,12 +131,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         leaderboardButton = findViewById(R.id.in_game_scores_button);
         addExitButton();
         addQuestionButton();
+        System.out.println("before db check " +" from player "+player.getName());
 
         if(useDB){
+            System.out.println("using db" +" from player "+player.getName());
             addLeaderboardButton();
             mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                 @Override
                 public void onDidFinishRenderingMap(boolean fully) {
+                    System.out.println("onFinishRendering " +" from player "+player.getName());
                     if(gameId != null){
                         initializeGame(gameId);
                     }
@@ -164,8 +167,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                 if(player.equals(game.getHost())){
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
+                }else{
+                    localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
                 addCoinsListener();
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -174,15 +178,18 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     private  void addCoinsListener(){
+        System.out.println("Entering coin listener " +" from player "+player.getName());
 
         proxyG.addCoinListener(game,new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("Entering data change " +" from player "+player.getName());
                 GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>(){};
                 List<Coin> newCoins = snapshot.getValue(t);
                 if(newCoins == null){
                     return;
                 }
+                System.out.println("getting new coins of size " + newCoins.size()+" from player "+player.getName());
                 localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
 
                 symbolManager.deleteAll();
@@ -509,15 +516,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Draws a circle around the players, this is where the players should be allowed to be during a game
      */
     public void drawCircle(){
+        //double lat = currentLocation.getLatitude();
+        //double longi = currentLocation.getLongitude();
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+                System.out.println("Map is ready for drawing the circle");
                 mapboxMap.addPolygon(generatePerimeter(
-                        new LatLng(0.0, 0.0),
+                        new LatLng(0.0,0.0),
                         1,
                         64));
             }
         });
+
     }
 
     private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
