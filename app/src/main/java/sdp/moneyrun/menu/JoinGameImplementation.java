@@ -121,6 +121,13 @@ public class JoinGameImplementation extends MenuImplementation{
             activity.getIntent().putExtra("number_of_results", -22);
 
             fusedLocationClient.getLastLocation()
+                    .addOnFailureListener(task -> {
+                        activity.getIntent().putExtra("number_of_results", -101);
+                        LocationRepresentation locationRep = new LocationRepresentation(0, 0);
+                        LoadGameListWithLocation(popupView, gameLayout, openGamesLayout, filterText, locationRep, gameRepresentations);
+                    });
+
+            fusedLocationClient.getLastLocation()
                     .addOnCompleteListener(task -> {
 
                         // Got last known location. In some rare situations this can be null
