@@ -130,7 +130,9 @@ public class JoinGameImplementation extends MenuImplementation{
                                 buttonId++;
                             }
                         }
-                        popupView.setTag(buttonId);
+                        // Put extra to give the number of elements found
+                        activity.getIntent().putExtra("number_of_results", buttonId);
+
                         openGamesLayout.addView(gameLayout);
                     });
         });

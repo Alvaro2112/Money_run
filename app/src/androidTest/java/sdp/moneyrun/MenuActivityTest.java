@@ -1,21 +1,15 @@
 package sdp.moneyrun;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.text.Layout;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -37,7 +31,6 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
@@ -54,14 +47,10 @@ import sdp.moneyrun.user.User;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
@@ -182,7 +171,11 @@ public class MenuActivityTest {
                 e.printStackTrace();
             }
 
-            onView(withTagValue(Matchers.is((Object) 1))).check(matches(isDisplayed()));
+            scenario.onActivity(a -> {
+                int n = a.getIntent().getIntExtra("number_of_results", -1);
+
+                assertEquals(1, n);
+            });
 
             FirebaseDatabase.getInstance().goOnline();
         }
@@ -205,7 +198,11 @@ public class MenuActivityTest {
                 e.printStackTrace();
             }
 
-            onView(withTagValue(Matchers.is((Object) 0))).check(matches(isDisplayed()));
+            scenario.onActivity(a -> {
+                int n = a.getIntent().getIntExtra("number_of_results", -1);
+
+                assertEquals(0, n);
+            });
         }
     }
 
@@ -277,8 +274,11 @@ public class MenuActivityTest {
                 e.printStackTrace();
             }
 
-            // The tag is defined as the number of games showed
-            onView(withTagValue(Matchers.is((Object) 1))).check(matches(isDisplayed()));
+            scenario.onActivity(a -> {
+                int n = a.getIntent().getIntExtra("number_of_results", -1);
+
+                assertEquals(1, n);
+            });
 
             FirebaseDatabase.getInstance().goOnline();
         }
