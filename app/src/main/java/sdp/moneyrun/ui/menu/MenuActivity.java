@@ -94,8 +94,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                     fineLocation);
 
             permissionsRequester.requestPermission();
+            fusedLocationClient.setMockMode(true);
             fusedLocationClient.setMockLocation(mockLocation);
         }
+
+        //Location loc = new Location("");
+        //loc.setLongitude(0);
+        //loc.setLatitude(0);
+        //fusedLocationClient.setMockLocation(loc);
+        //fusedLocationClient.setMockMode(true);
 
         runFunctionalities();
         addDownloadButton();
