@@ -69,6 +69,7 @@ public class JoinGameImplementation extends MenuImplementation{
      * @param view the current view
      */
     public void onClickShowJoinGamePopupWindow(View view) {
+        activity.getIntent().putExtra("number_of_results", -10);
         // Show popup
         PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list

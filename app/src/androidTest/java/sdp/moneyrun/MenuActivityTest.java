@@ -52,6 +52,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
@@ -171,6 +172,7 @@ public class MenuActivityTest {
 
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
             onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).check(matches(isClickable()));
 
             try {
                 Thread.sleep(7000);
