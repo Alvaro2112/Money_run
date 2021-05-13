@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,9 +33,13 @@ public class UserTest {
         FirebaseDatabase.getInstance().goOffline();
     }
 
+    @AfterClass
+    public static void afterTests(){
+        FirebaseDatabase.getInstance().getReference().child("games").removeValue();
+    }
+
     @Test
     public void setAddressWithDBUpdateWorks(){
-     //   FirebaseDatabase.getInstance().goOffline();
         FirebaseDatabase.getInstance().goOnline();
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
@@ -44,13 +49,6 @@ public class UserTest {
         User player = new User(id, name, address,0 ,0,0);
         UserDatabaseProxy db = new UserDatabaseProxy();CountDownLatch added = new CountDownLatch(1);
         db.putUser(player, task -> added.countDown());
-
-//        try {
-//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-//            assertEquals(0L, added.getCount());
-//        } catch (InterruptedException e) {
-//            fail();
-//        }
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

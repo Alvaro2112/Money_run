@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.user.User;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;

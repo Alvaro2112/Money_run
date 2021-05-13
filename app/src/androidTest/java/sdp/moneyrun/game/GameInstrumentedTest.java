@@ -52,6 +52,7 @@ public class GameInstrumentedTest {
     @AfterClass
     public static void after(){
         FirebaseDatabase.getInstance().goOnline();
+        FirebaseDatabase.getInstance().getReference().child("games").removeValue();
     }
 
     private final long ASYNC_CALL_TIMEOUT = 5L;
@@ -95,7 +96,6 @@ public class GameInstrumentedTest {
 
     @Test
     public void GameIsAddedToDB(){
-        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         CountDownLatch updated = new CountDownLatch(1);
         db.putGame(g);
@@ -311,7 +311,6 @@ public class GameInstrumentedTest {
 
     @Test
     public void setPlayersSetsPlayersOnDB(){
-      //  FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         db.putGame(g);
         List<Player> p = new ArrayList<>();

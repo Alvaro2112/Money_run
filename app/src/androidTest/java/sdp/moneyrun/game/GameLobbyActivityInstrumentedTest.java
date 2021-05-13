@@ -59,6 +59,7 @@ public class GameLobbyActivityInstrumentedTest {
 
 
 
+
     private Intent getStartIntent() {
         Player currentUser = new Player("999", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
@@ -305,6 +306,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void playersMissingUpdatesWithDB() {
+        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
