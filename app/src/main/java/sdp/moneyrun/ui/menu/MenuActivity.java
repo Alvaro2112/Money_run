@@ -1,16 +1,21 @@
 package sdp.moneyrun.ui.menu;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.PermissionRequest;
 import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -27,6 +32,7 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
+import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.MapActivity;
@@ -38,7 +44,8 @@ import sdp.moneyrun.user.User;
 
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
+    });
 
     private RiddlesDatabase db;
     private Button mapButton;
@@ -53,7 +60,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
 
+    private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
 
+
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +82,20 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Define mock location
+        Location mockLocation = (Location) getIntent().getSerializableExtra("mockLocation");
+        if (mockLocation != null) {
+            PermissionsRequester permissionsRequester = new PermissionsRequester(this,
+                    requestPermissionsLauncher,
+                    getString(R.string.user_location_permission_explanation),
+                    false,
+                    coarseLocation,
+                    fineLocation);
+
+            permissionsRequester.requestPermission();
+            fusedLocationClient.setMockLocation(mockLocation);
+        }
 
         runFunctionalities();
         addDownloadButton();

@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
                 this,
                 requestPermissionsLauncher,
-                "In order to work properly, this app needs to use location services.",
+                getString(R.string.user_location_permission_explanation),
                 true,
                 coarseLocation,
                 fineLocation);

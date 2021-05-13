@@ -52,10 +52,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static org.junit.Assert.assertEquals;
 
 
@@ -70,6 +68,11 @@ public class MenuActivityTest {
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
+
+        Location mockLocation = new Location("");
+        mockLocation.setLatitude(0);
+        mockLocation.setLongitude(0);
+        toStart.putExtra("mockLocation", mockLocation);
         return toStart;
     }
 
