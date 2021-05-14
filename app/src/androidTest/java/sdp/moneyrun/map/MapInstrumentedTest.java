@@ -1611,10 +1611,8 @@ public class MapInstrumentedTest {
                     e.printStackTrace();
                 }
                 assertEquals(a.getCircleManager().getAnnotations().size(), 1);
-
-
             });
-        }
+        } 
     }
 
 }
