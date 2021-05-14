@@ -24,8 +24,8 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
     User user;
 
     public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
-        super(context,0 , userList);
-        if(user == null){
+        super(context, 0, userList);
+        if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
 
@@ -41,15 +41,15 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
         TextView user_score = view.findViewById(R.id.main_player_score);
 
         String text_position;
-        if(position < rank.length){
+        if (position < rank.length) {
             text_position = rank[position];
-        }else{
+        } else {
             text_position = " " + (position + 1);
         }
 
         user_position.setText(text_position);
         user_name.setText(String.valueOf(user.getName()));
-        if(user.equals(user)){
+        if (user.equals(user)) {
             user_name.setTextColor(COLOR_GOLD);
             user_name.setTypeface(user_name.getTypeface(), Typeface.BOLD);
         }

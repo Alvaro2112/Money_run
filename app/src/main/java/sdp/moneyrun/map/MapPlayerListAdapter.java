@@ -15,7 +15,7 @@ import sdp.moneyrun.ui.player.PlayerListAdapter;
 public class MapPlayerListAdapter extends PlayerListAdapter {
 
     public MapPlayerListAdapter(Activity context, ArrayList<Player> playerList) {
-        super(context,  playerList);
+        super(context, playerList);
     }
 
     public View getView(int position, View view, ViewGroup parent) {

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -20,7 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.permissions.PermissionsRequester;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.user.User;
 
 public class MenuImplementation {
@@ -36,7 +34,7 @@ public class MenuImplementation {
                               User user,
                               ActivityResultLauncher<String[]> requestPermissionsLauncher,
                               FusedLocationProviderClient fusedLocationClient
-                              ){
+    ) {
         this.activity = activity;
         this.databaseReference = databaseReference;
         this.user = user;
@@ -46,9 +44,10 @@ public class MenuImplementation {
 
     /**
      * Requests location permissions to the user
+     *
      * @param requestPermissionsLauncher the permission requester
      */
-    public void requestLocationPermissions(ActivityResultLauncher<String[]> requestPermissionsLauncher){
+    public void requestLocationPermissions(ActivityResultLauncher<String[]> requestPermissionsLauncher) {
 
         if (
                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -69,10 +68,9 @@ public class MenuImplementation {
     }
 
     /**
-     *
-     * @param view Current view before click
+     * @param view      Current view before click
      * @param focusable Whether it can be dismissed by clicking outside the popup window
-     * @param layoutId Id of the popup layout that will be used
+     * @param layoutId  Id of the popup layout that will be used
      */
     public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
 

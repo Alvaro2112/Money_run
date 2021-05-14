@@ -27,9 +27,12 @@ import static org.junit.Assert.fail;
 
 public class GameTest {
 
-    public Game getGame(){
+    @Mock
+    GameDbData gameData;
+
+    public Game getGame() {
         String name = "name";
-        Player host = new Player("3","Bob", 0);
+        Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 3;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -39,9 +42,6 @@ public class GameTest {
 
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
-
-    @Mock
-    GameDbData gameData;
 
     @Test
     public void basicRiddleTest() {
@@ -88,7 +88,7 @@ public class GameTest {
     @Test
     public void testGameConstructorThrowsExceptionWhenInvalidArguments() {
         String name = "name";
-        Player host = new Player("3","Bob",0);
+        Player host = new Player("3", "Bob", 0);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Player> players = new ArrayList<>();
@@ -133,7 +133,6 @@ public class GameTest {
         }
 
 
-
         try {
             new Game(null, host, players, 3, startLocation, true, coins);
             fail();
@@ -164,18 +163,18 @@ public class GameTest {
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
-        try{
+        try {
             new Game(name, host, players, -1, startLocation, true, null);
             fail();
-        }catch (IllegalArgumentException e){
-            assert(true);
+        } catch (IllegalArgumentException e) {
+            assert (true);
         }
     }
 
     @Test
     public void testStartGameDoesNotCrash() {
         String name = "name";
-        Player host = new Player("3","Bob",0);
+        Player host = new Player("3", "Bob", 0);
         List<Player> players = new ArrayList<>();
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -183,7 +182,7 @@ public class GameTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
 
         Game game1 = new Game(name, host, 3, riddles, coins, location, true);
-        Game game2 = new Game(name, host, players,3, location, true, coins);
+        Game game2 = new Game(name, host, players, 3, location, true, coins);
 
         game1.startGame();
         Game.startGame(game1);
@@ -211,7 +210,7 @@ public class GameTest {
     @Test
     public void getRandomQuestionReturnsNullIfNoQuestion() {
         String name = "name";
-        Player host = new Player("3","Bob",0);
+        Player host = new Player("3", "Bob", 0);
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Location location = new Location("LocationManager#GPS_PROVIDER");
@@ -222,43 +221,43 @@ public class GameTest {
     }
 
     @Test
-    public void getIdReturnsCorrectValue(){
+    public void getIdReturnsCorrectValue() {
         Game game = getGame();
 
         assertNull(game.getId());
     }
 
     @Test
-    public void getNameGameReturnsCorrectValues(){
+    public void getNameGameReturnsCorrectValues() {
         Game game = getGame();
 
         assertEquals(game.getName(), "name");
     }
 
     @Test
-    public void getHostReturnsCorrectValue(){
+    public void getHostReturnsCorrectValue() {
         Game game = getGame();
-        Player host = new Player("3","Bob",0);
+        Player host = new Player("3", "Bob", 0);
 
         assertEquals(game.getHost(), host);
     }
 
     @Test
-    public void getPlayerCountReturnsCorrectValues(){
+    public void getPlayerCountReturnsCorrectValues() {
         Game game = getGame();
 
         assertEquals(game.getPlayerCount(), 1);
     }
 
     @Test
-    public void getMaxPlayerCountReturnsCorrectValues(){
+    public void getMaxPlayerCountReturnsCorrectValues() {
         Game game = getGame();
 
         assertEquals(game.getMaxPlayerCount(), 3);
     }
 
     @Test
-    public void getCoinsReturnsCorrectValue(){
+    public void getCoinsReturnsCorrectValue() {
         Game game = getGame();
         List<Coin> coins = new ArrayList<>();
         coins.add(new Coin(0., 0., 1));
@@ -267,7 +266,7 @@ public class GameTest {
     }
 
     @Test
-    public void getRiddlesReturnsCorrectValue(){
+    public void getRiddlesReturnsCorrectValue() {
         Game game = getGame();
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -276,28 +275,28 @@ public class GameTest {
     }
 
     @Test
-    public void getStartLocationReturnsCorrectValue(){
+    public void getStartLocationReturnsCorrectValue() {
         Game game = getGame();
 
         assertNotNull(game.getStartLocation());
     }
 
     @Test
-    public void getIsVisibleReturnsCorrectValue(){
+    public void getIsVisibleReturnsCorrectValue() {
         Game game = getGame();
 
         assertTrue(game.getIsVisible());
     }
 
     @Test
-    public void getHasBeenAddedReturnsCorrectValue(){
+    public void getHasBeenAddedReturnsCorrectValue() {
         Game game = getGame();
 
         assertFalse(game.getHasBeenAdded());
     }
 
     @Test
-    public void setIdWorks(){
+    public void setIdWorks() {
         Game game = getGame();
         game.setId("gameId");
 
@@ -305,13 +304,13 @@ public class GameTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setIdFailsOnNullArgument(){
+    public void setIdFailsOnNullArgument() {
         Game game = getGame();
         game.setId(null);
     }
 
     @Test
-    public void setHasBeenAddedWorks(){
+    public void setHasBeenAddedWorks() {
         Game game = getGame();
         game.setHasBeenAdded(true);
 

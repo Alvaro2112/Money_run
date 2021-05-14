@@ -3,10 +3,8 @@ package sdp.moneyrun.game;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Location;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -36,13 +34,6 @@ public class Game {
     //Aux variables
     private String id;
     private boolean hasBeenAdded;
-
-
-    //Wether the game has started
-    public boolean isStarted() {
-        return started;
-    }
-
     private boolean started;
 
     /**
@@ -151,6 +142,11 @@ public class Game {
         game.startGame();
     }
 
+    //Wether the game has started
+    public boolean isStarted() {
+        return started;
+    }
+
     public String getId() {
         return id;
     }
@@ -183,7 +179,7 @@ public class Game {
 
     public void setStarted(boolean started, boolean forceLocal) {
         gameDbData.setStarted(started);
-        if(!forceLocal){
+        if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
@@ -204,8 +200,7 @@ public class Game {
         if (coins == null) throw new IllegalArgumentException();
         gameDbData.setCoins(coins);
 
-        if(!forceLocal)
-        {
+        if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
@@ -223,8 +218,8 @@ public class Game {
         return gameDbData.getIsVisible();
     }
 
-    public void setIsVisible(boolean value, boolean forceLocal){
-        if(hasBeenAdded && !forceLocal){
+    public void setIsVisible(boolean value, boolean forceLocal) {
+        if (hasBeenAdded && !forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
@@ -322,19 +317,20 @@ public class Game {
         return player;
     }
 
-    public boolean getIsDeleted(){
+    public boolean getIsDeleted() {
         return gameDbData.getIsDeleted();
     }
 
     /**
      * Set the value of isDeleted
-     * @param value new value
+     *
+     * @param value      new value
      * @param forceLocal set to true if it is to only be done locally, false
      *                   if both database and local values should be changed
      *                   (game must still have been added to the DB for false to work)
      */
-    public void setIsDeleted(boolean value, boolean forceLocal){
-        if(hasBeenAdded && !forceLocal){
+    public void setIsDeleted(boolean value, boolean forceLocal) {
+        if (hasBeenAdded && !forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)

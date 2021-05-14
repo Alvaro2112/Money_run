@@ -9,7 +9,7 @@ public final class WeatherReport {
     private String weatherIcon;
 
     public WeatherReport(double averageTemperature, double minimumTemperature, double maximalTemperature, String weatherType, String weatherIcon) {
-        if(weatherIcon == null || weatherType == null){
+        if (weatherIcon == null || weatherType == null) {
             throw new NullPointerException();
         }
         this.averageTemperature = averageTemperature;
@@ -48,7 +48,7 @@ public final class WeatherReport {
     }
 
     public void setWeatherType(String weatherType) {
-        if(weatherType == null){
+        if (weatherType == null) {
             throw new NullPointerException();
         }
 
@@ -60,7 +60,7 @@ public final class WeatherReport {
     }
 
     public void setWeatherIcon(String weatherIcon) {
-        if(weatherIcon == null){
+        if (weatherIcon == null) {
             throw new NullPointerException();
         }
         this.weatherIcon = weatherIcon;

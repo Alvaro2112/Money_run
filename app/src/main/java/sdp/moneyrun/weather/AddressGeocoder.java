@@ -46,7 +46,7 @@ public class AddressGeocoder {
     }
 
     public Address convertToAddress(android.location.Address address) {
-        if(address == null){
+        if (address == null) {
             throw new NullPointerException();
         }
         List<String> addressLines = new ArrayList<>();

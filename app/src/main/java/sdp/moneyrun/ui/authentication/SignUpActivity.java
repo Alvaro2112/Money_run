@@ -15,9 +15,10 @@ import com.google.firebase.auth.FirebaseUser;
 import sdp.moneyrun.R;
 
 public class SignUpActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     private final String TAG = SignUpActivity.class.getSimpleName();
+    private FirebaseAuth mAuth;
     private boolean isClicked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         //Until sign Out at destroy activity is implemented
-    //    FirebaseAuth.getInstance().signOut();
+        //    FirebaseAuth.getInstance().signOut();
         ///////////////////////////////////////////////////
 
         final Button submitButton = findViewById(R.id.signUpSubmitButton);
@@ -36,47 +37,46 @@ public class SignUpActivity extends AppCompatActivity {
             String email = emailView.getText().toString().trim();
             String password = passwordView.getText().toString().trim();
             isClicked = !isClicked;
-            if(isClicked)
+            if (isClicked)
                 submitButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             else
                 submitButton.setBackgroundColor(getResources().getColor(R.color.design_default_color_background));
-            if(checkInput(emailView, passwordView)) {
+            if (checkInput(emailView, passwordView)) {
                 submitSignUp(email, password);
             }
         });
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         //Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             updateUI(currentUser);
         }
     }
 
     /**
-     *This is needed for testing
-     *Also, since it's one of the first activity created, it's reasonable to assume that when it's
-     *destroyed the user should be signed out
+     * This is needed for testing
+     * Also, since it's one of the first activity created, it's reasonable to assume that when it's
+     * destroyed the user should be signed out
      */
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         mAuth.signOut();
     }
 
-    private void submitSignUp(String email, String password){
+    private void submitSignUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         //Sign-In success
                         Log.d(TAG, "createUserWithEmail:success"); //Not sure about the tag thing
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
-                    }
-                    else{
+                    } else {
                         Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
                         Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
@@ -84,14 +84,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        if(user != null){
-            Intent intent = new Intent (this, RegisterUserActivity.class);
+        if (user != null) {
+            Intent intent = new Intent(this, RegisterUserActivity.class);
             intent.putExtra("userId", user.getUid());
             startActivity(intent);
             finish();
         }
     }
-    private boolean isPasswordValid(CharSequence password){
+
+    private boolean isPasswordValid(CharSequence password) {
         return password.length() > 6;
     }
 
@@ -99,29 +100,23 @@ public class SignUpActivity extends AppCompatActivity {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-        private boolean checkInput(EditText emailView, EditText passwordView){
+    private boolean checkInput(EditText emailView, EditText passwordView) {
         boolean retValue = true;
         String email = emailView.getText().toString().trim();
         String password = passwordView.getText().toString().trim();
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             emailView.setError("Email is required");
             emailView.requestFocus();
             retValue = false;
-        }
-
-        else if(password.isEmpty()){
+        } else if (password.isEmpty()) {
             passwordView.setError("Password is required");
             passwordView.requestFocus();
             retValue = false;
-        }
-
-        else if(!isEmailValid(email)){
+        } else if (!isEmailValid(email)) {
             emailView.setError("Please enter a valid email address");
             emailView.requestFocus();
             retValue = false;
-        }
-
-        else if(!isPasswordValid(password)){
+        } else if (!isPasswordValid(password)) {
             passwordView.setError("Password is too weak");
             passwordView.requestFocus();
             retValue = false;

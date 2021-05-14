@@ -16,13 +16,14 @@ import sdp.moneyrun.ui.authentication.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
     public final static String TAG = MainActivity.class.getSimpleName();
-    private TextView mTextView;
     public static boolean calledAlready = false;
+    private TextView mTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(!calledAlready){
+        if (!calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             calledAlready = true;
         }
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      * When the MainActivity is destroyed i.e the app is closed the user is signed out
      */
     @Override
-    protected  void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         FirebaseAuth.getInstance().signOut();
     }

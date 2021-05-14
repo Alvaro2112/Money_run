@@ -1,15 +1,20 @@
 package sdp.moneyrun.player;
 
 public class PlayerBuilder {
-    private  String playerId;
+    private String playerId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-    private int  score;
+    private int score;
 
     /**
-     *
+     * Empty constructor
+     */
+    public PlayerBuilder() {
+    }
+
+    /**
      * @param playerId the unique player Id
      */
     public void setPlayerId(String playerId) {
@@ -17,7 +22,6 @@ public class PlayerBuilder {
     }
 
     /**
-     *
      * @param name
      */
     public void setName(String name) {
@@ -27,7 +31,6 @@ public class PlayerBuilder {
     }
 
     /**
-     *
      * @param address
      */
     public void setAddress(String address) {
@@ -37,7 +40,6 @@ public class PlayerBuilder {
     }
 
     /**
-     *
      * @param numberOfPlayedGames
      */
     public void setNumberOfPlayedGames(int numberOfPlayedGames) {
@@ -52,19 +54,14 @@ public class PlayerBuilder {
         this.score = score;
     }
 
-
-    /**
-     * Empty constructor
-     */
-    public PlayerBuilder(){}
-
     /**
      * Builds current instance. Address and name cannot be null or empty and playerId cannot be 0
+     *
      * @return the player built with the attributes set
      * @throws IllegalStateException if the adress or name is null or empty, if the playerId is null
      */
-    public Player build(){
-        if(playerId == null || name == null)
+    public Player build() {
+        if (playerId == null || name == null)
             throw new IllegalStateException();
         return new Player(playerId, name, score);
     }

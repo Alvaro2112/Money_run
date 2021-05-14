@@ -3,35 +3,6 @@ package sdp.moneyrun.ui.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import sdp.moneyrun.R;
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.game.Game;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.map.MapActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.user.User;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -40,8 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
@@ -64,29 +31,23 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 
-
-
-
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
     private final String DB_HOST = "host";
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
     private final String DB_STARTED = "started";
-
+    //Listeners
+    ValueEventListener isDeletedListener;
+    ValueEventListener getDeleteListener;
+    ValueEventListener playerListListener;
+    ValueEventListener isStartedListener;
     private LobbyPlayerListAdapter listAdapter;
     private Game game;
     private String gameId;
     private Player user;
     private User actualUser;
     private DatabaseReference thisGame;
-
-    //Listeners
-    ValueEventListener isDeletedListener;
-    ValueEventListener getDeleteListener;
-    ValueEventListener playerListListener;
-    ValueEventListener isStartedListener;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,8 +175,8 @@ public class GameLobbyActivity extends AppCompatActivity {
         thisGame.child(DB_PLAYERS).addValueEventListener(playerListListener);
     }
 
-    private void listenToStarted(){
-        if(!game.getHost().equals(user)) {
+    private void listenToStarted() {
+        if (!game.getHost().equals(user)) {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -248,7 +209,8 @@ public class GameLobbyActivity extends AppCompatActivity {
             getDeleteListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
+                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
+                    };
                     List<Player> players = snapshot.getValue(t);
                     if (players.size() == 1) {
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
@@ -257,6 +219,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         finish();
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
@@ -286,9 +249,9 @@ public class GameLobbyActivity extends AppCompatActivity {
         if (!user.equals(game.getHost())) {
             thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
             thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
-        }else {
+        } else {
             //otherwise it will also remove it from the DB when it is launched
-            if(game.getIsDeleted()) {
+            if (game.getIsDeleted()) {
                 thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                 thisGame.removeValue();
             }

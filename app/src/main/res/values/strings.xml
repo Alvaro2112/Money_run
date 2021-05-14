@@ -5,8 +5,6 @@
     <string name="title_activity_menu">MenuActivity</string>
 
     <string name="menu_home">Profile</string>
-    <string name="menu_gallery">Friends</string>
-    <string name="menu_slideshow">Stats</string>
     <string name="Start_game">New game</string>
     <string name="login_page_login_button_text">Login</string>
     <string name="login_page_email_input_hint">Email address</string>
@@ -18,21 +16,15 @@
     <string name="leaderboard_header_name">Name</string>
     <string name="leaderboard_header_score">Score</string>
 
-    <string name="leaderboard_go_back_button_text">Go back</string>
     <string name="login_page_signup_button_text">Sign up</string>
     <string name="login_page_welcome_text">Login with your email or sign up!</string>
     <string name="login_page_keep_signed_in_text">Keep me signed in</string>
-    <string name="check_profile">check profile</string>
     <string name="go_back_to_main_menu">Go back to Main Menu</string>
     <string name="submit">submit</string>
     <string name="join_game">Join Game</string>
-    <string name="game_1">Game 1</string>
-    <string name="game_2">Game 2</string>
-    <string name="game_3">Game 3</string>
     <string name="open_games">Open Games</string>
     <string name="new_game">New Game</string>
 
-    <string name="game_description">%1$s (%2$d/%3$d) </string>
     <string name="join_game_message">Join</string>
     <string name="join_game_full_message">Full</string>
     <string name="join_game_too_far_message">Too far</string>
@@ -46,35 +38,17 @@
 
 
     <string name="lobby_player_missing">Players missing: %1$d</string>
-    <string name="lobby_player_in">Players in lobby:</string>
 
-    <string name="database_open_games">open_games</string>
     <string name="database_games">games</string>
-    <string name="database_games_isDeleted">isDeleted</string>
-    <string name="database_open_games_is_visible">isVisible</string>
-    <string name="database_open_games_game_id">gameId</string>
-    <string name="database_open_games_name">name</string>
-    <string name="database_open_games_player_count">playerCount</string>
     <string name="database_open_games_players">players</string>
-    <string name="database_open_games_max_player_count">maxPlayerCount</string>
-    <string name="database_open_games_max_player_number">maxPlayerNumber</string>
-    <string name="database_open_games_start_location">startLocation</string>
     <!--
     Here are defined all the attribute names in the database!
     -->
 
     <!-- PLAYER -->
-    <string name="database_player">players</string>
-    <string name="database_player_address">address</string>
-    <string name="database_player_name">name</string>
-    <string name="database_player_number_of_died_games">numberOfDiedGames</string>
-    <string name="database_player_number_of_played_games">numberOfPlayedGames</string>
-    <string name="database_player_id">playerId</string>
-    <string name="database_player_score">score</string>
 
     <!-- GAME -->
     <string name="database_game">games</string>
-    <string name="database_game_host">host</string>
     <string name="database_game_is_visible">isVisible</string>
     <string name="database_game_max_player_count">maxPlayerCount</string>
     <string name="database_game_name">name</string>
@@ -82,16 +56,11 @@
     <string name="database_game_start_location">startLocation</string>
 
     <!-- LOCATION -->
-    <string name="database_location_latitude">latitude</string>
-    <string name="database_location_longitude">longitude</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="title_activity_leaderboard">Leaderboard</string>
-    <string name="action_settings">Settings</string>
-    <string name="ask_question">Ask question</string>
     <string name="answer_1">A</string>
     <string name="answer_2">B</string>
     <string name="answer_3">C</string>
@@ -112,24 +81,15 @@
 
     <string name="user_location_permission_explanation">This app needs location permissions in order to work.</string>
     <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
-    <string name="region_name">Region %1$d</string>
 
-    <string name="location_component_fragment_text">User\'s current location on a map fragment</string>
-    <string name="end_game_to_menu_button_text">Return to menu</string>
-
-    <string name="new_location">New lat: %1$s New longitude: %2$s</string>
     <string name="log_out">Log out</string>
-    <string name="map_placeholder">map_placeholder</string>
-    <string name="leaderboard">Leaderboard</string>
     <string name="collect_coin">Collect coin</string>
     <string name="continue_run">Continue run</string>
     <string name="CorrectAnswerMessage">You are correct!</string>
-    <string name="title_activity_offline_map">OfflineMapActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
 
 
 </resources>

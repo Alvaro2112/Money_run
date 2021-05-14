@@ -23,7 +23,7 @@ public class MainActivityInstrumentedTest {
 
 
     @Test
-    public void activityChangesToDashBoardAfter3Sec(){
+    public void activityChangesToDashBoardAfter3Sec() {
         Intents.init();
         try {
             Thread.sleep(4000);

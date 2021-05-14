@@ -28,9 +28,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.atomic.AtomicReference;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.authentication.RegisterUserActivity;
@@ -55,15 +53,15 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 
 public class LoginInstrumentedTest {
+    private final String TAG = LoginActivity.class.getSimpleName();
+
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
     }
-
-    private final String TAG = LoginActivity.class.getSimpleName();
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     private static Matcher<View> withError(final String expected) {
@@ -97,10 +95,9 @@ public class LoginInstrumentedTest {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             Espresso.onView(ViewMatchers.withId(R.id.signUpButton)).perform(ViewActions.click());
-            try{
+            try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -117,10 +114,9 @@ public class LoginInstrumentedTest {
             Intents.init();
             final String expected = "Email is required";
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
-            try{
+            try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -138,10 +134,9 @@ public class LoginInstrumentedTest {
             final String expected = "Password is required";
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
-            try{
+            try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -151,7 +146,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void loginInvalidEmailError(){
+    public void loginInvalidEmailError() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
 
@@ -161,10 +156,9 @@ public class LoginInstrumentedTest {
             Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
             Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
-            try{
+            try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -175,7 +169,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void loginWithRegisteredUserAndValidPlayerStartsActivity(){
+    public void loginWithRegisteredUserAndValidPlayerStartsActivity() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
 
@@ -241,7 +235,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void loginWithRegisteredUserAndInvalidPlayerStartsActivity(){
+    public void loginWithRegisteredUserAndInvalidPlayerStartsActivity() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
 
@@ -304,7 +298,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void logOutWorks(){
+    public void logOutWorks() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
 
@@ -366,15 +360,16 @@ public class LoginInstrumentedTest {
             Intents.release();
         }
     }
+
     @Test
-    public void guestButtonStartsRegisterPlayerWhenNotNull(){
+    public void guestButtonStartsRegisterPlayerWhenNotNull() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             Espresso.onView(withId(R.id.guestButton)).perform(ViewActions.click());
             Thread.sleep(4000);
             intended(hasComponent(RegisterUserActivity.class.getName()));
             Intents.release();
-        }catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
     }

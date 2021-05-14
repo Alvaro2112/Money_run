@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.util.Locale;
 
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
 import sdp.moneyrun.user.User;
 
 import static org.junit.Assert.assertEquals;

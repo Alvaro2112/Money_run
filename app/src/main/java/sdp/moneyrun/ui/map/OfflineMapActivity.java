@@ -31,6 +31,7 @@ public class OfflineMapActivity extends BaseMap {
     private Button exitButton;
     private OfflineManager offlineManager;
     private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +64,13 @@ public class OfflineMapActivity extends BaseMap {
         });
     }
 
-    public boolean getHasFoundMap(){return hasFoundMap;}
+    public boolean getHasFoundMap() {
+        return hasFoundMap;
+    }
 
 
     // We only allow one downloaded map
-    private void getDownloadedRegion(){
+    private void getDownloadedRegion() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
 
             @Override
@@ -94,6 +97,7 @@ public class OfflineMapActivity extends BaseMap {
                 // Move camera to new position
                 mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
+
             @Override
             public void onError(String error) {
                 Toast.makeText(OfflineMapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();

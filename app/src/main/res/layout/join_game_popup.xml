@@ -12,19 +12,19 @@
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:hint="@string/join_game_filter_message"
-        android:ems="10"
-        android:inputType="textEmailAddress"
+        android:background="@drawable/inputs_register_profile"
         android:drawableStart="@drawable/baseline_search_24"
         android:drawablePadding="12dp"
-        android:background="@drawable/inputs_register_profile" />
+        android:ems="10"
+        android:hint="@string/join_game_filter_message"
+        android:inputType="textEmailAddress" />
 
     <Button
         android:id="@+id/join_game_button_filter"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="240dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/layout_rounded"
         android:text="@string/join_game_filter_button"
         android:textAlignment="center"
@@ -32,7 +32,6 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/openGamesText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -44,7 +43,6 @@
         android:textStyle="bold" />
 
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="300dp"
         android:layout_height="450dp"
         android:layout_marginTop="70dp"

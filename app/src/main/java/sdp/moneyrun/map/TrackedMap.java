@@ -39,14 +39,38 @@ public abstract class TrackedMap extends BaseMap implements
     private static final String ICON_ID = "ICON_ID";
     private static final String LAYER_ID = "LAYER_ID";
     private static final float ZOOM = 4;
-    private PermissionsManager permissionsManager;
+    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     public LocationEngine locationEngine;
     protected LocationCheckObjectivesCallback callback;
-    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
+    private PermissionsManager permissionsManager;
 
 
     // source
     // https://docs.mapbox.com/android/maps/examples/location-change-listening/
+
+    /**
+     * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
+     *
+     * @param lat_a
+     * @param lng_a
+     * @param lat_b
+     * @param lng_b
+     * @return the distance in meters between two coordinates
+     */
+    public static double distance(double lat_a, double lng_a, double lat_b, double lng_b) {
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b - lat_a);
+        double lngDiff = Math.toRadians(lng_b - lng_a);
+        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
+                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return distance * meterConversion;
+    }
 
     /**
      * Initialize the Maps SDK's LocationComponent
@@ -128,7 +152,6 @@ public abstract class TrackedMap extends BaseMap implements
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-
     public boolean isLocationAppropriate(Location location) {
         List<Feature> features = getFeatureAtLocation(location);
         if (features.size() == 0)
@@ -144,7 +167,6 @@ public abstract class TrackedMap extends BaseMap implements
         return CoinGenerationHelper.hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
     }
 
-
     private List<Feature> getFeatureAtLocation(Location location) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
@@ -158,7 +180,6 @@ public abstract class TrackedMap extends BaseMap implements
         List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
         return features;
     }
-
 
     /**
      * @param location
@@ -188,31 +209,6 @@ public abstract class TrackedMap extends BaseMap implements
 
         return min_coin;
     }
-
-    /**
-     * //source : https://stackoverflow.com/questions/8832071/how-can-i-get-the-distance-between-two-point-by-latlng
-     *
-     * @param lat_a
-     * @param lng_a
-     * @param lat_b
-     * @param lng_b
-     * @return the distance in meters between two coordinates
-     */
-    public static double distance(double lat_a, double lng_a, double lat_b, double lng_b) {
-        double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(lat_b - lat_a);
-        double lngDiff = Math.toRadians(lng_b - lng_a);
-        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
-                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = earthRadius * c;
-
-        int meterConversion = 1609;
-
-        return distance * meterConversion;
-    }
-
 
     public abstract void checkObjectives(Location location);
 }

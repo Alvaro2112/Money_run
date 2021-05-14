@@ -23,11 +23,10 @@ import sdp.moneyrun.map.LocationRepresentation;
 
 
 public class OpenWeatherMap {
+    public static final String open_weather_key = "052c4316c52f5d7f619a05a0a09a7636";
     private static final String API_ENDPOINT = "https://api.openweathermap.org/data/2.5/onecall";
     private static final String TEMP_UNIT = "metric";
     private static final WeatherReport NO_DATA = new WeatherReport(0, 0, 0, "N/A", "N/A");
-    public static final String open_weather_key = "052c4316c52f5d7f619a05a0a09a7636";
-
     private final String apiKey;
 
     OpenWeatherMap(String apiKey) {
@@ -43,8 +42,8 @@ public class OpenWeatherMap {
 
 
     private WeatherReport parseReport(JSONObject report) throws JSONException {
-        if(report == null){
-            throw  new NullPointerException();
+        if (report == null) {
+            throw new NullPointerException();
         }
 
         JSONObject weather = report.getJSONArray("weather").getJSONObject(0);
@@ -60,7 +59,7 @@ public class OpenWeatherMap {
     }
 
     private WeatherForecast parseForecast(JSONObject forecast) throws JSONException {
-        if(forecast == null){
+        if (forecast == null) {
             throw new NullPointerException();
         }
         JSONArray daily = forecast.getJSONArray("daily");

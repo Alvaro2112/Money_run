@@ -21,8 +21,8 @@ public class RiddlesDatabaseTest extends TestCase {
 
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -38,15 +38,12 @@ public class RiddlesDatabaseTest extends TestCase {
 
     public void testGetInstanceOnNonExistentThrowsException() {
 
-        try
-        {
+        try {
             RiddlesDatabase db = RiddlesDatabase.getInstance();
             Assert.fail("Should have thrown Arithmetic exception");
-        }
-        catch(RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             //success
-        }finally {
+        } finally {
             RiddlesDatabase.reset();
 
         }
@@ -63,7 +60,7 @@ public class RiddlesDatabaseTest extends TestCase {
 
         } catch (RuntimeException e) {
             assertEquals(1, 1);
-        }finally {
+        } finally {
             RiddlesDatabase.reset();
 
         }

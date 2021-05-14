@@ -16,6 +16,9 @@ import sdp.moneyrun.player.Player;
  * there is no use for them to be in the DB
  */
 public final class GameDbData {
+    boolean isVisible;
+    boolean isDeleted;
+    boolean isStarted;
     private String name;
     private Player host;
     private List<Player> players;
@@ -23,9 +26,6 @@ public final class GameDbData {
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     private int maxPlayerCount;
     private Location startLocation;
-    boolean isVisible;
-    boolean isDeleted;
-    boolean isStarted;
 
     public GameDbData(String name,
                       Player host,
@@ -33,20 +33,20 @@ public final class GameDbData {
                       int maxPlayerCount,
                       Location startLocation,
                       boolean isVisible,
-                      List<Coin> coins){
-        if(name == null){
+                      List<Coin> coins) {
+        if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
         }
-        if(host == null){
+        if (host == null) {
             throw new IllegalArgumentException("host should not be null.");
         }
-        if(players == null){
+        if (players == null) {
             throw new IllegalArgumentException("players should not be null.");
         }
-        if(startLocation == null){
+        if (startLocation == null) {
             throw new IllegalArgumentException("startLocation should not be null.");
         }
-        if(maxPlayerCount <= 0){
+        if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
         this.coins = new ArrayList<>(coins);
@@ -60,8 +60,8 @@ public final class GameDbData {
         this.isStarted = false;
     }
 
-    public GameDbData(GameDbData other){
-        if(other == null){
+    public GameDbData(GameDbData other) {
+        if (other == null) {
             throw new IllegalArgumentException("other should not be null.");
         }
         this.name = other.name;
@@ -75,13 +75,14 @@ public final class GameDbData {
         this.isStarted = other.isStarted;
     }
 
-    public GameDbData(){}
+    public GameDbData() {
+    }
 
     public String getName() {
         return name;
     }
 
-    public Player getHost(){
+    public Player getHost() {
         return host;
     }
 
@@ -91,6 +92,23 @@ public final class GameDbData {
 
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
+    }
+
+    /**
+     * Set List of Players
+     *
+     * @param players List of Players to set
+     * @throws IllegalArgumentException if the Player List is empty
+     */
+    public void setPlayers(List<Player> players) {
+        if (players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if (players.isEmpty()) {
+            throw new IllegalArgumentException("players should not be empty.");
+        }
+
+        this.players = new ArrayList<>(players);
     }
 
     public int getMaxPlayerCount() {
@@ -105,84 +123,69 @@ public final class GameDbData {
         return new ArrayList<>(coins);
     }
 
-    public boolean setCoin(int index, Coin coin){
-        if(index < 0  || coin == null) throw new IllegalArgumentException();
-        if( coins.size() < index + 1) return false;
+    public void setCoins(List<Coin> coins) {
+        if (coins == null) throw new IllegalArgumentException();
+        this.coins = new ArrayList<>(coins);
+    }
+
+    public boolean setCoin(int index, Coin coin) {
+        if (index < 0 || coin == null) throw new IllegalArgumentException();
+        if (coins.size() < index + 1) return false;
         coins.set(index, coin);
         return true;
     }
 
-    public void setIsDeleted(boolean b){
-        this.isDeleted = b;
-    }
-
-    public boolean getIsDeleted(){
+    public boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsVisible(boolean b){isVisible = b;}
+    public void setIsDeleted(boolean b) {
+        this.isDeleted = b;
+    }
 
-
-    public boolean getIsVisible(){
+    public boolean getIsVisible() {
         return isVisible;
+    }
+
+    public void setIsVisible(boolean b) {
+        isVisible = b;
     }
 
     /**
      * Adds a Player to the Player List, or does nothing if already present
+     *
      * @param player Player to add
      * @throws IllegalArgumentException if List already full
      */
-    public void addPlayer(Player player){
-        if(player == null){
+    public void addPlayer(Player player) {
+        if (player == null) {
             throw new IllegalArgumentException("player should not be null.");
         }
-        if(players.size() == maxPlayerCount){
+        if (players.size() == maxPlayerCount) {
             throw new IllegalArgumentException("You have already attained maxPlayerCount.");
         }
 
-        if(!players.contains(player)){
+        if (!players.contains(player)) {
             players.add(player);
         }
     }
 
     /**
      * Removes a Player from the Player List
+     *
      * @param player Player to remove
      * @throws IllegalArgumentException if only one player left in List (and removing them would cause it to be empty)
      */
-    public void removePlayer(Player player){
-        if(player == null){
+    public void removePlayer(Player player) {
+        if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
-        if(players.size() == 1) {
+        if (players.size() == 1) {
             throw new IllegalArgumentException("players should not be empty");
         }
 
         players.remove(player);
     }
-
-    /**
-     * Set List of Players
-     * @param players List of Players to set
-     * @throws IllegalArgumentException if the Player List is empty
-     */
-    public void setPlayers(List<Player> players) {
-        if(players == null){
-            throw new IllegalArgumentException("players should not be null.");
-        }
-        if(players.isEmpty()){
-            throw new IllegalArgumentException("players should not be empty.");
-        }
-
-        this.players = new ArrayList<>(players);
-    }
-
-    public void setCoins(List<Coin> coins) {
-        if(coins == null) throw new IllegalArgumentException();
-        this.coins = new ArrayList<>(coins);
-    }
-
-
 
     @Override
     public boolean equals(Object o) {

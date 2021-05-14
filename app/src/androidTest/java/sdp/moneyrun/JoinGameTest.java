@@ -15,10 +15,10 @@ import static org.junit.Assert.fail;
 public class JoinGameTest {
 
     @Test
-    public void constructorFailsOnNullUser(){
-        try{
+    public void constructorFailsOnNullUser() {
+        try {
             new JoinGameImplementation(null, null, null, null, null, true, 1);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return;
         }
         fail();

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThrows;
 
 public class GameRepresentationTest {
     @Test
-    public void constructionOfGameRepresentationWorks(){
+    public void constructionOfGameRepresentationWorks() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -18,24 +18,24 @@ public class GameRepresentationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructionOfGameRepresentationFailsWhenNullId(){
+    public void constructionOfGameRepresentationFailsWhenNullId() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation(null, "game", 0, 16, lr);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructionOfGameRepresentationFailsWhenNullName(){
+    public void constructionOfGameRepresentationFailsWhenNullName() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", null, 0, 16, lr);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructionOfGameRepresentationFailsWhenNullLocation(){
+    public void constructionOfGameRepresentationFailsWhenNullLocation() {
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, null);
     }
 
     @Test
-    public void getGameIdReturnsCorrectValue(){
+    public void getGameIdReturnsCorrectValue() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -43,7 +43,7 @@ public class GameRepresentationTest {
     }
 
     @Test
-    public void getNameReturnsCorrectValue(){
+    public void getNameReturnsCorrectValue() {
         LocationRepresentation lr = new LocationRepresentation(0, 0);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -51,7 +51,7 @@ public class GameRepresentationTest {
     }
 
     @Test
-    public void getPlayerCountReturnsCorrectValue(){
+    public void getPlayerCountReturnsCorrectValue() {
         LocationRepresentation lr = new LocationRepresentation(0, 0);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -59,7 +59,7 @@ public class GameRepresentationTest {
     }
 
     @Test
-    public void getMaxPlayerCountReturnsCorrectValue(){
+    public void getMaxPlayerCountReturnsCorrectValue() {
         LocationRepresentation lr = new LocationRepresentation(0, 0);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -67,7 +67,7 @@ public class GameRepresentationTest {
     }
 
     @Test
-    public void getStartLocationReturnsCorrectValue(){
+    public void getStartLocationReturnsCorrectValue() {
         LocationRepresentation lr = new LocationRepresentation(0, 0);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
 
@@ -75,16 +75,16 @@ public class GameRepresentationTest {
     }
 
     @Test
-    public void setPlayerCountFailsOnLessThanOne(){
+    public void setPlayerCountFailsOnLessThanOne() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
-        assertThrows(IllegalArgumentException.class, () ->{
+        assertThrows(IllegalArgumentException.class, () -> {
             gr.setPlayerCount(-2);
         });
     }
 
     @Test
-    public void setPlayerCountSetsPlayerCount(){
+    public void setPlayerCountSetsPlayerCount() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
         gr.setPlayerCount(4);

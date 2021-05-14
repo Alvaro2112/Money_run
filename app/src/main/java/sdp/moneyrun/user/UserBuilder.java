@@ -1,15 +1,20 @@
 package sdp.moneyrun.user;
 
 public class UserBuilder {
-    private  String userId;
+    private String userId;
     private String name;
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-    private int  score;
+    private int score;
 
     /**
-     *
+     * Empty constructor
+     */
+    public UserBuilder() {
+    }
+
+    /**
      * @param userId the unique user Id
      */
     public void setUserId(String userId) {
@@ -17,7 +22,6 @@ public class UserBuilder {
     }
 
     /**
-     *
      * @param name
      */
     public void setName(String name) {
@@ -27,7 +31,6 @@ public class UserBuilder {
     }
 
     /**
-     *
      * @param address
      */
     public void setAddress(String address) {
@@ -37,7 +40,6 @@ public class UserBuilder {
     }
 
     /**
-     *
      * @param numberOfPlayedGames
      */
     public void setNumberOfPlayedGames(int numberOfPlayedGames) {
@@ -52,19 +54,14 @@ public class UserBuilder {
         this.score = score;
     }
 
-
-    /**
-     * Empty constructor
-     */
-    public UserBuilder(){}
-
     /**
      * Builds current instance. Address and name cannot be null or empty and userId cannot be 0
+     *
      * @return the user built with the attributes set
      * @throws IllegalStateException if the adress or name is null or empty, if the userId is null
      */
-    public User build(){
-        if(userId == null || name == null || address == null)
+    public User build() {
+        if (userId == null || name == null || address == null)
             throw new IllegalStateException();
         return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames, score);
     }

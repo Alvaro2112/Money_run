@@ -1,12 +1,8 @@
 package sdp.moneyrun.user;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.io.Serializable;
 import java.util.Objects;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
@@ -20,36 +16,19 @@ public class User implements Serializable {
     private int numberOfDiedGames;
     private int totalDistanceRun;
     private List<String> friendIdList = new ArrayList<>();
-
-    public int getMaxScoreInGame() {
-        return maxScoreInGame;
-    }
-
-    public void setMaxScoreInGame(int maxScoreInGame, boolean dbChange) {
-        this.maxScoreInGame = maxScoreInGame;
-        dbUpdate(dbChange);
-
-    }
-
-    public void setMaxScoreInGame(int maxScoreInGame) {
-        setMaxScoreInGame(maxScoreInGame, false);
-    }
-
-
     private int maxScoreInGame;
     private String preferredColor;
     private String preferredPet;
 
+
     /**
      * For database purpose, a default constructor is needed
      */
-    public User() { }
-
+    public User() {
+    }
     public User(String userId) {
         this.userId = userId;
     }
-
-
     /**
      * Constructor, returns instance of user
      *
@@ -73,6 +52,19 @@ public class User implements Serializable {
         this.totalDistanceRun = 0;
     }
 
+    public int getMaxScoreInGame() {
+        return maxScoreInGame;
+    }
+
+    public void setMaxScoreInGame(int maxScoreInGame) {
+        setMaxScoreInGame(maxScoreInGame, false);
+    }
+
+    public void setMaxScoreInGame(int maxScoreInGame, boolean dbChange) {
+        this.maxScoreInGame = maxScoreInGame;
+        dbUpdate(dbChange);
+
+    }
 
     /**
      * Setter for name. By design the user already had a name
@@ -86,15 +78,6 @@ public class User implements Serializable {
     }
 
     /**
-     * Setter without db change
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.setName(name, false);
-    }
-
-    /**
      * Setter for address. By design the user already had an address
      *
      * @param address
@@ -103,15 +86,6 @@ public class User implements Serializable {
     public void setAddress(String address, boolean dbChange) {
         this.address = address;
         dbUpdate(dbChange);
-    }
-
-    /**
-     * Setter without db change
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.setAddress(address, false);
     }
 
     /**
@@ -160,15 +134,6 @@ public class User implements Serializable {
     }
 
     /**
-     * sets the number of died games
-     *
-     * @param diedGames
-     */
-    public void setNumberOfDiedGames(int diedGames) {
-        this.setNumberOfDiedGames(diedGames, false);
-    }
-
-    /**
      * sets the number of played games
      *
      * @param playedGames
@@ -180,39 +145,13 @@ public class User implements Serializable {
     }
 
     /**
-     * sets the number of played games
-     *
-     * @param playedGames
-     */
-    public void setNumberOfPlayedGames(int playedGames) {
-        this.setNumberOfPlayedGames(playedGames, false);
-    }
-
-    /**
-     * set the user friend list
-     *
-     * @param friendIdList the player id list
-     */
-    public void setFriendIdList(List<String> friendIdList) {
-        if (friendIdList == null) {
-            throw new IllegalArgumentException("friend id list should not be null");
-        }
-        for(String friend : friendIdList){
-            if(friend == null){
-                throw new IllegalArgumentException("friend id in friend id list should not be null");
-            }
-        }
-
-        this.friendIdList = new ArrayList<>(friendIdList);
-    }
-
-    /**
      * add a friend id to the friend id list
+     *
      * @param friendId the friend id to add
      * @return true if the friend id has been added, false otherwise
      */
-    public boolean addFriendId(String friendId){
-        if(friendId == null){
+    public boolean addFriendId(String friendId) {
+        if (friendId == null) {
             throw new IllegalArgumentException("friend id should not be null");
         }
 
@@ -220,12 +159,13 @@ public class User implements Serializable {
     }
 
     /**
-     *  remove a friend id to the friend id list
+     * remove a friend id to the friend id list
+     *
      * @param friendId the friend id to remove
      * @return true if the friend id has been removed, false otherwise
      */
-    public boolean removeFriendId(String friendId){
-        if(friendId == null){
+    public boolean removeFriendId(String friendId) {
+        if (friendId == null) {
             throw new IllegalArgumentException("friend should not be null");
         }
 
@@ -237,6 +177,15 @@ public class User implements Serializable {
      */
     public int getNumberOfDiedGames() {
         return numberOfDiedGames;
+    }
+
+    /**
+     * sets the number of died games
+     *
+     * @param diedGames
+     */
+    public void setNumberOfDiedGames(int diedGames) {
+        this.setNumberOfDiedGames(diedGames, false);
     }
 
     /**
@@ -254,10 +203,28 @@ public class User implements Serializable {
     }
 
     /**
+     * Setter without db change
+     *
+     * @param address
+     */
+    public void setAddress(String address) {
+        this.setAddress(address, false);
+    }
+
+    /**
      * @return the name of the user
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Setter without db change
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.setName(name, false);
     }
 
     /**
@@ -267,10 +234,36 @@ public class User implements Serializable {
         return numberOfPlayedGames;
     }
 
-    public List<String> getFriendIdList(){
+    /**
+     * sets the number of played games
+     *
+     * @param playedGames
+     */
+    public void setNumberOfPlayedGames(int playedGames) {
+        this.setNumberOfPlayedGames(playedGames, false);
+    }
+
+    public List<String> getFriendIdList() {
         return new ArrayList<>(this.friendIdList);
     }
 
+    /**
+     * set the user friend list
+     *
+     * @param friendIdList the player id list
+     */
+    public void setFriendIdList(List<String> friendIdList) {
+        if (friendIdList == null) {
+            throw new IllegalArgumentException("friend id list should not be null");
+        }
+        for (String friend : friendIdList) {
+            if (friend == null) {
+                throw new IllegalArgumentException("friend id in friend id list should not be null");
+            }
+        }
+
+        this.friendIdList = new ArrayList<>(friendIdList);
+    }
 
     @Override
     public boolean equals(Object o) {

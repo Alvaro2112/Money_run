@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import sdp.moneyrun.R;
@@ -28,6 +27,17 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    public static List<User> bestToWorstUser(List<User> users) {
+        ArrayList<User> sorted = new ArrayList<>();
+        users.sort((o1, o2) -> {
+            if (o1.getMaxScoreInGame() < o2.getMaxScoreInGame())
+                return 1;
+            return -1;
+        });
+        return users;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,23 +52,22 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     /**
      * @return the leaderboard adapter instance
      */
-    public MainLeaderboardListAdapter getLdbAdapter(){
+    public MainLeaderboardListAdapter getLdbAdapter() {
         return ldbAdapter;
     }
 
     /**
      * @return the user list
      */
-    public ArrayList<User> getUserList(){
+    public ArrayList<User> getUserList() {
         return userList;
     }
 
-    public int getMaxUserNumber(){
+    public int getMaxUserNumber() {
         return NUM_PLAYERS_LEADERBOARD;
     }
 
-
-    private void addAdapter(){
+    private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new MainLeaderboardListAdapter(this, userList, user);
         ListView ldbView = findViewById(R.id.ldblistView);
@@ -67,7 +76,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void addUsersToLeaderboard(int n){
+    private void addUsersToLeaderboard(int n) {
         UserDatabaseProxy dp = new UserDatabaseProxy();
         dp.getLeaderboardUsers(n).addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -80,7 +89,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot : result.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
-                    if(user != null){
+                    if (user != null) {
                         addUser(user);
                     }
                 }
@@ -90,17 +99,17 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     /**
      * @param userList: users to be added to the leaderboard
-     *  Adds users to leaderboard
+     *                  Adds users to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addUserList(List<User> userList){
-        if(userList == null){
+    public void addUserList(List<User> userList) {
+        if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }
 
         ldbAdapter.addAll(userList);
         ArrayList<User> users = new ArrayList<>();
-        for(int i = 0;i<ldbAdapter.getCount();++i)
+        for (int i = 0; i < ldbAdapter.getCount(); ++i)
             users.add(ldbAdapter.getItem(i));
         ldbAdapter.clear();
         bestToWorstUser(users);
@@ -109,27 +118,16 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     /**
      * @param user: user to be added to the leaderboard
-     *  Adds user to leaderboard
+     *              Adds user to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addUser(User user){
-        if(user == null){
+    public void addUser(User user) {
+        if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
 
         List<User> to_add = new ArrayList<>();
         to_add.add(user);
         addUserList(to_add);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<User >bestToWorstUser(List<User> users){
-        ArrayList<User> sorted = new ArrayList<>();
-        users.sort((o1, o2) -> {
-            if(o1.getMaxScoreInGame() < o2.getMaxScoreInGame())
-                return 1;
-            return -1;
-        });
-        return users;
     }
 }

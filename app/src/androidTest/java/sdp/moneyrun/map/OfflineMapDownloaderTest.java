@@ -44,11 +44,11 @@ public class OfflineMapDownloaderTest {
                 e.printStackTrace();
             }
             scenario.onActivity(a -> {
-                assertEquals(a.getHasStartedDownload(),true);
+                assertEquals(a.getHasStartedDownload(), true);
             });
-        }catch (Exception e) {
-        e.printStackTrace();
-        assertEquals(1,2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertEquals(1, 2);
         }
     }
 
@@ -85,31 +85,32 @@ public class OfflineMapDownloaderTest {
             }
             scenario.onActivity(activity -> {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
-                offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback(){
-                    @Override
-                    public void onList(OfflineRegion[] offlineRegions) {
-                        assertEquals(offlineRegions.length ,1);
-                        String name;
-                        try {
-                            name = new JSONObject(new String(offlineRegions[0].getMetadata(), Charset.forName(OfflineMapDownloaderActivity.JSON_CHARSET)))
-                                    .getString(OfflineMapDownloaderActivity.JSON_FIELD_REGION_NAME);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            name = " ";
-                        }
-                        assertEquals(name , "offline map");
-                    }
-                    @Override
-                    public void onError(String error) {
-                    }
-                }
-            );
-                assertEquals(activity.getIsEndNotified(),true);
+                offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+                                                      @Override
+                                                      public void onList(OfflineRegion[] offlineRegions) {
+                                                          assertEquals(offlineRegions.length, 1);
+                                                          String name;
+                                                          try {
+                                                              name = new JSONObject(new String(offlineRegions[0].getMetadata(), Charset.forName(OfflineMapDownloaderActivity.JSON_CHARSET)))
+                                                                      .getString(OfflineMapDownloaderActivity.JSON_FIELD_REGION_NAME);
+                                                          } catch (JSONException e) {
+                                                              e.printStackTrace();
+                                                              name = " ";
+                                                          }
+                                                          assertEquals(name, "offline map");
+                                                      }
 
-        });
-    }catch (Exception e) {
+                                                      @Override
+                                                      public void onError(String error) {
+                                                      }
+                                                  }
+                );
+                assertEquals(activity.getIsEndNotified(), true);
+
+            });
+        } catch (Exception e) {
             e.printStackTrace();
-            assertEquals(1,2);
+            assertEquals(1, 2);
         }
     }
 }

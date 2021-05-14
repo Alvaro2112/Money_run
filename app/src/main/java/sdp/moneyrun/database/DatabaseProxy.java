@@ -10,16 +10,16 @@ public class DatabaseProxy {
     private final DatabaseReference ref;
     private final FirebaseDatabase db;
 
-    public DatabaseProxy(){
+    public DatabaseProxy() {
         db = FirebaseDatabase.getInstance();
         ref = db.getReference();
     }
 
-    public DatabaseReference getReference(){
+    public DatabaseReference getReference() {
         return ref;
     }
 
-    public FirebaseDatabase getDatabase(){
+    public FirebaseDatabase getDatabase() {
         return db;
     }
 }

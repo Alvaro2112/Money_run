@@ -12,10 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.game.EndGameActivity">
-        </activity>
-        <activity android:name=".ui.map.MapActivity">
-        </activity>
+        <activity android:name=".ui.game.EndGameActivity"></activity>
+        <activity android:name=".ui.map.MapActivity"></activity>
         <activity android:name=".ui.menu.LeaderboardActivity" />
 
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
@@ -27,8 +25,7 @@
         <activity
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,9 +34,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.map.OfflineMapActivity">
-        </activity>
-        <activity android:name=".ui.map.OfflineMapDownloaderActivity"/>
+        <activity android:name=".ui.map.OfflineMapActivity"></activity>
+        <activity android:name=".ui.map.OfflineMapDownloaderActivity" />
         <activity
             android:name=".ui.authentication.LoginActivity"
             android:label="@string/title_activity_login" />

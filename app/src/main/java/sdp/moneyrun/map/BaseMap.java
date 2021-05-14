@@ -18,16 +18,19 @@ public abstract class BaseMap extends AppCompatActivity {
     protected MapboxMap mapboxMap;
     protected SymbolManager symbolManager;
 
-    protected void createMap(Bundle savedInstanceState,int mapViewID, int contentViewID){
+    protected void createMap(Bundle savedInstanceState, int mapViewID, int contentViewID) {
         setContentView(contentViewID);
         mapView = findViewById(mapViewID);
         mapView.onCreate(savedInstanceState);
     }
 
-    public MapboxMap getMapboxMap(){
+    public MapboxMap getMapboxMap() {
         return mapboxMap;
     }
-    public SymbolManager getSymbolManager(){return symbolManager;}
+
+    public SymbolManager getSymbolManager() {
+        return symbolManager;
+    }
 
     @Override
     protected void onStart() {

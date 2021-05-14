@@ -8,7 +8,6 @@
 
 
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="2000dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -37,20 +36,20 @@
                 android:id="@+id/incorrect_answer_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:autofillHints=""
                 android:ems="10"
-                android:layout_marginTop="10dp"
                 android:text="X"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Button
-                android:layout_width="fill_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:id="@+id/continue_run"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:text="@string/continue_run" />
 
         </LinearLayout>

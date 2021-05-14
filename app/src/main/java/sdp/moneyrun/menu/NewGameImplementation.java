@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,32 +12,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.GameDbData;
-import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.game.Game;
-import sdp.moneyrun.map.LocationRepresentation;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
@@ -49,10 +37,9 @@ public class NewGameImplementation extends MenuImplementation {
                                  DatabaseReference databaseReference,
                                  User user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                 FusedLocationProviderClient fusedLocationClient){
+                                 FusedLocationProviderClient fusedLocationClient) {
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
     }
-
 
 
     /**
@@ -113,8 +100,8 @@ public class NewGameImplementation extends MenuImplementation {
     /**
      * Post a new game.
      *
-     * @param name              the game name
-     * @param maxPlayerCount    the maximum number of players in the game
+     * @param name           the game name
+     * @param maxPlayerCount the maximum number of players in the game
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
@@ -157,7 +144,7 @@ public class NewGameImplementation extends MenuImplementation {
     }
 
 
-    private void launchLobbyActivity(String gameId, Player player){
+    private void launchLobbyActivity(String gameId, Player player) {
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);

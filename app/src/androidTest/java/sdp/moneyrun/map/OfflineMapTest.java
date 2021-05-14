@@ -67,18 +67,18 @@ public class OfflineMapTest {
 
             scenario.onActivity(activity -> {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
-                offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback(){
+                offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
                                                       @Override
                                                       public void onList(OfflineRegion[] offlineRegions) {
-                                                          if(offlineRegions.length == 1){
-                                                              assertEquals(offlineRegions.length == 1,true);
-                                                              assertEquals(activity.getHasFoundMap(),true);
+                                                          if (offlineRegions.length == 1) {
+                                                              assertEquals(offlineRegions.length == 1, true);
+                                                              assertEquals(activity.getHasFoundMap(), true);
 
+                                                          } else {
+                                                              assertEquals(activity.getHasFoundMap(), false);
                                                           }
-                                                          else{
-                                                              assertEquals(activity.getHasFoundMap(),false);
-                                                          }
-                                                       }
+                                                      }
+
                                                       @Override
                                                       public void onError(String error) {
                                                       }
@@ -86,9 +86,9 @@ public class OfflineMapTest {
                 );
 
             });
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            assertEquals(1,2);
+            assertEquals(1, 2);
         }
 
     }

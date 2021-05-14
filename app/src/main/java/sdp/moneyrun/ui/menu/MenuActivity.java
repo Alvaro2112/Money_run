@@ -4,9 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,8 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.concurrent.Semaphore;
 
 import sdp.moneyrun.R;
@@ -48,7 +43,6 @@ import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
-import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.weather.Address;
 import sdp.moneyrun.weather.AddressGeocoder;
@@ -58,21 +52,30 @@ import sdp.moneyrun.weather.WeatherReport;
 
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    /////////////////////////////////////////////////////WEATHER IMPLEMENTATION
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
     });
-
-    private RiddlesDatabase db;
-    protected DrawerLayout mDrawerLayout;
     private final Semaphore available = new Semaphore(1, true);
+    protected DrawerLayout mDrawerLayout;
+    DatabaseReference databaseReference;
+    FusedLocationProviderClient fusedLocationClient;
+    private RiddlesDatabase db;
     private int numberOfAsyncTasks;
     private int tasksFinished;
     private Player currentPlayer;
     private int tasksFInished;
     private User user;
-
-    DatabaseReference databaseReference;
-    FusedLocationProviderClient fusedLocationClient;
-
+    private OpenWeatherMap openWeatherMap;
+    private AddressGeocoder addressGeocoder;
+    private WeatherForecast currentForecast;
+    private LocationRepresentation currentLocation;
+    LocationListener locationListenerGPS = location -> {
+        loadWeather(location);
+        setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +119,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
     public void runFunctionalities() {
         //Setting the current player object
         user = (User) getIntent().getSerializableExtra("user");
@@ -158,7 +160,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
-
     public void StartMapActivity() {
         Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
         if (user != null) {
@@ -168,8 +169,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         MenuActivity.this.finish();
         available.release();
     }
-
-
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -224,25 +223,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /////////////////////////////////////////////////////WEATHER IMPLEMENTATION
-    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
-    private static final int PERMISSION_REQUEST_CODE = 1;
-    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
-    private OpenWeatherMap openWeatherMap;
-    private AddressGeocoder addressGeocoder;
-    private WeatherForecast currentForecast;
-    private LocationRepresentation currentLocation;
-
-    LocationListener locationListenerGPS = location -> {
-        loadWeather(location);
-        setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
-    };
-
     private void runWeather() {
         Criteria criteria = new Criteria();
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        currentLocation = new LocationRepresentation(0,0);
+        currentLocation = new LocationRepresentation(0, 0);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -275,19 +260,20 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public WeatherForecast getCurrentForecast(){
+    public WeatherForecast getCurrentForecast() {
         return currentForecast;
     }
-    public LocationRepresentation getCurrentLocation(){
+
+    public LocationRepresentation getCurrentLocation() {
         return currentLocation;
     }
 
-    private void setWeatherFieldsToday(WeatherReport report){
-        String weatherIconURL = "http://openweathermap.org/img/wn/"+report.getWeatherIcon()+"@2x.png";
-        Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : "+report.getWeatherIcon());
-        TextView weatherTypeText =findViewById(R.id.weather_type);
-        TextView weatherTempText =findViewById(R.id.weather_temp_average);
-        weatherTempText.setText(Double.toString(report.getAverageTemperature())+" C");
+    private void setWeatherFieldsToday(WeatherReport report) {
+        String weatherIconURL = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@2x.png";
+        Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : " + report.getWeatherIcon());
+        TextView weatherTypeText = findViewById(R.id.weather_type);
+        TextView weatherTempText = findViewById(R.id.weather_temp_average);
+        weatherTempText.setText(Double.toString(report.getAverageTemperature()) + " C");
         weatherTypeText.setText(report.getWeatherType());
     }
 }

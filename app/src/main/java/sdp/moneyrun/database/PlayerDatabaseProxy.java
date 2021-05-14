@@ -19,7 +19,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     private final DatabaseReference playersRef;
 
-    public PlayerDatabaseProxy(){
+    public PlayerDatabaseProxy() {
         super();
 
         playersRef = getReference().child(DATABASE_PLAYER);
@@ -27,18 +27,19 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     /**
      * Add a player to the database. If the player id already exists, erases previously kept data
+     *
      * @param player the player to be put in the database
      */
-    public void putPlayer(Player player){
-        if(player == null){
+    public void putPlayer(Player player) {
+        if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
 
         playersRef.child(String.valueOf(player.getPlayerId())).setValue(player);
     }
 
-    public void putPlayer(Player player, OnCompleteListener listener){
-        if(player == null || listener == null){
+    public void putPlayer(Player player, OnCompleteListener listener) {
+        if (player == null || listener == null) {
             throw new IllegalArgumentException();
         }
         playersRef.child(String.valueOf(player.getPlayerId()))
@@ -49,10 +50,11 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     /**
      * Remove a player to the database.
+     *
      * @param player the player to be removed in the database
      */
-    public void removePlayer(Player player){
-        if(player == null){
+    public void removePlayer(Player player) {
+        if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
 
@@ -62,18 +64,18 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
     /**
      * Get the Task (asynchronous !) from data base. The player instance can be retrieved -
      * once the task is completed - by using getPlayerFromTask
+     *
      * @param playerId
      * @return Task containing the player data
      */
-    public Task<DataSnapshot> getPlayerTask(String playerId){
+    public Task<DataSnapshot> getPlayerTask(String playerId) {
         Task<DataSnapshot> task = playersRef.child(String.valueOf(playerId)).get();
 
         task.addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {
                 Log.e(TAG, "Error getting data", task1.getException());
 
-            }
-            else {
+            } else {
                 Log.d(TAG, String.valueOf(task1.getResult().getValue()));
             }
         });
@@ -81,15 +83,16 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         return task;
     }
 
-    /** get a player from a task
+    /**
+     * get a player from a task
+     *
      * @param task the task containing a player
      * @return the player inside the task or null if the task is not complete
      */
-    public Player getPlayerFromTask(Task<DataSnapshot> task){
-        if(task.isComplete()){
+    public Player getPlayerFromTask(Task<DataSnapshot> task) {
+        if (task.isComplete()) {
             return task.getResult().getValue(Player.class);
-        }
-        else {
+        } else {
             return null;
         }
 
@@ -98,11 +101,12 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
     /**
      * Will trigger an event each time the player is updated in the database
      * This means that the player should be added first
-     * @param player the player who's database entry will be listened
+     *
+     * @param player   the player who's database entry will be listened
      * @param listener the listener which describes what to do on change
      */
-    public void addPlayerListener(Player player, ValueEventListener listener){
-        if (listener == null || player == null){
+    public void addPlayerListener(Player player, ValueEventListener listener) {
+        if (listener == null || player == null) {
             throw new IllegalArgumentException();
         }
         playersRef.child(String.valueOf(player.getPlayerId())).addValueEventListener(listener);
@@ -111,12 +115,13 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     /**
      * Removes a ValueEventListener from a player entry in the db
+     *
      * @param player
      * @param listener
      * @throws IllegalArgumentException on null listener or null player
      */
-    public void removePlayerListener(Player player, ValueEventListener listener){
-        if (listener == null || player == null){
+    public void removePlayerListener(Player player, ValueEventListener listener) {
+        if (listener == null || player == null) {
             throw new IllegalArgumentException();
         }
         playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
@@ -124,11 +129,12 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     /**
      * Returns the top players ordered by their score from the database.
+     *
      * @param n the number of players to retrieve from the database
      * @return the task
      */
-    public Task<DataSnapshot> getLeaderboardPlayers(int n){
-        if(n < 0){
+    public Task<DataSnapshot> getLeaderboardPlayers(int n) {
+        if (n < 0) {
             throw new IllegalArgumentException("n should not be negative.");
         }
 

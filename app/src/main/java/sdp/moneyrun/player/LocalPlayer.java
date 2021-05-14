@@ -13,8 +13,8 @@ import sdp.moneyrun.map.Coin;
 public class LocalPlayer implements Serializable {
 
     private final ArrayList<Coin> lostCoins;
-    private ArrayList<Coin> locallyAvailableCoins;
     private final ArrayList<Coin> collectedCoins;
+    private ArrayList<Coin> locallyAvailableCoins;
     private int score;
 
     public LocalPlayer() {

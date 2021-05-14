@@ -34,18 +34,18 @@ import sdp.moneyrun.user.User;
 
 public class OfflineMapDownloaderActivity extends TrackedMap {
 
+    // JSON encoding/decoding
+    public static final String JSON_CHARSET = "UTF-8";
+    public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
+    private final float LAT_OFFSET = 0.1f;
+    private final float LONG_OFFSET = 0.1f;
+    private final int MAX_ZOOM = 15;
+    private final int MIN_ZOOM = 9;
     private boolean isEndNotified = false;
     private boolean hasStartedDownload = false;
     private ProgressBar progressBar;
     private MapView mapView;
     private OfflineManager offlineManager;
-    private final float LAT_OFFSET = 0.1f;
-    private final float LONG_OFFSET = 0.1f;
-    // JSON encoding/decoding
-    public static final String JSON_CHARSET = "UTF-8";
-    public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
-    private final int MAX_ZOOM = 15;
-    private final int MIN_ZOOM = 9;
     private Button exitButton;
     private User user;
 
@@ -108,7 +108,9 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         }
     }
 
-    public boolean getIsEndNotified(){return isEndNotified;}
+    public boolean getIsEndNotified() {
+        return isEndNotified;
+    }
 
     public boolean getHasStartedDownload() {
         return hasStartedDownload;
@@ -152,8 +154,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
             offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
             // Create a bounding box for the offline region
-            LatLng northeast = new LatLng((double)location.getLatitude() + LAT_OFFSET, (double)location.getLongitude() + LONG_OFFSET);
-            LatLng southwest = new LatLng((double)location.getLatitude() - LAT_OFFSET, (double)location.getLongitude() - LONG_OFFSET);
+            LatLng northeast = new LatLng((double) location.getLatitude() + LAT_OFFSET, (double) location.getLongitude() + LONG_OFFSET);
+            LatLng southwest = new LatLng((double) location.getLatitude() - LAT_OFFSET, (double) location.getLongitude() - LONG_OFFSET);
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(northeast) // Northeast
@@ -239,8 +241,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
                 if (offlineRegions.length > 1) {
                     // delete the last item in the offlineRegions list which will be yosemite offline map
-                    for (int i = 0; i < offlineRegions.length -1 ; ++i) {
-                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(),offlineRegions[i].getDefinition().getBounds().toString() , Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < offlineRegions.length - 1; ++i) {
+                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), offlineRegions[i].getDefinition().getBounds().toString(), Toast.LENGTH_SHORT).show();
 
                         offlineRegions[i].delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                             @Override

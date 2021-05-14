@@ -4,7 +4,6 @@ import android.location.Location;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertThrows;
 public class GameBuilderTest {
 
     @Test
-    public void buildThrowsExceptionWhenNullAttributes(){
+    public void buildThrowsExceptionWhenNullAttributes() {
         GameBuilder gb = new GameBuilder();
         assertThrows(IllegalStateException.class, gb::build);
         gb.setName("game test");
@@ -32,7 +31,7 @@ public class GameBuilderTest {
     }
 
     @Test
-    public void buildWorksAsExpectedWithNullRiddlesOnly(){
+    public void buildWorksAsExpectedWithNullRiddlesOnly() {
         GameBuilder gb = new GameBuilder();
         Player host = new Player("1", "James", 4);
         List<Player> players = new ArrayList<>();
@@ -48,10 +47,10 @@ public class GameBuilderTest {
     }
 
     @Test
-    public void buildWorksAsExpectedWithNullPlayersOnly(){
+    public void buildWorksAsExpectedWithNullPlayersOnly() {
         GameBuilder gb = new GameBuilder();
         gb.setName("game test")
-                .setHost(new Player("1", "James",4))
+                .setHost(new Player("1", "James", 4))
                 .setMaxPlayerCount(1)
                 .setCoins(new ArrayList<>())
                 .setStartLocation(new Location(""))
@@ -60,7 +59,7 @@ public class GameBuilderTest {
     }
 
     @Test
-    public void setMethodsFailWhenWrongArguments(){
+    public void setMethodsFailWhenWrongArguments() {
         GameBuilder gb = new GameBuilder();
         assertThrows(IllegalArgumentException.class, () -> gb.setName(null));
         assertThrows(IllegalArgumentException.class, () -> gb.setHost(null));
@@ -73,7 +72,7 @@ public class GameBuilderTest {
     }
 
     @Test
-    public void buildWorksAsExpected(){
+    public void buildWorksAsExpected() {
         GameBuilder gb = new GameBuilder();
         Player host = new Player("1", "James", 4);
         List<Player> players = new ArrayList<>();
