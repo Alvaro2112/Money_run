@@ -149,6 +149,24 @@ public class GameTest {
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
+        try {
+            new Game(name, host, 3, riddles, coins, startLocation, true,-1,2,2);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, host, -1, riddles, coins, startLocation, true,2,-1,2);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
+        try {
+            new Game(name, host, -1, riddles, coins, startLocation, true,2,2,-1);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals(1, 1);
+        }
 
 
 
@@ -188,6 +206,28 @@ public class GameTest {
         }catch (IllegalArgumentException e){
             assert(true);
         }
+
+        try{
+            new Game(name, host, players, -1, startLocation, true, coins,-1,2,2);
+            fail();
+        }catch (IllegalArgumentException e){
+            assert(true);
+        }
+
+        try{
+            new Game(name, host, players, -1, startLocation, true, coins,2,-1,2);
+            fail();
+        }catch (IllegalArgumentException e){
+            assert(true);
+        }
+        try{
+            new Game(name, host, players, -1, startLocation, true, coins,2,2,-1);
+            fail();
+        }catch (IllegalArgumentException e){
+            assert(true);
+        }
+
+
     }
 
     @Test

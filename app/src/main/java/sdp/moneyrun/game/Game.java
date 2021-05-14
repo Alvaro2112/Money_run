@@ -186,6 +186,54 @@ public class Game {
 
     }
 
+    public Game(String name,
+                Player host,
+                List<Player> players,
+                int maxPlayerCount,
+                Location startLocation,
+                boolean isVisible,
+                List<Coin> coins,
+                int numCoins,
+                double radius,
+                double duration) {
+        if (name == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if (host == null) {
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if (players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if (startLocation == null) {
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if (maxPlayerCount <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
+        }
+        if (coins == null) {
+            throw new IllegalArgumentException("coins should not be null.");
+        }
+
+        if (numCoins <= 0) {
+            throw new IllegalArgumentException("Number of coins should be bigger than 0.");
+        }
+        if (radius <=0 ) {
+            throw new IllegalArgumentException("Radius should be bigger than 0.");
+        }
+        if (duration <=0) {
+            throw new IllegalArgumentException("Duration should be bigger than 0.");
+        }
+
+
+        this.id = null;
+        this.hasBeenAdded = false;
+
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins,numCoins,radius,duration);
+        this.riddles = new ArrayList<>();
+        started = false;
+
+    }
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, Activity currentActivity) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);

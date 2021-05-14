@@ -157,7 +157,7 @@ public class NewGameImplementation extends MenuImplementation {
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);
-        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true);
+        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true,numCoins,gameRadius,gameDuration);
         game.setId(user.getUserId());
         // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();

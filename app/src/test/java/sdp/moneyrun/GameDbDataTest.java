@@ -113,6 +113,31 @@ public class GameDbDataTest {
     }
 
     @Test
+    public void constructorFailsOnNegativeNumCoins(){
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, ()->{
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(),-1,2,2);
+        });
+    }
+    @Test
+    public void constructorFailsOnNegativeRadius(){
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, ()->{
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(),1,-2,2);
+        });
+    }
+    @Test
+    public void constructorFailsOnNegativeDuration(){
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, ()->{
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(),1,2,-2);
+        });
+    }
+
+    @Test
     public void constructorForCloneThrowsExceptionWhenNull(){
         assertThrows(IllegalArgumentException.class, () -> new GameDbData(null));
         new GameDbData();
