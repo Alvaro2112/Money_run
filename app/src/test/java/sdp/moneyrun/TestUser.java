@@ -47,10 +47,6 @@ public class TestUser {
         assertEquals(1, user.getNumberOfPlayedGames());
     }
 
-    @Test
-    public void testAskUserReturnsEmptyString() {
-        assertEquals("", user.ask(""));
-    }
 
     @Test
     public void hashOutputsExpectedValue() {

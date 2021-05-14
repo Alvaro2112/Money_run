@@ -11,12 +11,6 @@ import java.util.Random;
 public class PlayerBuilderInstrumentedTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void setAddressWithNullArgumentThrowsArgumentException() {
-        PlayerBuilder b = new PlayerBuilder();
-        b.setAddress(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void setNameWithNullArgumentThrowsArgumentException() {
         PlayerBuilder b = new PlayerBuilder();
         b.setName(null);
@@ -26,7 +20,6 @@ public class PlayerBuilderInstrumentedTest {
     @Test(expected = IllegalStateException.class)
     public void buildWithNonCompleteNameFieldThrowsStateException() {
         PlayerBuilder b = new PlayerBuilder();
-        b.setAddress("Stuff");
         b.setPlayerId("7");
         b.build();
     }
@@ -35,7 +28,6 @@ public class PlayerBuilderInstrumentedTest {
     public void buildWithNonCompletePlayerIdFieldThrowsStateException() {
         PlayerBuilder b = new PlayerBuilder();
         b.setName("Stuff");
-        b.setAddress("Sthg");
         b.build();
     }
 

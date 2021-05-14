@@ -487,21 +487,6 @@ public class GameInstrumentedTest {
         assertEquals(id, g.getId());
     }
 
-    @Test
-    public void testStartGameDoesNotCrash() {
-        Game game = getGame();
-        game.startGame();
-        Game.startGame(game);
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void askPlayerQuestionShouldReturnFalse() {
-        List<Riddle> riddleList = new ArrayList<>();
-        riddleList.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        Game game = getGame();
-        assertFalse(game.askPlayer(game.getPlayers().get(0), riddleList.get(0)));
-    }
 
 
     @Test
