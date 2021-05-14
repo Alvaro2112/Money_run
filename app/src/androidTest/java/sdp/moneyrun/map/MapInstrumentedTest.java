@@ -1612,7 +1612,7 @@ public class MapInstrumentedTest {
                 }
                 assertEquals(a.getCircleManager().getAnnotations().size(), 1);
             });
-        } 
+        }  
     }
 
 }
