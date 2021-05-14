@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,32 +12,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.GameDbData;
-import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.game.Game;
-import sdp.moneyrun.map.LocationRepresentation;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
@@ -89,8 +77,16 @@ public class NewGameImplementation extends MenuImplementation {
     public void onSubmitPostNewGame(LinearLayout newGameLayout) {
         TextView nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
+        TextView numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
+        TextView gameRadiusView = newGameLayout.findViewById(R.id.newGameRadius);
+        TextView gameDurationView = newGameLayout.findViewById(R.id.newGameDuration);
+
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
+        String numCoinsStr = numCoinsView.getText().toString().trim();
+        String gameRadiusStr = gameRadiusView.getText().toString().trim();
+        String gameDurationStr = gameDurationView.getText().toString().trim();
+
         if (gameName.isEmpty()) {
             nameGameView.setError("This field is required");
             return;
@@ -100,14 +96,45 @@ public class NewGameImplementation extends MenuImplementation {
             return;
         }
 
+        if (numCoinsStr.isEmpty()) {
+            numCoinsView.setError("This field is required");
+            return;
+        }
+        if (gameRadiusStr.isEmpty()) {
+            gameRadiusView.setError("This field is required");
+            return;
+        }
+        if (gameDurationStr.isEmpty()) {
+            gameDurationView.setError("This field is required");
+            return;
+        }
+
         int maxPlayerNumber = Integer.parseInt(maxPlayerNumberStr);
+        int numCoinsNumber = Integer.parseInt(numCoinsStr);
+        double gameRadiusNumber = Double.parseDouble(gameDurationStr) ;
+        double gameDurationNumber = Double.parseDouble(gameDurationStr);
 
         if (maxPlayerNumber < 1) {
             maxPlayerNumberView.setError("There should be at least one player in a game");
             return;
         }
 
-        postNewGame(gameName, maxPlayerNumber);
+        if (numCoinsNumber < 1) {
+            maxPlayerNumberView.setError("There should be at least one coin in a game");
+            return;
+        }
+
+        if (gameRadiusNumber <= 0) {
+            maxPlayerNumberView.setError("The radius of the game should be bigger than 0 km");
+            return;
+        }
+        if (gameDurationNumber <= 0) {
+            maxPlayerNumberView.setError("The game should last for more than 0 minute");
+            return;
+        }
+
+
+        postNewGame(gameName, maxPlayerNumber,numCoinsNumber,gameRadiusNumber,gameDurationNumber);
     }
 
     /**
@@ -117,7 +144,7 @@ public class NewGameImplementation extends MenuImplementation {
      * @param maxPlayerCount    the maximum number of players in the game
      */
     @SuppressLint("MissingPermission")
-    public void postNewGame(String name, int maxPlayerCount) {
+    public void postNewGame(String name, int maxPlayerCount,int numCoins, double gameRadius, double gameDuration) {
         DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
         DatabaseReference startLocationReference = databaseReference
                 .child(activity.getString(R.string.database_game))

@@ -40,6 +40,24 @@ public class GameTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
+    public Game getGame2(){
+
+
+        String name = "name";
+        Player host = new Player("3","Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        int numCoins = 5;
+        double radius = 2;
+        double duration =5;
+
+        return new Game(name, host, maxPlayerCount, riddles, coins, new Location(""), true,numCoins,radius,duration);
+    }
+
     @Mock
     GameDbData gameData;
 
@@ -287,6 +305,26 @@ public class GameTest {
         Game game = getGame();
 
         assertTrue(game.getIsVisible());
+    }
+
+    @Test
+    public void getNumCoinsWorks(){
+        Game game = getGame2();
+
+        assertEquals(game.getNumCoins(),5);
+    }
+    @Test
+    public void getRadiusWorks(){
+        Game game = getGame2();
+
+        assertEquals(game.getRadius(),2,0.001);
+    }
+
+    @Test
+    public void getDurationWorks(){
+        Game game = getGame2();
+
+        assertEquals(game.getDuration(),5,0.001);
     }
 
     @Test

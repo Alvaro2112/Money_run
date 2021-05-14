@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -42,6 +41,25 @@ public class GameDbDataTest {
         mockLocation = Mockito.mock(Location.class);
 
         return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
+    }
+
+    GameDbData getTestData2() {
+        String name = "game";
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        players.add(host);
+        players.add(new Player("2", "Potter", 4));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(1, 2, 3));
+        int maxPlayers = 4;
+        int numCoins = 5;
+        double radius = 2;
+        double duration = 5;
+        mockLocation = Mockito.mock(Location.class);
+
+        return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>(),numCoins,radius,duration);
     }
 
     @Mock
@@ -137,6 +155,22 @@ public class GameDbDataTest {
 
         assertEquals(getTestData().getStartLocation(), mockLocation);
     }
+
+
+    @Test
+    public void getNumCoinsWorks(){
+        assertEquals(getTestData2().getNumCoins(), 5);
+    }
+
+    @Test
+    public void getGameRadiusWorks(){
+        assertEquals(getTestData2().getRadius(), 2.0,0.01);
+    }
+    @Test
+    public void getDurationWorks(){
+        assertEquals(getTestData2().getDuration(), 5.0,0.001);
+    }
+
 
     @Test
     public void getIsVisiblegetsIsVisible(){
