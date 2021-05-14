@@ -1650,5 +1650,115 @@ public class MapInstrumentedTest {
         }
     }
 
+//    @Test
+//    public void checkIfRadiusShrinksWhenCoinRemoved(){
+//        Player host = new Player("1234567891", "Bob", 0);
+//        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+//        intent.putExtra("player", host);
+//        intent.putExtra("host", true);
+//        intent.putExtra("useDB", true);
+//
+//        GameDatabaseProxy gdp = new GameDatabaseProxy();
+//        Game game = getGame();
+//
+//        List<Player> players = game.getPlayers();
+//        players.add(host);
+//
+//        String id = gdp.putGame(game);
+//
+//        try {
+//            Thread.sleep(4000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        intent.putExtra("currentGameId", id);
+//        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+//            final AtomicBoolean finished = new AtomicBoolean(false);
+//
+//            scenario.onActivity(a -> {
+//                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+//                    @Override
+//                    public void onDidFinishRenderingMap(boolean fully) {
+//                        if(fully){
+//
+//                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+//                                @Override
+//                                public void onCameraDidChange(boolean animated) {
+//                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+//                                        @Override
+//                                        public void onDidFinishRenderingFrame(boolean fully) {
+//                                            if(fully){
+//                                                finished.set(true);
+//                                            }
+//                                        }
+//                                    });
+//                                }
+//                            });
+//                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+//
+//                        }}
+//                });
+//            });
+//            while(true){
+//                try {
+//                    Thread.sleep(100);
+//                }
+//                catch (Exception e){
+//                    assertEquals(-1,2);
+//                }
+//                if (finished.get()){
+//                    try {
+//                        Thread.sleep(1000);
+//                    }
+//                    catch (Exception e){
+//                        assertEquals(-1,2);
+//                    }
+//
+//                    break;
+//                }
+//            }
+//            scenario.onActivity( a-> {assertNotNull(a.getCircleManager());
+//                a.initCircle();
+//                try {
+//                    Thread.sleep(4000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                assertEquals(a.getCircleManager().getAnnotations().size(),1);
+//                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//                final GameDatabaseProxy db = new GameDatabaseProxy();
+//                //FIRST CHECK THAT IT IS INITIALIZED WELL
+//                Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
+//                dataTask.addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        Game fromDB = db.getGameFromTaskSnapshot(task);
+//                        assertEquals(fromDB.getCoins().size(), 2);
+//                        //scenario.onActivity(activity -> {
+//                            assertNotNull(a.getCircleManager());
+//                            a.initCircle();
+//                        try {
+//                            Thread.sleep(4000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        assertNotNull(a.getCircleManager().getAnnotations().get(0));
+//                            float initialRadius = a.getCircleManager().getAnnotations().get(0).getCircleRadius();
+//                            a.removeCoin(fromDB.getCoins().get(0),true);
+//                            try {
+//                                Thread.sleep(4000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            assertEquals(a.getCircleManager().getAnnotations().get(0).getCircleRadius() < initialRadius,true);
+//                       // });
+//                    } else {
+//                        fail();
+//                    }
+//                });
+//
+//            });
+//        }
+//    }
 
 }
