@@ -219,18 +219,43 @@ public class GameDbDataTest {
     }
 
 
+
     @Test
     public void getNumCoinsWorks(){
         assertEquals(getTestData2().getNumCoins(), 5);
     }
 
     @Test
+    public void setNumCoinsWorks(){
+        GameDbData gdbd  = new GameDbData(getTestData2());
+        int newNumCoins = 1;
+        gdbd.setNumCoins(newNumCoins);
+        assertEquals(newNumCoins, gdbd.getNumCoins());
+    }
+
+
+    @Test
     public void getGameRadiusWorks(){
         assertEquals(getTestData2().getRadius(), 2.0,0.01);
     }
     @Test
+    public void setGameRadiusWorks(){
+        GameDbData gdbd  = new GameDbData(getTestData2());
+        double newRadius = 1.0;
+        gdbd.setRadius(newRadius);
+        assertEquals(newRadius, gdbd.getRadius(),0.0001);
+    }
+
+    @Test
     public void getDurationWorks(){
         assertEquals(getTestData2().getDuration(), 5.0,0.001);
+    }
+    @Test
+    public void setGameDurationWorks(){
+        GameDbData gdbd  = new GameDbData(getTestData2());
+        double newDuration = 1.0;
+        gdbd.setDuration(newDuration);
+        assertEquals(newDuration, gdbd.getRadius(),0.0001);
     }
 
 

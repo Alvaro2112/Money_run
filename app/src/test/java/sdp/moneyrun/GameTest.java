@@ -193,13 +193,13 @@ public class GameTest {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, -1, riddles, coins, startLocation, true,2,-1,2);
+            new Game(name, host, 1, riddles, coins, startLocation, true,2,-1,2);
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, -1, riddles, coins, startLocation, true,2,2,-1);
+            new Game(name, host, 1, riddles, coins, startLocation, true,2,2,-1);
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
@@ -275,27 +275,27 @@ public class GameTest {
             assertEquals(1, 1);
         }
         try{
-            new Game(name, host, players, -1, startLocation, true, null,1,1,1);
+            new Game(name, host, players, 1, startLocation, true, null,1,1,1);
             fail();
         }catch (IllegalArgumentException e){
             assert(true);
         }
 
         try{
-            new Game(name, host, players, -1, startLocation, true, coins,-1,2,2);
+            new Game(name, host, players, 1, startLocation, true, coins,-1,2,2);
             fail();
         }catch (IllegalArgumentException e){
             assert(true);
         }
 
         try{
-            new Game(name, host, players, -1, startLocation, true, coins,2,-1,2);
+            new Game(name, host, players, 1, startLocation, true, coins,2,-1,2);
             fail();
         }catch (IllegalArgumentException e){
             assert(true);
         }
         try{
-            new Game(name, host, players, -1, startLocation, true, coins,2,2,-1);
+            new Game(name, host, players, 1, startLocation, true, coins,2,2,-1);
             fail();
         }catch (IllegalArgumentException e){
             assert(true);
