@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -50,8 +52,8 @@ public class UserProfileActivity extends AppCompatActivity {
         } else {
             playerName.setText(String.format("User name : %s", user.getName()));
             playerAddress.setText(String.format("User address : %s", user.getAddress()));
-            playerDiedGames.setText(String.format("User has died %d many times", user.getNumberOfDiedGames()));
-            playerPlayedGames.setText(String.format("User has played %d many games", user.getNumberOfPlayedGames()));
+            playerDiedGames.setText(String.format(Locale.getDefault(), "User has died %d many times", user.getNumberOfDiedGames()));
+            playerPlayedGames.setText(String.format(Locale.getDefault(), "User has played %d many games", user.getNumberOfPlayedGames()));
         }
     }
 }

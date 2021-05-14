@@ -5,6 +5,7 @@ import android.location.Location;
 import com.mapbox.geojson.Feature;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import sdp.moneyrun.ui.map.MapActivity;
@@ -58,7 +59,7 @@ public class CoinGenerationHelper {
         for (String field : relevantFields) {
             if (feature.properties().has(field)) {
                 String locationType = feature.properties().get(field).toString();
-                if (inappropriateLocations.contains(locationType.substring(1, locationType.length() - 1).toLowerCase())) {
+                if (inappropriateLocations.contains(locationType.substring(1, locationType.length() - 1).toLowerCase(Locale.ROOT))) {
                     return false;
                 }
             }

@@ -12,7 +12,12 @@ public class Player implements Serializable {
     private String name;
     private int score;
 
-    public Player(String playerId) {
+    /**
+     * For database purpose, a default constructor is needed
+     */
+    public Player(){}
+
+    public Player(String playerId){
         this.playerId = playerId;
     }
 

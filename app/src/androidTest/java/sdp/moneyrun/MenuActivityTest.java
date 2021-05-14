@@ -116,57 +116,6 @@ public class MenuActivityTest {
         }
     }
 
-   /* @Test
-    public void filterWorks(){
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-
-            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-
-            scenario.onActivity(a -> {
-                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(a);
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(a, selfLocation -> {
-                            if(selfLocation == null){
-                                assertEquals(1, 0);
-                                return;
-                            }
-                            Player host = new Player("364556546", "Bob", 0);
-
-                            GameBuilder gb = new GameBuilder();
-                            gb.setName("checkfilter")
-                                    .setMaxPlayerCount(12)
-                                    .setHost(host)
-                                    .setIsVisible(true)
-                                    .setRiddles(new ArrayList<>())
-                                    .setCoins(new ArrayList<>())
-                                    .setStartLocation(selfLocation);
-
-                            GameDatabaseProxy db = new GameDatabaseProxy();
-                            db.putGame(gb.build());
-                        });
-            });
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText("checkfilter"), closeSoftKeyboard());
-            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            onView(ViewMatchers.withId(0)).perform(ViewActions.scrollTo());
-            onView(ViewMatchers.withId(0)).check(matches(isDisplayed()));
-        }
-    }
-*/
-
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
@@ -188,66 +137,6 @@ public class MenuActivityTest {
         }
     }
 
-//    @Test
-//    public void joinGamePopupDoesntCrashAfterPlayerChange() {
-//        GameDatabaseProxy gdp = new GameDatabaseProxy();
-//        Game game = getGame();
-//        gdp.putGame(game);
-//        CountDownLatch added = new CountDownLatch(1);
-//        gdp.updateGameInDatabase(game, task -> added.countDown());
-//        try {
-//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-//            assertEquals(0l, added.getCount());
-//        } catch (InterruptedException e) {
-//            fail();
-//        }
-//
-//        CountDownLatch gotten = new CountDownLatch(1);
-//        //To get the Button ID of the button corresponding to this Game, we have
-//        //to get all the games in the DB, and find out how many are visible, aka
-//        //how many have buttons since thats how the ids are given out. Tedious but necessary.
-//        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference()
-//                .child("games")
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    gotten.countDown();
-//                });
-//        try {
-//            gotten.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-//            assertEquals(0l, gotten.getCount());
-//        } catch (InterruptedException e) {
-//            fail();
-//        }
-//        if(!dbGames.isSuccessful()){
-//            fail();
-//        }
-//        int visibleGames = 0;
-//        for(DataSnapshot d : dbGames.getResult().getChildren()){
-//            if(d != null) {
-//                if (d.child("isVisible").getValue(Boolean.class)) {
-//                    visibleGames += 1;
-//                }
-//            }
-//        }
-//        List<Player> playerList = new ArrayList<>();
-//        playerList.add(new Player(5,"Aragon", "Epfl",0,0,0));
-//        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
-//            Intents.init();
-//            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-//            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-//            onView(ViewMatchers.withId(visibleGames-1)).perform(ViewActions.scrollTo());
-//            game.setPlayers(playerList, false);
-//            Thread.sleep(2000);
-//            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-//            playerList.add(new Player(6,"Heimdalr", "Epfl",0,0,0));
-//            game.setPlayers(playerList, false);
-//            Thread.sleep(2000);
-//            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-//            Intents.release();
-//        }catch (Exception e) {
-//            fail();
-//        }
-//    }
 
     @Test
     public void CreateGameSendsYouToLobby() {
@@ -273,25 +162,6 @@ public class MenuActivityTest {
     }
 
 
-    /*
-    @Test
-    public void mapButtonAndSplashScreenWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(100);
-
-            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
-            Thread.sleep(10000);
-            intended(hasComponent(MapActivity.class.getName()));
-
-            Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-
-            Intents.release();
-        }
-    }*/
 
     @Test
     public void newGamePopupIsDisplayed() {
@@ -469,49 +339,4 @@ public class MenuActivityTest {
         }
     }
 
-    /*
-    @Test
-    public void joinLobbyFromJoinButtonIntentIsSent(){
-        GameDatabaseProxy gdp = new GameDatabaseProxy();
-        Game game = getGame();
-        gdp.putGame(game);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //To get the Button ID of the button corresponding to this Game, we have
-        //to get all the games in the DB, and find out how many are visible, aka
-        //how many have buttons since thats how the ids are given out. Tedious but necessary.
-        Task<DataSnapshot> dbGames = FirebaseDatabase.getInstance().getReference().child("games").get();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (!dbGames.isSuccessful()) {
-            fail();
-        }
-        int visibleGames = 0;
-        for (DataSnapshot d : dbGames.getResult().getChildren()) {
-            if (d.child("isVisible").getValue(Boolean.class)) {
-                visibleGames += 1;
-            }
-        }
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
-            Thread.sleep(5000);
-            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(visibleGames - 1)).perform(ViewActions.scrollTo());
-            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
-            onView(ViewMatchers.withId(visibleGames - 1)).perform(ViewActions.click());
-            Thread.sleep(2000);
-            intended(hasComponent(GameLobbyActivity.class.getName()));
-            Intents.release();
-        } catch (Exception e) {
-            fail();
-        }
-    }
-    */
 }
