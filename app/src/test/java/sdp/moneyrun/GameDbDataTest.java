@@ -255,7 +255,7 @@ public class GameDbDataTest {
         GameDbData gdbd  = new GameDbData(getTestData2());
         double newDuration = 1.0;
         gdbd.setDuration(newDuration);
-        assertEquals(newDuration, gdbd.getRadius(),0.0001);
+        assertEquals(newDuration, gdbd.getDuration(),0.0001);
     }
 
 
