@@ -228,8 +228,7 @@ public class JoinGameImplementation extends MenuImplementation{
 
                     double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
 
-                    if (false){
-                  //  if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
+                   if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
                         button.setEnabled(false);
                         button.setText(activity.getString(R.string.join_game_too_far_message));
                     }
