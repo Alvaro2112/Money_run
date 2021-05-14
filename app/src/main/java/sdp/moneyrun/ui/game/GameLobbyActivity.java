@@ -145,7 +145,6 @@ public class GameLobbyActivity extends AppCompatActivity {
             isDeletedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                     if ((boolean) snapshot.getValue()) {
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         intent.putExtra("user", actualUser);
@@ -226,6 +225,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         UserDatabaseProxy pdp = new UserDatabaseProxy();
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
+                        intent.putExtra("host", false);
                         intent.putExtra("useDB", true);
                         startActivity(intent);
                         finish();
