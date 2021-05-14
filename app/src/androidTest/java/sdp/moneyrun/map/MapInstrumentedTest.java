@@ -1557,7 +1557,7 @@ public class MapInstrumentedTest {
 
 
     @Test
-    public void checkCirleInitialized() {
+    public void checkCircleInitialized() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
@@ -1612,7 +1612,7 @@ public class MapInstrumentedTest {
                 }
                 assertEquals(a.getCircleManager().getAnnotations().size(), 1);
             });
-        }  
+        }
     }
 
 }
