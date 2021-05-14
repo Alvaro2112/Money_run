@@ -20,6 +20,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -29,15 +31,22 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import com.mapbox.mapboxsdk.utils.ColorUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +65,11 @@ import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
 
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 import static java.lang.System.currentTimeMillis;
 
 
@@ -92,6 +105,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
     private int coinsToPlace;
+    private  CircleManager circleManager;
+    private int COINS_RADIUS = 6;
+    private float circleRadius = COINS_RADIUS*10f;
+    private double shrinkingFactor = 0.9;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,8 +174,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void initializeGame(String gameId){
 
         if(!addedCoins && host){
-            placeRandomCoins(coinsToPlace, 6);
+            placeRandomCoins(coinsToPlace, COINS_RADIUS);
             addedCoins = true;
+            initCircle();
         }
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -256,11 +274,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), true);
+
             enableLocationComponent(style);
+
+            circleManager = new CircleManager(mapView,mapboxMap,style);
 
         });
 
         this.mapboxMap = mapboxMap;
+
 
     }
 
@@ -480,7 +502,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-
+        circleRadius *= shrinkingFactor;
+        initCircle();
 
     }
 
@@ -507,78 +530,20 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
     }
-
-
-    /**
-     *
-     * @param paceInMillis the rate of the shrinking radius
-     * @param initialRadius the starting radius inside which coins will appear
-     * @param center the starting position of the host
-     * @param numberOfSides to have as smooth of a circle
-     * @param map the map where the circle will be drawn
-     * @param shrinkPace bz how much the radius shrinks
-     * @param epsilon if under this threshold there is no circle anymore
-     */
-
-    public void shrinkCircle(long paceInMillis, double initialRadius,LatLng center,int numberOfSides,MapboxMap map,double shrinkPace,double epsilon){
-        drawCircle(center,initialRadius,numberOfSides,map);
-        if(initialRadius < epsilon)
-            return;
-        long initTime = currentTimeMillis();
-        while(currentTimeMillis() - initTime < paceInMillis){}
-        drawCircle(center,initialRadius*shrinkPace,numberOfSides,map);
+    public void initCircle(){
+        circleManager.deleteAll();
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions = circleOptions.withCircleRadius(circleRadius);
+        circleOptions = circleOptions.withCircleOpacity(0.5f);
+        circleOptions = circleOptions.withCircleColor(""+Color.blue(8));
+        //circleOptions.withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
+        System.out.println("Current lat is "+getCurrentLocation().getLatitude()+" and longitude is : "+getCurrentLocation().getLongitude());
+        circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(),getCurrentLocation().getLongitude()));
+        circleManager.create(circleOptions);
     }
 
-
-    /**
-     * Draws a circle around the players, this is where the players should be allowed to be during a game
-     */
-
-    // TODO: use this to draw filled circle in Portland : drawCircle(new LatLng( 45.522585,-122.685699), 20,64);
-    public void drawCircle(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides,MapboxMap map){
-
-        List<LatLng> positions = new ArrayList<>();
-        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
-        double distanceY = radiusInKilometers / 110.574;
-
-        double slice = (2 * Math.PI) / numberOfSides;
-
-        double theta;
-        double x;
-        double y;
-        LatLng position;
-        for (int i = 0; i < numberOfSides; ++i) {
-            theta = i * slice;
-            x = distanceX * Math.cos(theta);
-            y = distanceY * Math.sin(theta);
-
-            position = new LatLng(centerCoordinates.getLatitude() + y,
-                    centerCoordinates.getLongitude() + x);
-            positions.add(position);
-        }
-        List<List<Point>> POINTS = new ArrayList<>();
-        List<Point> OUTER_POINTS = new ArrayList<>();
-         {
-             for(int i = 0;i<positions.size();++i){
-                 OUTER_POINTS.add(Point.fromLngLat(positions.get(i).getLongitude(),positions.get(i).getLatitude()));
-             }
-            POINTS.add(OUTER_POINTS);
-        }
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-                map.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
-                        style.addSource(new GeoJsonSource("source-id", Polygon.fromLngLats(POINTS)));
-                        style.addLayerBelow(new FillLayer("layer-id", "source-id").withProperties(
-                                fillColor(Color.parseColor("#3bb2d0"))), "settlement-label"
-                        );
-                    }
-                });
-
-            }
-        });
+    public CircleManager getCircleManager(){
+        return circleManager;
     }
 
 }

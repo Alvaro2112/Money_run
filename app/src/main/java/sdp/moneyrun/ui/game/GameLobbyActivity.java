@@ -145,6 +145,7 @@ public class GameLobbyActivity extends AppCompatActivity {
             isDeletedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                     if ((boolean) snapshot.getValue()) {
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                         intent.putExtra("user", actualUser);

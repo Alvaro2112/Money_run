@@ -51,6 +51,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -1537,51 +1538,113 @@ public class MapInstrumentedTest {
         }
     }
     @Test
-    public void checkIfPointNotInCircle(){
+    public void checkIfCircularManagerIsInitiatedProperly(){
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            scenario.onActivity(a ->{
-                // draws a circle that after 0.6 seconds shrinks, located at Portland
-                double radiusInKilometers = 20;
-                LatLng centerCoordinates = new LatLng( 45.522585,-122.685699);
-                int numberOfSides = 64;
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
-                List<LatLng> positions = new ArrayList<>();
-                double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
-                double distanceY = radiusInKilometers / 110.574;
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
 
-                double slice = (2 * Math.PI) / numberOfSides;
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if(fully){
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
 
-                double theta;
-                double x;
-                double y;
-                LatLng position;
-                for (int i = 0; i < numberOfSides; ++i) {
-                    theta = i * slice;
-                    x = distanceX * Math.cos(theta);
-                    y = distanceY * Math.sin(theta);
-
-                    position = new LatLng(centerCoordinates.getLatitude() + y,
-                            centerCoordinates.getLongitude() + x);
-                    positions.add(position);
-                }
-                List<List<Point>> POINTS = new ArrayList<>();
-                List<Point> OUTER_POINTS = new ArrayList<>();
-                {
-                    for(int i = 0;i<positions.size();++i){
-                        OUTER_POINTS.add(Point.fromLngLat(positions.get(i).getLongitude(),positions.get(i).getLatitude()));
-                    }
-                    POINTS.add(OUTER_POINTS);
-
-                }
-                Polygon polygon = Polygon.fromLngLats(POINTS);
-                a.shrinkCircle(6000,20,new LatLng( 45.522585,-122.685699),64,
-                        a.mapboxMap,0.01,1);
+                        }}
+                });
+            });
+            while(true){
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity( a-> assertNotNull(a.getCircleManager()));
+        }
+    }
+
+
+    @Test
+    public void checkCirleInitialized() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if(fully){
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                        }}
+                });
+            });
+            while(true){
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e){
+                    assertEquals(-1,2);
+                }
+                if (finished.get()){
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (Exception e){
+                        assertEquals(-1,2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity( a-> {assertNotNull(a.getCircleManager());
+            a.initCircle();
+                try {
+                    Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                assertEquals(TurfJoins.inside(Point.fromLngLat(0,0), polygon),false);
+                assertEquals(a.getCircleManager().getAnnotations().size(),1);
+
 
             });
         }
