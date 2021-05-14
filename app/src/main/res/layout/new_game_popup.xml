@@ -67,7 +67,7 @@
                 android:layout_height="78dp"
                 android:ems="10"
                 android:hint="Enter the duration of the game in minutes"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:id="@+id/newGameRadius"
@@ -75,7 +75,7 @@
                 android:layout_height="87dp"
                 android:ems="10"
                 android:hint="Enter the radius of the game in km"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
 
             <Button
