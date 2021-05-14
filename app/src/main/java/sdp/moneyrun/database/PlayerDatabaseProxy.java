@@ -10,12 +10,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import sdp.moneyrun.player.Player;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class PlayerDatabaseProxy extends DatabaseProxy {
 
     private final String TAG = PlayerDatabaseProxy.class.getSimpleName();
 
     private final String DATABASE_PLAYER = "players";
-    private final String DATABASE_PLAYER_SCORE = "score";
 
     private final DatabaseReference playersRef;
 
@@ -127,19 +127,4 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
     }
 
-    /**
-     * Returns the top players ordered by their score from the database.
-     *
-     * @param n the number of players to retrieve from the database
-     * @return the task
-     */
-    public Task<DataSnapshot> getLeaderboardPlayers(int n) {
-        if (n < 0) {
-            throw new IllegalArgumentException("n should not be negative.");
-        }
-
-        return playersRef.orderByChild(DATABASE_PLAYER_SCORE)
-                .limitToLast(n)
-                .get();
-    }
 }

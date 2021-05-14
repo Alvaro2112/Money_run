@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class UserDatabaseProxy extends DatabaseProxy {
 
     private final String TAG = UserDatabaseProxy.class.getSimpleName();

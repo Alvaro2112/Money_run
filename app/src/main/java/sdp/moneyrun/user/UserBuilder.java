@@ -58,7 +58,7 @@ public class UserBuilder {
      * Builds current instance. Address and name cannot be null or empty and userId cannot be 0
      *
      * @return the user built with the attributes set
-     * @throws IllegalStateException if the adress or name is null or empty, if the userId is null
+     * @throws IllegalStateException if the address or name is null or empty, if the userId is null
      */
     public User build() {
         if (userId == null || name == null || address == null)

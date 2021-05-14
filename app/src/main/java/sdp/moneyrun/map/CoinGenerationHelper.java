@@ -84,8 +84,7 @@ public class CoinGenerationHelper {
             throw new NullPointerException("center location is null");
         }
         double dist = TrackedMap.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
-        int score = (int) Math.ceil(dist / VALUE_RADIUS);
-        return score;
+        return (int) Math.ceil(dist / VALUE_RADIUS);
     }
 }
 

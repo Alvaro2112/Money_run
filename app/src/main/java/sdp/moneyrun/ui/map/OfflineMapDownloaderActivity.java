@@ -32,6 +32,7 @@ import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class OfflineMapDownloaderActivity extends TrackedMap {
 
     // JSON encoding/decoding
@@ -68,21 +69,18 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
     private void addExitButton() {
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mainIntent = new Intent(OfflineMapDownloaderActivity.this, MenuActivity.class);
-                mainIntent.putExtra("user", user);
-                startActivity(mainIntent);
-                finish();
-            }
+        exitButton.setOnClickListener(v -> {
+            Intent mainIntent = new Intent(OfflineMapDownloaderActivity.this, MenuActivity.class);
+            mainIntent.putExtra("user", user);
+            startActivity(mainIntent);
+            finish();
         });
     }
 
 
     /**
      * @param mapboxMap the map where everything will be done
-     *                  this overried the OnMapReadyCallback in the implemented interface
+     *                  this overrides the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                  Then we setup the location tracking
      */
@@ -144,8 +142,8 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
     /**
-     * @param location the center of the donwloaded map
-     *                 The map will be downloaded whne the location provider updates the location so that we download the map where the user is.
+     * @param location the center of the downloaded map
+     *                 The map will be downloaded when the location provider updates the location so that we download the map where the user is.
      */
     @Override
     public void checkObjectives(Location location) {

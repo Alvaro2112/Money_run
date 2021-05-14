@@ -2,7 +2,6 @@ package sdp.moneyrun.ui.map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -23,9 +22,6 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class OfflineMapActivity extends BaseMap {
-    public static final String JSON_CHARSET = "UTF-8";
-    public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
-    private final int MIN_ZOOM = 9;
 
     private boolean hasFoundMap = false;
     private Button exitButton;
@@ -53,14 +49,11 @@ public class OfflineMapActivity extends BaseMap {
     }
 
     private void addExitButton() {
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mainIntent = new Intent(OfflineMapActivity.this, MenuActivity.class);
-                mainIntent.putExtra("user", user);
-                startActivity(mainIntent);
-                finish();
-            }
+        exitButton.setOnClickListener(v -> {
+            Intent mainIntent = new Intent(OfflineMapActivity.this, MenuActivity.class);
+            mainIntent.putExtra("user", user);
+            startActivity(mainIntent);
+            finish();
         });
     }
 

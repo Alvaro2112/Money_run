@@ -172,34 +172,6 @@ public class GameTest {
     }
 
     @Test
-    public void testStartGameDoesNotCrash() {
-        String name = "name";
-        Player host = new Player("3", "Bob", 0);
-        List<Player> players = new ArrayList<>();
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Coin> coins = new ArrayList<>();
-        Location location = new Location("LocationManager#GPS_PROVIDER");
-
-        Game game1 = new Game(name, host, 3, riddles, coins, location, true);
-        Game game2 = new Game(name, host, players, 3, location, true, coins);
-
-        game1.startGame();
-        Game.startGame(game1);
-        game2.startGame();
-        Game.startGame(game2);
-
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void askPlayerQuestionShouldReturnFalse() {
-        Game game = getGame();
-
-        assertFalse(game.askPlayer(game.getPlayers().get(0), game.getRiddles().get(0)));
-    }
-
-    @Test
     public void getRandomQuestionReturnsAQuestion() {
         Game game = getGame();
 

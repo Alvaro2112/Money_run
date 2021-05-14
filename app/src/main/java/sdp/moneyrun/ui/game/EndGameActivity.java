@@ -2,17 +2,11 @@ package sdp.moneyrun.ui.game;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +22,7 @@ import sdp.moneyrun.user.User;
 /**
  * In this activity we do everything that needs to be done to update players info
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EndGameActivity extends AppCompatActivity {
 
     private final int gameScore = 0;
@@ -69,24 +64,15 @@ public class EndGameActivity extends AppCompatActivity {
 
     private void linkToMenuButton(ImageButton toMenu) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
-        toMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            User p = pdp.getUserFromTask(task);
-                            Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
-                            mainIntent.putExtra("user", p);
-                            startActivity(mainIntent);
-                            finish();
-                        }
-                    }
-                });
-
+        toMenu.setOnClickListener(v -> pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                User p = pdp.getUserFromTask(task);
+                Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
+                mainIntent.putExtra("user", p);
+                startActivity(mainIntent);
+                finish();
             }
-        });
+        }));
 
     }
 
@@ -131,13 +117,10 @@ public class EndGameActivity extends AppCompatActivity {
 
     public void updateUser(String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
-        pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    User p = pdp.getUserFromTask(task);
-                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
-                }
+        pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                User p = pdp.getUserFromTask(task);
+                p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
             }
         });
 

@@ -86,6 +86,9 @@
     <string name="collect_coin">Collect coin</string>
     <string name="continue_run">Continue run</string>
     <string name="CorrectAnswerMessage">You are correct!</string>
+    <string name="delete_game_button">Delete</string>
+    <string name="incorrect_answer_message">\"You are incorrect!\n The answer was \"</string>
+    <string name="fillup_player_warning">PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

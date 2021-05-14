@@ -12,8 +12,6 @@ import androidx.core.content.ContextCompat;
 
 /**
  * This class implements a permissions requester.
- *
- * @author Arnaud Poletto
  */
 public class PermissionsRequester {
     private final Activity activity;
@@ -108,7 +106,7 @@ public class PermissionsRequester {
     }
 
     /**
-     * @return a popup with informations about the requested permissions
+     * @return a popup with information about the requested permissions
      */
     private AlertDialog buildAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -120,9 +118,8 @@ public class PermissionsRequester {
         builder.setMessage(requestMessage);
         builder.setPositiveButton(positiveButtonText, positiveButtonListener);
         builder.setNegativeButton(negativeButtonText, null);
-        AlertDialog alertDialog = builder.create();
 
-        return alertDialog;
+        return builder.create();
     }
 
     /**
@@ -160,7 +157,4 @@ public class PermissionsRequester {
         return forceShowRequest;
     }
 
-    public AlertDialog getAlertDialog() {
-        return alertDialog;
-    }
 }

@@ -8,6 +8,8 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /*
 Base class for a mapboxmap, implements base mapboxmap functions
@@ -57,7 +59,7 @@ public abstract class BaseMap extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }

@@ -15,6 +15,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class RegisterUserActivity extends AppCompatActivity {
     private Button submitButton;
     private EditText nameText;

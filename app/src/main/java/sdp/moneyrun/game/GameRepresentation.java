@@ -3,10 +3,8 @@ package sdp.moneyrun.game;
 import sdp.moneyrun.map.LocationRepresentation;
 
 /**
- * This class implements a representation of a game, a class containing informations of
+ * This class implements a representation of a game, a class containing information of
  * a game that is not automatically updated by the database.
- *
- * @author Arnaud Poletto
  */
 public class GameRepresentation {
     private final String gameId;

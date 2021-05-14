@@ -4,7 +4,6 @@ package sdp.moneyrun.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +14,7 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
-    public final static String TAG = MainActivity.class.getSimpleName();
     public static boolean calledAlready = false;
-    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +24,10 @@ public class MainActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             calledAlready = true;
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent authIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(authIntent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent authIntent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(authIntent);
+            finish();
         }, 3000);
     }
 

@@ -23,7 +23,6 @@ import java.util.List;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
@@ -33,7 +32,6 @@ import sdp.moneyrun.user.User;
 
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
-    private final String DB_HOST = "host";
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
     private final String DB_STARTED = "started";
@@ -117,7 +115,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, error.getMessage().toString());
+                    Log.e(TAG, error.getMessage());
                 }
             };
             thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
@@ -127,7 +125,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private void createDeleteOrLeaveButton() {
         if (user.equals(game.getHost())) {
             Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
-            leaveButton.setText("Delete");
+            leaveButton.setText(R.string.delete_game_button);
             leaveButton.setOnClickListener(getDeleteClickListener());
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
@@ -161,7 +159,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 };
                 List<Player> newPlayers = snapshot.getValue(t);
                 listAdapter.clear();
-                addPlayerList(new ArrayList<Player>(newPlayers));
+                addPlayerList(new ArrayList<>(newPlayers));
                 String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
 
                 playersMissing.setText(newPlayersMissing);
@@ -183,7 +181,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                     boolean started = snapshot.getValue(boolean.class);
                     if (started) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        UserDatabaseProxy pdp = new UserDatabaseProxy();
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", false);

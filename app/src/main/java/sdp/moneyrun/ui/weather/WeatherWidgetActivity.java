@@ -21,9 +21,9 @@ import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 
 
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class WeatherWidgetActivity extends AppCompatActivity {
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
-    private static final int PERMISSION_REQUEST_CODE = 1;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
     private OpenWeatherMap openWeatherMap;
     private AddressGeocoder addressGeocoder;
@@ -74,12 +74,5 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         }
     }
 
-    public WeatherForecast getCurrentForecast() {
-        return this.currentForecast;
-    }
 
-
-    public LocationRepresentation getCurrentLocation() {
-        return this.currentLocation;
-    }
 }

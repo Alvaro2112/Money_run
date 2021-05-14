@@ -22,14 +22,12 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
@@ -54,21 +52,18 @@ import sdp.moneyrun.player.Player;
 /*
 this map implements all the functionality we will need.
  */
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     private static final int GAME_TIME = 10000;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     public static int COINS_TO_PLACE = 2;
     private static int chronometerCounter = 0;
     private final String TAG = MapActivity.class.getSimpleName();
-    private final long ASYNC_CALL_TIMEOUT = 10L;
     private final String COIN_ID = "COIN";
     private final float ICON_SIZE = 1.5f;
-    private final String DATABASE_COIN = "coins";
     private Chronometer chronometer;
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
-    private SymbolLayer symbolLayer;
     private Player player;
     private GameDatabaseProxy proxyG;
     private TextView currentScoreView;
@@ -128,12 +123,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         if (useDB) {
             addLeaderboardButton();
-            mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-                @Override
-                public void onDidFinishRenderingMap(boolean fully) {
-                    if (gameId != null) {
-                        initializeGame(gameId);
-                    }
+            mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (gameId != null) {
+                    initializeGame(gameId);
                 }
             });
         }
@@ -142,7 +134,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param gameId The game ID to fetch the game from the DB
      *               Place the coins if user is host and coins have not been placed yet
-     *               It then finds the game and put the coins in it, the databse is then updated
+     *               It then finds the game and put the coins in it, the database is then updated
      *               finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId) {
@@ -196,13 +188,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
 
     private void addLeaderboardButton() {
-        leaderboardButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores);
-            }
-        });
+        leaderboardButton.setOnClickListener(v -> onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores));
     }
 
 
@@ -210,29 +196,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        exitButton.setOnClickListener(v -> finish());
     }
 
     /**
      * Add functionality to the question button so that we can see random questions popup
      */
     private void addQuestionButton() {
-        questionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null);
-            }
-        });
+        questionButton.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null));
     }
 
     /**
      * @param mapboxMap the map where everything will be done
-     *                  this overried the OnMapReadyCallback in the implemented interface
+     *                  this overrides the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                  Then we setup the location tracking
      */
@@ -308,13 +284,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
-        int correctId = 0;
+        int correctId;
 
         //changes the text to the current question
         tv.setText(riddle.getQuestion());
 
         int[] buttonIds = {R.id.question_choice_1, R.id.question_choice_2, R.id.question_choice_3, R.id.question_choice_4};
-        TextView buttonView = tv;
+        TextView buttonView;
 
         //Loops to find the ID of the button solution and assigns the text to each button
         for (int i = 0; i < 4; i++) {
@@ -344,9 +320,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 playerList.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
 
                 for (Player p : playerList) {
-                    System.out.println(p.getName() + String.valueOf(p.getScore()));
+                    System.out.println(p.getName() + p.getScore());
                 }
-                ldbListAdapter = new MapPlayerListAdapter(this, new ArrayList<Player>());
+                ldbListAdapter = new MapPlayerListAdapter(this, new ArrayList<>());
                 ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
                 ldbListAdapter.addAll(playerList);
                 leaderboard.setAdapter(ldbListAdapter);
@@ -358,12 +334,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void closePopupListener(PopupWindow popupWindow, int Id) {
-        popupWindow.getContentView().findViewById(Id).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        popupWindow.getContentView().findViewById(Id).setOnClickListener(v -> popupWindow.dismiss());
     }
 
     /**
@@ -376,25 +347,22 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void wrongAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
 
-        popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
 
-                popupWindow.dismiss();
-                PopupWindow wrongAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.wrong_answer_popup);
-                TextView tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.question);
-                tv.setText(riddle.getQuestion());
+            popupWindow.dismiss();
+            PopupWindow wrongAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.wrong_answer_popup);
+            TextView tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.question);
+            tv.setText(riddle.getQuestion());
 
-                tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
-                tv.setText("You are incorrect!\n The answer was " + "'" + riddle.getAnswer() + "'");
-                tv.setTextColor(Color.RED);
+            tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
+            tv.setText(String.format("%s'%s'", getString(R.string.incorrect_answer_message), riddle.getAnswer()));
+            tv.setTextColor(Color.RED);
 
 
-                closePopupListener(wrongAnswerPopupWindow, R.id.continue_run);
+            closePopupListener(wrongAnswerPopupWindow, R.id.continue_run);
 
-                if (coin != null) {
-                    removeCoin(coin, false);
-                }
+            if (coin != null) {
+                removeCoin(coin, false);
             }
         });
     }
@@ -410,22 +378,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
 
-        popupWindow.getContentView().findViewById(btnId).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
 
-                popupWindow.dismiss();
-                PopupWindow correctAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.correct_answer_popup);
-                TextView tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.question);
-                tv.setText(riddle.getQuestion());
+            popupWindow.dismiss();
+            PopupWindow correctAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.correct_answer_popup);
+            TextView tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.question);
+            tv.setText(riddle.getQuestion());
 
-                tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
-                tv.setTextColor(Color.GREEN);
+            tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
+            tv.setTextColor(Color.GREEN);
 
-                closePopupListener(correctAnswerPopupWindow, R.id.collect_coin);
-                if (coin != null)
-                    removeCoin(coin, true);
-            }
+            closePopupListener(correctAnswerPopupWindow, R.id.collect_coin);
+            if (coin != null)
+                removeCoin(coin, true);
         });
     }
 
@@ -481,13 +446,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void placeRandomCoins(int number, int radius) {
-        if (number < 0 || radius <= 0)
+        if (number < 0)
             throw new IllegalArgumentException("Number of coins to place is less than 0 ");
         if (radius <= 0)
             throw new IllegalArgumentException("Radius to place coins is less than or equal to 0 ");
 
         for (int i = 0; i < number; i++) {
-            Location loc = null;
+            Location loc;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
             addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), 1), true);
         }

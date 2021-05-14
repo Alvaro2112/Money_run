@@ -14,11 +14,8 @@ public class User implements Serializable {
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-    private int totalDistanceRun;
     private List<String> friendIdList = new ArrayList<>();
     private int maxScoreInGame;
-    private String preferredColor;
-    private String preferredPet;
 
 
     /**
@@ -26,9 +23,11 @@ public class User implements Serializable {
      */
     public User() {
     }
+
     public User(String userId) {
         this.userId = userId;
     }
+
     /**
      * Constructor, returns instance of user
      *
@@ -49,7 +48,6 @@ public class User implements Serializable {
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
         this.maxScoreInGame = maxScoreInGame;
-        this.totalDistanceRun = 0;
     }
 
     public int getMaxScoreInGame() {
@@ -196,7 +194,7 @@ public class User implements Serializable {
     }
 
     /**
-     * @return the adress of the user
+     * @return the address of the user
      */
     public String getAddress() {
         return address;
@@ -295,15 +293,4 @@ public class User implements Serializable {
         }
     }
 
-
-    /**
-     * @param question
-     * @return the answer of the question asked
-     */
-    public String ask(String question) {
-        String answer = "";
-        //TODO: display question on  user's screen and store the response
-        return answer;
-    }
-    //TODO: add later methods related to the game itself
 }

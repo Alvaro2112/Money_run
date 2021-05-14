@@ -3,10 +3,8 @@ package sdp.moneyrun.map;
 import android.location.Location;
 
 /**
- * This class implements a representation of a location, a class containing informations of
+ * This class implements a representation of a location, a class containing information of
  * a location that is not automatically updated by the database.
- *
- * @author Arnaud Poletto
  */
 public class LocationRepresentation {
     double latitude = 0.;

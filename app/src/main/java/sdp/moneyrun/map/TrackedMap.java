@@ -31,14 +31,11 @@ import sdp.moneyrun.R;
 /*
  extend this map to have a map where the device is tracked
  */
+@SuppressWarnings("FieldCanBeLocal")
 public abstract class TrackedMap extends BaseMap implements
         PermissionsListener {
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
-    private static final String SOURCE_ID = "SOURCE_ID";
-    private static final String ICON_ID = "ICON_ID";
-    private static final String LAYER_ID = "LAYER_ID";
-    private static final float ZOOM = 4;
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     public LocationEngine locationEngine;
     protected LocationCheckObjectivesCallback callback;
@@ -126,12 +123,7 @@ public abstract class TrackedMap extends BaseMap implements
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
-            mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    enableLocationComponent(style);
-                }
-            });
+            mapboxMap.getStyle(this::enableLocationComponent);
         } else {
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
         }
@@ -177,8 +169,7 @@ public abstract class TrackedMap extends BaseMap implements
         final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
 
 
-        List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
-        return features;
+        return mapboxMap.queryRenderedFeatures(pixel);
     }
 
     /**
@@ -191,7 +182,7 @@ public abstract class TrackedMap extends BaseMap implements
         double player_long = location.getLongitude();
 
         double min_dist = Integer.MAX_VALUE;
-        double curr_dist = Integer.MAX_VALUE;
+        double curr_dist;
         Coin min_coin = null;
         Coin curr_coin;
 

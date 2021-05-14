@@ -28,7 +28,7 @@ public class RiddlesDatabase {
 
         InputStream inputStream = context.getResources().openRawResource(R.raw.database);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        db = new ArrayList<Riddle>();
+        db = new ArrayList<>();
 
         try {
             String csvLine;

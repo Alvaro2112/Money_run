@@ -36,8 +36,7 @@ public class OpenWeatherMap {
     }
 
     public static OpenWeatherMap build() {
-        String key = open_weather_key;
-        return new OpenWeatherMap(key);
+        return new OpenWeatherMap(open_weather_key);
     }
 
 

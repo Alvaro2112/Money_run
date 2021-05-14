@@ -5,17 +5,12 @@ import java.util.Objects;
 
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class Player implements Serializable {
 
     private String playerId;
     private String name;
     private int score;
-
-    /**
-     * For database purpose, a default constructor is needed
-     */
-    public Player() {
-    }
 
     public Player(String playerId) {
         this.playerId = playerId;
@@ -35,15 +30,6 @@ public class Player implements Serializable {
         this.playerId = playerId;
         this.name = name;
         this.score = score;
-    }
-
-
-    //TODO This constructor should be removed once @Tesa fixes the merge error he created
-    public Player(String playerId, String name, String address) {
-        if (playerId == null || name == null || name.isEmpty() || address == null || address.isEmpty())
-            throw new IllegalArgumentException();
-        this.playerId = playerId;
-        this.name = name;
     }
 
     /**
@@ -133,15 +119,4 @@ public class Player implements Serializable {
         }
     }
 
-
-    /**
-     * @param question
-     * @return the answer of the question asked
-     */
-    public String ask(String question) {
-        String answer = "";
-        //TODO: display question on  player's screen and store the response
-        return answer;
-    }
-    //TODO: add later methods related to the game itself
 }

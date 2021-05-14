@@ -19,9 +19,9 @@ public class LocalPlayer implements Serializable {
 
     public LocalPlayer() {
 
-        this.lostCoins = new ArrayList<Coin>();
-        this.locallyAvailableCoins = new ArrayList<Coin>();
-        this.collectedCoins = new ArrayList<Coin>();
+        this.lostCoins = new ArrayList<>();
+        this.locallyAvailableCoins = new ArrayList<>();
+        this.collectedCoins = new ArrayList<>();
         score = 0;
     }
 
@@ -84,13 +84,13 @@ public class LocalPlayer implements Serializable {
             throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
         }
 
-        ArrayList<Coin> toRemove = new ArrayList<Coin>(lostCoins);
+        ArrayList<Coin> toRemove = new ArrayList<>(lostCoins);
         toRemove.removeAll(availableCoins);
         this.lostCoins.removeAll(toRemove);
     }
 
     /**
-     * This function will remove the coin from the corresponding lists depending on wheter is was picked up or not and
+     * This function will remove the coin from the corresponding lists depending on whether is was picked up or not and
      * will also update the score of the player of necessary.
      *
      * @param coin     The coin to be removed
@@ -134,12 +134,12 @@ public class LocalPlayer implements Serializable {
      * @return This function will return the new list of available coins that needs to be shared with everyone (ie. send to DB)
      */
     public ArrayList<Coin> toSendToDb() {
-        Set<Coin> set = new HashSet<Coin>();
+        Set<Coin> set = new HashSet<>();
 
         set.addAll(locallyAvailableCoins);
         set.addAll(lostCoins);
 
-        return new ArrayList<Coin>(set);
+        return new ArrayList<>(set);
     }
 
 }

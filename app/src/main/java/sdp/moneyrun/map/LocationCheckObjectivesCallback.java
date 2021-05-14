@@ -19,11 +19,11 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     private final WeakReference<TrackedMap> activityWeakReference;
 
     public LocationCheckObjectivesCallback(MapActivity activity) {
-        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
+        this.activityWeakReference = new WeakReference<>(activity);
     }
 
     public LocationCheckObjectivesCallback(OfflineMapDownloaderActivity activity) {
-        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
+        this.activityWeakReference = new WeakReference<>(activity);
     }
 
 

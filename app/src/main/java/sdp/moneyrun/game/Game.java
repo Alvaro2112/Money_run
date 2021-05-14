@@ -18,8 +18,8 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
 
 // The entirety of the game logic should be implemented in this class
+@SuppressWarnings("FieldCanBeLocal")
 public class Game {
-    private static final String TAG = Game.class.getSimpleName();
 
     private final String DATABASE_GAME = "games";
     private final String DATABASE_PLAYER = "players";
@@ -34,7 +34,6 @@ public class Game {
     //Aux variables
     private String id;
     private boolean hasBeenAdded;
-    private boolean started;
 
     /**
      * This constructor is used to create a game that has never been added to the database.
@@ -78,7 +77,6 @@ public class Game {
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
-        started = false;
     }
 
     /**
@@ -123,28 +121,17 @@ public class Game {
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
-        started = false;
 
     }
 
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, Activity currentActivity) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
-        ArrayList<Integer> collectedCoinsValues = new ArrayList<>();
         endGameIntent.putExtra("numberOfCollectedCoins", numberOfCollectedCoins);
         endGameIntent.putExtra("score", score);
         endGameIntent.putExtra("playerId", playerId);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
-    }
-
-    public static void startGame(Game game) {
-        game.startGame();
-    }
-
-    //Wether the game has started
-    public boolean isStarted() {
-        return started;
     }
 
     public String getId() {
@@ -339,16 +326,6 @@ public class Game {
         }
         gameDbData.setIsDeleted(value);
 
-    }
-
-
-    // Launched when create game button is pressed
-    public void startGame() {
-    }
-
-    public boolean askPlayer(Player player, Riddle riddle) {
-        String playerResponse = player.ask(riddle.getQuestion());
-        return playerResponse.trim().replaceAll(" ", "").toLowerCase().equals(riddle.getAnswer());
     }
 
     @Override

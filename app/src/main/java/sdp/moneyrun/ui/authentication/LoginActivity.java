@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,6 +23,7 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class LoginActivity extends AppCompatActivity {
 
     private final String TAG = LoginActivity.class.getSimpleName();
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // link from signUp button to signUp page
-    public void signUp(View view) {
+    public void signUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
@@ -175,13 +175,10 @@ public class LoginActivity extends AppCompatActivity {
     public void setGuestButton(Button guestButton) {
         if (guestButton == null)
             throw new IllegalArgumentException("Guest button was clicked but was null");
-        guestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
-                guestMenuIntent.putExtra("guestUser", true);
-                startActivity(guestMenuIntent);
-            }
+        guestButton.setOnClickListener(v -> {
+            Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
+            guestMenuIntent.putExtra("guestUser", true);
+            startActivity(guestMenuIntent);
         });
     }
 

@@ -18,6 +18,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings({"CanBeFinal", "FieldMayBeFinal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
@@ -27,14 +28,8 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<User> bestToWorstUser(List<User> users) {
-        ArrayList<User> sorted = new ArrayList<>();
-        users.sort((o1, o2) -> {
-            if (o1.getMaxScoreInGame() < o2.getMaxScoreInGame())
-                return 1;
-            return -1;
-        });
-        return users;
+    public static void bestToWorstUser(List<User> users) {
+        users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -31,7 +31,6 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
-    private final String DB_PLAYER_LIST = "players";
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
@@ -105,11 +104,6 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount) {
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
-        DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_game))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
-
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
 
@@ -122,24 +116,6 @@ public class NewGameImplementation extends MenuImplementation {
         // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
-
-        //The reason all of this is commented out is because it kept making the app crash
-        //as you can see there is a missing permission surpression that was here already in master
-        //most of the time it fails to get the location from the gps provider.
-        //we should fix it asap, but it is outside of the scope of this PR, and doesnt cause
-        //any critical failures
-
-        /*fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
-            // Got last known location. In some rare situations this can be null
-            // In this case, the game cannot be instanciated
-            if (location == null) {
-                Log.e("location", "Error getting location");
-                return;
-            }
-            // Post location to database
-            LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-            startLocationReference.setValue(locationRep);
-        });*/
         launchLobbyActivity(game.getId(), player);
     }
 

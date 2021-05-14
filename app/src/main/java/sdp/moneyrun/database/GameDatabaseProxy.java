@@ -22,6 +22,7 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GameDatabaseProxy extends DatabaseProxy {
 
     private final String TAG = GameDatabaseProxy.class.getSimpleName();
@@ -116,11 +117,6 @@ public class GameDatabaseProxy extends DatabaseProxy {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
-                        };
-                        GenericTypeIndicator<List<Coin>> coinIndicator = new GenericTypeIndicator<List<Coin>>() {
-                        };
-                        List<Coin> newCoinData = snapshot.getValue(coinIndicator);
                     }
 
                     @Override

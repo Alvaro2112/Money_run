@@ -23,6 +23,6 @@ public final class WeatherForecast {
 
 
     public enum Day {
-        TODAY, TOMORROW, AFTER_TOMORROW
+        TODAY, AFTER_TOMORROW
     }
 }

@@ -88,14 +88,14 @@ public class JoinGameImplementation extends MenuImplementation {
             openGamesLayout.removeAllViews();
 
             String filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
-            loadGameListGivenFilter(popupView, openGamesLayout, filterText);
+            loadGameListGivenFilter(openGamesLayout, filterText);
         });
 
         // First load the game list without any filter.
-        loadGameListGivenFilter(popupView, openGamesLayout, null);
+        loadGameListGivenFilter(openGamesLayout, null);
     }
 
-    private void loadGameListGivenFilter(View popupView, LinearLayout openGamesLayout, String filterText) {
+    private void loadGameListGivenFilter(LinearLayout openGamesLayout, String filterText) {
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
@@ -105,7 +105,7 @@ public class JoinGameImplementation extends MenuImplementation {
             for (GameRepresentation gameRepresentation : gameRepresentations) {
                 String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
                 if (filterText == null || lowerName.contains(filterText)) {
-                    displayGameInterface(gameLayout, buttonId, gameRepresentation, filterText);
+                    displayGameInterface(gameLayout, buttonId, gameRepresentation);
                     buttonId++;
                 }
             }
@@ -180,8 +180,7 @@ public class JoinGameImplementation extends MenuImplementation {
      */
     private void displayGameInterface(TableLayout gameLayout,
                                       int buttonId,
-                                      GameRepresentation gameRepresentation,
-                                      String filterText) {
+                                      GameRepresentation gameRepresentation) {
         // create game layout
         TableRow gameRow = new TableRow(activity);
         TableLayout.LayoutParams gameParams = new TableLayout.LayoutParams(
@@ -219,7 +218,7 @@ public class JoinGameImplementation extends MenuImplementation {
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(activity, location -> {
                     // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instanciated
+                    // In this case, the game cannot be instantiated
                     if (location == null) {
                         Log.e("location", "Error getting location");
                         return;
@@ -254,7 +253,7 @@ public class JoinGameImplementation extends MenuImplementation {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "Error getting new Player Count from DB");
-                //FailSafe defaults. If we couldnt get the data, let's be safe and close the game
+                //FailSafe defaults. If we couldn't get the data, let's be safe and close the game
                 button.setEnabled(false);
                 button.setText(activity.getResources().getString(R.string.join_game_full_message));
             }

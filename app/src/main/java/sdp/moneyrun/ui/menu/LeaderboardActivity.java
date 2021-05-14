@@ -13,12 +13,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
@@ -29,19 +27,10 @@ public class LeaderboardActivity extends AppCompatActivity {
     private final ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
     private Player user;
-    private DatabaseProxy db;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<Player> bestToWorstPlayer(List<Player> players) {
-        ArrayList<Player> sorted = new ArrayList<>();
-        players.sort(new Comparator<Player>() {
-            @Override
-            public int compare(Player o1, Player o2) {
-                if (o1.getScore() < o2.getScore())
-                    return 1;
-                return -1;
-            }
-        });
+        players.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
         return players;
     }
 
