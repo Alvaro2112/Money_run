@@ -33,7 +33,9 @@
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.185" />
+        app:layout_constraintVertical_bias="0.185"
+        android:inputType="textPersonName"
+        android:autofillHints="Enter your Name" />
 
     <EditText
         android:id="@+id/registerAddressText"
@@ -48,7 +50,9 @@
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerNameText"
-        app:layout_constraintVertical_bias="0.151" />
+        app:layout_constraintVertical_bias="0.151"
+        android:inputType="textPostalAddress"
+        android:autofillHints="Enter your address" />
 
     <EditText
         android:id="@+id/registerColorText"
@@ -63,7 +67,9 @@
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.949" />
+        app:layout_constraintVertical_bias="0.949"
+        android:inputType="textNoSuggestions"
+        android:autofillHints="Enter your favorite color" />
 
     <EditText
         android:id="@+id/registerAnimalText"
@@ -78,7 +84,9 @@
         app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.701" />
+        app:layout_constraintVertical_bias="0.701"
+        android:inputType="textNoSuggestions"
+        android:autofillHints="Enter your favorite animal" />
 
     <ProgressBar
         style="?android:attr/progressBarStyle"

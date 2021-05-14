@@ -17,7 +17,8 @@
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/join_game_filter_message"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:autofillHints="@string/join_game_filter_message" />
 
     <Button
         android:id="@+id/join_game_button_filter"

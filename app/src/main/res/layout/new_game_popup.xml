@@ -37,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Enter game name"
-                android:inputType="text" />
+                android:inputType="text"
+                android:autofillHints="Enter game name" />
 
             <EditText
                 android:id="@+id/maxPlayerCountField"
@@ -45,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Enter max player count"
-                android:inputType="number" />
+                android:inputType="number"
+                android:autofillHints="Enter max player count" />
 
             <Button
                 android:id="@+id/newGameSubmit"

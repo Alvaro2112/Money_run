@@ -23,7 +23,8 @@
         app:layout_constraintBottom_toTopOf="@+id/signUpPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="@string/EMAIL_HINT" />
 
     <EditText
         android:id="@+id/signUpPassword"
@@ -41,7 +42,8 @@
         app:layout_constraintBottom_toTopOf="@+id/signUpSubmitButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUpEmailText" />
+        app:layout_constraintTop_toBottomOf="@+id/signUpEmailText"
+        android:autofillHints="@string/PASSWORD_HINT"/>
 
     <Button
         android:id="@+id/signUpSubmitButton"
