@@ -155,8 +155,13 @@ public final class GameDbData {
     }
 
     public int getNumCoins(){return numCoins;}
+    public void setNumCoins(int numCoins){this.numCoins = numCoins;}
+
     public  double getRadius(){return  radius;}
+    public void setRadius(double radius){this.radius = radius;}
+
     public double getDuration(){return duration;}
+    public void setDuration(double duration){this.duration = duration;}
 
     public List<Coin> getCoins() {
         return new ArrayList<>(coins);
@@ -168,6 +173,7 @@ public final class GameDbData {
         coins.set(index, coin);
         return true;
     }
+
 
     public void setIsDeleted(boolean b){
         this.isDeleted = b;

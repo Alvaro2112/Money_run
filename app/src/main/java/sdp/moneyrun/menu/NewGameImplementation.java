@@ -111,7 +111,7 @@ public class NewGameImplementation extends MenuImplementation {
 
         int maxPlayerNumber = Integer.parseInt(maxPlayerNumberStr);
         int numCoinsNumber = Integer.parseInt(numCoinsStr);
-        double gameRadiusNumber = Double.parseDouble(gameDurationStr) ;
+        double gameRadiusNumber = Double.parseDouble(gameRadiusStr) ;
         double gameDurationNumber = Double.parseDouble(gameDurationStr);
 
         if (maxPlayerNumber < 1) {
@@ -120,16 +120,16 @@ public class NewGameImplementation extends MenuImplementation {
         }
 
         if (numCoinsNumber < 1) {
-            maxPlayerNumberView.setError("There should be at least one coin in a game");
+            numCoinsView.setError("There should be at least one coin in a game");
             return;
         }
 
         if (gameRadiusNumber <= 0) {
-            maxPlayerNumberView.setError("The radius of the game should be bigger than 0 km");
+            gameRadiusView.setError("The radius of the game should be bigger than 0 km");
             return;
         }
         if (gameDurationNumber <= 0) {
-            maxPlayerNumberView.setError("The game should last for more than 0 minute");
+            gameDurationView.setError("The game should last for more than 0 minute");
             return;
         }
 
