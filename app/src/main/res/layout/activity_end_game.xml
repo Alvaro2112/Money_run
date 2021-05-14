@@ -29,7 +29,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85"
         app:strokeColor="@android:color/background_dark"
-        app:strokeWidth="10dp" />
+        app:strokeWidth="10dp"
+        android:contentDescription="button to leave game" />
 
     <Button
         android:id="@+id/end_game_button_to_results"

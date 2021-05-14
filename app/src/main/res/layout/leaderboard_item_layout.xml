@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
-        android:gravity="left"
+        android:gravity="start"
         android:text="Medium Text"
         android:textColor="#CCCCCC"
         android:textSize="20sp" />
@@ -35,7 +35,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="4dp"
-        android:gravity="right"
+        android:gravity="end"
         android:text="Medium Text"
         android:textColor="#CCCCCC"
         android:textSize="20sp" />

@@ -16,7 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.884"
-        app:srcCompat="@drawable/running_guy" />
+        app:srcCompat="@drawable/running_guy"
+        android:contentDescription="Image on top of join game" />
 
     <ImageView
         android:layout_width="30dp"
@@ -27,7 +28,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.885"
-        app:srcCompat="@drawable/running_guy" />
+        app:srcCompat="@drawable/running_guy"
+        android:contentDescription="Image on top of join game" />
 
     <Button
         android:id="@+id/new_game"
@@ -68,7 +70,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.891"
-        app:srcCompat="@drawable/running_guy" />
+        app:srcCompat="@drawable/running_guy"
+        android:contentDescription="TImage on top of create game" />
 
     <Button
         android:id="@+id/download_map"

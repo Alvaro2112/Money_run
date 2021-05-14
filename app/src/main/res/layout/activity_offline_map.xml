@@ -25,7 +25,7 @@
                 android:id="@+id/close_map_offline"
                 android:layout_width="25dp"
                 android:layout_height="28dp"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
                 android:text="x"
                 android:textStyle="bold"

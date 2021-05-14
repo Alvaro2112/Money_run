@@ -27,7 +27,7 @@
                 android:id="@+id/downloader_exit"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
                 android:text="x"
                 android:textStyle="bold"

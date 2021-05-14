@@ -99,7 +99,8 @@
         android:layout_marginBottom="148dp"
         app:layout_constraintBottom_toBottomOf="@+id/playerName"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/profile_picture_avatar" />
+        app:srcCompat="@drawable/profile_picture_avatar"
+        android:contentDescription="Avatar of a player" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
