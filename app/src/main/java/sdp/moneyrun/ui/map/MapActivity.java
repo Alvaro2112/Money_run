@@ -55,7 +55,7 @@ import sdp.moneyrun.player.Player;
 this map implements all the functionality we will need.
  */
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    public static final double THRESHOLD_DISTANCE = 5;
+    public static final double THRESHOLD_DISTANCE = 20;
     private static final int GAME_TIME = 10000;
     private static final double ZOOM_FOR_FEATURES = 15.;
     private static int chronometerCounter = 0;
@@ -83,6 +83,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
     private int coinsToPlace;
+    private List<Coin> alreadyShown = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,10 +338,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 ArrayList<Player>  playerList = new ArrayList<>( game.getPlayers());
                 playerList.sort((o1, o2) -> Integer.compare(o2.getScore(),o1.getScore()));
-
-                for(Player p : playerList){
-                    System.out.println(p.getName()+String.valueOf(p.getScore()));
-                }
                 ldbListAdapter = new MapPlayerListAdapter(this,new ArrayList<Player>());
                 ListView leaderboard = popupWindow.getContentView().findViewById(R.id.in_game_scores_listview);
                 ldbListAdapter.addAll(playerList);
@@ -348,7 +346,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 Log.e(TAG, task.getException().getMessage());
             }
         });
-
     }
 
     public void closePopupListener(PopupWindow popupWindow, int Id) {
@@ -456,12 +453,16 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             currentScoreView.setText(default_score);
             //TODO: Inform database
             if(useDB) {
-                  game.setCoins(localPlayer.toSendToDb(),true);
-                  proxyG.updateGameInDatabase(game,null);
-                  player.setScore(localPlayer.getScore(),true);
+                List<Player> temp_players = game.getPlayers();
+                temp_players.remove(player);
+                player.setScore(localPlayer.getScore(),true);
+                temp_players.add(player);
+                game.setPlayers(temp_players,true);
+                game.setCoins(localPlayer.toSendToDb(),true);
+                proxyG.updateGameInDatabase(game,null);
+
             }
         }
-
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 
         for (int i = 0; i < symbols.size(); ++i) {
@@ -470,14 +471,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-
-
     }
 
     public void placeRandomCoins(int number, int radius) {
         if (number < 0 || radius <= 0) throw new IllegalArgumentException("Number of coins to place is less than 0 ");
         if ( radius <= 0) throw new IllegalArgumentException("Radius to place coins is less than or equal to 0 ");
-
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
@@ -492,10 +490,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null) {
+        if (coin != null && !alreadyShown.contains(coin)) {
+            alreadyShown.add(coin);
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
-
     }
 
 

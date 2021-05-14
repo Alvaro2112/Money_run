@@ -3,7 +3,6 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -28,12 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import sdp.moneyrun.game.Game;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.map.LocationRepresentation;
-import sdp.moneyrun.R;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation{
@@ -229,7 +228,8 @@ public class JoinGameImplementation extends MenuImplementation{
 
                     double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
 
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
+                    if (false){
+                  //  if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
                         button.setEnabled(false);
                         button.setText(activity.getString(R.string.join_game_too_far_message));
                     }
