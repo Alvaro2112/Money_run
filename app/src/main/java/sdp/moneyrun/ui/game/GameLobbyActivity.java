@@ -224,6 +224,9 @@ public class GameLobbyActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         UserDatabaseProxy pdp = new UserDatabaseProxy();
                         intent.putExtra("player", user);
+                        intent.putExtra("gameId", gameId);
+                        intent.putExtra("host", false);
+                        intent.putExtra("useDB", true);
                         startActivity(intent);
                         finish();
                     }
