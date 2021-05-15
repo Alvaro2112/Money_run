@@ -245,13 +245,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        removeListeners();
-    }
-
-    /**
-     * Removes when possible the event listeners from the game
-     */
-    private void removeListeners(){
         if(playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
         if (user != null && game != null && !user.equals(game.getHost())) {
