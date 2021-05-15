@@ -279,7 +279,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.coin_image)), true);
-            
+
             enableLocationComponent(style);
 
             circleManager = new CircleManager(mapView, mapboxMap, style);
