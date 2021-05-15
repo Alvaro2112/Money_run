@@ -81,7 +81,6 @@ public class Game {
         if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
-        this.id = null;
         this.hasBeenAdded = false;
         ArrayList<Player> players = new ArrayList<>();
         players.add(host);
@@ -129,7 +128,6 @@ public class Game {
             throw new IllegalArgumentException("Duration should be bigger than 0.");
         }
 
-        this.id = null;
         this.hasBeenAdded = false;
         ArrayList<Player> players = new ArrayList<>();
         players.add(host);
@@ -177,7 +175,6 @@ public class Game {
             throw new IllegalArgumentException("coins should not be null.");
         }
 
-        this.id = null;
         this.hasBeenAdded = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
@@ -226,7 +223,6 @@ public class Game {
         }
 
 
-        this.id = null;
         this.hasBeenAdded = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins,numCoins,radius,duration);

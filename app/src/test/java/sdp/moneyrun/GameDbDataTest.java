@@ -204,6 +204,13 @@ public class GameDbDataTest {
 
         new GameDbData(gameData);
     }
+    @Test
+    public void constructorWorks2(){
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(),1,2,2);
+    }
+
 
     @Test
     public void getNameReturnsName(){
