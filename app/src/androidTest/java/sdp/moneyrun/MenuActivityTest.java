@@ -331,7 +331,7 @@ public class MenuActivityTest {
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
-            Thread.sleep(2000);
+            Thread.sleep(3000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
 
