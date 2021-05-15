@@ -281,15 +281,19 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
+        if(playerListListener != null)
+            thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
 
-        if (!user.equals(game.getHost())) {
-            thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
-            thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+        if (user != null && game != null && !user.equals(game.getHost())) {
+            if(thisGame != null && isDeletedListener != null)
+                thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+            if(isStartedListener != null)
+                thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
         }else {
             //otherwise it will also remove it from the DB when it is launched
-            if(game.getIsDeleted()) {
-                thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+            if(game != null && thisGame != null && game.getIsDeleted()) {
+                if(getDeleteListener != null)
+                    thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                 thisGame.removeValue();
             }
         }
