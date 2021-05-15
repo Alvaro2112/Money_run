@@ -32,15 +32,19 @@ import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
     private final String DB_PLAYER_LIST = "players";
+    TextView nameGameView;
+    TextView maxPlayerNumberView;
+    TextView numCoinsView;
+    TextView gameRadiusView;
+    TextView gameDurationView;
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  User user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                 FusedLocationProviderClient fusedLocationClient){
+                                 FusedLocationProviderClient fusedLocationClient) {
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
     }
-
 
 
     /**
@@ -75,11 +79,11 @@ public class NewGameImplementation extends MenuImplementation {
      * @param newGameLayout the game layout
      */
     public void onSubmitPostNewGame(LinearLayout newGameLayout) {
-        TextView nameGameView = newGameLayout.findViewById(R.id.nameGameField);
-        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
-        TextView numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
-        TextView gameRadiusView = newGameLayout.findViewById(R.id.newGameRadius);
-        TextView gameDurationView = newGameLayout.findViewById(R.id.newGameDuration);
+        nameGameView = newGameLayout.findViewById(R.id.nameGameField);
+        maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
+        numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
+        gameRadiusView = newGameLayout.findViewById(R.id.newGameRadius);
+        gameDurationView = newGameLayout.findViewById(R.id.newGameDuration);
 
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
@@ -87,64 +91,91 @@ public class NewGameImplementation extends MenuImplementation {
         String gameRadiusStr = gameRadiusView.getText().toString().trim();
         String gameDurationStr = gameDurationView.getText().toString().trim();
 
-        if (gameName.isEmpty()) {
-            nameGameView.setError("This field is required");
+        if (!checkNewGameStringParameters(gameName, maxPlayerNumberStr, numCoinsStr, gameRadiusStr, gameDurationStr)) {
             return;
         }
+        int maxPlayerNumber = Integer.parseInt(maxPlayerNumberStr);
+        int numCoinsNumber = Integer.parseInt(numCoinsStr);
+        double gameRadiusNumber = Double.parseDouble(gameRadiusStr);
+        double gameDurationNumber = Double.parseDouble(gameDurationStr);
+
+        if (!checkNewGameParametersValues(maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber)) {
+            return;
+        }
+        postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
+    }
+
+    /**
+     * Checks if the strings inputted in the UI are good or not
+     *
+     * @param gameName           name of the game
+     * @param maxPlayerNumberStr string inputted in the UI for the  player count
+     * @param numCoinsStr        string inputted in the UI for the number of coin
+     * @param gameRadiusStr      sintr inputted in the UI for the radius of th game
+     * @param gameDurationStr    string inputted in the UI for the game duration
+     * @return true if there is no problem with the strings else return false
+     */
+    private boolean checkNewGameStringParameters(String gameName, String maxPlayerNumberStr, String numCoinsStr, String gameRadiusStr, String gameDurationStr) {
         if (maxPlayerNumberStr.isEmpty()) {
             maxPlayerNumberView.setError("This field is required");
-            return;
+            return false;
         }
 
         if (numCoinsStr.isEmpty()) {
             numCoinsView.setError("This field is required");
-            return;
+            return false;
         }
         if (gameRadiusStr.isEmpty()) {
             gameRadiusView.setError("This field is required");
-            return;
+            return false;
         }
         if (gameDurationStr.isEmpty()) {
             gameDurationView.setError("This field is required");
-            return;
+            return false;
         }
+        return true;
 
-        int maxPlayerNumber = Integer.parseInt(maxPlayerNumberStr);
-        int numCoinsNumber = Integer.parseInt(numCoinsStr);
-        double gameRadiusNumber = Double.parseDouble(gameRadiusStr) ;
-        double gameDurationNumber = Double.parseDouble(gameDurationStr);
+    }
 
+    /**
+     * @param maxPlayerNumber parsed int of the UI string parameter
+     * @param numCoins        parsed int of the UI string parameter
+     * @param gameRadius      parsed double of the UI string parameter
+     * @param gameDuration    parsed double of the UI string parameter
+     * @return true if there is no problem with the numbers else return false
+     */
+    private boolean checkNewGameParametersValues(int maxPlayerNumber, int numCoins, double gameRadius, double gameDuration) {
         if (maxPlayerNumber < 1) {
             maxPlayerNumberView.setError("There should be at least one player in a game");
-            return;
+            return false;
         }
 
-        if (numCoinsNumber < 1) {
+        if (numCoins < 1) {
             numCoinsView.setError("There should be at least one coin in a game");
-            return;
+            return false;
         }
 
-        if (gameRadiusNumber <= 0) {
+        if (gameRadius <= 0) {
             gameRadiusView.setError("The radius of the game should be bigger than 0 km");
-            return;
+            return false;
         }
-        if (gameDurationNumber <= 0) {
+        if (gameDuration <= 0) {
             gameDurationView.setError("The game should last for more than 0 minute");
-            return;
+            return false;
         }
+        return true;
 
-
-        postNewGame(gameName, maxPlayerNumber,numCoinsNumber,gameRadiusNumber,gameDurationNumber);
     }
+
 
     /**
      * Post a new game.
      *
-     * @param name              the game name
-     * @param maxPlayerCount    the maximum number of players in the game
+     * @param name           the game name
+     * @param maxPlayerCount the maximum number of players in the game
      */
     @SuppressLint("MissingPermission")
-    public void postNewGame(String name, int maxPlayerCount,int numCoins, double gameRadius, double gameDuration) {
+    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
         DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
         DatabaseReference startLocationReference = databaseReference
                 .child(activity.getString(R.string.database_game))
@@ -157,7 +188,7 @@ public class NewGameImplementation extends MenuImplementation {
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);
-        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true,numCoins,gameRadius,gameDuration);
+        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true, numCoins, gameRadius, gameDuration);
         game.setId(user.getUserId());
         // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
@@ -184,7 +215,7 @@ public class NewGameImplementation extends MenuImplementation {
     }
 
 
-    private void launchLobbyActivity(String gameId, Player player){
+    private void launchLobbyActivity(String gameId, Player player) {
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);
