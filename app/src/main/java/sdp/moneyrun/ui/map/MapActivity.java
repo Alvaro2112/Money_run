@@ -106,10 +106,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
     private int coinsToPlace;
+
     private CircleManager circleManager;
     private int COINS_RADIUS = 6;
     private float circleRadius = COINS_RADIUS * 10f;
     private double shrinkingFactor = 0.9;
+
+    private ArrayList<Coin> seenCoins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +120,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         getSupportActionBar().hide();
 
         player = (Player) getIntent().getSerializableExtra("player");
-
         gameId = getIntent().getStringExtra("currentGameId");
         if (gameId == null) {
             gameId = getIntent().getStringExtra("gameId");
@@ -128,7 +130,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (coinsToPlace == -1) {
             coinsToPlace = COINS_TO_PLACE;
         }
-
+        seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
 
         localPlayer = new LocalPlayer();
@@ -277,7 +279,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.coin_image)), true);
-
+            
             enableLocationComponent(style);
 
             circleManager = new CircleManager(mapView, mapboxMap, style);
@@ -540,7 +542,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null) {
+        if (coin != null && !seenCoins.contains(coin)) {
+            seenCoins.add(coin);
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
