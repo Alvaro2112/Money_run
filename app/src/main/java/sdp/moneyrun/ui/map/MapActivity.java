@@ -83,6 +83,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
     private int coinsToPlace;
+    private ArrayList<Coin> seenCoins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         getSupportActionBar().hide();
 
         player = (Player) getIntent().getSerializableExtra("player");
-
         gameId = getIntent().getStringExtra("currentGameId");
         if(gameId == null){
             gameId = getIntent().getStringExtra("gameId");
@@ -101,7 +101,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if(coinsToPlace == -1){
             coinsToPlace = COINS_TO_PLACE;
         }
-
+        seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
 
         localPlayer = new LocalPlayer();
@@ -492,7 +492,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null) {
+        if (coin != null && !seenCoins.contains(coin)) {
+            seenCoins.add(coin);
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
