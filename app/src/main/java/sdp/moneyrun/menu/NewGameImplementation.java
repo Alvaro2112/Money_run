@@ -116,25 +116,25 @@ public class NewGameImplementation extends MenuImplementation {
      * @return true if there is no problem with the strings else return false
      */
     private boolean checkNewGameStringParameters(String gameName, String maxPlayerNumberStr, String numCoinsStr, String gameRadiusStr, String gameDurationStr) {
+        boolean isEmpty = false;
         if (maxPlayerNumberStr.isEmpty()) {
             maxPlayerNumberView.setError("This field is required");
-            return false;
+            isEmpty = true;
         }
 
         if (numCoinsStr.isEmpty()) {
             numCoinsView.setError("This field is required");
-            return false;
+            isEmpty = true;
         }
         if (gameRadiusStr.isEmpty()) {
             gameRadiusView.setError("This field is required");
-            return false;
+            isEmpty = true;
         }
         if (gameDurationStr.isEmpty()) {
             gameDurationView.setError("This field is required");
-            return false;
+            isEmpty = true;
         }
-        return true;
-
+        return !isEmpty;
     }
 
     /**
@@ -145,25 +145,26 @@ public class NewGameImplementation extends MenuImplementation {
      * @return true if there is no problem with the numbers else return false
      */
     private boolean checkNewGameParametersValues(int maxPlayerNumber, int numCoins, double gameRadius, double gameDuration) {
+        boolean outOfBounds = false;
         if (maxPlayerNumber < 1) {
             maxPlayerNumberView.setError("There should be at least one player in a game");
-            return false;
+            outOfBounds = true;
         }
 
         if (numCoins < 1) {
             numCoinsView.setError("There should be at least one coin in a game");
-            return false;
+            outOfBounds = true;
         }
 
         if (gameRadius <= 0) {
             gameRadiusView.setError("The radius of the game should be bigger than 0 km");
-            return false;
+            outOfBounds = true;
         }
         if (gameDuration <= 0) {
             gameDurationView.setError("The game should last for more than 0 minute");
-            return false;
+            outOfBounds = true;
         }
-        return true;
+        return !outOfBounds;
 
     }
 
