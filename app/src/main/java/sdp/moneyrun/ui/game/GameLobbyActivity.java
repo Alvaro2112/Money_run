@@ -241,7 +241,9 @@ public class GameLobbyActivity extends AppCompatActivity {
         };
     }
 
-    //remove all the listeners so that we may delete the activity from the Database
+    /**
+     * remove all the listeners so that we may delete the activity from the Database
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
