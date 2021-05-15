@@ -42,47 +42,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:ems="10"
-                android:hint="Enter game name"
-                android:inputType="text" />
+                android:hint="@string/gameNameFieldText"
+                android:inputType="text"
+                android:importantForAutofill="no"/>
 
             <EditText
                 android:id="@+id/maxPlayerCountField"
                 android:layout_width="match_parent"
                 android:layout_height="61dp"
                 android:ems="10"
-                android:hint="Enter max player count"
-                android:inputType="number" />
+                android:hint="@string/maxPlayerCountFieldText"
+                android:inputType="number"
+                android:importantForAutofill="no"/>
 
             <EditText
                 android:id="@+id/newGameNumCoins"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter the number of coins "
-                android:inputType="number" />
+                android:hint="@string/newGameNumCoinsText"
+                android:inputType="number"
+                android:importantForAutofill="no" />
 
             <EditText
                 android:id="@+id/newGameDuration"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
                 android:ems="10"
-                android:hint="Enter the duration of the game in minutes"
-                android:inputType="numberDecimal" />
+                android:hint="@string/newGameDurationText"
+                android:inputType="numberDecimal"
+                android:importantForAutofill="no"/>
 
             <EditText
                 android:id="@+id/newGameRadius"
                 android:layout_width="match_parent"
                 android:layout_height="87dp"
                 android:ems="10"
-                android:hint="Enter the radius of the game in km"
-                android:inputType="numberDecimal" />
+                android:hint="@string/newGameRadiusText"
+                android:inputType="numberDecimal"
+                android:importantForAutofill="no"/>
 
 
             <Button
                 android:id="@+id/newGameSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit" />
+                android:text="@string/newGameSubmitButtonText" />
 
 
         </LinearLayout>

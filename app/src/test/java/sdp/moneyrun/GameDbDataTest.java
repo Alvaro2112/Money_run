@@ -102,6 +102,14 @@ public class GameDbDataTest {
             GameDbData g = new GameDbData("name", host, null, 3, new Location(""), true, new ArrayList<>());
         });
     }
+    @Test
+    public void constructorFailsOnNullLocation(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData("name", host, new ArrayList<Player>(), 3,null, true, new ArrayList<>());
+        });
+    }
+
 
     @Test
     public void constructorFailsOnNegativeMaxPlayers(){
@@ -114,6 +122,16 @@ public class GameDbDataTest {
 
 
     //
+    @Test
+    public void constructorFailsOnNullLocation2(){
+        assertThrows(IllegalArgumentException.class, ()->{
+            List<Player> players = new ArrayList<>();
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData("namegame", host, new ArrayList<Player>(), 3, null,true ,new ArrayList<>() ,1,2,2);
+
+        });
+    }
+
     @Test
     public void constructorFailsOnNullName2(){
         assertThrows(IllegalArgumentException.class, ()->{
