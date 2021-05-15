@@ -44,7 +44,8 @@
                 android:ems="10"
                 android:hint="@string/gameNameFieldText"
                 android:inputType="text"
-                android:importantForAutofill="no"/>
+                android:autofillHints=""
+               />
 
             <EditText
                 android:id="@+id/maxPlayerCountField"
@@ -53,7 +54,7 @@
                 android:ems="10"
                 android:hint="@string/maxPlayerCountFieldText"
                 android:inputType="number"
-                android:importantForAutofill="no"/>
+                android:autofillHints=""/>
 
             <EditText
                 android:id="@+id/newGameNumCoins"
@@ -62,7 +63,7 @@
                 android:ems="10"
                 android:hint="@string/newGameNumCoinsText"
                 android:inputType="number"
-                android:importantForAutofill="no" />
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/newGameDuration"
@@ -71,7 +72,7 @@
                 android:ems="10"
                 android:hint="@string/newGameDurationText"
                 android:inputType="numberDecimal"
-                android:importantForAutofill="no"/>
+                android:autofillHints=""/>
 
             <EditText
                 android:id="@+id/newGameRadius"
@@ -80,7 +81,7 @@
                 android:ems="10"
                 android:hint="@string/newGameRadiusText"
                 android:inputType="numberDecimal"
-                android:importantForAutofill="no"/>
+                android:autofillHints=""/>
 
 
             <Button

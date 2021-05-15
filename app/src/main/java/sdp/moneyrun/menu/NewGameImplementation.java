@@ -84,7 +84,6 @@ public class NewGameImplementation extends MenuImplementation {
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
         gameRadiusView = newGameLayout.findViewById(R.id.newGameRadius);
         gameDurationView = newGameLayout.findViewById(R.id.newGameDuration);
-
         String gameName = nameGameView.getText().toString().trim();
         String maxPlayerNumberStr = maxPlayerNumberView.getText().toString().trim();
         String numCoinsStr = numCoinsView.getText().toString().trim();
@@ -117,6 +116,11 @@ public class NewGameImplementation extends MenuImplementation {
      */
     private boolean checkNewGameStringParameters(String gameName, String maxPlayerNumberStr, String numCoinsStr, String gameRadiusStr, String gameDurationStr) {
         boolean isEmpty = false;
+        if (gameName.isEmpty()) {
+            nameGameView.setError("This field is required");
+            isEmpty = true;
+        }
+
         if (maxPlayerNumberStr.isEmpty()) {
             maxPlayerNumberView.setError("This field is required");
             isEmpty = true;
