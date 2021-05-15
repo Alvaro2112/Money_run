@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -274,8 +275,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
-            symbolManager.setTextAllowOverlap(true); 
-            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), true);
+            symbolManager.setTextAllowOverlap(true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.coin_image)), true);
 
             enableLocationComponent(style);
 
@@ -418,7 +419,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 tv.setText(riddle.getQuestion());
 
                 tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
-                tv.setText("You are incorrect!\n The answer was " + "'" + riddle.getAnswer() + "'");
+                String WRONG_ANSWER_TEXT = "You are incorrect!\n The answer was " + "'" + riddle.getAnswer() + "'";
+                tv.setText(WRONG_ANSWER_TEXT);
                 tv.setTextColor(Color.RED);
 
 

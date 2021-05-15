@@ -58,6 +58,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -310,13 +311,15 @@ public class MenuActivityTest {
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
-
+            Thread.sleep(1000);
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
 
             Intents.release();
+        }catch (Exception e){
+            fail();
         }
     }
 
@@ -328,7 +331,7 @@ public class MenuActivityTest {
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
 
