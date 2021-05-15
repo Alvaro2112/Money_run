@@ -245,7 +245,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), false);
             enableLocationComponent(style);
 
         });
