@@ -326,7 +326,7 @@ public class MenuActivityTest {
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
+            Intents.init(); 
 
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
