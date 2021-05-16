@@ -481,7 +481,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void placeRandomCoins(int number, int radius) {
         if (number < 0 || radius <= 0) throw new IllegalArgumentException("Number of coins to place is less than 0 ");
         if ( radius <= 0) throw new IllegalArgumentException("Radius to place coins is less than or equal to 0 ");
-
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), radius);
