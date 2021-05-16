@@ -23,13 +23,11 @@ import java.util.List;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-
 
 
 public class GameLobbyActivity extends AppCompatActivity {
@@ -45,6 +43,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private Player user;
     private User actualUser;
     private DatabaseReference thisGame;
+    GameDatabaseProxy proxyG;
 
     //Listeners
     ValueEventListener isDeletedListener;
@@ -58,7 +57,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
-
+        proxyG = new GameDatabaseProxy();
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
@@ -91,7 +90,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void getGameFromDb() {
-        GameDatabaseProxy proxyG = new GameDatabaseProxy();
+
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 this.game = proxyG.getGameFromTaskSnapshot(task);
@@ -141,8 +140,9 @@ public class GameLobbyActivity extends AppCompatActivity {
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
         TextView name = (TextView) findViewById(R.id.lobby_title);
-        name.setText(game.getName());
 
+        if (game.getHost().equals(user)) {
+        }
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
             if (game.getHost().equals(user)) {
                 game.setStarted(true, false);
@@ -178,15 +178,17 @@ public class GameLobbyActivity extends AppCompatActivity {
         thisGame.child(DB_PLAYERS).addValueEventListener(playerListListener);
     }
 
-    private void listenToStarted(){
-        if(!game.getHost().equals(user)) {
+    private void listenToStarted() {
+        if (!game.getHost().equals(user)) {
+
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean started = snapshot.getValue(boolean.class);
+                    GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
+                    };
+                    boolean started = snapshot.child("started").getValue(coinIndicator);
                     if (started) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        UserDatabaseProxy pdp = new UserDatabaseProxy();
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", false);
@@ -200,7 +202,8 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            thisGame.child(DB_STARTED).addValueEventListener(isStartedListener);
+            proxyG.addGameListener(game, isStartedListener);
+          //  thisGame.child(DB_STARTED).addValueEventListener(isStartedListener);
         }
     }
 
@@ -211,7 +214,8 @@ public class GameLobbyActivity extends AppCompatActivity {
             getDeleteListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {};
+                    GenericTypeIndicator<List<Player>> t = new GenericTypeIndicator<List<Player>>() {
+                    };
                     List<Player> players = snapshot.getValue(t);
                     if (players.size() == 1) {
                         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
@@ -220,6 +224,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         finish();
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
@@ -245,17 +250,17 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(playerListListener != null)
+        if (playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
         if (user != null && game != null && !user.equals(game.getHost())) {
-            if(thisGame != null && isDeletedListener != null)
+            if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
-            if(isStartedListener != null)
+            if (isStartedListener != null)
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
-        }else {
+        } else {
             //otherwise it will also remove it from the DB when it is launched
-            if(game != null && thisGame != null && game.getIsDeleted()) {
-                if(getDeleteListener != null)
+            if (game != null && thisGame != null && game.getIsDeleted()) {
+                if (getDeleteListener != null)
                     thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                 thisGame.removeValue();
             }

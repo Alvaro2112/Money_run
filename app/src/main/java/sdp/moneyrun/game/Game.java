@@ -176,10 +176,10 @@ public class Game {
         }
 
         this.hasBeenAdded = false;
+        started = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
-        started = false;
 
     }
 
@@ -224,10 +224,10 @@ public class Game {
 
 
         this.hasBeenAdded = false;
+        started = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins,numCoins,radius,duration);
         this.riddles = new ArrayList<>();
-        started = false;
 
     }
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, Activity currentActivity) {
@@ -274,9 +274,8 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
-
+    public boolean getStarted(){return  gameDbData.getStarted();}
     public void setStarted(boolean started, boolean forceLocal) {
-        gameDbData.setStarted(started);
         if(!forceLocal){
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
@@ -284,7 +283,11 @@ public class Game {
                     .child(DATABASE_STARTED)
                     .setValue(started);
         }
+        gameDbData.setStarted(started);
+        this.started = started;
+
     }
+
 
     public List<Riddle> getRiddles() {
         return new ArrayList<>(riddles);

@@ -38,6 +38,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
     private final String DATABASE_GAME_RADIUS = "radius";
     private final String DATABASE_GAME_NUMCOINS = "numCoins";
     private final String DATABASE_GAME_DURATION = "duration";
+    private final String DATABASE_GAME_STARTED = "started";
 
     private final DatabaseReference gamesRef;
 
@@ -165,7 +166,6 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
         if(task.isSuccessful()){
             DataSnapshot ds = task.getResult();
-            System.out.println(ds.toString());
             String retName = ds.child(DATABASE_GAME_NAME).getValue(String.class);
             Player retHost = ds.child(DATABASE_GAME_HOST).getValue(Player.class);
             List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>(){});
@@ -181,6 +181,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
                     .child(DATABASE_LOCATION_LONGITUDE)
                     .getValue(Double.class);
             Boolean retIsVisible = ds.child(DATABASE_GAME_IS_VISIBLE).getValue(Boolean.class);
+            Boolean started = ds.child(DATABASE_GAME_STARTED).getValue(Boolean.class);
 
             Integer numCoins = ds.child(DATABASE_GAME_NUMCOINS).getValue(Integer.class);
             Double radius = ds.child(DATABASE_GAME_RADIUS).getValue(Double.class);
@@ -207,6 +208,9 @@ public class GameDatabaseProxy extends DatabaseProxy {
             if(retIsVisible == null){
                 throw new IllegalArgumentException("is visible should not be null.");
             }
+            if(started == null){
+                throw new IllegalArgumentException("started should not be null.");
+            }
 
             //Cant deserialize Location properly so we do it manually
             Location retLocation = new Location("");
@@ -218,6 +222,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Game retGame = new Game(retName, retHost, retPlayers, retMaxPlayerCount, retLocation, retIsVisible, retCoin,numCoins,radius,duration);
             retGame.setId(ds.getKey());
             retGame.setHasBeenAdded(true);
+            retGame.setStarted(started,true);
 
             return retGame;
         }else{

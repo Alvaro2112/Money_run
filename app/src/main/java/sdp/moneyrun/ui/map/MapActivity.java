@@ -536,7 +536,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleManager.deleteAll();
         CircleOptions circleOptions = new CircleOptions();
         circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(1f);
+        circleOptions = circleOptions.withCircleOpacity(0.4f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
         //circleOptions.withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
         System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());

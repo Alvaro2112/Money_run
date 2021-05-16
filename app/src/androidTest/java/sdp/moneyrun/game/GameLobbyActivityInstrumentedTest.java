@@ -62,7 +62,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     private Intent getStartIntent() {
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
-        Player currentUser = new Player("999", "CURRENT_USER", 0);
+        Player currentUser = new Player("78646", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
@@ -71,7 +71,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     public Game getGame() {
         String name = "LobbyActivityInstrumentedTest";
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -87,7 +87,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void StartGameAsNonHostWorksWhenHostsLaunchesGame() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -99,7 +99,7 @@ public class    GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-
+        System.out.println("IN TESTSTARTED"+String.valueOf(game.getStarted()));
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -112,7 +112,7 @@ public class    GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         }catch (InterruptedException e) {
@@ -120,16 +120,17 @@ public class    GameLobbyActivityInstrumentedTest {
             fail();
         }
 
-            Player nonHost = new Player("4", "Carl", 0);
-            Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-            intent2.putExtra("currentUser", nonHost);
-            intent2.putExtra("currentGameId", id);
+        Player nonHost = new Player("4", "Carl", 0);
+        Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        intent2.putExtra("currentUser", nonHost);
+        intent2.putExtra("currentGameId", id);
+        players = game.getPlayers();
+        players.add(nonHost);
+        game.setPlayers(players, false);
         try (ActivityScenario<GameLobbyActivity> scenario2 = ActivityScenario.launch(intent2)) {
             Intents.init();
-            Thread.sleep(8000);
+            Thread.sleep(15000);
             intended(hasComponent(MapActivity.class.getName()));
-            Thread.sleep(8000);
-
             Intents.release();
         }catch (InterruptedException e) {
             e.printStackTrace();
@@ -176,9 +177,6 @@ public class    GameLobbyActivityInstrumentedTest {
         }
     }
 
-    /*
-    CHANGE THIS
-     */
     @Test
     public void InitializeGameAddsCoinsToDB() {
         Player host = new Player("3", "Bob", 0);
@@ -216,9 +214,6 @@ public class    GameLobbyActivityInstrumentedTest {
             dataTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
-                    //TODO CHANGE THIS
-                    ////////
-                    //////
                     assertEquals(fromDB.getCoins().size(), 1);
                 } else {
                     fail();

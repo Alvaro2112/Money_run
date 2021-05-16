@@ -415,6 +415,13 @@ public class GameTest {
     }
 
     @Test
+    public void getStartedWorks(){
+        Game game = getGame();
+
+        assertNotNull(game.getStarted());
+    }
+
+    @Test
     public void getIsVisibleReturnsCorrectValue(){
         Game game = getGame();
 
@@ -455,6 +462,14 @@ public class GameTest {
 
         assertEquals(game.getId(), "gameId");
     }
+
+    @Test
+    public void setStartedWorks(){
+        Game game = getGame();
+        game.setStarted(true,true);
+        assertEquals( true,game.getStarted());
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void setIdFailsOnNullArgument(){

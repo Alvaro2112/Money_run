@@ -25,7 +25,7 @@ public final class GameDbData {
     private Location startLocation;
     boolean isVisible;
     boolean isDeleted;
-    boolean isStarted;
+    boolean started;
     private int numCoins;
     private double radius;
     private double duration;
@@ -60,7 +60,7 @@ public final class GameDbData {
         this.startLocation = startLocation;
         this.isVisible = isVisible;
         this.isDeleted = false;
-        this.isStarted = false;
+        this.started = false;
     }
 
     public GameDbData(String name,
@@ -106,7 +106,7 @@ public final class GameDbData {
         this.startLocation = startLocation;
         this.isVisible = isVisible;
         this.isDeleted = false;
-        this.isStarted = false;
+        this.started = false;
         this.radius = radius;
         this.numCoins = numCoins;
         this.duration = duration;
@@ -125,7 +125,7 @@ public final class GameDbData {
         this.isVisible = other.isVisible;
         this.coins = other.coins;
         this.isDeleted = false;
-        this.isStarted = other.isStarted;
+        this.started = other.started;
         this.duration = other.duration;
         this.radius = other.radius;
         this.numCoins = other.numCoins;
@@ -142,7 +142,10 @@ public final class GameDbData {
     }
 
     public void setStarted(boolean started) {
-        isStarted = started;
+        this.started = started;
+    }
+    public boolean getStarted() {
+        return started;
     }
 
     public List<Player> getPlayers() {
