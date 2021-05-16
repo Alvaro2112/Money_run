@@ -456,9 +456,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             currentScoreView.setText(default_score);
             //TODO: Inform database
             if(useDB) {
-                  game.setCoins(localPlayer.toSendToDb(),true);
-                  proxyG.updateGameInDatabase(game,null);
-                  player.setScore(localPlayer.getScore(),true);
+                List<Player> temp_players = game.getPlayers();
+                temp_players.remove(player);
+                player.setScore(localPlayer.getScore(),true);
+                temp_players.add(player);
+                game.setPlayers(temp_players,true);
+                game.setCoins(localPlayer.toSendToDb(),true);
+                proxyG.updateGameInDatabase(game,null);
             }
         }
 

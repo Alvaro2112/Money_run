@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,9 +18,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -32,17 +28,13 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
-import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -55,7 +47,6 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -330,7 +321,10 @@ public class MenuActivityTest {
                     .perform(DrawerActions.open());
             Thread.sleep(1000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
+            Thread.sleep(3000);
+
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
+            Thread.sleep(3000);
 
             Intents.release();
         } catch (Exception e) {
