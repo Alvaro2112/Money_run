@@ -14,6 +14,7 @@
     <string name="title_activity_login">Login page</string>
     <string name="menu_leaderboard_button_text">Leaderboard</string>
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
+    <string name="friend_list_button_text">Friend list</string>
     <string name="leaderboard_header_position">Position</string>
     <string name="leaderboard_header_name">Name</string>
     <string name="leaderboard_header_score">Score</string>

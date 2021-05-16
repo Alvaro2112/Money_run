@@ -6,6 +6,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import sdp.moneyrun.user.User;
 
@@ -70,6 +73,14 @@ public class UserDatabaseProxy extends DatabaseProxy {
         return task;
     }
 
+    /**
+     * Get all the users in the database.
+     * @return Task containing the users datas
+     */
+    public Task<DataSnapshot> getUsersTask(){
+        return usersRef.get();
+    }
+
     /** get a user from a task
      * @param task the task containing a user
      * @return the user inside the task or null if the task is not complete
@@ -124,5 +135,43 @@ public class UserDatabaseProxy extends DatabaseProxy {
         return usersRef.orderByChild(DATABASE_USER_SCORE)
                 .limitToLast(n)
                 .get();
+    }
+
+    public List<User> getUserListFromTaskFromSimilarName(Task<DataSnapshot> task, String filter) {
+        if (filter == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        String cleanFilter = filter.trim().toLowerCase(Locale.getDefault());
+        if (cleanFilter.equals("")) {
+            throw new IllegalArgumentException("name should not be the empty string.");
+        }
+
+        if (!task.isComplete()) {
+            return null;
+        }
+        if(!task.isSuccessful()){
+            Log.e(TAG, "Error getting data", task.getException());
+            return null;
+        }
+
+        DataSnapshot result = task.getResult();
+        if (result == null) {
+            return null;
+        }
+
+        ArrayList<User> resultList = new ArrayList<>();
+        for(DataSnapshot dataSnapshot: result.getChildren()){
+            User user = dataSnapshot.getValue(User.class);
+            if(user == null || user.getName() == null){
+                continue;
+            }
+
+            String cleanUserName = user.getName().trim().toLowerCase();
+            if(cleanUserName.contains(cleanFilter)){
+                resultList.add(user);
+            }
+        }
+
+        return resultList;
     }
 }
