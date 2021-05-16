@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class EndGameActivity extends AppCompatActivity {
      *               Call this on the button to make start the Menu activity
      */
 
-    private void linkToMenuButton(ImageButton toMenu) {
+    private void linkToMenuButton(@NonNull ImageButton toMenu) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         toMenu.setOnClickListener(v -> pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -107,6 +109,7 @@ public class EndGameActivity extends AppCompatActivity {
      * @param playerId  player to update
      * @param gameScore score to be added
      */
+    @NonNull
     public Player updatePlayer(String playerId, int gameScore) {
         final Player player = new Player(playerId, "name", gameScore);
         if (player != null) {
@@ -134,7 +137,7 @@ public class EndGameActivity extends AppCompatActivity {
      *
      * @param resultButton button that will link to result UI
      */
-    public void linkToResult(Button resultButton) {
+    public void linkToResult(@Nullable Button resultButton) {
         List<Player> players = getPlayersFromGame();
         if (resultButton == null || players == null)
             throw new IllegalArgumentException("Button linking end to results or players list is null");
@@ -151,6 +154,7 @@ public class EndGameActivity extends AppCompatActivity {
     /**
      * @return players that were in the game that just ended
      */
+    @NonNull
     private List<Player> getPlayersFromGame() {
         List<Player> players = new ArrayList<>();
         int numberOfPlayers = getIntent().getIntExtra("players", 0);

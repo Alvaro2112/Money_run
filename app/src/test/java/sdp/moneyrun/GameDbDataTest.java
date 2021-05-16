@@ -243,10 +243,9 @@ public class GameDbDataTest {
         when(mockLocation.getLongitude()).thenReturn(3.0);
 
         GameDbData g = new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
-        GameDbData sameRef = g;
         GameDbData sameContent = new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
 
-        assertEquals(g, sameRef);
+        assertEquals(g, g);
         assertNotEquals(null, g);
         assertEquals(g, sameContent);
     }
@@ -274,11 +273,6 @@ public class GameDbDataTest {
         assert (!data.setCoin(0, new Coin()));
     }
 
-
-    @Test
-    public void setPlayersFailsWhenHostNotPresent() {
-        //TODO
-    }
 
     @Test
     public void isDeletedIsFalseWhenCreated() {

@@ -2,6 +2,9 @@ package sdp.moneyrun.database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +17,9 @@ import sdp.moneyrun.map.Riddle;
 
 public class RiddlesDatabase {
 
+    @Nullable
     private static RiddlesDatabase obj;
+    @NonNull
     private final ArrayList<Riddle> db;
     private int loc;
 
@@ -23,7 +28,7 @@ public class RiddlesDatabase {
      *
      * @param context the current context
      */
-    private RiddlesDatabase(Context context) {
+    private RiddlesDatabase(@NonNull Context context) {
 
 
         InputStream inputStream = context.getResources().openRawResource(R.raw.database);
@@ -57,6 +62,7 @@ public class RiddlesDatabase {
 
     }
 
+    @Nullable
     public static RiddlesDatabase getInstance() {
         if (obj == null)
             throw new RuntimeException("Need to create a instance first");
@@ -71,7 +77,8 @@ public class RiddlesDatabase {
      * @param context current context
      * @return the created instance
      */
-    public static RiddlesDatabase createInstance(Context context) {
+    @Nullable
+    public static RiddlesDatabase createInstance(@NonNull Context context) {
         if (obj != null)
             throw new RuntimeException("Instance already exists");
 

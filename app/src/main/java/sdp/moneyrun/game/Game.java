@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -28,10 +31,13 @@ public class Game {
     private final String DATABASE_IS_VISIBLE = "isVisible";
     private final String DATABASE_STARTED = "started";
     //Attributes
+    @NonNull
     private final GameDbData gameDbData;
+    @Nullable
     private final List<Riddle> riddles;
 
     //Aux variables
+    @Nullable
     private String id;
     private boolean hasBeenAdded;
 
@@ -46,12 +52,12 @@ public class Game {
      * @param startLocation  location of the game
      * @param isVisible      visibility of game in the list
      */
-    public Game(String name,
-                Player host,
+    public Game(@Nullable String name,
+                @Nullable Player host,
                 int maxPlayerCount,
-                List<Riddle> riddles,
-                List<Coin> coins,
-                Location startLocation,
+                @Nullable List<Riddle> riddles,
+                @Nullable List<Coin> coins,
+                @Nullable Location startLocation,
                 boolean isVisible) {
         if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
@@ -90,13 +96,13 @@ public class Game {
      * @param startLocation  location of the game
      * @param isVisible      visibility of game in the list
      */
-    public Game(String name,
-                Player host,
-                List<Player> players,
+    public Game(@Nullable String name,
+                @Nullable Player host,
+                @Nullable List<Player> players,
                 int maxPlayerCount,
-                Location startLocation,
+                @Nullable Location startLocation,
                 boolean isVisible,
-                List<Coin> coins) {
+                @Nullable List<Coin> coins) {
         if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
         }
@@ -124,7 +130,7 @@ public class Game {
 
     }
 
-    public static void endGame(int numberOfCollectedCoins, int score, String playerId, Activity currentActivity) {
+    public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull Activity currentActivity) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
         endGameIntent.putExtra("numberOfCollectedCoins", numberOfCollectedCoins);
@@ -134,11 +140,12 @@ public class Game {
         currentActivity.finish();
     }
 
+    @Nullable
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@Nullable String id) {
         if (id == null) {
             throw new IllegalArgumentException("id should not be null.");
         }
@@ -159,6 +166,7 @@ public class Game {
         return gameDbData.getMaxPlayerCount();
     }
 
+    @NonNull
     public List<Player> getPlayers() {
         return gameDbData.getPlayers();
     }
@@ -175,15 +183,17 @@ public class Game {
         }
     }
 
+    @NonNull
     public List<Riddle> getRiddles() {
         return new ArrayList<>(riddles);
     }
 
+    @NonNull
     public List<Coin> getCoins() {
         return new ArrayList<>(gameDbData.getCoins());
     }
 
-    public void setCoins(List<Coin> coins, boolean forceLocal) {
+    public void setCoins(@Nullable List<Coin> coins, boolean forceLocal) {
         if (coins == null) throw new IllegalArgumentException();
         gameDbData.setCoins(coins);
 
@@ -228,6 +238,7 @@ public class Game {
         this.hasBeenAdded = hasBeenAdded;
     }
 
+    @NonNull
     public GameDbData getGameDbData() {
         return new GameDbData(gameDbData);
     }
@@ -238,7 +249,7 @@ public class Game {
      * @param players    New List of Players
      * @param forceLocal force the modification to be local only
      */
-    public void setPlayers(List<Player> players, boolean forceLocal) {
+    public void setPlayers(@Nullable List<Player> players, boolean forceLocal) {
         if (players == null) {
             throw new IllegalArgumentException("players should not be null.");
         }
@@ -263,7 +274,7 @@ public class Game {
      *
      * @param player new player
      */
-    public void addPlayer(Player player, boolean forceLocal) {
+    public void addPlayer(@Nullable Player player, boolean forceLocal) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null.");
         }
@@ -277,7 +288,7 @@ public class Game {
         setPlayers(players, forceLocal);
     }
 
-    public boolean setCoin(int index, Coin coin) {
+    public boolean setCoin(int index, @Nullable Coin coin) {
         if (index < 0 || coin == null) throw new IllegalArgumentException();
         return gameDbData.setCoin(index, coin);
     }
@@ -286,14 +297,13 @@ public class Game {
      * Remove a player to the game, updates it in the database if necessary
      *
      * @param player the player to be removed
-     * @return the player previously at the specified location
      */
-    public Player removePlayer(Player player, boolean forceLocal) {
+    public void removePlayer(@Nullable Player player, boolean forceLocal) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null.");
         }
         if (!getPlayers().contains(player)) {
-            return null;
+            return;
         }
 
         List<Player> players = getPlayers();
@@ -301,7 +311,6 @@ public class Game {
 
         setPlayers(players, forceLocal);
 
-        return player;
     }
 
     public boolean getIsDeleted() {
@@ -329,7 +338,7 @@ public class Game {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
@@ -344,6 +353,7 @@ public class Game {
     /**
      * @return returns a random riddle from all the possible riddles
      */
+    @Nullable
     public Riddle getRandomRiddle() {
 
         if (riddles.isEmpty()) {

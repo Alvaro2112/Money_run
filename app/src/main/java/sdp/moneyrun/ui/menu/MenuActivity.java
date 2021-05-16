@@ -62,6 +62,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    @NonNull
     LocationListener locationListenerGPS = location -> {
         loadWeather(location);
         setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
@@ -172,7 +173,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setPutExtraArguments(Intent intent) {
+    private void setPutExtraArguments(@NonNull Intent intent) {
         intent.putExtra("user", user);
     }
 
@@ -211,7 +212,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addressGeocoder = AddressGeocoder.fromContext(this);
     }
 
-    public void loadWeather(android.location.Location location) {
+    public void loadWeather(@NonNull android.location.Location location) {
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
@@ -237,7 +238,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return currentLocation;
     }
 
-    private void setWeatherFieldsToday(WeatherReport report) {
+    private void setWeatherFieldsToday(@NonNull WeatherReport report) {
         String weatherIconURL = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@2x.png";
         Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : " + report.getWeatherIcon());
         TextView weatherTypeText = findViewById(R.id.weather_type);

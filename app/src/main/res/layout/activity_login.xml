@@ -75,7 +75,7 @@
         android:layout_width="90dp"
         android:layout_height="50dp"
         android:background="@drawable/layout_rounded"
-        android:text="Guest"
+        android:text="@string/guest_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/loginButton"
         app:layout_constraintHorizontal_bias="1.0"
@@ -86,7 +86,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(For offline mode)"
+        android:text="@string/for_offline_mode_description"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

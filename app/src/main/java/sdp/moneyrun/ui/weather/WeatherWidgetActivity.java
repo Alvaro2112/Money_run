@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -55,7 +56,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
     }
 
-    public void loadWeather(android.location.Location location) {
+    public void loadWeather(@NonNull android.location.Location location) {
 
         try {
             LocationRepresentation loc;

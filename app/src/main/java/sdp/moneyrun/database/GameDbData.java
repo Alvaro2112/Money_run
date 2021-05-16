@@ -2,6 +2,9 @@ package sdp.moneyrun.database;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,21 +22,26 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean isStarted;
+    @Nullable
     private String name;
+    @Nullable
     private Player host;
+    @Nullable
     private List<Player> players;
+    @Nullable
     private List<Coin> coins;
     //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     private int maxPlayerCount;
+    @Nullable
     private Location startLocation;
 
-    public GameDbData(String name,
-                      Player host,
-                      List<Player> players,
+    public GameDbData(@Nullable String name,
+                      @Nullable Player host,
+                      @Nullable List<Player> players,
                       int maxPlayerCount,
-                      Location startLocation,
+                      @Nullable Location startLocation,
                       boolean isVisible,
-                      List<Coin> coins) {
+                      @NonNull List<Coin> coins) {
         if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
         }
@@ -60,7 +68,7 @@ public final class GameDbData {
         this.isStarted = false;
     }
 
-    public GameDbData(GameDbData other) {
+    public GameDbData(@Nullable GameDbData other) {
         if (other == null) {
             throw new IllegalArgumentException("other should not be null.");
         }
@@ -78,10 +86,12 @@ public final class GameDbData {
     public GameDbData() {
     }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
+    @Nullable
     public Player getHost() {
         return host;
     }
@@ -90,6 +100,7 @@ public final class GameDbData {
         isStarted = started;
     }
 
+    @NonNull
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
     }
@@ -100,7 +111,7 @@ public final class GameDbData {
      * @param players List of Players to set
      * @throws IllegalArgumentException if the Player List is empty
      */
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(@Nullable List<Player> players) {
         if (players == null) {
             throw new IllegalArgumentException("players should not be null.");
         }
@@ -115,20 +126,22 @@ public final class GameDbData {
         return maxPlayerCount;
     }
 
+    @Nullable
     public Location getStartLocation() {
         return startLocation;
     }
 
+    @NonNull
     public List<Coin> getCoins() {
         return new ArrayList<>(coins);
     }
 
-    public void setCoins(List<Coin> coins) {
+    public void setCoins(@Nullable List<Coin> coins) {
         if (coins == null) throw new IllegalArgumentException();
         this.coins = new ArrayList<>(coins);
     }
 
-    public boolean setCoin(int index, Coin coin) {
+    public boolean setCoin(int index, @Nullable Coin coin) {
         if (index < 0 || coin == null) throw new IllegalArgumentException();
         if (coins.size() < index + 1) return false;
         coins.set(index, coin);
@@ -157,7 +170,7 @@ public final class GameDbData {
      * @param player Player to add
      * @throws IllegalArgumentException if List already full
      */
-    public void addPlayer(Player player) {
+    public void addPlayer(@Nullable Player player) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null.");
         }
@@ -176,7 +189,7 @@ public final class GameDbData {
      * @param player Player to remove
      * @throws IllegalArgumentException if only one player left in List (and removing them would cause it to be empty)
      */
-    public void removePlayer(Player player) {
+    public void removePlayer(@Nullable Player player) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
@@ -188,7 +201,7 @@ public final class GameDbData {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameDbData gameDbData = (GameDbData) o;

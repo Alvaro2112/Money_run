@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
@@ -21,9 +23,10 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
     // Medal emotes
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
     private final int COLOR_GOLD = Color.rgb(255, 204, 51);
+    @Nullable
     private User currentUser;
 
-    public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
+    public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, @Nullable User user) {
         super(context, 0, userList);
         if (user == null) {
             throw new IllegalArgumentException("user should not be null.");

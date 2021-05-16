@@ -2,6 +2,9 @@ package sdp.moneyrun.map;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mapbox.geojson.Feature;
 
 import java.util.List;
@@ -21,7 +24,8 @@ public class CoinGenerationHelper {
      * @param radius
      * @return a Location within a radius in meters
      */
-    public static Location getRandomLocation(Location currentLocation, int radius) {
+    @NonNull
+    public static Location getRandomLocation(@Nullable Location currentLocation, int radius) {
         if (radius <= 0 || currentLocation == null) throw new IllegalArgumentException();
         double x0 = currentLocation.getLongitude();
         double y0 = currentLocation.getLatitude();
@@ -54,7 +58,7 @@ public class CoinGenerationHelper {
         return copy;
     }
 
-    public static boolean checkIndividualFeature(Feature feature, List<String> inappropriateLocations) {
+    public static boolean checkIndividualFeature(@NonNull Feature feature, @NonNull List<String> inappropriateLocations) {
         String[] relevantFields = new String[]{"type", "class", "name"};
         for (String field : relevantFields) {
             if (feature.properties().has(field)) {
@@ -68,7 +72,7 @@ public class CoinGenerationHelper {
         return true;
     }
 
-    public static boolean hasAtLeasOneProperty(List<Feature> features) {
+    public static boolean hasAtLeasOneProperty(@NonNull List<Feature> features) {
         for (Feature feature : features) {
             if (!feature.properties().toString().equals("{}")) {
                 return true;
@@ -77,7 +81,7 @@ public class CoinGenerationHelper {
         return false;
     }
 
-    public static int coinValue(Location coinLoc, Location centerLoc) {
+    public static int coinValue(@Nullable Location coinLoc, @Nullable Location centerLoc) {
         if (coinLoc == null) {
             throw new NullPointerException("coin loc is null");
         }

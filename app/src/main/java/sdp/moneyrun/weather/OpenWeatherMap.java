@@ -4,6 +4,9 @@ package sdp.moneyrun.weather;
 import android.os.StrictMode;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,12 +38,14 @@ public class OpenWeatherMap {
         this.apiKey = apiKey;
     }
 
+    @NonNull
     public static OpenWeatherMap build() {
         return new OpenWeatherMap(open_weather_key);
     }
 
 
-    private WeatherReport parseReport(JSONObject report) throws JSONException {
+    @NonNull
+    private WeatherReport parseReport(@Nullable JSONObject report) throws JSONException {
         if (report == null) {
             throw new NullPointerException();
         }
@@ -57,7 +62,8 @@ public class OpenWeatherMap {
         );
     }
 
-    private WeatherForecast parseForecast(JSONObject forecast) throws JSONException {
+    @NonNull
+    private WeatherForecast parseForecast(@Nullable JSONObject forecast) throws JSONException {
         if (forecast == null) {
             throw new NullPointerException();
         }
@@ -79,7 +85,8 @@ public class OpenWeatherMap {
         return new WeatherForecast(reports);
     }
 
-    private String getRawForecast(LocationRepresentation location) throws IOException {
+    @Nullable
+    private String getRawForecast(@NonNull LocationRepresentation location) throws IOException {
         String queryUrl = API_ENDPOINT +
                 "?lat=" + location.getLatitude() +
                 "&lon=" + location.getLongitude() +
@@ -123,7 +130,8 @@ public class OpenWeatherMap {
 
     }
 
-    public WeatherForecast getForecast(LocationRepresentation location) throws IOException {
+    @NonNull
+    public WeatherForecast getForecast(@NonNull LocationRepresentation location) throws IOException {
         String forecast = getRawForecast(location);
         try {
             JSONObject json = (JSONObject) new JSONTokener(forecast).nextValue();

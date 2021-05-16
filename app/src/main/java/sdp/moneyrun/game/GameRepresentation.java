@@ -1,5 +1,7 @@
 package sdp.moneyrun.game;
 
+import androidx.annotation.Nullable;
+
 import sdp.moneyrun.map.LocationRepresentation;
 
 /**
@@ -7,9 +9,12 @@ import sdp.moneyrun.map.LocationRepresentation;
  * a game that is not automatically updated by the database.
  */
 public class GameRepresentation {
+    @Nullable
     private final String gameId;
+    @Nullable
     private final String name;
     private final int maxPlayerCount;
+    @Nullable
     private final LocationRepresentation startLocation;
     private int playerCount;
 
@@ -19,7 +24,7 @@ public class GameRepresentation {
      * @param playerCount    the current number of players in the game
      * @param maxPlayerCount the maximum number of players in the game
      */
-    public GameRepresentation(String gameId, String name, int playerCount, int maxPlayerCount, LocationRepresentation startLocation) {
+    public GameRepresentation(@Nullable String gameId, @Nullable String name, int playerCount, int maxPlayerCount, @Nullable LocationRepresentation startLocation) {
         if (gameId == null) {
             throw new IllegalArgumentException("gameId should not be null.");
         }
@@ -40,6 +45,7 @@ public class GameRepresentation {
     /**
      * @return the id of the game
      */
+    @Nullable
     public String getGameId() {
         return gameId;
     }
@@ -47,6 +53,7 @@ public class GameRepresentation {
     /**
      * @return the name of the game
      */
+    @Nullable
     public String getName() {
         return name;
     }
@@ -75,6 +82,7 @@ public class GameRepresentation {
     /**
      * @return the start location of the game
      */
+    @Nullable
     public LocationRepresentation getStartLocation() {
         return startLocation;
     }

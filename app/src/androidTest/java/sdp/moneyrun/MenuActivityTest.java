@@ -162,7 +162,6 @@ public class MenuActivityTest {
     }
 
 
-
     @Test
     public void newGamePopupIsDisplayed() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);

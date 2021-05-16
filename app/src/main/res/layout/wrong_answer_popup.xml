@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrong_answer_popup"
     android:layout_width="100dp"
     android:layout_height="300dp"
@@ -7,53 +8,52 @@
     android:fadingEdge="horizontal|vertical">
 
 
-    <ScrollView
-        android:layout_width="2000dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/question"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/question"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
-                android:tag="rr"
-                android:text="Question"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:tag="rr"
+            android:text="@string/question_title_text"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
-            <TextView
-                android:id="@+id/incorrect_answer_text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:text="X"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/incorrect_answer_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:text="@string/wrong_answer_cross"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/continue_run"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/continue_run" />
+        <Button
+            android:id="@+id/continue_run"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
 
-        </LinearLayout>
+            android:text="@string/continue_run" />
 
-    </ScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

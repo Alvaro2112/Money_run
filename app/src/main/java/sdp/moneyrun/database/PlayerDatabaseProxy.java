@@ -2,6 +2,9 @@ package sdp.moneyrun.database;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +20,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     private final String DATABASE_PLAYER = "players";
 
+    @NonNull
     private final DatabaseReference playersRef;
 
     public PlayerDatabaseProxy() {
@@ -30,7 +34,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      *
      * @param player the player to be put in the database
      */
-    public void putPlayer(Player player) {
+    public void putPlayer(@Nullable Player player) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
@@ -38,7 +42,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
         playersRef.child(String.valueOf(player.getPlayerId())).setValue(player);
     }
 
-    public void putPlayer(Player player, OnCompleteListener listener) {
+    public void putPlayer(@Nullable Player player, @Nullable OnCompleteListener listener) {
         if (player == null || listener == null) {
             throw new IllegalArgumentException();
         }
@@ -53,7 +57,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      *
      * @param player the player to be removed in the database
      */
-    public void removePlayer(Player player) {
+    public void removePlayer(@Nullable Player player) {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
@@ -68,6 +72,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param playerId
      * @return Task containing the player data
      */
+    @NonNull
     public Task<DataSnapshot> getPlayerTask(String playerId) {
         Task<DataSnapshot> task = playersRef.child(String.valueOf(playerId)).get();
 
@@ -89,7 +94,8 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param task the task containing a player
      * @return the player inside the task or null if the task is not complete
      */
-    public Player getPlayerFromTask(Task<DataSnapshot> task) {
+    @Nullable
+    public Player getPlayerFromTask(@NonNull Task<DataSnapshot> task) {
         if (task.isComplete()) {
             return task.getResult().getValue(Player.class);
         } else {
@@ -105,7 +111,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param player   the player who's database entry will be listened
      * @param listener the listener which describes what to do on change
      */
-    public void addPlayerListener(Player player, ValueEventListener listener) {
+    public void addPlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
         if (listener == null || player == null) {
             throw new IllegalArgumentException();
         }
@@ -120,7 +126,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param listener
      * @throws IllegalArgumentException on null listener or null player
      */
-    public void removePlayerListener(Player player, ValueEventListener listener) {
+    public void removePlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
         if (listener == null || player == null) {
             throw new IllegalArgumentException();
         }

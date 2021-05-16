@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">moneyRun</string>
+    <string name="app_name">Money Run</string>
     <string name="EMAIL_HINT">Email</string>
     <string name="PASSWORD_HINT">Password</string>
     <string name="title_activity_menu">MenuActivity</string>
@@ -87,8 +87,35 @@
     <string name="continue_run">Continue run</string>
     <string name="CorrectAnswerMessage">You are correct!</string>
     <string name="delete_game_button">Delete</string>
-    <string name="incorrect_answer_message">\"You are incorrect!\n The answer was \"</string>
+    <string name="incorrect_answer_message">You are incorrect!\n The answer was </string>
     <string name="fillup_player_warning">PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER</string>
+    <string name="emptyString" />
+    <string name="button_to_leave_game_description">button to leave game</string>
+    <string name="game_results_button_text">Game Results</string>
+    <string name="game_lobby_title">Game Lobby</string>
+    <string name="players_in_lobby_message">Players in Lobby :</string>
+    <string name="players_missing_message">Players Missing :</string>
+    <string name="leave_button_text">Leave</string>
+    <string name="launch_game_button_text">Launch game</string>
+    <string name="guest_button_text">Guest</string>
+    <string name="for_offline_mode_description">(For offline mode)</string>
+    <string name="welcome_image_description">Welcome image when opening app</string>
+    <string name="cross">x</string>
+    <string name="new_question_button_text">new_question</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="player_avatar_description">Avatar of a player</string>
+    <string name="image_on_top_of_join_game_description">Image on top of join game</string>
+    <string name="image_on_top_of_create_game_description">Image on top of create game</string>
+    <string name="weather_text">Weather</string>
+    <string name="name_prompt_text">Enter your Name</string>
+    <string name="address_prompt_text">Enter your address</string>
+    <string name="favorite_color_prompt_text">Enter your favorite color</string>
+    <string name="favorite_animal_text">Enter your favorite animal</string>
+    <string name="game_name_prompt_text">Enter game name</string>
+    <string name="game_max_players_prompt_text">Enter max player count</string>
+    <string name="submit_game_text">Submit</string>
+    <string name="question_title_text">Question</string>
+    <string name="wrong_answer_cross">X</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

@@ -2,6 +2,9 @@ package sdp.moneyrun.map;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * This class implements a representation of a location, a class containing information of
  * a location that is not automatically updated by the database.
@@ -15,7 +18,7 @@ public class LocationRepresentation {
         this.longitude = longitude;
     }
 
-    public LocationRepresentation(Location location) {
+    public LocationRepresentation(@Nullable Location location) {
         if (location == null) {
             throw new IllegalArgumentException("location should not be null.");
         }
@@ -47,7 +50,7 @@ public class LocationRepresentation {
      * @param other a location
      * @return the distance in meters from this location to another location
      */
-    public double distanceTo(LocationRepresentation other) {
+    public double distanceTo(@NonNull LocationRepresentation other) {
         // constant for meters
         double R = 6371e3;
 

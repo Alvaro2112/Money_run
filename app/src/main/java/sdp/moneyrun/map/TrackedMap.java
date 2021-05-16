@@ -6,6 +6,7 @@ import android.location.Location;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -144,7 +145,7 @@ public abstract class TrackedMap extends BaseMap implements
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-    public boolean isLocationAppropriate(Location location) {
+    public boolean isLocationAppropriate(@NonNull Location location) {
         List<Feature> features = getFeatureAtLocation(location);
         if (features.size() == 0)
             return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
@@ -159,7 +160,8 @@ public abstract class TrackedMap extends BaseMap implements
         return CoinGenerationHelper.hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
     }
 
-    private List<Feature> getFeatureAtLocation(Location location) {
+    @NonNull
+    private List<Feature> getFeatureAtLocation(@NonNull Location location) {
         double lat = location.getLatitude();
         double lon = location.getLongitude();
         LatLng point = new LatLng(lat, lon);
@@ -176,7 +178,8 @@ public abstract class TrackedMap extends BaseMap implements
      * @param location
      * @return the index of the closest coin whose distance is lower than a threshold or -1 if there are none
      */
-    public Coin nearestCoin(Location location, List<Coin> remainingCoins, double thresholdDistance) {
+    @Nullable
+    public Coin nearestCoin(@NonNull Location location, @NonNull List<Coin> remainingCoins, double thresholdDistance) {
 
         double player_lat = location.getLatitude();
         double player_long = location.getLongitude();

@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -69,7 +70,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         // The adapter lets us add item to a ListView easily.
         ArrayList<Player> playerList = new ArrayList<>();
         listAdapter = new LobbyPlayerListAdapter(this, playerList);
-        ListView playerListView = (ListView) findViewById(R.id.lobby_player_list_view);
+        ListView playerListView = findViewById(R.id.lobby_player_list_view);
         playerListView.setAdapter(listAdapter);
     }
 
@@ -77,7 +78,7 @@ public class GameLobbyActivity extends AppCompatActivity {
      * @param playerList: players to be added to the leaderboard
      *                    Adds players to leaderboard
      */
-    public void addPlayerList(ArrayList<Player> playerList) {
+    public void addPlayerList(@Nullable ArrayList<Player> playerList) {
         if (playerList == null) {
             throw new NullPointerException("Player list is null");
         }
@@ -124,7 +125,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void createDeleteOrLeaveButton() {
         if (user.equals(game.getHost())) {
-            Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
+            Button leaveButton = findViewById(R.id.leave_lobby_button);
             leaveButton.setText(R.string.delete_game_button);
             leaveButton.setOnClickListener(getDeleteClickListener());
         } else {
@@ -134,7 +135,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
-        TextView name = (TextView) findViewById(R.id.lobby_title);
+        TextView name = findViewById(R.id.lobby_title);
         name.setText(game.getName());
 
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
@@ -151,7 +152,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
 
         //Player List is dynamic with DB
-        TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
+        TextView playersMissing = findViewById(R.id.players_missing_TextView);
         playerListListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -200,6 +201,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
 
+    @NonNull
     private View.OnClickListener getDeleteClickListener() {
         return v -> {
             game.setIsDeleted(true, false);
@@ -226,6 +228,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         };
     }
 
+    @NonNull
     private View.OnClickListener getLeaveClickListener() {
         return v -> {
             game.removePlayer(user, false);

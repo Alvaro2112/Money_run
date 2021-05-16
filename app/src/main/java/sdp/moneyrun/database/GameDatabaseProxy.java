@@ -37,6 +37,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
     private final String DATABASE_LOCATION_LONGITUDE = "longitude";
     private final String DATABASE_COIN = "coins";
 
+    @NonNull
     private final DatabaseReference gamesRef;
 
     public GameDatabaseProxy() {
@@ -50,7 +51,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
      *
      * @return the Id of this game in the DB
      */
-    public String putGame(Game game) {
+    @Nullable
+    public String putGame(@Nullable Game game) {
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
         }
@@ -71,7 +73,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
         return id;
     }
 
-    public void updateGameInDatabase(Game game, @Nullable OnCompleteListener listener) {
+    public void updateGameInDatabase(@Nullable Game game, @Nullable OnCompleteListener listener) {
         if (game == null) throw new IllegalArgumentException();
         if (!game.getHasBeenAdded()) {
             putGame(game);
@@ -87,7 +89,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
      * Links pertinent attributes to the DB instance corresponding to its ID.
      * For now the only pertinent attribute is the player List
      */
-    private void linkPlayersToDB(Game game) {
+    private void linkPlayersToDB(@Nullable Game game) {
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
         }
@@ -111,7 +113,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
                 });
     }
 
-    private void linkCoinsToDB(Game game) {
+    private void linkCoinsToDB(@NonNull Game game) {
         gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
                 .addValueEventListener(new ValueEventListener() {
@@ -133,7 +135,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
      * @param id ID of the Game to retrieve
      * @return a Task containing the serialized Game or a null value if the game not present in DB
      */
-    public Task<DataSnapshot> getGameDataSnapshot(String id) throws NoSuchElementException {
+    @NonNull
+    public Task<DataSnapshot> getGameDataSnapshot(@Nullable String id) throws NoSuchElementException {
         if (id == null) {
             throw new IllegalArgumentException("id should not be null.");
         }
@@ -155,7 +158,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
      * @param task Task that you get from getGameDataSnapshot()
      * @return A Game instance
      */
-    public Game getGameFromTaskSnapshot(Task<DataSnapshot> task) {
+    @Nullable
+    public Game getGameFromTaskSnapshot(@Nullable Task<DataSnapshot> task) {
         if (task == null) {
             throw new IllegalArgumentException("task should not be null.");
         }
@@ -219,7 +223,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
         }
     }
 
-    public void addGameListener(Game game, ValueEventListener l) {
+    public void addGameListener(@Nullable Game game, @Nullable ValueEventListener l) {
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
         }
@@ -231,14 +235,14 @@ public class GameDatabaseProxy extends DatabaseProxy {
         }
     }
 
-    public void addCoinListener(Game game, ValueEventListener listener) {
+    public void addCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
         gamesRef.child(game.getId())
                 .child(DATABASE_COIN)
                 .addValueEventListener(listener);
     }
 
-    public void removeCoinListener(Game game, ValueEventListener listener) {
+    public void removeCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
         gamesRef.child(game.getId())
                 .child(DATABASE_COIN)

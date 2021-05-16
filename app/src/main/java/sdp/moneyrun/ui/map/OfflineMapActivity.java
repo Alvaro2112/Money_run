@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -67,7 +68,7 @@ public class OfflineMapActivity extends BaseMap {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
 
             @Override
-            public void onList(OfflineRegion[] offlineRegions) {
+            public void onList(@Nullable OfflineRegion[] offlineRegions) {
                 if (offlineRegions == null || offlineRegions.length == 0) {
                     hasFoundMap = false;
                     Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();

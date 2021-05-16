@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="46.51"
         mapbox:mapbox_cameraTargetLng="6.6"
-        mapbox:mapbox_cameraZoom="7.2">
+        mapbox:mapbox_cameraZoom="10.2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_height="28dp"
                 android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
-                android:text="x"
+                android:text="@string/cross"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,7 @@
                 android:layout_width="105dp"
                 android:layout_height="35dp"
                 android:background="@drawable/layout_rounded"
-                android:text="new_question"
+                android:text="@string/new_question_button_text"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:textStyle="bold"

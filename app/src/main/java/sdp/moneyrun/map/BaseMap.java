@@ -2,6 +2,7 @@ package sdp.moneyrun.map;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -18,6 +19,7 @@ public abstract class BaseMap extends AppCompatActivity {
 
     protected MapView mapView;
     protected MapboxMap mapboxMap;
+    @Nullable
     protected SymbolManager symbolManager;
 
     protected void createMap(Bundle savedInstanceState, int mapViewID, int contentViewID) {
@@ -30,6 +32,7 @@ public abstract class BaseMap extends AppCompatActivity {
         return mapboxMap;
     }
 
+    @Nullable
     public SymbolManager getSymbolManager() {
         return symbolManager;
     }

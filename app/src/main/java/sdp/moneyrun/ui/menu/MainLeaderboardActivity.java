@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,12 +25,13 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
 
+    @NonNull
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void bestToWorstUser(List<User> users) {
+    public static void bestToWorstUser(@NonNull List<User> users) {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
     }
 
@@ -54,6 +57,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     /**
      * @return the user list
      */
+    @NonNull
     public ArrayList<User> getUserList() {
         return userList;
     }
@@ -97,7 +101,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
      *                  Adds users to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addUserList(List<User> userList) {
+    public void addUserList(@Nullable List<User> userList) {
         if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }
@@ -116,7 +120,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
      *              Adds user to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addUser(User user) {
+    public void addUser(@Nullable User user) {
         if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }

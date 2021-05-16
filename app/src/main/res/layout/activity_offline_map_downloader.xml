@@ -29,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
-                android:text="x"
+                android:text="@string/cross"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

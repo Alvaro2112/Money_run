@@ -1,8 +1,13 @@
 package sdp.moneyrun.user;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class UserBuilder {
     private String userId;
+    @Nullable
     private String name;
+    @Nullable
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
@@ -24,7 +29,7 @@ public class UserBuilder {
     /**
      * @param name
      */
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
@@ -33,7 +38,7 @@ public class UserBuilder {
     /**
      * @param address
      */
-    public void setAddress(String address) {
+    public void setAddress(@Nullable String address) {
         if (address == null || address.isEmpty())
             throw new IllegalArgumentException();
         this.address = address;
@@ -60,6 +65,7 @@ public class UserBuilder {
      * @return the user built with the attributes set
      * @throws IllegalStateException if the address or name is null or empty, if the userId is null
      */
+    @NonNull
     public User build() {
         if (userId == null || name == null || address == null)
             throw new IllegalStateException();

@@ -61,10 +61,9 @@ public class RiddleTest {
         String question = "What is the color of the sky";
         String correctAnswer = "blue";
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
-        Riddle sameRef = riddle;
         Riddle sameContent = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
         Riddle nul = null;
-        assertTrue(riddle.equals(sameRef));
+        assertTrue(riddle.equals(riddle));
         assertTrue(riddle.equals(sameContent));
         assertFalse(riddle.equals(nul));
     }

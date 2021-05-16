@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,12 +27,12 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private final ArrayList<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
+    @Nullable
     private Player user;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static List<Player> bestToWorstPlayer(List<Player> players) {
+    public static void bestToWorstPlayer(@NonNull List<Player> players) {
         players.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
-        return players;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -70,7 +71,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      *                    Adds players to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addPlayerList(ArrayList<Player> playerList) {
+    public void addPlayerList(@Nullable ArrayList<Player> playerList) {
         if (playerList == null) {
             throw new NullPointerException("Player list is null");
         }
@@ -88,7 +89,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      *                Adds player to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addPlayer(Player player) {
+    public void addPlayer(@Nullable Player player) {
         // can't just add a player directly to an adapter, need to put it in a list
         if (player == null) {
             throw new IllegalArgumentException("player is null");
@@ -98,6 +99,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         addPlayerList(to_add);
     }
 
+    @NonNull
     public ArrayList<Player> getPlayerList() {
         return playerList;
     }
@@ -106,7 +108,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      * Initializes the player object private instance
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void setMainPlayer(Player player) {
+    public void setMainPlayer(@Nullable Player player) {
         if (user == null && player != null) {
             user = player;
         }
@@ -153,7 +155,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      *                       Attaches a lister to a player so that once real players join the game the dummy player will represent
      *                       an actual person with all the player object attributes associated with it
      */
-    private void attachListenerToPlayer(Player dummy1, PlayerDatabaseProxy databaseProxy) {
+    private void attachListenerToPlayer(@NonNull Player dummy1, @NonNull PlayerDatabaseProxy databaseProxy) {
         databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -173,6 +175,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * @return: returns the player object representing the person that wants to access the leaderboard
      */
+    @Nullable
     public Player getUserPlayer() {
         return user;
     }

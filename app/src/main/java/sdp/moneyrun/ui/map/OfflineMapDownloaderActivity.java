@@ -146,14 +146,14 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
      *                 The map will be downloaded when the location provider updates the location so that we download the map where the user is.
      */
     @Override
-    public void checkObjectives(Location location) {
+    public void checkObjectives(@NonNull Location location) {
 
         if (!isEndNotified && !hasStartedDownload) {
             offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
             // Create a bounding box for the offline region
-            LatLng northeast = new LatLng((double) location.getLatitude() + LAT_OFFSET, (double) location.getLongitude() + LONG_OFFSET);
-            LatLng southwest = new LatLng((double) location.getLatitude() - LAT_OFFSET, (double) location.getLongitude() - LONG_OFFSET);
+            LatLng northeast = new LatLng(location.getLatitude() + LAT_OFFSET, location.getLongitude() + LONG_OFFSET);
+            LatLng southwest = new LatLng(location.getLatitude() - LAT_OFFSET, location.getLongitude() - LONG_OFFSET);
 
             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                     .include(northeast) // Northeast
@@ -185,7 +185,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                         metadata,
                         new OfflineManager.CreateOfflineRegionCallback() {
                             @Override
-                            public void onCreate(OfflineRegion offlineRegion) {
+                            public void onCreate(@NonNull OfflineRegion offlineRegion) {
                                 offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE);
 
                                 progressBar = findViewById(R.id.progress_bar_map_downloader);
@@ -193,7 +193,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
                                 offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
                                     @Override
-                                    public void onStatusChanged(OfflineRegionStatus status) {
+                                    public void onStatusChanged(@NonNull OfflineRegionStatus status) {
                                         double percentage = status.getRequiredResourceCount() >= 0
                                                 ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
                                                 0.0;
@@ -206,7 +206,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                                     }
 
                                     @Override
-                                    public void onError(OfflineRegionError error) {
+                                    public void onError(@NonNull OfflineRegionError error) {
                                         Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error.getReason(), Toast.LENGTH_SHORT).show();
                                     }
 
@@ -235,7 +235,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     private void deleteOlderMaps() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
             @Override
-            public void onList(OfflineRegion[] offlineRegions) {
+            public void onList(@NonNull OfflineRegion[] offlineRegions) {
 
                 if (offlineRegions.length > 1) {
                     // delete the last item in the offlineRegions list which will be yosemite offline map

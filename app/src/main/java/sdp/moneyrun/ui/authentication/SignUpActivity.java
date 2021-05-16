@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,7 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth.signOut();
     }
 
-    private void submitSignUp(String email, String password) {
+    private void submitSignUp(@NonNull String email, @NonNull String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, task -> {
                     if (task.isSuccessful()) {
@@ -83,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(@Nullable FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(this, RegisterUserActivity.class);
             intent.putExtra("userId", user.getUid());
@@ -92,15 +94,15 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isPasswordValid(CharSequence password) {
+    private boolean isPasswordValid(@NonNull CharSequence password) {
         return password.length() > 6;
     }
 
-    private boolean isEmailValid(CharSequence email) {
+    private boolean isEmailValid(@NonNull CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private boolean checkInput(EditText emailView, EditText passwordView) {
+    private boolean checkInput(@NonNull EditText emailView, @NonNull EditText passwordView) {
         boolean retValue = true;
         String email = emailView.getText().toString().trim();
         String password = passwordView.getText().toString().trim();

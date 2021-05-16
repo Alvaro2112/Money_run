@@ -1,7 +1,11 @@
 package sdp.moneyrun.player;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class PlayerBuilder {
     private String playerId;
+    @Nullable
     private String name;
     private int score;
 
@@ -21,7 +25,7 @@ public class PlayerBuilder {
     /**
      * @param name
      */
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
@@ -37,6 +41,7 @@ public class PlayerBuilder {
      * @return the player built with the attributes set
      * @throws IllegalStateException if the address or name is null or empty, if the playerId is null
      */
+    @NonNull
     public Player build() {
         if (playerId == null || name == null)
             throw new IllegalStateException();

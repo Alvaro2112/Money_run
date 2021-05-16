@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:outlineAmbientShadowColor="@color/cardview_dark_background"
         android:text="@string/submit"
         android:textColor="@color/colorPrimaryDark"
         android:textColorHighlight="@color/colorPrimary"

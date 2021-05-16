@@ -16,6 +16,7 @@ import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 
 public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
+    @NonNull
     private final WeakReference<TrackedMap> activityWeakReference;
 
     public LocationCheckObjectivesCallback(MapActivity activity) {
@@ -30,7 +31,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     /* Updates the location, then checks if near a coin and calls a  function accordingly
      */
     @Override
-    public void onSuccess(LocationEngineResult result) {
+    public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
 
         if (activity != null) {

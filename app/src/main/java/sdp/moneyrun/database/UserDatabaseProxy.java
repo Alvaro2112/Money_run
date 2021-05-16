@@ -2,6 +2,9 @@ package sdp.moneyrun.database;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +20,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
     private final String DATABASE_USER = "users";
     private final String DATABASE_USER_SCORE = "score";
 
+    @NonNull
     private final DatabaseReference usersRef;
 
     public UserDatabaseProxy() {
@@ -30,7 +34,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      *
      * @param user the user to be put in the database
      */
-    public void putUser(User user) {
+    public void putUser(@Nullable User user) {
         if (user == null) {
             throw new IllegalArgumentException("user should not be null");
         }
@@ -43,7 +47,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      *
      * @param user the user to be removed in the database
      */
-    public void removeUser(User user) {
+    public void removeUser(@Nullable User user) {
         if (user == null) {
             throw new IllegalArgumentException("user should not be null");
         }
@@ -58,7 +62,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param userId
      * @return Task containing the user data
      */
-    public Task<DataSnapshot> getUserTask(String userId) {
+    @NonNull
+    public Task<DataSnapshot> getUserTask(@NonNull String userId) {
         Task<DataSnapshot> task = usersRef.child(userId).get();
 
         task.addOnCompleteListener(task1 -> {
@@ -79,7 +84,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param task the task containing a user
      * @return the user inside the task or null if the task is not complete
      */
-    public User getUserFromTask(Task<DataSnapshot> task) {
+    @Nullable
+    public User getUserFromTask(@NonNull Task<DataSnapshot> task) {
         if (task.isComplete()) {
             return task.getResult().getValue(User.class);
         } else {
@@ -95,7 +101,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param user     the user who's database entry will be listened
      * @param listener the listener which describes what to do on change
      */
-    public void addUserListener(User user, ValueEventListener listener) {
+    public void addUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
         if (listener == null || user == null) {
             throw new IllegalArgumentException();
         }
@@ -110,7 +116,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param listener
      * @throws IllegalArgumentException on null listener or null user
      */
-    public void removeUserListener(User user, ValueEventListener listener) {
+    public void removeUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
         if (listener == null || user == null) {
             throw new IllegalArgumentException();
         }
@@ -123,6 +129,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param n the number of users to retrieve from the database
      * @return the task
      */
+    @NonNull
     public Task<DataSnapshot> getLeaderboardUsers(int n) {
         if (n < 0) {
             throw new IllegalArgumentException("n should not be negative.");

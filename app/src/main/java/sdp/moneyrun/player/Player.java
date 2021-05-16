@@ -1,23 +1,27 @@
 package sdp.moneyrun.player;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 
-@SuppressWarnings("FieldMayBeFinal")
 public class Player implements Serializable {
 
+    @Nullable
     private String playerId;
+    @Nullable
     private String name;
     private int score;
 
     /**
      * For database purpose, a default constructor is needed
      */
-    public Player(){}
+    public Player() {
+    }
 
-    public Player(String playerId){
+    public Player(@Nullable String playerId) {
         this.playerId = playerId;
     }
 
@@ -29,7 +33,7 @@ public class Player implements Serializable {
      * @param name
      * @throws IllegalArgumentException on empty or null address or name and on player = 0
      */
-    public Player(String playerId, String name, int score) {
+    public Player(@Nullable String playerId, @Nullable String name, int score) {
         if (playerId == null || name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.playerId = playerId;
@@ -62,6 +66,7 @@ public class Player implements Serializable {
     /**
      * @return the unique player id
      */
+    @Nullable
     public String getPlayerId() {
         return playerId;
     }
@@ -85,6 +90,7 @@ public class Player implements Serializable {
     /**
      * @return the name of the player
      */
+    @Nullable
     public String getName() {
         return name;
     }
@@ -99,7 +105,7 @@ public class Player implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;

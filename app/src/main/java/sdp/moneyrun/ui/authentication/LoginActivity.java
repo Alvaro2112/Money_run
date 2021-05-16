@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
@@ -88,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setLogIn(Button loginButton) {
+    private void setLogIn(@NonNull Button loginButton) {
         loginButton.setOnClickListener(clicked -> {
             EditText emailView = findViewById(R.id.loginEmailAddress);
             EditText passwordView = findViewById(R.id.loginPassword);
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void submitLogin(String email, String password) {
+    private void submitLogin(@NonNull String email, @NonNull String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, task -> {
                     if (task.isSuccessful()) {
@@ -129,14 +131,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(@Nullable FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
             getUserFromDB(user.getUid(), menuIntent);
         }
     }
 
-    private void getUserFromDB(String userId, Intent menuIntent) {
+    private void getUserFromDB(String userId, @NonNull Intent menuIntent) {
         UserDatabaseProxy pdb = new UserDatabaseProxy();
         Task<DataSnapshot> t = pdb.getUserTask(userId);
         t.addOnCompleteListener(task -> {
@@ -159,10 +161,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isEmailValid(CharSequence email) {
+    private boolean isEmailValid(@NonNull CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    @NonNull
     public ActivityResultLauncher<String[]> getRequestPermissionsLauncher() {
         return requestPermissionsLauncher;
     }
@@ -173,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param guestButton offline mode option
      */
-    public void setGuestButton(Button guestButton) {
+    public void setGuestButton(@Nullable Button guestButton) {
         if (guestButton == null)
             throw new IllegalArgumentException("Guest button was clicked but was null");
         guestButton.setOnClickListener(v -> {

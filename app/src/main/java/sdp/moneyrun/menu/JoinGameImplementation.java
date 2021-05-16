@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
@@ -42,12 +43,13 @@ public class JoinGameImplementation extends MenuImplementation {
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
     private final boolean focusable;
     private final int layoutId;
+    @Nullable
     private final User currentUser;
     private int buttonId;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
-                                  User user,
+                                  @Nullable User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
                                   boolean focusable,
@@ -78,7 +80,7 @@ public class JoinGameImplementation extends MenuImplementation {
      *
      * @param popupView
      */
-    private void onJoinGamePopupWindowLoadGameList(View popupView) {
+    private void onJoinGamePopupWindowLoadGameList(@NonNull View popupView) {
         LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
 
         Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
@@ -95,7 +97,7 @@ public class JoinGameImplementation extends MenuImplementation {
         loadGameListGivenFilter(openGamesLayout, null);
     }
 
-    private void loadGameListGivenFilter(LinearLayout openGamesLayout, String filterText) {
+    private void loadGameListGivenFilter(@NonNull LinearLayout openGamesLayout, @Nullable String filterText) {
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
@@ -119,7 +121,8 @@ public class JoinGameImplementation extends MenuImplementation {
      * @param gameRepresentations a list of the game representations.
      * @return
      */
-    private Task<DataSnapshot> getTaskGameRepresentations(List<GameRepresentation> gameRepresentations) {
+    @NonNull
+    private Task<DataSnapshot> getTaskGameRepresentations(@NonNull List<GameRepresentation> gameRepresentations) {
 
         return databaseReference
                 .child(activity.getString(R.string.database_game))
@@ -152,7 +155,8 @@ public class JoinGameImplementation extends MenuImplementation {
      * @return
      */
 
-    private GameRepresentation defineGameFromDatabase(DataSnapshot dataSnapshot) {
+    @Nullable
+    private GameRepresentation defineGameFromDatabase(@NonNull DataSnapshot dataSnapshot) {
         String gameId = dataSnapshot.getKey();
         Boolean isVisible = dataSnapshot.child(activity.getString(R.string.database_game_is_visible)).getValue(Boolean.class);
         String name = dataSnapshot.child(activity.getString(R.string.database_game_name)).getValue(String.class);
@@ -178,9 +182,9 @@ public class JoinGameImplementation extends MenuImplementation {
      * @param buttonId           the id of the join button
      * @param gameRepresentation the representation of the game to display
      */
-    private void displayGameInterface(TableLayout gameLayout,
+    private void displayGameInterface(@NonNull TableLayout gameLayout,
                                       int buttonId,
-                                      GameRepresentation gameRepresentation) {
+                                      @NonNull GameRepresentation gameRepresentation) {
         // create game layout
         TableRow gameRow = new TableRow(activity);
         TableLayout.LayoutParams gameParams = new TableLayout.LayoutParams(
@@ -202,7 +206,7 @@ public class JoinGameImplementation extends MenuImplementation {
     }
 
     @SuppressLint("MissingPermission")
-    private void createJoinButton(Button button, int buttonId, GameRepresentation gameRepresentation) {
+    private void createJoinButton(@NonNull Button button, int buttonId, @NonNull GameRepresentation gameRepresentation) {
         // create join button
         button.setId(buttonId);
         button.setText(activity.getString(R.string.join_game_message));
@@ -234,7 +238,7 @@ public class JoinGameImplementation extends MenuImplementation {
                 });
     }
 
-    private void addFullGameListener(Button button, GameRepresentation gameRepresentation) {
+    private void addFullGameListener(@NonNull Button button, @NonNull GameRepresentation gameRepresentation) {
         // Modify button if the game is full
         databaseReference.child(activity.getString(R.string.database_game))
                 .child(gameRepresentation.getGameId()).addValueEventListener(new ValueEventListener() {
@@ -260,7 +264,7 @@ public class JoinGameImplementation extends MenuImplementation {
         });
     }
 
-    private void createGameNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow) {
+    private void createGameNameInfoDisplay(@NonNull GameRepresentation gameRepresentation, @NonNull TableRow gameRow) {
         TextView nameView = new TextView(activity);
         String nameText = String.format((activity.getResources().getString(R.string.game_name_display)), gameRepresentation.getName());
         nameView.setText(nameText);
@@ -268,7 +272,7 @@ public class JoinGameImplementation extends MenuImplementation {
         gameRow.addView(nameView);
     }
 
-    private void createPlayerCountNameInfoDisplay(GameRepresentation gameRepresentation, TableRow gameRow) {
+    private void createPlayerCountNameInfoDisplay(@NonNull GameRepresentation gameRepresentation, @NonNull TableRow gameRow) {
         TextView playerNumberView = new TextView(activity);
         String playerNumberText = String.format((activity.getResources().getString(R.string.game_player_number_display)),
                 gameRepresentation.getPlayerCount(),
@@ -296,7 +300,7 @@ public class JoinGameImplementation extends MenuImplementation {
         gameRow.addView(playerNumberView);
     }
 
-    private void joinLobbyFromJoinButton(GameRepresentation gameRepresentation) {
+    private void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation) {
         DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
         final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {

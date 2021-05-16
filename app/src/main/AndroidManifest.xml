@@ -14,14 +14,17 @@
         tools:ignore="AllowBackup">
         <activity android:name=".ui.game.EndGameActivity" />
         <activity android:name=".ui.map.MapActivity" />
-        <activity android:name=".ui.menu.LeaderboardActivity" />
+        <activity
+            android:name=".ui.menu.LeaderboardActivity"
+            android:theme="@style/NullTheme" />
 
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
 
         <activity
             android:name=".ui.authentication.SignUpActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/NullTheme"
             tools:ignore="AllowBackup" />
+
         <activity
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
@@ -38,11 +41,15 @@
         <activity android:name=".ui.map.OfflineMapDownloaderActivity" />
         <activity
             android:name=".ui.authentication.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".ui.player.UserProfileActivity" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/NullTheme" />
+        <activity
+            android:name=".ui.player.UserProfileActivity"
+            android:theme="@style/NullTheme" />
         <activity
             android:name=".ui.authentication.RegisterUserActivity"
-            android:label="Register Player" />
+            android:label="Register Player"
+            android:theme="@style/NullTheme" />
         <activity android:name=".ui.game.GameLobbyActivity" />
     </application>
 

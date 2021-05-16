@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +51,7 @@ public class NewGameImplementation extends MenuImplementation {
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.new_game_popup, null);
+        @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.new_game_popup, null);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -64,7 +65,6 @@ public class NewGameImplementation extends MenuImplementation {
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
         newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
-        //TODO, post the game, but also join it and launch the lobby activity
     }
 
     /**
@@ -72,7 +72,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(LinearLayout newGameLayout) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout) {
         TextView nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         String gameName = nameGameView.getText().toString().trim();

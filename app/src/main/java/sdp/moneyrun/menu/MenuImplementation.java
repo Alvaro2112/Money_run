@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -72,6 +73,7 @@ public class MenuImplementation {
      * @param focusable Whether it can be dismissed by clicking outside the popup window
      * @param layoutId  Id of the popup layout that will be used
      */
+    @NonNull
     public PopupWindow onButtonShowPopupWindowClick(View view, Boolean focusable, int layoutId) {
 
         // inflate the layout of the popup window

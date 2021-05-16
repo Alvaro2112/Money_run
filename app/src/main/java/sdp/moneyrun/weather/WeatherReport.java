@@ -1,14 +1,18 @@
 package sdp.moneyrun.weather;
 
+import androidx.annotation.Nullable;
+
 public final class WeatherReport {
     private double averageTemperature;
     private double minimumTemperature;
     private double maximalTemperature;
 
+    @Nullable
     private String weatherType;
+    @Nullable
     private String weatherIcon;
 
-    public WeatherReport(double averageTemperature, double minimumTemperature, double maximalTemperature, String weatherType, String weatherIcon) {
+    public WeatherReport(double averageTemperature, double minimumTemperature, double maximalTemperature, @Nullable String weatherType, @Nullable String weatherIcon) {
         if (weatherIcon == null || weatherType == null) {
             throw new NullPointerException();
         }
@@ -43,11 +47,12 @@ public final class WeatherReport {
         this.maximalTemperature = maximalTemperature;
     }
 
+    @Nullable
     public String getWeatherType() {
         return weatherType;
     }
 
-    public void setWeatherType(String weatherType) {
+    public void setWeatherType(@Nullable String weatherType) {
         if (weatherType == null) {
             throw new NullPointerException();
         }
@@ -55,11 +60,12 @@ public final class WeatherReport {
         this.weatherType = weatherType;
     }
 
+    @Nullable
     public String getWeatherIcon() {
         return weatherIcon;
     }
 
-    public void setWeatherIcon(String weatherIcon) {
+    public void setWeatherIcon(@Nullable String weatherIcon) {
         if (weatherIcon == null) {
             throw new NullPointerException();
         }

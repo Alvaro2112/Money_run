@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
@@ -18,10 +20,13 @@ public class LobbyPlayerListAdapter extends PlayerListAdapter {
         super(context, playerList);
     }
 
-    public View getView(int position, View view, ViewGroup parent) {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.lobby_player_item_layout, parent, false);
+    @Nullable
+    public View getView(int position, @Nullable View view, ViewGroup parent) {
+        if (view == null) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.lobby_player_item_layout, parent, false);
+        }
         Player player = getItem(position);
-        TextView player_name = (TextView) view.findViewById(R.id.player_name_lobby_item);
+        TextView player_name = view.findViewById(R.id.player_name_lobby_item);
         player_name.setText(String.valueOf(player.getName()));
         return view;
     }

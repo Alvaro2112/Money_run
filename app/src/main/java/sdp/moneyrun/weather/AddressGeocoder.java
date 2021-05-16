@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Geocoder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class AddressGeocoder {
         this.geocoder = geocoder;
     }
 
+    @NonNull
     public static AddressGeocoder fromContext(Context context) {
         return new AddressGeocoder(new Geocoder(context));
     }
@@ -32,6 +34,7 @@ public class AddressGeocoder {
      * @return The address
      * @throws IOException
      */
+    @Nullable
     public android.location.Address getAddress(@NonNull LocationRepresentation location) throws IOException {
         List<android.location.Address> addressList = this.geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
         android.location.Address address;
@@ -45,7 +48,8 @@ public class AddressGeocoder {
         return address;
     }
 
-    public Address convertToAddress(android.location.Address address) {
+    @NonNull
+    public Address convertToAddress(@Nullable android.location.Address address) {
         if (address == null) {
             throw new NullPointerException();
         }

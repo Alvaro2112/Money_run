@@ -13,8 +13,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -223,7 +225,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
             symbolManager.setTextAllowOverlap(true);
-            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.coin_image)), true);
+            style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.coin_image)), false);
             enableLocationComponent(style);
 
         });
@@ -280,7 +282,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param riddle    The riddle that will be asked
      * @param coin      the coin that triggered a riddle
      */
-    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, Riddle riddle, Coin coin) {
+    public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, @NonNull Riddle riddle, Coin coin) {
 
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
@@ -333,7 +335,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
-    public void closePopupListener(PopupWindow popupWindow, int Id) {
+    public void closePopupListener(@NonNull PopupWindow popupWindow, int Id) {
         popupWindow.getContentView().findViewById(Id).setOnClickListener(v -> popupWindow.dismiss());
     }
 
@@ -345,7 +347,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param coin        the coin that triggered the question
      * @param riddle      the riddle that is being displayed
      */
-    public void wrongAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
+    public void wrongAnswerListener(@NonNull PopupWindow popupWindow, int btnId, @Nullable Coin coin, @NonNull Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
 
@@ -355,7 +357,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             tv.setText(riddle.getQuestion());
 
             tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.incorrect_answer_text);
-            tv.setText(String.format("%s'%s'", getString(R.string.incorrect_answer_message), riddle.getAnswer()));
+            tv.setText(String.format("%s: '%s'", getString(R.string.incorrect_answer_message), riddle.getAnswer()));
             tv.setTextColor(Color.RED);
 
 
@@ -376,7 +378,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param coin        the coin that triggered the question
      * @param riddle      the riddle that is being displayed
      */
-    public void correctAnswerListener(PopupWindow popupWindow, int btnId, Coin coin, Riddle riddle) {
+    public void correctAnswerListener(@NonNull PopupWindow popupWindow, int btnId, @Nullable Coin coin, @NonNull Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
 
@@ -398,7 +400,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param coin Adds a coins to the list of remaining coins and adds it to the map
      */
-    public void addCoin(Coin coin, boolean addLocal) {
+    public void addCoin(@Nullable Coin coin, boolean addLocal) {
         if (coin == null) {
             throw new NullPointerException("added coin cannot be null");
         }
@@ -414,7 +416,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param coin removes a coin from the list of remaining coins, adds it to the list of collected coin
      *             and removes it from the map
      */
-    public void removeCoin(Coin coin, Boolean collected) {
+    public void removeCoin(@Nullable Coin coin, Boolean collected) {
 
         if (coin == null) {
             throw new NullPointerException("removed coined is null");
@@ -462,7 +464,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * @param location Used to check if location is near a coin or not
      */
     @Override
-    public void checkObjectives(Location location) {
+    public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -68,7 +69,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     /*
      Checking on submit that each field is not left empty and raise an error and prevent from logging in if that is the case
      */
-    private boolean checkAllFields(String name, String address, String color, String animal) {
+    private boolean checkAllFields(@NonNull String name, @NonNull String address, @NonNull String color, @NonNull String animal) {
         if (name.trim().isEmpty() || address.trim().isEmpty() || color.trim().isEmpty() || animal.trim().isEmpty()) {
             setErrorForEmptyFields(name, address, color, animal);
             return false;
@@ -81,7 +82,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setErrorForEmptyFields(String name, String address, String color, String animal) {
+    private void setErrorForEmptyFields(@NonNull String name, @NonNull String address, @NonNull String color, @NonNull String animal) {
         if (name.trim().isEmpty()) {
             nameText.setError("Name field is empty");
         }

@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import androidx.annotation.NonNull;
+
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class Helpers {
 
-    public static PopupWindow onButtonShowPopupWindowClick(Activity currentActivity, View view, Boolean focusable, int layoutId) {
+    @NonNull
+    public static PopupWindow onButtonShowPopupWindowClick(@NonNull Activity currentActivity, View view, Boolean focusable, int layoutId) {
 
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)

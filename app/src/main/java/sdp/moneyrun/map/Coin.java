@@ -1,5 +1,7 @@
 package sdp.moneyrun.map;
 
+import androidx.annotation.Nullable;
+
 public class Coin {
 
     private double latitude;
@@ -31,7 +33,7 @@ public class Coin {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coin coin = (Coin) o;

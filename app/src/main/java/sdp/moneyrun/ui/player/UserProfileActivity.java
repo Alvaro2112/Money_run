@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
@@ -45,7 +46,7 @@ public class UserProfileActivity extends AppCompatActivity {
         setDisplayedTexts(user);
     }
 
-    public void setDisplayedTexts(User user) {
+    public void setDisplayedTexts(@Nullable User user) {
         if (user == null) {
             playerIsEmptyText.setAllCaps(true);
             playerIsEmptyText.setText(R.string.fillup_player_warning);
