@@ -80,7 +80,7 @@ public class    GameLobbyActivityInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,1,1,1);
     }
 
 
@@ -219,7 +219,7 @@ public class    GameLobbyActivityInstrumentedTest {
                     //TODO CHANGE THIS
                     ////////
                     //////
-                    assertEquals(fromDB.getCoins().size(), 3);
+                    assertEquals(fromDB.getCoins().size(), 1);
                 } else {
                     fail();
                 }
