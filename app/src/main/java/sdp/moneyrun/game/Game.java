@@ -77,13 +77,60 @@ public class Game {
         if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
-        this.id = null;
         this.hasBeenAdded = false;
         ArrayList<Player> players = new ArrayList<>();
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
     }
+
+    public Game(@Nullable String name,
+                @Nullable Player host,
+                int maxPlayerCount,
+                @Nullable List<Riddle> riddles,
+                @Nullable List<Coin> coins,
+                @Nullable Location startLocation,
+                boolean isVisible,
+                int numCoins,
+                double radius,
+                double duration) {
+        if (name == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if (host == null) {
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if (riddles == null) {
+            throw new IllegalArgumentException("riddles should not be null.");
+        }
+        if (coins == null) {
+            throw new IllegalArgumentException("coins should not be null.");
+        }
+        if (startLocation == null) {
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if (maxPlayerCount <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
+        }
+
+        if (numCoins <= 0) {
+            throw new IllegalArgumentException("Number of coins should be bigger than 0.");
+        }
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Radius should be bigger than 0.");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration should be bigger than 0.");
+        }
+
+        this.hasBeenAdded = false;
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(host);
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
+        this.riddles = riddles;
+
+    }
+
 
     /**
      * This constructor is used to create an instance of game from retrieved information
@@ -122,10 +169,56 @@ public class Game {
             throw new IllegalArgumentException("coins should not be null.");
         }
 
-        this.id = null;
         this.hasBeenAdded = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+        this.riddles = new ArrayList<>();
+
+    }
+
+    public Game(@Nullable String name,
+                @Nullable Player host,
+                @Nullable List<Player> players,
+                int maxPlayerCount,
+                @Nullable Location startLocation,
+                boolean isVisible,
+                @Nullable List<Coin> coins,
+                int numCoins,
+                double radius,
+                double duration) {
+        if (name == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if (host == null) {
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if (players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if (startLocation == null) {
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if (maxPlayerCount <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
+        }
+        if (coins == null) {
+            throw new IllegalArgumentException("coins should not be null.");
+        }
+
+        if (numCoins <= 0) {
+            throw new IllegalArgumentException("Number of coins should be bigger than 0.");
+        }
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Radius should be bigger than 0.");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration should be bigger than 0.");
+        }
+
+
+        this.hasBeenAdded = false;
+
+        this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
 
     }
@@ -153,10 +246,12 @@ public class Game {
         this.id = id;
     }
 
+    @Nullable
     public String getName() {
         return gameDbData.getName();
     }
 
+    @Nullable
     public Player getHost() {
         return gameDbData.getHost();
     }
@@ -207,6 +302,7 @@ public class Game {
 
     }
 
+    @Nullable
     public Location getStartLocation() {
         return gameDbData.getStartLocation();
     }

@@ -22,6 +22,9 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean isStarted;
+    private int numCoins;
+    private double radius;
+    private double duration;
     @Nullable
     private String name;
     @Nullable
@@ -34,6 +37,7 @@ public final class GameDbData {
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
+
 
     public GameDbData(@Nullable String name,
                       @Nullable Player host,
@@ -67,6 +71,56 @@ public final class GameDbData {
         this.isDeleted = false;
         this.isStarted = false;
     }
+
+    public GameDbData(@Nullable String name,
+                      @Nullable Player host,
+                      @Nullable List<Player> players,
+                      int maxPlayerCount,
+                      @Nullable Location startLocation,
+                      boolean isVisible,
+                      @NonNull List<Coin> coins,
+                      int numCoins,
+                      double radius,
+                      double duration) {
+        if (name == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if (host == null) {
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if (players == null) {
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if (startLocation == null) {
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if (maxPlayerCount <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if (numCoins <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if (radius <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if (duration <= 0) {
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+
+        this.coins = new ArrayList<>(coins);
+        this.name = name;
+        this.host = host;
+        this.players = players;
+        this.maxPlayerCount = maxPlayerCount;
+        this.startLocation = startLocation;
+        this.isVisible = isVisible;
+        this.isDeleted = false;
+        this.isStarted = false;
+        this.radius = radius;
+        this.numCoins = numCoins;
+        this.duration = duration;
+    }
+
 
     public GameDbData(@Nullable GameDbData other) {
         if (other == null) {

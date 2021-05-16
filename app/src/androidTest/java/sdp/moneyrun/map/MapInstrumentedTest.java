@@ -48,8 +48,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 
 public class MapInstrumentedTest {
 
@@ -1498,5 +1500,114 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void checkIfCircularManagerIsInitiatedProperly() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if (fully) {
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                        }
+                    }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> assertNotNull(a.getCircleManager()));
+        }
+    }
+
+
+    @Test
+    public void checkCircleInitialized() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if (fully) {
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                        }
+                    }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> {
+                assertNotNull(a.getCircleManager());
+                a.initCircle();
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(a.getCircleManager().getAnnotations().size(), 1);
+            });
+        }
+    }
 
 }

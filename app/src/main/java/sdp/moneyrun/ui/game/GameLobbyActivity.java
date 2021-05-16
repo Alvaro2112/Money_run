@@ -24,6 +24,7 @@ import java.util.List;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
@@ -33,6 +34,7 @@ import sdp.moneyrun.user.User;
 
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
+    private final String DB_HOST = "host";
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
     private final String DB_STARTED = "started";
@@ -42,6 +44,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     ValueEventListener playerListListener;
     ValueEventListener isStartedListener;
     private LobbyPlayerListAdapter listAdapter;
+    @Nullable
     private Game game;
     private String gameId;
     private Player user;
@@ -70,7 +73,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         // The adapter lets us add item to a ListView easily.
         ArrayList<Player> playerList = new ArrayList<>();
         listAdapter = new LobbyPlayerListAdapter(this, playerList);
-        ListView playerListView = findViewById(R.id.lobby_player_list_view);
+        ListView playerListView = (ListView) findViewById(R.id.lobby_player_list_view);
         playerListView.setAdapter(listAdapter);
     }
 
@@ -116,7 +119,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, error.getMessage());
+                    Log.e(TAG, error.getMessage().toString());
                 }
             };
             thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
@@ -125,8 +128,8 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void createDeleteOrLeaveButton() {
         if (user.equals(game.getHost())) {
-            Button leaveButton = findViewById(R.id.leave_lobby_button);
-            leaveButton.setText(R.string.delete_game_button);
+            Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
+            leaveButton.setText("Delete");
             leaveButton.setOnClickListener(getDeleteClickListener());
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
@@ -135,7 +138,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
-        TextView name = findViewById(R.id.lobby_title);
+        TextView name = (TextView) findViewById(R.id.lobby_title);
         name.setText(game.getName());
 
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
@@ -152,7 +155,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
 
         //Player List is dynamic with DB
-        TextView playersMissing = findViewById(R.id.players_missing_TextView);
+        TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
         playerListListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -160,7 +163,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 };
                 List<Player> newPlayers = snapshot.getValue(t);
                 listAdapter.clear();
-                addPlayerList(new ArrayList<>(newPlayers));
+                addPlayerList(new ArrayList<Player>(newPlayers));
                 String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
 
                 playersMissing.setText(newPlayersMissing);
@@ -182,6 +185,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     boolean started = snapshot.getValue(boolean.class);
                     if (started) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                        UserDatabaseProxy pdp = new UserDatabaseProxy();
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", false);
@@ -239,20 +243,24 @@ public class GameLobbyActivity extends AppCompatActivity {
         };
     }
 
-
-    //remove all the listeners so that we may delete the activity from the Database
+    /**
+     * remove all the listeners so that we may delete the activity from the Database
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
-
-        if (!user.equals(game.getHost())) {
-            thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
-            thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+        if (playerListListener != null)
+            thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
+        if (user != null && game != null && !user.equals(game.getHost())) {
+            if (thisGame != null && isDeletedListener != null)
+                thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+            if (isStartedListener != null)
+                thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
         } else {
             //otherwise it will also remove it from the DB when it is launched
-            if (game.getIsDeleted()) {
-                thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+            if (game != null && thisGame != null && game.getIsDeleted()) {
+                if (getDeleteListener != null)
+                    thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                 thisGame.removeValue();
             }
         }

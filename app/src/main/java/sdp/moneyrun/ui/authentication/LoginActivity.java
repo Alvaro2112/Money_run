@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void getUserFromDB(String userId, @NonNull Intent menuIntent) {
+    private void getUserFromDB(@NonNull String userId, @NonNull Intent menuIntent) {
         UserDatabaseProxy pdb = new UserDatabaseProxy();
         Task<DataSnapshot> t = pdb.getUserTask(userId);
         t.addOnCompleteListener(task -> {

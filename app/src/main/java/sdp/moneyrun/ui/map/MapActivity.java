@@ -24,9 +24,12 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
+import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
@@ -64,6 +67,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final String COIN_ID = "COIN";
     private final float ICON_SIZE = 1.5f;
     private Chronometer chronometer;
+    @Nullable
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
     private Player player;
@@ -73,6 +77,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Button questionButton;
     private Button leaderboardButton;
     private LocalPlayer localPlayer;
+    @Nullable
     private Game game;
     private String gameId;
     private boolean addedCoins = false;
@@ -81,13 +86,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private MapPlayerListAdapter ldbListAdapter;
     private int coinsToPlace;
 
+    private CircleManager circleManager;
+    private int COINS_RADIUS = 6;
+    private float circleRadius = COINS_RADIUS * 10f;
+    private double shrinkingFactor = 0.9;
+
+    private ArrayList<Coin> seenCoins;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
 
         player = (Player) getIntent().getSerializableExtra("player");
-
         gameId = getIntent().getStringExtra("currentGameId");
         if (gameId == null) {
             gameId = getIntent().getStringExtra("gameId");
@@ -98,7 +109,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (coinsToPlace == -1) {
             coinsToPlace = COINS_TO_PLACE;
         }
-
+        seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
 
         localPlayer = new LocalPlayer();
@@ -125,9 +136,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         if (useDB) {
             addLeaderboardButton();
-            mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (gameId != null) {
-                    initializeGame(gameId);
+            mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                @Override
+                public void onDidFinishRenderingMap(boolean fully) {
+                    if (gameId != null) {
+                        initializeGame(gameId);
+                    }
                 }
             });
         }
@@ -136,14 +150,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param gameId The game ID to fetch the game from the DB
      *               Place the coins if user is host and coins have not been placed yet
+     *               <<<<<<< HEAD
      *               It then finds the game and put the coins in it, the database is then updated
+     *               =======
+     *               It then finds the game and put the coins in it, the databse is then updated
+     *               >>>>>>> origin/master
      *               finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId) {
 
         if (!addedCoins && host) {
-            placeRandomCoins(coinsToPlace, 6);
+            placeRandomCoins(coinsToPlace, COINS_RADIUS);
             addedCoins = true;
+            initCircle();
         }
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -151,8 +170,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                 if (player.equals(game.getHost())) {
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), false);
+                } else {
+                    localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
                 addCoinsListener();
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -190,7 +210,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
 
     private void addLeaderboardButton() {
-        leaderboardButton.setOnClickListener(v -> onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores));
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores);
+            }
+        });
     }
 
 
@@ -210,7 +236,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * @param mapboxMap the map where everything will be done
+     *                  <<<<<<< HEAD
      *                  this overrides the OnMapReadyCallback in the implemented interface
+     *                  =======
+     *                  this override the OnMapReadyCallback in the implemented interface
+     *                  >>>>>>> origin/master
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                  Then we setup the location tracking
      */
@@ -228,9 +258,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.coin_image)), false);
             enableLocationComponent(style);
 
+            circleManager = new CircleManager(mapView, mapboxMap, style);
+
         });
 
         this.mapboxMap = mapboxMap;
+
 
     }
 
@@ -246,6 +279,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return localPlayer;
     }
 
+    @Nullable
     public String getPlayerId() {
         return player.getPlayerId();
     }
@@ -443,10 +477,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-
+        circleRadius *= shrinkingFactor;
+        initCircle();
 
     }
 
+    /**
+     * @param number number of coins we want to add
+     * @param radius will generate randomly placed coins inside a circle of given radius
+     */
     public void placeRandomCoins(int number, int radius) {
         if (number < 0)
             throw new IllegalArgumentException("Number of coins to place is less than 0 ");
@@ -467,11 +506,31 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null) {
+        if (coin != null && !seenCoins.contains(coin)) {
+            seenCoins.add(coin);
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
     }
 
+    /**
+     * Draws a circle of a predefined radius that corresponds to the radius inside which coins get generated
+     * and it shrinks by a shrinking factor that is also predefined
+     */
+    public void initCircle() {
+        circleManager.deleteAll();
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions = circleOptions.withCircleRadius(circleRadius);
+        circleOptions = circleOptions.withCircleOpacity(0.5f);
+        circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
+        //circleOptions.withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
+        System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());
+        circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
+        circleManager.create(circleOptions);
+    }
+
+    public CircleManager getCircleManager() {
+        return circleManager;
+    }
 
 }

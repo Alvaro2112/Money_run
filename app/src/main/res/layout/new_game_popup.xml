@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/new_game_popup"
     android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_height="500dp"
     android:background="@drawable/layout_rounded"
     android:fadingEdge="horizontal|vertical"
     app:layoutDescription="@xml/new_game_popup_scene">
@@ -17,6 +17,7 @@
         android:layout_marginBottom="10dp"
         android:orientation="vertical"
         tools:ignore="UselessParent">
+
 
         <TextView
             android:layout_width="match_parent"
@@ -50,13 +51,45 @@
             android:hint="@string/game_max_players_prompt_text"
             android:inputType="number" />
 
+        <EditText
+            android:id="@+id/newGameNumCoins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/newGameNumCoinsText"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/newGameDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/newGameDurationText"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/newGameRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/newGameRadiusText"
+            android:inputType="numberDecimal" />
+
         <Button
             android:id="@+id/newGameSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/submit_game_text" />
-
 
     </LinearLayout>
 

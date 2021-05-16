@@ -46,6 +46,26 @@ public class GameDbDataTest {
         return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
     }
 
+    GameDbData getTestData2() {
+        String name = "game";
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        players.add(host);
+        players.add(new Player("2", "Potter", 4));
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(1, 2, 3));
+        int maxPlayers = 4;
+        int numCoins = 5;
+        double radius = 2;
+        double duration = 5;
+        mockLocation = Mockito.mock(Location.class);
+
+        return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>(), numCoins, radius, duration);
+    }
+
+
     @Test
     public void constructorFailsOnNullArg() {
         List<Player> players = new ArrayList<>();
@@ -84,11 +104,94 @@ public class GameDbDataTest {
     }
 
     @Test
+    public void constructorFailsOnNullLocation() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData("name", host, new ArrayList<Player>(), 3, null, true, new ArrayList<>());
+        });
+    }
+
+
+    @Test
     public void constructorFailsOnNegativeMaxPlayers() {
         List<Player> players = new ArrayList<>();
         Player host = new Player("1", "James", 4);
         assertThrows(IllegalArgumentException.class, () -> {
             GameDbData g = new GameDbData("name", host, players, -4, new Location(""), true, new ArrayList<>());
+        });
+    }
+
+
+    //
+    @Test
+    public void constructorFailsOnNullLocation2() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            List<Player> players = new ArrayList<>();
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData("namegame", host, new ArrayList<Player>(), 3, null, true, new ArrayList<>(), 1, 2, 2);
+
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNullName2() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            List<Player> players = new ArrayList<>();
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData(null, host, new ArrayList<Player>(), 3, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNullHost2() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            List<Player> players = new ArrayList<>();
+            GameDbData g = new GameDbData("name", null, players, 3, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNullPlayers2() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Player host = new Player("1", "James", 4);
+            GameDbData g = new GameDbData("name", host, null, 3, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNegativeMaxPlayers2() {
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GameDbData g = new GameDbData("name", host, players, -4, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNegativeNumCoins() {
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(), -1, 2, 2);
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNegativeRadius() {
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(), 1, -2, 2);
+        });
+    }
+
+    @Test
+    public void constructorFailsOnNegativeDuration() {
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        assertThrows(IllegalArgumentException.class, () -> {
+            GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(), 1, 2, -2);
         });
     }
 
@@ -104,6 +207,14 @@ public class GameDbDataTest {
 
         new GameDbData(gameData);
     }
+
+    @Test
+    public void constructorWorks2() {
+        List<Player> players = new ArrayList<>();
+        Player host = new Player("1", "James", 4);
+        GameDbData g = new GameDbData("name", host, players, 4, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+    }
+
 
     @Test
     public void getNameReturnsName() {
@@ -135,6 +246,7 @@ public class GameDbDataTest {
 
         assertEquals(getTestData().getStartLocation(), mockLocation);
     }
+
 
     @Test
     public void getIsVisiblegetsIsVisible() {

@@ -69,7 +69,6 @@ public class PermissionsRequester {
 
     /**
      * Requests the permissions to the user.
-     *
      */
     public void requestPermission() {
         if (!hasPermissions()) {

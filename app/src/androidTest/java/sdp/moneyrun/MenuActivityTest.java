@@ -49,6 +49,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -149,8 +150,16 @@ public class MenuActivityTest {
 
             final String game_name = "CreateGameTest";
             final String max_player_count = String.valueOf(3);
+            final String numCoins = String.valueOf(5);
+            final String radius = String.valueOf(2);
+            final String duration = String.valueOf(5);
+
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(radius), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
+
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             Thread.sleep(2000);
             intended(hasComponent(GameLobbyActivity.class.getName()));
@@ -169,13 +178,15 @@ public class MenuActivityTest {
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
-
+            Thread.sleep(1000);
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
 
             Intents.release();
+        } catch (Exception e) {
+            fail();
         }
     }
 
@@ -187,7 +198,7 @@ public class MenuActivityTest {
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
-            Thread.sleep(1000);
+            Thread.sleep(3000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
 
@@ -262,7 +273,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void newGameZeroMaxPlayerCountFieldError() {
+    public void newGameEmptyNumCoinFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
@@ -271,13 +282,202 @@ public class MenuActivityTest {
             Thread.sleep(1000);
 
             final String game_name = "new game";
+            final String max_player_count = String.valueOf(12);
+
+            final String expected = "This field is required";
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameNumCoins)).check(matches(withError(expected)));
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void newGameEmptyRadiusFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String game_name = "new game";
+            final String max_player_count = String.valueOf(12);
+
+            final String expected = "This field is required";
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameRadius)).check(matches(withError(expected)));
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void newGameEmptyDurationFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String game_name = "new game";
+            final String max_player_count = String.valueOf(12);
+
+            final String expected = "This field is required";
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameDuration)).check(matches(withError(expected)));
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+
+    @Test
+    public void newGameZeroMaxPlayerCountFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
             final String max_player_count_zero = String.valueOf(0);
             final String expected_zero_players = "There should be at least one player in a game";
+            final String game_name = "CreateGameTest";
+            final String numCoins = String.valueOf(5);
+            final String radius = String.valueOf(2);
+            final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count_zero), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(radius), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
+
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.maxPlayerCountField)).check(matches(withError(expected_zero_players)));
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+
+    @Test
+    public void newGameZeroNumCoinsFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String max_player_count = String.valueOf(2);
+            final String expected_zero_players = "There should be at least one coin in a game";
+            final String game_name = "CreateGameTest";
+            final String numCoins = String.valueOf(0);
+            final String radius = String.valueOf(2);
+            final String duration = String.valueOf(5);
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(radius), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
+
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameNumCoins)).check(matches(withError(expected_zero_players)));
+
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void newGameZeroRadiusFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String max_player_count = String.valueOf(2);
+            final String expected_zero_players = "The radius of the game should be bigger than 0 km";
+            final String game_name = "CreateGameTest";
+            final String numCoins = String.valueOf(5);
+            final String radius = String.valueOf(0);
+            final String duration = String.valueOf(5);
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(radius), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
+
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameRadius)).check(matches(withError(expected_zero_players)));
+
+
+            Intents.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void newGameZeroDurationFieldError() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
+
+            Thread.sleep(1000);
+
+            final String max_player_count = String.valueOf(2);
+            final String expected_zero_players = "The game should last for more than 0 minute";
+            final String game_name = "CreateGameTest";
+            final String numCoins = String.valueOf(5);
+            final String radius = String.valueOf(2);
+            final String duration = String.valueOf(0);
+
+            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameRadius)).perform(typeText(radius), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
+
+            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            Espresso.onView(withId(R.id.newGameDuration)).check(matches(withError(expected_zero_players)));
+
 
             Intents.release();
         } catch (InterruptedException e) {

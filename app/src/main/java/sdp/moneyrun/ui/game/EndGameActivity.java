@@ -118,7 +118,7 @@ public class EndGameActivity extends AppCompatActivity {
         return player;
     }
 
-    public void updateUser(String playerId, int gameScore) {
+    public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

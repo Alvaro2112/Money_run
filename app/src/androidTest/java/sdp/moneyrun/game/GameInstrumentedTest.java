@@ -488,7 +488,6 @@ public class GameInstrumentedTest {
     }
 
 
-
     @Test
     public void getGameDataReturnsGameData() {
         String name = "name";
