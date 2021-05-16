@@ -26,6 +26,9 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean isStarted;
+    private int numCoins;
+    private double radius;
+    private double duration;
 
     public GameDbData(String name,
                       Player host,
@@ -59,6 +62,56 @@ public final class GameDbData {
         this.isDeleted = false;
         this.isStarted = false;
     }
+
+    public GameDbData(String name,
+                      Player host,
+                      List<Player> players,
+                      int maxPlayerCount,
+                      Location startLocation,
+                      boolean isVisible,
+                      List<Coin> coins,
+                      int numCoins,
+                      double radius,
+                      double duration){
+        if(name == null){
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        if(host == null){
+            throw new IllegalArgumentException("host should not be null.");
+        }
+        if(players == null){
+            throw new IllegalArgumentException("players should not be null.");
+        }
+        if(startLocation == null){
+            throw new IllegalArgumentException("startLocation should not be null.");
+        }
+        if(maxPlayerCount <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if(numCoins <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if(radius <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+        if(duration <= 0){
+            throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
+        }
+
+        this.coins = new ArrayList<>(coins);
+        this.name = name;
+        this.host = host;
+        this.players = players;
+        this.maxPlayerCount = maxPlayerCount;
+        this.startLocation = startLocation;
+        this.isVisible = isVisible;
+        this.isDeleted = false;
+        this.isStarted = false;
+        this.radius = radius;
+        this.numCoins = numCoins;
+        this.duration = duration;
+    }
+
 
     public GameDbData(GameDbData other){
         if(other == null){
@@ -101,6 +154,15 @@ public final class GameDbData {
         return startLocation;
     }
 
+    public int getNumCoins(){return numCoins;}
+    public void setNumCoins(int numCoins){this.numCoins = numCoins;}
+
+    public  double getRadius(){return  radius;}
+    public void setRadius(double radius){this.radius = radius;}
+
+    public double getDuration(){return duration;}
+    public void setDuration(double duration){this.duration = duration;}
+
     public List<Coin> getCoins() {
         return new ArrayList<>(coins);
     }
@@ -111,6 +173,7 @@ public final class GameDbData {
         coins.set(index, coin);
         return true;
     }
+
 
     public void setIsDeleted(boolean b){
         this.isDeleted = b;

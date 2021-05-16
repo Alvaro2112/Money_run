@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/new_game_popup"
     android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_height="500dp"
     android:background="@drawable/layout_rounded"
     android:fadingEdge="horizontal|vertical"
     app:layoutDescription="@xml/new_game_popup_scene">
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="490dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="10dp">
 
 
@@ -26,7 +29,7 @@
             <TextView
                 android:id="@+id/newGameText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:text="@string/new_game"
@@ -37,24 +40,55 @@
             <EditText
                 android:id="@+id/nameGameField"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
                 android:ems="10"
-                android:hint="Enter game name"
-                android:inputType="text" />
+                android:hint="@string/gameNameFieldText"
+                android:inputType="text"
+                android:autofillHints=""
+               />
 
             <EditText
                 android:id="@+id/maxPlayerCountField"
                 android:layout_width="match_parent"
+                android:layout_height="61dp"
+                android:ems="10"
+                android:hint="@string/maxPlayerCountFieldText"
+                android:inputType="number"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/newGameNumCoins"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Enter max player count"
-                android:inputType="number" />
+                android:hint="@string/newGameNumCoinsText"
+                android:inputType="number"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/newGameDuration"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:ems="10"
+                android:hint="@string/newGameDurationText"
+                android:inputType="numberDecimal"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/newGameRadius"
+                android:layout_width="match_parent"
+                android:layout_height="87dp"
+                android:ems="10"
+                android:hint="@string/newGameRadiusText"
+                android:inputType="numberDecimal"
+                android:autofillHints=""/>
+
 
             <Button
                 android:id="@+id/newGameSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit" />
+                android:text="@string/newGameSubmitButtonText" />
 
 
         </LinearLayout>
