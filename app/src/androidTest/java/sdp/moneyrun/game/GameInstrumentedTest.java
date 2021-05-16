@@ -71,7 +71,7 @@ public class GameInstrumentedTest {
         location.setLongitude(20);
 
 
-        return new Game(name, host, maxPlayerCount, riddles,coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles,coins, location, true,1,1,1);
     }
 
     public GameDbData getGameData(){
@@ -691,7 +691,7 @@ public class GameInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(10);
         location.setLongitude(20);
-        Game g = new Game(name, host, maxPlayerCount, riddles,coins, location, true);
+        Game g = new Game(name, host, maxPlayerCount, riddles,coins, location, true,1,1,1);
         gdp.putGame(g);
         try {
             Thread.sleep(2000);

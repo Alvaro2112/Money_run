@@ -15,14 +15,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -38,7 +35,6 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -55,8 +51,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.mapbox.turf.TurfJoins;
-
 public class MapInstrumentedTest {
 
     @BeforeClass
@@ -68,33 +62,63 @@ public class MapInstrumentedTest {
     }
 
     private Intent getStartIntent() {
-        Player currentUser = new Player("999", "CURRENT_USER", 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        Player currentUser = new Player("3212", "CURRENT_USER", 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         toStart.putExtra("currentUser", currentUser);
         return toStart;
     }
 
     public Game getGame() {
         String name = "Game";
-        Player host = new Player("1234567891", "Bob", 0);
+        Player host = new Player("98934", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
-        coins.add(new Coin(0., 0., 1));
         Location location = new Location("LocationManager#GPS_PROVIDER");
-        location.setLatitude(37.4219473);
-        location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+        location.setLatitude(37.42);
+        location.setLongitude(-122.084);
+
+        int num_coins = 2;
+        double duration = 4;
+        double radius = 20;
+
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,num_coins,radius,duration);
     }
 
+    public Intent createIntentAndPutInDB(){
+        Player host = new Player("1234567891", "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        return intent;
+    }
 
     double minZoomForBuilding = 15.;
     private final CountDownLatch moved = null;
 
     @Test
     public void moveCameraToWorks() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
             float lat = 8f;
             float lon = 8f;
@@ -143,7 +167,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void testSymbolManager() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
             final AtomicBoolean finished = new AtomicBoolean(false);
 
@@ -177,7 +202,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void locationTracking() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
@@ -209,7 +236,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void chronometerTest() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
             final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> {
@@ -241,7 +270,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void onExplanationNeededWorks() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             ArrayList<String> reasons = new ArrayList<>();
             reasons.add("e");
 
@@ -257,7 +288,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void onPermissionResultWorks() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
             boolean granted = true;
 
@@ -288,7 +321,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void addCoinAddsCoinToMap() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -331,9 +366,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void endGameStartsActivity() {
-        Player host = new Player("1234567891", "Bob", 0);
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        intent.putExtra("player", host);
+        Intent intent = createIntentAndPutInDB();
+
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
 
@@ -371,8 +405,9 @@ public class MapInstrumentedTest {
     @Test
     public void questionButtonWorks() {
 
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -410,8 +445,9 @@ public class MapInstrumentedTest {
         String question = "What is the color of the sky";
         String correctAnswer = "blue";
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -460,8 +496,9 @@ public class MapInstrumentedTest {
         String question = "What is the color of the sky";
         String correctAnswer = "blue";
         Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -501,13 +538,13 @@ public class MapInstrumentedTest {
 
     @Test(expected = NoMatchingViewException.class)
     public void continueRunButtonWorks() {
+        String question = "What is the color of the sky";
+        String correctAnswer = "blue";
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
-
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -550,13 +587,16 @@ public class MapInstrumentedTest {
 
     @Test(expected = NoMatchingViewException.class)
     public void collectCoinButtonWorks() {
+        String question = "What is the color of the sky";
+        String correctAnswer = "blue";
+        Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
+        Intent intent = createIntentAndPutInDB();
+
         ExpectedException exception = ExpectedException.none();
 
         exception.expect(NoMatchingViewException.class);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
-            String question = "What is the color of the sky";
-            String correctAnswer = "blue";
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -578,7 +618,6 @@ public class MapInstrumentedTest {
                 }
             }
 
-            Riddle riddle = new Riddle(question, correctAnswer, "blue", "green", "yellow", "brown");
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
@@ -609,7 +648,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void showScoreWorks() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -654,8 +695,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void collectCoinButtonCollectsCoin() {
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
             String question = "What is the color of the sky";
             String correctAnswer = "blue";
@@ -702,8 +744,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void closeButtonWorks() {
+        Intent intent = createIntentAndPutInDB();
 
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             final AtomicBoolean finished = new AtomicBoolean(false);
 
@@ -740,12 +783,13 @@ public class MapInstrumentedTest {
 
     @Test
     public void LakeLemanIsDetectedAsInappropriateTest() {
+        Intent intent = createIntentAndPutInDB();
         double lat = 46.49396808615545;
         double lon = 6.638823143919147;
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -807,7 +851,8 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -871,7 +916,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -927,7 +974,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -985,7 +1034,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -1042,7 +1093,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -1099,7 +1152,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
 
@@ -1156,7 +1211,9 @@ public class MapInstrumentedTest {
         Location location = new Location("");
         location.setLatitude(lat);
         location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -1207,12 +1264,9 @@ public class MapInstrumentedTest {
 
     @Test
     public void placingCoins() {
+        Intent intent = createIntentAndPutInDB();
 
-        Player host = new Player("1234567891", "Bob", 0);
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        intent.putExtra("player", host);
-        intent.putExtra("host", false);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -1258,7 +1312,7 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
-                a.placeRandomCoins(numberOfCoins, 100);
+                a.placeRandomCoins(numberOfCoins, 100,2);
                 assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
             });
         }
@@ -1271,7 +1325,6 @@ public class MapInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);
-        intent.putExtra("useDB", true);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -1295,7 +1348,9 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
+                        if(fully){
                         finished.set(true);
+                        }
                     }
                 });
             });
@@ -1322,7 +1377,12 @@ public class MapInstrumentedTest {
             dataTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
-                    assertEquals(fromDB.getCoins().size(), 2);
+                    scenario.onActivity(activity -> {
+                        assertEquals(2, activity.coinsToPlace);
+                        assertEquals(2,activity.getSymbolManager().getAnnotations().size());
+                        assertEquals(2,activity.getLocalPlayer().getLocallyAvailableCoins().size());
+                    });
+                    assertEquals( 2,fromDB.getCoins().size());
                     scenario.onActivity(activity -> {
                         activity.removeCoin(fromDB.getCoins().get(0), true);
                     });
@@ -1356,7 +1416,6 @@ public class MapInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);
-        intent.putExtra("useDB", true);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -1437,8 +1496,6 @@ public class MapInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);
-        intent.putExtra("useDB", true);
-        intent.putExtra("coinsToPlace", 0);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -1507,7 +1564,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void checkIfCircularManagerIsInitiatedProperly() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {
@@ -1558,7 +1616,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void checkCircleInitialized() {
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> {

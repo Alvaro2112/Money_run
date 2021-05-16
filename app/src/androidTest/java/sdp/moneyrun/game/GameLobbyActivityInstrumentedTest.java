@@ -176,7 +176,9 @@ public class    GameLobbyActivityInstrumentedTest {
         }
     }
 
-
+    /*
+    CHANGE THIS
+     */
     @Test
     public void InitializeGameAddsCoinsToDB() {
         Player host = new Player("3", "Bob", 0);
@@ -214,7 +216,10 @@ public class    GameLobbyActivityInstrumentedTest {
             dataTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
-                    assertEquals(fromDB.getCoins().size(), MapActivity.COINS_TO_PLACE);
+                    //TODO CHANGE THIS
+                    ////////
+                    //////
+                    assertEquals(fromDB.getCoins().size(), 3);
                 } else {
                     fail();
                 }

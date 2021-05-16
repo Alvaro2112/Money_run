@@ -23,13 +23,30 @@ public class CoinGenerationHelperTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void randomLocThrowsCorrectErrorForNegativeRadius() {
+    public void randomLocThrowsCorrectErrorForNegativeMaxRadius() {
         long seed = 654;
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        CoinGenerationHelper.getRandomLocation(loc, -10);
+        CoinGenerationHelper.getRandomLocation(loc, -1,1);
 
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void randomLocThrowsCorrectErrorForNegativeMinRadius() {
+        long seed = 654;
+        Location loc = new Location("");
+        loc.setLongitude(4);
+        loc.setLatitude(8);
+        CoinGenerationHelper.getRandomLocation(loc, 1,-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void randomLocThrowsCorrectErrorForMinBiggerThanMaxRadius() {
+        long seed = 654;
+        Location loc = new Location("");
+        loc.setLongitude(4);
+        loc.setLatitude(8);
+        CoinGenerationHelper.getRandomLocation(loc, 1,2);
     }
 
     @Test
@@ -37,11 +54,11 @@ public class CoinGenerationHelperTest {
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        int radius = 1000;
+        double radius = 1000;
        for(int i = 0; i < 100000; i++){
-           Location random = CoinGenerationHelper.getRandomLocation(loc, radius);
+           Location random = CoinGenerationHelper.getRandomLocation(loc, radius,1);
            double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
-           assert(distance < radius && distance > MapActivity.THRESHOLD_DISTANCE);
+           assert(distance < radius && distance > 1);
        }
 
 
@@ -49,7 +66,7 @@ public class CoinGenerationHelperTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void randomLocThrowsCorrectErrorForNullLocation() {
-        CoinGenerationHelper.getRandomLocation(null, 10);
+        CoinGenerationHelper.getRandomLocation(null, 10,1);
 
     }
 

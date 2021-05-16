@@ -21,7 +21,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -101,7 +100,7 @@ public class MenuActivityTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,2,2,2);
     }
 
     @Test
@@ -618,31 +617,6 @@ public class MenuActivityTest {
         }
     }
 
-    @Test
-    public void newGameWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-
-            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
-
-            Thread.sleep(2000); 
-
-            final String game_name = "test game";
-            final String max_player_count = String.valueOf(1);
-
-            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-
-            assertEquals(1, 1);
-
-            Intents.release();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Intents.release();
-        }
-    }
 
     @Test
     public void loadWeatherWorks() {
