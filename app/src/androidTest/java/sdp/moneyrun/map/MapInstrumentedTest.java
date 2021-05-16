@@ -15,11 +15,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -48,18 +51,22 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import com.mapbox.turf.TurfJoins;
 
 public class MapInstrumentedTest {
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
     }
+
     private Intent getStartIntent() {
         Player currentUser = new Player("999", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
@@ -96,13 +103,13 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
+                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
                             @Override
                             public void onCameraDidChange(boolean animated) {
                                 a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
                                     @Override
                                     public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
+                                        if (fully) {
                                             LatLng latLng = a.getMapboxMap().getCameraPosition().target;
                                             assertEquals(latLng.getLatitude(), 8.0, 0.1);
                                             assertEquals(latLng.getLongitude(), 8.0, 0.1);
@@ -118,20 +125,19 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            assertEquals(-1,2);
+            assertEquals(-1, 2);
         }
     }
 
@@ -152,14 +158,13 @@ public class MapInstrumentedTest {
 
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -184,14 +189,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -218,14 +222,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -267,14 +270,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -295,21 +297,20 @@ public class MapInstrumentedTest {
                     public void onDidFinishRenderingMap(boolean fully) {
                         Location curloc = a.getCurrentLocation();
                         Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
-                        a.addCoin(coin,true);
+                        a.addCoin(coin, true);
                         Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
-                        a.addCoin(coin2,true);
+                        a.addCoin(coin2, true);
                         finished.set(true);
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -347,14 +348,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -383,14 +383,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -419,7 +418,7 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
+                        if (fully) {
                             a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
 
                             finished.set(true);
@@ -427,14 +426,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -475,14 +473,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -522,14 +519,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -554,7 +550,7 @@ public class MapInstrumentedTest {
 
     @Test(expected = NoMatchingViewException.class)
     public void collectCoinButtonWorks() {
-         ExpectedException exception = ExpectedException.none();
+        ExpectedException exception = ExpectedException.none();
 
         exception.expect(NoMatchingViewException.class);
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
@@ -571,14 +567,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -625,14 +620,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -642,7 +636,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 Location curloc = a.getCurrentLocation();
                 Coin coin = new Coin(curloc.getLatitude(), curloc.getLongitude(), 1);
-                a.addCoin(coin,true);
+                a.addCoin(coin, true);
                 a.removeCoin(coin, true);
 
             });
@@ -678,14 +672,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -722,14 +715,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -761,42 +753,41 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
+                        if (fully) {
 
-                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
 
-                            }
-                        });
+                                }
+                            });
 
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
 
-                    }}
+                        }
+                    }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(1000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -824,44 +815,43 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
+                        if (fully) {
 
-                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+
                                         }
 
-                                    }
-
-                                });
+                                    });
 
 
-                            }
-                        });
+                                }
+                            });
 
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
 
-                    }}
+                        }
+                    }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -889,38 +879,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
                     break;
                 }
@@ -947,38 +935,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1007,38 +993,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                        finished.set(true);
-                                    }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1066,38 +1050,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1125,38 +1107,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1183,37 +1163,36 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                        if (fully) {
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                    }}
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
+                        }
+                    }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1240,39 +1219,38 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
+                        if (fully) {
 
-                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener(){
-                            @Override
-                            public void onCameraDidChange(boolean animated) {
-                                a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                    @Override
-                                    public void onDidFinishRenderingFrame(boolean fully) {
-                                        if(fully){
-                                            finished.set(true);
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                        a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
 
-                    }}
+                        }
+                    }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     try {
                         Thread.sleep(1000);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
                     }
 
                     break;
@@ -1290,89 +1268,87 @@ public class MapInstrumentedTest {
     @Test
     public void CollectingACoinRemovesCoinFromDBTest() {
         Player host = new Player("1234567891", "Bob", 0);
-            Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-            intent.putExtra("player", host);
-            intent.putExtra("host", true);
-            intent.putExtra("useDB", true);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
 
-            GameDatabaseProxy gdp = new GameDatabaseProxy();
-            Game game = getGame();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
 
-            List<Player> players = game.getPlayers();
-            players.add(host);
+        List<Player> players = game.getPlayers();
+        players.add(host);
 
-            String id = gdp.putGame(game);
+        String id = gdp.putGame(game);
 
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        finished.set(true);
+                    }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    break;
+                }
+            }
             try {
                 Thread.sleep(4000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                assertEquals(-1, 2);
             }
 
-            intent.putExtra("currentGameId", id);
-
-            try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-                final AtomicBoolean finished = new AtomicBoolean(false);
-                scenario.onActivity(a -> {
-                    a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-                        @Override
-                        public void onDidFinishRenderingMap(boolean fully) {
-                            finished.set(true);
-                        }
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            final GameDatabaseProxy db = new GameDatabaseProxy();
+            //FIRST CHECK THAT IT IS INITIALIZED WELL
+            Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
+            dataTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Game fromDB = db.getGameFromTaskSnapshot(task);
+                    assertEquals(fromDB.getCoins().size(), 2);
+                    scenario.onActivity(activity -> {
+                        activity.removeCoin(fromDB.getCoins().get(0), true);
                     });
-                });
-                while(true){
-                    try {
-                        Thread.sleep(100);
-                    }
-                    catch (Exception e){
-                        assertEquals(-1,2);
-                    }
-                    if (finished.get()){
-                        break;
-                    }
-                }
-                try {
-                    Thread.sleep(4000);
-                }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-
-                final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                final GameDatabaseProxy db = new GameDatabaseProxy();
-                //FIRST CHECK THAT IT IS INITIALIZED WELL
-                Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
-                dataTask.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Game fromDB = db.getGameFromTaskSnapshot(task);
-                        assertEquals(fromDB.getCoins().size(), 2);
-                        scenario.onActivity(activity -> {
-                            activity.removeCoin(fromDB.getCoins().get(0),true);
-                        });
-                    } else {
-                        fail();
-                    }
-                });
-                try{
-                    Thread.sleep(4000);
-                }catch (Exception e){
-                    e.printStackTrace();
+                } else {
                     fail();
                 }
-
-                dataTask = ref.child("games").child(id).get();
-                dataTask.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Game fromDB = db.getGameFromTaskSnapshot(task);
-                        assertEquals(fromDB.getCoins().size(), 1);
-                    } else {
-                        fail();
-                    }
-                });
-
+            });
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail();
             }
+
+            dataTask = ref.child("games").child(id).get();
+            dataTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Game fromDB = db.getGameFromTaskSnapshot(task);
+                    assertEquals(fromDB.getCoins().size(), 1);
+                } else {
+                    fail();
+                }
+            });
+
         }
+    }
 
     @Test
     public void RemovingACoinFromDBRemovesCoinFromTheMapTest() {
@@ -1407,22 +1383,20 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
             try {
                 Thread.sleep(4000);
-            }
-            catch (Exception e){
-                assertEquals(-1,2);
+            } catch (Exception e) {
+                assertEquals(-1, 2);
             }
 
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -1433,25 +1407,25 @@ public class MapInstrumentedTest {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
                     assertEquals(fromDB.getCoins().size(), 2);
-                    ArrayList<Coin> newCoins =   new ArrayList<Coin>();
+                    ArrayList<Coin> newCoins = new ArrayList<Coin>();
                     newCoins.add(fromDB.getCoins().get(0));
-                    fromDB.setCoins(newCoins,true);
+                    fromDB.setCoins(newCoins, true);
                     db.updateGameInDatabase(fromDB, null);
                 } else {
                     fail();
                 }
             });
 
-            try{
+            try {
                 Thread.sleep(10000);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 fail();
             }
             System.out.println("OKOKOO");
             scenario.onActivity(activity -> {
-               assertEquals(1 ,activity.getLocalPlayer().getLocallyAvailableCoins().size());
-                assertEquals(1 ,activity.symbolManager.getAnnotations().size());
+                assertEquals(1, activity.getLocalPlayer().getLocallyAvailableCoins().size());
+                assertEquals(1, activity.symbolManager.getAnnotations().size());
 
             });
         }
@@ -1471,7 +1445,7 @@ public class MapInstrumentedTest {
         List<Player> players = game.getPlayers();
         Player justJoined = new Player("3", "Gaston", 2);
         players.add(justJoined);
-        game.setPlayers(players,false);
+        game.setPlayers(players, false);
         String id = gdp.putGame(game);
 
         try {
@@ -1493,14 +1467,13 @@ public class MapInstrumentedTest {
                     }
                 });
             });
-            while(true){
+            while (true) {
                 try {
                     Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                catch (Exception e){
-                    assertEquals(-1,2);
-                }
-                if (finished.get()){
+                if (finished.get()) {
                     break;
                 }
             }
@@ -1525,13 +1498,121 @@ public class MapInstrumentedTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                assertEquals(2,listAdapter.getCount());
+                assertEquals(2, listAdapter.getCount());
                 assert listAdapter.getItem(0).getScore() > listAdapter.getItem(1).getScore();
             });
 
         }
     }
 
+    @Test
+    public void checkIfCircularManagerIsInitiatedProperly() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if (fully) {
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                        }
+                    }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> assertNotNull(a.getCircleManager()));
+        }
+    }
+
+
+    @Test
+    public void checkCircleInitialized() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if (fully) {
+
+                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
+                                @Override
+                                public void onCameraDidChange(boolean animated) {
+                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
+                                        @Override
+                                        public void onDidFinishRenderingFrame(boolean fully) {
+                                            if (fully) {
+                                                finished.set(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                        }
+                    }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> {
+                assertNotNull(a.getCircleManager());
+                a.initCircle();
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(a.getCircleManager().getAnnotations().size(), 1);
+            });
+        }
+    }
 
 }

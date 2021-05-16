@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -310,25 +312,27 @@ public class MenuActivityTest {
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
-
+            Thread.sleep(1000);
             Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
 
             Intents.release();
+        }catch (Exception e){
+            fail();
         }
     }
 
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
+            Intents.init(); 
 
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
                     .perform(DrawerActions.open());
-            Thread.sleep(1000);
+            Thread.sleep(3000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
 
@@ -434,7 +438,7 @@ public class MenuActivityTest {
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            Thread.sleep(2000);
+            Thread.sleep(2000); 
 
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);

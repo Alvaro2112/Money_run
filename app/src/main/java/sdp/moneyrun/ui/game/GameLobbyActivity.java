@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
@@ -27,43 +25,10 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import sdp.moneyrun.R;
-import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.game.Game;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.map.MapActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.user.User;
-
-
 
 
 
@@ -276,20 +241,24 @@ public class GameLobbyActivity extends AppCompatActivity {
         };
     }
 
-
-    //remove all the listeners so that we may delete the activity from the Database
+    /**
+     * remove all the listeners so that we may delete the activity from the Database
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
-
-        if (!user.equals(game.getHost())) {
-            thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
-            thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+        if(playerListListener != null)
+            thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
+        if (user != null && game != null && !user.equals(game.getHost())) {
+            if(thisGame != null && isDeletedListener != null)
+                thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+            if(isStartedListener != null)
+                thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
         }else {
             //otherwise it will also remove it from the DB when it is launched
-            if(game.getIsDeleted()) {
-                thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+            if(game != null && thisGame != null && game.getIsDeleted()) {
+                if(getDeleteListener != null)
+                    thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                 thisGame.removeValue();
             }
         }

@@ -52,7 +52,7 @@ public class JoinGameImplementation extends MenuImplementation{
                                   User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
                                   FusedLocationProviderClient fusedLocationClient,
-                                  boolean focusable,
+                                  boolean focusable, 
                                   int layoutId){
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         if(user == null){
