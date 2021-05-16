@@ -1639,7 +1639,6 @@ public class MapInstrumentedTest {
                                     });
                                 }
                             });
-                            a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
 
                         }
                     }
