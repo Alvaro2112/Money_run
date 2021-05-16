@@ -122,6 +122,7 @@
     <string name="newGameNumCoinsText">Enter the number of coins</string>
     <string name="newGameDurationText">Enter the duration of the game in minutes</string>
     <string name="newGameRadiusText">Enter the radius of the game in km</string>
+    <string name="delete_button_text">Delete</string>
 
 
 </resources>

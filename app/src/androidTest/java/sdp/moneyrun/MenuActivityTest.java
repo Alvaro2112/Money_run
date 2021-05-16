@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -54,11 +55,13 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
+    @NonNull
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-    private long ASYNC_CALL_TIMEOUT = 10L;
+    private final long ASYNC_CALL_TIMEOUT = 10L;
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    @NonNull
     private static Matcher<View> withError(final String expected) {
         return new TypeSafeMatcher<View>() {
 
@@ -80,6 +83,7 @@ public class MenuActivityTest {
 
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
@@ -88,6 +92,7 @@ public class MenuActivityTest {
         return toStart;
     }
 
+    @NonNull
     public Game getGame() {
         String name = "JoinGameImplementationTest";
         Player host = new Player("3", "Bob", 0);
@@ -532,7 +537,7 @@ public class MenuActivityTest {
             });
 
 
-        } catch (IllegalArgumentException | InterruptedException e) {
+        } catch (@NonNull IllegalArgumentException | InterruptedException e) {
             assertEquals(1, 2);
             e.printStackTrace();
         }

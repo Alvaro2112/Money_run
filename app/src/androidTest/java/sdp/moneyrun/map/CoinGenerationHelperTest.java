@@ -61,7 +61,7 @@ public class CoinGenerationHelperTest {
         Location coinLoc = new Location("");
         centerLoc.setLatitude(1);
         centerLoc.setLongitude(1);
-        double distance = (double) MapActivity.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
+        double distance = MapActivity.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
         int value = CoinGenerationHelper.coinValue(coinLoc, centerLoc);
         assertEquals(Math.ceil((distance) / CoinGenerationHelper.VALUE_RADIUS), value, 0);
     }

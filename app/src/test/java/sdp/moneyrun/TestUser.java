@@ -1,5 +1,7 @@
 package sdp.moneyrun;
 
+import androidx.annotation.NonNull;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import sdp.moneyrun.user.User;
 import static org.junit.Assert.assertEquals;
 
 public class TestUser {
+    @NonNull
+    final
     User user = new User("1", "Bob", "New York", 0, 0, 0);
 
     @Test
@@ -63,8 +67,6 @@ public class TestUser {
     @Test
     public void equalsReturnFalseForNullObject() {
         String userId = "123";
-        int nbrOfDiedGames = 0;
-        int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
         String name = "BaaaRRfF";
         User user1 = new User(userId, name, address, 0, 0, 0);

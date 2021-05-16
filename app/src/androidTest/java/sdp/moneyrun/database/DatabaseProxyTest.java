@@ -63,7 +63,7 @@ public class DatabaseProxyTest {
         }
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, updated.getCount());
+            assertEquals(0L, updated.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -76,7 +76,6 @@ public class DatabaseProxyTest {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                return;
             }
 
             @Override
@@ -140,12 +139,6 @@ public class DatabaseProxyTest {
             assert (false);
         }
 
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            assert(false);
-//        }
         assertThat(player.getName(), is(newName));
         db.removePlayerListener(player, listener);
     }
@@ -156,7 +149,6 @@ public class DatabaseProxyTest {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                return;
             }
 
             @Override

@@ -2,6 +2,7 @@ package sdp.moneyrun.map;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -24,9 +25,11 @@ import sdp.moneyrun.user.User;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class OfflineMapDownloaderTest {
 
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
@@ -43,9 +46,7 @@ public class OfflineMapDownloaderTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.onActivity(a -> {
-                assertEquals(a.getHasStartedDownload(), true);
-            });
+            scenario.onActivity(a -> assertTrue(a.getHasStartedDownload()));
         } catch (Exception e) {
             e.printStackTrace();
             assertEquals(1, 2);
@@ -87,7 +88,7 @@ public class OfflineMapDownloaderTest {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
                 offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
                                                       @Override
-                                                      public void onList(OfflineRegion[] offlineRegions) {
+                                                      public void onList(@NonNull OfflineRegion[] offlineRegions) {
                                                           assertEquals(offlineRegions.length, 1);
                                                           String name;
                                                           try {
@@ -105,7 +106,7 @@ public class OfflineMapDownloaderTest {
                                                       }
                                                   }
                 );
-                assertEquals(activity.getIsEndNotified(), true);
+                assertTrue(activity.getIsEndNotified());
 
             });
         } catch (Exception e) {

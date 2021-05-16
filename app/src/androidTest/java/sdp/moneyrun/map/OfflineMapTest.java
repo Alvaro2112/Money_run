@@ -2,6 +2,7 @@ package sdp.moneyrun.map;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -20,8 +21,11 @@ import sdp.moneyrun.user.User;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class OfflineMapTest {
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
@@ -69,13 +73,13 @@ public class OfflineMapTest {
                 OfflineManager offlineManager = OfflineManager.getInstance(activity.getApplicationContext());
                 offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
                                                       @Override
-                                                      public void onList(OfflineRegion[] offlineRegions) {
+                                                      public void onList(@NonNull OfflineRegion[] offlineRegions) {
                                                           if (offlineRegions.length == 1) {
-                                                              assertEquals(offlineRegions.length == 1, true);
-                                                              assertEquals(activity.getHasFoundMap(), true);
+                                                              assertEquals(1, offlineRegions.length);
+                                                              assertTrue(activity.getHasFoundMap());
 
                                                           } else {
-                                                              assertEquals(activity.getHasFoundMap(), false);
+                                                              assertFalse(activity.getHasFoundMap());
                                                           }
                                                       }
 

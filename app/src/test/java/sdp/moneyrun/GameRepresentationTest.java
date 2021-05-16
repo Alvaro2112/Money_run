@@ -78,9 +78,7 @@ public class GameRepresentationTest {
     public void setPlayerCountFailsOnLessThanOne() {
         LocationRepresentation lr = new LocationRepresentation(0, 1);
         GameRepresentation gr = new GameRepresentation("0", "game", 0, 16, lr);
-        assertThrows(IllegalArgumentException.class, () -> {
-            gr.setPlayerCount(-2);
-        });
+        assertThrows(IllegalArgumentException.class, () -> gr.setPlayerCount(-2));
     }
 
     @Test

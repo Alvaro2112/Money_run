@@ -3,6 +3,7 @@ package sdp.moneyrun.game;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
@@ -47,6 +48,7 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class GameLobbyActivityInstrumentedTest {
+    @NonNull
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -60,6 +62,7 @@ public class GameLobbyActivityInstrumentedTest {
     }
 
 
+    @NonNull
     private Intent getStartIntent() {
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         Player currentUser = new Player("999", "CURRENT_USER", 0);
@@ -69,6 +72,7 @@ public class GameLobbyActivityInstrumentedTest {
         return toStart;
     }
 
+    @NonNull
     public Game getGame() {
         String name = "LobbyActivityInstrumentedTest";
         Player host = new Player("3", "Bob", 0);
@@ -268,17 +272,11 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             //  onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName())));
-            scenario.onActivity(activity -> {
-                assertEquals(activity.getListAdapter().getCount(), 1);
-
-            });
+            scenario.onActivity(activity -> assertEquals(activity.getListAdapter().getCount(), 1));
 
             game.setPlayers(players, false);
             Thread.sleep(4000);
-            scenario.onActivity(activity -> {
-                assertEquals(activity.getListAdapter().getCount(), 2);
-
-            });
+            scenario.onActivity(activity -> assertEquals(activity.getListAdapter().getCount(), 2));
             Thread.sleep(4000);
 
             //   onView(ViewMatchers.withId(R.id.player_list_textView)).check(matches(withText(game.getHost().getName()+"\n"+justJoined.getName())));
@@ -368,9 +366,7 @@ public class GameLobbyActivityInstrumentedTest {
         intent.putExtra("currentGameId", id);
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
-            scenario.onActivity(a -> {
-                a.addPlayerList(null);
-            });
+            scenario.onActivity(a -> a.addPlayerList(null));
         }
     }
 

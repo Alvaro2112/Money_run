@@ -22,9 +22,6 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean isStarted;
-    private int numCoins;
-    private double radius;
-    private double duration;
     @Nullable
     private String name;
     @Nullable
@@ -116,9 +113,6 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.isStarted = false;
-        this.radius = radius;
-        this.numCoins = numCoins;
-        this.duration = duration;
     }
 
 

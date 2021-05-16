@@ -48,8 +48,6 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class EndGameInstrumentedTest {
 
-    private final long ASYNC_CALL_TIMEOUT = 5L;
-
     @BeforeClass
     public static void setPersistence() {
         if (!MainActivity.calledAlready) {
@@ -76,9 +74,7 @@ public class EndGameInstrumentedTest {
     @Test
     public void updateTextDisplaysGoodNumbers() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            scenario.onActivity(a -> {
-                a.updateText(1, 1, true);
-            });
+            scenario.onActivity(a -> a.updateText(1, 1, true));
 
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
@@ -117,6 +113,7 @@ public class EndGameInstrumentedTest {
             CountDownLatch added = new CountDownLatch(1);
             OnCompleteListener addedListener = task -> added.countDown();
             db.putPlayer(player, addedListener);
+            long ASYNC_CALL_TIMEOUT = 5L;
             try {
                 added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
                 assertThat(added.getCount(), is(0L));

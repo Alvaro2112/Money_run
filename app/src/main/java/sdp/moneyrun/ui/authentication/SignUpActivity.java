@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,9 +41,9 @@ public class SignUpActivity extends AppCompatActivity {
             String password = passwordView.getText().toString().trim();
             isClicked = !isClicked;
             if (isClicked)
-                submitButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
             else
-                submitButton.setBackgroundColor(getResources().getColor(R.color.design_default_color_background));
+                submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.design_default_color_background));
             if (checkInput(emailView, passwordView)) {
                 submitSignUp(email, password);
             }

@@ -3,6 +3,7 @@ package sdp.moneyrun;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 public class LeaderboardInstrumentedTest {
 
+    @NonNull
     @Rule
     public ExpectedException exception = ExpectedException.none();
 

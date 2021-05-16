@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -47,6 +48,7 @@ public class SignUpActivityTest {
     }
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    @NonNull
     public static TypeSafeMatcher<View> withError(final String expected) {
         return new TypeSafeMatcher<View>() {
 
@@ -189,6 +191,7 @@ public class SignUpActivityTest {
     /*
     From https://stackoverflow.com/questions/45841500/generate-random-emails/55768012
      */
+    @NonNull
     private String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
@@ -197,8 +200,7 @@ public class SignUpActivityTest {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
 
     }
 }

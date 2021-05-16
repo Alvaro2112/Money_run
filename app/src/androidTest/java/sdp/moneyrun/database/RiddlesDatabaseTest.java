@@ -15,7 +15,7 @@ import org.junit.Test;
 import sdp.moneyrun.ui.MainActivity;
 
 
-public class RiddlesDatabaseTest extends TestCase {
+public class RiddlesDatabaseTest {
 
     private final Context context = ApplicationProvider.getApplicationContext();
 
@@ -31,11 +31,12 @@ public class RiddlesDatabaseTest extends TestCase {
     @Test
     public void testGetInstance() {
         RiddlesDatabase db = RiddlesDatabase.createInstance(context);
-        assertEquals(RiddlesDatabase.getInstance(), db);
+        Assert.assertEquals(RiddlesDatabase.getInstance(), db);
         RiddlesDatabase.reset();
 
     }
 
+    @Test
     public void testGetInstanceOnNonExistentThrowsException() {
 
         try {
@@ -59,7 +60,7 @@ public class RiddlesDatabaseTest extends TestCase {
 
 
         } catch (RuntimeException e) {
-            assertEquals(1, 1);
+            Assert.assertEquals(1, 1);
         } finally {
             RiddlesDatabase.reset();
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -35,11 +36,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class UserProfileInstrumentedTest {
 
+    @NonNull
     @Rule
     public ActivityScenarioRule<UserProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+    @NonNull
     @Rule
     public ActivityScenarioRule<UserProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
 
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
@@ -82,9 +86,7 @@ public class UserProfileInstrumentedTest {
             user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
-            scenario.onActivity(a -> {
-                a.setDisplayedTexts(user);
-            });
+            scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("User has died 0 many times")));

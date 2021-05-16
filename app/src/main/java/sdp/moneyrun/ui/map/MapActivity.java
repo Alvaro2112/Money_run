@@ -24,7 +24,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -57,7 +56,7 @@ import sdp.moneyrun.player.Player;
 /*
 this map implements all the functionality we will need.
  */
-@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal", "FieldMayBeFinal"})
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     private static final int GAME_TIME = 10000;
@@ -136,12 +135,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         if (useDB) {
             addLeaderboardButton();
-            mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-                @Override
-                public void onDidFinishRenderingMap(boolean fully) {
-                    if (gameId != null) {
-                        initializeGame(gameId);
-                    }
+            mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (gameId != null) {
+                    initializeGame(gameId);
                 }
             });
         }
@@ -153,7 +149,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *               <<<<<<< HEAD
      *               It then finds the game and put the coins in it, the database is then updated
      *               =======
-     *               It then finds the game and put the coins in it, the databse is then updated
+     *               It then finds the game and put the coins in it, the database is then updated
      *               >>>>>>> origin/master
      *               finishes by adding a listener for the coins
      */
@@ -210,13 +206,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
 
     private void addLeaderboardButton() {
-        leaderboardButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-                onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores);
-            }
-        });
+        leaderboardButton.setOnClickListener(v -> onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores));
     }
 
 

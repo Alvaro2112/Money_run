@@ -2,6 +2,8 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -29,6 +31,7 @@ public class GameDbDataTest {
     @Mock
     Location mockLocation;
 
+    @NonNull
     GameDbData getTestData() {
         String name = "game";
         List<Player> players = new ArrayList<>();
@@ -46,24 +49,7 @@ public class GameDbDataTest {
         return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>());
     }
 
-    GameDbData getTestData2() {
-        String name = "game";
-        List<Player> players = new ArrayList<>();
-        Player host = new Player("1", "James", 4);
-        players.add(host);
-        players.add(new Player("2", "Potter", 4));
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("?", "a", "b", "c", "d", "e"));
-        List<Coin> coins = new ArrayList<>();
-        coins.add(new Coin(1, 2, 3));
-        int maxPlayers = 4;
-        int numCoins = 5;
-        double radius = 2;
-        double duration = 5;
-        mockLocation = Mockito.mock(Location.class);
 
-        return new GameDbData(name, host, players, maxPlayers, mockLocation, true, new ArrayList<>(), numCoins, radius, duration);
-    }
 
 
     @Test
@@ -82,7 +68,7 @@ public class GameDbDataTest {
         assertThrows(IllegalArgumentException.class, () -> {
             List<Player> players = new ArrayList<>();
             Player host = new Player("1", "James", 4);
-            GameDbData g = new GameDbData(null, host, new ArrayList<Player>(), 3, new Location(""), true, new ArrayList<>());
+            GameDbData g = new GameDbData(null, host, new ArrayList<>(), 3, new Location(""), true, new ArrayList<>());
 
         });
     }
@@ -107,7 +93,7 @@ public class GameDbDataTest {
     public void constructorFailsOnNullLocation() {
         assertThrows(IllegalArgumentException.class, () -> {
             Player host = new Player("1", "James", 4);
-            GameDbData g = new GameDbData("name", host, new ArrayList<Player>(), 3, null, true, new ArrayList<>());
+            GameDbData g = new GameDbData("name", host, new ArrayList<>(), 3, null, true, new ArrayList<>());
         });
     }
 
@@ -128,7 +114,7 @@ public class GameDbDataTest {
         assertThrows(IllegalArgumentException.class, () -> {
             List<Player> players = new ArrayList<>();
             Player host = new Player("1", "James", 4);
-            GameDbData g = new GameDbData("namegame", host, new ArrayList<Player>(), 3, null, true, new ArrayList<>(), 1, 2, 2);
+            GameDbData g = new GameDbData("namegame", host, new ArrayList<>(), 3, null, true, new ArrayList<>(), 1, 2, 2);
 
         });
     }
@@ -138,7 +124,7 @@ public class GameDbDataTest {
         assertThrows(IllegalArgumentException.class, () -> {
             List<Player> players = new ArrayList<>();
             Player host = new Player("1", "James", 4);
-            GameDbData g = new GameDbData(null, host, new ArrayList<Player>(), 3, new Location(""), true, new ArrayList<>(), 1, 2, 2);
+            GameDbData g = new GameDbData(null, host, new ArrayList<>(), 3, new Location(""), true, new ArrayList<>(), 1, 2, 2);
 
         });
     }
@@ -262,16 +248,12 @@ public class GameDbDataTest {
 
     @Test
     public void setPlayersFailsOnNullArg() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            getTestData().setPlayers(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> getTestData().setPlayers(null));
     }
 
     @Test
     public void setPlayersFailsOnEmptyArg() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            getTestData().setPlayers(new ArrayList<Player>());
-        });
+        assertThrows(IllegalArgumentException.class, () -> getTestData().setPlayers(new ArrayList<>()));
     }
 
     @Test
@@ -286,9 +268,7 @@ public class GameDbDataTest {
 
     @Test
     public void addPlayerFailsOnNullArg() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            getTestData().addPlayer(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> getTestData().addPlayer(null));
     }
 
     @Test
@@ -315,18 +295,14 @@ public class GameDbDataTest {
 
     @Test
     public void removePlayerFailsOnNullArg() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            getTestData().removePlayer(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> getTestData().removePlayer(null));
     }
 
     @Test
     public void removePlayerFailsIfOneElementLEft() {
         GameDbData g = getTestData();
         g.removePlayer(g.getPlayers().get(0));
-        assertThrows(IllegalArgumentException.class, () -> {
-            g.removePlayer(new Player("2", "Potter", 4));
-        });
+        assertThrows(IllegalArgumentException.class, () -> g.removePlayer(new Player("2", "Potter", 4)));
     }
 
     @Test
@@ -389,13 +365,13 @@ public class GameDbDataTest {
     @Test
     public void isDeletedIsFalseWhenCreated() {
         GameDbData g = getTestData();
-        assertEquals(false, g.getIsDeleted());
+        assertFalse(g.getIsDeleted());
     }
 
     @Test
     public void setIsDeletedWorks() {
         GameDbData g = getTestData();
         g.setIsDeleted(true);
-        assertEquals(true, g.getIsDeleted());
+        assertTrue(g.getIsDeleted());
     }
 }

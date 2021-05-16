@@ -78,8 +78,8 @@ public class NewGameImplementation extends MenuImplementation {
      * @param newGameLayout the game layout
      */
     public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout) {
-        TextView nameGameView = newGameLayout.findViewById(R.id.nameGameField);
-        TextView maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
+        nameGameView = newGameLayout.findViewById(R.id.nameGameField);
+        maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
         gameRadiusView = newGameLayout.findViewById(R.id.newGameRadius);
         gameDurationView = newGameLayout.findViewById(R.id.newGameDuration);
@@ -109,7 +109,7 @@ public class NewGameImplementation extends MenuImplementation {
      * @param gameName           name of the game
      * @param maxPlayerNumberStr string inputted in the UI for the  player count
      * @param numCoinsStr        string inputted in the UI for the number of coin
-     * @param gameRadiusStr      sintr inputted in the UI for the radius of th game
+     * @param gameRadiusStr      string inputted in the UI for the radius of th game
      * @param gameDurationStr    string inputted in the UI for the game duration
      * @return true if there is no problem with the strings else return false
      */
@@ -180,10 +180,6 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
-        DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_game))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
 
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);

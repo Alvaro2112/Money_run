@@ -54,6 +54,7 @@ public class GameInstrumentedTest {
         }
     }
 
+    @NonNull
     public Game getGame() {
         String name = "name";
         Player host = new Player("3", "Bob", 0);
@@ -70,6 +71,7 @@ public class GameInstrumentedTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
+    @NonNull
     public GameDbData getGameData() {
         String name = "name";
         Player host = new Player("3", "Bob", 0);
@@ -124,7 +126,7 @@ public class GameInstrumentedTest {
         });
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, updated.getCount());
+            assertEquals(0L, updated.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -154,7 +156,7 @@ public class GameInstrumentedTest {
         db.updateGameInDatabase(g, task -> added.countDown());
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -171,7 +173,7 @@ public class GameInstrumentedTest {
         ref.child(DATABASE_GAME).child(id).child("players").setValue(players).addOnCompleteListener(task -> readded.countDown());
         try {
             readded.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, readded.getCount());
+            assertEquals(0L, readded.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -187,7 +189,7 @@ public class GameInstrumentedTest {
         db.updateGameInDatabase(g, task -> added.countDown());
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -218,13 +220,13 @@ public class GameInstrumentedTest {
 
         try {
             got.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, got.getCount());
+            assertEquals(0L, got.getCount());
         } catch (InterruptedException e) {
             fail();
         }
         try {
             got2.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, got2.getCount());
+            assertEquals(0L, got2.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -573,7 +575,7 @@ public class GameInstrumentedTest {
         p.updateGameInDatabase(g, task -> added.countDown());
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, added.getCount());
+            assertEquals(0L, added.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -602,7 +604,7 @@ public class GameInstrumentedTest {
                 };
                 boolean started = snapshot.child("started").getValue(coinIndicator);
                 if (updated.getCount() == 0L) {
-                    assertEquals(true, started);
+                    assertTrue(started);
                 }
                 updated.countDown();
             }

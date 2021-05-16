@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 
+import androidx.annotation.NonNull;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -18,6 +19,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
 
+    @NonNull
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 

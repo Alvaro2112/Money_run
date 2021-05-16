@@ -2,6 +2,7 @@ package sdp.moneyrun.permissions;
 
 import android.Manifest;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -21,9 +23,11 @@ public class PermissionRequesterInstrumentedTest {
     private final String coarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final String fineLocation = Manifest.permission.ACCESS_FINE_LOCATION;
 
+    @NonNull
     @Rule
     public ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
 
+    @NonNull
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -33,10 +37,9 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
                     null,
-                    activity.getRequestPermissionsLauncher(),
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -49,9 +52,8 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
+                    a,
                     null,
                     "Test message",
                     false,
@@ -65,10 +67,9 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     null,
                     false,
                     coarseLocation,
@@ -81,10 +82,9 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false);
         });
@@ -95,10 +95,9 @@ public class PermissionRequesterInstrumentedTest {
         exception.expect(RuntimeException.class);
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -109,42 +108,39 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetActivityReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
                     fineLocation);
 
-            assertEquals(activity, pr.getActivity());
+            assertEquals(a, pr.getActivity());
         });
     }
 
     @Test
     public void requesterGetRequestPermissionsLauncherReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
                     fineLocation);
 
-            assertEquals(activity.getRequestPermissionsLauncher(), pr.getRequestPermissionsLauncher());
+            assertEquals(a.getRequestPermissionsLauncher(), pr.getRequestPermissionsLauncher());
         });
     }
 
     @Test
     public void requesterGetPermissionsReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -159,10 +155,9 @@ public class PermissionRequesterInstrumentedTest {
     public void requesterGetRequestMessageReturnsRightObject() {
 
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
@@ -176,26 +171,24 @@ public class PermissionRequesterInstrumentedTest {
     @Test
     public void requesterGetForceShowRequestMessageReturnsRightObject() {
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     false,
                     coarseLocation,
                     fineLocation);
 
-            assertEquals(false, pr.getForceShowRequest());
+            assertFalse(pr.getForceShowRequest());
         });
     }
 
     @Test
     public void requesterRunsCorrectly() {
         activityRule.getScenario().onActivity(a -> {
-            LoginActivity activity = a;
             PermissionsRequester pr = new PermissionsRequester(
-                    activity,
-                    activity.getRequestPermissionsLauncher(),
+                    a,
+                    a.getRequestPermissionsLauncher(),
                     "Test message",
                     true,
                     coarseLocation,

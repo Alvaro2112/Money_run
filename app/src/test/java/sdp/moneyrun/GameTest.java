@@ -3,13 +3,13 @@ package sdp.moneyrun;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -27,9 +27,7 @@ import static org.junit.Assert.fail;
 
 public class GameTest {
 
-    @Mock
-    GameDbData gameData;
-
+    @NonNull
     public Game getGame() {
         String name = "name";
         Player host = new Player("3", "Bob", 0);
@@ -41,24 +39,6 @@ public class GameTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
 
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
-    }
-
-    public Game getGame2() {
-
-
-        String name = "name";
-        Player host = new Player("3", "Bob", 0);
-        int maxPlayerCount = 3;
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Coin> coins = new ArrayList<>();
-        coins.add(new Coin(0., 0., 1));
-        Location location = new Location("LocationManager#GPS_PROVIDER");
-        int numCoins = 5;
-        double radius = 2;
-        double duration = 5;
-
-        return new Game(name, host, maxPlayerCount, riddles, coins, new Location(""), true, numCoins, radius, duration);
     }
 
     @Test
@@ -76,30 +56,18 @@ public class GameTest {
     @Test
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle(null, "blue", "green", "yellow", "brown", "a");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle(null, "blue", "green", "yellow", "brown", "a"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle("a", null, "green", "yellow", "brown", "very");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle("a", null, "green", "yellow", "brown", "very"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle("a", "blue", null, "yellow", "brown", "very");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", null, "yellow", "brown", "very"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle("a", "blue", "green", null, "brown", "very");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", null, "brown", "very"));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle("a", "blue", "green", "yellow", null, "very");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", "yellow", null, "very"));
 
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Riddle("a", "blue", "green", "yellow", "brown", null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", "yellow", "brown", null));
     }
 
 

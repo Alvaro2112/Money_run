@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -64,6 +65,7 @@ public class LoginInstrumentedTest {
     }
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    @NonNull
     private static Matcher<View> withError(final String expected) {
         return new TypeSafeMatcher<View>() {
 
@@ -180,23 +182,21 @@ public class LoginInstrumentedTest {
             AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
-            scenario.onActivity(activity -> {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(activity, task -> {
-                            if (!task.isSuccessful()) {
-                                assertEquals(0, 1);
-                            } else {
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                String playerId = firebaseUser.getUid();
+            scenario.onActivity(activity -> mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(activity, task -> {
+                        if (!task.isSuccessful()) {
+                            assertEquals(0, 1);
+                        } else {
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            String playerId = firebaseUser.getUid();
 
-                                // Build a new instance of player for the user to create a
-                                // valid instance in the database
-                                playerUserRef.set(new User(playerId));
-                                playerUserRef.get().setName("Bob");
-                                playerUserRef.get().setAddress("Somewhere");
-                            }
-                        });
-            });
+                            // Build a new instance of player for the user to create a
+                            // valid instance in the database
+                            playerUserRef.set(new User(playerId));
+                            playerUserRef.get().setName("Bob");
+                            playerUserRef.get().setAddress("Somewhere");
+                        }
+                    }));
 
             try {
                 Thread.sleep(5000);
@@ -246,23 +246,21 @@ public class LoginInstrumentedTest {
             AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
-            scenario.onActivity(activity -> {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(activity, task -> {
-                            if (!task.isSuccessful()) {
-                                assertEquals(0, 1);
-                            } else {
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                String playerId = firebaseUser.getUid();
+            scenario.onActivity(activity -> mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(activity, task -> {
+                        if (!task.isSuccessful()) {
+                            assertEquals(0, 1);
+                        } else {
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            String playerId = firebaseUser.getUid();
 
-                                // Build a new instance of player for the user to create a
-                                // valid instance in the database
-                                playerUserRef.set(new User(playerId));
-                                playerUserRef.get().setName("Bob");
-                                playerUserRef.get().setAddress("Somewhere");
-                            }
-                        });
-            });
+                            // Build a new instance of player for the user to create a
+                            // valid instance in the database
+                            playerUserRef.set(new User(playerId));
+                            playerUserRef.get().setName("Bob");
+                            playerUserRef.get().setAddress("Somewhere");
+                        }
+                    }));
 
             try {
                 Thread.sleep(5000);
@@ -309,23 +307,21 @@ public class LoginInstrumentedTest {
             AtomicReference<User> playerUserRef = new AtomicReference<>();
 
             // Define player instance given email and password user
-            scenario.onActivity(activity -> {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(activity, task -> {
-                            if (!task.isSuccessful()) {
-                                assertEquals(0, 1);
-                            } else {
-                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                String playerId = firebaseUser.getUid();
+            scenario.onActivity(activity -> mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(activity, task -> {
+                        if (!task.isSuccessful()) {
+                            assertEquals(0, 1);
+                        } else {
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            String playerId = firebaseUser.getUid();
 
-                                // Build a new instance of player for the user to create a
-                                // valid instance in the database
-                                playerUserRef.set(new User(playerId));
-                                playerUserRef.get().setName("Bob");
-                                playerUserRef.get().setAddress("Somewhere");
-                            }
-                        });
-            });
+                            // Build a new instance of player for the user to create a
+                            // valid instance in the database
+                            playerUserRef.set(new User(playerId));
+                            playerUserRef.get().setName("Bob");
+                            playerUserRef.get().setAddress("Somewhere");
+                        }
+                    }));
 
             Thread.sleep(5000);
 
