@@ -82,7 +82,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean addedCoins = false;
     private boolean host = false;
     private final String DATABASE_COIN = "coins";
-    private boolean useDB;
     private MapPlayerListAdapter ldbListAdapter;
     public int coinsToPlace;
 
@@ -114,7 +113,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
-
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -124,20 +122,21 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         String default_score = getString(R.string.map_score_text, 0);
         currentScoreView = findViewById(R.id.map_score_view);
         currentScoreView.setText(default_score);
+        chronometer = findViewById(R.id.mapChronometer);
+
 
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
         addExitButton();
         addQuestionButton();
-
         addLeaderboardButton();
         mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
             @Override
             public void onDidFinishRenderingMap(boolean fully) {
-                  if (gameId != null) {
-                      initializeGame(gameId);
-                  }
+                if (gameId != null) {
+                    initializeGame(gameId);
+                }
             }
         });
 
@@ -159,13 +158,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 circleRadius = (float) game_radius;
                 game_time = (int) Math.floor(game.getDuration() * 60);
                 game_center = game.getStartLocation();
+                initChronometer();
+
                 if (!addedCoins && host) {
-                    placeRandomCoins(coinsToPlace, game_radius,THRESHOLD_DISTANCE);
+                    placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
                     addedCoins = true;
                     initCircle();
                 }
 
-                initChronometer();
                 addCoinsListener();
                 if (host) {
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), true);
@@ -174,8 +174,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
-
 
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -233,11 +231,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * @param mapboxMap the map where everything will be done
-     *                  <<<<<<< HEAD
      *                  this overrides the OnMapReadyCallback in the implemented interface
-     *                  =======
-     *                  this override the OnMapReadyCallback in the implemented interface
-     *                  >>>>>>> origin/master
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
      *                  Then we setup the location tracking
      */
@@ -288,16 +282,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     private void initChronometer() {
 
-        chronometer = findViewById(R.id.mapChronometer);
         chronometer.start();
-
+        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
             } else {
                 Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
             }
-            chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
     }
 
@@ -457,9 +449,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             String default_score = getString(R.string.map_score_text, localPlayer.getScore());
             currentScoreView.setText(default_score);
             //TODO: Inform database
-                game.setCoins(localPlayer.toSendToDb(), true);
-                proxyG.updateGameInDatabase(game, null);
-                player.setScore(localPlayer.getScore(), true);
+            game.setCoins(localPlayer.toSendToDb(), true);
+            proxyG.updateGameInDatabase(game, null);
+            player.setScore(localPlayer.getScore(), true);
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
@@ -476,20 +468,20 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     /**
-     * @param number number of coins to add
+     * @param number    number of coins to add
      * @param maxRadius max distance of a coin from the center
      * @param minRadius min distance of a coin from the center
      */
     public void placeRandomCoins(int number, double maxRadius, double minRadius) {
         if (number < 0 || maxRadius <= 0 || minRadius <= 0)
-            throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  "+String.valueOf(number) );
+            throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  " + number);
         if (minRadius >= maxRadius)
             throw new IllegalArgumentException("Min radius is bigger than max Radius ");
 
         for (int i = 0; i < number; i++) {
             Location loc = null;
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
-            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc,getCurrentLocation())), true);
+            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
         }
     }
 

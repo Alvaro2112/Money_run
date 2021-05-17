@@ -91,10 +91,10 @@ public class MapInstrumentedTest {
         double duration = 4;
         double radius = 20;
 
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,num_coins,radius,duration);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
     }
 
-    public Intent createIntentAndPutInDB(){
+    public Intent createIntentAndPutInDB() {
         Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
@@ -162,9 +162,11 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if(fully){
                 assertEquals(a.getSymbolManager().getIconAllowOverlap(), true);
                 assertEquals(a.getSymbolManager().getTextAllowOverlap(), true);
                 finished.set(true);
+                }
             }));
             do {
                 try {
@@ -214,21 +216,27 @@ public class MapInstrumentedTest {
 
             final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                assertFalse(a.getChronometer().isCountDown());
-                assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
-                finished.set(true);
+                if(fully){
+                    finished.set(true);}
             }));
             do {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(400);
                 } catch (Exception e) {
                     assertEquals(-1, 2);
                 }
             } while (!finished.get());
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                assertEquals(-1, 2);
+            }
+            scenario.onActivity(a -> {
+                assertFalse(a.getChronometer().isCountDown());
+                assertTrue(a.getChronometer().getText().toString().contains("REMAINING TIME"));
+            });
 
-        } catch (Exception e) {
-            assertEquals(-1, 2);
-            e.printStackTrace();
+
         }
     }
 
@@ -1048,7 +1056,7 @@ public class MapInstrumentedTest {
             }
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
-                a.placeRandomCoins(numberOfCoins, 100,2);
+                a.placeRandomCoins(numberOfCoins, 100, 2);
                 assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
             });
         }
@@ -1084,24 +1092,24 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if(fully){
-                        finished.set(true);
+                        if (fully) {
+                            finished.set(true);
                         }
                     }
                 });
             });
-                do {
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-                }    while (!finished.get());
+            do {
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(100);
                 } catch (Exception e) {
                     assertEquals(-1, 2);
                 }
+            } while (!finished.get());
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+                assertEquals(-1, 2);
+            }
 
             final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
             final GameDatabaseProxy db = new GameDatabaseProxy();
@@ -1112,10 +1120,10 @@ public class MapInstrumentedTest {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
                     scenario.onActivity(activity -> {
                         assertEquals(2, activity.coinsToPlace);
-                        assertEquals(2,activity.getSymbolManager().getAnnotations().size());
-                        assertEquals(2,activity.getLocalPlayer().getLocallyAvailableCoins().size());
+                        assertEquals(2, activity.getSymbolManager().getAnnotations().size());
+                        assertEquals(2, activity.getLocalPlayer().getLocallyAvailableCoins().size());
                     });
-                    assertEquals( 2,fromDB.getCoins().size());
+                    assertEquals(2, fromDB.getCoins().size());
                     scenario.onActivity(activity -> {
                         activity.removeCoin(fromDB.getCoins().get(0), true);
                     });
@@ -1335,39 +1343,39 @@ public class MapInstrumentedTest {
                                         }
                                     });
                                 }
-                                });
-                            }
-                        }
-                    });
-                });
-                            while (true) {
-                                try {
-                                    Thread.sleep(100);
-                                } catch (Exception e) {
-                                    assertEquals(-1, 2);
-                                }
-                                if (finished.get()) {
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (Exception e) {
-                                        assertEquals(-1, 2);
-                                    }
-
-                                    break;
-                                }
-                            }
-                            scenario.onActivity(a -> {
-                                assertNotNull(a.getCircleManager());
-                                a.initCircle();
-                                try {
-                                    Thread.sleep(4000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                assertEquals(a.getCircleManager().getAnnotations().size(), 1);
                             });
                         }
                     }
+                });
+            });
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> {
+                assertNotNull(a.getCircleManager());
+                a.initCircle();
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                assertEquals(a.getCircleManager().getAnnotations().size(), 1);
+            });
+        }
+    }
 
 
 }
