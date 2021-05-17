@@ -34,6 +34,9 @@ public final class GameDbData {
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
+    private int numCoins;
+    private double radius;
+    private double duration;
 
 
     public GameDbData(@Nullable String name,
@@ -129,6 +132,9 @@ public final class GameDbData {
         this.coins = other.coins;
         this.isDeleted = false;
         this.isStarted = other.isStarted;
+        this.numCoins = other.numCoins;
+        this.radius = other.radius;
+        this.duration = other.duration;
     }
 
     public GameDbData() {
@@ -179,7 +185,31 @@ public final class GameDbData {
         return startLocation;
     }
 
-    @NonNull
+    public int getNumCoins() {
+        return numCoins;
+    }
+
+    public void setNumCoins(int numCoins) {
+        this.numCoins = numCoins;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    @Nullable
     public List<Coin> getCoins() {
         return new ArrayList<>(coins);
     }

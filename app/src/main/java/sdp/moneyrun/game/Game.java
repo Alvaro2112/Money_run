@@ -41,6 +41,9 @@ public class Game {
     private String id;
     private boolean hasBeenAdded;
 
+    private int numCoins;
+    private boolean started;
+
     /**
      * This constructor is used to create a game that has never been added to the database.
      *
@@ -128,9 +131,9 @@ public class Game {
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = riddles;
+        started = false;
 
     }
-
 
     /**
      * This constructor is used to create an instance of game from retrieved information
@@ -173,8 +176,10 @@ public class Game {
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
+        started = false;
 
     }
+
 
     public Game(@Nullable String name,
                 @Nullable Player host,
@@ -220,6 +225,7 @@ public class Game {
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
+        started = false;
 
     }
 
@@ -231,6 +237,11 @@ public class Game {
         endGameIntent.putExtra("playerId", playerId);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
+    }
+
+    //Wether the game has started
+    public boolean isStarted() {
+        return started;
     }
 
     @Nullable
@@ -324,6 +335,18 @@ public class Game {
 
     public int getPlayerCount() {
         return gameDbData.getPlayers().size();
+    }
+
+    public int getNumCoins() {
+        return gameDbData.getNumCoins();
+    }
+
+    public double getRadius() {
+        return gameDbData.getRadius();
+    }
+
+    public double getDuration() {
+        return gameDbData.getDuration();
     }
 
     public boolean getHasBeenAdded() {
