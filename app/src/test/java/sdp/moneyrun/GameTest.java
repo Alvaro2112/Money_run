@@ -354,7 +354,6 @@ public class GameTest {
     }
 
     @Test
-<<<<<<< HEAD
     public void getStartedWorks(){
         Game game = getGame();
 
@@ -363,9 +362,6 @@ public class GameTest {
 
     @Test
     public void getIsVisibleReturnsCorrectValue(){
-=======
-    public void getIsVisibleReturnsCorrectValue() {
->>>>>>> 544b07f7a18517e747dc3c64dcb0d6b5162a10ac
         Game game = getGame();
 
         assertTrue(game.getIsVisible());

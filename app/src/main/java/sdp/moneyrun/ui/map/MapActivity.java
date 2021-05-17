@@ -146,11 +146,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * @param gameId The game ID to fetch the game from the DB
      *               Place the coins if user is host and coins have not been placed yet
-     *               <<<<<<< HEAD
      *               It then finds the game and put the coins in it, the database is then updated
-     *               =======
-     *               It then finds the game and put the coins in it, the database is then updated
-     *               >>>>>>> origin/master
      *               finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId) {
