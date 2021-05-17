@@ -125,8 +125,11 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds a listener to the button that either leaves for a player that joined the game or
+     * leaves and deletes the game if the user is the host
+     */
     private void createDeleteOrLeaveButton() {
-        System.out.println("USREE IS HOST ?" + user.equals(game.getHost()));
         if (user.equals(game.getHost())) {
             Button leaveButton = findViewById(R.id.leave_lobby_button);
             leaveButton.setText(R.string.delete_button_text);
@@ -136,6 +139,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set all the UI fields according to the game fetched from the DB
+     * Also sets the listener for the launch game button
+     */
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
         TextView name = findViewById(R.id.lobby_title);

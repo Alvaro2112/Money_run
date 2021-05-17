@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-=======
   <component name="EntryPointsManager">
     <pattern value="sdp.moneyrun.database.DatabaseProxy" method="getDatabase" />
   </component>
@@ -50,7 +47,6 @@
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
->>>>>>> 544b07f7a18517e747dc3c64dcb0d6b5162a10ac
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
