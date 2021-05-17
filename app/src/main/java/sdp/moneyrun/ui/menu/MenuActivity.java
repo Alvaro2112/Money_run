@@ -60,7 +60,7 @@ import sdp.moneyrun.weather.WeatherReport;
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
     });
-    
+
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
 
