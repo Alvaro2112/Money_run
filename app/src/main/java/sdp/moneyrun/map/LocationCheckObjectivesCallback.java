@@ -16,21 +16,22 @@ import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 
 public class LocationCheckObjectivesCallback implements LocationEngineCallback<LocationEngineResult> {
 
+    @NonNull
     private final WeakReference<TrackedMap> activityWeakReference;
 
     public LocationCheckObjectivesCallback(MapActivity activity) {
-        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
+        this.activityWeakReference = new WeakReference<>(activity);
     }
 
     public LocationCheckObjectivesCallback(OfflineMapDownloaderActivity activity) {
-        this.activityWeakReference = new WeakReference<TrackedMap>(activity);
+        this.activityWeakReference = new WeakReference<>(activity);
     }
 
 
-        /* Updates the location, then checks if near a coin and calls a  function accordingly
-        */
+    /* Updates the location, then checks if near a coin and calls a  function accordingly
+     */
     @Override
-    public void onSuccess(LocationEngineResult result) {
+    public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
 
         if (activity != null) {

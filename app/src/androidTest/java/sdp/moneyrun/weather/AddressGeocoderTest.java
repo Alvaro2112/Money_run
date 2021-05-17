@@ -2,6 +2,7 @@ package sdp.moneyrun.weather;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -10,13 +11,13 @@ import org.junit.Test;
 import java.util.Locale;
 
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
 import sdp.moneyrun.user.User;
 
 import static org.junit.Assert.assertEquals;
 
 public class AddressGeocoderTest {
 
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);

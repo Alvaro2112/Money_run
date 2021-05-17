@@ -1,15 +1,25 @@
 package sdp.moneyrun.user;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class UserBuilder {
-    private  String userId;
+    private String userId;
+    @Nullable
     private String name;
+    @Nullable
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-    private int  score;
+    private int score;
 
     /**
-     *
+     * Empty constructor
+     */
+    public UserBuilder() {
+    }
+
+    /**
      * @param userId the unique user Id
      */
     public void setUserId(String userId) {
@@ -17,27 +27,24 @@ public class UserBuilder {
     }
 
     /**
-     *
      * @param name
      */
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
     }
 
     /**
-     *
      * @param address
      */
-    public void setAddress(String address) {
+    public void setAddress(@Nullable String address) {
         if (address == null || address.isEmpty())
             throw new IllegalArgumentException();
         this.address = address;
     }
 
     /**
-     *
      * @param numberOfPlayedGames
      */
     public void setNumberOfPlayedGames(int numberOfPlayedGames) {
@@ -52,19 +59,15 @@ public class UserBuilder {
         this.score = score;
     }
 
-
-    /**
-     * Empty constructor
-     */
-    public UserBuilder(){}
-
     /**
      * Builds current instance. Address and name cannot be null or empty and userId cannot be 0
+     *
      * @return the user built with the attributes set
-     * @throws IllegalStateException if the adress or name is null or empty, if the userId is null
+     * @throws IllegalStateException if the address or name is null or empty, if the userId is null
      */
-    public User build(){
-        if(userId == null || name == null || address == null)
+    @NonNull
+    public User build() {
+        if (userId == null || name == null || address == null)
             throw new IllegalStateException();
         return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames, score);
     }

@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import sdp.moneyrun.ui.menu.MenuActivity;
+import java.util.Locale;
+
 import sdp.moneyrun.R;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -43,15 +46,15 @@ public class UserProfileActivity extends AppCompatActivity {
         setDisplayedTexts(user);
     }
 
-    public void setDisplayedTexts(User user) {
+    public void setDisplayedTexts(@Nullable User user) {
         if (user == null) {
             playerIsEmptyText.setAllCaps(true);
-            playerIsEmptyText.setText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER");
+            playerIsEmptyText.setText(R.string.fillup_player_warning);
         } else {
-            playerName.setText("User name : " + user.getName());
-            playerAddress.setText("User address : " + user.getAddress());
-            playerDiedGames.setText("User has died " + user.getNumberOfDiedGames() + " many times");
-            playerPlayedGames.setText("User has played " + user.getNumberOfPlayedGames() + " many games");
+            playerName.setText(String.format("User name : %s", user.getName()));
+            playerAddress.setText(String.format("User address : %s", user.getAddress()));
+            playerDiedGames.setText(String.format(Locale.getDefault(), "User has died %d many times", user.getNumberOfDiedGames()));
+            playerPlayedGames.setText(String.format(Locale.getDefault(), "User has played %d many games", user.getNumberOfPlayedGames()));
         }
     }
 }
