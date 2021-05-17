@@ -162,10 +162,10 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if(fully){
-                assertEquals(a.getSymbolManager().getIconAllowOverlap(), true);
-                assertEquals(a.getSymbolManager().getTextAllowOverlap(), true);
-                finished.set(true);
+                if (fully) {
+                    assertEquals(a.getSymbolManager().getIconAllowOverlap(), true);
+                    assertEquals(a.getSymbolManager().getTextAllowOverlap(), true);
+                    finished.set(true);
                 }
             }));
             do {
@@ -216,8 +216,9 @@ public class MapInstrumentedTest {
 
             final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if(fully){
-                    finished.set(true);}
+                if (fully) {
+                    finished.set(true);
+                }
             }));
             do {
                 try {
@@ -289,14 +290,15 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if(fully) {
+                if (fully) {
                     Location curloc = a.getCurrentLocation();
                     Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
                     a.addCoin(coin, true);
                     Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
                     a.addCoin(coin2, true);
                     finished.set(true);
-                }}));
+                }
+            }));
             do {
                 try {
                     Thread.sleep(100);
@@ -552,7 +554,11 @@ public class MapInstrumentedTest {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {if(fully){ finished.set(true);}}));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+                    finished.set(true);
+                }
+            }));
             do {
                 try {
                     Thread.sleep(100);
@@ -614,7 +620,7 @@ public class MapInstrumentedTest {
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             try {
                 Thread.sleep(1000);
-            }catch (Exception e){
+            } catch (Exception e) {
                 fail();
             }
             onView(withId(R.id.collect_coin)).perform(ViewActions.click());
@@ -632,7 +638,11 @@ public class MapInstrumentedTest {
             Intents.init();
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {if(fully){ finished.set(true);}}));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+                    finished.set(true);
+                }
+            }));
             do {
                 try {
                     Thread.sleep(100);
@@ -1067,7 +1077,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
                 a.placeRandomCoins(numberOfCoins, 100, 2);
-                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins );
+                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
             });
         }
     }
@@ -1076,45 +1086,45 @@ public class MapInstrumentedTest {
     @Test
     public void CollectingACoinRemovesCoinFromDBTest() {
 
-            Player currentUser = new Player("3212", "CURRENT_USER", 0);
-            Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-            toStart.putExtra("currentUser", currentUser);
+        Player currentUser = new Player("3212", "CURRENT_USER", 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        toStart.putExtra("currentUser", currentUser);
 
-            String name = "Game";
-            Player host = new Player("98934", "Bob", 0);
-            int maxPlayerCount = 2;
-            List<Riddle> riddles = new ArrayList<>();
-            riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-            List<Coin> coins = new ArrayList<>();
-            Location location = new Location("LocationManager#GPS_PROVIDER");
-            location.setLatitude(37.42);
-            location.setLongitude(-122.084);
+        String name = "Game";
+        Player host = new Player("98934", "Bob", 0);
+        int maxPlayerCount = 2;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(37.42);
+        location.setLongitude(-122.084);
 
-            int num_coins = 2;
-            double duration = 4;
-            double radius = 20;
+        int num_coins = 2;
+        double duration = 4;
+        double radius = 20;
 
-             Game  game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
+        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
 
-            Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-            intent.putExtra("player", host);
-            intent.putExtra("host", true);
-            intent.putExtra("useDB", true);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
 
-            GameDatabaseProxy gdp = new GameDatabaseProxy();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
 
-            List<Player> players = game.getPlayers();
-            players.add(host);
+        List<Player> players = game.getPlayers();
+        players.add(host);
 
-            String id = gdp.putGame(game);
+        String id = gdp.putGame(game);
 
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            intent.putExtra("currentGameId", id);
+        intent.putExtra("currentGameId", id);
 
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
@@ -1202,7 +1212,7 @@ public class MapInstrumentedTest {
         double duration = 4;
         double radius = 20;
 
-        Game  game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
+        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
@@ -1329,6 +1339,7 @@ public class MapInstrumentedTest {
 
         }
     }
+
     @Test
     public void mapParametersFromGame() {
         Player currentUser = new Player("3212", "CURRENT_USER", 0);
@@ -1349,7 +1360,7 @@ public class MapInstrumentedTest {
         double duration = 4;
         double radius = 20;
 
-        Game  game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
+        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
@@ -1374,7 +1385,11 @@ public class MapInstrumentedTest {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {if(fully){finished.set(true);}}));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+                    finished.set(true);
+                }
+            }));
             do {
                 try {
                     Thread.sleep(100);
@@ -1389,11 +1404,11 @@ public class MapInstrumentedTest {
             }
 
             scenario.onActivity(activity -> {
-                assertEquals(2,activity.coinsToPlace);
-                assertEquals(location.getLatitude(),activity.game_center.getLatitude(),0.01);
-                assertEquals(location.getLongitude(),activity.game_center.getLongitude(),0.01);
-                assertEquals(4*60,activity.game_time);
-                assertEquals(20,activity.game_radius,0.001);
+                assertEquals(2, activity.coinsToPlace);
+                assertEquals(location.getLatitude(), activity.game_center.getLatitude(), 0.01);
+                assertEquals(location.getLongitude(), activity.game_center.getLongitude(), 0.01);
+                assertEquals(4 * 60, activity.game_time);
+                assertEquals(20, activity.game_radius, 0.001);
 
             });
         }

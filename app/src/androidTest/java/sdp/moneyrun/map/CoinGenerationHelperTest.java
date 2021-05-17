@@ -28,16 +28,17 @@ public class CoinGenerationHelperTest {
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        CoinGenerationHelper.getRandomLocation(loc, -1,1);
+        CoinGenerationHelper.getRandomLocation(loc, -1, 1);
 
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void randomLocThrowsCorrectErrorForNegativeMinRadius() {
         long seed = 654;
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        CoinGenerationHelper.getRandomLocation(loc, 1,-1);
+        CoinGenerationHelper.getRandomLocation(loc, 1, -1);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -46,7 +47,7 @@ public class CoinGenerationHelperTest {
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        CoinGenerationHelper.getRandomLocation(loc, 1,2);
+        CoinGenerationHelper.getRandomLocation(loc, 1, 2);
     }
 
     @Test
@@ -55,16 +56,16 @@ public class CoinGenerationHelperTest {
         loc.setLongitude(4);
         loc.setLatitude(8);
         double radius = 1000;
-       for(int i = 0; i < 100000; i++){
-           Location random = CoinGenerationHelper.getRandomLocation(loc, radius,1);
-           double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
-           assert(distance < radius && distance > 1);
-       }
+        for (int i = 0; i < 100000; i++) {
+            Location random = CoinGenerationHelper.getRandomLocation(loc, radius, 1);
+            double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
+            assert (distance < radius && distance > 1);
+        }
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void randomLocThrowsCorrectErrorForNullLocation() {
-        CoinGenerationHelper.getRandomLocation(null, 10,1);
+        CoinGenerationHelper.getRandomLocation(null, 10, 1);
 
     }
 

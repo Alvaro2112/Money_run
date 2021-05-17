@@ -354,14 +354,14 @@ public class GameTest {
     }
 
     @Test
-    public void getStartedWorks(){
+    public void getStartedWorks() {
         Game game = getGame();
 
         assertNotNull(game.getStarted());
     }
 
     @Test
-    public void getIsVisibleReturnsCorrectValue(){
+    public void getIsVisibleReturnsCorrectValue() {
         Game game = getGame();
 
         assertTrue(game.getIsVisible());
@@ -383,10 +383,10 @@ public class GameTest {
     }
 
     @Test
-    public void setStartedWorks(){
+    public void setStartedWorks() {
         Game game = getGame();
-        game.setStarted(true,true);
-        assertEquals( true,game.getStarted());
+        game.setStarted(true, true);
+        assertEquals(true, game.getStarted());
     }
 
 

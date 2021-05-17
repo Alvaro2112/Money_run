@@ -13,18 +13,21 @@ import java.util.Random;
 
 public class CoinGenerationHelper {
 
-    public static  final double  VALUE_RADIUS = 100;
+    public static final double VALUE_RADIUS = 100;
 
     /**
-     *      https://stackoverflow.com/a/36919707
-     * @param currentLocation  Center of the radius
-     * @param maxRadius Biggest distance for a coin compared to the center
-     * @param minRadius Mininum distance from a coin to the radius
+     * https://stackoverflow.com/a/36919707
+     *
+     * @param currentLocation Center of the radius
+     * @param maxRadius       Biggest distance for a coin compared to the center
+     * @param minRadius       Mininum distance from a coin to the radius
      * @return a location between min radius and max radius from the currentLocation
      */
-    public static  Location getRandomLocation(Location currentLocation, double maxRadius, double minRadius){
-        if(maxRadius<=0 || currentLocation == null || minRadius <= 0) throw new IllegalArgumentException();
-        if(maxRadius <= minRadius ) throw new IllegalArgumentException("Min radius is bigger than maxRadius");
+    public static Location getRandomLocation(Location currentLocation, double maxRadius, double minRadius) {
+        if (maxRadius <= 0 || currentLocation == null || minRadius <= 0)
+            throw new IllegalArgumentException();
+        if (maxRadius <= minRadius)
+            throw new IllegalArgumentException("Min radius is bigger than maxRadius");
 
         double x0 = currentLocation.getLongitude();
         double y0 = currentLocation.getLatitude();
@@ -49,7 +52,7 @@ public class CoinGenerationHelper {
 
             foundLatitude = y0 + y;
             foundLongitude = x0 + new_x;
-        }while (TrackedMap.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < minRadius);
+        } while (TrackedMap.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < minRadius);
 
         Location copy = new Location("");
         copy.setLatitude(foundLatitude);

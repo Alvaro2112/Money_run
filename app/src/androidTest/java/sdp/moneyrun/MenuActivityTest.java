@@ -104,7 +104,7 @@ public class MenuActivityTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,2,2,2);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 2, 2);
     }
 
     @Test

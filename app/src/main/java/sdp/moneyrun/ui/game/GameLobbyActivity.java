@@ -126,7 +126,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void createDeleteOrLeaveButton() {
-        System.out.println("USREE IS HOST ?"+String.valueOf(user.equals(game.getHost())));
+        System.out.println("USREE IS HOST ?" + user.equals(game.getHost()));
         if (user.equals(game.getHost())) {
             Button leaveButton = findViewById(R.id.leave_lobby_button);
             leaveButton.setText(R.string.delete_button_text);

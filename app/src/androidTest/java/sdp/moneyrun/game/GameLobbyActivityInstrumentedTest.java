@@ -84,7 +84,7 @@ public class GameLobbyActivityInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true,1,100,10);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 100, 10);
     }
 
 
@@ -102,7 +102,6 @@ public class GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-        System.out.println("IN TESTSTARTED"+String.valueOf(game.getStarted()));
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -406,7 +405,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void LeaveIsDeleteForHost() {
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-       Player host = new Player("12634", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);

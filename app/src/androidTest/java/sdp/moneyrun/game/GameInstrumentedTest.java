@@ -67,7 +67,7 @@ public class GameInstrumentedTest {
         location.setLatitude(10);
         location.setLongitude(20);
 
-        return new Game(name, host, maxPlayerCount, riddles,coins, location, true,1,1,1);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 1, 1);
 
     }
 
@@ -136,11 +136,6 @@ public class GameInstrumentedTest {
     public void GameCannotBeAddedTwiceToDB() {
         Game g = getGame();
         db.putGame(g);
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         String id = g.getId();
         assertEquals(id, db.putGame(g));
     }
@@ -673,7 +668,7 @@ public class GameInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(10);
         location.setLongitude(20);
-        Game g = new Game(name, host, maxPlayerCount, riddles,coins, location, true,1,1,1);
+        Game g = new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 1, 1);
         gdp.putGame(g);
         try {
             Thread.sleep(2000);

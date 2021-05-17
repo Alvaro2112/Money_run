@@ -193,7 +193,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Double radius = ds.child(DATABASE_GAME_RADIUS).getValue(Double.class);
             Double duration = ds.child(DATABASE_GAME_DURATION).getValue(Double.class);
 
-            if(retName == null){
+            if (retName == null) {
                 throw new IllegalArgumentException("name should not be null.");
             }
             if (retHost == null) {
@@ -214,7 +214,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             if (retIsVisible == null) {
                 throw new IllegalArgumentException("is visible should not be null.");
             }
-            if(started == null){
+            if (started == null) {
                 throw new IllegalArgumentException("started should not be null.");
             }
 
@@ -225,10 +225,10 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
             //name, host, maxPlayerCount, startLocation, isVisible
 
-            Game retGame = new Game(retName, retHost, retPlayers, retMaxPlayerCount, retLocation, retIsVisible, retCoin,numCoins,radius,duration);
+            Game retGame = new Game(retName, retHost, retPlayers, retMaxPlayerCount, retLocation, retIsVisible, retCoin, numCoins, radius, duration);
             retGame.setId(ds.getKey());
             retGame.setHasBeenAdded(true);
-            retGame.setStarted(started,true);
+            retGame.setStarted(started, true);
 
             return retGame;
         } else {

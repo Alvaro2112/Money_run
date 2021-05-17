@@ -277,7 +277,10 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
-    public boolean getStarted(){return  gameDbData.getStarted();}
+    public boolean getStarted() {
+        return gameDbData.getStarted();
+    }
+
     public void setStarted(boolean started, boolean forceLocal) {
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
