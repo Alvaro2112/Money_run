@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,25 +33,22 @@ import sdp.moneyrun.user.User;
 
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
-    private final String DB_HOST = "host";
     private final String DB_IS_DELETED = "isDeleted";
     private final String DB_PLAYERS = "players";
     private final String DB_STARTED = "started";
-
+    //Listeners
+    ValueEventListener isDeletedListener;
+    ValueEventListener getDeleteListener;
+    ValueEventListener playerListListener;
+    ValueEventListener isStartedListener;
     private LobbyPlayerListAdapter listAdapter;
+    @Nullable
     private Game game;
     private String gameId;
     private Player user;
     private User actualUser;
     private DatabaseReference thisGame;
     GameDatabaseProxy proxyG;
-
-    //Listeners
-    ValueEventListener isDeletedListener;
-    ValueEventListener getDeleteListener;
-    ValueEventListener playerListListener;
-    ValueEventListener isStartedListener;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         // The adapter lets us add item to a ListView easily.
         ArrayList<Player> playerList = new ArrayList<>();
         listAdapter = new LobbyPlayerListAdapter(this, playerList);
-        ListView playerListView = (ListView) findViewById(R.id.lobby_player_list_view);
+        ListView playerListView = findViewById(R.id.lobby_player_list_view);
         playerListView.setAdapter(listAdapter);
     }
 
@@ -82,7 +80,7 @@ public class GameLobbyActivity extends AppCompatActivity {
      * @param playerList: players to be added to the leaderboard
      *                    Adds players to leaderboard
      */
-    public void addPlayerList(ArrayList<Player> playerList) {
+    public void addPlayerList(@Nullable ArrayList<Player> playerList) {
         if (playerList == null) {
             throw new NullPointerException("Player list is null");
         }
@@ -120,7 +118,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, error.getMessage().toString());
+                    Log.e(TAG, error.getMessage());
                 }
             };
             thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
@@ -130,8 +128,8 @@ public class GameLobbyActivity extends AppCompatActivity {
     private void createDeleteOrLeaveButton() {
         System.out.println("USREE IS HOST ?"+String.valueOf(user.equals(game.getHost())));
         if (user.equals(game.getHost())) {
-            Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
-            leaveButton.setText("Delete");
+            Button leaveButton = findViewById(R.id.leave_lobby_button);
+            leaveButton.setText(R.string.delete_button_text);
             leaveButton.setOnClickListener(getDeleteClickListener());
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
@@ -140,7 +138,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
-        TextView name = (TextView) findViewById(R.id.lobby_title);
+        TextView name = findViewById(R.id.lobby_title);
         name.setText(game.getName());
 
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
@@ -156,7 +154,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
 
         //Player List is dynamic with DB
-        TextView playersMissing = (TextView) findViewById(R.id.players_missing_TextView);
+        TextView playersMissing = findViewById(R.id.players_missing_TextView);
         playerListListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -164,7 +162,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 };
                 List<Player> newPlayers = snapshot.getValue(t);
                 listAdapter.clear();
-                addPlayerList(new ArrayList<Player>(newPlayers));
+                addPlayerList(new ArrayList<>(newPlayers));
                 String newPlayersMissing = getString(R.string.lobby_player_missing, game.getMaxPlayerCount() - newPlayers.size());
 
                 playersMissing.setText(newPlayersMissing);
@@ -206,6 +204,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
 
+    @NonNull
     private View.OnClickListener getDeleteClickListener() {
         return v -> {
             game.setIsDeleted(true, false);
@@ -222,6 +221,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         finish();
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());
@@ -231,6 +231,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         };
     }
 
+    @NonNull
     private View.OnClickListener getLeaveClickListener() {
         return v -> {
             game.removePlayer(user, false);

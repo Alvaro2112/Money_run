@@ -49,37 +49,32 @@ import static org.junit.Assert.fail;
 public class EndGameInstrumentedTest {
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             try {
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true);
                 MainActivity.calledAlready = true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private final long ASYNC_CALL_TIMEOUT = 5L;
-
     @Test
     public void updateTextFailsWithoutLists() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
 
-        Espresso.onView(ViewMatchers.withId(R.id.end_game_text)).check(matches(withText("Unfortunately the coin you collected have been lost")));
+            Espresso.onView(ViewMatchers.withId(R.id.end_game_text)).check(matches(withText("Unfortunately the coin you collected have been lost")));
+        } catch (Exception e) {
+            assertEquals(-1, 2);
+            e.printStackTrace();
         }
-        catch (Exception e){
-                assertEquals(-1,2);
-                e.printStackTrace();
-            }
-        }
+    }
 
     @Test
     public void updateTextDisplaysGoodNumbers() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            scenario.onActivity(a -> {
-                a.updateText(1, 1,true);
-            });
+            scenario.onActivity(a -> a.updateText(1, 1, true));
 
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
@@ -87,16 +82,11 @@ public class EndGameInstrumentedTest {
             textBuilder = textBuilder.append("For a total score of ").append(1);
             String text = textBuilder.toString();
             Espresso.onView(withId(R.id.end_game_text)).check(matches(withText(text)));
-        }
-        catch (Exception e){
-            assertEquals(-1,2);
+        } catch (Exception e) {
+            assertEquals(-1, 2);
             e.printStackTrace();
         }
     }
-
-
-
-
 
 
     @Test
@@ -115,18 +105,19 @@ public class EndGameInstrumentedTest {
     }
 
     @Test
-    public void updatePlayerUpdateScoreTest(){
+    public void updatePlayerUpdateScoreTest() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             String playerid = "98732";
-            final Player player = new Player(playerid, "O",5);
+            final Player player = new Player(playerid, "O", 5);
             final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
             CountDownLatch added = new CountDownLatch(1);
             OnCompleteListener addedListener = task -> added.countDown();
             db.putPlayer(player, addedListener);
+            long ASYNC_CALL_TIMEOUT = 5L;
             try {
                 added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
                 assertThat(added.getCount(), is(0L));
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 fail();
             }
             CountDownLatch updated = new CountDownLatch(1);
@@ -134,27 +125,26 @@ public class EndGameInstrumentedTest {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Player p = snapshot.getValue(Player.class);
-                    if(p.getScore() == 10) {
-                        assertEquals(p.getScore(),10);
+                    if (p.getScore() == 10) {
+                        assertEquals(p.getScore(), 10);
                         updated.countDown();
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    assert(false);
+                    assert (false);
                 }
             };
             scenario.onActivity(a -> {
-                        Player p = a.updatePlayer(playerid,10);
-                    });
-            db.addPlayerListener(player,listener);
+                Player p = a.updatePlayer(playerid, 10);
+            });
+            db.addPlayerListener(player, listener);
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
 
             db.removePlayerListener(player, listener);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             fail();
             e.printStackTrace();
         }
@@ -164,13 +154,13 @@ public class EndGameInstrumentedTest {
     public void launchIntentWithScoreOfCoins() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        Intent endGameIntent = new Intent( appContext,EndGameActivity.class);
+        Intent endGameIntent = new Intent(appContext, EndGameActivity.class);
         ArrayList<Integer> coins = new ArrayList<>();
-        endGameIntent.putExtra("score",3);
-        endGameIntent.putExtra("numberOfCollectedCoins",2);
+        endGameIntent.putExtra("score", 3);
+        endGameIntent.putExtra("numberOfCollectedCoins", 2);
 
-        endGameIntent.putExtra("playerId","1234567891");
-        try(ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
+        endGameIntent.putExtra("playerId", "1234567891");
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(2).append("coins");
             textBuilder = textBuilder.append("\n");
@@ -183,10 +173,8 @@ public class EndGameInstrumentedTest {
     }
 
 
-
-
     @Test
-    public void toLeaderboardButtonWorks(){
+    public void toLeaderboardButtonWorks() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
@@ -196,7 +184,6 @@ public class EndGameInstrumentedTest {
 
         }
     }
-
 
 
 }

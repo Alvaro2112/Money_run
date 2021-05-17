@@ -15,8 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class CoinGenerationHelperTest {
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -60,8 +60,6 @@ public class CoinGenerationHelperTest {
            double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
            assert(distance < radius && distance > 1);
        }
-
-
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -78,16 +76,17 @@ public class CoinGenerationHelperTest {
         Location coinLoc = new Location("");
         centerLoc.setLatitude(1);
         centerLoc.setLongitude(1);
-        double distance = (double) MapActivity.distance(coinLoc.getLatitude(),coinLoc.getLongitude(),centerLoc.getLatitude(),centerLoc.getLongitude());
-        int value = CoinGenerationHelper.coinValue(coinLoc,centerLoc);
-        assertEquals(Math.ceil((distance)/CoinGenerationHelper.VALUE_RADIUS),value,0);
+        double distance = MapActivity.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
+        int value = CoinGenerationHelper.coinValue(coinLoc, centerLoc);
+        assertEquals(Math.ceil((distance) / CoinGenerationHelper.VALUE_RADIUS), value, 0);
     }
+
     @Test(expected = NullPointerException.class)
     public void coinValuesFailsOnNullCoinLoc() {
         Location centerLoc = new Location("");
         centerLoc.setLatitude(0);
         centerLoc.setLongitude(0);
-        int value = CoinGenerationHelper.coinValue(null,centerLoc);
+        int value = CoinGenerationHelper.coinValue(null, centerLoc);
 
     }
 
@@ -96,7 +95,7 @@ public class CoinGenerationHelperTest {
         Location coinLoc = new Location("");
         coinLoc.setLatitude(0);
         coinLoc.setLongitude(0);
-        int value = CoinGenerationHelper.coinValue(coinLoc,null);
+        int value = CoinGenerationHelper.coinValue(coinLoc, null);
 
     }
 

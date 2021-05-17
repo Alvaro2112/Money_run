@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/leaderboard_top"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/spiderman_wall">
+    android:background="@drawable/spiderman_wall"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -51,7 +50,6 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/scrollableContents_leaderboard"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/leaderboard_header"

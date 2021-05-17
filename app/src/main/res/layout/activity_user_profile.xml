@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgoud_for_profile">
@@ -13,7 +12,7 @@
 
         android:gravity="center"
         android:textAppearance="@color/cardview_light_background"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,9 +27,9 @@
         android:layout_height="150dp"
 
         android:gravity="center"
-        android:textSize="15dp"
-        android:textStyle="bold"
         android:textAppearance="@color/cardview_light_background"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -43,10 +42,10 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
 
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:textAppearance="@color/cardview_light_background"
         android:gravity="center"
+        android:textAppearance="@color/cardview_light_background"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.909"
@@ -59,10 +58,10 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
 
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:textAppearance="@color/cardview_light_background"
         android:gravity="center"
+        android:textAppearance="@color/cardview_light_background"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -94,11 +93,11 @@
         app:layout_constraintVertical_bias="0.971" />
 
     <ImageView
-        android:id="@+id/avatarProfile"
         android:layout_width="172dp"
         android:layout_height="168dp"
         android:layout_marginStart="116dp"
         android:layout_marginBottom="148dp"
+        android:contentDescription="@string/player_avatar_description"
         app:layout_constraintBottom_toBottomOf="@+id/playerName"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/profile_picture_avatar" />

@@ -7,10 +7,10 @@
     tools:context=".ui.menu.MenuActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="46dp"
         android:layout_height="63dp"
         android:layout_marginStart="112dp"
+        android:contentDescription="@string/image_on_top_of_join_game_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.565"
@@ -20,9 +20,9 @@
         app:srcCompat="@drawable/running_guy" />
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="30dp"
         android:layout_height="67dp"
+        android:contentDescription="@string/image_on_top_of_join_game_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.262"
@@ -35,8 +35,8 @@
         android:id="@+id/new_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Start_game"
         android:background="@drawable/layout_rounded"
+        android:text="@string/Start_game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.726"
@@ -49,10 +49,10 @@
         android:id="@+id/join_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/layout_rounded"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/join_game"
-        android:background="@drawable/layout_rounded"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +62,9 @@
         app:layout_constraintVertical_bias="0.968" />
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="30dp"
         android:layout_height="67dp"
+        android:contentDescription="@string/image_on_top_of_create_game_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.341"
@@ -118,11 +118,10 @@
         app:layout_constraintTop_toBottomOf="@+id/weather_type" />
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="219dp"
         android:layout_height="42dp"
         android:layout_marginBottom="52dp"
-        android:text="Weather"
+        android:text="@string/weather_text"
         android:textAlignment="center"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/weather_type"

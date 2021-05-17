@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -28,17 +27,16 @@
                 android:id="@+id/downloader_exit"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
-                android:text="x"
+                android:text="@string/cross"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.989"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.006"
-                 />
+                app:layout_constraintVertical_bias="0.006" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.mapbox.mapboxsdk.maps.MapView>
@@ -48,9 +46,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:paddingLeft="25dp"
         android:layout_gravity="center"
+        android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-</FrameLayout>
+</merge>

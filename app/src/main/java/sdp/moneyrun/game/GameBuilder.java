@@ -2,6 +2,9 @@ package sdp.moneyrun.game;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import sdp.moneyrun.map.Coin;
@@ -9,25 +12,33 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 
 public class GameBuilder {
+    @Nullable
     private String name;
+    @Nullable
     private Player host;
+    @Nullable
     private List<Player> players;
     private int maxPlayerCount = 0;
+    @Nullable
     private List<Coin> coins;
+    @Nullable
     private List<Riddle> riddles;
+    @Nullable
     private Location startLocation;
     private boolean isVisible = true;
 
     /**
      * Empty constructor
      */
-    public GameBuilder(){}
+    public GameBuilder() {
+    }
 
     /**
      * @param name the game name
      */
-    public GameBuilder setName(String name){
-        if(name == null){
+    @NonNull
+    public GameBuilder setName(@Nullable String name) {
+        if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
         }
 
@@ -38,8 +49,9 @@ public class GameBuilder {
     /**
      * @param host the game host
      */
-    public GameBuilder setHost(Player host){
-        if(host == null){
+    @NonNull
+    public GameBuilder setHost(@Nullable Player host) {
+        if (host == null) {
             throw new IllegalArgumentException("host should not be null.");
         }
 
@@ -50,11 +62,12 @@ public class GameBuilder {
     /**
      * @param players the players in the game
      */
-    public GameBuilder setPlayers(List<Player> players){
-        if(players == null){
+    @NonNull
+    public GameBuilder setPlayers(@Nullable List<Player> players) {
+        if (players == null) {
             throw new IllegalArgumentException("players should not be null.");
         }
-        if(players.isEmpty()){
+        if (players.isEmpty()) {
             throw new IllegalArgumentException("players can never be empty (There should always be the host)");
         }
 
@@ -65,8 +78,9 @@ public class GameBuilder {
     /**
      * @param maxPlayerCount the maximum number of players in the game
      */
-    public GameBuilder setMaxPlayerCount(int maxPlayerCount){
-        if(maxPlayerCount <= 0){
+    @NonNull
+    public GameBuilder setMaxPlayerCount(int maxPlayerCount) {
+        if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("max player count should be greater than 0.");
         }
 
@@ -77,8 +91,9 @@ public class GameBuilder {
     /**
      * @param coins the coins located in the map for the game
      */
-    public GameBuilder setCoins(List<Coin> coins){
-        if(coins == null){
+    @NonNull
+    public GameBuilder setCoins(@Nullable List<Coin> coins) {
+        if (coins == null) {
             throw new IllegalArgumentException("coins should not be null.");
         }
 
@@ -89,8 +104,9 @@ public class GameBuilder {
     /**
      * @param riddles the game riddles
      */
-    public GameBuilder setRiddles(List<Riddle> riddles){
-        if(riddles == null){
+    @NonNull
+    public GameBuilder setRiddles(@Nullable List<Riddle> riddles) {
+        if (riddles == null) {
             throw new IllegalArgumentException("riddles should not be null.");
         }
 
@@ -101,8 +117,9 @@ public class GameBuilder {
     /**
      * @param startLocation the start location of the game
      */
-    public GameBuilder setStartLocation(Location startLocation){
-        if(startLocation == null){
+    @NonNull
+    public GameBuilder setStartLocation(@Nullable Location startLocation) {
+        if (startLocation == null) {
             throw new IllegalArgumentException("start location should not be null.");
         }
 
@@ -113,41 +130,42 @@ public class GameBuilder {
     /**
      * @param isVisible The visibility of the game in the join list
      */
-    public GameBuilder setIsVisible(boolean isVisible){
+    @NonNull
+    public GameBuilder setIsVisible(boolean isVisible) {
         this.isVisible = isVisible;
         return this;
     }
 
-    public Game build(){
-        if(name == null){
+    public void build() {
+        if (name == null) {
             throw new IllegalStateException("name should not be null.");
         }
-        if(host == null){
+        if (host == null) {
             throw new IllegalStateException("host should not be null.");
         }
-        if(maxPlayerCount <= 0){
+        if (maxPlayerCount <= 0) {
             throw new IllegalStateException("max player count should be greater than 0.");
         }
-        if(coins == null){
+        if (coins == null) {
             throw new IllegalStateException("coins should not be null.");
         }
-        if(startLocation == null){
+        if (startLocation == null) {
             throw new IllegalStateException("start location should not be null.");
         }
 
-        if(riddles == null){
-            if(players == null){
+        if (riddles == null) {
+            if (players == null) {
                 throw new IllegalStateException("players and riddles should not be null.");
             }
 
-            return new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+            new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+            return;
         }
 
         Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
-        if(players != null){
+        if (players != null) {
             game.setPlayers(players, true);
         }
 
-        return game;
     }
 }
