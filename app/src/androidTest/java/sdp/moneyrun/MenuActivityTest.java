@@ -653,17 +653,19 @@ public class MenuActivityTest {
     }
 
 
+    //Huge wait time (35 sec) I know, but it needs the time to get the location via the network
+    //then send an http request and wait for an answer. All in all its pretty lengthy
     @Test
     public void weatherTypeAndTemperatureAreNotEmpty(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Thread.sleep(25000);
+            Thread.sleep(35000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
             onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    
+
     /*
     @Test
     public void joinLobbyFromJoinButtonIntentIsSent(){
