@@ -621,12 +621,8 @@ public class GameInstrumentedTest {
                 GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
                 };
                 boolean started = snapshot.child("started").getValue(coinIndicator);
-                System.out.println("VALUE TO BE TESTED"+String.valueOf(started));
                 if (updated.getCount() == 0L) {
                     assertEquals(true, started);
-                }
-                else{
-                    System.out.println("FALSE");
                 }
                 updated.countDown();
             }

@@ -87,6 +87,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private CircleManager circleManager;
     private double game_radius;
     private int game_time;
+    public Location game_center;
 
     private float circleRadius;
     private double shrinkingFactor = 0.9;
@@ -155,7 +156,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_radius = game.getRadius();
                 circleRadius = (float) game_radius;
                 game_time = (int) Math.floor(game.getDuration() * 60);
-
+                game_center = game.getStartLocation();
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius,THRESHOLD_DISTANCE);
                     addedCoins = true;

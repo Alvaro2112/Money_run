@@ -141,9 +141,8 @@ public class GameLobbyActivity extends AppCompatActivity {
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
         TextView name = (TextView) findViewById(R.id.lobby_title);
+        name.setText(game.getName());
 
-        if (game.getHost().equals(user)) {
-        }
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
             if (game.getHost().equals(user)) {
                 game.setStarted(true, false);
