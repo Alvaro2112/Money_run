@@ -389,8 +389,10 @@ public class GameLobbyActivityInstrumentedTest {
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
+            Thread.sleep(3000);
+
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
-            Thread.sleep(2000);
+            Thread.sleep(3000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {

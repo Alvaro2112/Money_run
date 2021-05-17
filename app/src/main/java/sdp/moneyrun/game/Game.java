@@ -116,7 +116,7 @@ public class Game {
             throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
 
-        if (numCoins <= 0) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("Number of coins should be bigger than 0.");
         }
         if (radius <= 0) {
@@ -210,7 +210,7 @@ public class Game {
             throw new IllegalArgumentException("coins should not be null.");
         }
 
-        if (numCoins <= 0) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("Number of coins should be bigger than 0.");
         }
         if (radius <= 0) {

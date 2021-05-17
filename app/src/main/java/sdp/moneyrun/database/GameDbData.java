@@ -97,7 +97,7 @@ public final class GameDbData {
         if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
-        if (numCoins <= 0) {
+        if (numCoins < 0 ) {
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
         if (radius <= 0) {
