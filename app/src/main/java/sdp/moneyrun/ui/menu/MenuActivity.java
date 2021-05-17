@@ -60,6 +60,9 @@ import sdp.moneyrun.weather.WeatherReport;
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
     });
+    
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
 
     private RiddlesDatabase db;
     protected DrawerLayout mDrawerLayout;
@@ -69,6 +72,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private Player currentPlayer;
     private int tasksFInished;
     private User user;
+
+    private OpenWeatherMap openWeatherMap;
+    private AddressGeocoder addressGeocoder;
+    private WeatherForecast currentForecast;
+    private LocationRepresentation currentLocation;
+
+
+
 
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -140,10 +151,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissionsLauncher,
                 fusedLocationClient);
 
-        // Functionalities
-        /////////////////////////////////
+
         runWeather();
-        //////////////////////////////
 
         Button joinGame = findViewById(R.id.join_game);
         joinGame.setOnClickListener(joinGameImplementation::onClickShowJoinGamePopupWindow);
@@ -157,18 +166,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         RiddlesDatabase.reset();
     }
-
-
-    public void StartMapActivity() {
-        Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-        if (user != null) {
-            mainIntent.putExtra("playerId", user.getUserId());
-        }
-        MenuActivity.this.startActivity(mainIntent);
-        MenuActivity.this.finish();
-        available.release();
-    }
-
 
 
     @SuppressLint("NonConstantResourceId")
@@ -223,15 +220,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             joinGame.setEnabled(false);
         }
     }
-
-    /////////////////////////////////////////////////////WEATHER IMPLEMENTATION
-    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
-    private static final int PERMISSION_REQUEST_CODE = 1;
-    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
-    private OpenWeatherMap openWeatherMap;
-    private AddressGeocoder addressGeocoder;
-    private WeatherForecast currentForecast;
-    private LocationRepresentation currentLocation;
 
     LocationListener locationListenerGPS = location -> {
         loadWeather(location);

@@ -48,6 +48,8 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -283,26 +285,6 @@ public class MenuActivityTest {
         }
     }
 
-
-    /*
-    @Test
-    public void mapButtonAndSplashScreenWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-            Espresso.onView(withId(R.id.map_button)).perform(ViewActions.click());
-            Thread.sleep(100);
-
-            onView(ViewMatchers.withId(R.id.splashscreen)).check(matches(isDisplayed()));
-            Thread.sleep(10000);
-            intended(hasComponent(MapActivity.class.getName()));
-
-            Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-
-            Intents.release();
-        }
-    }*/
 
     @Test
     public void newGamePopupIsDisplayed() {
@@ -669,6 +651,21 @@ public class MenuActivityTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void weatherTypeAndTemperatureAreNotEmpty(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(25000);
+            onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void
 
     /*
     @Test
