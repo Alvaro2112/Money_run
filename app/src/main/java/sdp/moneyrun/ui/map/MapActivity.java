@@ -86,8 +86,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public int coinsToPlace;
 
     private CircleManager circleManager;
-    private double game_radius;
-    private int game_time;
+    public double game_radius;
+    public int game_time;
     public Location game_center;
 
     private float circleRadius;
@@ -165,12 +165,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     addedCoins = true;
                     initCircle();
                 }
-
                 addCoinsListener();
                 if (host) {
                     game.setCoins(localPlayer.getLocallyAvailableCoins(), true);
                     proxyG.updateGameInDatabase(game, null);
-
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
@@ -290,6 +288,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } else {
                 Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
             }
+            chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
     }
 

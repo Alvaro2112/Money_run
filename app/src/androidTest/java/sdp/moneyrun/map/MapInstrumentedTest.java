@@ -289,13 +289,14 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                Location curloc = a.getCurrentLocation();
-                Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
-                a.addCoin(coin, true);
-                Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
-                a.addCoin(coin2, true);
-                finished.set(true);
-            }));
+                if(fully) {
+                    Location curloc = a.getCurrentLocation();
+                    Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude() / 2, 1);
+                    a.addCoin(coin, true);
+                    Coin coin2 = new Coin(curloc.getLatitude() / 3, curloc.getLongitude() / 100, 1);
+                    a.addCoin(coin2, true);
+                    finished.set(true);
+                }}));
             do {
                 try {
                     Thread.sleep(100);
@@ -304,11 +305,11 @@ public class MapInstrumentedTest {
                 }
             } while (!finished.get());
             try {
-                Thread.sleep(100);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenario.onActivity(a -> assertEquals(2, a.getSymbolManager().getAnnotations().size()));
+            scenario.onActivity(a -> assertEquals(4, a.getSymbolManager().getAnnotations().size()));
         } catch (Exception e) {
             e.printStackTrace();
             assertEquals(-1, 2);
@@ -583,8 +584,8 @@ public class MapInstrumentedTest {
 
     @Test
     public void collectCoinButtonCollectsCoin() {
-        Intent intent = createIntentAndPutInDB();
 
+        Intent intent = createIntentAndPutInDB();
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
 
             String question = "What is the color of the sky";
@@ -613,7 +614,7 @@ public class MapInstrumentedTest {
             onView(withId(R.id.question_choice_1)).perform(ViewActions.click());
             onView(withId(R.id.collect_coin)).perform(ViewActions.click());
 
-            scenario.onActivity(a -> assertEquals(0, a.getSymbolManager().getAnnotations().size()));
+            scenario.onActivity(a -> assertEquals(2, a.getSymbolManager().getAnnotations().size()));
 
         }
     }
@@ -626,7 +627,7 @@ public class MapInstrumentedTest {
             Intents.init();
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {if(fully){ finished.set(true);}}));
             do {
                 try {
                     Thread.sleep(100);
@@ -634,6 +635,11 @@ public class MapInstrumentedTest {
                     assertEquals(-1, 2);
                 }
             } while (!finished.get());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             onView(withId(R.id.close_map)).perform(ViewActions.click());
             try {
@@ -831,7 +837,6 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 a.isLocationAppropriate(location);
                 assert (a.isLocationAppropriate(location));
-                //  System.out.println("At spc appropriate returns " + a.isLocationAppropriate(location));
             });
         }
     }
@@ -1057,7 +1062,7 @@ public class MapInstrumentedTest {
             scenario.onActivity(a -> {
                 int numberOfCoins = 7;
                 a.placeRandomCoins(numberOfCoins, 100, 2);
-                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins);
+                assertEquals(a.getLocalPlayer().getLocallyAvailableCoins().size(), numberOfCoins + 2);
             });
         }
     }
@@ -1212,7 +1217,6 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
                 fail();
             }
-            System.out.println("OKOKOO");
             scenario.onActivity(activity -> {
                 assertEquals(1, activity.getLocalPlayer().getLocallyAvailableCoins().size());
                 assertEquals(1, activity.symbolManager.getAnnotations().size());
@@ -1277,6 +1281,39 @@ public class MapInstrumentedTest {
                 assert listAdapter.getItem(0).getScore() > listAdapter.getItem(1).getScore();
             });
 
+        }
+    }
+    @Test
+    public void mapHasIntegratesFromGame() {
+        Intent intent = createIntentAndPutInDB();
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
+            do {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+            } while (!finished.get());
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Location location = new Location("LocationManager#GPS_PROVIDER");
+            location.setLatitude(37.42);
+            location.setLongitude(-122.084);
+
+            scenario.onActivity(activity -> {
+                assertEquals(1,activity.coinsToPlace);
+                assertEquals(location,activity.game_center);
+                assertEquals(4*60,activity.game_time);
+                assertEquals(20,activity.game_radius,0.001);
+
+            });
         }
     }
 
