@@ -140,7 +140,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void StartGameAsHostWorks() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -179,7 +179,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void InitializeGameAddsCoinsToDB() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -408,7 +408,7 @@ public class    GameLobbyActivityInstrumentedTest {
     public void LeaveIsDeleteForHost(){
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        Player host = new Player("3","Bob", 0);
+       Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
@@ -491,7 +491,7 @@ public class    GameLobbyActivityInstrumentedTest {
     public void deleteGameDeletesItFromDB(){
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        Player host = new Player("3","Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);

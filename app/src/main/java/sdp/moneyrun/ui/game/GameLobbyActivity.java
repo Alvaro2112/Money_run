@@ -128,6 +128,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void createDeleteOrLeaveButton() {
+        System.out.println("USREE IS HOST ?"+String.valueOf(user.equals(game.getHost())));
         if (user.equals(game.getHost())) {
             Button leaveButton = (Button) findViewById(R.id.leave_lobby_button);
             leaveButton.setText("Delete");
@@ -180,7 +181,6 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void listenToStarted() {
         if (!game.getHost().equals(user)) {
-
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -203,7 +203,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 }
             };
             proxyG.addGameListener(game, isStartedListener);
-          //  thisGame.child(DB_STARTED).addValueEventListener(isStartedListener);
         }
     }
 
@@ -224,7 +223,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Log.e(TAG, error.getMessage());

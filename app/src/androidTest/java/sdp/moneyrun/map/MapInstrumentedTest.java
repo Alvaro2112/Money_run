@@ -1485,7 +1485,6 @@ public class MapInstrumentedTest {
             scenario.onActivity(activity -> {
                 assertEquals(1, activity.getLocalPlayer().getLocallyAvailableCoins().size());
                 assertEquals(1, activity.symbolManager.getAnnotations().size());
-
             });
         }
     }
