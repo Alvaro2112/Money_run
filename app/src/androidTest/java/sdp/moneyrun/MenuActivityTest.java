@@ -107,7 +107,7 @@ public class MenuActivityTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
-    
+
     @Test
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
@@ -555,8 +555,11 @@ public class MenuActivityTest {
                 location.setLongitude(38.2699);
                 a.loadWeather(location);
             });
+            Thread.sleep(40000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
             onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
