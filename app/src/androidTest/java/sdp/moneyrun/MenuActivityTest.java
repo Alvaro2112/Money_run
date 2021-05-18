@@ -656,8 +656,7 @@ public class MenuActivityTest {
 
     //Huge wait time (35 sec) I know, but it needs the time to get the location via the network
     //then send an http request and wait for an answer. All in all its pretty lengthy
-    @Test
-
+    /*
     public void weatherTypeAndTemperatureAreNotEmpty(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             scenario.onActivity(a -> {
@@ -673,7 +672,7 @@ public class MenuActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /*
     @Test
