@@ -41,7 +41,6 @@ public class Game {
     private String id;
     private boolean hasBeenAdded;
 
-    private int numCoins;
     private boolean started;
 
     /**
@@ -116,7 +115,7 @@ public class Game {
             throw new IllegalArgumentException("maxPlayerCount should not be smaller than 1.");
         }
 
-        if (numCoins <= 0) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("Number of coins should be bigger than 0.");
         }
         if (radius <= 0) {
@@ -173,10 +172,10 @@ public class Game {
         }
 
         this.hasBeenAdded = false;
+        started = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
-        started = false;
 
     }
 
@@ -210,7 +209,7 @@ public class Game {
             throw new IllegalArgumentException("coins should not be null.");
         }
 
-        if (numCoins <= 0) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("Number of coins should be bigger than 0.");
         }
         if (radius <= 0) {
@@ -222,9 +221,9 @@ public class Game {
 
 
         this.hasBeenAdded = false;
+        started = false;
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
-        started = false;
 
     }
 
@@ -238,7 +237,6 @@ public class Game {
         currentActivity.finish();
     }
 
-    //Wether the game has started
     public boolean isStarted() {
         return started;
     }
@@ -276,9 +274,11 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
+    public boolean getStarted() {
+        return gameDbData.getStarted();
+    }
 
     public void setStarted(boolean started, boolean forceLocal) {
-        gameDbData.setStarted(started);
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
@@ -286,9 +286,11 @@ public class Game {
                     .child(DATABASE_STARTED)
                     .setValue(started);
         }
+        gameDbData.setStarted(started);
+        this.started = started;
+
     }
 
-    @NonNull
     public List<Riddle> getRiddles() {
         return new ArrayList<>(riddles);
     }

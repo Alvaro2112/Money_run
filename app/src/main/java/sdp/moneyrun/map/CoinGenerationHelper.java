@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import sdp.moneyrun.ui.map.MapActivity;
-
 public class CoinGenerationHelper {
 
     public static final double VALUE_RADIUS = 100;
@@ -20,13 +18,17 @@ public class CoinGenerationHelper {
     /**
      * https://stackoverflow.com/a/36919707
      *
-     * @param currentLocation
-     * @param radius
-     * @return a Location within a radius in meters
+     * @param currentLocation Center of the radius
+     * @param maxRadius       Biggest distance for a coin compared to the center
+     * @param minRadius       Mininum distance from a coin to the radius
+     * @return a location between min radius and max radius from the currentLocation
      */
-    @NonNull
-    public static Location getRandomLocation(@Nullable Location currentLocation, int radius) {
-        if (radius <= 0 || currentLocation == null) throw new IllegalArgumentException();
+    public static Location getRandomLocation(Location currentLocation, double maxRadius, double minRadius) {
+        if (maxRadius <= 0 || currentLocation == null || minRadius <= 0)
+            throw new IllegalArgumentException();
+        if (maxRadius <= minRadius)
+            throw new IllegalArgumentException("Min radius is bigger than maxRadius");
+
         double x0 = currentLocation.getLongitude();
         double y0 = currentLocation.getLatitude();
 
@@ -34,7 +36,7 @@ public class CoinGenerationHelper {
         double foundLatitude;
         double foundLongitude;
         // Convert radius from meters to degrees.
-        double radiusInDegrees = radius / 111320f;
+        double radiusInDegrees = maxRadius / 111320f;
 
         do {// Get a random distance and a random angle.
             double u = random.nextDouble();
@@ -50,7 +52,7 @@ public class CoinGenerationHelper {
 
             foundLatitude = y0 + y;
             foundLongitude = x0 + new_x;
-        } while (TrackedMap.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < MapActivity.THRESHOLD_DISTANCE);
+        } while (TrackedMap.distance(foundLatitude, foundLongitude, currentLocation.getLatitude(), currentLocation.getLongitude()) < minRadius);
 
         Location copy = new Location("");
         copy.setLatitude(foundLatitude);

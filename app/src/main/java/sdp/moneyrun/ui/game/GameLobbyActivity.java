@@ -48,13 +48,14 @@ public class GameLobbyActivity extends AppCompatActivity {
     private Player user;
     private User actualUser;
     private DatabaseReference thisGame;
+    GameDatabaseProxy proxyG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
-
+        proxyG = new GameDatabaseProxy();
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
@@ -87,7 +88,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void getGameFromDb() {
-        GameDatabaseProxy proxyG = new GameDatabaseProxy();
+
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 this.game = proxyG.getGameFromTaskSnapshot(task);
@@ -124,6 +125,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds a listener to the button that either leaves for a player that joined the game or
+     * leaves and deletes the game if the user is the host
+     */
     private void createDeleteOrLeaveButton() {
         if (user.equals(game.getHost())) {
             Button leaveButton = findViewById(R.id.leave_lobby_button);
@@ -134,6 +139,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set all the UI fields according to the game fetched from the DB
+     * Also sets the listener for the launch game button
+     */
     private void setAllFieldsAccordingToGame() {
         //Find all the views and assign them values
         TextView name = findViewById(R.id.lobby_title);
@@ -146,7 +155,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 intent.putExtra("player", user);
                 intent.putExtra("gameId", gameId);
                 intent.putExtra("host", true);
-                intent.putExtra("useDB", true);
                 startActivity(intent);
                 finish();
             }
@@ -180,13 +188,11 @@ public class GameLobbyActivity extends AppCompatActivity {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean started = snapshot.getValue(boolean.class);
-                    if (started) {
+                    if ((boolean) snapshot.child("started").getValue()) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);
                         intent.putExtra("host", false);
-                        intent.putExtra("useDB", true);
                         startActivity(intent);
                         finish();
                     }
@@ -197,7 +203,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            thisGame.child(DB_STARTED).addValueEventListener(isStartedListener);
+            proxyG.addGameListener(game, isStartedListener);
         }
     }
 
