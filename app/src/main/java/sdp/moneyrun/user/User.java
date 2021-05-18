@@ -47,8 +47,18 @@ public class User implements Serializable {
      */
     public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
-        if (userId == null || name == null || name.isEmpty() || address == null || address.isEmpty() || maxScoreInGame < 0)
-            throw new IllegalArgumentException();
+        if (userId == null)
+            throw new IllegalArgumentException("The user ID cannot be null");
+
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("The name of the user cannot be null");
+
+        if (address == null || address.isEmpty())
+            throw new IllegalArgumentException("The address of the user cannot be null nor empty");
+
+        if (maxScoreInGame < 0)
+            throw new IllegalArgumentException("The max score of a user must be positive");
+
         this.userId = userId;
         this.name = name;
         this.address = address;
@@ -254,6 +264,20 @@ public class User implements Serializable {
         return new ArrayList<>(this.friendIdList);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return numberOfPlayedGames == user.numberOfPlayedGames &&
+                numberOfDiedGames == user.numberOfDiedGames &&
+                maxScoreInGame == user.maxScoreInGame &&
+                Objects.equals(userId, user.userId) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(address, user.address) &&
+                friendIdList.equals(user.friendIdList);
+    }
+
     /**
      * set the user friend list
      *
@@ -270,19 +294,6 @@ public class User implements Serializable {
         }
 
         this.friendIdList = new ArrayList<>(friendIdList);
-    }
-
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId.equals(user.userId) &&
-                numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames &&
-                name.equals(user.name) &&
-                address.equals(user.address)
-                && friendIdList.equals(user.friendIdList);
     }
 
     @Override
