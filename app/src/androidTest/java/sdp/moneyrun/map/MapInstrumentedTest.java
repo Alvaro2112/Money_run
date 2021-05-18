@@ -1407,7 +1407,7 @@ public class MapInstrumentedTest {
                 assertEquals(2, activity.coinsToPlace);
                 assertEquals(location.getLatitude(), activity.getGameCenter().getLatitude(), 0.01);
                 assertEquals(location.getLongitude(), activity.getGameCenter().getLongitude(), 0.01);
-                assertEquals(4 * 60, activity.getGameDuration());
+                assertEquals(4 * 60, activity.getGameDuration(),0.01);
                 assertEquals(20, activity.getGameRadius(), 0.001);
 
             });
