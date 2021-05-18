@@ -166,7 +166,7 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(2000);
+            Thread.sleep(20000);
             intended(hasComponent(GameLobbyActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
