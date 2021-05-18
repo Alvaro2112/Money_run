@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -52,6 +53,7 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
 
 
 /*
@@ -156,6 +158,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_time = (int) Math.floor(game.getDuration() * 60);
                 game_center = game.getStartLocation();
                 initChronometer();
+
 
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
@@ -464,7 +467,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         circleRadius *= shrinkingFactor;
         initCircle();
-
+        checkIfLegalPosition(coin);
     }
 
     /**
@@ -518,4 +521,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return circleManager;
     }
 
+    public void checkIfLegalPosition(Coin coin){
+        // calculates distance between the current coin and the game center
+        double distance = Math.sqrt(Math.pow(coin.getLatitude()-game_center.getLatitude(),2)+ Math.pow(coin.getLatitude()-game_center.getLatitude(),2));
+        if(distance < circleRadius){
+            // should end the game for this user
+            Intent endGameIntent = new Intent(MapActivity.this, EndGameActivity.class);
+            startActivity(endGameIntent);
+        }
+
+    }
 }
