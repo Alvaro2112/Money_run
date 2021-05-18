@@ -69,6 +69,7 @@ public class MenuActivityTest {
         return toStart;
     }
 
+    
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
