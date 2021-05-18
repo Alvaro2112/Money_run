@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
@@ -64,6 +65,41 @@ public class GameTest {
         coins.add(new Coin(0., 0., 1));
         Location location = new Location("LocationManager#GPS_PROVIDER");
         new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+    }
+
+    @Test
+    public void hashCodeWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertEquals(game.hashCode(), Objects.hash(game.getGameDbData()));
+    }
+
+    @Test
+    public void addAlreadyPresentPlayerDoesNothing() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        Player bob = new Player("3", "Bob", 0);
+        Player john = new Player("3", "john", 0);
+
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(bob);
+        players.add(john);
+        Game game = new Game(name, host, players, maxPlayerCount, location, true, coins, 3, 5, 10);
+        game.addPlayer(john, true);
+        assertEquals(game.getPlayers(), players);
     }
 
     @Test

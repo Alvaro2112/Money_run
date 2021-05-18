@@ -116,6 +116,9 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.isStarted = false;
+        this.numCoins = numCoins;
+        this.radius = radius;
+        this.duration = duration;
     }
 
 

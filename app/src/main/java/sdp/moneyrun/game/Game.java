@@ -222,7 +222,6 @@ public class Game {
 
 
         this.hasBeenAdded = false;
-
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
         started = false;
