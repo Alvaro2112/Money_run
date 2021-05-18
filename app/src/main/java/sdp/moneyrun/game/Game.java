@@ -324,14 +324,38 @@ public class Game {
     }
 
     public void setIsVisible(boolean value, boolean forceLocal) {
-        if (hasBeenAdded && !forceLocal) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child(DATABASE_GAME)
-                    .child(id)
-                    .child(DATABASE_IS_VISIBLE)
-                    .setValue(value);
-        }
+        if (hasBeenAdded && !forceLocal)
+            setDatabaseVariable(DATABASE_IS_VISIBLE, value);
+
         gameDbData.setIsVisible(value);
+    }
+
+    public boolean getIsDeleted() {
+        return gameDbData.getIsDeleted();
+    }
+
+    /**
+     * Set the value of isDeleted
+     *
+     * @param value      new value
+     * @param forceLocal set to true if it is to only be done locally, false
+     *                   if both database and local values should be changed
+     *                   (game must still have been added to the DB for false to work)
+     */
+    public void setIsDeleted(boolean value, boolean forceLocal) {
+        if (hasBeenAdded && !forceLocal)
+            setDatabaseVariable(DATABASE_IS_DELETED, value);
+
+        gameDbData.setIsDeleted(value);
+
+    }
+
+    public void setDatabaseVariable(String variable, Object value){
+        FirebaseDatabase.getInstance().getReference()
+                .child(DATABASE_GAME)
+                .child(id)
+                .child(variable)
+                .setValue(value);
     }
 
     public int getPlayerCount() {
@@ -377,16 +401,11 @@ public class Game {
             throw new IllegalArgumentException("Player List can never be empty (There should always be the host)");
         }
 
-        if (!hasBeenAdded || forceLocal) {
-            gameDbData.setPlayers(players);
-        } else {
-            gameDbData.setPlayers(players);
-            FirebaseDatabase.getInstance().getReference()
-                    .child(DATABASE_GAME)
-                    .child(id)
-                    .child(DATABASE_PLAYER)
-                    .setValue(players);
-        }
+        gameDbData.setPlayers(players);
+
+        if (hasBeenAdded && !forceLocal)
+            setDatabaseVariable(DATABASE_PLAYER, players);
+
     }
 
     /**
@@ -433,29 +452,7 @@ public class Game {
 
     }
 
-    public boolean getIsDeleted() {
-        return gameDbData.getIsDeleted();
-    }
 
-    /**
-     * Set the value of isDeleted
-     *
-     * @param value      new value
-     * @param forceLocal set to true if it is to only be done locally, false
-     *                   if both database and local values should be changed
-     *                   (game must still have been added to the DB for false to work)
-     */
-    public void setIsDeleted(boolean value, boolean forceLocal) {
-        if (hasBeenAdded && !forceLocal) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child(DATABASE_GAME)
-                    .child(id)
-                    .child(DATABASE_IS_DELETED)
-                    .setValue(value);
-        }
-        gameDbData.setIsDeleted(value);
-
-    }
 
     @Override
     public boolean equals(@Nullable Object o) {
