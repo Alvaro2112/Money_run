@@ -127,7 +127,7 @@ public class GameTest {
         coins.add(new Coin(0., 0., 1));
         Location location = new Location("LocationManager#GPS_PROVIDER");
         Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
-        assertEquals(game.getNumCoins(), 0);
+        assertEquals(game.getNumCoins(), 3, 0);
     }
 
     @Test
