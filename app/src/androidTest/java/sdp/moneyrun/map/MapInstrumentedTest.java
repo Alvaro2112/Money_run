@@ -568,6 +568,11 @@ public class MapInstrumentedTest {
             } while (!finished.get());
             String default_text = "Score: 0";
             Espresso.onView(withId(R.id.map_score_view)).check(matches(withText(default_text)));
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             scenario.onActivity(a -> {
                 Location curloc = a.getCurrentLocation();
