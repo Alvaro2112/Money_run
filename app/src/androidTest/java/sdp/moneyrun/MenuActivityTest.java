@@ -69,7 +69,7 @@ public class MenuActivityTest {
         return toStart;
     }
 
-    
+
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
@@ -657,8 +657,16 @@ public class MenuActivityTest {
     //Huge wait time (35 sec) I know, but it needs the time to get the location via the network
     //then send an http request and wait for an answer. All in all its pretty lengthy
     @Test
+
     public void weatherTypeAndTemperatureAreNotEmpty(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
+                location.setLatitude(40.741895);
+                location.setLongitude(-73.989308);
+                a.loadWeather(location);
+
+            });
             Thread.sleep(35000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
             onView(withId(R.id.weather_type)).check(matches(not(withText(""))));

@@ -61,7 +61,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
     });
 
-    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
+    //In meters
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 1.0;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
 
     private RiddlesDatabase db;
