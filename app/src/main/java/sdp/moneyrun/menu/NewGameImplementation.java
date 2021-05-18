@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +32,6 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
-    private final String DB_PLAYER_LIST = "players";
     TextView nameGameView;
     TextView maxPlayerNumberView;
     TextView numCoinsView;
@@ -56,7 +56,7 @@ public class NewGameImplementation extends MenuImplementation {
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.new_game_popup, null);
+        @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.new_game_popup, null);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -70,7 +70,6 @@ public class NewGameImplementation extends MenuImplementation {
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
         newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
-        //TODO, post the game, but also join it and launch the lobby activity
     }
 
     /**
@@ -78,7 +77,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(LinearLayout newGameLayout) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout) {
         nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
@@ -110,11 +109,11 @@ public class NewGameImplementation extends MenuImplementation {
      * @param gameName           name of the game
      * @param maxPlayerNumberStr string inputted in the UI for the  player count
      * @param numCoinsStr        string inputted in the UI for the number of coin
-     * @param gameRadiusStr      sintr inputted in the UI for the radius of th game
+     * @param gameRadiusStr      string inputted in the UI for the radius of th game
      * @param gameDurationStr    string inputted in the UI for the game duration
      * @return true if there is no problem with the strings else return false
      */
-    private boolean checkNewGameStringParameters(String gameName, String maxPlayerNumberStr, String numCoinsStr, String gameRadiusStr, String gameDurationStr) {
+    private boolean checkNewGameStringParameters(@NonNull String gameName, @NonNull String maxPlayerNumberStr, @NonNull String numCoinsStr, @NonNull String gameRadiusStr, @NonNull String gameDurationStr) {
         boolean isEmpty = false;
         if (gameName.isEmpty()) {
             nameGameView.setError("This field is required");
@@ -181,10 +180,6 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-        DatabaseReference gameReference = databaseReference.child(activity.getString(R.string.database_game)).push();
-        DatabaseReference startLocationReference = databaseReference
-                .child(activity.getString(R.string.database_game))
-                .child(gameReference.getKey()).child(activity.getString(R.string.database_game_start_location));
 
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
@@ -198,24 +193,6 @@ public class NewGameImplementation extends MenuImplementation {
         // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
-
-        //The reason all of this is commented out is because it kept making the app crash
-        //as you can see there is a missing permission surpression that was here already in master
-        //most of the time it fails to get the location from the gps provider.
-        //we should fix it asap, but it is outside of the scope of this PR, and doesnt cause
-        //any critical failures
-
-        /*fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
-            // Got last known location. In some rare situations this can be null
-            // In this case, the game cannot be instanciated
-            if (location == null) {
-                Log.e("location", "Error getting location");
-                return;
-            }
-            // Post location to database
-            LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-            startLocationReference.setValue(locationRep);
-        });*/
         launchLobbyActivity(game.getId(), player);
     }
 

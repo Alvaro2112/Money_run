@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -21,7 +22,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +48,7 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -75,6 +76,7 @@ public class MenuActivityTest {
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    @NonNull
     private static Matcher<View> withError(final String expected) {
         return new TypeSafeMatcher<View>() {
 
@@ -94,6 +96,9 @@ public class MenuActivityTest {
         };
     }
 
+
+
+    @NonNull
     public Game getGame() {
         String name = "JoinGameImplementationTest";
         Player host = new Player("3", "Bob", 0);
@@ -105,7 +110,7 @@ public class MenuActivityTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 2, 2);
     }
 
 
@@ -125,8 +130,7 @@ public class MenuActivityTest {
     }
 
 
-
-    public void filterWithNotExistingNameWorks(){
+    public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
@@ -146,7 +150,6 @@ public class MenuActivityTest {
 
         }
     }
-
 
 
     @Test
@@ -195,7 +198,7 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.new_game_popup)).check(matches(isDisplayed()));
 
             Intents.release();
-        }catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
     }
@@ -203,7 +206,7 @@ public class MenuActivityTest {
     @Test
     public void leaderboardButtonWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init(); 
+            Intents.init();
 
             onView(withId(R.id.drawer_layout))
                     .check(matches(isClosed(Gravity.LEFT)))
@@ -281,6 +284,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+
     @Test
     public void newGameEmptyNumCoinFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -405,7 +409,7 @@ public class MenuActivityTest {
 
             Thread.sleep(1000);
 
-            final String max_player_count= String.valueOf(2);
+            final String max_player_count = String.valueOf(2);
             final String expected_zero_players = "There should be at least one coin in a game";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(0);
@@ -438,7 +442,7 @@ public class MenuActivityTest {
 
             Thread.sleep(1000);
 
-            final String max_player_count= String.valueOf(2);
+            final String max_player_count = String.valueOf(2);
             final String expected_zero_players = "The radius of the game should be bigger than 0 km";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
@@ -471,7 +475,7 @@ public class MenuActivityTest {
 
             Thread.sleep(1000);
 
-            final String max_player_count= String.valueOf(2);
+            final String max_player_count = String.valueOf(2);
             final String expected_zero_players = "The game should last for more than 0 minute";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
@@ -502,7 +506,7 @@ public class MenuActivityTest {
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
-            Thread.sleep(2000); 
+            Thread.sleep(2000);
 
             final String game_name = "test game";
             final String max_player_count = String.valueOf(1);
@@ -541,7 +545,7 @@ public class MenuActivityTest {
             });
 
 
-        } catch (IllegalArgumentException | InterruptedException e) {
+        } catch (@NonNull IllegalArgumentException | InterruptedException e) {
             assertEquals(1, 2);
             e.printStackTrace();
         }
@@ -560,6 +564,7 @@ public class MenuActivityTest {
             Thread.sleep(5000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
             onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_icon)).check(matches(not(withContentDescription(""))));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

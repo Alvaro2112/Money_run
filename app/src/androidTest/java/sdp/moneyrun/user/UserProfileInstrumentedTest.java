@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -22,7 +23,6 @@ import org.junit.runner.RunWith;
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
-import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -36,25 +36,26 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class UserProfileInstrumentedTest {
 
+    @NonNull
+    @Rule
+    public ActivityScenarioRule<UserProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+    @NonNull
+    @Rule
+    public ActivityScenarioRule<UserProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
+
+    @NonNull
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
-                ,  0, 0,0);
+                , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
     }
 
-    @Rule
-    public ActivityScenarioRule<UserProfileActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-
-    @Rule
-    public ActivityScenarioRule<UserProfileActivity> testRuleProfile = new ActivityScenarioRule<>(getStartIntent());
-
-
     @Test
-    public void checkButtonOpenRightActivities() throws Throwable {
+    public void checkButtonOpenRightActivities() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
-                , 0, 0,0);
+                , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(toStart)) {
@@ -85,9 +86,7 @@ public class UserProfileInstrumentedTest {
             user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
-            scenario.onActivity(a -> {
-                a.setDisplayedTexts(user);
-            });
+            scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
                     .check(matches(withText("User has died 0 many times")));
@@ -114,7 +113,7 @@ public class UserProfileInstrumentedTest {
     }
 
     @Test
-    public void buttonBackToMenuWorks(){
+    public void buttonBackToMenuWorks() {
 
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
@@ -124,7 +123,7 @@ public class UserProfileInstrumentedTest {
 
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
-        } catch(InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
         }

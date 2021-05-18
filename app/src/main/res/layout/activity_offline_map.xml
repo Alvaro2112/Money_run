@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,9 +25,9 @@
                 android:id="@+id/close_map_offline"
                 android:layout_width="25dp"
                 android:layout_height="28dp"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
-                android:text="x"
+                android:text="@string/cross"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,11 +37,10 @@
                 app:layout_constraintVertical_bias="0.006" />
 
             <Button
-                android:id="@+id/new_question_offline"
                 android:layout_width="105dp"
                 android:layout_height="35dp"
                 android:background="@drawable/layout_rounded"
-                android:text="new_question"
+                android:text="@string/new_question_button_text"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:textStyle="bold"
