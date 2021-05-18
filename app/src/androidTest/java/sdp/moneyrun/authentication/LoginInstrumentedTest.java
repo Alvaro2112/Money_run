@@ -374,7 +374,6 @@ public class LoginInstrumentedTest {
     @Test(expected = Exception.class)
     public void setGuestButtonFailsCorrectly() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
-            Intents.init();
             scenario.onActivity(a ->{
                     a.setGuestButton(null);
             });
