@@ -6,8 +6,6 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.google.firebase.database.FirebaseDatabase;
 
-import junit.framework.TestCase;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

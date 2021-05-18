@@ -50,8 +50,6 @@ public class GameDbDataTest {
     }
 
 
-
-
     @Test
     public void constructorFailsOnNullArg() {
         List<Player> players = new ArrayList<>();

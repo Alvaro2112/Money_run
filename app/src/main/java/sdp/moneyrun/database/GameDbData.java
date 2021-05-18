@@ -21,7 +21,6 @@ import sdp.moneyrun.player.Player;
 public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
-    boolean isStarted;
     @Nullable
     private String name;
     @Nullable
@@ -34,6 +33,7 @@ public final class GameDbData {
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
+    boolean started;
     private int numCoins;
     private double radius;
     private double duration;
@@ -69,7 +69,7 @@ public final class GameDbData {
         this.startLocation = startLocation;
         this.isVisible = isVisible;
         this.isDeleted = false;
-        this.isStarted = false;
+        this.started = false;
     }
 
     public GameDbData(@Nullable String name,
@@ -97,7 +97,7 @@ public final class GameDbData {
         if (maxPlayerCount <= 0) {
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
-        if (numCoins <= 0) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("maxPlayerCount should be greater than 0.");
         }
         if (radius <= 0) {
@@ -115,7 +115,10 @@ public final class GameDbData {
         this.startLocation = startLocation;
         this.isVisible = isVisible;
         this.isDeleted = false;
-        this.isStarted = false;
+        this.started = false;
+        this.radius = radius;
+        this.numCoins = numCoins;
+        this.duration = duration;
     }
 
 
@@ -131,10 +134,10 @@ public final class GameDbData {
         this.isVisible = other.isVisible;
         this.coins = other.coins;
         this.isDeleted = false;
-        this.isStarted = other.isStarted;
-        this.numCoins = other.numCoins;
-        this.radius = other.radius;
+        this.started = other.started;
         this.duration = other.duration;
+        this.radius = other.radius;
+        this.numCoins = other.numCoins;
     }
 
     public GameDbData() {
@@ -151,7 +154,11 @@ public final class GameDbData {
     }
 
     public void setStarted(boolean started) {
-        isStarted = started;
+        this.started = started;
+    }
+
+    public boolean getStarted() {
+        return started;
     }
 
     @NonNull

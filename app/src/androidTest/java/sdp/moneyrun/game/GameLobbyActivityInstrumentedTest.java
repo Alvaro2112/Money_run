@@ -65,7 +65,7 @@ public class GameLobbyActivityInstrumentedTest {
     @NonNull
     private Intent getStartIntent() {
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
-        Player currentUser = new Player("999", "CURRENT_USER", 0);
+        Player currentUser = new Player("78646", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
@@ -75,7 +75,7 @@ public class GameLobbyActivityInstrumentedTest {
     @NonNull
     public Game getGame() {
         String name = "LobbyActivityInstrumentedTest";
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         int maxPlayerCount = 2;
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -84,13 +84,13 @@ public class GameLobbyActivityInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 100, 10);
     }
 
 
     @Test
     public void StartGameAsNonHostWorksWhenHostsLaunchesGame() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -102,7 +102,6 @@ public class GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -115,7 +114,7 @@ public class GameLobbyActivityInstrumentedTest {
             Intents.init();
             Thread.sleep(4000);
             onView(ViewMatchers.withId(R.id.launch_game_button)).perform(ViewActions.click());
-            Thread.sleep(4000);
+            Thread.sleep(10000);
             intended(hasComponent(MapActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
@@ -127,12 +126,13 @@ public class GameLobbyActivityInstrumentedTest {
         Intent intent2 = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent2.putExtra("currentUser", nonHost);
         intent2.putExtra("currentGameId", id);
+        players = game.getPlayers();
+        players.add(nonHost);
+        game.setPlayers(players, false);
         try (ActivityScenario<GameLobbyActivity> scenario2 = ActivityScenario.launch(intent2)) {
             Intents.init();
-            Thread.sleep(8000);
+            Thread.sleep(15000);
             intended(hasComponent(MapActivity.class.getName()));
-            Thread.sleep(8000);
-
             Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -142,7 +142,7 @@ public class GameLobbyActivityInstrumentedTest {
 
     @Test
     public void StartGameAsHostWorks() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -179,10 +179,9 @@ public class GameLobbyActivityInstrumentedTest {
         }
     }
 
-
     @Test
     public void InitializeGameAddsCoinsToDB() {
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
@@ -217,7 +216,7 @@ public class GameLobbyActivityInstrumentedTest {
             dataTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Game fromDB = db.getGameFromTaskSnapshot(task);
-                    assertEquals(fromDB.getCoins().size(), MapActivity.COINS_TO_PLACE);
+                    assertEquals(fromDB.getCoins().size(), 1);
                 } else {
                     fail();
                 }
@@ -389,8 +388,10 @@ public class GameLobbyActivityInstrumentedTest {
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
+            Thread.sleep(3000);
+
             onView(ViewMatchers.withId(R.id.leave_lobby_button)).perform(ViewActions.click());
-            Thread.sleep(2000);
+            Thread.sleep(3000);
             intended(hasComponent(MenuActivity.class.getName()));
             Intents.release();
         } catch (InterruptedException e) {
@@ -404,7 +405,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void LeaveIsDeleteForHost() {
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
@@ -486,7 +487,7 @@ public class GameLobbyActivityInstrumentedTest {
     public void deleteGameDeletesItFromDB() {
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
-        Player host = new Player("3", "Bob", 0);
+        Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
         User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
