@@ -101,11 +101,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         getExtras();
         initializeVariables();
-        getViews();
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
         mapView.getMapAsync(this);
+
+        getViews();
 
         String default_score = getString(R.string.map_score_text, 0);
         currentScoreView.setText(default_score);
