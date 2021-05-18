@@ -6,8 +6,6 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.google.firebase.database.FirebaseDatabase;
 
-import junit.framework.TestCase;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,14 +13,14 @@ import org.junit.Test;
 import sdp.moneyrun.ui.MainActivity;
 
 
-public class RiddlesDatabaseTest extends TestCase {
+public class RiddlesDatabaseTest {
 
     private final Context context = ApplicationProvider.getApplicationContext();
 
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -31,22 +29,20 @@ public class RiddlesDatabaseTest extends TestCase {
     @Test
     public void testGetInstance() {
         RiddlesDatabase db = RiddlesDatabase.createInstance(context);
-        assertEquals(RiddlesDatabase.getInstance(), db);
+        Assert.assertEquals(RiddlesDatabase.getInstance(), db);
         RiddlesDatabase.reset();
 
     }
 
+    @Test
     public void testGetInstanceOnNonExistentThrowsException() {
 
-        try
-        {
+        try {
             RiddlesDatabase db = RiddlesDatabase.getInstance();
             Assert.fail("Should have thrown Arithmetic exception");
-        }
-        catch(RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             //success
-        }finally {
+        } finally {
             RiddlesDatabase.reset();
 
         }
@@ -62,8 +58,8 @@ public class RiddlesDatabaseTest extends TestCase {
 
 
         } catch (RuntimeException e) {
-            assertEquals(1, 1);
-        }finally {
+            Assert.assertEquals(1, 1);
+        } finally {
             RiddlesDatabase.reset();
 
         }

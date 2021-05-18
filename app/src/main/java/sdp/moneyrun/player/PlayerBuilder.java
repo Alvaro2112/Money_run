@@ -1,15 +1,21 @@
 package sdp.moneyrun.player;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class PlayerBuilder {
-    private  String playerId;
+    private String playerId;
+    @Nullable
     private String name;
-    private String address;
-    private int numberOfPlayedGames;
-    private int numberOfDiedGames;
-    private int  score;
+    private int score;
 
     /**
-     *
+     * Empty constructor
+     */
+    public PlayerBuilder() {
+    }
+
+    /**
      * @param playerId the unique player Id
      */
     public void setPlayerId(String playerId) {
@@ -17,54 +23,27 @@ public class PlayerBuilder {
     }
 
     /**
-     *
      * @param name
      */
-    public void setName(String name) {
+    public void setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
-    }
-
-    /**
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        if (address == null || address.isEmpty())
-            throw new IllegalArgumentException();
-        this.address = address;
-    }
-
-    /**
-     *
-     * @param numberOfPlayedGames
-     */
-    public void setNumberOfPlayedGames(int numberOfPlayedGames) {
-        this.numberOfPlayedGames = numberOfPlayedGames;
-    }
-
-    public void setNumberOfDiedGames(int numberOfDiedGames) {
-        this.numberOfDiedGames = numberOfDiedGames;
     }
 
     public void setScore(int score) {
         this.score = score;
     }
 
-
-    /**
-     * Empty constructor
-     */
-    public PlayerBuilder(){}
-
     /**
      * Builds current instance. Address and name cannot be null or empty and playerId cannot be 0
+     *
      * @return the player built with the attributes set
-     * @throws IllegalStateException if the adress or name is null or empty, if the playerId is null
+     * @throws IllegalStateException if the address or name is null or empty, if the playerId is null
      */
-    public Player build(){
-        if(playerId == null || name == null)
+    @NonNull
+    public Player build() {
+        if (playerId == null || name == null)
             throw new IllegalStateException();
         return new Player(playerId, name, score);
     }

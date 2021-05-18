@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ask_question_popup"
     android:layout_width="100dp"
     android:layout_height="300dp"
@@ -7,69 +8,56 @@
     android:fadingEdge="horizontal|vertical">
 
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="2000dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/question"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:tag="rr"
+            android:text="@string/question_title_text"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/question"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
-                android:tag="rr"
-                android:text="Question"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/question_choice_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/answer_1" />
 
-            <LinearLayout
-                android:id="@+id/questions"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
+        <Button
+            android:id="@+id/question_choice_2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/answer_2" />
 
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_1"
-                    android:text="@string/answer_1" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_2"
-                    android:text="@string/answer_2" />
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_3"
-                    android:text="@string/answer_3" />
+        <Button
+            android:id="@+id/question_choice_3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/answer_3" />
 
 
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/question_choice_4"
-                    android:text="@string/answer_4" />
+        <Button
+            android:id="@+id/question_choice_4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/answer_4" />
 
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

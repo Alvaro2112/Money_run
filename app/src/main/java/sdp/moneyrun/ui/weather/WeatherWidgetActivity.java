@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -21,9 +22,9 @@ import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 
 
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class WeatherWidgetActivity extends AppCompatActivity {
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
-    private static final int PERMISSION_REQUEST_CODE = 1;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
     private OpenWeatherMap openWeatherMap;
     private AddressGeocoder addressGeocoder;
@@ -55,7 +56,7 @@ public class WeatherWidgetActivity extends AppCompatActivity {
 
     }
 
-    public void loadWeather(android.location.Location location) {
+    public void loadWeather(@NonNull android.location.Location location) {
 
         try {
             LocationRepresentation loc;
@@ -74,12 +75,5 @@ public class WeatherWidgetActivity extends AppCompatActivity {
         }
     }
 
-    public WeatherForecast getCurrentForecast() {
-        return this.currentForecast;
-    }
 
-
-    public LocationRepresentation getCurrentLocation() {
-        return this.currentLocation;
-    }
 }

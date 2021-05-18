@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.authentication.SignUpActivity"
-    android:background="@drawable/splash_backgroud_balck_white_sign_up">
+    android:background="@drawable/splash_backgroud_balck_white_sign_up"
+    tools:context=".ui.authentication.SignUpActivity">
 
     <EditText
         android:id="@+id/signUpEmailText"
@@ -14,12 +14,13 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="305dp"
         android:layout_marginEnd="100dp"
+        android:autofillHints="@string/EMAIL_HINT"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_person_register"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/EMAIL_HINT"
         android:inputType="textEmailAddress"
-        android:drawableStart="@drawable/ic_baseline_person_register"
-        android:drawablePadding="12dp"
-        android:background="@drawable/inputs_register_profile"
         app:layout_constraintBottom_toTopOf="@+id/signUpPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,29 +33,30 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="16dp"
+        android:autofillHints="@string/PASSWORD_HINT"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_lock_sign_up"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/PASSWORD_HINT"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/signUpSubmitButton"
-        android:drawableStart="@drawable/ic_baseline_lock_sign_up"
-        android:drawablePadding="12dp"
-        android:background="@drawable/inputs_register_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpEmailText" />
 
     <Button
         android:id="@+id/signUpSubmitButton"
-        android:focusable="true"
-
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="162dp"
         android:layout_marginBottom="255dp"
-        android:text="Submit"
         android:background="@drawable/layout_rounded"
+        android:focusable="true"
+        android:text="@string/submit_button_text"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

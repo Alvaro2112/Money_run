@@ -1,5 +1,8 @@
 package sdp.moneyrun.player;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,31 +15,37 @@ import sdp.moneyrun.map.Coin;
  */
 public class LocalPlayer implements Serializable {
 
+    @NonNull
     private final ArrayList<Coin> lostCoins;
-    private ArrayList<Coin> locallyAvailableCoins;
+    @NonNull
     private final ArrayList<Coin> collectedCoins;
+    @Nullable
+    private ArrayList<Coin> locallyAvailableCoins;
     private int score;
 
     public LocalPlayer() {
 
-        this.lostCoins = new ArrayList<Coin>();
-        this.locallyAvailableCoins = new ArrayList<Coin>();
-        this.collectedCoins = new ArrayList<Coin>();
+        this.lostCoins = new ArrayList<>();
+        this.locallyAvailableCoins = new ArrayList<>();
+        this.collectedCoins = new ArrayList<>();
         score = 0;
     }
 
+    @Nullable
     public ArrayList<Coin> getLocallyAvailableCoins() {
         return locallyAvailableCoins;
     }
 
-    public void setLocallyAvailableCoins(ArrayList<Coin> locallyAvailableCoins) {
+    public void setLocallyAvailableCoins(@Nullable ArrayList<Coin> locallyAvailableCoins) {
         this.locallyAvailableCoins = locallyAvailableCoins;
     }
 
+    @NonNull
     public ArrayList<Coin> getLostCoins() {
         return lostCoins;
     }
 
+    @NonNull
     public ArrayList<Coin> getCollectedCoins() {
         return collectedCoins;
     }
@@ -45,7 +54,7 @@ public class LocalPlayer implements Serializable {
         return score;
     }
 
-    public void addLostCoin(Coin coin) {
+    public void addLostCoin(@Nullable Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
@@ -53,7 +62,7 @@ public class LocalPlayer implements Serializable {
         lostCoins.add(coin);
     }
 
-    public void addCollectedCoin(Coin coin) {
+    public void addCollectedCoin(@Nullable Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
@@ -61,7 +70,7 @@ public class LocalPlayer implements Serializable {
         collectedCoins.add(coin);
     }
 
-    public void addLocallyAvailableCoin(Coin coin) {
+    public void addLocallyAvailableCoin(@Nullable Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
         }
@@ -76,7 +85,7 @@ public class LocalPlayer implements Serializable {
      *
      * @param availableCoins Newly made aware availableCoins that were just received from the database
      */
-    public void updateLostCoins(ArrayList<Coin> availableCoins) {
+    public void updateLostCoins(@Nullable ArrayList<Coin> availableCoins) {
         if (availableCoins == null) {
             throw new IllegalArgumentException("The availableCoins cannot be null");
         }
@@ -84,19 +93,19 @@ public class LocalPlayer implements Serializable {
             throw new IllegalArgumentException("The availableCoins cannot contain a null coin");
         }
 
-        ArrayList<Coin> toRemove = new ArrayList<Coin>(lostCoins);
+        ArrayList<Coin> toRemove = new ArrayList<>(lostCoins);
         toRemove.removeAll(availableCoins);
         this.lostCoins.removeAll(toRemove);
     }
 
     /**
-     * This function will remove the coin from the corresponding lists depending on wheter is was picked up or not and
+     * This function will remove the coin from the corresponding lists depending on whether is was picked up or not and
      * will also update the score of the player of necessary.
      *
      * @param coin     The coin to be removed
      * @param pickedUp whether the coins was picked up (ie. the player answered correctly to the riddle) or not
      */
-    public void updateCoins(Coin coin, boolean pickedUp) {
+    public void updateCoins(@Nullable Coin coin, boolean pickedUp) {
         if (coin == null) {
             throw new IllegalArgumentException("cannot remove a null coin");
         }
@@ -117,7 +126,7 @@ public class LocalPlayer implements Serializable {
      *
      * @param availableCoins Updated list of available coins received from database
      */
-    public void syncAvailableCoinsFromDb(ArrayList<Coin> availableCoins) {
+    public void syncAvailableCoinsFromDb(@Nullable ArrayList<Coin> availableCoins) {
         if (availableCoins == null) {
             throw new IllegalArgumentException("The availableCoins cannot be null");
         }
@@ -133,13 +142,14 @@ public class LocalPlayer implements Serializable {
     /**
      * @return This function will return the new list of available coins that needs to be shared with everyone (ie. send to DB)
      */
+    @NonNull
     public ArrayList<Coin> toSendToDb() {
-        Set<Coin> set = new HashSet<Coin>();
+        Set<Coin> set = new HashSet<>();
 
         set.addAll(locallyAvailableCoins);
         set.addAll(lostCoins);
 
-        return new ArrayList<Coin>(set);
+        return new ArrayList<>(set);
     }
 
 }
