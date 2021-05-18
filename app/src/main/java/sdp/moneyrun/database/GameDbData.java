@@ -138,9 +138,6 @@ public final class GameDbData {
         this.duration = other.duration;
         this.radius = other.radius;
         this.numCoins = other.numCoins;
-        this.numCoins = other.numCoins;
-        this.radius = other.radius;
-        this.duration = other.duration;
     }
 
     public GameDbData() {

@@ -188,10 +188,7 @@ public class GameLobbyActivity extends AppCompatActivity {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    GenericTypeIndicator<Boolean> coinIndicator = new GenericTypeIndicator<Boolean>() {
-                    };
-                    boolean started = snapshot.child("started").getValue(coinIndicator);
-                    if (started) {
+                    if ((boolean) snapshot.child("started").getValue()) {
                         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                         intent.putExtra("player", user);
                         intent.putExtra("gameId", gameId);

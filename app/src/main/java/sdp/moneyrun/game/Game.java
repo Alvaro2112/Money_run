@@ -41,7 +41,6 @@ public class Game {
     private String id;
     private boolean hasBeenAdded;
 
-    private int numCoins;
     private boolean started;
 
     /**
@@ -239,7 +238,6 @@ public class Game {
         currentActivity.finish();
     }
 
-    //Wether the game has started
     public boolean isStarted() {
         return started;
     }

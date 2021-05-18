@@ -603,7 +603,6 @@ public class GameInstrumentedTest {
                 }
                 updated.countDown();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 assert (false);

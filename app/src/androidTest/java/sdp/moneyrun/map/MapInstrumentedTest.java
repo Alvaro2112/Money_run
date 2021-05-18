@@ -1405,10 +1405,10 @@ public class MapInstrumentedTest {
 
             scenario.onActivity(activity -> {
                 assertEquals(2, activity.coinsToPlace);
-                assertEquals(location.getLatitude(), activity.game_center.getLatitude(), 0.01);
-                assertEquals(location.getLongitude(), activity.game_center.getLongitude(), 0.01);
-                assertEquals(4 * 60, activity.game_time);
-                assertEquals(20, activity.game_radius, 0.001);
+                assertEquals(location.getLatitude(), activity.getGameCenter().getLatitude(), 0.01);
+                assertEquals(location.getLongitude(), activity.getGameCenter().getLongitude(), 0.01);
+                assertEquals(4 * 60, activity.getGameDuration());
+                assertEquals(20, activity.getGameRadius(), 0.001);
 
             });
         }

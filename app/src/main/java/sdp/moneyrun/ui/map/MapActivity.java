@@ -81,15 +81,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private String gameId;
     private boolean addedCoins = false;
     private boolean host = false;
-    private final String DATABASE_COIN = "coins";
     private MapPlayerListAdapter ldbListAdapter;
     public int coinsToPlace;
 
     private CircleManager circleManager;
-    public double game_radius;
-    public int game_time;
-    public Location game_center;
-
+    private double game_radius;
+    private int game_time;
+    private Location game_center;
     private float circleRadius;
     private double shrinkingFactor = 0.9;
 
@@ -123,7 +121,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView = findViewById(R.id.map_score_view);
         currentScoreView.setText(default_score);
         chronometer = findViewById(R.id.mapChronometer);
-
 
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
@@ -265,6 +262,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public LocalPlayer getLocalPlayer() {
         return localPlayer;
     }
+
+    public double getGameRadius(){return game_radius;}
+    public double getGameDuration(){return game_time;}
+    public Location getGameCenter(){return game_center;}
+
 
     @Nullable
     public String getPlayerId() {
@@ -477,8 +479,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new IllegalArgumentException("Min radius is bigger than max Radius ");
 
         for (int i = 0; i < number; i++) {
-            Location loc = null;
-            loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
+            Location loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
             addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
         }
     }
