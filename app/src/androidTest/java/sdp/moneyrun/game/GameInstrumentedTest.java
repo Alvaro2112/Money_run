@@ -86,6 +86,7 @@ public class GameInstrumentedTest {
         return new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
     }
 
+
     @Test
     public void GameIsAddedToDB() {
         Game g = getGame();
@@ -517,6 +518,68 @@ public class GameInstrumentedTest {
         assertEquals(game.getGameDbData(), getGameData());
     }
 
+    @Test
+    public void setNumCoinsWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Player> players = new ArrayList<>();
+
+        players.add(host);
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+
+        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
+        getGameData().setNumCoins(0);
+        assertEquals(gameData.getNumCoins(), 0, 0);
+    }
+
+    @Test
+    public void setRadiusWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Player> players = new ArrayList<>();
+
+        players.add(host);
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+
+        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
+        getGameData().setRadius(0);
+        assertEquals(gameData.getRadius(), 0, 0);
+    }
+
+    @Test
+    public void setDurationWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Player> players = new ArrayList<>();
+
+        players.add(host);
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(10);
+        location.setLongitude(20);
+
+        GameDbData gameData = new GameDbData(name, host, players, maxPlayerCount, location, true, coins);
+        getGameData().setDuration(0);
+        assertEquals(gameData.getDuration(), 0, 0);
+    }
     @Test
     public void equalsWorks() {
         Game game1 = getGame();
