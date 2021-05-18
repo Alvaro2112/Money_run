@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -102,10 +103,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param listener the listener which describes what to do on change
      */
     public void addUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
-        if (listener == null || user == null) {
-            throw new IllegalArgumentException();
-        }
-        usersRef.child(String.valueOf(user.getUserId())).addValueEventListener(listener);
+        Helpers.addOrRemoveListener(user, listener, usersRef, false);
+
     }
 
 
@@ -117,10 +116,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @throws IllegalArgumentException on null listener or null user
      */
     public void removeUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
-        if (listener == null || user == null) {
-            throw new IllegalArgumentException();
-        }
-        usersRef.child(String.valueOf(user.getUserId())).removeEventListener(listener);
+        Helpers.addOrRemoveListener(user, listener, usersRef, true);
     }
 
     /**

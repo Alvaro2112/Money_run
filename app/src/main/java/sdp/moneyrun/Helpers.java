@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class Helpers {
+
 
     @NonNull
     public static PopupWindow onButtonShowPopupWindowClick(@NonNull Activity currentActivity, View view, Boolean focusable, int layoutId) {
@@ -52,4 +62,24 @@ public class Helpers {
 
         return view;
     }
+
+    public static <T> void addOrRemoveListener(@Nullable T object, @Nullable ValueEventListener listener, DatabaseReference databaseReference, boolean remove) {
+        if (listener == null || object == null)
+            throw new IllegalArgumentException();
+
+        DatabaseReference newDatabaseReference = null;
+
+        if(object instanceof Player)
+            newDatabaseReference = databaseReference.child(String.valueOf(((Player)object).getPlayerId()));
+        else if (object instanceof User)
+            newDatabaseReference = databaseReference.child(String.valueOf(((User)object).getUserId()));
+        else
+            throw new IllegalArgumentException("Objects need to be a User or a Player");
+
+        if (remove)
+            newDatabaseReference.removeEventListener(listener);
+        else
+            newDatabaseReference.addValueEventListener(listener);
+    }
+
 }

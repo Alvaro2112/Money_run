@@ -144,7 +144,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     @Override
     public void checkObjectives(@NonNull Location location) {
 
-        if (isEndNotified && hasStartedDownload)
+        if (isEndNotified || hasStartedDownload)
             return;
 
         offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);

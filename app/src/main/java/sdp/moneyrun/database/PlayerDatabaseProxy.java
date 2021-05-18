@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.player.Player;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -113,10 +114,8 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param listener the listener which describes what to do on change
      */
     public void addPlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
-        if (listener == null || player == null) {
-            throw new IllegalArgumentException();
-        }
-        playersRef.child(String.valueOf(player.getPlayerId())).addValueEventListener(listener);
+        Helpers.addOrRemoveListener(player, listener, playersRef, false);
+
     }
 
 
@@ -128,10 +127,8 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @throws IllegalArgumentException on null listener or null player
      */
     public void removePlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
-        if (listener == null || player == null) {
-            throw new IllegalArgumentException();
-        }
-        playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
+        Helpers.addOrRemoveListener(player, listener, playersRef, true);
+
     }
 
     /**
