@@ -31,6 +31,35 @@ public class UserTest {
         }
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void putUserFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeUserFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.removeUser(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addUserListenerFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        String name = "John Doe";
+        String address = "Somewhere";
+        String id = "1234567891";
+        User user = new User(id, name, address, 0, 0, 0);
+        db.addUserListener(user, null);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getLeaderboardUsersFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.getLeaderboardUsers(-1);
+    }
+
     @Test
     public void setAddressWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
@@ -40,20 +69,11 @@ public class UserTest {
         String id = "1234567891";
         User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
-        CountDownLatch added = new CountDownLatch(1);
         db.putUser(player);
-//
-//        try {
-//            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-//            assertEquals(0L, added.getCount());
-//        } catch (InterruptedException e) {
-//            fail();
-//        }
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                //player.setAddress(p.getAddress());
                 if (p.getAddress().equals(newAddress)) {
                     assertThat(p.getAddress(), is(newAddress));
                     updated.countDown();

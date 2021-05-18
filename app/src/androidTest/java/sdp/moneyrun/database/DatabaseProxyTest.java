@@ -38,6 +38,21 @@ public class DatabaseProxyTest {
         }
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly1() {
+        Player player = new Player("564123", "Johann", 0);
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        db.putPlayer(player, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly2() {
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        CountDownLatch added = new CountDownLatch(1);
+        OnCompleteListener addedListener = task -> added.countDown();
+        db.putPlayer(null, addedListener);
+    }
+
     @Test
     public void getPlayerFromDatabase() {
         FirebaseDatabase.getInstance().goOffline();

@@ -60,6 +60,9 @@ public class MenuActivityTest {
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
     private final long ASYNC_CALL_TIMEOUT = 10L;
 
+
+
+
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     @NonNull
     private static Matcher<View> withError(final String expected) {
