@@ -78,6 +78,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    private Address currentAddress;
 
 
 
@@ -254,9 +255,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             this.currentForecast = openWeatherMap.getForecast(loc);
 
             android.location.Address addr = addressGeocoder.getAddress(loc);
-            Address address;
             if (addr != null) {
-                address = addressGeocoder.convertToAddress(addr);
+                currentAddress = addressGeocoder.convertToAddress(addr);
             }
 
         } catch (IOException e) {
@@ -271,7 +271,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return currentLocation;
     }
 
-    private void setWeatherFieldsToday(WeatherReport report){
+    public void setWeatherFieldsToday(WeatherReport report){
         String weatherIconURL = "http://openweathermap.org/img/wn/"+report.getWeatherIcon()+"@2x.png";
         Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : "+report.getWeatherIcon());
         TextView weatherTypeText =findViewById(R.id.weather_type);

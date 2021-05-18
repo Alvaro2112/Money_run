@@ -37,6 +37,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
+import sdp.moneyrun.weather.WeatherForecast;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -554,8 +555,9 @@ public class MenuActivityTest {
                 location.setLatitude(0.7126);
                 location.setLongitude(38.2699);
                 a.loadWeather(location);
+                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport(WeatherForecast.Day.TODAY));
             });
-            Thread.sleep(40000);
+            Thread.sleep(5000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
             onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
         } catch (InterruptedException e) {
@@ -719,8 +721,4 @@ public class MenuActivityTest {
 //        }
 //    }
     */
-
-
-
-
 }
