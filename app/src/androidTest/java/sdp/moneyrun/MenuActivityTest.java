@@ -156,7 +156,7 @@ public class MenuActivityTest {
             final String game_name = "CreateGameTest";
             final String max_player_count = String.valueOf(3);
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
