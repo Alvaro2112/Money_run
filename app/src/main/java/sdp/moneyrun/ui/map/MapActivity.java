@@ -38,6 +38,7 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -96,47 +97,56 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
+        getExtras();
+        initializeVariables();
+        getViews();
+
+        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
+        createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
+        mapView.getMapAsync(this);
+
+        String default_score = getString(R.string.map_score_text, 0);
+        currentScoreView.setText(default_score);
+
+        addExitButton();
+        addQuestionButton();
+        addLeaderboardButton();
+
+        mapView.addOnDidFinishRenderingMapListener(fully -> {
+            if (gameId != null) {
+                initializeGame(gameId);
+            }
+        });
+    }
+
+    public void getExtras(){
         player = (Player) getIntent().getSerializableExtra("player");
         gameId = getIntent().getStringExtra("currentGameId");
         if (gameId == null) {
             gameId = getIntent().getStringExtra("gameId");
         }
         host = getIntent().getBooleanExtra("host", false);
+    }
+
+    public void initializeVariables(){
         seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
-
         localPlayer = new LocalPlayer();
-        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
-        createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
-        mapView.getMapAsync(this);
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
             riddleDb = RiddlesDatabase.getInstance();
         }
+    }
 
-        String default_score = getString(R.string.map_score_text, 0);
+    public void getViews(){
         currentScoreView = findViewById(R.id.map_score_view);
-        currentScoreView.setText(default_score);
         chronometer = findViewById(R.id.mapChronometer);
-
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
-        addExitButton();
-        addQuestionButton();
-        addLeaderboardButton();
-        mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-            @Override
-            public void onDidFinishRenderingMap(boolean fully) {
-                if (gameId != null) {
-                    initializeGame(gameId);
-                }
-            }
-        });
-
     }
 
     /**
@@ -439,7 +449,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *             and removes it from the map
      */
     public void removeCoin(@Nullable Coin coin, Boolean collected) {
-
         if (coin == null) {
             throw new NullPointerException("removed coined is null");
         }
@@ -449,11 +458,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (collected) {
             String default_score = getString(R.string.map_score_text, localPlayer.getScore());
             currentScoreView.setText(default_score);
-            game.setCoins(localPlayer.toSendToDb(), true);
+            game.setCoins(localPlayer.toSendToDb(), false);
             proxyG.updateGameInDatabase(game, null);
             player.setScore(localPlayer.getScore(), true);
         }
 
+        deleteCoinFromMap(coin);
+
+        circleRadius *= shrinkingFactor;
+        initCircle();
+
+    }
+
+    public void deleteCoinFromMap(Coin coin){
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 
         for (int i = 0; i < symbols.size(); ++i) {
@@ -462,9 +479,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-        circleRadius *= shrinkingFactor;
-        initCircle();
-
     }
 
     /**
@@ -476,7 +490,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (number < 0 || maxRadius <= 0 || minRadius <= 0)
             throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  " + number);
         if (minRadius >= maxRadius)
-            throw new IllegalArgumentException("Min radius is bigger than max Radius ");
+            throw new IllegalArgumentException("Min radius cannot be bigger or equal than max Radius ");
 
         for (int i = 0; i < number; i++) {
             Location loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
@@ -508,7 +522,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions = circleOptions.withCircleRadius(circleRadius);
         circleOptions = circleOptions.withCircleOpacity(0.4f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
-        //circleOptions.withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
         System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);

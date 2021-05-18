@@ -342,7 +342,7 @@ public class MapInstrumentedTest {
     public void placeRandomCoinsFailsCorrectly1() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             scenario.onActivity(a -> {
-                a.placeRandomCoins(-1, 1);
+                a.placeRandomCoins(-1, 2, 1);
             });
         }
     }
@@ -351,7 +351,7 @@ public class MapInstrumentedTest {
     public void placeRandomCoinsFailsCorrectly2() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             scenario.onActivity(a -> {
-                a.placeRandomCoins(0, 0);
+                a.placeRandomCoins(1, 2, 4);
             });
         }
     }
