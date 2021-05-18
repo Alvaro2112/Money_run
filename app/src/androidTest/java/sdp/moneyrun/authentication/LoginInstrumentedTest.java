@@ -49,6 +49,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
@@ -367,6 +368,16 @@ public class LoginInstrumentedTest {
             Intents.release();
         } catch (Exception e) {
             fail();
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void setGuestButtonFailsCorrectly() {
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            scenario.onActivity(a ->{
+                    a.setGuestButton(null);
+            });
         }
     }
 
