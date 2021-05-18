@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -27,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -211,7 +213,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         openWeatherMap = OpenWeatherMap.build();
         addressGeocoder = AddressGeocoder.fromContext(this);
     }
-
+    Address address;
     public void loadWeather(@NonNull android.location.Location location) {
         try {
             LocationRepresentation loc;
@@ -220,7 +222,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             this.currentForecast = openWeatherMap.getForecast(loc);
 
             android.location.Address addr = addressGeocoder.getAddress(loc);
-            Address address;
+
             if (addr != null) {
                 address = addressGeocoder.convertToAddress(addr);
             }
@@ -239,11 +241,20 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setWeatherFieldsToday(@NonNull WeatherReport report) {
-        String weatherIconURL = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@2x.png";
-        Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : " + report.getWeatherIcon());
         TextView weatherTypeText = findViewById(R.id.weather_type);
         TextView weatherTempText = findViewById(R.id.weather_temp_average);
+        ImageView weatherIconView = findViewById(R.id.weather_icon);
+        Log.d("ICON", report.getWeatherIcon());
+        Log.d("ICON", address.toString());
+
+        String url = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
+        Picasso obj = Picasso.get();
+                obj.setLoggingEnabled(true);
+                obj.load(url).fit().into(weatherIconView);
         weatherTempText.setText(String.format("%s C", report.getAverageTemperature()));
         weatherTypeText.setText(report.getWeatherType());
     }
+
+
+
 }
