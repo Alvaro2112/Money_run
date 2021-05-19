@@ -155,8 +155,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(FriendListActivity.class, false);
                 break;
             }
-
-
+            
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
                 break;

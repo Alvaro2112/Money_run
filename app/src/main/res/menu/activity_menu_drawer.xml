@@ -13,10 +13,6 @@
             android:icon="@drawable/baseline_supervisor_account_24"
             android:title="@string/friend_list_button_text" />
         <item
-            android:id="@+id/leaderboard_button"
-            android:icon="@drawable/ic_baseline_leaderboard"
-            android:title="@string/menu_leaderboard_button_text" />
-        <item
             android:id="@+id/main_leaderboard_button"
             android:icon="@drawable/ic_baseline_leaderboard"
             android:title="@string/menu_main_leaderboard_button_text" />

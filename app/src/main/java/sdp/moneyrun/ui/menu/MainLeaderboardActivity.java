@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import sdp.moneyrun.R;
@@ -25,7 +26,6 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
 
-    @NonNull
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
@@ -42,7 +42,6 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_leaderboard);
 
         user = (User) getIntent().getSerializableExtra("user");
-
         addAdapter();
         addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
     }
@@ -85,13 +84,17 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 if (result == null) {
                     return;
                 }
-
+                HashSet<User> userToShow = new HashSet<>();
                 for (DataSnapshot dataSnapshot : result.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
                     if (user != null) {
-                        addUser(user);
+                        if (user.getUserId() != null) {
+                            userToShow.add(user);
+                        }
                     }
                 }
+                userList = new ArrayList<>(userToShow);
+                addUserList(userList);
             }
         });
     }
