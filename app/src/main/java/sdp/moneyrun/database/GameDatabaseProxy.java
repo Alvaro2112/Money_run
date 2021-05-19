@@ -164,76 +164,65 @@ public class GameDatabaseProxy extends DatabaseProxy {
      */
     @Nullable
     public Game getGameFromTaskSnapshot(@Nullable Task<DataSnapshot> task) {
-        if (task == null) {
+        if (task == null)
             throw new IllegalArgumentException("task should not be null.");
-        }
+
+        Game toReturn = null;
 
         if (task.isSuccessful()) {
+
             DataSnapshot ds = task.getResult();
-            String retName = ds.child(DATABASE_GAME_NAME).getValue(String.class);
-            Player retHost = ds.child(DATABASE_GAME_HOST).getValue(Player.class);
-            List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>() {
-            });
-            List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>() {
-            });
-            if (retCoin == null) {
-                retCoin = new ArrayList<>();
-            }
-            Integer retMaxPlayerCount = ds.child(DATABASE_GAME_MAX_PLAYER_COUNT).getValue(Integer.class);
+
+            String retName = getDatabaseValue(ds, DATABASE_GAME_NAME, String.class);
+            Player retHost = getDatabaseValue(ds, DATABASE_GAME_HOST, Player.class);
+            Integer retMaxPlayerCount = getDatabaseValue(ds, DATABASE_GAME_MAX_PLAYER_COUNT, Integer.class);
+
+            List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>() {});
+            List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>() {});
+
             Double retLatitude = ds.child(DATABASE_GAME_START_LOCATION)
                     .child(DATABASE_LOCATION_LATITUDE)
                     .getValue(Double.class);
             Double retLongitude = ds.child(DATABASE_GAME_START_LOCATION)
                     .child(DATABASE_LOCATION_LONGITUDE)
                     .getValue(Double.class);
-            Boolean retIsVisible = ds.child(DATABASE_GAME_IS_VISIBLE).getValue(Boolean.class);
-            Boolean started = ds.child(DATABASE_GAME_STARTED).getValue(Boolean.class);
 
-            Integer numCoins = ds.child(DATABASE_GAME_NUMCOINS).getValue(Integer.class);
-            Double radius = ds.child(DATABASE_GAME_RADIUS).getValue(Double.class);
-            Double duration = ds.child(DATABASE_GAME_DURATION).getValue(Double.class);
+            Boolean retIsVisible = getDatabaseValue(ds, DATABASE_GAME_IS_VISIBLE, Boolean.class);
+            Boolean started = getDatabaseValue(ds, DATABASE_GAME_STARTED, Boolean.class);
+            Integer numCoins = getDatabaseValue(ds, DATABASE_GAME_NUMCOINS, Integer.class);
+            Double radius = getDatabaseValue(ds, DATABASE_GAME_RADIUS, Double.class);
+            Double duration = getDatabaseValue(ds, DATABASE_GAME_DURATION, Double.class);
 
-            if (retName == null) {
-                throw new IllegalArgumentException("name should not be null.");
-            }
-            if (retHost == null) {
-                throw new IllegalArgumentException("host should not be null.");
-            }
-            if (retPlayers == null) {
+            if (retCoin == null)
+                retCoin = new ArrayList<>();
+
+            if (retPlayers == null)
                 throw new IllegalArgumentException("players should not be null.");
-            }
-            if (retMaxPlayerCount == null) {
+
+                if (retMaxPlayerCount == null)
                 throw new IllegalArgumentException("max player count should not be null.");
-            }
-            if (retLatitude == null) {
+
+            if (retLatitude == null)
                 throw new IllegalArgumentException("latitude should not be null.");
-            }
-            if (retLongitude == null) {
+
+            if (retLongitude == null)
                 throw new IllegalArgumentException("longitude should not be null.");
-            }
-            if (retIsVisible == null) {
-                throw new IllegalArgumentException("is visible should not be null.");
-            }
-            if (started == null) {
-                throw new IllegalArgumentException("started should not be null.");
-            }
 
             //Cant deserialize Location properly so we do it manually
             Location retLocation = new Location("");
             retLocation.setLatitude(retLatitude);
             retLocation.setLongitude(retLongitude);
 
-            //name, host, maxPlayerCount, startLocation, isVisible
 
             Game retGame = new Game(retName, retHost, retPlayers, retMaxPlayerCount, retLocation, retIsVisible, retCoin, numCoins, radius, duration);
             retGame.setId(ds.getKey());
             retGame.setHasBeenAdded(true);
             retGame.setStarted(started, true);
 
-            return retGame;
-        } else {
-            return null;
+            toReturn = retGame;
         }
+
+        return toReturn;
     }
 
     public void addGameListener(@Nullable Game game, @Nullable ValueEventListener l) {
@@ -250,15 +239,27 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     public void addCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
-        gamesRef.child(game.getId())
-                .child(DATABASE_COIN)
-                .addValueEventListener(listener);
+        getDatabaseChildOfGame(game, DATABASE_COIN).addValueEventListener(listener);
     }
 
     public void removeCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
-        gamesRef.child(game.getId())
-                .child(DATABASE_COIN)
-                .removeEventListener(listener);
+        getDatabaseChildOfGame(game, DATABASE_COIN).removeEventListener(listener);
+    }
+
+    @NonNull
+    public DatabaseReference getDatabaseChildOfGame(@NonNull Game game, @NonNull String variable){
+        return gamesRef.child(game.getId())
+                .child(variable);
+    }
+
+    @Nullable
+    public <T> T getDatabaseValue(@NonNull DataSnapshot ds, @NonNull String variable, @NonNull Class<T> type){
+        T value = ds.child(variable).getValue(type);
+        if (value == null) {
+            throw new IllegalArgumentException(variable + " should not be null.");
+        }
+
+        return value;
     }
 }

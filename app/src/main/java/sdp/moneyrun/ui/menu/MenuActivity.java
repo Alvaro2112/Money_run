@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -31,27 +32,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.Address;
 import sdp.moneyrun.weather.AddressGeocoder;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings("CanBeFinal")
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //In meters
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
@@ -69,13 +67,29 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
 
-    LocationListener locationListenerGPS = location -> {
-        loadWeather(location);
-        setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+    @NonNull
+    LocationListener locationListenerGPS = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            loadWeather(location);
+            if(currentForecast != null)
+                setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+
+        }
+
     };
 
     @Override
@@ -226,8 +240,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             this.currentLocation = loc;
             this.currentForecast = openWeatherMap.getForecast(loc);
-
-            android.location.Address addr = addressGeocoder.getAddress(loc);
 
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);

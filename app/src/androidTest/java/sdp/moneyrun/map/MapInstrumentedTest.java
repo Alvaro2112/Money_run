@@ -318,6 +318,44 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test(expected = Exception.class)
+    public void addCoinFailsCorrectly() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
+            scenario.onActivity(a -> {
+                a.addCoin(null, true);
+            });
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void removeCoinFailsCorrectly() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+
+            scenario.onActivity(a -> {
+                a.removeCoin(null, true);
+            });
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void placeRandomCoinsFailsCorrectly1() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            scenario.onActivity(a -> {
+                a.placeRandomCoins(-1, 2, 1);
+            });
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void placeRandomCoinsFailsCorrectly2() {
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            scenario.onActivity(a -> {
+                a.placeRandomCoins(1, 2, 4);
+            });
+        }
+    }
+
 
     @Test
     public void endGameStartsActivity() {

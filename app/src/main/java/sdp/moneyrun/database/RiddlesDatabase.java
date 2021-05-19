@@ -24,7 +24,8 @@ public class RiddlesDatabase {
     private int loc;
 
     /**
-     * \
+     * This constructor will create a RiddleDatabase by parsing all the riddles for the txt file and creating
+     * Riddle objects from each riddle
      *
      * @param context the current context
      */
@@ -62,6 +63,10 @@ public class RiddlesDatabase {
 
     }
 
+    /**
+     *
+     * @return Returns the current instance of the riddle database
+     */
     @Nullable
     public static RiddlesDatabase getInstance() {
         if (obj == null)
@@ -71,7 +76,6 @@ public class RiddlesDatabase {
     }
 
     /**
-     * \
      * Will create a unique instance of the database by loading all the riddles that are present in the text file into an array of Riddles.
      *
      * @param context current context
@@ -91,7 +95,6 @@ public class RiddlesDatabase {
     }
 
     /**
-     * \
      *
      * @return the next Riddle in the shuffled array
      */

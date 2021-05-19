@@ -33,6 +33,11 @@ public class LocationRepresentationTest {
         new LocationRepresentation(location);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void constructionOfLocationRepresentationFailsCorrectly() {
+        new LocationRepresentation(null);
+    }
+
     @Test
     public void getLatitudeReturnsCorrectNumber() {
         double latitude = 0;

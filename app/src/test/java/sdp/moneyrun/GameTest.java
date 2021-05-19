@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
@@ -41,6 +42,20 @@ public class GameTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void setDatabaseVariableFailsCorrectly(){
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        game.setDatabaseVariable("e", null);
+    }
+
     @Test
     public void basicRiddleTest() {
         String question = "What is the color of the sky";
@@ -52,6 +67,111 @@ public class GameTest {
         assertEquals(correctAnswer, riddle.getAnswer());
         assertArrayEquals(possibleAnswers, riddle.getPossibleAnswers());
     }
+
+    @Test
+    public void gameConstructorDoesNotCrash() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+    }
+
+    @Test
+    public void hashCodeWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertEquals(game.hashCode(), Objects.hash(game.getGameDbData()));
+    }
+
+    @Test
+    public void addAlreadyPresentPlayerDoesNothing() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        Player bob = new Player("3", "Bob", 0);
+        Player john = new Player("3", "john", 0);
+
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(bob);
+        players.add(john);
+        Game game = new Game(name, host, players, maxPlayerCount, location, true, coins, 3, 5, 10);
+        game.addPlayer(john, true);
+        assertEquals(game.getPlayers(), players);
+    }
+
+    @Test
+    public void startedIsInitializedToFalse() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertFalse(game.isStarted());
+    }
+
+    @Test
+    public void getNumCoinsWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertEquals(game.getNumCoins(), 3, 0);
+    }
+
+    @Test
+    public void getRadiusWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertEquals(game.getRadius(), 5, 0);
+    }
+
+    @Test
+    public void getDurationWorks() {
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        assertEquals(game.getDuration(), 10, 0);
+    }
+
 
     @Test
     public void RiddleThrowsExceptionWhenArgumentsAreNull() {
@@ -66,9 +186,9 @@ public class GameTest {
 
         assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", "yellow", null, "very"));
 
-
         assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", "yellow", "brown", null));
     }
+
 
 
     @Test
@@ -96,6 +216,7 @@ public class GameTest {
         }
         try {
             new Game(name, host, 3, null, coins, startLocation, true);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
@@ -132,6 +253,7 @@ public class GameTest {
         }
         try {
             new Game(name, host, 3, null, coins, startLocation, true, 1, 1, 1);
+            fail();
         } catch (IllegalArgumentException e) {
             assertEquals(1, 1);
         }
@@ -205,7 +327,7 @@ public class GameTest {
             assertEquals(1, 1);
         }
         try {
-            new Game(name, host, players, -1, startLocation, true, null);
+            new Game(name, host, players, 1, startLocation, true, null);
             fail();
         } catch (IllegalArgumentException e) {
             assert (true);
@@ -291,6 +413,8 @@ public class GameTest {
 
         assertNull(game.getRandomRiddle());
     }
+
+
 
     @Test
     public void getIdReturnsCorrectValue() {
