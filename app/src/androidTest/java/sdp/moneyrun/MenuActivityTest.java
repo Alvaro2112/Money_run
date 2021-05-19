@@ -130,7 +130,7 @@ public class MenuActivityTest {
 
             String filter = "randomNameThatWillNeverOccur56903645734657260287345260874523048732648";
             onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
-            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.friend_add_list_filter)).perform(ViewActions.click());
 
             try {
                 Thread.sleep(5000);

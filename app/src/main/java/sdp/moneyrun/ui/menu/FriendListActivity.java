@@ -23,8 +23,6 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        System.out.println("SHOW ME THAT ONCREATE");
-
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.updatedFriendListFromDatabase(user).addOnCompleteListener(task -> {

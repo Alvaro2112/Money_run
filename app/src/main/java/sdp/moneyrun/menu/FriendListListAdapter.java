@@ -33,8 +33,10 @@ public class FriendListListAdapter extends ArrayAdapter<User> {
         User userRequested = getItem(position);
 
         TextView userNameView = view.findViewById(R.id.add_friend_list_player_name);
-
         userNameView.setText(String.valueOf(userRequested.getName()));
+
+        //Define a tag to recognize the user.
+        view.setTag(userRequested.getUserId());
 
         return view;
     }
