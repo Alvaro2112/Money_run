@@ -29,6 +29,7 @@ import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
@@ -159,8 +160,8 @@ public class NewGameImplementation extends MenuImplementation {
             outOfBounds = true;
         }
 
-        if (gameRadius <= 0) {
-            gameRadiusView.setError("The radius of the game should be bigger than 0 km");
+        if (gameRadius <= MapActivity.THRESHOLD_DISTANCE) {
+            gameRadiusView.setError("The radius of the game should be bigger than 5 meters");
             outOfBounds = true;
         }
         if (gameDuration <= 0) {
