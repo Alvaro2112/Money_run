@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -62,11 +63,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    @NonNull
-    LocationListener locationListenerGPS = location -> {
-        loadWeather(location);
-        if(currentForecast != null)
-            setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+    LocationListener locationListenerGPS = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            loadWeather(location);
+            if(currentForecast != null)
+                setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+
+        }
     };
 
     @Override

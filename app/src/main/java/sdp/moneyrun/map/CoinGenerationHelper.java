@@ -62,17 +62,30 @@ public class CoinGenerationHelper {
 
     public static boolean checkIndividualFeature(@NonNull Feature feature, @NonNull List<String> inappropriateLocations) {
         String[] relevantFields = new String[]{"type", "class", "name"};
-        for (String field : relevantFields) {
-            if (feature.properties().has(field)) {
-                String locationType = feature.properties().get(field).toString();
-                if (inappropriateLocations.contains(locationType.substring(1, locationType.length() - 1).toLowerCase(Locale.ROOT))) {
-                    return false;
-                }
-            }
-        }// An inappropriate characteristics may be in different property fields
+        boolean isAppropriate = true;
 
-        return true;
+        for (String field : relevantFields)
+            isAppropriate &= checkField(inappropriateLocations, feature, field);
+        // An inappropriate characteristics may be in different property fields
+
+        return isAppropriate;
     }
+
+    public static boolean checkField(@NonNull List<String> inappropriateLocations, @NonNull Feature feature, String field){
+        boolean isAppropriate = true;
+
+        if (feature.properties().has(field)) {
+
+            String locationType = feature.properties().get(field).toString();
+
+            if (inappropriateLocations.contains(locationType.substring(1, locationType.length() - 1).toLowerCase(Locale.ROOT)))
+                isAppropriate = false;
+        }
+
+        return isAppropriate;
+    }
+
+
 
     public static boolean hasAtLeasOneProperty(@NonNull List<Feature> features) {
         for (Feature feature : features) {
