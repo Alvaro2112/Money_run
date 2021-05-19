@@ -23,7 +23,7 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings({"CanBeFinal", "FieldMayBeFinal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
-    private final int NUM_PLAYERS_LEADERBOARD = 10;
+    private final int NUM_PLAYERS_LEADERBOARD = 30;
 
     @NonNull
     private ArrayList<User> userList = new ArrayList<>();

@@ -274,15 +274,14 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+
         return userId.equals(user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
                 numberOfDiedGames == user.numberOfDiedGames &&
                 name.equals(user.name) &&
-                address.equals(user.address)
-                && friendIdList.equals(user.friendIdList);
+                address.equals(user.address);
     }
 
     @Override
