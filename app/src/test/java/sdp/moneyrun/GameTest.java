@@ -42,6 +42,20 @@ public class GameTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void setDatabaseVariableFailsCorrectly(){
+        String name = "name";
+        Player host = new Player("3", "Bob", 0);
+        int maxPlayerCount = 3;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        coins.add(new Coin(0., 0., 1));
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Game game = new Game(name, host, new ArrayList<>(), maxPlayerCount, location, true, coins, 3, 5, 10);
+        game.setDatabaseVariable("e", null);
+    }
+
     @Test
     public void basicRiddleTest() {
         String question = "What is the color of the sky";

@@ -23,7 +23,7 @@ public class Riddle {
 
     /**
      *
-     * @param question The riddle questio
+     * @param question The riddle question
      * @param correctAnswer The correct answer to the riddle
      * @param firstAnswer First possible answer
      * @param secondAnswer Second possible answer

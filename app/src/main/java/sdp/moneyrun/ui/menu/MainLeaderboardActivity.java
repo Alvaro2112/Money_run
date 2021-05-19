@@ -22,11 +22,12 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"CanBeFinal", "FieldMayBeFinal"})
+@SuppressWarnings({"CanBeFinal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
 
+    @NonNull
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;

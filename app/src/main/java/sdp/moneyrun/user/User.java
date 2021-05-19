@@ -11,10 +11,11 @@ import java.util.Objects;
 import sdp.moneyrun.database.UserDatabaseProxy;
 
 /**
- * This class represents a user (ie. A person), not to be confused with a Player. A user is the entity that uses the app and always existt, a Player only exists during a Game and is created by a User.
+ * This class represents a user (ie. A person), not to be confused with a Player. A user is the entity that uses the app and always exist, a Player only exists during a Game and is created by a User.
  */
 public class User implements Serializable {
 
+    @Nullable
     private String userId;
     @Nullable
     private String name;
@@ -33,7 +34,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User( String userId) {
+    public User(@Nullable String userId) {
         if(userId == null){throw new NullPointerException("UserID is null");}
         this.userId = userId;
     }
@@ -49,7 +50,7 @@ public class User implements Serializable {
      * @param maxScoreInGame  the highest score this user achieved in any game
      * @throws IllegalArgumentException on empty or null address or name and on user = 0
      */
-    public User( String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
+    public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
         if (userId == null)
             throw new IllegalArgumentException("The user ID cannot be null");
@@ -85,7 +86,7 @@ public class User implements Serializable {
 
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(@Nullable String userId) {
         if(userId == null){
             throw new NullPointerException();
         }

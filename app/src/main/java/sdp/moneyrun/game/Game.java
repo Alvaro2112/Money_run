@@ -352,6 +352,9 @@ public class Game {
     }
 
     public void setDatabaseVariable(@NonNull String variable, Object value){
+        if(value == null)
+            throw new NullPointerException();
+
         FirebaseDatabase.getInstance().getReference()
                 .child(DATABASE_GAME)
                 .child(id)
@@ -452,8 +455,6 @@ public class Game {
         setPlayers(players, forceLocal);
 
     }
-
-
 
     @Override
     public boolean equals(@Nullable Object o) {
