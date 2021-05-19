@@ -74,20 +74,20 @@ public class OpenWeatherMap {
             if (i >= daily.length())
                 reports[i] = NO_DATA;
             else
-                reports[i] = tryToParseReport(daily.getJSONObject(i));
+                reports[i] = tryToParseReport(daily.getJSONObject(i), i);
         }
 
         return new WeatherForecast(reports);
     }
 
-    private WeatherReport tryToParseReport(JSONObject jsonObject){
+    private WeatherReport tryToParseReport(JSONObject jsonObject, int day){
 
         WeatherReport report;
 
         try {
             report = parseReport(jsonObject);
         } catch (JSONException ex) {
-            Log.e("OpenWeatherMapWeather", "Error when parsing day " + i, ex);
+            Log.e("OpenWeatherMapWeather", "Error when parsing day " + day, ex);
             report = NO_DATA;
         }
 
