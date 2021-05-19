@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
@@ -59,7 +60,11 @@ public class AddFriendListActivity extends AppCompatActivity {
         Button button = findViewById(R.id.friend_add_list_search_button);
         button.setOnClickListener(v -> {
             EditText editTextFilter = findViewById(R.id.friend_add_list_filter);
-            String textFilter = editTextFilter.getText().toString();
+            String textFilter = editTextFilter
+                    .getText()
+                    .toString()
+                    .trim()
+                    .toLowerCase(Locale.getDefault();
 
             if(textFilter.length() <= 1){
                 editTextFilter.setError("The filter should be more precise.");

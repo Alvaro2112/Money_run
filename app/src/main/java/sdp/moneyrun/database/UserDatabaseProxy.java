@@ -166,18 +166,12 @@ public class UserDatabaseProxy extends DatabaseProxy {
             throw new IllegalArgumentException("name should not be the empty string.");
         }
 
-        if (!task.isComplete()) {
-            return null;
-        }
-        if(!task.isSuccessful()){
+        if (!task.isComplete() || !task.isSuccessful()) {
             Log.e(TAG, "Error getting data", task.getException());
             return null;
         }
 
         DataSnapshot result = task.getResult();
-        if (result == null) {
-            return null;
-        }
 
         ArrayList<User> resultList = new ArrayList<>();
         for(DataSnapshot dataSnapshot: result.getChildren()){

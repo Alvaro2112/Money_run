@@ -92,25 +92,41 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
             }
 
             //Remove or add user from the user's friend list
+            //and update button look
             if(hasFollowed){
-                userFromDb.removeFriendId(friendId);
-                user.removeFriendId(friendId);
+                removeUserFromFriendList(userFromDb, friendId, button);
             }else{
-                userFromDb.addFriendId(friendId);
-                user.addFriendId(friendId);
+                addUserFromFriendList(userFromDb, friendId, button);
             }
             db.putUser(userFromDb);
-
-            //Update button look
-            if(hasFollowed){
-                setFollowButtonType(button);
-            }else{
-                setUnfollowButtonType(button);
-            }
 
             //Reverse button state
             button.setTag(R.string.add_friend_tag_0, !hasFollowed);
         });
+    }
+
+    /**
+     * Implementation to do when removing a user from friend list
+     * @param userFromDb the user
+     * @param friendId the friend id
+     * @param button the button
+     */
+    private void removeUserFromFriendList(User userFromDb, String friendId, Button button){
+        userFromDb.removeFriendId(friendId);
+        user.removeFriendId(friendId);
+        setFollowButtonType(button);
+    }
+
+    /**
+     * Implementation to do when adding a user from friend list
+     * @param userFromDb the user
+     * @param friendId the friend id
+     * @param button the button
+     */
+    private void addUserFromFriendList(User userFromDb, String friendId, Button button){
+        userFromDb.addFriendId(friendId);
+        user.addFriendId(friendId);
+        setUnfollowButtonType(button);
     }
 
     /**
