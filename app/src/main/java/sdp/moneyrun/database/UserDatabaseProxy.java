@@ -135,7 +135,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
             throw new IllegalArgumentException("n should not be negative.");
         }
 
-        //return usersRef.limitToLast(n).get();
         return usersRef.orderByChild(DATABASE_USER_SCORE)
                 .limitToLast(n).get();
     }

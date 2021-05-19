@@ -42,7 +42,6 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_leaderboard);
 
         user = (User) getIntent().getSerializableExtra("user");
-        System.out.println("ME"+user.getUserId());
         addAdapter();
         addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
     }
