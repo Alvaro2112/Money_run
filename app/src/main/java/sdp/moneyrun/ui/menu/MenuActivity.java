@@ -69,7 +69,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    private Address currentAddress;
 
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -221,7 +220,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addressGeocoder = AddressGeocoder.fromContext(this);
     }
 
-    Address address;
 
     public void loadWeather(@NonNull android.location.Location location) {
         try {
@@ -231,10 +229,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             this.currentForecast = openWeatherMap.getForecast(loc);
 
             android.location.Address addr = addressGeocoder.getAddress(loc);
-
-            if (addr != null) {
-                currentAddress = addressGeocoder.convertToAddress(addr);
-            }
 
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);
