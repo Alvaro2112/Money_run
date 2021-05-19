@@ -64,7 +64,7 @@ public class AddFriendListActivity extends AppCompatActivity {
                     .getText()
                     .toString()
                     .trim()
-                    .toLowerCase(Locale.getDefault();
+                    .toLowerCase(Locale.getDefault());
 
             if(textFilter.length() <= 1){
                 editTextFilter.setError("The filter should be more precise.");
