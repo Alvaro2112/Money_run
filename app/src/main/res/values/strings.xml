@@ -10,6 +10,7 @@
     <string name="login_page_email_input_hint">Email address</string>
     <string name="login_page_password_input_hint">Password</string>
     <string name="title_activity_login">Login page</string>
+    <string name="friend_list_button_text">Friend list</string>
 
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
     <string name="menu_main_weather_placeholder_text">coin placeholder</string>
@@ -134,7 +135,6 @@
     <string name="add_friend_button_search">Search name</string>
     <string name="add_friend_button_go_back">Go back to friend list</string>
     <string name="friend_button_search">Search friends</string>
-    <string name="friend_list_button_text">Friend list</string>
 
 
 </resources>

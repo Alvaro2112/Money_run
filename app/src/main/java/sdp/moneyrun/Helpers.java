@@ -133,9 +133,4 @@ public class Helpers {
     public static void bestToWorstUser(@NonNull List<User> users) {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
     }
-
-
-    public static void addAdapterList(){
-
-    }
 }
