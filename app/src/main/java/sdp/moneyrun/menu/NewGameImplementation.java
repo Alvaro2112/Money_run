@@ -70,7 +70,10 @@ public class NewGameImplementation extends MenuImplementation {
         LinearLayout newGameLayout = popupView.findViewById(R.id.newGameLayout);
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
-        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
+        newGameButton.setOnClickListener(v -> {
+                onSubmitPostNewGame(newGameLayout);
+                popupWindow.dismiss();
+        });
     }
 
     /**
