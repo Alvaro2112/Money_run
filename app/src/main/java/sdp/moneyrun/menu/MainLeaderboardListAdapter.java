@@ -32,7 +32,6 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
             throw new IllegalArgumentException("user should not be null.");
         }
         this.currentUser = user;
-
     }
 
     @SuppressLint("ViewHolder")

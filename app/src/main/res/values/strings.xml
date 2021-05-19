@@ -10,6 +10,7 @@
     <string name="login_page_email_input_hint">Email address</string>
     <string name="login_page_password_input_hint">Password</string>
     <string name="title_activity_login">Login page</string>
+
     <string name="menu_leaderboard_button_text">Leaderboard</string>
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
     <string name="menu_main_weather_placeholder_text">coin placeholder</string>
@@ -121,7 +122,7 @@
     -->
     <string name="newGameNumCoinsText">Enter the number of coins</string>
     <string name="newGameDurationText">Enter the duration of the game in minutes</string>
-    <string name="newGameRadiusText">Enter the radius of the game in km</string>
+    <string name="newGameRadiusText">Enter the radius of the game in meter</string>
     <string name="delete_button_text">Delete</string>
 
 

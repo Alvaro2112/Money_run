@@ -449,9 +449,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (collected) {
             String default_score = getString(R.string.map_score_text, localPlayer.getScore());
             currentScoreView.setText(default_score);
-            game.setCoins(localPlayer.toSendToDb(), true);
-            proxyG.updateGameInDatabase(game, null);
-            player.setScore(localPlayer.getScore(), true);
+            List<Player> temp_players = game.getPlayers();
+            temp_players.remove(player);
+            player.setScore(localPlayer.getScore(),true);
+            temp_players.add(player);
+            game.setPlayers(temp_players,true);
+            game.setCoins(localPlayer.toSendToDb(),true);
+            proxyG.updateGameInDatabase(game,null);
         }
 
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
