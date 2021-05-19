@@ -12,7 +12,6 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 
 public class User implements Serializable {
 
-    @Nullable
     private String userId;
     @Nullable
     private String name;
@@ -31,7 +30,8 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(@Nullable String userId) {
+    public User( String userId) {
+        if(userId == null){throw new NullPointerException("UserID is null");}
         this.userId = userId;
     }
 
@@ -45,7 +45,7 @@ public class User implements Serializable {
      * @param numberOfPlayedGames
      * @throws IllegalArgumentException on empty or null address or name and on user = 0
      */
-    public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
+    public User( String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
         if (userId == null || name == null || name.isEmpty() || address == null || address.isEmpty() || maxScoreInGame < 0)
             throw new IllegalArgumentException();
@@ -70,6 +70,14 @@ public class User implements Serializable {
         dbUpdate(dbChange);
 
     }
+
+    public void setUserId(String userId) {
+        if(userId == null){
+            throw new NullPointerException();
+        }
+        this.userId = userId;
+    }
+
 
     /**
      * Setter for name. By design the user already had a name
@@ -279,9 +287,7 @@ public class User implements Serializable {
 
         return userId.equals(user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames &&
-                name.equals(user.name) &&
-                address.equals(user.address);
+                numberOfDiedGames == user.numberOfDiedGames;
     }
 
     @Override
