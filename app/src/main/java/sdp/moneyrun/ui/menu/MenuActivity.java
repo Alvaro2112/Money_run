@@ -58,7 +58,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
-                    map -> {});
+                    map -> {
+                    });
 
 
     protected DrawerLayout mDrawerLayout;
@@ -219,7 +220,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         openWeatherMap = OpenWeatherMap.build();
         addressGeocoder = AddressGeocoder.fromContext(this);
     }
+
     Address address;
+
     public void loadWeather(@NonNull android.location.Location location) {
         try {
             LocationRepresentation loc;
@@ -253,13 +256,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         String url = "https://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
         Picasso obj = Picasso.get();
-                obj.setLoggingEnabled(true);
-                obj.load(url).fit().into(weatherIconView);
+        obj.setLoggingEnabled(true);
+        obj.load(url).fit().into(weatherIconView);
         weatherIconView.setContentDescription(report.getWeatherType());
         weatherTempText.setText(String.format("%s C", report.getAverageTemperature()));
         weatherTypeText.setText(report.getWeatherType());
     }
-
 
 
 }
