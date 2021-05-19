@@ -251,7 +251,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         TextView weatherTempText = findViewById(R.id.weather_temp_average);
         ImageView weatherIconView = findViewById(R.id.weather_icon);
 
-        String url = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
+        String url = "https://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
         Picasso obj = Picasso.get();
                 obj.setLoggingEnabled(true);
                 obj.load(url).fit().into(weatherIconView);

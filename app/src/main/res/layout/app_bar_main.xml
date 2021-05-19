@@ -123,6 +123,7 @@
         android:id="@+id/weather_icon"
         android:layout_width="144dp"
         android:layout_height="151dp"
+        android:contentDescription="@string/menu_main_weather_placeholder_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
