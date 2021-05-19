@@ -150,7 +150,7 @@ public class RegisterUserInstrumentedTest {
     @Test
     public void guestModeDisablesJoinGameButtonInMenu() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RegisterUserActivity.class);
-        intent.putExtra("guestPlayer", true);
+        intent.putExtra("guestUser", true);
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             String name = "John";
