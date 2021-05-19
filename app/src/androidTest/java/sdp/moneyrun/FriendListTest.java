@@ -1,21 +1,11 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
-import android.widget.ListView;
-
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.hamcrest.Matchers;
 import org.junit.AfterClass;
@@ -23,26 +13,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.menu.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 @RunWith(AndroidJUnit4.class)
