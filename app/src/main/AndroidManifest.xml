@@ -5,31 +5,32 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE " />
 
     <application
+        android:icon="@mipmap/coin"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup"
-        android:icon="@mipmap/coin">
-        <activity android:name=".ui.game.EndGameActivity">
-        </activity>
-        <activity android:name=".ui.map.MapActivity">
-        </activity>
-        <activity android:name=".ui.menu.LeaderboardActivity" />
+        tools:ignore="AllowBackup">
+        <activity android:name=".ui.game.EndGameActivity" />
+        <activity android:name=".ui.map.MapActivity" />
+        <activity
+            android:name=".ui.menu.LeaderboardActivity"
+            android:theme="@style/NullTheme" />
+
 
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
 
         <activity
             android:name=".ui.authentication.SignUpActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/NullTheme"
             tools:ignore="AllowBackup" />
+
         <activity
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,16 +39,19 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.map.OfflineMapActivity">
-        </activity>
-        <activity android:name=".ui.map.OfflineMapDownloaderActivity"/>
+        <activity android:name=".ui.map.OfflineMapActivity" />
+        <activity android:name=".ui.map.OfflineMapDownloaderActivity" />
         <activity
             android:name=".ui.authentication.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".ui.player.UserProfileActivity" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/NullTheme" />
+        <activity
+            android:name=".ui.player.UserProfileActivity"
+            android:theme="@style/NullTheme" />
         <activity
             android:name=".ui.authentication.RegisterUserActivity"
-            android:label="Register Player" />
+            android:label="Register Player"
+            android:theme="@style/NullTheme" />
         <activity android:name=".ui.game.GameLobbyActivity" />
     </application>
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -36,15 +35,15 @@
                 app:layout_constraintHorizontal_bias="0.015"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.01"></Chronometer>
+                app:layout_constraintVertical_bias="0.01" />
 
             <Button
                 android:id="@+id/close_map"
                 android:layout_width="25dp"
                 android:layout_height="28dp"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:background="@drawable/roundedbutton"
-                android:text="x"
+                android:text="@string/cross"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +57,7 @@
                 android:layout_width="105dp"
                 android:layout_height="35dp"
                 android:background="@drawable/layout_rounded"
-                android:text="new_question"
+                android:text="@string/new_question_button_text"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -90,8 +89,8 @@
                 android:id="@+id/in_game_scores_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/map_in_game_scores"
                 android:background="@drawable/layout_rounded"
+                android:text="@string/map_in_game_scores"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.944"
@@ -100,9 +99,6 @@
                 app:layout_constraintVertical_bias="0.953" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
     </com.mapbox.mapboxsdk.maps.MapView>

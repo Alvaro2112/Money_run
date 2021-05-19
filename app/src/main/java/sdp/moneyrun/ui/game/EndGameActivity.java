@@ -2,21 +2,18 @@ package sdp.moneyrun.ui.game;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import java.util.ArrayList;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -27,11 +24,12 @@ import sdp.moneyrun.user.User;
 /**
  * In this activity we do everything that needs to be done to update players info
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EndGameActivity extends AppCompatActivity {
 
+    private final int gameScore = 0;
     private int score;
     private int numberOfCollectedCoins;
-    private final int gameScore = 0;
     private TextView endText;
     private String playerId;
     private Button resultButton;
@@ -66,31 +64,22 @@ public class EndGameActivity extends AppCompatActivity {
      *               Call this on the button to make start the Menu activity
      */
 
-    private void linkToMenuButton(ImageButton toMenu){
+    private void linkToMenuButton(@NonNull ImageButton toMenu) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
-        toMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()){
-                            User p = pdp.getUserFromTask(task);
-                            Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
-                            mainIntent.putExtra("user", p);
-                            startActivity(mainIntent);
-                            finish();
-                        }
-                    }
-                });
-
+        toMenu.setOnClickListener(v -> pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                User p = pdp.getUserFromTask(task);
+                Intent mainIntent = new Intent(EndGameActivity.this, MenuActivity.class);
+                mainIntent.putExtra("user", p);
+                startActivity(mainIntent);
+                finish();
             }
-        });
+        }));
 
     }
 
     /**
-     * @param numCoins number of coins collected
+     * @param numCoins  number of coins collected
      * @param gameScore score of the game (sum of values of coins)
      * @param succeeded (has managed to get the list of coins from the map activity
      *                  <p>
@@ -120,6 +109,7 @@ public class EndGameActivity extends AppCompatActivity {
      * @param playerId  player to update
      * @param gameScore score to be added
      */
+    @NonNull
     public Player updatePlayer(String playerId, int gameScore) {
         final Player player = new Player(playerId, "name", gameScore);
         if (player != null) {
@@ -128,15 +118,12 @@ public class EndGameActivity extends AppCompatActivity {
         return player;
     }
 
-    public void updateUser(String playerId, int gameScore) {
+    public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
-        pdp.getUserTask(playerId).addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()){
-                    User p = pdp.getUserFromTask(task);
-                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
-                }
+        pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                User p = pdp.getUserFromTask(task);
+                p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
             }
         });
 
@@ -150,15 +137,15 @@ public class EndGameActivity extends AppCompatActivity {
      *
      * @param resultButton button that will link to result UI
      */
-    public void linkToResult(Button resultButton){
+    public void linkToResult(@Nullable Button resultButton) {
         List<Player> players = getPlayersFromGame();
-        if(resultButton == null || players == null)
+        if (resultButton == null || players == null)
             throw new IllegalArgumentException("Button linking end to results or players list is null");
         resultButton.setOnClickListener(v -> {
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
-            resultIntent.putExtra("numberOfPlayers",players.size());
-            for(int i = 0;i < players.size();++i) {
-                resultIntent.putExtra("players"+i, players.get(i));
+            resultIntent.putExtra("numberOfPlayers", players.size());
+            for (int i = 0; i < players.size(); ++i) {
+                resultIntent.putExtra("players" + i, players.get(i));
             }
             startActivity(resultIntent);
         });
@@ -167,11 +154,12 @@ public class EndGameActivity extends AppCompatActivity {
     /**
      * @return players that were in the game that just ended
      */
-    private List<Player> getPlayersFromGame(){
+    @NonNull
+    private List<Player> getPlayersFromGame() {
         List<Player> players = new ArrayList<>();
-        int numberOfPlayers = getIntent().getIntExtra("players",0);
-        for(int i =0;i<numberOfPlayers;++i){
-            Player player = (Player)getIntent().getSerializableExtra("player"+i);
+        int numberOfPlayers = getIntent().getIntExtra("players", 0);
+        for (int i = 0; i < numberOfPlayers; ++i) {
+            Player player = (Player) getIntent().getSerializableExtra("player" + i);
             players.add(player);
         }
         return players;

@@ -1,25 +1,29 @@
 package sdp.moneyrun.database;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class DatabaseProxy {
 
-    private final String TAG = DatabaseProxy.class.getSimpleName();
-
+    @NonNull
     private final DatabaseReference ref;
+    @NonNull
     private final FirebaseDatabase db;
 
-    public DatabaseProxy(){
+    public DatabaseProxy() {
         db = FirebaseDatabase.getInstance();
         ref = db.getReference();
     }
 
-    public DatabaseReference getReference(){
+    @NonNull
+    public DatabaseReference getReference() {
         return ref;
     }
 
-    public FirebaseDatabase getDatabase(){
+    @NonNull
+    public FirebaseDatabase getDatabase() {
         return db;
     }
 }
