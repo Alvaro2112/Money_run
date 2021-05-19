@@ -154,7 +154,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 coinsToPlace = game.getNumCoins();
                 game_radius = game.getRadius();
-                circleRadius = (float) game_radius;
+                circleRadius = (float) game_radius*10;
                 game_time = (int) Math.floor(game.getDuration() * 60);
                 game_center = game.getStartLocation();
                 initChronometer();
@@ -467,7 +467,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
         circleRadius *= shrinkingFactor;
         initCircle();
-        checkIfLegalPosition(coin);
+        //checkIfLegalPosition(coin);
     }
 
     /**
