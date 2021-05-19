@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -22,7 +23,6 @@ import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.offline.OfflineRegionError;
 import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import org.json.JSONObject;
 
@@ -175,7 +175,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
     }
 
-    public void createOfflineRegion(byte[] metadata, OfflineTilePyramidRegionDefinition definition){
+    public void createOfflineRegion(@NonNull byte[] metadata, @NonNull OfflineTilePyramidRegionDefinition definition){
         offlineManager.createOfflineRegion(
                 definition,
                 metadata,
@@ -198,7 +198,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                 });
     }
 
-    public void setOfflineRegionObserver(OfflineRegion offlineRegion){
+    public void setOfflineRegionObserver(@NonNull OfflineRegion offlineRegion){
         offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
             @Override
             public void onStatusChanged(@NonNull OfflineRegionStatus status) {
@@ -226,6 +226,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         });
     }
 
+    @Nullable
     public byte[] setMetaData(){
         byte[] metadata;
 

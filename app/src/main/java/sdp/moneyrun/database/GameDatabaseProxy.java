@@ -247,12 +247,14 @@ public class GameDatabaseProxy extends DatabaseProxy {
         getDatabaseChildOfGame(game, DATABASE_COIN).removeEventListener(listener);
     }
 
-    public DatabaseReference getDatabaseChildOfGame(Game game, String variable){
+    @NonNull
+    public DatabaseReference getDatabaseChildOfGame(@NonNull Game game, @NonNull String variable){
         return gamesRef.child(game.getId())
                 .child(variable);
     }
 
-    public <T> T getDatabaseValue(DataSnapshot ds, String variable, Class<T> type){
+    @Nullable
+    public <T> T getDatabaseValue(@NonNull DataSnapshot ds, @NonNull String variable, @NonNull Class<T> type){
         T value = ds.child(variable).getValue(type);
         if (value == null) {
             throw new IllegalArgumentException(variable + " should not be null.");

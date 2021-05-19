@@ -24,7 +24,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -88,6 +87,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private CircleManager circleManager;
     private double game_radius;
     private int game_time;
+    @Nullable
     private Location game_center;
     private float circleRadius;
     private double shrinkingFactor = 0.9;
@@ -122,6 +122,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * get all the extras necessary to run this activity
+     */
     public void getExtras(){
         player = (Player) getIntent().getSerializableExtra("player");
         gameId = getIntent().getStringExtra("currentGameId");
@@ -131,6 +134,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         host = getIntent().getBooleanExtra("host", false);
     }
 
+    /**
+     * Initialize all the variables to start this activity
+     */
     public void initializeVariables(){
         seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
@@ -142,6 +148,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Find all the views present in this activity
+     */
     public void getViews(){
         currentScoreView = findViewById(R.id.map_score_view);
         chronometer = findViewById(R.id.mapChronometer);
@@ -276,6 +285,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public double getGameRadius(){return game_radius;}
     public double getGameDuration(){return game_time;}
+    @Nullable
     public Location getGameCenter(){return game_center;}
 
 
@@ -475,7 +485,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
-    public void deleteCoinFromMap(Coin coin){
+    public void deleteCoinFromMap(@NonNull Coin coin){
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 
         for (int i = 0; i < symbols.size(); ++i) {

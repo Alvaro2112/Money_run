@@ -31,6 +31,7 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
     private final String DB_IS_DELETED = "isDeleted";

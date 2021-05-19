@@ -1,7 +1,5 @@
 package sdp.moneyrun.database;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -75,7 +73,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @return Task containing the player data
      */
     @NonNull
-    public Task<DataSnapshot> getPlayerTask(String playerId) {
+    public Task<DataSnapshot> getPlayerTask(@NonNull String playerId) {
         Task<DataSnapshot> task = playersRef.child(playerId).get();
         return Helpers.addOnCompleteListener(TAG, task);
 

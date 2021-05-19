@@ -20,10 +20,11 @@ public class CoinGenerationHelper {
      *
      * @param currentLocation Center of the radius
      * @param maxRadius       Biggest distance for a coin compared to the center
-     * @param minRadius       Mininum distance from a coin to the radius
+     * @param minRadius       Minimum distance from a coin to the radius
      * @return a location between min radius and max radius from the currentLocation
      */
-    public static Location getRandomLocation(Location currentLocation, double maxRadius, double minRadius) {
+    @NonNull
+    public static Location getRandomLocation(@Nullable Location currentLocation, double maxRadius, double minRadius) {
         if (maxRadius <= 0 || currentLocation == null || minRadius <= 0)
             throw new IllegalArgumentException();
         if (maxRadius <= minRadius)

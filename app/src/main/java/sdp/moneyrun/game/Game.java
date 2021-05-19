@@ -291,6 +291,7 @@ public class Game {
 
     }
 
+    @Nullable
     public List<Riddle> getRiddles() {
         return new ArrayList<>(riddles);
     }
@@ -350,7 +351,7 @@ public class Game {
 
     }
 
-    public void setDatabaseVariable(String variable, Object value){
+    public void setDatabaseVariable(@NonNull String variable, Object value){
         FirebaseDatabase.getInstance().getReference()
                 .child(DATABASE_GAME)
                 .child(id)

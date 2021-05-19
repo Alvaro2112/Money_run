@@ -1,14 +1,12 @@
 package sdp.moneyrun;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.map.OfflineMapActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -56,7 +52,7 @@ public class Helpers {
     }
 
     @Nullable
-    public static View getView(int position, @Nullable View view, Player player) {
+    public static View getView(int position, @Nullable View view, @NonNull Player player) {
 
         TextView player_position = view.findViewById(R.id.player_position);
         TextView player_name = view.findViewById(R.id.player_name);
@@ -71,11 +67,11 @@ public class Helpers {
         return view;
     }
 
-    public static <T> void addOrRemoveListener(@Nullable T object, @Nullable ValueEventListener listener, DatabaseReference databaseReference, boolean remove) {
+    public static <T> void addOrRemoveListener(@Nullable T object, @Nullable ValueEventListener listener, @NonNull DatabaseReference databaseReference, boolean remove) {
         if (listener == null || object == null)
             throw new IllegalArgumentException();
 
-        DatabaseReference newDatabaseReference = null;
+        DatabaseReference newDatabaseReference;
 
         if(object instanceof Player)
             newDatabaseReference = databaseReference.child(String.valueOf(((Player)object).getPlayerId()));
@@ -90,7 +86,8 @@ public class Helpers {
             newDatabaseReference.addValueEventListener(listener);
     }
 
-    public static Task<DataSnapshot> addOnCompleteListener(String TAG, Task<DataSnapshot> task){
+    @NonNull
+    public static Task<DataSnapshot> addOnCompleteListener(String TAG, @NonNull Task<DataSnapshot> task){
 
         task.addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {
@@ -104,7 +101,7 @@ public class Helpers {
         return task;
     }
 
-    public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(ArrayList<T> objectList, U listAdapter){
+    public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter){
         if (objectList == null) {
             throw new NullPointerException("List is null");
         }

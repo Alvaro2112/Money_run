@@ -10,6 +10,9 @@ import java.util.Objects;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
 
+/**
+ * This class represents a user (ie. A person), not to be confused with a Player. A user is the entity that uses the app and always existt, a Player only exists during a Game and is created by a User.
+ */
 public class User implements Serializable {
 
     @Nullable
@@ -39,10 +42,11 @@ public class User implements Serializable {
      * Constructor, returns instance of user
      *
      * @param userId              the unique id that identifies a user
-     * @param name
-     * @param address
-     * @param numberOfDiedGames
-     * @param numberOfPlayedGames
+     * @param name the name of the user
+     * @param address the address of the user
+     * @param numberOfDiedGames the number of games a user lost
+     * @param numberOfPlayedGames the number of games a user played
+     * @param maxScoreInGame  the highest score this user achieved in any game
      * @throws IllegalArgumentException on empty or null address or name and on user = 0
      */
     public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
@@ -84,7 +88,7 @@ public class User implements Serializable {
     /**
      * Setter for name. By design the user already had a name
      *
-     * @param name
+     * @param name The new name of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setName(String name, boolean dbChange) {
@@ -95,7 +99,7 @@ public class User implements Serializable {
     /**
      * Setter for address. By design the user already had an address
      *
-     * @param address
+     * @param address The new address of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setAddress(String address, boolean dbChange) {
@@ -140,7 +144,7 @@ public class User implements Serializable {
     /**
      * sets the number of died games
      *
-     * @param diedGames
+     * @param diedGames The new number of games this user lost
      * @param dbChange  whether the database entry must be updated
      */
     public void setNumberOfDiedGames(int diedGames, boolean dbChange) {
@@ -151,8 +155,8 @@ public class User implements Serializable {
     /**
      * sets the number of played games
      *
-     * @param playedGames
-     * @param dbChange
+     * @param playedGames The new number of games this user player
+     * @param dbChange Whether to update the database or not
      */
     public void setNumberOfPlayedGames(int playedGames, boolean dbChange) {
         numberOfPlayedGames = playedGames;
@@ -265,7 +269,7 @@ public class User implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;

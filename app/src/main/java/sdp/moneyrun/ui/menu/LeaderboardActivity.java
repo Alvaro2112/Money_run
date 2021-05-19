@@ -14,8 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 import java.util.Random;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -81,7 +80,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         if (player == null) {
             throw new IllegalArgumentException("player should not be null");
         }
-        ArrayList<Player> to_add = new ArrayList<>(Arrays.asList(player));
+        ArrayList<Player> to_add = new ArrayList<>(Collections.singletonList(player));
         addPlayerList(to_add);
     }
 

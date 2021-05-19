@@ -41,14 +41,13 @@ import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.Address;
 import sdp.moneyrun.weather.AddressGeocoder;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings("CanBeFinal")
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     /////////////////////////////////////////////////////WEATHER IMPLEMENTATION
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
@@ -63,6 +62,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
