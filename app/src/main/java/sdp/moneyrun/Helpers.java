@@ -31,4 +31,8 @@ public class Helpers {
 
         return popupWindow;
     }
+
+    public static void addAdapterList(){
+
+    }
 }

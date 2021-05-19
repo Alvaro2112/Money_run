@@ -21,6 +21,8 @@ import sdp.moneyrun.user.User;
 public class AddFriendListListAdapter extends ArrayAdapter<User> {
 
     private final User user;
+    private final int color_light_gray = Color.rgb(220, 220, 220);
+    private final int color_gold = Color.rgb(255,215,0);
 
     public AddFriendListListAdapter(Activity context, List<User> userList, User user) {
         super(context,0 , userList);
@@ -52,10 +54,10 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
             setInvalidButtonType(userButtonView);
         }else if(user.getFriendIdList().contains(userRequested.getUserId())){
             userButtonView.setTag(R.string.add_friend_tag_0, true);
-            setUnfollowButtonType(userButtonView);
+            setButtonType(userButtonView, false);
         }else{
             userButtonView.setTag(R.string.add_friend_tag_0, false);
-            setFollowButtonType(userButtonView);
+            setButtonType(userButtonView, true);
         }
 
         userButtonView.setOnClickListener(this::defineFollowButton);
@@ -69,9 +71,6 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
      */
     private void defineFollowButton(View view){
         Button button = (Button) view;
-        if(button == null){
-            throw new IllegalArgumentException("button view should not be null");
-        }
 
         boolean hasFollowed = (boolean) button.getTag(R.string.add_friend_tag_0);
 
@@ -114,7 +113,7 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
     private void removeUserFromFriendList(User userFromDb, String friendId, Button button){
         userFromDb.removeFriendId(friendId);
         user.removeFriendId(friendId);
-        setFollowButtonType(button);
+        setButtonType(button, true);
     }
 
     /**
@@ -126,7 +125,7 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
     private void addUserFromFriendList(User userFromDb, String friendId, Button button){
         userFromDb.addFriendId(friendId);
         user.addFriendId(friendId);
-        setUnfollowButtonType(button);
+        setButtonType(button, false);
     }
 
     /**
@@ -139,25 +138,15 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
     }
 
     /**
-     * Define unfollow button type
+     * Define button type
      * @param button the button
      */
-    private void setUnfollowButtonType(Button button){
-        int color_light_gray = Color.rgb(220, 220, 220);
+    private void setButtonType(Button button, boolean follow){
+        int text = follow ? R.string.add_friend_button_follow_text : R.string.add_friend_button_unfollow_text;
+        int color = follow ? color_gold : color_light_gray;
 
-        button.setBackground(getButtonBackground(color_light_gray));
-        button.setText(R.string.add_friend_button_unfollow_text);
-    }
-
-    /**
-     * Define follow button type
-     * @param button the button
-     */
-    private void setFollowButtonType(Button button){
-        int color_gold = Color.rgb(255,215,0);
-
-        button.setBackground(getButtonBackground(color_gold));
-        button.setText(R.string.add_friend_button_follow_text);
+        button.setBackground(getButtonBackground(color));
+        button.setText(text);
     }
 
     /**
