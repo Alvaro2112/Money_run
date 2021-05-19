@@ -65,7 +65,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @NonNull
     LocationListener locationListenerGPS = location -> {
         loadWeather(location);
-        setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+        if(currentForecast != null)
+            setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
     };
 
     @Override
@@ -218,13 +219,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             this.currentLocation = loc;
             this.currentForecast = openWeatherMap.getForecast(loc);
-
-            android.location.Address addr = addressGeocoder.getAddress(loc);
-            Address address;
-            if (addr != null) {
-                address = addressGeocoder.convertToAddress(addr);
-            }
-
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);
         }

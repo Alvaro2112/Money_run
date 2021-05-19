@@ -264,21 +264,17 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                                         getString(R.string.offline_map_deleted),
                                         Toast.LENGTH_LONG
                                 ).show();
-
-
                             }
 
                             @Override
-                            public void onError(String error) {
-                            }
+                            public void onError(String error) {}
                         });
                     }
                 }
             }
 
             @Override
-            public void onError(String error) {
-            }
+            public void onError(String error) {}
         });
     }
 
