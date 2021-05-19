@@ -159,7 +159,9 @@ public class User implements Serializable {
             throw new IllegalArgumentException("friend id should not be null");
         }
 
-        this.friendIdList.add(friendId);
+        if(!this.friendIdList.contains(friendId)){
+            this.friendIdList.add(friendId);
+        }
     }
 
     /**
@@ -277,12 +279,13 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId.equals(user.userId) &&
+
+        return Objects.equals(userId, user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
                 numberOfDiedGames == user.numberOfDiedGames &&
-                name.equals(user.name) &&
-                address.equals(user.address)
-                && friendIdList.equals(user.friendIdList);
+                Objects.equals(name, user.name) &&
+                Objects.equals(address, user.address) &&
+                Objects.equals(friendIdList, user.friendIdList);
     }
 
     @Override

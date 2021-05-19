@@ -21,7 +21,7 @@
             android:layout_marginStart="144dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/layout_rounded"
-            android:text="Search friends"
+            android:text="@string/friend_button_search"
             android:textAlignment="center"
             android:textSize="12sp"
             android:textStyle="bold"

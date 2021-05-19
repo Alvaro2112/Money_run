@@ -1,6 +1,8 @@
 package sdp.moneyrun.ui.menu;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.service.autofill.UserData;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,11 +33,17 @@ public class AddFriendListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend_list);
 
         user = (User) getIntent().getSerializableExtra("user");
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.updatedFriendListFromDatabase(user);
 
         addAdapter();
         searchButtonFunctionality();
+        goBackButtonFunctionality();
     }
 
+    /**
+     * Link list adapter to the activity
+     */
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new AddFriendListListAdapter(this, resultList, user);
@@ -44,6 +52,9 @@ public class AddFriendListActivity extends AppCompatActivity {
         ldbAdapter.clear();
     }
 
+    /**
+     * Functionality for the search friend button
+     */
     private void searchButtonFunctionality(){
         Button button = findViewById(R.id.friend_add_list_search_button);
         button.setOnClickListener(v -> {
@@ -66,6 +77,23 @@ public class AddFriendListActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Functionality for the go back to friend list button
+     */
+    private void goBackButtonFunctionality(){
+        Button button = findViewById(R.id.friend_add_list_button_back);
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(AddFriendListActivity.this, FriendListActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    /**
+     * Add a user list to the list adapter
+     * @param userList the user list to add
+     */
     public void addUserList(List<User> userList){
         if(userList == null){
             throw new NullPointerException("user list should not be null.");

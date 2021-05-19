@@ -152,6 +152,12 @@ public class UserDatabaseProxy extends DatabaseProxy {
                 .get();
     }
 
+    /**
+     * Get a list of players that have a name containing the filter string.
+     * @param task the task from the database to sort
+     * @param filter the name filter
+     * @return a list of user whose names contain the filter string
+     */
     public List<User> getUserListFromTaskFromSimilarName(Task<DataSnapshot> task, String filter) {
         if (filter == null) {
             throw new IllegalArgumentException("name should not be null.");
@@ -188,5 +194,27 @@ public class UserDatabaseProxy extends DatabaseProxy {
         }
 
         return resultList;
+    }
+
+    /**
+     * Given a user, updates their friend list given the database
+     * @param user the user to update
+     * @return the task that retrieves the user from the database
+     */
+    public Task<DataSnapshot> updatedFriendListFromDatabase(User user){
+        if(user == null || user.getUserId() == null){
+            return null;
+        }
+
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        Task<DataSnapshot> userTask = db.getUserTask(user.getUserId());
+        userTask.addOnCompleteListener(task -> {
+            User userUpdated = db.getUserFromTask(task);
+            if(userUpdated != null){
+                user.setFriendIdList(userUpdated.getFriendIdList());
+            }
+        });
+
+        return userTask;
     }
 }
