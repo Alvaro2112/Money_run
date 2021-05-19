@@ -95,7 +95,7 @@ public class FriendListTest {
     }
 
     @Test
-    public void FriendListWorks() {
+    public void defaultFriendsWork(){
         UserDatabaseProxy db = new UserDatabaseProxy();
         for(User user : usersDatabase){
             db.putUser(user);
@@ -113,6 +113,30 @@ public class FriendListTest {
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(2).getUserId()))).check(matches(isDisplayed()));
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(User user : usersDatabase){
+            db.removeUser(user);
+        }
+    }
+
+    @Test
+    public void addFriendWorks(){
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        for(User user : usersDatabase){
+            db.putUser(user);
+        }
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(3000);
             //Join add friends
             onView(ViewMatchers.withId(R.id.friend_list_search_button)).perform(ViewActions.click());
 
@@ -133,7 +157,30 @@ public class FriendListTest {
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(2).getUserId()))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(5).getUserId()))).check(matches(isDisplayed()));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        for(User user : usersDatabase){
+            db.removeUser(user);
+        }
+    }
+
+    @Test
+    public void removeFriendWorks() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        for(User user : usersDatabase){
+            db.putUser(user);
+        }
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(3000);
             //Join add friends
             onView(ViewMatchers.withId(R.id.friend_list_search_button)).perform(ViewActions.click());
 
