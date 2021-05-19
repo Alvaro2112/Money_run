@@ -205,7 +205,10 @@ public class MenuActivityTest {
                     .perform(DrawerActions.open());
             Thread.sleep(3000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
+            Thread.sleep(3000);
+
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
+            Thread.sleep(3000);
 
             Intents.release();
         } catch (Exception e) {
