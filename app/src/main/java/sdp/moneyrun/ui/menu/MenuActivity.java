@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -28,14 +29,17 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
+import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
@@ -49,19 +53,25 @@ import sdp.moneyrun.weather.WeatherReport;
 
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    /////////////////////////////////////////////////////WEATHER IMPLEMENTATION
-    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 0.00001;
+    //In meters
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {
-    });
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                    map -> {
+                    });
+
+
     protected DrawerLayout mDrawerLayout;
-    DatabaseReference databaseReference;
-    FusedLocationProviderClient fusedLocationClient;
     private User user;
+
     private OpenWeatherMap openWeatherMap;
     private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    DatabaseReference databaseReference;
+    FusedLocationProviderClient fusedLocationClient;
+
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -81,6 +91,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         public void onProviderEnabled(@NonNull String provider) {
 
         }
+
     };
 
     @Override
@@ -137,10 +148,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissionsLauncher,
                 fusedLocationClient);
 
-        // Functionalities
-        /////////////////////////////////
+
         runWeather();
-        //////////////////////////////
 
         Button joinGame = findViewById(R.id.join_game);
         joinGame.setOnClickListener(joinGameImplementation::onClickShowJoinGamePopupWindow);
@@ -226,12 +235,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addressGeocoder = AddressGeocoder.fromContext(this);
     }
 
+
     public void loadWeather(@NonNull android.location.Location location) {
         try {
             LocationRepresentation loc;
             loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
             this.currentLocation = loc;
             this.currentForecast = openWeatherMap.getForecast(loc);
+
         } catch (IOException e) {
             Log.e("WeatherActivity", "Error when retrieving forecast.", e);
         }
@@ -245,12 +256,19 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return currentLocation;
     }
 
-    private void setWeatherFieldsToday(@NonNull WeatherReport report) {
-        String weatherIconURL = "http://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@2x.png";
-        Log.d(MenuActivity.class.getSimpleName(), "THE ICON IS : " + report.getWeatherIcon());
+    public void setWeatherFieldsToday(@NonNull WeatherReport report) {
         TextView weatherTypeText = findViewById(R.id.weather_type);
         TextView weatherTempText = findViewById(R.id.weather_temp_average);
+        ImageView weatherIconView = findViewById(R.id.weather_icon);
+
+        String url = "https://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
+        Picasso obj = Picasso.get();
+        obj.setLoggingEnabled(true);
+        obj.load(url).fit().into(weatherIconView);
+        weatherIconView.setContentDescription(report.getWeatherType());
         weatherTempText.setText(String.format("%s C", report.getAverageTemperature()));
         weatherTypeText.setText(report.getWeatherType());
     }
+
+
 }
