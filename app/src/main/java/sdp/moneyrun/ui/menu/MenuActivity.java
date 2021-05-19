@@ -32,14 +32,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;

@@ -11,7 +11,6 @@
     <string name="login_page_password_input_hint">Password</string>
     <string name="title_activity_login">Login page</string>
 
-    <string name="menu_leaderboard_button_text">Leaderboard</string>
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
     <string name="menu_main_weather_placeholder_text">coin placeholder</string>
     <string name="leaderboard_header_position">Position</string>

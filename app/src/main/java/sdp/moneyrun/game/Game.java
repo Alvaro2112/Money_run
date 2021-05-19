@@ -351,7 +351,7 @@ public class Game {
 
     }
 
-    public void setDatabaseVariable(@NonNull String variable, Object value){
+    public void setDatabaseVariable(@NonNull String variable, @Nullable Object value){
         if(value == null)
             throw new NullPointerException();
 
