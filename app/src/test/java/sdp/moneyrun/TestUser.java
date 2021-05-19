@@ -126,6 +126,8 @@ public class TestUser {
         User p = new User(strId, name, address, died, played, 0);
     }
 
+
+
     @Test(expected = IllegalArgumentException.class)
     public void userThrowsExceptionOnNullId() {
         Random r = new Random();
@@ -247,4 +249,19 @@ public class TestUser {
 
         user.removeFriendId(null);
     }
+
+    @Test()
+    public void setIdWorks() {
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        user.setUserId("12");
+        assertEquals("12",(user.getUserId()));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void setIdThrowsExceptionOnNullID() {
+        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        user.setUserId(null);
+    }
+
+
 }
