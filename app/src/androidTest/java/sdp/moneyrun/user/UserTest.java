@@ -97,6 +97,7 @@ public class UserTest {
         db.removeUserListener(player, listener);
     }
 
+
     @Test
     public void setNameWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);

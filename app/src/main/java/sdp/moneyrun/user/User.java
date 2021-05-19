@@ -15,7 +15,6 @@ import sdp.moneyrun.database.UserDatabaseProxy;
  */
 public class User implements Serializable {
 
-    @Nullable
     private String userId;
     @Nullable
     private String name;
@@ -34,7 +33,8 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(@Nullable String userId) {
+    public User( String userId) {
+        if(userId == null){throw new NullPointerException("UserID is null");}
         this.userId = userId;
     }
 
@@ -49,7 +49,7 @@ public class User implements Serializable {
      * @param maxScoreInGame  the highest score this user achieved in any game
      * @throws IllegalArgumentException on empty or null address or name and on user = 0
      */
-    public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
+    public User( String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
         if (userId == null)
             throw new IllegalArgumentException("The user ID cannot be null");
@@ -84,6 +84,14 @@ public class User implements Serializable {
         dbUpdate(dbChange);
 
     }
+
+    public void setUserId(String userId) {
+        if(userId == null){
+            throw new NullPointerException();
+        }
+        this.userId = userId;
+    }
+
 
     /**
      * Setter for name. By design the user already had a name
@@ -268,19 +276,6 @@ public class User implements Serializable {
         return new ArrayList<>(this.friendIdList);
     }
 
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames &&
-                maxScoreInGame == user.maxScoreInGame &&
-                Objects.equals(userId, user.userId) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(address, user.address) &&
-                friendIdList.equals(user.friendIdList);
-    }
 
     /**
      * set the user friend list
@@ -298,6 +293,16 @@ public class User implements Serializable {
         }
 
         this.friendIdList = new ArrayList<>(friendIdList);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+
+        return userId.equals(user.userId) &&
+                numberOfPlayedGames == user.numberOfPlayedGames &&
+                numberOfDiedGames == user.numberOfDiedGames;
     }
 
     @Override
