@@ -21,7 +21,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
     private final String TAG = UserDatabaseProxy.class.getSimpleName();
 
     private final String DATABASE_USER = "users";
-    private final String DATABASE_USER_SCORE = "score";
+    private final String DATABASE_USER_SCORE = "maxScoreInGame";
 
     @NonNull
     private final DatabaseReference usersRef;
@@ -148,8 +148,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
         }
 
         return usersRef.orderByChild(DATABASE_USER_SCORE)
-                .limitToLast(n)
-                .get();
+                .limitToLast(n).get();
     }
 
     /**

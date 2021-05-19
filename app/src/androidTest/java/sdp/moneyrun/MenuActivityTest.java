@@ -104,7 +104,7 @@ public class MenuActivityTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 2, 2);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 25, 2);
     }
 
     @Test
@@ -156,7 +156,7 @@ public class MenuActivityTest {
             final String game_name = "CreateGameTest";
             final String max_player_count = String.valueOf(3);
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -375,7 +375,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one player in a game";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -408,7 +408,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one coin in a game";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(0);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -429,7 +429,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void newGameZeroRadiusFieldError() {
+    public void newGameRadiusLessThanMinDistanceError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
@@ -438,10 +438,10 @@ public class MenuActivityTest {
             Thread.sleep(1000);
 
             final String max_player_count = String.valueOf(2);
-            final String expected_zero_players = "The radius of the game should be bigger than 0 km";
+            final String expected_zero_players = "The radius of the game should be bigger than 5 meters";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(0);
+            final String radius = String.valueOf(1);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -474,7 +474,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "The game should last for more than 0 minute";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(0);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -488,32 +488,6 @@ public class MenuActivityTest {
 
 
             Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Intents.release();
-        }
-    }
-
-    @Test
-    public void newGameWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-
-            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
-
-            Thread.sleep(2000);
-
-            final String game_name = "test game";
-            final String max_player_count = String.valueOf(1);
-
-            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-
-            assertEquals(1, 1);
-
-            Intents.release();
-
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
