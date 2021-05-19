@@ -31,6 +31,7 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GameLobbyActivity extends AppCompatActivity {
     private final String TAG = GameLobbyActivity.class.getSimpleName();
     private final String DB_IS_DELETED = "isDeleted";
@@ -254,16 +255,21 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onDestroy();
         if (playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
+
         if (user != null && game != null && !user.equals(game.getHost())) {
             if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+
             if (isStartedListener != null)
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+
         } else {
             //otherwise it will also remove it from the DB when it is launched
             if (game != null && thisGame != null && game.getIsDeleted()) {
+
                 if (getDeleteListener != null)
                     thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+
                 thisGame.removeValue();
             }
         }

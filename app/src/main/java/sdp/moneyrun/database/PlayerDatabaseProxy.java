@@ -1,7 +1,5 @@
 package sdp.moneyrun.database;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -11,6 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.player.Player;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -74,19 +73,10 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @return Task containing the player data
      */
     @NonNull
-    public Task<DataSnapshot> getPlayerTask(String playerId) {
-        Task<DataSnapshot> task = playersRef.child(String.valueOf(playerId)).get();
+    public Task<DataSnapshot> getPlayerTask(@NonNull String playerId) {
+        Task<DataSnapshot> task = playersRef.child(playerId).get();
+        return Helpers.addOnCompleteListener(TAG, task);
 
-        task.addOnCompleteListener(task1 -> {
-            if (!task1.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task1.getException());
-
-            } else {
-                Log.d(TAG, String.valueOf(task1.getResult().getValue()));
-            }
-        });
-
-        return task;
     }
 
     /**
@@ -113,10 +103,8 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @param listener the listener which describes what to do on change
      */
     public void addPlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
-        if (listener == null || player == null) {
-            throw new IllegalArgumentException();
-        }
-        playersRef.child(String.valueOf(player.getPlayerId())).addValueEventListener(listener);
+        Helpers.addOrRemoveListener(player, listener, playersRef, false);
+
     }
 
 
@@ -128,10 +116,8 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      * @throws IllegalArgumentException on null listener or null player
      */
     public void removePlayerListener(@Nullable Player player, @Nullable ValueEventListener listener) {
-        if (listener == null || player == null) {
-            throw new IllegalArgumentException();
-        }
-        playersRef.child(String.valueOf(player.getPlayerId())).removeEventListener(listener);
+        Helpers.addOrRemoveListener(player, listener, playersRef, true);
+
     }
 
     /**

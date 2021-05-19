@@ -1,6 +1,5 @@
 package sdp.moneyrun.database;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -68,17 +68,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
     @NonNull
     public Task<DataSnapshot> getUserTask(@NonNull String userId) {
         Task<DataSnapshot> task = usersRef.child(userId).get();
-
-        task.addOnCompleteListener(task1 -> {
-            if (!task1.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task1.getException());
-
-            } else {
-                Log.d(TAG, String.valueOf(task1.getResult().getValue()));
-            }
-        });
-
-        return task;
+        return Helpers.addOnCompleteListener(TAG, task);
     }
 
     /**
@@ -114,10 +104,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param listener the listener which describes what to do on change
      */
     public void addUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
-        if (listener == null || user == null) {
-            throw new IllegalArgumentException();
-        }
-        usersRef.child(String.valueOf(user.getUserId())).addValueEventListener(listener);
+        Helpers.addOrRemoveListener(user, listener, usersRef, false);
+
     }
 
 
@@ -129,10 +117,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @throws IllegalArgumentException on null listener or null user
      */
     public void removeUserListener(@Nullable User user, @Nullable ValueEventListener listener) {
-        if (listener == null || user == null) {
-            throw new IllegalArgumentException();
-        }
-        usersRef.child(String.valueOf(user.getUserId())).removeEventListener(listener);
+        Helpers.addOrRemoveListener(user, listener, usersRef, true);
     }
 
     /**

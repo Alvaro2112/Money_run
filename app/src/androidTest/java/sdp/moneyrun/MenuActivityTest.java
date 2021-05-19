@@ -37,6 +37,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
+import sdp.moneyrun.weather.WeatherForecast;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -47,7 +48,10 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -55,10 +59,24 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
-    @NonNull
+    private  long ASYNC_CALL_TIMEOUT = 10L;
+
+    //Since the features of Menu now depend on the intent it is usually launched with
+    //We also need to launch MenuActivity with a valid intent for tests to pass
+    private Intent getStartIntent() {
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-    private final long ASYNC_CALL_TIMEOUT = 10L;
+
+
+
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     @NonNull
@@ -81,16 +99,7 @@ public class MenuActivityTest {
         };
     }
 
-    //Since the features of Menu now depend on the intent it is usually launched with
-    //We also need to launch MenuActivity with a valid intent for tests to pass
-    @NonNull
-    private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        toStart.putExtra("user", currentUser);
-        return toStart;
-    }
+
 
     @NonNull
     public Game getGame() {
@@ -107,6 +116,7 @@ public class MenuActivityTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 25, 2);
     }
 
+
     @Test
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
@@ -121,6 +131,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+
 
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -520,4 +531,22 @@ public class MenuActivityTest {
         }
     }
 
+    @Test
+    public void weatherTypeAndTemperatureAreNotEmpty(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
+                location.setLatitude(0.7126);
+                location.setLongitude(38.2699);
+                a.loadWeather(location);
+                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport(WeatherForecast.Day.TODAY));
+            });
+            Thread.sleep(5000);
+            onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_icon)).check(matches(not(withContentDescription("coin placeholder"))));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

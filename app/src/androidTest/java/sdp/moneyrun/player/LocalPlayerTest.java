@@ -97,6 +97,8 @@ public class LocalPlayerTest {
 
     }
 
+
+
     @Test
     public void updateLostCoinsWorks() {
         LocalPlayer localPlayer = new LocalPlayer();

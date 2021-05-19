@@ -174,7 +174,7 @@ public class MainLeaderboardInstrumentedTest {
         players2.add(new User("9", "a4", "b", 0, 0, 11));
         players2.add(new User("24", "a1", "b", 0, 0, 6));
         players2.add(new User("1", "a0", "b", 0, 0, 0));
-        MainLeaderboardActivity.bestToWorstUser(players);
+        Helpers.bestToWorstUser(players);
         assertEquals(players2, players);
     }
 
