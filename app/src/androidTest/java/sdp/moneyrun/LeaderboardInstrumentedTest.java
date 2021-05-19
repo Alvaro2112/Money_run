@@ -203,7 +203,7 @@ public class LeaderboardInstrumentedTest {
         players2.add(new Player("9", "a4", 11));
         players2.add(new Player("24", "a1", 6));
         players2.add(new Player("1", "a0", 0));
-        LeaderboardActivity.bestToWorstPlayer(players);
+        Helpers.bestToWorstPlayer(players);
         assertEquals(players2, players);
     }
 

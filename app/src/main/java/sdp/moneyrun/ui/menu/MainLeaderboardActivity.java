@@ -113,7 +113,6 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
-
         ArrayList<User> to_add = new ArrayList<>(Collections.singletonList(user));
         addUserList(to_add);
     }
