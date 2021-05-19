@@ -143,6 +143,13 @@ public class FriendListTest {
             //Remove Paul to the friend list
             onView(ViewMatchers.withTagKey(R.string.add_friend_tag_1, Matchers.is(usersDatabase.get(1).getUserId()))).perform(ViewActions.click());
 
+            //Check that Paul is not a friend anymore
+            onView(ViewMatchers.withId(R.id.friend_add_list_button_back)).perform(ViewActions.click());
+
+            Thread.sleep(3000);
+
+            onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(doesNotExist());
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
