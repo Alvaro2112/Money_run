@@ -32,25 +32,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
 
-    private static final List<User> usersDatabase = getUsers();
+    private static List<User> usersDatabase;
     private static String randomString;
-
-    @BeforeClass
-    public static void buildDatabase(){
-        UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
-            db.putUser(user);
-        }
-    }
-
-    @AfterClass
-    public static void removeDatabase(){
-        UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
-            db.removeUser(user);
-        }
-    }
-
 
     private static List<User> getUsers(){
         ArrayList<User> users = new ArrayList<>();
@@ -88,6 +71,18 @@ public class FriendListTest {
 
     @Test
     public void FriendListWorks() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        usersDatabase = getUsers();
+        for(User user : usersDatabase){
+            db.putUser(user);
+        }
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(3000);
             //Check default friends
@@ -136,6 +131,10 @@ public class FriendListTest {
 
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        for(User user : usersDatabase){
+            db.removeUser(user);
         }
     }
 }
