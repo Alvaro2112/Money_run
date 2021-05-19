@@ -1,6 +1,5 @@
 package sdp.moneyrun.database;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,17 +65,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
     @NonNull
     public Task<DataSnapshot> getUserTask(@NonNull String userId) {
         Task<DataSnapshot> task = usersRef.child(userId).get();
-
-        task.addOnCompleteListener(task1 -> {
-            if (!task1.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task1.getException());
-
-            } else {
-                Log.d(TAG, String.valueOf(task1.getResult().getValue()));
-            }
-        });
-
-        return task;
+        return Helpers.addOnCompleteListener(TAG, task);
     }
 
     /**

@@ -76,18 +76,9 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
      */
     @NonNull
     public Task<DataSnapshot> getPlayerTask(String playerId) {
-        Task<DataSnapshot> task = playersRef.child(String.valueOf(playerId)).get();
+        Task<DataSnapshot> task = playersRef.child(playerId).get();
+        return Helpers.addOnCompleteListener(TAG, task);
 
-        task.addOnCompleteListener(task1 -> {
-            if (!task1.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task1.getException());
-
-            } else {
-                Log.d(TAG, String.valueOf(task1.getResult().getValue()));
-            }
-        });
-
-        return task;
     }
 
     /**

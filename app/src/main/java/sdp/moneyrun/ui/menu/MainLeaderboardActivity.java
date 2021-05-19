@@ -13,8 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
@@ -29,11 +31,6 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void bestToWorstUser(@NonNull List<User> users) {
-        users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -101,18 +98,9 @@ public class MainLeaderboardActivity extends AppCompatActivity {
      *                  Adds users to leaderboard
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addUserList(@Nullable List<User> userList) {
-        if (userList == null) {
-            throw new NullPointerException("user list should not be null.");
-        }
+    public void addUserList(@Nullable ArrayList<User> userList) {
+        Helpers.addObjectListToAdapter(userList, ldbAdapter);
 
-        ldbAdapter.addAll(userList);
-        ArrayList<User> users = new ArrayList<>();
-        for (int i = 0; i < ldbAdapter.getCount(); ++i)
-            users.add(ldbAdapter.getItem(i));
-        ldbAdapter.clear();
-        bestToWorstUser(users);
-        ldbAdapter.addAll(users);
     }
 
     /**
@@ -121,12 +109,12 @@ public class MainLeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addUser(@Nullable User user) {
+        // can't just add a user directly to an adapter, we need to put it in a list first.
         if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
 
-        List<User> to_add = new ArrayList<>();
-        to_add.add(user);
+        ArrayList<User> to_add = new ArrayList<>(Collections.singletonList(user));
         addUserList(to_add);
     }
 }
