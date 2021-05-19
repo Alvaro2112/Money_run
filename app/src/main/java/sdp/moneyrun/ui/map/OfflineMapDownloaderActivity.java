@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -22,7 +23,6 @@ import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.offline.OfflineRegionError;
 import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 
 import org.json.JSONObject;
 
@@ -88,11 +88,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
         callback = new LocationCheckObjectivesCallback(this);
 
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
-            GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
-            enableLocationComponent(style);
-
-        });
+        mapboxMap.setStyle(Style.MAPBOX_STREETS, this::enableLocationComponent);
         this.mapboxMap = mapboxMap;
     }
 
@@ -116,7 +112,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
     // Progress bar methods
     private void startProgress() {
-// Start and show the progress bar
+        // Start and show the progress bar
         isEndNotified = false;
         hasStartedDownload = true;
         progressBar.setIndeterminate(true);
@@ -148,84 +144,102 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     @Override
     public void checkObjectives(@NonNull Location location) {
 
-        if (!isEndNotified && !hasStartedDownload) {
-            offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
+        if (isEndNotified || hasStartedDownload)
+            return;
 
-            // Create a bounding box for the offline region
-            LatLng northeast = new LatLng(location.getLatitude() + LAT_OFFSET, location.getLongitude() + LONG_OFFSET);
-            LatLng southwest = new LatLng(location.getLatitude() - LAT_OFFSET, location.getLongitude() - LONG_OFFSET);
+        offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
-            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                    .include(northeast) // Northeast
-                    .include(southwest) // Southwest
-                    .build();
-            // Define the offline region
-            OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
-                    mapboxMap.getStyle().getUri(),
-                    latLngBounds,
-                    MIN_ZOOM,
-                    MAX_ZOOM,
-                    OfflineMapDownloaderActivity.this.getResources().getDisplayMetrics().density);
+        // Create a bounding box for the offline region
+        LatLng northeast = new LatLng(location.getLatitude() + LAT_OFFSET, location.getLongitude() + LONG_OFFSET);
+        LatLng southwest = new LatLng(location.getLatitude() - LAT_OFFSET, location.getLongitude() - LONG_OFFSET);
 
-            // Set the metadata
-            byte[] metadata;
-            try {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(JSON_FIELD_REGION_NAME, getString(R.string.offline_map_name));
-                String json = jsonObject.toString();
-                metadata = json.getBytes(JSON_CHARSET);
-            } catch (Exception exception) {
-                metadata = null;
+        LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                .include(northeast) // Northeast
+                .include(southwest) // Southwest
+                .build();
+
+        // Define the offline region
+        OfflineTilePyramidRegionDefinition definition = new OfflineTilePyramidRegionDefinition(
+                mapboxMap.getStyle().getUri(),
+                latLngBounds,
+                MIN_ZOOM,
+                MAX_ZOOM,
+                OfflineMapDownloaderActivity.this.getResources().getDisplayMetrics().density);
+
+        // Set the metadata
+        byte[] metadata = setMetaData();
+
+        // Create the region asynchronously
+        if (metadata != null)
+            createOfflineRegion(metadata, definition);
+
+    }
+
+    public void createOfflineRegion(@NonNull byte[] metadata, @NonNull OfflineTilePyramidRegionDefinition definition){
+        offlineManager.createOfflineRegion(
+                definition,
+                metadata,
+                new OfflineManager.CreateOfflineRegionCallback() {
+                    @Override
+                    public void onCreate(@NonNull OfflineRegion offlineRegion) {
+                        offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE);
+
+                        progressBar = findViewById(R.id.progress_bar_map_downloader);
+                        startProgress();
+                        setOfflineRegionObserver(offlineRegion);
+
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void setOfflineRegionObserver(@NonNull OfflineRegion offlineRegion){
+        offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
+            @Override
+            public void onStatusChanged(@NonNull OfflineRegionStatus status) {
+                double percentage = status.getRequiredResourceCount() >= 0
+                        ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
+                        0.0;
+
+                if (status.isComplete()) {
+                    endProgress(getString(R.string.offline_end_progress_success));
+                } else if (status.isRequiredResourceCountPrecise()) {
+                    setPercentage((int) Math.round(percentage));
+                }
             }
 
-            // Create the region asynchronously
-            if (metadata != null) {
-                offlineManager.createOfflineRegion(
-                        definition,
-                        metadata,
-                        new OfflineManager.CreateOfflineRegionCallback() {
-                            @Override
-                            public void onCreate(@NonNull OfflineRegion offlineRegion) {
-                                offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE);
+            @Override
+            public void onError(@NonNull OfflineRegionError error) {
+                Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error.getReason(), Toast.LENGTH_SHORT).show();
+            }
 
-                                progressBar = findViewById(R.id.progress_bar_map_downloader);
-                                startProgress();
-
-                                offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
-                                    @Override
-                                    public void onStatusChanged(@NonNull OfflineRegionStatus status) {
-                                        double percentage = status.getRequiredResourceCount() >= 0
-                                                ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
-                                                0.0;
-
-                                        if (status.isComplete()) {
-                                            endProgress(getString(R.string.offline_end_progress_success));
-                                        } else if (status.isRequiredResourceCountPrecise()) {
-                                            setPercentage((int) Math.round(percentage));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull OfflineRegionError error) {
-                                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error.getReason(), Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void mapboxTileCountLimitExceeded(long limit) {
-                                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), getString(R.string.tile_limit_exceeded), Toast.LENGTH_SHORT).show();
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+            @Override
+            public void mapboxTileCountLimitExceeded(long limit) {
+                Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), getString(R.string.tile_limit_exceeded), Toast.LENGTH_SHORT).show();
 
             }
+        });
+    }
+
+    @Nullable
+    public byte[] setMetaData(){
+        byte[] metadata;
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(JSON_FIELD_REGION_NAME, getString(R.string.offline_map_name));
+            String json = jsonObject.toString();
+            metadata = json.getBytes(JSON_CHARSET);
+        } catch (Exception exception) {
+            metadata = null;
         }
+
+        return metadata;
     }
 
 
@@ -251,22 +265,17 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                                         getString(R.string.offline_map_deleted),
                                         Toast.LENGTH_LONG
                                 ).show();
-
-
                             }
 
                             @Override
-                            public void onError(String error) {
-                                //    Timber.e("On delete error: %s", error);
-                            }
+                            public void onError(String error) {}
                         });
                     }
                 }
             }
 
             @Override
-            public void onError(String error) {
-            }
+            public void onError(String error) {}
         });
     }
 

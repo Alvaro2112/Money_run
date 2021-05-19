@@ -71,6 +71,16 @@ public class EndGameInstrumentedTest {
         }
     }
 
+    @Test(expected = Exception.class)
+    public void linkToResultsFailsCorrectly() {
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.linkToResult(null);
+            });
+        }
+    }
+
+
     @Test
     public void updateTextDisplaysGoodNumbers() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {

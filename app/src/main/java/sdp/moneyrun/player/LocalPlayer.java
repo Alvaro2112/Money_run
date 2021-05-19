@@ -11,20 +11,32 @@ import java.util.Set;
 import sdp.moneyrun.map.Coin;
 
 /**
- * We store here all the attributes of a player that do not need no be pushed to the database
+ * We store here all the attributes of a player that do not need no be pushed to the database and that are kept locally
  */
 public class LocalPlayer implements Serializable {
 
+    /**
+     * Coins that this player lost (ie. Answered incorrectly to the riddle associated with this coin). Other players can still see these coins
+     */
     @NonNull
     private final ArrayList<Coin> lostCoins;
+
+    /**
+     * Coins that this player collected (ie. Answered correctly to the riddle associated with this coin), it should be synced with the database and other players will
+     * not be able to see these coins
+     */
     @NonNull
     private final ArrayList<Coin> collectedCoins;
+
+    /**
+     * The coins that the player sees locally (ie. what this player can collect, others might be able to see more or less coins)
+     */
     @Nullable
     private ArrayList<Coin> locallyAvailableCoins;
+
     private int score;
 
     public LocalPlayer() {
-
         this.lostCoins = new ArrayList<>();
         this.locallyAvailableCoins = new ArrayList<>();
         this.collectedCoins = new ArrayList<>();
@@ -54,6 +66,10 @@ public class LocalPlayer implements Serializable {
         return score;
     }
 
+    /**
+     * Adds a coin that was lost because of an incorrectly answered riddle
+     * @param coin The coin to be added
+     */
     public void addLostCoin(@Nullable Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
@@ -62,6 +78,10 @@ public class LocalPlayer implements Serializable {
         lostCoins.add(coin);
     }
 
+    /**
+     * Adds a coin that was collected because of an correctly answered riddle
+     * @param coin The coin to be added
+     */
     public void addCollectedCoin(@Nullable Coin coin) {
         if (coin == null) {
             throw new IllegalArgumentException("The coin to be added cannot be null");
@@ -100,7 +120,7 @@ public class LocalPlayer implements Serializable {
 
     /**
      * This function will remove the coin from the corresponding lists depending on whether is was picked up or not and
-     * will also update the score of the player of necessary.
+     * will also update the score of the player if necessary.
      *
      * @param coin     The coin to be removed
      * @param pickedUp whether the coins was picked up (ie. the player answered correctly to the riddle) or not
