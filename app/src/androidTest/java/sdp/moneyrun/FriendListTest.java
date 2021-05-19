@@ -7,6 +7,8 @@ import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -32,8 +35,30 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
 
-    private static List<User> usersDatabase;
+    private static final List<User> usersDatabase = getUsers();
     private static String randomString;
+
+    @BeforeClass
+    public static void buildDatabase(){
+            if (!MainActivity.calledAlready) {
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+                MainActivity.calledAlready = true;
+            }
+
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        for(User user : usersDatabase){
+            db.putUser(user);
+        }
+    }
+
+    @AfterClass
+    public static void removeDatabase(){
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        for(User user : usersDatabase){
+            db.removeUser(user);
+        }
+    }
+
 
     private static List<User> getUsers(){
         ArrayList<User> users = new ArrayList<>();
@@ -72,7 +97,6 @@ public class FriendListTest {
     @Test
     public void FriendListWorks() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        usersDatabase = getUsers();
         for(User user : usersDatabase){
             db.putUser(user);
         }
