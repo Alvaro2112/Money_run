@@ -367,7 +367,7 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), a);
+                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
                 finished.set(true);
             }));
             do {
