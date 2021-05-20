@@ -147,15 +147,15 @@ public class JoinGameImplementation extends MenuImplementation {
         for (GameRepresentation gameRepresentation : gameRepresentations) {
             LocationRepresentation gameStartLocation = gameRepresentation.getStartLocation();
             String gameName = gameRepresentation.getName();
-            if(gameStartLocation == null || gameName == null){
-                return;
-            }
+            assert gameStartLocation != null;
+            assert gameName != null;
 
             double distance = gameStartLocation.distanceTo(foundLocation);
             String lowerName = gameName.toLowerCase(Locale.getDefault());
 
             if (canDisplayGame(filterText, lowerName, distance)) {
-                displayGameIncreaseButton(gameRepresentation, popupWindow, gameLayout);
+                displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
+                buttonId++;
             }
         }
     }
@@ -170,14 +170,8 @@ public class JoinGameImplementation extends MenuImplementation {
     private boolean canDisplayGame(String filterText,
                                    String lowerName,
                                    double distance){
-        return (filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME;
-    }
-
-    private void displayGameIncreaseButton(@NonNull GameRepresentation gameRepresentation,
-                                           @NonNull PopupWindow popupWindow,
-                                           @NonNull TableLayout gameLayout){
-        displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
-        buttonId++;
+        return (filterText == null || lowerName.contains(filterText))
+                && distance <= MAX_DISTANCE_TO_JOIN_GAME
     }
 
     /**
