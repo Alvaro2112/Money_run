@@ -48,7 +48,8 @@ public class JoinGameImplementation extends MenuImplementation {
     private int buttonId;
 
     //Location where we look for games, default (0, 0)
-    private LocationRepresentation foundLocation;
+    private LocationRepresentation foundLocation = new LocationRepresentation(0, 0);
+    private boolean isLocationFound = false;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -112,27 +113,26 @@ public class JoinGameImplementation extends MenuImplementation {
             // Grant permissions if necessary
             requestLocationPermissions(requestPermissionsLauncher);
 
-            fusedLocationClient.getLocationAvailability().addOnCompleteListener(task -> {
-               if(!task.isSuccessful() || !task.getResult().isLocationAvailable()){
-                   foundLocation = new LocationRepresentation(0, 0);
-                   loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout);
-                   openGamesLayout.addView(gameLayout);
-               }else{
-                   fusedLocationClient.getLastLocation()
-                           .addOnSuccessListener(activity, location -> {
-                               // Got last known location. In some rare situations this can be null
-                               // In this case, the game cannot be instantiated
-                               if (location == null) {
-                                   Log.e("location", "Error getting location");
-                                   return;
-                               }
+            loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout, false);
 
-                               foundLocation = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                               loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout);
-                               openGamesLayout.addView(gameLayout);
-                           });
-               }
-            });
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(activity, location -> {
+                        // Got last known location. In some rare situations this can be null
+                        // In this case, the game cannot be instantiated
+                        if (location == null) {
+                            Log.e("location", "Error getting location");
+                            return;
+                        }
+
+                        openGamesLayout.removeAllViews();
+                        isLocationFound = true;
+
+                        foundLocation = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                        loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout, true);
+
+                        openGamesLayout.addView(gameLayout);
+                        isLocationFound = false;
+                    });
         });
     }
 
@@ -142,7 +142,10 @@ public class JoinGameImplementation extends MenuImplementation {
     private void loadGameListFromLocation(@Nullable String filterText,
                                           @NonNull List<GameRepresentation> gameRepresentations,
                                           @NonNull PopupWindow popupWindow,
-                                          @NonNull TableLayout gameLayout){
+                                          @NonNull TableLayout gameLayout,
+                                          boolean loadDefaultGame) {
+        gameLayout.removeAllViews();
+
         buttonId = 0;
         for (GameRepresentation gameRepresentation : gameRepresentations) {
             LocationRepresentation gameStartLocation = gameRepresentation.getStartLocation();
@@ -153,7 +156,7 @@ public class JoinGameImplementation extends MenuImplementation {
             double distance = gameStartLocation.distanceTo(foundLocation);
             String lowerName = gameName.toLowerCase(Locale.getDefault());
 
-            if (canDisplayGame(filterText, lowerName, distance)) {
+            if (canDisplayGame(filterText, lowerName, distance, loadDefaultGame)) {
                 displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                 buttonId++;
             }
@@ -162,16 +165,19 @@ public class JoinGameImplementation extends MenuImplementation {
 
     /**
      * Conditions to be able to add a game to the list
+     *
      * @param filterText the filter text
-     * @param lowerName the game name
-     * @param distance the distance from the user to the start game location
+     * @param lowerName  the game name
+     * @param distance   the distance from the user to the start game location
      * @return
      */
     private boolean canDisplayGame(String filterText,
                                    String lowerName,
-                                   double distance){
+                                   double distance,
+                                   boolean loadDefaultGame) {
         return (filterText == null || lowerName.contains(filterText))
-                && distance <= MAX_DISTANCE_TO_JOIN_GAME;
+                && distance <= MAX_DISTANCE_TO_JOIN_GAME
+                && loadDefaultGame == isLocationFound;
     }
 
     /**
@@ -282,24 +288,6 @@ public class JoinGameImplementation extends MenuImplementation {
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instantiated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                        return;
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void addFullGameListener(@NonNull Button button, @NonNull GameRepresentation gameRepresentation) {

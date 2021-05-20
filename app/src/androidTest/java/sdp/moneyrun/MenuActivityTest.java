@@ -75,12 +75,8 @@ public class MenuActivityTest {
         return toStart;
     }
 
-
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-
-
-
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     @NonNull
@@ -103,8 +99,6 @@ public class MenuActivityTest {
         };
     }
 
-
-
     @NonNull
     public Game getGame() {
         String name = "JoinGameImplementationTest";
@@ -120,7 +114,6 @@ public class MenuActivityTest {
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 25, 2);
     }
 
-
     @Test
     public void activityStartsProperly() {
         assertEquals(State.RESUMED, testRule.getScenario().getState());
@@ -135,7 +128,6 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
 
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -154,10 +146,8 @@ public class MenuActivityTest {
             }
 
             onView(ViewMatchers.withId(0)).check(doesNotExist());
-
         }
     }
-
 
     @Test
     public void CreateGameSendsYouToLobby() {
@@ -189,7 +179,6 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
 
     @Test
     public void newGamePopupIsDisplayed() {
@@ -229,7 +218,6 @@ public class MenuActivityTest {
         } catch (Exception e) {
             e.printStackTrace();
             assertEquals(-2, 1);
-
         }
     }
 
@@ -376,7 +364,6 @@ public class MenuActivityTest {
         }
     }
 
-
     @Test
     public void newGameZeroMaxPlayerCountFieldError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -408,7 +395,6 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
 
     @Test
     public void newGameZeroNumCoinsFieldError() {
