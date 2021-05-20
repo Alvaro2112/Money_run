@@ -51,6 +51,9 @@ public class JoinGameImplementation extends MenuImplementation {
     private LocationRepresentation foundLocation = new LocationRepresentation(0, 0);
     private boolean isLocationFound = false;
 
+
+    String filterText = null;
+
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
                                   @Nullable User user,
@@ -93,18 +96,17 @@ public class JoinGameImplementation extends MenuImplementation {
             EditText filterEditText = popupWindow.getContentView().findViewById(R.id.join_game_text_filter);
             openGamesLayout.removeAllViews();
 
-            String filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
-            loadGameListGivenFilter(popupWindow, openGamesLayout, filterText);
+            filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
+            loadGameListGivenFilter(popupWindow, openGamesLayout);
         });
 
         // First load the game list without any filter.
-        loadGameListGivenFilter(popupWindow, openGamesLayout, null);
+        loadGameListGivenFilter(popupWindow, openGamesLayout);
     }
 
     @SuppressLint("MissingPermission")
     private void loadGameListGivenFilter(@NonNull PopupWindow popupWindow,
-                                         @NonNull LinearLayout openGamesLayout,
-                                         @Nullable String filterText) {
+                                         @NonNull LinearLayout openGamesLayout) {
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
@@ -113,7 +115,7 @@ public class JoinGameImplementation extends MenuImplementation {
             // Grant permissions if necessary
             requestLocationPermissions(requestPermissionsLauncher);
 
-            loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout, false);
+            loadGameListFromLocation(gameRepresentations, popupWindow, gameLayout, false);
             openGamesLayout.addView(gameLayout);
 
             fusedLocationClient.getLastLocation()
@@ -129,7 +131,7 @@ public class JoinGameImplementation extends MenuImplementation {
                         isLocationFound = true;
 
                         foundLocation = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-                        loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout, true);
+                        loadGameListFromLocation(gameRepresentations, popupWindow, gameLayout, true);
 
                         openGamesLayout.addView(gameLayout);
                         isLocationFound = false;
@@ -140,8 +142,7 @@ public class JoinGameImplementation extends MenuImplementation {
     /**
      * Load games.
      */
-    private void loadGameListFromLocation(@Nullable String filterText,
-                                          @NonNull List<GameRepresentation> gameRepresentations,
+    private void loadGameListFromLocation(@NonNull List<GameRepresentation> gameRepresentations,
                                           @NonNull PopupWindow popupWindow,
                                           @NonNull TableLayout gameLayout,
                                           boolean loadDefaultGame) {
@@ -157,7 +158,7 @@ public class JoinGameImplementation extends MenuImplementation {
             double distance = gameStartLocation.distanceTo(foundLocation);
             String lowerName = gameName.toLowerCase(Locale.getDefault());
 
-            if (canDisplayGame(filterText, lowerName, distance, loadDefaultGame)) {
+            if (canDisplayGame(lowerName, distance, loadDefaultGame)) {
                 displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                 buttonId++;
             }
@@ -167,13 +168,11 @@ public class JoinGameImplementation extends MenuImplementation {
     /**
      * Conditions to be able to add a game to the list
      *
-     * @param filterText the filter text
      * @param lowerName  the game name
      * @param distance   the distance from the user to the start game location
      * @return
      */
-    private boolean canDisplayGame(String filterText,
-                                   String lowerName,
+    private boolean canDisplayGame(String lowerName,
                                    double distance,
                                    boolean loadDefaultGame) {
         return (filterText == null || lowerName.contains(filterText))
