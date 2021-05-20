@@ -23,6 +23,8 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
@@ -47,6 +49,9 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class    GameLobbyActivityInstrumentedTest {
+    private final String DATABASE_GAME = "games";
+    private final long ASYNC_CALL_TIMEOUT = 5L;
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -57,7 +62,6 @@ public class    GameLobbyActivityInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
-       FirebaseDatabase.getInstance().goOffline();
     }
 
 
@@ -102,11 +106,13 @@ public class    GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-
+        CountDownLatch added = new CountDownLatch(1);
+        gdp.updateGameInDatabase(game, task -> added.countDown());
         try {
-            Thread.sleep(4000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
 
         intent.putExtra("currentGameId", id);
@@ -138,6 +144,8 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -162,6 +170,7 @@ public class    GameLobbyActivityInstrumentedTest {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
 
         intent.putExtra("currentGameId", id);
@@ -177,6 +186,7 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
@@ -195,11 +205,13 @@ public class    GameLobbyActivityInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-
+        CountDownLatch added = new CountDownLatch(1);
+        gdp.updateGameInDatabase(game,task -> added.countDown());
         try {
-            Thread.sleep(4000);
+           added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
 
         intent.putExtra("currentGameId", id);
@@ -226,17 +238,18 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
     @Test
     public void nameDisplaysProperly() {
-        //I don't have the slightest idea why but having the db offline crashes this test
-        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         String id = gdp.putGame(game);
+
+        //Tried with CountDownLatch but didn't work
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -251,7 +264,7 @@ public class    GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        FirebaseDatabase.getInstance().goOffline();
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
     @Test
     public void playerListUpdatesWithDB(){
@@ -293,15 +306,16 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
     public void playersMissingDisplaysProperly() {
-        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         String id = gdp.putGame(game);
+
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -320,12 +334,11 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
-        FirebaseDatabase.getInstance().goOffline();
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
     public void playersMissingUpdatesWithDB() {
-        FirebaseDatabase.getInstance().goOnline();
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -335,8 +348,9 @@ public class    GameLobbyActivityInstrumentedTest {
 
 
         String id = gdp.putGame(game);
+        CountDownLatch added = new CountDownLatch(1);
         try {
-            Thread.sleep(4000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
@@ -360,6 +374,7 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -369,10 +384,13 @@ public class    GameLobbyActivityInstrumentedTest {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         String id = gdp.putGame(game);
+
+        //I tried using a CountDownLatch here but it doesn't work
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
         intent.putExtra("currentGameId", id);
 
@@ -381,13 +399,15 @@ public class    GameLobbyActivityInstrumentedTest {
                 a.addPlayerList(null);
             });
         }
+        finally {
+            FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+        }
     }
 
 
     @Test
     public void LeaveLobbyWorks() {
         Intent intent = getStartIntent();
-        FirebaseDatabase.getInstance().goOnline();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
         String id = gdp.putGame(game);
@@ -413,12 +433,12 @@ public class    GameLobbyActivityInstrumentedTest {
         finally {
             Intents.release();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
    @Test
     public void LeaveIsDeleteForHost(){
-        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("3","Bob", 0);
@@ -427,6 +447,8 @@ public class    GameLobbyActivityInstrumentedTest {
         toStart.putExtra("UserTypeCurrentUser", actualUser);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);
+        CountDownLatch added = new CountDownLatch(1);
+        gdp.updateGameInDatabase(g,task -> added.countDown());
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -439,11 +461,14 @@ public class    GameLobbyActivityInstrumentedTest {
             Thread.sleep(3000);
             onView(withId(R.id.leave_lobby_button)).check(matches(withText("Delete")));
             Thread.sleep(2000);
-            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         }
-        FirebaseDatabase.getInstance().goOffline();
+        finally {
+            FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+            Intents.release();
+        }
     }
     
 
@@ -471,6 +496,7 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
@@ -482,6 +508,8 @@ public class    GameLobbyActivityInstrumentedTest {
         Intent intent = getStartIntent();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);
+
+        //I tried using a CountDownLatch here but it doesn't work
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -498,12 +526,12 @@ public class    GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
     @Test
     public void deleteGameDeletesItFromDB(){
-        FirebaseDatabase.getInstance().goOnline();
         Game g = getGame();
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("3","Bob", 0);
@@ -512,8 +540,10 @@ public class    GameLobbyActivityInstrumentedTest {
         toStart.putExtra("UserTypeCurrentUser", actualUser);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);
+        CountDownLatch added = new CountDownLatch(1);
+        gdp.updateGameInDatabase(g, task -> added.countDown());
         try {
-            Thread.sleep(3000);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
@@ -539,7 +569,6 @@ public class    GameLobbyActivityInstrumentedTest {
             e.printStackTrace();
         }
         assertNull(deleted.getResult().getValue());
-        FirebaseDatabase.getInstance().goOffline();
     }
 
 }

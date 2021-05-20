@@ -11,7 +11,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.user.User;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -39,11 +37,6 @@ public class DatabaseProxyTest {
         }
         FirebaseDatabase.getInstance().goOffline();
     }
-
-   @AfterClass
-   public static void afterTests(){
-        FirebaseDatabase.getInstance().goOnline();
-   }
 
 
     @Test
@@ -102,7 +95,6 @@ public class DatabaseProxyTest {
 
     @Test
     public void addPlayerListenerCorrectlyUpdates(){
-        FirebaseDatabase.getInstance().goOffline();
         CountDownLatch received = new CountDownLatch(1);
         Player player = new Player("564123", "Johann",0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
@@ -143,7 +135,6 @@ public class DatabaseProxyTest {
         }
         assertThat(player.getName(),is(newName));
         db.removePlayerListener(player, listener);
-        FirebaseDatabase.getInstance().goOnline();
     }
 
     @Test(expected = IllegalArgumentException.class)

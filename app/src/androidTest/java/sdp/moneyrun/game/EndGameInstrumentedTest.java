@@ -52,7 +52,7 @@ public class EndGameInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
-        FirebaseDatabase.getInstance().goOffline();
+
     }
 
 

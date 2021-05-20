@@ -7,7 +7,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,10 +32,6 @@ public class UserTest {
         FirebaseDatabase.getInstance().goOffline();
     }
 
-    @AfterClass
-    public static void afterTests(){
-        FirebaseDatabase.getInstance().getReference().child("games").removeValue();
-    }
 
     @Test
     public void setAddressWithDBUpdateWorks(){
