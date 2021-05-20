@@ -40,66 +40,63 @@ public class AddFriendListActivity extends AppCompatActivity {
 
         addAdapter();
         Button searchButton = findViewById(R.id.friend_add_list_search_button);
+        searchButton.setOnClickListener(v -> searchButtonFunctionality());
         Button goButton = findViewById(R.id.friend_add_list_button_back);
-        searchButton.setOnClickListener(v -> searchButtonFunctionality((Button) v));
-        goButton.setOnClickListener(v -> goBackButtonFunctionality((Button) v));
+        goButton.setOnClickListener(v -> goBackButtonFunctionality());
     }
 
     /**
      * Link list adapter to the activity
      */
-    private void addAdapter(){
+    private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new AddFriendListListAdapter(this, resultList, user);
-        Helpers.addAdapter(ldbAdapter ,resultList, user, this, R.id.friend_add_list_view);
+        Helpers.addAdapter(ldbAdapter, resultList, user, this, R.id.friend_add_list_view);
     }
 
     /**
      * Functionality for the search friend button
      */
-    private void searchButtonFunctionality(Button button){
-        button.setOnClickListener(v -> {
-            EditText editTextFilter = findViewById(R.id.friend_add_list_filter);
-            String textFilter = editTextFilter
-                    .getText()
-                    .toString()
-                    .trim()
-                    .toLowerCase(Locale.getDefault());
+    private void searchButtonFunctionality() {
+        EditText editTextFilter = findViewById(R.id.friend_add_list_filter);
+        String textFilter = editTextFilter
+                .getText()
+                .toString()
+                .trim()
+                .toLowerCase(Locale.getDefault());
 
-            if(textFilter.length() <= 1){
-                editTextFilter.setError("The filter should be more precise.");
-                ldbAdapter.clear();
-                return;
+        if (textFilter.length() <= 1) {
+            editTextFilter.setError("The filter should be more precise.");
+            ldbAdapter.clear();
+            return;
+        }
+
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.getUsersTask().addOnCompleteListener(task -> {
+            resultList = db.getUserListFromTaskFromSimilarName(task, textFilter);
+            if (resultList != null) {
+                addUserList(resultList);
             }
-
-            UserDatabaseProxy db = new UserDatabaseProxy();
-            db.getUsersTask().addOnCompleteListener(task -> {
-                resultList = db.getUserListFromTaskFromSimilarName(task, textFilter);
-                if(resultList != null){
-                    addUserList(resultList);
-                }
-            });
         });
     }
 
     /**
      * Functionality for the go back to friend list button
      */
-    private void goBackButtonFunctionality(Button button){
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(AddFriendListActivity.this, FriendListActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-            finish();
-        });
+    private void goBackButtonFunctionality() {
+        Intent intent = new Intent(AddFriendListActivity.this, FriendListActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+        finish();
     }
 
     /**
      * Add a user list to the list adapter
+     *
      * @param userList the user list to add
      */
-    public void addUserList(List<User> userList){
-        if(userList == null){
+    public void addUserList(List<User> userList) {
+        if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }
 

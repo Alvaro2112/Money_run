@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,50 +30,49 @@ public class FriendListActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.updatedFriendListFromDatabase(user).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 showFriendList();
             }
         });
 
         addAdapter();
         friendButtonFunctionality();
+        Button searchButton = findViewById(R.id.friend_list_search_button);
+        searchButton.setOnClickListener(v -> friendButtonFunctionality());
     }
 
     /**
      * Link list adapter to the activity
      */
-    private void addAdapter(){
+    private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new FriendListListAdapter(this, friendList, user);
-        Helpers.addAdapter(ldbAdapter , friendList, user, this, R.id.friend_list_view);
+        Helpers.addAdapter(ldbAdapter, friendList, user, this, R.id.friend_list_view);
     }
 
     /**
      * Functionality to link this activity to the add friend activity
      */
-    private void friendButtonFunctionality(){
-        Button button = findViewById(R.id.friend_list_search_button);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(FriendListActivity.this, AddFriendListActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-            finish();
-        });
+    private void friendButtonFunctionality() {
+        Intent intent = new Intent(FriendListActivity.this, AddFriendListActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+        finish();
     }
 
     /**
      * Display the friend list
      */
-    private void showFriendList(){
+    private void showFriendList() {
         List<String> friendListId = user.getFriendIdList();
 
         ldbAdapter.clear();
 
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(String userId : friendListId){
+        for (String userId : friendListId) {
             db.getUserTask(userId).addOnCompleteListener(task -> {
                 User requestedUser = db.getUserFromTask(task);
-                if(requestedUser == null){
+                if (requestedUser == null) {
                     return;
                 }
 
@@ -82,10 +83,11 @@ public class FriendListActivity extends AppCompatActivity {
 
     /**
      * Add a user to the list adapater
+     *
      * @param user the user to add
      */
-    public void addUserToList(User user){
-        if(user == null){
+    public void addUserToList(User user) {
+        if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
         List<User> userList = new ArrayList<>();
@@ -96,10 +98,11 @@ public class FriendListActivity extends AppCompatActivity {
 
     /**
      * Add a user list to the list adapter
+     *
      * @param userList the user list to add
      */
-    public void addUserList(List<User> userList){
-        if(userList == null){
+    public void addUserList(List<User> userList) {
+        if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }
 
