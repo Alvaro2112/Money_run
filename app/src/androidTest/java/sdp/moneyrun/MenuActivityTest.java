@@ -618,7 +618,7 @@ public class MenuActivityTest {
             }
 
             onView(ViewMatchers.withTagValue(is(nearGameName))).check(matches(isDisplayed()));
-            onView(ViewMatchers.withTagValue(is(nearGameName))).check(doesNotExist());
+            onView(ViewMatchers.withTagValue(is(farGameName))).check(doesNotExist());
         }
     }
 }
