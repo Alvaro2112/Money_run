@@ -18,19 +18,13 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.user.User;
 
-public class AddFriendListListAdapter extends ArrayAdapter<User> {
+public class AddFriendListListAdapter extends ListAdapterWithUser {
 
-    private final User user;
     private final int color_light_gray = Color.rgb(220, 220, 220);
     private final int color_gold = Color.rgb(255,215,0);
 
     public AddFriendListListAdapter(Activity context, List<User> userList, User user) {
-        super(context,0 , userList);
-        if(user == null){
-            throw new IllegalArgumentException("user should not be null.");
-        }
-
-        this.user = user;
+        super(context,userList, user);
     }
 
     @SuppressLint("ViewHolder")
@@ -50,9 +44,9 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
 
         // Change button given some state: can follow, already followed or invalid
         if(userRequested.getUserId() == null ||
-                userRequested.getUserId().equals(user.getUserId())){
+                userRequested.getUserId().equals(getCurrentUser().getUserId())){
             setInvalidButtonType(userButtonView);
-        }else if(user.getFriendIdList().contains(userRequested.getUserId())){
+        }else if(getCurrentUser().getFriendIdList().contains(userRequested.getUserId())){
             userButtonView.setTag(R.string.add_friend_tag_0, true);
             setButtonType(userButtonView, false);
         }else{
@@ -75,11 +69,11 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
         boolean hasFollowed = (boolean) button.getTag(R.string.add_friend_tag_0);
 
         //Update database and user friend list
-        if(user.getUserId() == null){
+        if(getCurrentUser().getUserId() == null){
             throw new IllegalArgumentException("user id should not be null");
         }
         UserDatabaseProxy db = new UserDatabaseProxy();
-        db.getUserTask(user.getUserId()).addOnCompleteListener(task -> {
+        db.getUserTask(getCurrentUser().getUserId()).addOnCompleteListener(task -> {
             User userFromDb = db.getUserFromTask(task);
             if(userFromDb == null){
                 return;
@@ -112,7 +106,7 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
      */
     private void removeUserFromFriendList(User userFromDb, String friendId, Button button){
         userFromDb.removeFriendId(friendId);
-        user.removeFriendId(friendId);
+        getCurrentUser().removeFriendId(friendId);
         setButtonType(button, true);
     }
 
@@ -124,7 +118,7 @@ public class AddFriendListListAdapter extends ArrayAdapter<User> {
      */
     private void addUserFromFriendList(User userFromDb, String friendId, Button button){
         userFromDb.addFriendId(friendId);
-        user.addFriendId(friendId);
+        getCurrentUser().addFriendId(friendId);
         setButtonType(button, false);
     }
 

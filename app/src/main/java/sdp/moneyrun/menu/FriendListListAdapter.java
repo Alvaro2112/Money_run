@@ -14,17 +14,10 @@ import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.user.User;
 
-public class FriendListListAdapter extends ArrayAdapter<User> {
-
-    private final User user;
+public class FriendListListAdapter extends ListAdapterWithUser {
 
     public FriendListListAdapter(Activity context, List<User> userList, User user) {
-        super(context,0 , userList);
-        if(user == null){
-            throw new IllegalArgumentException("user should not be null.");
-        }
-
-        this.user = user;
+        super(context,userList, user);
     }
 
     @SuppressLint("ViewHolder")
