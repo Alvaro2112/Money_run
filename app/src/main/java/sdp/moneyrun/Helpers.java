@@ -142,8 +142,6 @@ public class Helpers {
      * Link list adapter to the activity
      */
     public static <T> void addAdapter(ArrayAdapter<T> ldbAdapter,
-                                      List<T> resultList,
-                                      T user,
                                       Activity activity,
                                       int viewInt){
         // The adapter lets us add item to a ListView easily.

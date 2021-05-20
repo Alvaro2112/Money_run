@@ -161,10 +161,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
                 continue;
             }
 
-            String cleanUserName = getCleanString(user.getName());
-            if(cleanUserName.contains(cleanFilter)){
-                resultList.add(user);
-            }
+            addMatchingUser(resultList, user, cleanFilter);
         }
 
         return resultList;
@@ -183,6 +180,23 @@ public class UserDatabaseProxy extends DatabaseProxy {
         }
 
         return cleanString;
+    }
+
+    /**
+     * Add a player to the list if it is matching the name/filter requirements
+     */
+    private void addMatchingUser(@NonNull List<User> resultList,
+                                 @NonNull User user,
+                                 @NonNull String cleanFilter){
+        String name = user.getName();
+        if(name == null){
+            throw new IllegalArgumentException("name should not be null.");
+        }
+
+        String cleanUserName = getCleanString(user.getName());
+        if(cleanUserName.contains(cleanFilter)){
+            resultList.add(user);
+        }
     }
 
     /**

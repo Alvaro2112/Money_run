@@ -65,7 +65,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new MainLeaderboardListAdapter(this, userList, user);
-        Helpers.addAdapter(ldbAdapter, userList, user, this, R.id.ldblistView);
+        Helpers.addAdapter(ldbAdapter, this, R.id.ldblistView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
