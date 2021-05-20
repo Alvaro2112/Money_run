@@ -171,7 +171,7 @@ public class JoinGameImplementation extends MenuImplementation {
                                    String lowerName,
                                    double distance){
         return (filterText == null || lowerName.contains(filterText))
-                && distance <= MAX_DISTANCE_TO_JOIN_GAME
+                && distance <= MAX_DISTANCE_TO_JOIN_GAME;
     }
 
     /**
