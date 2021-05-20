@@ -1,6 +1,7 @@
 package sdp.moneyrun.ui.player;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class UserProfileActivity extends AppCompatActivity {
         User user = (User) playerIntent.getSerializableExtra("user");
 
         goBackToMain.setOnClickListener(v -> {
+            MediaPlayer.create(this, R.raw.button_press).start();
             Intent mainMenuIntent = new Intent(UserProfileActivity.this, MenuActivity.class);
             mainMenuIntent.putExtra("user", user);
             startActivity(mainMenuIntent);

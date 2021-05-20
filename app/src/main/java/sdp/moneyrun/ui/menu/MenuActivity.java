@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -165,7 +166,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        MediaPlayer.create(this, R.raw.button_press).start();
         switch (item.getItemId()) {
 
             case R.id.profile_button: {

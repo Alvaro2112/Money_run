@@ -1,6 +1,7 @@
 package sdp.moneyrun.ui.game;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -142,6 +143,7 @@ public class EndGameActivity extends AppCompatActivity {
         if (resultButton == null || players == null)
             throw new IllegalArgumentException("Button linking end to results or players list is null");
         resultButton.setOnClickListener(v -> {
+            MediaPlayer.create(this, R.raw.button_press).start();
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
             for (int i = 0; i < players.size(); ++i) {
