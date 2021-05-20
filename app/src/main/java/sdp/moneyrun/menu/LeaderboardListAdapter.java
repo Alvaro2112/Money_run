@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -16,7 +17,7 @@ import sdp.moneyrun.player.Player;
 
 public class LeaderboardListAdapter extends ArrayAdapter<Player> {
 
-    public LeaderboardListAdapter(Activity context, ArrayList<Player> playerList) {
+    public LeaderboardListAdapter(Activity context, List<Player> playerList) {
         super(context, 0, playerList);
     }
 

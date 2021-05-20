@@ -182,7 +182,9 @@ public class User implements Serializable {
             throw new IllegalArgumentException("friend id should not be null");
         }
 
-        this.friendIdList.add(friendId);
+        if(!this.friendIdList.contains(friendId)){
+            this.friendIdList.add(friendId);
+        }
     }
 
     /**
@@ -301,9 +303,20 @@ public class User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
 
-        return userId.equals(user.userId) &&
+        return sameAttributes(user);
+    }
+
+    /**
+     * @param user the other user
+     * @return true if user has same attributes as this
+     */
+    private boolean sameAttributes(@NonNull User user){
+        return Objects.equals(userId, user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames;
+                numberOfDiedGames == user.numberOfDiedGames &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(address, user.address) &&
+                Objects.equals(friendIdList, user.friendIdList);
     }
 
     @Override

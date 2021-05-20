@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/leaderboard_top"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/friend_list_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/friend_list_search_button"
+            android:layout_width="123dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="144dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/layout_rounded"
+            android:text="@string/friend_button_search"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/friend_list_scrollable"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/friend_list_header"
+        android:scrollbars="vertical">
+
+        <ListView
+            android:id="@+id/friend_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="462dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="75dp">
+
+        </ListView>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

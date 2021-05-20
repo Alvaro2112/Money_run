@@ -25,6 +25,8 @@
 
 
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
+        <activity android:name=".ui.menu.FriendListActivity" />
+        <activity android:name=".ui.menu.AddFriendListActivity" />
 
         <activity
             android:name=".ui.authentication.SignUpActivity"

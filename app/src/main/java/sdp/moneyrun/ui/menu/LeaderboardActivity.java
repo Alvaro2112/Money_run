@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -25,7 +26,7 @@ import sdp.moneyrun.player.Player;
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
-    private final ArrayList<Player> playerList = new ArrayList<>();
+    private final List<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
     @Nullable
     private Player user;
@@ -57,8 +58,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this, playerList);
-        ListView ldbView = findViewById(R.id.ldblistView);
-        ldbView.setAdapter(ldbAdapter);
+        Helpers.addAdapter(ldbAdapter, this, R.id.ldblistView);
     }
 
     /**
@@ -85,7 +85,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     @NonNull
-    public ArrayList<Player> getPlayerList() {
+    public List<Player> getPlayerList() {
         return playerList;
     }
 
