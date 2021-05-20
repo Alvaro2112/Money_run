@@ -176,7 +176,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @return the cleaned string
      */
     @NonNull
-    private String getCleanString(String string){
+    private String getCleanString(@NonNull String string){
         if (string == null) {
             throw new IllegalArgumentException("name should not be null.");
         }

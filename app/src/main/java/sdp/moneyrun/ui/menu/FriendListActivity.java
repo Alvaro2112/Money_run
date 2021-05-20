@@ -7,6 +7,8 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
+
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.FriendListListAdapter;
@@ -41,9 +43,7 @@ public class FriendListActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new FriendListListAdapter(this, friendList, user);
-        ListView ldbView = findViewById(R.id.friend_list_view);
-        ldbView.setAdapter(ldbAdapter);
-        ldbAdapter.clear();
+        Helpers.addAdapter(ldbAdapter , friendList, user, this);
     }
 
     /**

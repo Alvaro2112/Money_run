@@ -303,6 +303,14 @@ public class User implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
 
+        return sameAttributes(user);
+    }
+
+    /**
+     * @param user the other user
+     * @return true if user has same attributes as this
+     */
+    private boolean sameAttributes(@NonNull User user){
         return Objects.equals(userId, user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
                 numberOfDiedGames == user.numberOfDiedGames &&

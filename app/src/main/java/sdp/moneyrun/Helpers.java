@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.menu.AddFriendListListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.user.User;
 
@@ -101,6 +104,7 @@ public class Helpers {
         return task;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter){
         if (objectList == null) {
             throw new NullPointerException("List is null");
@@ -132,5 +136,15 @@ public class Helpers {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void bestToWorstUser(@NonNull List<User> users) {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
+    }
+
+    /**
+     * Link list adapter to the activity
+     */
+    public static <T> void addAdapter(ArrayAdapter<T> ldbAdapter, List<T> resultList, T user, Activity activity){
+        // The adapter lets us add item to a ListView easily.
+        ListView ldbView = activity.findViewById(R.id.friend_add_list_view);
+        ldbView.setAdapter(ldbAdapter);
+        ldbAdapter.clear();
     }
 }

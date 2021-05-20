@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.AddFriendListListAdapter;
@@ -48,9 +49,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new AddFriendListListAdapter(this, resultList, user);
-        ListView ldbView = findViewById(R.id.friend_add_list_view);
-        ldbView.setAdapter(ldbAdapter);
-        ldbAdapter.clear();
+        Helpers.addAdapter(ldbAdapter ,resultList, user, this);
     }
 
     /**
