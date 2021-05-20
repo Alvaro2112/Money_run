@@ -3,8 +3,9 @@ package sdp.moneyrun.ui.menu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -16,8 +17,10 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class FriendListActivity extends AppCompatActivity {
 
+    @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
     private FriendListListAdapter ldbAdapter;
     private User user;
@@ -81,11 +84,11 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     /**
-     * Add a user to the list adapater
+     * Add a user to the list adapter
      *
      * @param user the user to add
      */
-    public void addUserToList(User user) {
+    public void addUserToList(@Nullable User user) {
         if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
@@ -100,7 +103,7 @@ public class FriendListActivity extends AppCompatActivity {
      *
      * @param userList the user list to add
      */
-    public void addUserList(List<User> userList) {
+    public void addUserList(@Nullable List<User> userList) {
         if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }

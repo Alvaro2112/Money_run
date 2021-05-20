@@ -4,9 +4,8 @@ import android.app.UiAutomation;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +45,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
-
+        Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
@@ -54,7 +53,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         //TODO
         // Put addPlayer with local cache
         getEndGamePlayers();
-        linkToMenuButton();
+        linkToMenuButton(toMenu);
     }
 
     /**
@@ -165,9 +164,8 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * Sends user to end game screen
      */
-    public void linkToMenuButton(){
-        Button toMenu = findViewById(R.id.leaderboard_button_end);
-        toMenu.setOnClickListener( v -> {
+    public void linkToMenuButton(Button button){
+        button.setOnClickListener( v -> {
             Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
             menuIntent.putExtra("user",userFromEnd);
             startActivity(menuIntent);

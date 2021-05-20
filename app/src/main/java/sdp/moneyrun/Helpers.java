@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.menu.AddFriendListListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.user.User;
 
@@ -142,8 +140,8 @@ public class Helpers {
     /**
      * Link list adapter to the activity
      */
-    public static <T> void addAdapter(ArrayAdapter<T> ldbAdapter,
-                                      Activity activity,
+    public static <T> void addAdapter(@NonNull ArrayAdapter<T> ldbAdapter,
+                                      @NonNull Activity activity,
                                       int viewInt){
         // The adapter lets us add item to a ListView easily.
         ListView ldbView = activity.findViewById(viewInt);

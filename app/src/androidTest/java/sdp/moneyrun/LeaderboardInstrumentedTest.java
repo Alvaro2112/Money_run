@@ -6,7 +6,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,11 +22,18 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class LeaderboardInstrumentedTest {
 
@@ -204,6 +213,27 @@ public class LeaderboardInstrumentedTest {
                 assertEquals(a.getPlayerList().size(), 1);
             });
             Intents.release();
+        }
+    }
+
+    @Test
+    public void goToMenuButtonWorks() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
+        Player user = new Player("3", "Bob", 0);
+        User user2 = new User("rrrrr");
+        intent.putExtra("userEnd",user2);
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+                onView(ViewMatchers.withId(R.id.leaderboard_button_end)).perform(ViewActions.click());
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        }catch (Exception e){
+            fail();
         }
     }
 }

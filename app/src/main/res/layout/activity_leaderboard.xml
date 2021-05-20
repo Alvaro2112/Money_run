@@ -76,7 +76,7 @@
         android:layout_marginHorizontal="160dp"
         android:layout_marginBottom="85dp"
         android:background="@drawable/layout_rounded"
-        android:text="Back to End" />
+        android:text="Back to Menu" />
 
 </RelativeLayout>
 

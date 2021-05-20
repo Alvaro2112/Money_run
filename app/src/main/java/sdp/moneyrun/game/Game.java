@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.database.GameDbData;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
@@ -234,10 +235,7 @@ public class Game {
         endGameIntent.putExtra("score", score);
         endGameIntent.putExtra("playerId", playerId);
         endGameIntent.putExtra("numberOfPlayers",players.size());
-        System.out.println("Number of players is in Game function "+players.size());
-        for(int i =0;i<players.size();++i){
-            endGameIntent.putExtra("players"+i,players.get(i));
-        }
+        Helpers.putPlayersInIntent(endGameIntent,players);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
     }

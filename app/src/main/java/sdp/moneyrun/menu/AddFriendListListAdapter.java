@@ -7,17 +7,18 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     private final int color_light_gray = Color.rgb(220, 220, 220);
@@ -66,7 +67,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * Functionality for every follow/unfollow buttons to add or remove user from the friend list
      * @param button the button view
      */
-    private void defineFollowButton(Button button){
+    private void defineFollowButton(@NonNull Button button){
 
         boolean hasFollowed = (boolean) button.getTag(R.string.add_friend_tag_0);
 
@@ -106,7 +107,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * @param friendId the friend id
      * @param button the button
      */
-    private void removeUserFromFriendList(User userFromDb, String friendId, Button button){
+    private void removeUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button){
         userFromDb.removeFriendId(friendId);
         getCurrentUser().removeFriendId(friendId);
         setButtonType(button, true);
@@ -118,7 +119,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * @param friendId the friend id
      * @param button the button
      */
-    private void addUserFromFriendList(User userFromDb, String friendId, Button button){
+    private void addUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button){
         userFromDb.addFriendId(friendId);
         getCurrentUser().addFriendId(friendId);
         setButtonType(button, false);
@@ -128,7 +129,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * Define invalid button type
      * @param button the button
      */
-    private void setInvalidButtonType(Button button){
+    private void setInvalidButtonType(@NonNull Button button){
         button.setEnabled(false);
         button.setVisibility(View.GONE);
     }
@@ -137,7 +138,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * Define button type
      * @param button the button
      */
-    private void setButtonType(Button button, boolean follow){
+    private void setButtonType(@NonNull Button button, boolean follow){
         int text = follow ? R.string.add_friend_button_follow_text : R.string.add_friend_button_unfollow_text;
         int color = follow ? color_gold : color_light_gray;
 
@@ -150,6 +151,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * @param backgroundColor the button's background color
      * @return the button's background
      */
+    @NonNull
     private GradientDrawable getButtonBackground(int backgroundColor){
 
         GradientDrawable gradientDrawable = new GradientDrawable();
