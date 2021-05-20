@@ -126,13 +126,11 @@
     <string name="delete_button_text">Delete</string>
 
     <string name="add_friend_tag_0">userState</string>
-    <string name="add_friend_user_state_invalid">userState</string>
-    <string name="add_friend_user_state_followed">userState</string>
-    <string name="add_friend_user_state_not_followed">userState</string>
     <string name="add_friend_tag_1">requestedUserId</string>
     <string name="add_friend_button_follow_text">Follow</string>
     <string name="add_friend_button_unfollow_text">Unfollow</string>
     <string name="add_friend_button_search">Search name</string>
+    <string name="add_friend_button_search_user">Search user</string>
     <string name="add_friend_button_go_back">Go back to friend list</string>
     <string name="friend_button_search">Search friends</string>
 

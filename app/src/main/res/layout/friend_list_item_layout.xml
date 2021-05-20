@@ -9,7 +9,7 @@
         android:textSize="20sp"
         android:textColor="#CCCCCC"
         android:text="Medium Text"
-        android:gravity="left"
+        android:gravity="start"
         android:id="@+id/add_friend_list_player_name"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />

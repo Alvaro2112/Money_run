@@ -23,11 +23,14 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
     private final int color_light_gray = Color.rgb(220, 220, 220);
     private final int color_gold = Color.rgb(255,215,0);
 
+    private final int CORNER_RADIUS = 20;
+    private final int BUTTON_WIDTH = 5;
+
     public AddFriendListListAdapter(Activity context, List<User> userList, User user) {
         super(context,userList, user);
     }
 
-    @SuppressLint("ViewHolder")
+    @SuppressLint({"ViewHolder", "InflateParams"})
     public View getView(int position, View view, ViewGroup parent) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.add_friend_list_item_layout, null, true);
         User userRequested = getItem(position);
@@ -54,17 +57,16 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
             setButtonType(userButtonView, true);
         }
 
-        userButtonView.setOnClickListener(this::defineFollowButton);
+        userButtonView.setOnClickListener(v -> defineFollowButton((Button) v));
 
         return view;
     }
 
     /**
      * Functionality for every follow/unfollow buttons to add or remove user from the friend list
-     * @param view the button view
+     * @param button the button view
      */
-    private void defineFollowButton(View view){
-        Button button = (Button) view;
+    private void defineFollowButton(Button button){
 
         boolean hasFollowed = (boolean) button.getTag(R.string.add_friend_tag_0);
 
@@ -79,7 +81,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
                 return;
             }
 
-            String friendId = (String) view.getTag(R.string.add_friend_tag_1);
+            String friendId = (String) button.getTag(R.string.add_friend_tag_1);
             if(friendId == null){
                 return;
             }
@@ -149,13 +151,11 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
      * @return the button's background
      */
     private GradientDrawable getButtonBackground(int backgroundColor){
-        int radius = 20;
-        int width = 5;
 
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(backgroundColor);
-        gradientDrawable.setCornerRadius(radius);
-        gradientDrawable.setStroke(width, Color.GRAY);
+        gradientDrawable.setCornerRadius(CORNER_RADIUS);
+        gradientDrawable.setStroke(BUTTON_WIDTH, Color.GRAY);
 
         return gradientDrawable;
     }

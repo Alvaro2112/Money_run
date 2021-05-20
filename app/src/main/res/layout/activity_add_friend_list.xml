@@ -39,7 +39,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/layout_rounded"
-            android:text="Search users"
+            android:text="@string/add_friend_button_search_user"
             android:textAlignment="center"
             android:textSize="12sp"
             android:textStyle="bold"

@@ -11,7 +11,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
-        android:gravity="left"
+        android:gravity="start"
         android:text="Medium Text"
         android:textColor="#CCCCCC"
         android:textSize="20sp" />
@@ -24,7 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="60dp"
         android:background="@drawable/layout_rounded"
-        android:text="Follow"
+        android:text="@string/add_friend_button_follow_text"
         android:textAlignment="center"
         android:textSize="12sp"
         android:textStyle="bold" />
