@@ -163,7 +163,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
                     addedCoins = true;
-                    initCircle();
                 }
                 addCoinsListener();
                 if (host) {
@@ -172,7 +171,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
+                initCircle();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -291,7 +290,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
+                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });

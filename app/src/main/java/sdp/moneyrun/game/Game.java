@@ -228,12 +228,16 @@ public class Game {
 
     }
 
-    public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull Activity currentActivity) {
+    public static void endGame(int numberOfCollectedCoins, int score, String playerId,List<Player>players, @NonNull Activity currentActivity) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
         endGameIntent.putExtra("numberOfCollectedCoins", numberOfCollectedCoins);
         endGameIntent.putExtra("score", score);
         endGameIntent.putExtra("playerId", playerId);
+        endGameIntent.putExtra("numberOfPlayers",players.size());
+        for(int i =0;i<players.size();++i){
+            endGameIntent.putExtra("players"+i,players.get(i));
+        }
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
     }
