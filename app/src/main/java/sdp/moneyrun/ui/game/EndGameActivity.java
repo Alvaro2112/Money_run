@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
@@ -145,9 +146,7 @@ public class EndGameActivity extends AppCompatActivity {
         resultButton.setOnClickListener(v -> {
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
-            for (int i = 0; i < players.size(); ++i) {
-                resultIntent.putExtra("players" + i, players.get(i));
-            }
+            Helpers.putPlayersInIntent(resultIntent,players);
             UserDatabaseProxy pdp = new UserDatabaseProxy();
             pdp.getUserTask(playerId).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
