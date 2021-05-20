@@ -70,7 +70,7 @@ public class NewGameImplementation extends MenuImplementation {
         LinearLayout newGameLayout = popupView.findViewById(R.id.newGameLayout);
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
-        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
+        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout, popupWindow));
     }
 
     /**
@@ -78,7 +78,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, PopupWindow popupWindow) {
         nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
@@ -101,6 +101,8 @@ public class NewGameImplementation extends MenuImplementation {
         if (!checkNewGameParametersValues(maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber)) {
             return;
         }
+
+        popupWindow.dismiss();
         postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
     }
 

@@ -70,34 +70,34 @@ public class JoinGameImplementation extends MenuImplementation {
      */
     public void onClickShowJoinGamePopupWindow(View view) {
         // Show popup
-        PopupWindow popupWindows = onButtonShowPopupWindowClick(view, focusable, layoutId);
+        PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list
-        onJoinGamePopupWindowLoadGameList(popupWindows.getContentView());
+        onJoinGamePopupWindowLoadGameList(popupWindow);
     }
 
     /**
      * Displays every current games.
      *
-     * @param popupView
+     * @param popupWindow
      */
-    private void onJoinGamePopupWindowLoadGameList(@NonNull View popupView) {
-        LinearLayout openGamesLayout = popupView.findViewById(R.id.openGamesLayout);
+    private void onJoinGamePopupWindowLoadGameList(@NonNull PopupWindow popupWindow) {
+        LinearLayout openGamesLayout = popupWindow.getContentView().findViewById(R.id.openGamesLayout);
 
-        Button filterButton = popupView.findViewById(R.id.join_game_button_filter);
+        Button filterButton = popupWindow.getContentView().findViewById(R.id.join_game_button_filter);
 
         filterButton.setOnClickListener(v -> {
-            EditText filterEditText = popupView.findViewById(R.id.join_game_text_filter);
+            EditText filterEditText = popupWindow.getContentView().findViewById(R.id.join_game_text_filter);
             openGamesLayout.removeAllViews();
 
             String filterText = filterEditText.getText().toString().trim().toLowerCase(Locale.getDefault());
-            loadGameListGivenFilter(openGamesLayout, filterText);
+            loadGameListGivenFilter(popupWindow, openGamesLayout, filterText);
         });
 
         // First load the game list without any filter.
-        loadGameListGivenFilter(openGamesLayout, null);
+        loadGameListGivenFilter(popupWindow, openGamesLayout, null);
     }
 
-    private void loadGameListGivenFilter(@NonNull LinearLayout openGamesLayout, @Nullable String filterText) {
+    private void loadGameListGivenFilter(@NonNull PopupWindow popupWindow, @NonNull LinearLayout openGamesLayout, @Nullable String filterText) {
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
@@ -107,7 +107,7 @@ public class JoinGameImplementation extends MenuImplementation {
             for (GameRepresentation gameRepresentation : gameRepresentations) {
                 String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
                 if (filterText == null || lowerName.contains(filterText)) {
-                    displayGameInterface(gameLayout, buttonId, gameRepresentation);
+                    displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                     buttonId++;
                 }
             }
@@ -182,7 +182,7 @@ public class JoinGameImplementation extends MenuImplementation {
      * @param buttonId           the id of the join button
      * @param gameRepresentation the representation of the game to display
      */
-    private void displayGameInterface(@NonNull TableLayout gameLayout,
+    private void displayGameInterface(@NonNull PopupWindow popupWindow, @NonNull TableLayout gameLayout,
                                       int buttonId,
                                       @NonNull GameRepresentation gameRepresentation) {
         // create game layout
@@ -192,7 +192,7 @@ public class JoinGameImplementation extends MenuImplementation {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
         Button button = new Button(activity);
-        createJoinButton(button, buttonId, gameRepresentation);
+        createJoinButton(popupWindow, button, buttonId, gameRepresentation);
 
         gameRow.addView(button);
 
@@ -206,12 +206,15 @@ public class JoinGameImplementation extends MenuImplementation {
     }
 
     @SuppressLint("MissingPermission")
-    private void createJoinButton(@NonNull Button button, int buttonId, @NonNull GameRepresentation gameRepresentation) {
+    private void createJoinButton(@NonNull PopupWindow popupWindow, @NonNull Button button, int buttonId, @NonNull GameRepresentation gameRepresentation) {
         // create join button
         button.setId(buttonId);
         button.setText(activity.getString(R.string.join_game_message));
 
-        button.setOnClickListener(v -> joinLobbyFromJoinButton(gameRepresentation));
+        button.setOnClickListener(v -> {
+            joinLobbyFromJoinButton(gameRepresentation);
+            popupWindow.dismiss();
+        });
 
         //modify button if the game is full or if a space frees up
         addFullGameListener(button, gameRepresentation);
