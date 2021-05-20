@@ -39,8 +39,10 @@ public class AddFriendListActivity extends AppCompatActivity {
         db.updatedFriendListFromDatabase(user);
 
         addAdapter();
-        searchButtonFunctionality();
-        goBackButtonFunctionality();
+        Button searchButton = findViewById(R.id.friend_add_list_search_button);
+        Button goButton = findViewById(R.id.friend_add_list_button_back);
+        searchButton.setOnClickListener(v -> searchButtonFunctionality((Button) v));
+        goButton.setOnClickListener(v -> goBackButtonFunctionality((Button) v));
     }
 
     /**
@@ -55,8 +57,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     /**
      * Functionality for the search friend button
      */
-    private void searchButtonFunctionality(){
-        Button button = findViewById(R.id.friend_add_list_search_button);
+    private void searchButtonFunctionality(Button button){
         button.setOnClickListener(v -> {
             EditText editTextFilter = findViewById(R.id.friend_add_list_filter);
             String textFilter = editTextFilter
@@ -84,8 +85,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     /**
      * Functionality for the go back to friend list button
      */
-    private void goBackButtonFunctionality(){
-        Button button = findViewById(R.id.friend_add_list_button_back);
+    private void goBackButtonFunctionality(Button button){
         button.setOnClickListener(v -> {
             Intent intent = new Intent(AddFriendListActivity.this, FriendListActivity.class);
             intent.putExtra("user", user);
