@@ -210,7 +210,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
 
                 symbolManager.deleteAll();
-                for (Coin coin : newCoins) {
+                for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
             }
