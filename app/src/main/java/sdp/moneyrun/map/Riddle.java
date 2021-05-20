@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Riddle {
 
-    //They should be final, but that is incompatible with being able to add them to the DB
     @Nullable
     private final String question;
     @Nullable
@@ -23,8 +22,13 @@ public class Riddle {
     private final String fourthAnswer;
 
     /**
-     * @param question      This is the question that the user will see and will have to solve
-     * @param correctAnswer This is the unique correct answer to the question
+     *
+     * @param question The riddle question
+     * @param correctAnswer The correct answer to the riddle
+     * @param firstAnswer First possible answer
+     * @param secondAnswer Second possible answer
+     * @param thirdAnswer Third possible answer
+     * @param fourthAnswer Fourth possible answer
      */
     public Riddle(@Nullable String question, @Nullable String correctAnswer, @Nullable String firstAnswer, @Nullable String secondAnswer, @Nullable String thirdAnswer, @Nullable String fourthAnswer) {
         if (question == null || correctAnswer == null) {

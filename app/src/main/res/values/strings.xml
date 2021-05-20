@@ -10,8 +10,9 @@
     <string name="login_page_email_input_hint">Email address</string>
     <string name="login_page_password_input_hint">Password</string>
     <string name="title_activity_login">Login page</string>
-    <string name="menu_leaderboard_button_text">Leaderboard</string>
+
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
+    <string name="menu_main_weather_placeholder_text">coin placeholder</string>
     <string name="leaderboard_header_position">Position</string>
     <string name="leaderboard_header_name">Name</string>
     <string name="leaderboard_header_score">Score</string>
@@ -105,7 +106,6 @@
     <string name="player_avatar_description">Avatar of a player</string>
     <string name="image_on_top_of_join_game_description">Image on top of join game</string>
     <string name="image_on_top_of_create_game_description">Image on top of create game</string>
-    <string name="weather_text">Weather</string>
     <string name="name_prompt_text">Enter your Name</string>
     <string name="address_prompt_text">Enter your address</string>
     <string name="favorite_color_prompt_text">Enter your favorite color</string>
@@ -121,7 +121,7 @@
     -->
     <string name="newGameNumCoinsText">Enter the number of coins</string>
     <string name="newGameDurationText">Enter the duration of the game in minutes</string>
-    <string name="newGameRadiusText">Enter the radius of the game in km</string>
+    <string name="newGameRadiusText">Enter the radius of the game in meter</string>
     <string name="delete_button_text">Delete</string>
 
 

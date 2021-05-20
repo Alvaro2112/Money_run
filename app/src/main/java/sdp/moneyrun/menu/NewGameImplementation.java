@@ -30,6 +30,7 @@ import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.user.User;
 
 public class NewGameImplementation extends MenuImplementation {
@@ -70,7 +71,7 @@ public class NewGameImplementation extends MenuImplementation {
         LinearLayout newGameLayout = popupView.findViewById(R.id.newGameLayout);
         Button newGameButton = newGameLayout.findViewById(R.id.newGameSubmit);
 
-        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout));
+        newGameButton.setOnClickListener(v -> onSubmitPostNewGame(newGameLayout, popupWindow));
     }
 
     /**
@@ -78,7 +79,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, PopupWindow popupWindow) {
         nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);
@@ -102,6 +103,7 @@ public class NewGameImplementation extends MenuImplementation {
             return ;
         }
 
+        popupWindow.dismiss();
         postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
     }
 
@@ -161,8 +163,8 @@ public class NewGameImplementation extends MenuImplementation {
             outOfBounds = true;
         }
 
-        if (gameRadius <= 0) {
-            gameRadiusView.setError("The radius of the game should be bigger than 0 km");
+        if (gameRadius <= MapActivity.THRESHOLD_DISTANCE) {
+            gameRadiusView.setError("The radius of the game should be bigger than 5 meters");
             outOfBounds = true;
         }
         if (gameDuration <= 0) {

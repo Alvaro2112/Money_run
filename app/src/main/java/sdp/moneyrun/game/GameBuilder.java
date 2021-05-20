@@ -137,35 +137,42 @@ public class GameBuilder {
     }
 
     public void build() {
-        if (name == null) {
-            throw new IllegalStateException("name should not be null.");
-        }
-        if (host == null) {
-            throw new IllegalStateException("host should not be null.");
-        }
-        if (maxPlayerCount <= 0) {
-            throw new IllegalStateException("max player count should be greater than 0.");
-        }
-        if (coins == null) {
-            throw new IllegalStateException("coins should not be null.");
-        }
-        if (startLocation == null) {
-            throw new IllegalStateException("start location should not be null.");
-        }
 
-        if (riddles == null) {
-            if (players == null) {
-                throw new IllegalStateException("players and riddles should not be null.");
-            }
+        checkBuildArguments();
 
+        if (riddles == null )
             new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
-            return;
+
+        else{
+
+            Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
+
+            if (players != null)
+                game.setPlayers(players, true);
+
         }
 
-        Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
-        if (players != null) {
-            game.setPlayers(players, true);
-        }
+    }
+
+    public void checkBuildArguments(){
+
+        if (name == null)
+            throw new IllegalStateException("name should not be null.");
+
+        if (host == null)
+            throw new IllegalStateException("host should not be null.");
+
+        if (maxPlayerCount <= 0)
+            throw new IllegalStateException("max player count should be greater than 0.");
+
+        if (coins == null)
+            throw new IllegalStateException("coins should not be null.");
+
+        if (startLocation == null)
+            throw new IllegalStateException("start location should not be null.");
+
+        if (riddles == null && players == null)
+            throw new IllegalStateException("players and riddles should not be null.");
 
     }
 }

@@ -37,6 +37,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
+import sdp.moneyrun.weather.WeatherForecast;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -47,7 +48,10 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -55,10 +59,24 @@ import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
-    @NonNull
+    private  long ASYNC_CALL_TIMEOUT = 10L;
+
+    //Since the features of Menu now depend on the intent it is usually launched with
+    //We also need to launch MenuActivity with a valid intent for tests to pass
+    private Intent getStartIntent() {
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-    private final long ASYNC_CALL_TIMEOUT = 10L;
+
+
+
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     @NonNull
@@ -81,16 +99,7 @@ public class MenuActivityTest {
         };
     }
 
-    //Since the features of Menu now depend on the intent it is usually launched with
-    //We also need to launch MenuActivity with a valid intent for tests to pass
-    @NonNull
-    private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
-                , 0, 0, 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        toStart.putExtra("user", currentUser);
-        return toStart;
-    }
+
 
     @NonNull
     public Game getGame() {
@@ -104,8 +113,9 @@ public class MenuActivityTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(37.4219473);
         location.setLongitude(-122.0840015);
-        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 2, 2);
+        return new Game(name, host, maxPlayerCount, riddles, coins, location, true, 2, 25, 2);
     }
+
 
     @Test
     public void activityStartsProperly() {
@@ -121,6 +131,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
+
 
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -156,7 +167,7 @@ public class MenuActivityTest {
             final String game_name = "CreateGameTest";
             final String max_player_count = String.valueOf(3);
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -205,7 +216,10 @@ public class MenuActivityTest {
                     .perform(DrawerActions.open());
             Thread.sleep(3000);
             Espresso.onView(withId(R.id.main_leaderboard_button)).perform(ViewActions.click());
+            Thread.sleep(3000);
+
             intended(hasComponent(MainLeaderboardActivity.class.getName()));
+            Thread.sleep(3000);
 
             Intents.release();
         } catch (Exception e) {
@@ -372,7 +386,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one player in a game";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -405,7 +419,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "There should be at least one coin in a game";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(0);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -426,7 +440,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void newGameZeroRadiusFieldError() {
+    public void newGameRadiusLessThanMinDistanceError() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
 
@@ -435,10 +449,10 @@ public class MenuActivityTest {
             Thread.sleep(1000);
 
             final String max_player_count = String.valueOf(2);
-            final String expected_zero_players = "The radius of the game should be bigger than 0 km";
+            final String expected_zero_players = "The radius of the game should be bigger than 5 meters";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(0);
+            final String radius = String.valueOf(1);
             final String duration = String.valueOf(5);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -471,7 +485,7 @@ public class MenuActivityTest {
             final String expected_zero_players = "The game should last for more than 0 minute";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
-            final String radius = String.valueOf(2);
+            final String radius = String.valueOf(25);
             final String duration = String.valueOf(0);
 
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
@@ -485,32 +499,6 @@ public class MenuActivityTest {
 
 
             Intents.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Intents.release();
-        }
-    }
-
-    @Test
-    public void newGameWorks() {
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-
-            onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
-
-            Thread.sleep(2000);
-
-            final String game_name = "test game";
-            final String max_player_count = String.valueOf(1);
-
-            Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-
-            assertEquals(1, 1);
-
-            Intents.release();
-
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();
@@ -543,4 +531,22 @@ public class MenuActivityTest {
         }
     }
 
+    @Test
+    public void weatherTypeAndTemperatureAreNotEmpty(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
+                location.setLatitude(0.7126);
+                location.setLongitude(38.2699);
+                a.loadWeather(location);
+                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport(WeatherForecast.Day.TODAY));
+            });
+            Thread.sleep(5000);
+            onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_type)).check(matches(not(withText(""))));
+            onView(withId(R.id.weather_icon)).check(matches(not(withContentDescription("coin placeholder"))));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

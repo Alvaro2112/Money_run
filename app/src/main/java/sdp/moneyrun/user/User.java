@@ -10,6 +10,9 @@ import java.util.Objects;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
 
+/**
+ * This class represents a user (ie. A person), not to be confused with a Player. A user is the entity that uses the app and always exist, a Player only exists during a Game and is created by a User.
+ */
 public class User implements Serializable {
 
     @Nullable
@@ -32,6 +35,7 @@ public class User implements Serializable {
     }
 
     public User(@Nullable String userId) {
+        if(userId == null){throw new NullPointerException("UserID is null");}
         this.userId = userId;
     }
 
@@ -39,16 +43,27 @@ public class User implements Serializable {
      * Constructor, returns instance of user
      *
      * @param userId              the unique id that identifies a user
-     * @param name
-     * @param address
-     * @param numberOfDiedGames
-     * @param numberOfPlayedGames
+     * @param name the name of the user
+     * @param address the address of the user
+     * @param numberOfDiedGames the number of games a user lost
+     * @param numberOfPlayedGames the number of games a user played
+     * @param maxScoreInGame  the highest score this user achieved in any game
      * @throws IllegalArgumentException on empty or null address or name and on user = 0
      */
     public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
-        if (userId == null || name == null || name.isEmpty() || address == null || address.isEmpty() || maxScoreInGame < 0)
-            throw new IllegalArgumentException();
+        if (userId == null)
+            throw new IllegalArgumentException("The user ID cannot be null");
+
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("The name of the user cannot be null");
+
+        if (address == null || address.isEmpty())
+            throw new IllegalArgumentException("The address of the user cannot be null nor empty");
+
+        if (maxScoreInGame < 0)
+            throw new IllegalArgumentException("The max score of a user must be positive");
+
         this.userId = userId;
         this.name = name;
         this.address = address;
@@ -71,10 +86,18 @@ public class User implements Serializable {
 
     }
 
+    public void setUserId(@Nullable String userId) {
+        if(userId == null){
+            throw new NullPointerException();
+        }
+        this.userId = userId;
+    }
+
+
     /**
      * Setter for name. By design the user already had a name
      *
-     * @param name
+     * @param name The new name of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setName(String name, boolean dbChange) {
@@ -85,7 +108,7 @@ public class User implements Serializable {
     /**
      * Setter for address. By design the user already had an address
      *
-     * @param address
+     * @param address The new address of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setAddress(String address, boolean dbChange) {
@@ -130,7 +153,7 @@ public class User implements Serializable {
     /**
      * sets the number of died games
      *
-     * @param diedGames
+     * @param diedGames The new number of games this user lost
      * @param dbChange  whether the database entry must be updated
      */
     public void setNumberOfDiedGames(int diedGames, boolean dbChange) {
@@ -141,8 +164,8 @@ public class User implements Serializable {
     /**
      * sets the number of played games
      *
-     * @param playedGames
-     * @param dbChange
+     * @param playedGames The new number of games this user player
+     * @param dbChange Whether to update the database or not
      */
     public void setNumberOfPlayedGames(int playedGames, boolean dbChange) {
         numberOfPlayedGames = playedGames;
@@ -254,6 +277,7 @@ public class User implements Serializable {
         return new ArrayList<>(this.friendIdList);
     }
 
+
     /**
      * set the user friend list
      *
@@ -274,15 +298,12 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+
         return userId.equals(user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames &&
-                name.equals(user.name) &&
-                address.equals(user.address)
-                && friendIdList.equals(user.friendIdList);
+                numberOfDiedGames == user.numberOfDiedGames;
     }
 
     @Override

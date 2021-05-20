@@ -1,6 +1,9 @@
 package sdp.moneyrun.database;
 
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,8 +21,10 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.map.MapActivity;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -36,6 +41,41 @@ public class DatabaseProxyTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+    }
+
+    @Test
+    public void getDatabaseWorks() {
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        assertEquals(db.getReference().getDatabase(), db.getDatabase());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putGameFailsCorrectly() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.putGame(null);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addGameListenerFailsCorrectly() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.addGameListener(null, null);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly1() {
+        Player player = new Player("564123", "Johann", 0);
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        db.putPlayer(player, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly2() {
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        CountDownLatch added = new CountDownLatch(1);
+        OnCompleteListener addedListener = task -> added.countDown();
+        db.putPlayer(null, addedListener);
     }
 
     @Test

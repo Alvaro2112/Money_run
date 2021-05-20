@@ -14,9 +14,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Random;
-
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
@@ -30,10 +30,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Nullable
     private Player user;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void bestToWorstPlayer(@NonNull List<Player> players) {
-        players.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -44,7 +40,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
-//        setUserPlayer();
         setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
@@ -72,16 +67,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayerList(@Nullable ArrayList<Player> playerList) {
-        if (playerList == null) {
-            throw new NullPointerException("Player list is null");
-        }
-        ldbAdapter.addAll(playerList);
-        ArrayList<Player> players = new ArrayList<>();
-        for (int i = 0; i < ldbAdapter.getCount(); ++i)
-            players.add(ldbAdapter.getItem(i));
-        ldbAdapter.clear();
-        bestToWorstPlayer(players);
-        ldbAdapter.addAll(players);
+        Helpers.addObjectListToAdapter(playerList, ldbAdapter);
     }
 
     /**
@@ -90,12 +76,11 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayer(@Nullable Player player) {
-        // can't just add a player directly to an adapter, need to put it in a list
+        // can't just add a player directly to an adapter, we need to put it in a list first
         if (player == null) {
-            throw new IllegalArgumentException("player is null");
+            throw new IllegalArgumentException("player should not be null");
         }
-        ArrayList<Player> to_add = new ArrayList<>();
-        to_add.add(player);
+        ArrayList<Player> to_add = new ArrayList<>(Collections.singletonList(player));
         addPlayerList(to_add);
     }
 
@@ -144,7 +129,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             dummy.setScore(Math.abs(random.nextInt() % 1000));
             dummies.add(dummy);
         }
-        bestToWorstPlayer(dummies);
+        Helpers.bestToWorstPlayer(dummies);
         addPlayerList(dummies);
 
     }
