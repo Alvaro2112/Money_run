@@ -155,8 +155,7 @@ public class JoinGameImplementation extends MenuImplementation {
             String lowerName = gameName.toLowerCase(Locale.getDefault());
 
             if (canDisplayGame(filterText, lowerName, distance)) {
-                displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
-                buttonId++;
+                displayGameIncreaseButton(gameRepresentation, popupWindow, gameLayout);
             }
         }
     }
@@ -172,6 +171,13 @@ public class JoinGameImplementation extends MenuImplementation {
                                    String lowerName,
                                    double distance){
         return (filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME;
+    }
+
+    private void displayGameIncreaseButton(@NonNull GameRepresentation gameRepresentation,
+                                           @NonNull PopupWindow popupWindow,
+                                           @NonNull TableLayout gameLayout){
+        displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
+        buttonId++;
     }
 
     /**
