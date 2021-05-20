@@ -2,6 +2,7 @@ package sdp.moneyrun.ui.map;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -403,7 +404,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void wrongAnswerListener(@NonNull PopupWindow popupWindow, int btnId, @Nullable Coin coin, @NonNull Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
-
+            MediaPlayer.create(this, R.raw.wrong_choice).start();
             popupWindow.dismiss();
             PopupWindow wrongAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.wrong_answer_popup);
             TextView tv = wrongAnswerPopupWindow.getContentView().findViewById(R.id.question);
@@ -434,7 +435,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void correctAnswerListener(@NonNull PopupWindow popupWindow, int btnId, @Nullable Coin coin, @NonNull Riddle riddle) {
 
         popupWindow.getContentView().findViewById(btnId).setOnClickListener(v -> {
-
+            MediaPlayer.create(this, R.raw.correct_choice).start();
             popupWindow.dismiss();
             PopupWindow correctAnswerPopupWindow = Helpers.onButtonShowPopupWindowClick(MapActivity.this, mapView, true, R.layout.correct_answer_popup);
             TextView tv = correctAnswerPopupWindow.getContentView().findViewById(R.id.question);
