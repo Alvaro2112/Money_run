@@ -36,7 +36,6 @@ public class FriendListActivity extends AppCompatActivity {
         });
 
         addAdapter();
-        friendButtonFunctionality();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
     }
