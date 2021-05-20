@@ -204,16 +204,21 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<List<Coin>> t = new GenericTypeIndicator<List<Coin>>() {
                 };
+
                 List<Coin> newCoins = snapshot.getValue(t);
+
                 if (newCoins == null) {
                     return;
                 }
+
                 localPlayer.syncAvailableCoinsFromDb(new ArrayList<>(newCoins));
 
                 symbolManager.deleteAll();
-                for (Coin coin : newCoins) {
+
+                for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
+
             }
 
             @Override
@@ -329,6 +334,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void onButtonShowQuestionPopupWindowClick(View view, Boolean focusable, int layoutId, @NonNull Riddle riddle, Coin coin) {
 
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
+        popupWindow.setOnDismissListener(() -> {
+            if (coin != null) {
+                removeCoin(coin, false);
+            }
+        });
         TextView tv = popupWindow.getContentView().findViewById(R.id.question);
         int correctId;
 

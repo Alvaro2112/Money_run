@@ -18,20 +18,14 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
+public class MainLeaderboardListAdapter extends ListAdapterWithUser {
 
     // Medal emotes
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
     private final int COLOR_GOLD = Color.rgb(255, 204, 51);
-    @Nullable
-    private User currentUser;
 
-    public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, @Nullable User user) {
-        super(context, 0, userList);
-        if (user == null) {
-            throw new IllegalArgumentException("user should not be null.");
-        }
-        this.currentUser = user;
+    public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
+        super(context, userList, user);
     }
 
     @SuppressLint("ViewHolder")
@@ -51,7 +45,7 @@ public class MainLeaderboardListAdapter extends ArrayAdapter<User> {
 
         user_position.setText(text_position);
         user_name.setText(String.valueOf(user.getName()));
-        if (user.equals(currentUser)) {
+        if (user.equals(getCurrentUser())) {
             user_name.setTextColor(COLOR_GOLD);
             user_name.setTypeface(user_name.getTypeface(), Typeface.BOLD);
         }

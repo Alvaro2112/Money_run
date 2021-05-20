@@ -34,8 +34,8 @@ A variation of what color is the shade called Harlequin?\n;Green;Blue;Orange;Red
 "A Venus day, the time it takes Venus to rotate once, is approximately how long?\n";243 Earth days;20 Earth hours;10 Earth hours;106 Earth days;243 Earth days
 A very common greeting in India is namaste or namaskar. What does it mean?\n;I bow  to you.;I bow  to you.;I pray your family is complete.;May you be blessed.;How are  you?
 "A war, which was condemned by the United Nations, was fought in 1982 over a group of islands between which two countries?\n";Argentina and Great Britain;Grenada and the USA;Panama and the USA;Argentina and Great Britain;Chile and Argentina
-â€œAppointing your grandmother to office for the good of the partyâ€ is the definition of which of these words in the satirical book by Ambrose Bierce The Devils Dictionary?\n;Nepotism;Favoritism;Humanitarianism;Socialism;Nepotism
-â€œThe art of protecting flat surfaces from the weather and exposing them to the criticâ€ is satirist Ambrose Bierceâ€™s definition for which of these activities?\n;Painting;Sculpturing;Repairing;Painting;Safeguarding
+â€œAppointing your grandmother to office for the good of the partyï¿½ is the definition of which of these words in the satirical book by Ambrose Bierce The Devils Dictionary?\n;Nepotism;Favoritism;Humanitarianism;Socialism;Nepotism
+â€œThe art of protecting flat surfaces from the weather and exposing them to the criticï¿½ is satirist Ambrose Bierceâ€™s definition for which of these activities?\n;Painting;Sculpturing;Repairing;Painting;Safeguarding
 "About half of the 26,000 kg diamonds mined annually originate from which continent?\n";Africa;Asia;South America;Europe;Africa
 About how many feet are there in one kilometer?\n;3281;1762;3281;5280;2089
 "According to a belief,  women should wear diamonds on this finger.\n";The middle finger of the left hand;The thumb of the right hand;The index finger of the left hand;The middle finger of the left hand;The middle finger of the right hand
@@ -79,7 +79,7 @@ According to the Christian  tradition there are 39 books in the Old Testament. H
 "According to urban legends, the Titantic sank because it was carrying which of the following?\n";A cursed mummy;Jack the Ripper;A man trying to outrun a gypsys curse;A cursed mummy;The Book of the Dead
 "Ace Frehley, one of the original members of Kiss, created the bands iconic logo, in which the letters SS look like lightning bolts. In which of these countries have Kiss used a modified version of their logo in order to avoid controversy?\n";Germany;Australia;Germany;Russia;USA
 "Acrophobia is a term, defined as an excessive fear of what?\n";Heights;Heights;Travel;Water;Light
-"Across the Hall, Friends Like Us, Insomnia Café and Six of One are all working titles of one of famous US TV-series.  Name the series.\n";Friends;Friends;Sex and the City;ALF;One Tree Hill
+"Across the Hall, Friends Like Us, Insomnia Cafï¿½ and Six of One are all working titles of one of famous US TV-series.  Name the series.\n";Friends;Friends;Sex and the City;ALF;One Tree Hill
 "Actors Dolph Lundgren, Lena Olin, and Ann Margaret hail from this Scandinavian country that joined the European Union in 1995.\n";Sweden;Finland;Sweden;Norway;Estonia
 "After fashion designer Gianni Versace was murdered outside his Miami home, his sister Donatella stepped in as creative director of the fashion label. What is the name of Versaces older brother who became CEO of Gianni Versace S.p.A.?\n";Santo;Francesco;Antonio;Tano;Santo
 "After gaining 30 pounds and donning a set of prosthetic teeth, Charlize Theron teamed up with Christina Ricci and won a 2003 Academy Award for Best Actress in the biographical, crime, thriller movie titled Monster. What real life serial killer and prostitute did Charlize portray in this film?\n";Aileen Wournos;Lizzie Borden;Lynette Squeaky Fromme;Aileen Wournos;Valerie Solanas
@@ -176,7 +176,7 @@ Blue pages are a telephone directory of these.\n;Government offices;Business off
 Brian Hayes coined the term umop-episdn.  What does it mean?\n;Topsy-turvy;A computer glitch;Alien language;Topsy-turvy;A mishmash of languages
 "British aircraft manufacturer, Saunders Roe, developed the first practical man-carrying hovercraft, the SR-N1. Its first public demonstration, including a cross-channel run, was made in what year?\n";1959;1716;1959;1934;1978
 "Bud Abbott and Lou Costello were a comedy team that lasted for 20 years, from the 1930s through the 1950s. What famous baseball routine are they best known for?\n";Whos on First?;The Ump is Blind!;Whos on First?;Whos Playing Who?;Whos your Daddy?
-"Buddhism, a religion and philosophy based on the teachings of SiddhÄrtha Gautama, traces its origins to which country?\n";India;Taiwan;Thailand;India;China
+"Buddhism, a religion and philosophy based on the teachings of Siddhï¿½rtha Gautama, traces its origins to which country?\n";India;Taiwan;Thailand;India;China
 "By act of Congress, this is the official alcoholic spirit of the USA.\n";Bourbon;Corn liquor;Gin;Rye;Bourbon
 By the end of what week does an unborn fetus start to develop fingerprints?\n;18th;16th;18th;15th;20th
 "By the mid-1990s, horror movies were in dire need of something new. The standard formulas were becoming tired and old. One of the most successful films of this period, Scream (1996), was basically tongue-in-cheek and poked fun at the now cliche horror film genre. Which actress did NOT appear in Scream?\n";Sarah Michelle Gellar;Neve Campbell;Sarah Michelle Gellar;Drew Barrymore;Courteney Cox
@@ -209,11 +209,11 @@ Complete the title to this Credence Clearwater Revival tune: Bad Moon ____.\n;Ri
 "D-Day refers to one of the biggest military operations in history that took place on June 6, 1944. What was the pass word used by the Allied Forces on that day?\n";Mickey Mouse;Mickey Mouse;Overlord;Sceptre;Ike
 "Dactyloscopy, a technique perfected by anthropologist Juan Vucetichs, studies what?\n";Fingerprints;Fingerprints;The shape of human head;Flightless birds;Land dinosaurs
 "Daddy Warbucks is a character in this popular musical that opened in April 21, 1977.\n";Annie;Annie;Xanadu;Phantom of the Opera;Cats
-"David Seaman, Ian Wright, John Jensen, Dennis Bergkamp, David Platt, Patrick Vieira, Marc Overmars, Fredrik Ljungberg, and Thierry Henry are top players who have all played for one of the following soccer clubs.\n";Arsenal FC;Real Madrid CF;Arsenal FC;FC Bayern München;AC Milan
+"David Seaman, Ian Wright, John Jensen, Dennis Bergkamp, David Platt, Patrick Vieira, Marc Overmars, Fredrik Ljungberg, and Thierry Henry are top players who have all played for one of the following soccer clubs.\n";Arsenal FC;Real Madrid CF;Arsenal FC;FC Bayern Mï¿½nchen;AC Milan
 "Despite her long and tempestuous romance with Rhett Butler, the strong-willed Southern belle Scarlett OHara could not overcome her infatuation with this gentleman.\n";Ashley Wilkes;Frank Kennedy;Stuart Tarleton;Ashley Wilkes;Charles Hamilton
 Diamond formation is a very slow process. It is estimated that most diamonds found in nature are of what approximate age?\n;1 â€“ 3 billion years old;1 â€“ 3 billion years old;100 â€“ 200 million years old;30 â€“ 40 billion years old;100 000 â€“ 200 000 years old
 Diamond is the birthstone of people who were born in this month.\n;April;April;March;June;February
-Diamondsâ€™ properties are commonly measured by the so called â€œfour Cs.â€ What do the four Cs stand for?\n;"Carat, clarity, color, and cut";"Chemical balance, color, clarity and carat";"Carat, capacity, color and clarity";"Cut, calcification, carat, and cut";"Carat, clarity, color, and cut"
+Diamondsâ€™ properties are commonly measured by the so called â€œfour Cs.ï¿½ What do the four Cs stand for?\n;"Carat, clarity, color, and cut";"Chemical balance, color, clarity and carat";"Carat, capacity, color and clarity";"Cut, calcification, carat, and cut";"Carat, clarity, color, and cut"
 Doctor Dolittle is the central character of a series of childrens books by this author.\n;Hugh Lofting;J. K. Rowling;Lewis Carroll;L. Frank Baum;Hugh Lofting
 Doctor Zhivago is a character from a novel of the same name by Boris Pasternak. This is the historical background of the story in the book.\n;Russian Revolution;The USSRs collapse;WWII;Russian Revolution;Brezhnevs reign
 Dr. Mary Edwards Walker was the first American women to be awarded what?\n;The Congressional Medal of Honor;The Congressional Medal of Honor;The Nobel Peace Prize;The Pulitzer Prize;The Nobel Prize in Medicine
@@ -288,7 +288,7 @@ From which law school did fictional character Elle Woods graduate?\n;Harvard;Sta
 From which radio station was the first national US broadcast made?\n;KDKA  in Pittsburgh;KPHI in Philadelphia;WWRL in Chicago;WINS  in New York;KDKA  in Pittsburgh
 "Fyodor Tyutchev, Nikolai Alekseevich Nekrasov and Evgeny Baratynsky were Russian poets and are usually related to this period of Russian literature.\n";19th century;Silver Age;Post-Soviet era;19th century;Soviet era
 "Gangster Al Capone, popular as Scarface, was known by what other nickname?\n";Snorky;Snorky;Loverboy;The senator;The fox
-Gemologists use eleven grades to define clarity. This grade means there are no inclusions or surface blemishes under 10x magnification.\n;FL (Flawless);IF (Internally Flawless);FL (Flawless);I1 (Imperfect – Level 1);VS1 / VS2 (Very Slightly Included)
+Gemologists use eleven grades to define clarity. This grade means there are no inclusions or surface blemishes under 10x magnification.\n;FL (Flawless);IF (Internally Flawless);FL (Flawless);I1 (Imperfect ï¿½ Level 1);VS1 / VS2 (Very Slightly Included)
 "General Electric, one of the worlds biggest corporations, is active in many market segments. In which of these areas do they NOT operate?\n";oil drilling;finance;oil drilling;electricity;jet engines
 "General Santa Anna , loser at San Juancinto and victor at the Alamo, went on to help promote what?\n";Chewing gum;Chewing gum;The Gatling Gun;Tacos;Movies
 "Geologically, we are in the Quaternary Period of the Cenozoic Era. In which geological epoch are we?\n";Holocene;Miocene;Eocene;Pliocene;Holocene
@@ -312,7 +312,7 @@ Hairy man-apes seem to be everywhere. Which of these names is not used for them?
 He invented instant coffee in 1901.\n;Satori Koto;Satori Koto;Karl von Nestle;Eduard Helfenmier;Levi Hutchins
 He invented the idea of an ATM in the late 1930s and persuaded what is now Citicorp to give it a trial.\n;Luther George Simjian;Luther George Simjian;James Goodfellow;Allen Bred;John Shepherd-Barron
 He invented the vulcanized rubber double-tube tire in 1845 and the glass fountain pen in 1849. He also came up with the technique of firing explosive charges using electricity.\n;Robert William Thomson;Robert William Thomson;Edouard Michelin;B. F. Goodrich;Edouard Goodyear
-"He is a very popular American entertainer.  His wife, Compton Maalak, operates a full service non-profit salon giving free services to women trying to get off welfare and going into jobs.  He was in Beverly Hills Cop IIâ€ and voiced a role in Madagascar. Who is he?\n";Chris Rock;Will Smith;Tommy  Tiny  LIster;Eddie Murphy;Chris Rock
+"He is a very popular American entertainer.  His wife, Compton Maalak, operates a full service non-profit salon giving free services to women trying to get off welfare and going into jobs.  He was in Beverly Hills Cop IIï¿½ and voiced a role in Madagascar. Who is he?\n";Chris Rock;Will Smith;Tommy  Tiny  LIster;Eddie Murphy;Chris Rock
 "He reigned until 1725 and carried out a policy of Westernization and expansion, that transformed his country into a major European power.\n";Peter the Great;Peter the Great;Augustus II of Poland;Kemal Ataturk;Frederich the Great
 He was a great silent screen star.  He was well known as the best pie thrower in the movies.  He was a great athlete and did almost all of his own stunts.  He was famous for rarely showing emotion in his face.  Who was he?\n;Buster Keaton;Buster Keaton;Joseph Schenck;Charlie  Chaplin;Fatty Arbuckle
 "He was arrested and imprisoned in 1849 for engaging in revolutionary activity against the ruler, but became one of his countrys greatest writers.\n";Dostoevsky;Dostoevsky;Hugo;Engels;Cervantes
@@ -344,7 +344,7 @@ How big is a firkin?\n;9 gallons;9 pounds;9 square miles;9 gallons;9 yards
 How big was the first telephone book?\n;1 page;1 page;50 pages;100 pages;10 pages
 "How did Jane Seymour, wife of King Henry VIII of England, die in 1537?\n";Of natural causes;She was executed.;She committed suicide.;She was poisoned.;Of natural causes
 "How did Jerome Napoleon Charles Bonaparte, the last member of the Bonaparte family, die?\n";He died of injuries sustained when he tripped over his dogs leash.;He died of starvation in a German prisoner.;He drowned off the coast of the Island of Elba.;He died a natural death in 1995 at the age of 106.;He died of injuries sustained when he tripped over his dogs leash.
-How did Michael Moore finance his movie â€žRoger and Me?â€\n;He ran bingo games.;He sold hunting equipment.;He sold over 100% of the film to investors;He ran bingo games.;"He managed a Walmart in Flint, Michigan."
+How did Michael Moore finance his movie â€žRoger and Me?ï¿½\n;He ran bingo games.;He sold hunting equipment.;He sold over 100% of the film to investors;He ran bingo games.;"He managed a Walmart in Flint, Michigan."
 "How did the alien invasion in Herbert Wells well-known science fiction novel, The War of the Worlds eventually come to a halt?\n";The aliens were unexpectedly killed by a terrestrial disease.;"All nations united and together, repelled the invasion.";The aliens were unexpectedly killed by a terrestrial disease.;The alien invaders took possession of Earth.;Aliens and humans reached an agreement to coexist on Earth.
 How do mermaids enchant people according to legends and myths?\n;By singing;By sprinkling them with magic powder;By dancing;With their eyes;By singing
 How do you say apple in Spanish?\n;manzana;apio;arroz;uva;manzana
@@ -502,7 +502,7 @@ In 2006 a female corpse dating from the 16th century was found near Venice. Acco
 In 64 AD there were terrible fires in Rome. Which Roman Emperor was busy playing his fiddle while the fires were burning?\n;None of the Emperors;Caligula;Nero;None of the Emperors;Vespasian
 "In a pen, what is the object that holds the ink called?\n";ink reservoir;ink composite;ink compress;ink reservoir;ink tube
 "In Adrian Lynes movie Unfaithful, Constance (Diane Lane), who is married to Edward (Richard Gere), has a fling with Paul (Olivier Martinez), a mysterious Frenchman who buys and sells used books. How does the movie end?\n";Constance discovers that Edward has killed Paul and tells him they will get through the crisis together.;Constance and Edward confront each other and she subsequently commits suicide.;Constance discovers that Edward has killed Paul and tells him they will get through the crisis together.;Paul murders Edward.;Constance and Edward confront each other and she kills him.
-"In Ambrose Bierces satirical book The Devils Dictionary, what is called â€œone of the sauces which serve the French in place of a state religionâ€?\n";Mayonaise;Mayonaise;Ketchup;Hollendaise;Mustard
+"In Ambrose Bierces satirical book The Devils Dictionary, what is called â€œone of the sauces which serve the French in place of a state religionï¿½?\n";Mayonaise;Mayonaise;Ketchup;Hollendaise;Mustard
 In Americas west there are towns that once boomed during the gold rush but are now abandoned. These places known as ghost towns are said to be haunted by the spirits of the people that once inhabited them. One such town is St. Elmos in Denver Colorado. In what year did this town officially die?\n;1952;1967;1909;1952;1892
 "In ancient times, which stone was believed to protect from drunkenness?\n";amethyst;amethyst;ruby;emerald;onyx
 "In April 2009, Gjorge Ivanov was elected the 4th President of  what country?\n";Republic of Macedonia;Republic of Macedonia;Republic of Lithuania;Republic of the Marshall Islands;Republic of Palau
@@ -763,8 +763,8 @@ Manfred Albrecht Freiherr von Richthofen was a German pilot and is still regarde
 "Many sailors have seen the Flying Dutchman, a ship doomed to roam the seas forever. Where did the Flying Dutchman reportedly disappear?\n";Cape of Good Hope;Cape of Good Hope;The East Indies;The North Sea;The Atlantic Ocean
 "Many years before trivia, during the Devonian period, when trees and forests began to appear for the first time,  there were two types of fish: fish with ray fins and fish with lobe fins.  Which type were able to make their way onto the land and breath air?\n";Lobe finned fish;Neither;Both;Ray finned fish;Lobe finned fish
 "Martin Lewis Perl, Riccardo Giacconi, and Georges Charpak all received the Nobel Prize in ....?\n";Physics;Physics;Literature;Chemistry;Medicine
-Match this definition to the word it belongs in Ambrose Bierceâ€™s book The Devils Dictionary: â€œa machine which you go into as a pig and come out of as a sausage.â€\n;Litigation;A Sausage Factory;Life;Marriage;Litigation
-"Match this definition to the word it belongs to according to Ambrose Bierceâ€™s book The Devils Dictionary: â€œThe state or condition of a community consisting of a master, a mistress and two slaves, making in all, two.â€\n";Marriage;Love;Marriage;Family;Engagement
+Match this definition to the word it belongs in Ambrose Bierceâ€™s book The Devils Dictionary: â€œa machine which you go into as a pig and come out of as a sausage.ï¿½\n;Litigation;A Sausage Factory;Life;Marriage;Litigation
+"Match this definition to the word it belongs to according to Ambrose Bierceâ€™s book The Devils Dictionary: â€œThe state or condition of a community consisting of a master, a mistress and two slaves, making in all, two.ï¿½\n";Marriage;Love;Marriage;Family;Engagement
 "Matt Groening, the creator of The Simpsons, grew up on a street named what?\n";Evergreen Terrace;Main Street;Springfield Boulevard;Simpson Street;Evergreen Terrace
 "Mayday, an emergency code word used internationally as a distress signal, derives from which language?\n";French;French;German;English;Italian
 "Measured from base to peak, what is the worlds highest mountain?\n";Mauna Kea;Chimborazo;Mauna Kea;K2;Mt. Everest
@@ -926,7 +926,7 @@ Rumpole from the fabulous British TV series Rumpole of the Bailey likes his job 
 "Said to be the first of the Film Noir genre, The Maltese Falcon starred Humphrey Bogart as the one and only Sam Spade.  How many appearances did Bogart make as this character?\n";1;3;6;1;4
 Samhainophobia is the fear of this holiday.\n;Halloween;Valentines Day;Halloween;St. Patricks Day;Christmas
 "San Marino, Denmark and Norway are among the countries with most _____  per capita.\n";Personal computers;Personal computers;Television sets;Credit cards;Cell phones
-Sancho Panza was the squire to and the best friend of Don Quixote. What does panzaâ€ mean in Spanish?\n;Belly;Fool;Belly;Jester;Compatriot
+Sancho Panza was the squire to and the best friend of Don Quixote. What does panzaï¿½ mean in Spanish?\n;Belly;Fool;Belly;Jester;Compatriot
 "Sangria is a drink, traditionally served at Mexican weddings. Sangria contains all these ingredients, except one.\n";Tequila;Fruit juice;Tequila;Brandy;Wine
 Sapphire is usually associated with this month.\n;September;November;December;October;September
 "Sarah Brightman, who became the first artist to hold #1 spots on the Billboard Classical and Dance charts simultaneously, has what type of singing voice?\n";Soprano;Alto;Soprano;Contralto;Mezzo Soprano
@@ -1108,7 +1108,7 @@ The Mississippi is the longest North American river. The Missouri is the second.
 The most garbage collecting volunteers gathered in this US state.\n;California;Ohio;Texas;California;New York
 The motto of which US state is The Welfare of the People Shall Be The Supreme Law.?\n;Missouri;Washington;Connecticut;Texas;Missouri
 "The moves in this sport include Barani, Triffus, Miller, and Randy.\n";Trampoline;Figure Skating;Ballroom Dancing;Trampoline;BMX
-"The movie â€œTo Sir, with Loveâ€ stars Sidney Poitier as a teacher confronted with a class of arrogant and provocative students. In what city is the movie set?\n";London;Liverpool;San Francisco;London;New York City
+"The movie â€œTo Sir, with Loveï¿½ stars Sidney Poitier as a teacher confronted with a class of arrogant and provocative students. In what city is the movie set?\n";London;Liverpool;San Francisco;London;New York City
 "The movie Stand and Deliver is centered around Jaime A. Escalante, who gave up a steady well-paid job to become a dedicated teacher in a school where rebellion runs. What subject did Mr. Escalante teach?\n";mathematics;chemistry;physics;biology;mathematics
 The movie Trois couleurs: Rouge (Three Colors: Red) is about a girl who discovers her neighbour is keen on invading peoples privacy. This is her profession.\n;Model;Photographer;Teacher;Model;Actress
 "The name Ethan was the fourth most popular baby name of 2006, and means what?\n";"Strong, optimistic";Shepherd;"Strong, optimistic";"Intelligent, wise";Of the forest
@@ -1129,7 +1129,7 @@ The Not Ready For Primetime Players debuted on Saturday Night Live in 1975. Whic
 The Opel company was founded in 1863 and began making cars in 1899. What was the first name of its founder Opel?\n;Adam;Heinrich;Friedrich;Ludwig;Adam
 The Orange River is the longest river in which country?\n;Republic of South Africa;Canada;Republic of South Africa;Chile;Australia
 The original 747  was fitted with what kind of jet engines?\n;Pratt  Whitney JT9D-3;General Electric CF6-80C2B1F;Pratt  Whitney JT9D-3;Rolls Royce RB211-524G;Kuznetsov NK-82 turbofans
-The original name of which city is translated as The Great City of Angelsâ€?\n;Bangkok;Vadodara;Los Angeles;Bangkok;BogotÃ¡
+The original name of which city is translated as The Great City of Angelsï¿½?\n;Bangkok;Vadodara;Los Angeles;Bangkok;BogotÃ¡
 "The Orlons had a 1963 hit in which they told everyone where all the hippies meet. Where was this, according to the song?\n";South Street;South Street;San Francisco;Greenwich Village;State Street
 The outbreak of what deadly disease is often referred to as Black Death?\n;Plague;Tuberculosis;Plague;Malaria;Cholera
 "The Peace Symbol, which became an icon of the 1960s anti-war movement, derives from what?\n";two semaphoric signals;a slightly twisted cross;None of these;two semaphoric signals;an image of a nuclear bomber
@@ -1200,7 +1200,7 @@ The white pages are a telephone directory listing of the telephone numbers of th
 "The word abacus derives from a Hebrew word, meaning this.\n";Dust;Movement;Sky;Dust;Wood
 "The word algorism, which comes from the name of Persian mathematician al-Khwarizmi, refers to which of these?\n";The rules of performing arithmetic using the decimal system for representing numbers;A binary numeral system where two successive values differ in only one digit;None of these;The rules of performing arithmetic using the decimal system for representing numbers;A numeral system that uses the digits 0 to 7
 "The word berserk referring to Norse warriors, means what in Old Norse?\n";Bear Shirt;Warriors Wrath;Warriors Rage;Beer Shirt;Bear Shirt
-The word diamond comes from the ancient Greek word â€œadamasâ€ meaning what translated in English?\n;Invincible;Everlasting;Powerful;Brilliant;Invincible
+The word diamond comes from the ancient Greek word â€œadamasï¿½ meaning what translated in English?\n;Invincible;Everlasting;Powerful;Brilliant;Invincible
 The word for tomato in Spanish is _________ .\n;el tomate;el labio;la manzana;el tomate;el escritorio
 The world-class hospital in Maryland was named after a person whose last name was Hopkins. What was his first name?\n;Johns;Johns;Reed;John;James
 The worlds largest swimming pool in 2007 was in this country.\n;Chile;Chile;Morocco;North Korea;Venezuela
@@ -1534,7 +1534,7 @@ To which of these countries are the Sami people not indigenous?\n;Denmark;Denmar
 To whom did the inventor of the typewriter sell his patent?\n;A maker of guns;A maker of guns;A sewing machine company;Thomas A. Edison;The US government
 "Tom Cruise had a lead role in all, but one of these movies.  Which one?\n";Endless Love;Rain Man;The Firm;Magnolia;Endless Love
 Tom Hanks co-starred in the TV program Bosom Buddies with this fine actor/juggler.\n;Peter Scolari;Christopher Knight;Peter Scolari;Steve Zahn;Tom Everett Scott
-"Tomas Tranströmer, Assia Djebar and Raja Rao have won one, what is it?\n";Neustadt International Prize for Literature;Bobbitt National Prize for Poetry;Pulitzer Prize for Poetry;Neustadt International Prize for Literature;Nobel Prize in Literature
+"Tomas Transtrï¿½mer, Assia Djebar and Raja Rao have won one, what is it?\n";Neustadt International Prize for Literature;Bobbitt National Prize for Poetry;Pulitzer Prize for Poetry;Neustadt International Prize for Literature;Nobel Prize in Literature
 "Topic: Childrens Books. This series, written by Marc Brown, stars this bespectacled aardvark. What is the right question?\n";Who is Arthur?;Who is Arthur?;Who is Junie B. Jones?;Who is Captain Underpants?;Who is Curious George?
 "Topic: Fast Foods: This restaurant carries Chicken Tenders, Burger Shots and the Double Croissanwich. Ask the right question.\n";What is Burger King?;What is Jack in the Box?;What is Wendys?;What is Burger King?;What is Arbys?
 "Topic: Name the Videogame. Characters: Samanosuke Akechi, Princess Yuki,  Nobunaga. What is the right question?\n";What is Onimusha?;What is Devil May Cry?;What is Tenchu: Wrath of Heaven?;What is Genji: Dawn of the Samurai?;What is Onimusha?
@@ -1659,7 +1659,7 @@ What color is a John Deere tractor?\n;Green;Red;Blue;Green;Black
 What color is Johnnie Walkers jacket?\n;Red;Brown;Pink;Red;Blue
 What color is the sweat of the Hippopotamus?\n;Red;Red;Clear;Pink;Blue
 What comic book is The Human Torch from?\n;Fantastic Four;X-Men;Fantastic Four;Daredevil;The Incredible Hulk
-What common drink was first named the â€œEsteemed Brain Tonic and Intellectual Beverageâ€?\n;Coca Cola;Coca Cola;Tab;Dr Pepper;Sprite
+What common drink was first named the â€œEsteemed Brain Tonic and Intellectual Beverageï¿½?\n;Coca Cola;Coca Cola;Tab;Dr Pepper;Sprite
 "What commonplace object has parts called stretcher, runner and rib?\n";Umbrella;Underwear;Umbrella;Underlay;Urn
 What company bought Opel in 1931?\n;General Motors;FIAT;Darracq S.A.;Chrysler;General Motors
 What company introduced its popular entertainment system in 1985?\n;Nintendo;Magnavox;Sega;Nintendo;Atari
@@ -2223,7 +2223,7 @@ When a contestant selects the Daily Double on the game show Jeopardy! what is th
 When did a war start over a postage stamp?\n;1932;1833;1896;1932;1847
 When did Americas military actions in Korea first begin?\n;1871;1951;1871;1950;1958
 When did Russia declare war against Japan during World  War II?\n;Two days after the bombing of Hiroshima;Two days after the bombing of Hiroshima;The day after the Battle of Kursk;The day after the Battle of Stalingrad;Two days after Germany surrendered.
-"When did the famous American crooner Nat King Cole and his daughter Natalie Cole record their hit song, Unforgettableâ€?\n";Never;in 1989;Never;in 1990;The date was never officially revealed
+"When did the famous American crooner Nat King Cole and his daughter Natalie Cole record their hit song, Unforgettableï¿½?\n";Never;in 1989;Never;in 1990;The date was never officially revealed
 When did the first balloon flight in the USA take place?\n;1793;1839;1793;1855;1903
 When does the vernal equinox occur in the Northern Hemisphere?\n;"March 20, 21, or 22";"September 20, 21, or 22";"December 20, 2, or 22";"March 20, 21, or 22";"June 20, 21, or 22"
 "When expressed by a medical term, containing the word phobia, which one of these has the most letters?\n";the fear of long words;the fear of long words;the fear of kidney disease;the fear of the number 666;the fear of foreign languages
@@ -2412,8 +2412,8 @@ Which is the only state whose legal system is not based upon English Common Law?
 Which is the only UN member not allowed to be on the Security Council?\n;Israel;The Congo;Israel;Vietnam;Sudan
 Which is the only US state famous for producing limburger cheese in the Chalet Cheese Co-op factory?\n;Wisconsin;Minnessota;Wisconsin;New York;Ohio
 Which is the only US state to have two Ivy League colleges in it ?\n;New York;Connecticut;New Jersey;Massachusetts;New York
-Which is the Sanskrit word for â€œunion?â€\n;yoga;shiva;sri;krishna;yoga
-"Which is the word this definition from Ambrose Bierceâ€™s book The Devils Dictionary refers to: â€œA man whose qualities, prepared for display like a box of berries in a market -- the fine ones on top -- have been opened on the wrong side. An inverted gentlemanâ€?\n";Blackguard;Blackguard;Evildoer;Villain;Rogue
+Which is the Sanskrit word for â€œunion?ï¿½\n;yoga;shiva;sri;krishna;yoga
+"Which is the word this definition from Ambrose Bierceâ€™s book The Devils Dictionary refers to: â€œA man whose qualities, prepared for display like a box of berries in a market -- the fine ones on top -- have been opened on the wrong side. An inverted gentlemanï¿½?\n";Blackguard;Blackguard;Evildoer;Villain;Rogue
 Which Japanese car brand is also a word in Spanish?\n;Honda;Toyota;Honda;Nissan;Mazda
 Which lake is NOT one of the Great Lakes?\n;Great Salt Lake;Great Salt Lake;Lake Huron;Lake Michigan;Lake Ontario
 Which late-night television host is famous for his amusing Top Ten lists?\n;David Letterman;Conan OBrien;Craig Ferguson;Jay Leno;David Letterman
@@ -2562,7 +2562,7 @@ Which of these is best for cooling your mouth if you have just eaten very spicy 
 "Which of these is characteristic of Rabbit, a fictional character in the series Winnie the Pooh?\n";Busy and responsible;Bouncing and confident;Gloomy and pessimistic;Ashamed of being small;Busy and responsible
 Which of these is considered the best selling English-language novel of all times?\n;A Tale of Two Cities;And Then There Were None;A Tale of Two Cities;The DaVinci Code;The Hobbit
 Which of these is covered by the second amendment to the US Constitution?\n;the right to bear arms in order to maintain a militia;the right to bear arms in order to maintain a militia;the right to not have soldiers living in our houses;the right to a fair and speedy trial;the right to vote
-Which of these is not  a prime number?\n;1;13;3;2;1
+Which of these is not  a prime number?\n;1;13;3;2;1This
 Which of these is not a quote by Groucho Marx?\n;I have a memory like an elephant. In fact elephants often consult me.;I have a memory like an elephant. In fact elephants often consult me.;The husband who wants a  perfect marriage should keep his mouth shut and his checkbook open.;Bloods not  thicker than money.;I was married by a judge. I should have asked for the jury.
 Which of these is NOT a state capital?\n;Dallas;Dover;Des Moines;Denver;Dallas
 Which of these is not among the reasons for which most pencils are yellow?\n;To copy the style of the first pencils made in the USA;To show that they come from China;To make them easier to see on a desk top;To show that they are top quality;To copy the style of the first pencils made in the USA
@@ -2658,7 +2658,7 @@ Which plane is the first  jet fighter?\n;Heinkel He 280;Messerschmidt  M29;Heink
 Which planet is 5th from the sun?\n;Jupiter;Jupiter;Saturn;Mars;Earth
 Which President ended Reconstruction ?\n;Hayes;Hayes;Grant;Garfield;Arthur
 Which President of the United States does Anthony Hopkins portray in Steven Spielbergs historical drama Amistad?\n;John Quincy Adams;John Adams;John Quincy Adams;Abraham Lincoln;Martin Van Buren
-Which quality does satirist Ambrose Bierce define as â€œhideously appareled after the manner of the time and placeâ€ in his book The Devils Dictionary?\n;Handsome;Fashionable;Stylish;Handsome;Presentable
+Which quality does satirist Ambrose Bierce define as â€œhideously appareled after the manner of the time and placeï¿½ in his book The Devils Dictionary?\n;Handsome;Fashionable;Stylish;Handsome;Presentable
 Which river in China caused a flood of mammoth proportions in 1931?\n;Yellow;Pearl;Red;Yellow;Tumen
 "Which royal abode has had visitations from the ghosts of Thomas Becket, Anne Boleyn, King Henry VIII and Lady Jane Grey amongst many others (including a bear)?\n";The Tower of London;Windsor Castle;Sandringham;The Tower of London;Buckingham Palace
 "Which scientist discovered that blood could be separated into blood plasma and red blood cells and the components frozen separately, thus lasting longer?\n";Charles Drew;Karl Landsteiner;Paul Ehrlich;Richard Keating;Charles Drew
@@ -2717,7 +2717,7 @@ Which US President invented the baseball seventh inning stretch?\n;Taft;Hoover;T
 Which US President was nicknamed Young Hickory?\n;Polk;Polk;Jackson;Taylor;Martin Van Buren
 Which US state had the most estimated farmland for 2000?\n;Texas;South Dakota;Kansas;Montana;Texas
 Which use of  the term Wild West is incorrect?\n;Wild West was a common name for territories west of the Rio Grande river;Wild West is the title of several Western movies;Wild West is a Nintendo game;Wild West was a common name for territories west of the Rio Grande river;Wild West is an album of Dottie West
-Which verb is defined as â€œto put forward a suitable person to incur the mudgobbling and deadcatting of the oppositionâ€ in Ambrose Bierceâ€™s satirical book The Devils Dictionary\n;Nominate;Nominate;Fire;Promote;Recommend
+Which verb is defined as â€œto put forward a suitable person to incur the mudgobbling and deadcatting of the oppositionï¿½ in Ambrose Bierceâ€™s satirical book The Devils Dictionary\n;Nominate;Nominate;Fire;Promote;Recommend
 Which video game console is credited with popularizing the use of game cartridges in 1977?\n;Atari 2600;ColecoVision;Atari 2600;NES/Famicom;Sega Master System
 Which was the first car model to sell one million cars in one year?\n;Chevy Impala;Corvette;Chevy Impala;Volkswagon Beetle;Toyota Corolla
 Which was the first country in the world to constitutionally abolish its army?\n;Costa Rica;Costa Rica;Gabon;Togo;Estonia
@@ -2739,7 +2739,7 @@ Which wedding anniversary is celebrated as Silver Wedding Day by old tradition?\
 Which woodwind instrument is not made of wood and has no reeds?\n;Flute;Flute;Clarinet;Oboe;Accordion
 Which word goes with the Oriental symbol Yang?\n;Yin;Tao;Yin;Sutra;Ying
 Which word in this sentence is incorrectly used:  The new trivia mix was answered by Joe and me.\n;mix;me;answered;trivia;mix
-Which word is defined as â€œthe spiritual attitude of a man to a god and a dog to a manâ€ in Ambrose Bierces satirical book The Devils Dictionary?\n;Reverence;Love;Worship;Reverence;Respect
+Which word is defined as â€œthe spiritual attitude of a man to a god and a dog to a manï¿½ in Ambrose Bierces satirical book The Devils Dictionary?\n;Reverence;Love;Worship;Reverence;Respect
 "Which word means a practitioner of the martial art of Okinawan origin, karate?\n";Karateka;Konyico;Karateka;Sojin;Samurai
 Which word refers to a person who stuffs and mounts animals for display or study?\n;Taxidermist;Hunter;Taxidermist;None of these;Poacher
 Which word refers to a specialized type of building in a garden that is used for the growing of citrus trees?\n;Orangery;Orange garden;Orangeton;Orangery;Orange-greenhouse
@@ -2816,7 +2816,7 @@ Who played the last juror to vote not  guilty in the 1957 movie Twelve Angry Men
 Who played the role of Draco Malfoy in the Harry Potter film series?\n;Tom Felton;Daniel Radcliffe;Rupert Grint;Richard Harris;Tom Felton
 "Who played the role of Jimmy B-Rabbit in the 2002 movie 8 Mile, directed by Curtis Hanson?\n";Eminem;Michael Shannon;Kim Basinger;Evan Jones;Eminem
 Who played the role of Rebecca Howe on the TV show Cheers?\n;Kirstie Alley;Kirstie Alley;Rhea Perlman;Shelley Long;Bebe Neuwirth
-Who played the role of Tommy in the 1975 movie Tommyâ€?\n;Roger Daltrey;Eric Clapton;Elton John;Roger Daltrey;Keith Moon
+Who played the role of Tommy in the 1975 movie Tommyï¿½?\n;Roger Daltrey;Eric Clapton;Elton John;Roger Daltrey;Keith Moon
 Who popularized the song Unforgettable in 1951?\n;Nat King Cole;Nat King Cole;Humphrey Bogart;Dean Martin;Frank Sinatra
 "Who portrayed Adam Schiff, the Manhattan District Attorney in Law and Order?\n";Steven Hill;Fred Dalton Thompson;Steven Hill;Dann Florek;Steve Zirnkilton
 Who portrayed Gabrielle Solis in the TV series Desperate Housewives?\n;Eva Longoria Parker;Eva Longoria Parker;Marcia Cross;Felicity Huffman;Teri Hatcher
