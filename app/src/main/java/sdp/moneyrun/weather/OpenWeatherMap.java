@@ -64,9 +64,9 @@ public class OpenWeatherMap {
 
     @NonNull
     private WeatherForecast parseForecast(@Nullable JSONObject forecast) throws JSONException {
-        if (forecast == null) {
+        if (forecast == null)
             throw new NullPointerException();
-        }
+
         JSONArray daily = forecast.getJSONArray("daily");
         WeatherReport[] reports = new WeatherReport[Math.max(3, daily.length())];
 
@@ -74,15 +74,24 @@ public class OpenWeatherMap {
             if (i >= daily.length())
                 reports[i] = NO_DATA;
             else
-                try {
-                    reports[i] = parseReport(daily.getJSONObject(i));
-                } catch (JSONException ex) {
-                    Log.e("OpenWeatherMapWeather", "Error when parsing day " + i, ex);
-                    reports[i] = NO_DATA;
-                }
+                reports[i] = tryToParseReport(daily.getJSONObject(i), i);
         }
 
         return new WeatherForecast(reports);
+    }
+
+    private WeatherReport tryToParseReport(JSONObject jsonObject, int day){
+
+        WeatherReport report;
+
+        try {
+            report = parseReport(jsonObject);
+        } catch (JSONException ex) {
+            Log.e("OpenWeatherMapWeather", "Error when parsing day " + day, ex);
+            report = NO_DATA;
+        }
+
+        return report;
     }
 
     @Nullable

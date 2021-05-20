@@ -1,7 +1,11 @@
 package sdp.moneyrun.ui.menu;
 
+import android.app.UiAutomation;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -14,13 +18,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Random;
-
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
@@ -29,11 +36,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     private LeaderboardListAdapter ldbAdapter;
     @Nullable
     private Player user;
+    private String playerId;
+    User userFromEnd;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void bestToWorstPlayer(@NonNull List<Player> players) {
-        players.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -44,12 +49,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
-//        setUserPlayer();
         setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
         setDummyPlayers();
-        getEndGamePlayers(); //TODO: this function should be called at the end of the game
+        getEndGamePlayers();
+        linkToMenuButton();
     }
 
     /**
@@ -72,16 +77,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayerList(@Nullable ArrayList<Player> playerList) {
-        if (playerList == null) {
-            throw new NullPointerException("Player list is null");
-        }
-        ldbAdapter.addAll(playerList);
-        ArrayList<Player> players = new ArrayList<>();
-        for (int i = 0; i < ldbAdapter.getCount(); ++i)
-            players.add(ldbAdapter.getItem(i));
-        ldbAdapter.clear();
-        bestToWorstPlayer(players);
-        ldbAdapter.addAll(players);
+        Helpers.addObjectListToAdapter(playerList, ldbAdapter);
     }
 
     /**
@@ -90,12 +86,11 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addPlayer(@Nullable Player player) {
-        // can't just add a player directly to an adapter, need to put it in a list
+        // can't just add a player directly to an adapter, we need to put it in a list first
         if (player == null) {
-            throw new IllegalArgumentException("player is null");
+            throw new IllegalArgumentException("player should not be null");
         }
-        ArrayList<Player> to_add = new ArrayList<>();
-        to_add.add(player);
+        ArrayList<Player> to_add = new ArrayList<>(Collections.singletonList(player));
         addPlayerList(to_add);
     }
 
@@ -144,7 +139,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             dummy.setScore(Math.abs(random.nextInt() % 1000));
             dummies.add(dummy);
         }
-        bestToWorstPlayer(dummies);
+        Helpers.bestToWorstPlayer(dummies);
         addPlayerList(dummies);
 
     }
@@ -188,9 +183,29 @@ public class LeaderboardActivity extends AppCompatActivity {
     public void getEndGamePlayers() {
         ldbAdapter.clear();
         int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers", 0);
+        userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
         for (int i = 0; i < numberOfPlayers; ++i) {
             Player player = (Player) getIntent().getSerializableExtra("players" + i);
             addPlayer(player);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // We disable the user from clicking the back button and force him to use the dedicated button
+        return;
+    }
+
+    /**
+     * Sends user to end game screen
+     */
+    public void linkToMenuButton(){
+        Button toMenu = findViewById(R.id.leaderboard_button_end);
+        toMenu.setOnClickListener( v -> {
+            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
+            menuIntent.putExtra("user",userFromEnd);
+            startActivity(menuIntent);
+            finish();
+        });
     }
 }

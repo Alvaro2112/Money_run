@@ -25,7 +25,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -39,6 +38,7 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -89,6 +89,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private CircleManager circleManager;
     private double game_radius;
     private int game_time;
+    @Nullable
     private Location game_center;
     private float circleRadius;
     private double shrinkingFactor = 0.9;
@@ -98,47 +99,66 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
+        getExtras();
+        initializeVariables();
+
+        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
+        createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
+        mapView.getMapAsync(this);
+
+        getViews();
+
+        String default_score = getString(R.string.map_score_text, 0);
+        currentScoreView.setText(default_score);
+
+        addExitButton();
+        addQuestionButton();
+        addLeaderboardButton();
+
+        mapView.addOnDidFinishRenderingMapListener(fully -> {
+            if (gameId != null) {
+                initializeGame(gameId);
+            }
+        });
+    }
+
+    /**
+     * get all the extras necessary to run this activity
+     */
+    public void getExtras(){
         player = (Player) getIntent().getSerializableExtra("player");
         gameId = getIntent().getStringExtra("currentGameId");
         if (gameId == null) {
             gameId = getIntent().getStringExtra("gameId");
         }
         host = getIntent().getBooleanExtra("host", false);
+    }
+
+    /**
+     * Initialize all the variables to start this activity
+     */
+    public void initializeVariables(){
         seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
-
         localPlayer = new LocalPlayer();
-        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
-        createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
-        mapView.getMapAsync(this);
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
             riddleDb = RiddlesDatabase.getInstance();
         }
+    }
 
-        String default_score = getString(R.string.map_score_text, 0);
+    /**
+     * Find all the views present in this activity
+     */
+    public void getViews(){
         currentScoreView = findViewById(R.id.map_score_view);
-        currentScoreView.setText(default_score);
         chronometer = findViewById(R.id.mapChronometer);
-
         exitButton = findViewById(R.id.close_map);
         questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
-        addExitButton();
-        addQuestionButton();
-        addLeaderboardButton();
-        mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-            @Override
-            public void onDidFinishRenderingMap(boolean fully) {
-                if (gameId != null) {
-                    initializeGame(gameId);
-                }
-            }
-        });
-
     }
 
     /**
@@ -148,7 +168,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *               finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId) {
-
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
@@ -216,7 +235,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> finish());
+        exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
     }
 
     /**
@@ -267,6 +286,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     public double getGameRadius(){return game_radius;}
     public double getGameDuration(){return game_time;}
+    @Nullable
     public Location getGameCenter(){return game_center;}
 
 
@@ -441,7 +461,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *             and removes it from the map
      */
     public void removeCoin(@Nullable Coin coin, Boolean collected) {
-
         if (coin == null) {
             throw new NullPointerException("removed coined is null");
         }
@@ -460,6 +479,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             proxyG.updateGameInDatabase(game,null);
         }
 
+        deleteCoinFromMap(coin);
+
+        circleRadius *= shrinkingFactor;
+        initCircle();
+        checkIfLegalPosition(coin);
+
+    }
+
+    public void deleteCoinFromMap(@NonNull Coin coin){
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 
         for (int i = 0; i < symbols.size(); ++i) {
@@ -468,9 +496,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 symbolManager.delete(symbol);
             }
         }
-        circleRadius *= shrinkingFactor;
-        initCircle();
-        //checkIfLegalPosition(coin);
     }
 
     /**
@@ -482,7 +507,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         if (number < 0 || maxRadius <= 0 || minRadius <= 0)
             throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  " + number);
         if (minRadius >= maxRadius)
-            throw new IllegalArgumentException("Min radius is bigger than max Radius ");
+            throw new IllegalArgumentException("Min radius cannot be bigger or equal than max Radius ");
 
         for (int i = 0; i < number; i++) {
             Location loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
@@ -514,7 +539,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions = circleOptions.withCircleRadius(circleRadius);
         circleOptions = circleOptions.withCircleOpacity(0.4f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
-        //circleOptions.withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
         System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
@@ -525,12 +549,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void checkIfLegalPosition(Coin coin){
+        System.out.println("Should not enter if coin is not removed");
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude()-game_center.getLatitude(),2)+ Math.pow(coin.getLatitude()-game_center.getLatitude(),2));
         if(distance < circleRadius){
+            System.out.println("Entered checking");
             // should end the game for this user
-            Intent endGameIntent = new Intent(MapActivity.this, EndGameActivity.class);
-            startActivity(endGameIntent);
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
         }
 
     }

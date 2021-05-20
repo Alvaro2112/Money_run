@@ -26,6 +26,16 @@ public class AddressGeocoderTest {
         return toStart;
     }
 
+    @Test(expected = Exception.class)
+    public void convertToAddressFailsCorrectly() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                AddressGeocoder addressGeocoder = AddressGeocoder.fromContext(a);
+                addressGeocoder.convertToAddress(null);
+                });
+        }
+    }
+
     @Test
     public void getWeatherReportWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {

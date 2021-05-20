@@ -147,7 +147,15 @@ public class EndGameActivity extends AppCompatActivity {
             for (int i = 0; i < players.size(); ++i) {
                 resultIntent.putExtra("players" + i, players.get(i));
             }
-            startActivity(resultIntent);
+            UserDatabaseProxy pdp = new UserDatabaseProxy();
+            pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    User p = pdp.getUserFromTask(task);
+                    resultIntent.putExtra("userEnd", p);
+                    startActivity(resultIntent);
+                    finish();
+                }
+            });
         });
     }
 
@@ -157,9 +165,10 @@ public class EndGameActivity extends AppCompatActivity {
     @NonNull
     private List<Player> getPlayersFromGame() {
         List<Player> players = new ArrayList<>();
-        int numberOfPlayers = getIntent().getIntExtra("players", 0);
+        int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers", 0);
+        System.out.println("Number of players is in end game"+ players);
         for (int i = 0; i < numberOfPlayers; ++i) {
-            Player player = (Player) getIntent().getSerializableExtra("player" + i);
+            Player player = (Player) getIntent().getSerializableExtra("players" + i);
             players.add(player);
         }
         return players;

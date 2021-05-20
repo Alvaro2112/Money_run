@@ -29,7 +29,6 @@ public final class GameDbData {
     private List<Player> players;
     @Nullable
     private List<Coin> coins;
-    //TODO add Game Host Attribute and change setPlayers so that it can never be empty and
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
