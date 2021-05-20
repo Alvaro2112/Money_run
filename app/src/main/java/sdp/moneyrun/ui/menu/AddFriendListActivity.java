@@ -2,15 +2,11 @@ package sdp.moneyrun.ui.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.autofill.UserData;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +16,6 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.AddFriendListListAdapter;
-import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
 public class AddFriendListActivity extends AppCompatActivity {
@@ -95,7 +90,7 @@ public class AddFriendListActivity extends AppCompatActivity {
      *
      * @param userList the user list to add
      */
-    public void addUserList(List<User> userList) {
+    public void addUserList(@Nullable List<User> userList) {
         if (userList == null) {
             throw new NullPointerException("user list should not be null.");
         }

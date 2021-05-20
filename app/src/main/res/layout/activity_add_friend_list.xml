@@ -59,7 +59,8 @@
             android:hint="@string/add_friend_button_search"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="Search name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

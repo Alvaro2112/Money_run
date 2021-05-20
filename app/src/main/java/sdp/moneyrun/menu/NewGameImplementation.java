@@ -78,7 +78,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, PopupWindow popupWindow) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, @NonNull PopupWindow popupWindow) {
         nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);

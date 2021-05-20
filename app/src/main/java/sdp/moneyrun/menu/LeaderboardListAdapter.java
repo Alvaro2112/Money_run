@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.Helpers;
