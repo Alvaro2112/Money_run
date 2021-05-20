@@ -524,6 +524,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null && !seenCoins.contains(coin)) {
             seenCoins.add(coin);
+            assert riddleDb != null;
             onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
         }
 
@@ -539,7 +540,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions = circleOptions.withCircleRadius(circleRadius);
         circleOptions = circleOptions.withCircleOpacity(0.4f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
-        System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
@@ -549,11 +549,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void checkIfLegalPosition(Coin coin){
-        System.out.println("Should not enter if coin is not removed");
         // calculates distance between the current coin and the game center
+        assert game_center != null;
         double distance = Math.sqrt(Math.pow(coin.getLatitude()-game_center.getLatitude(),2)+ Math.pow(coin.getLatitude()-game_center.getLatitude(),2));
         if(distance > circleRadius){
-            System.out.println("Entered checking with distance = "+distance+" and circle radius = "+ circleRadius);
             // should end the game for this user
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
         }

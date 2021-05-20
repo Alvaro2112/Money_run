@@ -1554,5 +1554,46 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void gameEndsWhenOutsideTheRadius(){
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+
+                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
+                        if (fully1) {
+                            finished.set(true);
+                        }
+                    }));
+                    a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                }
+            }));
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> {
+                a.checkIfLegalPosition(new Coin(90,90,2));
+                
+            });
+        }
+    }
+
 
 }
