@@ -39,13 +39,16 @@ import sdp.moneyrun.user.User;
 public class JoinGameImplementation extends MenuImplementation {
 
     // Distance in meters
-    private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
+    private final static float MAX_DISTANCE_TO_JOIN_GAME = 1000;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
     private final boolean focusable;
     private final int layoutId;
     @Nullable
     private final User currentUser;
     private int buttonId;
+
+    //Location where we look for games, default (0, 0)
+    private LocationRepresentation foundLocation;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -56,7 +59,7 @@ public class JoinGameImplementation extends MenuImplementation {
                                   int layoutId) {
         super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
         if (user == null) {
-            throw new IllegalArgumentException("user is null");
+            throw new IllegalArgumentException("user should not be null.");
         }
         this.focusable = focusable;
         this.layoutId = layoutId;
@@ -97,22 +100,70 @@ public class JoinGameImplementation extends MenuImplementation {
         loadGameListGivenFilter(popupWindow, openGamesLayout, null);
     }
 
-    private void loadGameListGivenFilter(@NonNull PopupWindow popupWindow, @NonNull LinearLayout openGamesLayout, @Nullable String filterText) {
+    @SuppressLint("MissingPermission")
+    private void loadGameListGivenFilter(@NonNull PopupWindow popupWindow,
+                                         @NonNull LinearLayout openGamesLayout,
+                                         @Nullable String filterText) {
         List<GameRepresentation> gameRepresentations = new ArrayList<>();
         Task<DataSnapshot> taskDataSnapshot = getTaskGameRepresentations(gameRepresentations);
         taskDataSnapshot.addOnSuccessListener(dataSnapshot -> {
             TableLayout gameLayout = new TableLayout(activity);
 
-            buttonId = 0;
-            for (GameRepresentation gameRepresentation : gameRepresentations) {
-                String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-                if (filterText == null || lowerName.contains(filterText)) {
-                    displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
-                    buttonId++;
-                }
-            }
-            openGamesLayout.addView(gameLayout);
+            // Grant permissions if necessary
+            requestLocationPermissions(requestPermissionsLauncher);
+
+            fusedLocationClient.getLocationAvailability().addOnCompleteListener(task -> {
+               if(!task.isSuccessful() || !task.getResult().isLocationAvailable()){
+                   foundLocation = new LocationRepresentation(0, 0);
+                   loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout);
+                   openGamesLayout.addView(gameLayout);
+               }else{
+                   fusedLocationClient.getLastLocation()
+                           .addOnSuccessListener(activity, location -> {
+                               // Got last known location. In some rare situations this can be null
+                               // In this case, the game cannot be instantiated
+                               if (location == null) {
+                                   Log.e("location", "Error getting location");
+                                   return;
+                               }
+
+                               foundLocation = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+                               loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout);
+                               openGamesLayout.addView(gameLayout);
+                           });
+               }
+            });
         });
+    }
+
+    /**
+     * Load games.
+     */
+    private void loadGameListFromLocation(@Nullable String filterText,
+                                          @NonNull List<GameRepresentation> gameRepresentations,
+                                          @NonNull PopupWindow popupWindow,
+                                          @NonNull TableLayout gameLayout){
+        buttonId = 0;
+        for (GameRepresentation gameRepresentation : gameRepresentations) {
+            LocationRepresentation gameStartLocation = gameRepresentation.getStartLocation();
+            if(gameStartLocation == null){
+                return;
+            }
+
+            String gameName = gameRepresentation.getName();
+            if(gameName == null){
+                return;
+            }
+
+            double distance = gameStartLocation.distanceTo(foundLocation);
+            String lowerName = gameName.toLowerCase(Locale.getDefault());
+
+            if ((filterText == null || lowerName.contains(filterText))
+                    && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
+                displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
+                buttonId++;
+            }
+        }
     }
 
     /**
@@ -152,7 +203,7 @@ public class JoinGameImplementation extends MenuImplementation {
      * Get a representation of a game from the database.
      *
      * @param dataSnapshot the game snapshot
-     * @return
+     * @return the game representation
      */
 
     @Nullable
@@ -195,6 +246,8 @@ public class JoinGameImplementation extends MenuImplementation {
         createJoinButton(popupWindow, button, buttonId, gameRepresentation);
 
         gameRow.addView(button);
+        //Set tag as game name
+        gameRow.setTag(gameRepresentation.getName());
 
         // create game name display
         createGameNameInfoDisplay(gameRepresentation, gameRow);

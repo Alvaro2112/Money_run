@@ -136,22 +136,19 @@ public class GameBuilder {
         return this;
     }
 
-    public void build() {
-
+    public Game build() {
         checkBuildArguments();
+        Game game;
 
-        if (riddles == null )
-            new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
-
-        else{
-
-            Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
-
-            if (players != null)
+        if (riddles == null ) {
+            game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+        }else{
+            game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
+            if (players != null) {
                 game.setPlayers(players, true);
-
+            }
         }
-
+        return game;
     }
 
     public void checkBuildArguments(){

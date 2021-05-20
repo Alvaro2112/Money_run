@@ -28,8 +28,11 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
@@ -51,6 +54,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -547,6 +551,74 @@ public class MenuActivityTest {
             onView(withId(R.id.weather_icon)).check(matches(not(withContentDescription("coin placeholder"))));
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void OnlyNearGamesShowUp(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+
+            Random rand = new Random();
+            String filter = String.valueOf(rand.nextInt(1000000000));
+            String nearGameName = "nearGame_" + filter;
+            String farGameName = "farGame_" + filter;
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
+
+            Location nearLocation = new Location("");
+            nearLocation.setLongitude(0);
+            nearLocation.setLatitude(0);
+
+            Player host = new Player("364556546", "Bob", 0);
+
+            GameDatabaseProxy db = new GameDatabaseProxy();
+            // Near game
+            GameBuilder gb = new GameBuilder();
+            gb.setName(nearGameName)
+                    .setMaxPlayerCount(12)
+                    .setHost(host)
+                    .setIsVisible(true)
+                    .setRiddles(new ArrayList<>())
+                    .setCoins(new ArrayList<>())
+                    .setStartLocation(nearLocation);
+
+            db.putGame(gb.build());
+
+            Location farLocation = new Location("");
+            farLocation.setLatitude(nearLocation.getLatitude() + 10.);
+            farLocation.setLongitude(nearLocation.getLongitude() + 10.);
+            // Far game
+            GameBuilder gb2 = new GameBuilder();
+            gb2.setName(farGameName)
+                    .setMaxPlayerCount(12)
+                    .setHost(host)
+                    .setIsVisible(true)
+                    .setRiddles(new ArrayList<>())
+                    .setCoins(new ArrayList<>())
+                    .setStartLocation(farLocation);
+
+            db.putGame(gb2.build());
+
+            try {
+                Thread.sleep(7000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
+            onView(ViewMatchers.withId(R.id.join_game_text_filter)).perform(typeText(filter), closeSoftKeyboard());
+            onView(ViewMatchers.withId(R.id.join_game_button_filter)).perform(ViewActions.click());
+
+            try {
+                Thread.sleep(7000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Intents.release();
+            }
+
+            onView(ViewMatchers.withTagValue(is(nearGameName))).check(matches(isDisplayed()));
+            onView(ViewMatchers.withTagValue(is(nearGameName))).check(doesNotExist());
         }
     }
 }
