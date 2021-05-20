@@ -156,9 +156,8 @@ public class MenuActivityTest {
 
 
     @Test
-    public void CreateGameSendsYouToLobby() {
+    public void CreateGameWorksWhenFieldsAreAppropriate() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
@@ -170,6 +169,7 @@ public class MenuActivityTest {
             final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
+
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
@@ -177,11 +177,25 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(20000);
-            intended(hasComponent(GameLobbyActivity.class.getName()));
-            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Intents.release();
+        }
+    }
+
+    @Test
+    public void postNewGameWorks(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+
+            Location loc = new Location("");
+            loc.setLongitude(0);
+            loc.setLatitude(0);
+
+            scenario.onActivity(a -> {
+                a.newGameImplementation.postNewGame("LOOOL",3, 5, 25, 5, loc);
+            });
+            intended(hasComponent(GameLobbyActivity.class.getName()));
             Intents.release();
         }
     }

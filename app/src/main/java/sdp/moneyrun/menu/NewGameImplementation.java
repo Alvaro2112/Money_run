@@ -104,7 +104,8 @@ public class NewGameImplementation extends MenuImplementation {
         }
 
         popupWindow.dismiss();
-        postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
+
+        tryLocation(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
     }
 
     /**
@@ -177,14 +178,10 @@ public class NewGameImplementation extends MenuImplementation {
 
 
     /**
-     * Post a new game.
-     *
-     * @param name           the game name
-     * @param maxPlayerCount the maximum number of players in the game
+     * try getting the player's location to start the game
      */
     @SuppressLint("MissingPermission")
-    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-
+    private void tryLocation(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
         fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
@@ -194,17 +191,21 @@ public class NewGameImplementation extends MenuImplementation {
                 Log.e("location", "Error getting location");
                 return;
             }
-            // Build new game given fields filled by user
-            List<Riddle> riddles = new ArrayList<>();
-            List<Coin> coins = new ArrayList<>();
-            Player player = new Player(user.getUserId(), user.getName(), 0);
-            Game game = new Game(name, player, maxPlayerCount, riddles, coins, location, true, numCoins, gameRadius, gameDuration);
-            game.setId(user.getUserId());
-            // post game to database
-            GameDatabaseProxy gdb = new GameDatabaseProxy();
-            gdb.putGame(game);
-            launchLobbyActivity(game.getId(), player);
+            postNewGame(name, maxPlayerCount, numCoins, gameRadius, gameDuration, location);
         });
+    }
+
+    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, Location loc){
+        // Build new game given fields filled by user
+        List<Riddle> riddles = new ArrayList<>();
+        List<Coin> coins = new ArrayList<>();
+        Player player = new Player(user.getUserId(), user.getName(), 0);
+        Game game = new Game(name, player, maxPlayerCount, riddles, coins, loc, true, numCoins, gameRadius, gameDuration);
+        game.setId(user.getUserId());
+        // post game to database
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        gdb.putGame(game);
+        launchLobbyActivity(game.getId(), player);
     }
 
 

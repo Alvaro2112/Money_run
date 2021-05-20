@@ -69,6 +69,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private LocationRepresentation currentLocation;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
+    public NewGameImplementation newGameImplementation;
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
@@ -140,7 +141,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 true,
                 R.layout.join_game_popup);
 
-        NewGameImplementation newGameImplementation = new NewGameImplementation(this,
+        newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
