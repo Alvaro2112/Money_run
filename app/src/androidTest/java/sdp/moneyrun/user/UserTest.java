@@ -24,8 +24,8 @@ public class UserTest {
     private final long ASYNC_CALL_TIMEOUT = 10L;
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -33,23 +33,51 @@ public class UserTest {
     }
 
 
+    @Test(expected = IllegalArgumentException.class)
+    public void putUserFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeUserFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.removeUser(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addUserListenerFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        String name = "John Doe";
+        String address = "Somewhere";
+        String id = "1234567891";
+        User user = new User(id, name, address, 0, 0, 0);
+        db.addUserListener(user, null);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getLeaderboardUsersFailsCorrectly() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.getLeaderboardUsers(-1);
+    }
+
     @Test
-    public void setAddressWithDBUpdateWorks(){
-        FirebaseDatabase.getInstance().goOnline();
+    public void setAddressWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Someeewhere";
         String newAddress = "New Address";
         String id = "1234567891";
-        User player = new User(id, name, address,0 ,0,0);
-        UserDatabaseProxy db = new UserDatabaseProxy();CountDownLatch added = new CountDownLatch(1);
-        db.putUser(player, task -> added.countDown());
+
+        User player = new User(id, name, address, 0, 0, 0);
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        db.putUser(player);
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                //player.setAddress(p.getAddress());
-                if(p.getAddress().equals(newAddress)) {
+                if (p.getAddress().equals(newAddress)) {
                     assertThat(p.getAddress(), is(newAddress));
                     updated.countDown();
                 }
@@ -57,35 +85,36 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
-        db.addUserListener(player,listener);
+        db.addUserListener(player, listener);
         player.setAddress(newAddress, true);
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
         db.removeUserListener(player, listener);
         FirebaseDatabase.getInstance().goOnline();
     }
 
+
     @Test
-    public void setNameWithDBUpdateWorks(){
+    public void setNameWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         String newName = "New Address";
         String id = "1234567892";
 
-        User player = new User(id, name, address,0,0 ,0);
+        User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
-        ValueEventListener listener =new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
@@ -97,7 +126,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addUserListener(player, listener);
@@ -108,26 +137,26 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        db.removeUserListener(player,listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
-    public void setPlayedGamesWithDBUpdateWorks(){
+    public void setPlayedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         int newPlayedGames = 75;
         String id = "1234567893";
-        User player = new User(id, name, address,0,0,0 );
-        User player2 = new User(id, name, address,0,0,0 );
+        User player = new User(id, name, address, 0, 0, 0);
+        User player2 = new User(id, name, address, 0, 0, 0);
 
 
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
-        ValueEventListener listener =  new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
@@ -139,7 +168,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addUserListener(player, listener);
@@ -150,7 +179,7 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
         assertThat(player2.getNumberOfPlayedGames(), is(newPlayedGames));
 
@@ -158,21 +187,21 @@ public class UserTest {
     }
 
     @Test
-    public void setDiedGamesWithDBUpdateWorks(){
+    public void setDiedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         int newDiedGames = 75;
         String id = "1234567894";
 
-        User player = new User(id, name, address,0,0,0 );
+        User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
-        ValueEventListener listener =new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                if(p.getNumberOfDiedGames() == newDiedGames) {
+                if (p.getNumberOfDiedGames() == newDiedGames) {
                     assertThat(p.getNumberOfDiedGames(), is(newDiedGames));
                     updated.countDown();
                 }
@@ -180,7 +209,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addUserListener(player, listener);
@@ -191,26 +220,26 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        db.removeUserListener(player,listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
-    public void updatePlayedGamesWithDBUpdateWorks(){
+    public void updatePlayedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         String id = "1234567895";
 
-        User player = new User(id, name, address,0 ,0,0);
+        User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                if(p.getNumberOfPlayedGames()==1) {
+                if (p.getNumberOfPlayedGames() == 1) {
                     assertThat(p.getNumberOfPlayedGames(), is(1));
                     updated.countDown();
                 }
@@ -218,7 +247,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addUserListener(player, listener);
@@ -228,18 +257,18 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        db.removeUserListener(player,listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
-    public void updateDiedGamesWithDBUpdateWorks(){
+    public void updateDiedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         String id = "1234567896";
-        User player = new User(id, name, address,0,0 ,0);
+        User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
@@ -247,7 +276,7 @@ public class UserTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                if(p.getNumberOfDiedGames() == 1) {
+                if (p.getNumberOfDiedGames() == 1) {
                     assertThat(p.getNumberOfDiedGames(), is(1));
                     updated.countDown();
                 }
@@ -255,7 +284,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addUserListener(player, listener);
@@ -265,20 +294,20 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        db.removeUserListener(player,listener);
+        db.removeUserListener(player, listener);
     }
 
     @Test
-    public void setScoreWithDBUpdateWorks(){
+    public void setScoreWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
         String address = "Somewhere";
         int score = 75;
         String id = "1234567897";
 
-        User player = new User(id, name, address,0,0,0 );
+        User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
@@ -286,7 +315,7 @@ public class UserTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User p = snapshot.getValue(User.class);
-                if(p.getMaxScoreInGame() == score){
+                if (p.getMaxScoreInGame() == score) {
                     assertThat(p.getMaxScoreInGame(), is(score));
                     updated.countDown();
                 }
@@ -294,7 +323,7 @@ public class UserTest {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
 
@@ -306,11 +335,10 @@ public class UserTest {
             assertThat(updated.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        db.removeUserListener(player,listener);
+        db.removeUserListener(player, listener);
     }
-
 
 
 }

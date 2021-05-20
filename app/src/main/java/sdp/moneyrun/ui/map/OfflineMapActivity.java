@@ -2,11 +2,11 @@ package sdp.moneyrun.ui.map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -23,14 +23,12 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class OfflineMapActivity extends BaseMap {
-    public static final String JSON_CHARSET = "UTF-8";
-    public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
-    private final int MIN_ZOOM = 9;
 
     private boolean hasFoundMap = false;
     private Button exitButton;
     private OfflineManager offlineManager;
     private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,26 +50,25 @@ public class OfflineMapActivity extends BaseMap {
     }
 
     private void addExitButton() {
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mainIntent = new Intent(OfflineMapActivity.this, MenuActivity.class);
-                mainIntent.putExtra("user", user);
-                startActivity(mainIntent);
-                finish();
-            }
+        exitButton.setOnClickListener(v -> {
+            Intent mainIntent = new Intent(OfflineMapActivity.this, MenuActivity.class);
+            mainIntent.putExtra("user", user);
+            startActivity(mainIntent);
+            finish();
         });
     }
 
-    public boolean getHasFoundMap(){return hasFoundMap;}
+    public boolean getHasFoundMap() {
+        return hasFoundMap;
+    }
 
 
     // We only allow one downloaded map
-    private void getDownloadedRegion(){
+    private void getDownloadedRegion() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
 
             @Override
-            public void onList(OfflineRegion[] offlineRegions) {
+            public void onList(@Nullable OfflineRegion[] offlineRegions) {
                 if (offlineRegions == null || offlineRegions.length == 0) {
                     hasFoundMap = false;
                     Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
@@ -94,6 +91,7 @@ public class OfflineMapActivity extends BaseMap {
                 // Move camera to new position
                 mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
+
             @Override
             public void onError(String error) {
                 Toast.makeText(OfflineMapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();

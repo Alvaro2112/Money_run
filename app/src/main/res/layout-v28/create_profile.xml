@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#d1daa0">
+
+    <Button
+        android:id="@+id/submitProfileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:outlineAmbientShadowColor="@color/cardview_dark_background"
+        android:text="@string/submit"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHighlight="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.904"
+        tools:layout_editor_absoluteX="31dp" />
+
+    <EditText
+        android:id="@+id/registerNameText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="Enter your Name"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_person_register"
+        android:drawablePadding="12dp"
+        android:hint="@string/name_prompt_text"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.185" />
+
+    <EditText
+        android:id="@+id/registerAddressText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="Enter your address"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_house_register"
+        android:drawablePadding="12dp"
+        android:hint="@string/address_prompt_text"
+        android:inputType="textPostalAddress"
+        android:textColorHint="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerNameText"
+        app:layout_constraintVertical_bias="0.151" />
+
+    <EditText
+        android:id="@+id/registerColorText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="Enter your favorite color"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_color_lregister_player"
+        android:drawablePadding="12dp"
+        android:hint="@string/favorite_color_prompt_text"
+        android:inputType="textNoSuggestions"
+        android:textColorHint="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.949" />
+
+    <EditText
+        android:id="@+id/registerAnimalText"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="Enter your favorite animal"
+        android:background="@drawable/inputs_register_profile"
+        android:drawableStart="@drawable/ic_baseline_pets_register"
+        android:drawablePadding="12dp"
+        android:hint="@string/favorite_animal_text"
+        android:inputType="textNoSuggestions"
+        android:textColorHint="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.701" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

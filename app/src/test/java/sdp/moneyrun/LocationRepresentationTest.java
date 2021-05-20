@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-
 import sdp.moneyrun.map.LocationRepresentation;
 
 import static org.junit.Assert.assertEquals;
@@ -18,13 +17,13 @@ public class LocationRepresentationTest {
     Location location;
 
     @Test
-    public void constructionOfLocationRepresentationWorks1(){
+    public void constructionOfLocationRepresentationWorks1() {
         LocationRepresentation lr = new LocationRepresentation(0, 0);
         assertEquals(1, 1);
     }
 
     @Test
-    public void constructionOfLocationRepresentationWorks2(){
+    public void constructionOfLocationRepresentationWorks2() {
         new LocationRepresentation();
         assertEquals(1, 1);
 
@@ -34,8 +33,13 @@ public class LocationRepresentationTest {
         new LocationRepresentation(location);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void constructionOfLocationRepresentationFailsCorrectly() {
+        new LocationRepresentation(null);
+    }
+
     @Test
-    public void getLatitudeReturnsCorrectNumber(){
+    public void getLatitudeReturnsCorrectNumber() {
         double latitude = 0;
         double longitude = 1;
         LocationRepresentation lr = new LocationRepresentation(latitude, longitude);
@@ -43,7 +47,7 @@ public class LocationRepresentationTest {
     }
 
     @Test
-    public void getLongitudeReturnsCorrectNumber(){
+    public void getLongitudeReturnsCorrectNumber() {
         double latitude = 0;
         double longitude = 1;
         LocationRepresentation lr = new LocationRepresentation(latitude, longitude);
@@ -51,7 +55,7 @@ public class LocationRepresentationTest {
     }
 
     @Test
-    public void distanceToWorks1(){
+    public void distanceToWorks1() {
         double latitude1 = 0;
         double longitude1 = 0;
         LocationRepresentation lr1 = new LocationRepresentation(latitude1, longitude1);
@@ -63,7 +67,7 @@ public class LocationRepresentationTest {
     }
 
     @Test
-    public void distanceToWorks2(){
+    public void distanceToWorks2() {
         // Moudon gare
         double latitude1 = 46.668114595627486;
         double longitude1 = 6.8024942281470295;

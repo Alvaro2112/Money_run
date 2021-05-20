@@ -18,7 +18,7 @@ public class LocalPlayerTest {
         LocalPlayer localPlayer = new LocalPlayer();
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
-        ArrayList<Coin> c = new ArrayList<Coin>();
+        ArrayList<Coin> c = new ArrayList<>();
         c.add(a);
         c.add(b);
         localPlayer.addLostCoin(a);
@@ -47,7 +47,7 @@ public class LocalPlayerTest {
         LocalPlayer localPlayer = new LocalPlayer();
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
-        ArrayList<Coin> c = new ArrayList<Coin>();
+        ArrayList<Coin> c = new ArrayList<>();
         c.add(a);
         c.add(b);
         localPlayer.addLocallyAvailableCoin(a);
@@ -64,7 +64,7 @@ public class LocalPlayerTest {
         LocalPlayer localPlayer = new LocalPlayer();
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
-        ArrayList<Coin> c = new ArrayList<Coin>();
+        ArrayList<Coin> c = new ArrayList<>();
         c.add(a);
         c.add(b);
         localPlayer.addCollectedCoin(a);
@@ -91,11 +91,13 @@ public class LocalPlayerTest {
     @Test(expected = IllegalArgumentException.class)
     public void updateLostCoinsWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
-        ArrayList<Coin> c = new ArrayList<Coin>();
+        ArrayList<Coin> c = new ArrayList<>();
         c.add(null);
         localPlayer.updateLostCoins(c);
 
     }
+
+
 
     @Test
     public void updateLostCoinsWorks() {
@@ -107,7 +109,7 @@ public class LocalPlayerTest {
         Coin d = new Coin(4, 1, 1);
         Coin e = new Coin(5, 1, 1);
 
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+        ArrayList<Coin> availableCoins = new ArrayList<>();
 
         availableCoins.add(a);
         availableCoins.add(b);
@@ -148,7 +150,7 @@ public class LocalPlayerTest {
     @Test(expected = IllegalArgumentException.class)
     public void syncAvailableCoinsFromDbWorksOnWrongArgument2() {
         LocalPlayer localPlayer = new LocalPlayer();
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+        ArrayList<Coin> availableCoins = new ArrayList<>();
         availableCoins.add(null);
         localPlayer.syncAvailableCoinsFromDb(availableCoins);
 
@@ -164,7 +166,7 @@ public class LocalPlayerTest {
         Coin d = new Coin(4, 1, 1);
         Coin e = new Coin(5, 1, 1);
 
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+        ArrayList<Coin> availableCoins = new ArrayList<>();
 
         availableCoins.add(a);
         availableCoins.add(b);
@@ -199,7 +201,7 @@ public class LocalPlayerTest {
         Coin a = new Coin(1, 1, 1);
         Coin b = new Coin(2, 1, 1);
 
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+        ArrayList<Coin> availableCoins = new ArrayList<>();
 
         availableCoins.add(a);
         availableCoins.add(b);
@@ -230,7 +232,7 @@ public class LocalPlayerTest {
         Coin b = new Coin(2, 1, 1);
         Coin c = new Coin(3, 1, 1);
 
-        ArrayList<Coin> availableCoins = new ArrayList<Coin>();
+        ArrayList<Coin> availableCoins = new ArrayList<>();
 
         availableCoins.add(a);
         availableCoins.add(b);

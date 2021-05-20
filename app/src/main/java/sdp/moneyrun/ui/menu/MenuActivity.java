@@ -1,16 +1,25 @@
 package sdp.moneyrun.ui.menu;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -20,39 +29,68 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.Semaphore;
+import java.io.IOException;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.map.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
-import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.authentication.LoginActivity;
-import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
-import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.user.User;
+import sdp.moneyrun.weather.AddressGeocoder;
+import sdp.moneyrun.weather.OpenWeatherMap;
+import sdp.moneyrun.weather.WeatherForecast;
+import sdp.moneyrun.weather.WeatherReport;
 
 
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private final ActivityResultLauncher<String[]> requestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), map -> {});
+    //In meters
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 10000;
+    private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                    map -> {
+                    });
 
-    private RiddlesDatabase db;
-    private Button mapButton;
+
     protected DrawerLayout mDrawerLayout;
-    private final Semaphore available = new Semaphore(1, true);
-    private int numberOfAsyncTasks;
-    private int tasksFinished;
-    private Player currentPlayer;
-    private int tasksFInished;
     private User user;
 
+    private OpenWeatherMap openWeatherMap;
+    private AddressGeocoder addressGeocoder;
+    private WeatherForecast currentForecast;
+    private LocationRepresentation currentLocation;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
 
+    @NonNull
+    LocationListener locationListenerGPS = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            loadWeather(location);
+            if(currentForecast != null)
+                setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +99,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        mapButton = findViewById(R.id.map_button);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
-        String toDeleteId = getIntent().getStringExtra("deleteGame");
 
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -77,32 +113,23 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         addOfflineMapButton();
     }
 
-    public void addDownloadButton(){
+    public void addDownloadButton() {
         Button download = findViewById(R.id.download_map);
-        download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class,false);
-            }});
+        download.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false));
     }
 
-    public void addOfflineMapButton(){
+    public void addOfflineMapButton() {
         Button offline_map = findViewById(R.id.offline_map_menu);
-        offline_map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onButtonSwitchToActivity(OfflineMapActivity.class,false);
-            }});
+        offline_map.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapActivity.class, false));
     }
 
-
-    public void runFunctionalities(){
+    public void runFunctionalities() {
         //Setting the current player object
         user = (User) getIntent().getSerializableExtra("user");
-        if(user == null){
+        if (user == null) {
             throw new IllegalStateException("the Intent that launched MenuActivity has null \"user\" value");
         }
-        boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer",false);
+        boolean guestPlayer = getIntent().getBooleanExtra("guestPlayer", false);
         setGuestPlayerFields(guestPlayer);
 
         JoinGameImplementation joinGameImplementation = new JoinGameImplementation(this,
@@ -119,9 +146,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissionsLauncher,
                 fusedLocationClient);
 
-        // Functionalities
-        mapButton = findViewById(R.id.map_button);
-        addMapButtonFunctionality();
+
+        runWeather();
 
         Button joinGame = findViewById(R.id.join_game);
         joinGame.setOnClickListener(joinGameImplementation::onClickShowJoinGamePopupWindow);
@@ -136,85 +162,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
-    
-    public void StartMapActivity(){
-        Intent mainIntent = new Intent(MenuActivity.this, MapActivity.class);
-        if(user != null){
-            mainIntent.putExtra("playerId", user.getUserId());
-        }
-        MenuActivity.this.startActivity(mainIntent);
-        MenuActivity.this.finish();
-        available.release();
-    }
-
-    public void addMapButtonFunctionality(){
-
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Example of how the Async tasks should be implemented
-                numberOfAsyncTasks = 2; //number of async tasks
-                tasksFinished = 0;
-
-                setContentView(R.layout.splash_screen);
-
-                Runnable x = new Runnable() {
-                    public void run() {
-                        synchronized (this) {
-                            try {
-                                wait(5000);
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                        try {
-                            available.acquire();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if(tasksFinished == numberOfAsyncTasks - 1){
-                            StartMapActivity();
-                        } else {
-                            tasksFinished += 1;
-                        }
-
-                        available.release();
-                    }
-                };
-
-                Runnable y = new Runnable() {
-                    public void run() {
-                        synchronized (this) {
-                            try {
-                                wait(2000);
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                        try {
-                            available.acquire();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if(tasksFinished == numberOfAsyncTasks - 1){
-                            StartMapActivity();
-                        } else {
-                            tasksFinished += 1;
-                        }
-
-                        available.release();
-                    }
-                };
-
-                Thread thread = new Thread(x);
-                Thread thread1 = new Thread(y);
-
-                thread.start();
-                thread1.start();
-            }
-
-        });
-    }
-
-
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -225,7 +172,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(UserProfileActivity.class, false);
                 break;
             }
-
 
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
@@ -248,49 +194,79 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setPutExtraArguments(Intent intent){
+    private void setPutExtraArguments(@NonNull Intent intent) {
         intent.putExtra("user", user);
     }
 
-    public void onButtonSwitchToActivity(Class activityClass, boolean shouldFinish){
+    public void onButtonSwitchToActivity(Class activityClass, boolean shouldFinish) {
         Intent switchActivity = new Intent(MenuActivity.this, activityClass);
         setPutExtraArguments(switchActivity);
         startActivity(switchActivity);
-        if(shouldFinish){
+        if (shouldFinish) {
             finish();
         }
     }
 
-    public void setGuestPlayerFields(boolean guest){
-        if(guest){
+    public void setGuestPlayerFields(boolean guest) {
+        if (guest) {
             Button joinGame = findViewById(R.id.join_game);
             joinGame.setEnabled(false);
         }
     }
 
+    private void runWeather() {
+        Criteria criteria = new Criteria();
+        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        currentLocation = new LocationRepresentation(0, 0);
 
-    //TODO: fix it somehow: task is never completed and thus cannot get player from database
-    //To come back too later
-//    public void setPlayerObject(){
-//        playerId = getIntent().getIntExtra("playerId",0);
-//        playerInfo = getIntent().getStringArrayExtra("playerId"+playerId);
-//        DatabaseProxy db = new DatabaseProxy();
-//        if(db != null) {
-//            Task<DataSnapshot> t = db.getPlayerTask(playerId);
-////            player = db.getPlayerFromTask(t);
-//            t.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                    if(task.isSuccessful()){
-//                        player = db.getPlayerFromTask(t);
-//                    }
-//                }
-//            });
-////           while(!t.isComplete()){
-////               System.out.println("Task is not ready yet");
-////           }
-//            System.out.println("PLayer should be set by now");
-//        }
-//        //TODO: put player in the database with playerId as primary key
-//    }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        try {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+        } catch (Exception e) {
+            System.out.println("Your device does not have network capabilities");
+        }
+        openWeatherMap = OpenWeatherMap.build();
+        addressGeocoder = AddressGeocoder.fromContext(this);
+    }
+
+
+    public void loadWeather(@NonNull android.location.Location location) {
+        try {
+            LocationRepresentation loc;
+            loc = new LocationRepresentation(location.getLatitude(), location.getLongitude());
+            this.currentLocation = loc;
+            this.currentForecast = openWeatherMap.getForecast(loc);
+
+        } catch (IOException e) {
+            Log.e("WeatherActivity", "Error when retrieving forecast.", e);
+        }
+    }
+
+    public WeatherForecast getCurrentForecast() {
+        return currentForecast;
+    }
+
+    public LocationRepresentation getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setWeatherFieldsToday(@NonNull WeatherReport report) {
+        TextView weatherTypeText = findViewById(R.id.weather_type);
+        TextView weatherTempText = findViewById(R.id.weather_temp_average);
+        ImageView weatherIconView = findViewById(R.id.weather_icon);
+
+        String url = "https://openweathermap.org/img/wn/" + report.getWeatherIcon() + "@4x.png";
+        Picasso obj = Picasso.get();
+        obj.setLoggingEnabled(true);
+        obj.load(url).fit().into(weatherIconView);
+        weatherIconView.setContentDescription(report.getWeatherType());
+        weatherTempText.setText(String.format("%s C", report.getAverageTemperature()));
+        weatherTypeText.setText(report.getWeatherType());
+    }
+
+
 }

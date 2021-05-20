@@ -11,37 +11,28 @@ import java.util.Random;
 public class PlayerBuilderInstrumentedTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void setAddressWithNullArgumentThrowsArgumentException(){
-        PlayerBuilder b = new PlayerBuilder();
-        b.setAddress(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void setNameWithNullArgumentThrowsArgumentException(){
+    public void setNameWithNullArgumentThrowsArgumentException() {
         PlayerBuilder b = new PlayerBuilder();
         b.setName(null);
     }
 
 
-
     @Test(expected = IllegalStateException.class)
-    public void buildWithNonCompleteNameFieldThrowsStateException(){
+    public void buildWithNonCompleteNameFieldThrowsStateException() {
         PlayerBuilder b = new PlayerBuilder();
-        b.setAddress("Stuff");
         b.setPlayerId("7");
         b.build();
     }
 
     @Test(expected = IllegalStateException.class)
-    public void buildWithNonCompletePlayerIdFieldThrowsStateException(){
+    public void buildWithNonCompletePlayerIdFieldThrowsStateException() {
         PlayerBuilder b = new PlayerBuilder();
         b.setName("Stuff");
-        b.setAddress("Sthg");
         b.build();
     }
 
     @Test
-    public void buildWithAppropriateProcessReturnsCorrectPlayer(){
+    public void buildWithAppropriateProcessReturnsCorrectPlayer() {
         Random r = new Random();
         PlayerBuilder b = new PlayerBuilder();
         String name = "Other stuff";
@@ -52,6 +43,6 @@ public class PlayerBuilderInstrumentedTest {
         b.setPlayerId(playerId);
         b.setName(name);
         b.setScore(score);
-        assert(player.equals(b.build()));
+        assert (player.equals(b.build()));
     }
 }

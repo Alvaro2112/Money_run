@@ -1,4 +1,5 @@
 package sdp.moneyrun.authentication;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -19,34 +20,33 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
-import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
 import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
 public class RegisterUserInstrumentedTest {
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
     }
 
     @Test
-    public void checkViewsAreUpdatedWhenCorrectTyping(){
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
+    public void checkViewsAreUpdatedWhenCorrectTyping() {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
             String address = "New York";
@@ -62,11 +62,12 @@ public class RegisterUserInstrumentedTest {
             Espresso.onView(withId(R.id.registerColorText)).check(matches(withText(color)));
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
             Intents.release();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Intents.release();
         }
     }
+
     @Test
     public void checkErrorWhenNameIsEmpty() {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
@@ -77,9 +78,10 @@ public class RegisterUserInstrumentedTest {
             Intents.release();
         }
     }
+
     @Test
-    public void checkErrorWhenAddressIsEmpty(){
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
+    public void checkErrorWhenAddressIsEmpty() {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             final String expected = "Address field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -87,9 +89,10 @@ public class RegisterUserInstrumentedTest {
             Intents.release();
         }
     }
+
     @Test
-    public void checkErrorWhenAnimalIsEmpty(){
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
+    public void checkErrorWhenAnimalIsEmpty() {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             final String expected = "Animal field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -97,9 +100,10 @@ public class RegisterUserInstrumentedTest {
             Intents.release();
         }
     }
+
     @Test
-    public void checkErrorWhenColorIsEmpty(){
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)){
+    public void checkErrorWhenColorIsEmpty() {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             final String expected = "Color field is empty";
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
@@ -107,9 +111,10 @@ public class RegisterUserInstrumentedTest {
             Intents.release();
         }
     }
+
     @Test
-    public void checkProfileHasCorrectAttributesWhenPlayerRegisters(){
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
+    public void checkProfileHasCorrectAttributesWhenPlayerRegisters() {
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
             String address = "New York";
@@ -136,16 +141,17 @@ public class RegisterUserInstrumentedTest {
             Espresso.onView(withId(R.id.playerName))
                     .check(matches(withText("Player name : John")));
             Intents.release();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Intents.release();
         }
     }
+
     @Test
-    public void guestModeDisablesJoinGameButtonInMenu(){
+    public void guestModeDisablesJoinGameButtonInMenu() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RegisterUserActivity.class);
-        intent.putExtra("guestPlayer", true);
-        try(ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
+        intent.putExtra("guestUser", true);
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             String name = "John";
             String address = "New York";

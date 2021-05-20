@@ -6,20 +6,23 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 /**
  * This class implements a permissions requester.
- *
- * @author Arnaud Poletto
  */
 public class PermissionsRequester {
+    @Nullable
     private final Activity activity;
+    @Nullable
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher;
+    @Nullable
     private final String[] permissions;
 
+    @Nullable
     private final String requestMessage;
     private final boolean forceShowRequest;
     private final AlertDialog alertDialog;
@@ -32,11 +35,11 @@ public class PermissionsRequester {
      * @param permissions                the permissions requested
      */
     public PermissionsRequester(
-            AppCompatActivity activity,
-            ActivityResultLauncher<String[]> requestPermissionsLauncher,
-            String requestMessage,
+            @Nullable AppCompatActivity activity,
+            @Nullable ActivityResultLauncher<String[]> requestPermissionsLauncher,
+            @Nullable String requestMessage,
             boolean forceShowRequest,
-            String... permissions) {
+            @Nullable String... permissions) {
         if (activity == null) {
             throw new IllegalArgumentException("Activity should not be null.");
         }
@@ -66,10 +69,8 @@ public class PermissionsRequester {
 
     /**
      * Requests the permissions to the user.
-     *
-     * @return true if all permissions have been granted, false otherwise
      */
-    public boolean requestPermission() {
+    public void requestPermission() {
         if (!hasPermissions()) {
             if (shouldShowRequestPermissionsRationale() || forceShowRequest) {
                 alertDialog.show();
@@ -78,7 +79,7 @@ public class PermissionsRequester {
             }
         }
 
-        return hasPermissions();
+        hasPermissions();
     }
 
     /**
@@ -108,7 +109,7 @@ public class PermissionsRequester {
     }
 
     /**
-     * @return a popup with informations about the requested permissions
+     * @return a popup with information about the requested permissions
      */
     private AlertDialog buildAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -120,14 +121,14 @@ public class PermissionsRequester {
         builder.setMessage(requestMessage);
         builder.setPositiveButton(positiveButtonText, positiveButtonListener);
         builder.setNegativeButton(negativeButtonText, null);
-        AlertDialog alertDialog = builder.create();
 
-        return alertDialog;
+        return builder.create();
     }
 
     /**
      * @return the current activity
      */
+    @Nullable
     public Activity getActivity() {
         return activity;
     }
@@ -135,6 +136,7 @@ public class PermissionsRequester {
     /**
      * @return the permissions launcher
      */
+    @Nullable
     public ActivityResultLauncher<String[]> getRequestPermissionsLauncher() {
         return requestPermissionsLauncher;
     }
@@ -149,6 +151,7 @@ public class PermissionsRequester {
     /**
      * @return the informative message for the user about requested permissions
      */
+    @Nullable
     public String getRequestMessage() {
         return requestMessage;
     }
@@ -160,7 +163,4 @@ public class PermissionsRequester {
         return forceShowRequest;
     }
 
-    public AlertDialog getAlertDialog() {
-        return alertDialog;
-    }
 }

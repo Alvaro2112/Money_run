@@ -15,21 +15,39 @@ import static org.junit.Assert.assertEquals;
 public class CoinGenerationHelperTest {
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void randomLocThrowsCorrectErrorForNegativeRadius() {
+    public void randomLocThrowsCorrectErrorForNegativeMaxRadius() {
         long seed = 654;
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        CoinGenerationHelper.getRandomLocation(loc, -10);
+        CoinGenerationHelper.getRandomLocation(loc, -1, 1);
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void randomLocThrowsCorrectErrorForNegativeMinRadius() {
+        long seed = 654;
+        Location loc = new Location("");
+        loc.setLongitude(4);
+        loc.setLatitude(8);
+        CoinGenerationHelper.getRandomLocation(loc, 1, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void randomLocThrowsCorrectErrorForMinBiggerThanMaxRadius() {
+        long seed = 654;
+        Location loc = new Location("");
+        loc.setLongitude(4);
+        loc.setLatitude(8);
+        CoinGenerationHelper.getRandomLocation(loc, 1, 2);
     }
 
     @Test
@@ -37,19 +55,17 @@ public class CoinGenerationHelperTest {
         Location loc = new Location("");
         loc.setLongitude(4);
         loc.setLatitude(8);
-        int radius = 1000;
-       for(int i = 0; i < 100000; i++){
-           Location random = CoinGenerationHelper.getRandomLocation(loc, radius);
-           double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
-           assert(distance < radius && distance > MapActivity.THRESHOLD_DISTANCE);
-       }
-
-
+        double radius = 1000;
+        for (int i = 0; i < 100000; i++) {
+            Location random = CoinGenerationHelper.getRandomLocation(loc, radius, 1);
+            double distance = MapActivity.distance(loc.getLatitude(), loc.getLongitude(), random.getLatitude(), random.getLongitude());
+            assert (distance < radius && distance > 1);
+        }
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void randomLocThrowsCorrectErrorForNullLocation() {
-        CoinGenerationHelper.getRandomLocation(null, 10);
+        CoinGenerationHelper.getRandomLocation(null, 10, 1);
 
     }
 
@@ -61,16 +77,17 @@ public class CoinGenerationHelperTest {
         Location coinLoc = new Location("");
         centerLoc.setLatitude(1);
         centerLoc.setLongitude(1);
-        double distance = (double) MapActivity.distance(coinLoc.getLatitude(),coinLoc.getLongitude(),centerLoc.getLatitude(),centerLoc.getLongitude());
-        int value = CoinGenerationHelper.coinValue(coinLoc,centerLoc);
-        assertEquals(Math.ceil((distance)/CoinGenerationHelper.VALUE_RADIUS),value,0);
+        double distance = MapActivity.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
+        int value = CoinGenerationHelper.coinValue(coinLoc, centerLoc);
+        assertEquals(Math.ceil((distance) / CoinGenerationHelper.VALUE_RADIUS), value, 0);
     }
+
     @Test(expected = NullPointerException.class)
     public void coinValuesFailsOnNullCoinLoc() {
         Location centerLoc = new Location("");
         centerLoc.setLatitude(0);
         centerLoc.setLongitude(0);
-        int value = CoinGenerationHelper.coinValue(null,centerLoc);
+        int value = CoinGenerationHelper.coinValue(null, centerLoc);
 
     }
 
@@ -79,7 +96,7 @@ public class CoinGenerationHelperTest {
         Location coinLoc = new Location("");
         coinLoc.setLatitude(0);
         coinLoc.setLongitude(0);
-        int value = CoinGenerationHelper.coinValue(coinLoc,null);
+        int value = CoinGenerationHelper.coinValue(coinLoc, null);
 
     }
 

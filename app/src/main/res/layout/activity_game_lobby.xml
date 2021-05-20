@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Game Lobby"
+        android:text="@string/game_lobby_title"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Players in Lobby :"
+        android:text="@string/players_in_lobby_message"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/players_missing_TextView"
         app:layout_constraintHorizontal_bias="0.0"
@@ -36,13 +36,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="48dp"
-        android:text="Players Missing :"
+        android:text="@string/players_missing_message"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lobby_title" />
 
     <TextView
-        android:id="@+id/game_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="204dp"
@@ -60,7 +59,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginBottom="40dp"
         android:background="#FF392E"
-        android:text="Leave"
+        android:text="@string/leave_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -70,14 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="84dp"
         android:background="#77dd77"
-        android:text="Launch game"
+        android:text="@string/launch_game_button_text"
         app:layout_constraintBaseline_toBaselineOf="@+id/leave_lobby_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/leave_lobby_button" />
 
     <RelativeLayout
-        android:id="@+id/scrollableContents_lobby"
         android:layout_width="378dp"
         android:layout_height="208dp"
         android:scrollbars="vertical"

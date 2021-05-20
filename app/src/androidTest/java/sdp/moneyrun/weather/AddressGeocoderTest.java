@@ -1,21 +1,44 @@
 package sdp.moneyrun.weather;
 
+import android.content.Intent;
+
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Test;
 
 import java.util.Locale;
 
-import sdp.moneyrun.ui.weather.WeatherWidgetActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 import static org.junit.Assert.assertEquals;
 
 public class AddressGeocoderTest {
 
+    @NonNull
+    private Intent getStartIntent() {
+        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+    @Test(expected = Exception.class)
+    public void convertToAddressFailsCorrectly() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                AddressGeocoder addressGeocoder = AddressGeocoder.fromContext(a);
+                addressGeocoder.convertToAddress(null);
+                });
+        }
+    }
 
     @Test
     public void getWeatherReportWorks() {
-        try (ActivityScenario<WeatherWidgetActivity> scenario = ActivityScenario.launch(WeatherWidgetActivity.class)) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             scenario.onActivity(a -> {
                         AddressGeocoder addressGeocoder = AddressGeocoder.fromContext(a);
                         Locale locale = new Locale("French");

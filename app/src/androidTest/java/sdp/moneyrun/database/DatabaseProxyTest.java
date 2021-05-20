@@ -29,15 +29,51 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
     private final long ASYNC_CALL_TIMEOUT = 5L;
+
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
         FirebaseDatabase.getInstance().goOffline();
     }
 
+
+    @Test
+    public void getDatabaseWorks() {
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        assertEquals(db.getReference().getDatabase(), db.getDatabase());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putGameFailsCorrectly() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.putGame(null);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addGameListenerFailsCorrectly() {
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.addGameListener(null, null);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly1() {
+        Player player = new Player("564123", "Johann", 0);
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        db.putPlayer(player, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void putPlayerFailsCorrectly2() {
+        final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
+        CountDownLatch added = new CountDownLatch(1);
+        OnCompleteListener addedListener = task -> added.countDown();
+        db.putPlayer(null, addedListener);
+    }
 
     @Test
     public void getPlayerFromDatabase() {
@@ -50,20 +86,20 @@ public class DatabaseProxyTest {
         db.putPlayer(player, listener);
         Task<DataSnapshot> testTask = db.getPlayerTask(player.getPlayerId());
         testTask.addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-               assert( player.equals(db.getPlayerFromTask(testTask)));
-               updated.countDown();
-            }else{
+            if (task.isSuccessful()) {
+                assert (player.equals(db.getPlayerFromTask(testTask)));
+                updated.countDown();
+            } else {
                 System.out.println(task.getException());
                 assert (false);
             }
         });
-        while(!testTask.isComplete()){
+        while (!testTask.isComplete()) {
             System.out.println("false");
         }
         try {
             updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, updated.getCount());
+            assertEquals(0L, updated.getCount());
         } catch (InterruptedException e) {
             fail();
         }
@@ -75,7 +111,6 @@ public class DatabaseProxyTest {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                return;
             }
 
             @Override
@@ -89,51 +124,49 @@ public class DatabaseProxyTest {
     @Test(expected = IllegalArgumentException.class)
     public void addPlayerListenerThrowsExceptionOnNullListener() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-        Player player = new Player("1", "a",0);
+        Player player = new Player("1", "a", 0);
         db.addPlayerListener(player, null);
     }
 
     @Test
-    public void addPlayerListenerCorrectlyUpdates(){
+    public void addPlayerListenerCorrectlyUpdates() {
         CountDownLatch received = new CountDownLatch(1);
-        Player player = new Player("564123", "Johann",0);
+        Player player = new Player("564123", "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         DatabaseReference dataB = FirebaseDatabase.getInstance().getReference("players").child(String.valueOf(player.getPlayerId()));
         CountDownLatch added = new CountDownLatch(1);
         OnCompleteListener addedListener = task -> added.countDown();
         db.putPlayer(player, addedListener);
-
+        db.putPlayer(player);
         String newName = "Simon";
-
-
-        ValueEventListener listener =new ValueEventListener() {
+        ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
                 System.out.println("Got there ");
                 player.setName(p.getName());
-                if(p.getName().equals(newName)) {
+                if (p.getName().equals(newName)) {
                     received.countDown();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                assert(false);
+                assert (false);
             }
         };
         db.addPlayerListener(player, listener);
 
-        Player p = new Player("564123",newName,0);
+        Player p = new Player("564123", newName, 0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
             assertThat(received.getCount(), is(0L));
         } catch (InterruptedException e) {
             e.printStackTrace();
-            assert(false);
+            assert (false);
         }
-        assertThat(player.getName(),is(newName));
+        assertThat(player.getName(), is(newName));
         db.removePlayerListener(player, listener);
     }
 
@@ -143,7 +176,6 @@ public class DatabaseProxyTest {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                return;
             }
 
             @Override
@@ -162,13 +194,13 @@ public class DatabaseProxyTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putPlayerWithNullInstanceThrowsException(){
+    public void putPlayerWithNullInstanceThrowsException() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.putPlayer(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void removePlayerWithNullInstanceThrowsException(){
+    public void removePlayerWithNullInstanceThrowsException() {
         PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         db.removePlayer(null);
     }

@@ -1,28 +1,83 @@
 package sdp.moneyrun.user;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.io.Serializable;
 import java.util.Objects;
 
 import sdp.moneyrun.database.UserDatabaseProxy;
 
+/**
+ * This class represents a user (ie. A person), not to be confused with a Player. A user is the entity that uses the app and always exist, a Player only exists during a Game and is created by a User.
+ */
 public class User implements Serializable {
 
+    @Nullable
     private String userId;
+    @Nullable
     private String name;
+    @Nullable
     private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
-    private int totalDistanceRun;
+    @NonNull
     private List<String> friendIdList = new ArrayList<>();
+    private int maxScoreInGame;
+
+
+    /**
+     * For database purpose, a default constructor is needed
+     */
+    public User() {
+    }
+
+    public User(@Nullable String userId) {
+        if(userId == null){throw new NullPointerException("UserID is null");}
+        this.userId = userId;
+    }
+
+    /**
+     * Constructor, returns instance of user
+     *
+     * @param userId              the unique id that identifies a user
+     * @param name the name of the user
+     * @param address the address of the user
+     * @param numberOfDiedGames the number of games a user lost
+     * @param numberOfPlayedGames the number of games a user played
+     * @param maxScoreInGame  the highest score this user achieved in any game
+     * @throws IllegalArgumentException on empty or null address or name and on user = 0
+     */
+    public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
+                int numberOfPlayedGames, int maxScoreInGame) {
+        if (userId == null)
+            throw new IllegalArgumentException("The user ID cannot be null");
+
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("The name of the user cannot be null");
+
+        if (address == null || address.isEmpty())
+            throw new IllegalArgumentException("The address of the user cannot be null nor empty");
+
+        if (maxScoreInGame < 0)
+            throw new IllegalArgumentException("The max score of a user must be positive");
+
+        this.userId = userId;
+        this.name = name;
+        this.address = address;
+        this.numberOfDiedGames = numberOfDiedGames;
+        this.numberOfPlayedGames = numberOfPlayedGames;
+        this.maxScoreInGame = maxScoreInGame;
+    }
 
     public int getMaxScoreInGame() {
         return maxScoreInGame;
+    }
+
+    public void setMaxScoreInGame(int maxScoreInGame) {
+        setMaxScoreInGame(maxScoreInGame, false);
     }
 
     public void setMaxScoreInGame(int maxScoreInGame, boolean dbChange) {
@@ -31,53 +86,18 @@ public class User implements Serializable {
 
     }
 
-    public void setMaxScoreInGame(int maxScoreInGame) {
-        setMaxScoreInGame(maxScoreInGame, false);
-    }
-
-
-    private int maxScoreInGame;
-    private String preferredColor;
-    private String preferredPet;
-
-    /**
-     * For database purpose, a default constructor is needed
-     */
-    public User() { }
-
-    public User(String userId) {
+    public void setUserId(@Nullable String userId) {
+        if(userId == null){
+            throw new NullPointerException();
+        }
         this.userId = userId;
-    }
-
-
-    /**
-     * Constructor, returns instance of user
-     *
-     * @param userId              the unique id that identifies a user
-     * @param name
-     * @param address
-     * @param numberOfDiedGames
-     * @param numberOfPlayedGames
-     * @throws IllegalArgumentException on empty or null address or name and on user = 0
-     */
-    public User(String userId, String name, String address, int numberOfDiedGames,
-                int numberOfPlayedGames, int maxScoreInGame) {
-        if (userId == null || name == null || name.isEmpty() || address == null || address.isEmpty() || maxScoreInGame < 0)
-            throw new IllegalArgumentException();
-        this.userId = userId;
-        this.name = name;
-        this.address = address;
-        this.numberOfDiedGames = numberOfDiedGames;
-        this.numberOfPlayedGames = numberOfPlayedGames;
-        this.maxScoreInGame = maxScoreInGame;
-        this.totalDistanceRun = 0;
     }
 
 
     /**
      * Setter for name. By design the user already had a name
      *
-     * @param name
+     * @param name The new name of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setName(String name, boolean dbChange) {
@@ -86,32 +106,14 @@ public class User implements Serializable {
     }
 
     /**
-     * Setter without db change
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.setName(name, false);
-    }
-
-    /**
      * Setter for address. By design the user already had an address
      *
-     * @param address
+     * @param address The new address of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setAddress(String address, boolean dbChange) {
         this.address = address;
         dbUpdate(dbChange);
-    }
-
-    /**
-     * Setter without db change
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.setAddress(address, false);
     }
 
     /**
@@ -151,12 +153,56 @@ public class User implements Serializable {
     /**
      * sets the number of died games
      *
-     * @param diedGames
+     * @param diedGames The new number of games this user lost
      * @param dbChange  whether the database entry must be updated
      */
     public void setNumberOfDiedGames(int diedGames, boolean dbChange) {
         numberOfDiedGames = diedGames;
         dbUpdate(dbChange);
+    }
+
+    /**
+     * sets the number of played games
+     *
+     * @param playedGames The new number of games this user player
+     * @param dbChange Whether to update the database or not
+     */
+    public void setNumberOfPlayedGames(int playedGames, boolean dbChange) {
+        numberOfPlayedGames = playedGames;
+        dbUpdate(dbChange);
+    }
+
+    /**
+     * add a friend id to the friend id list
+     *
+     * @param friendId the friend id to add
+     */
+    public void addFriendId(@Nullable String friendId) {
+        if (friendId == null) {
+            throw new IllegalArgumentException("friend id should not be null");
+        }
+
+        this.friendIdList.add(friendId);
+    }
+
+    /**
+     * remove a friend id to the friend id list
+     *
+     * @param friendId the friend id to remove
+     */
+    public void removeFriendId(@Nullable String friendId) {
+        if (friendId == null) {
+            throw new IllegalArgumentException("friend should not be null");
+        }
+
+        this.friendIdList.remove(friendId);
+    }
+
+    /**
+     * @return number of games in which the user died
+     */
+    public int getNumberOfDiedGames() {
+        return numberOfDiedGames;
     }
 
     /**
@@ -169,14 +215,52 @@ public class User implements Serializable {
     }
 
     /**
-     * sets the number of played games
-     *
-     * @param playedGames
-     * @param dbChange
+     * @return the unique user id
      */
-    public void setNumberOfPlayedGames(int playedGames, boolean dbChange) {
-        numberOfPlayedGames = playedGames;
-        dbUpdate(dbChange);
+    @Nullable
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * @return the address of the user
+     */
+    @Nullable
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Setter without db change
+     *
+     * @param address
+     */
+    public void setAddress(String address) {
+        this.setAddress(address, false);
+    }
+
+    /**
+     * @return the name of the user
+     */
+    @Nullable
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Setter without db change
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.setName(name, false);
+    }
+
+    /**
+     * @return the number of games the user played
+     */
+    public int getNumberOfPlayedGames() {
+        return numberOfPlayedGames;
     }
 
     /**
@@ -188,17 +272,23 @@ public class User implements Serializable {
         this.setNumberOfPlayedGames(playedGames, false);
     }
 
+    @NonNull
+    public List<String> getFriendIdList() {
+        return new ArrayList<>(this.friendIdList);
+    }
+
+
     /**
      * set the user friend list
      *
      * @param friendIdList the player id list
      */
-    public void setFriendIdList(List<String> friendIdList) {
+    public void setFriendIdList(@Nullable List<String> friendIdList) {
         if (friendIdList == null) {
             throw new IllegalArgumentException("friend id list should not be null");
         }
-        for(String friend : friendIdList){
-            if(friend == null){
+        for (String friend : friendIdList) {
+            if (friend == null) {
                 throw new IllegalArgumentException("friend id in friend id list should not be null");
             }
         }
@@ -206,83 +296,14 @@ public class User implements Serializable {
         this.friendIdList = new ArrayList<>(friendIdList);
     }
 
-    /**
-     * add a friend id to the friend id list
-     * @param friendId the friend id to add
-     * @return true if the friend id has been added, false otherwise
-     */
-    public boolean addFriendId(String friendId){
-        if(friendId == null){
-            throw new IllegalArgumentException("friend id should not be null");
-        }
-
-        return this.friendIdList.add(friendId);
-    }
-
-    /**
-     *  remove a friend id to the friend id list
-     * @param friendId the friend id to remove
-     * @return true if the friend id has been removed, false otherwise
-     */
-    public boolean removeFriendId(String friendId){
-        if(friendId == null){
-            throw new IllegalArgumentException("friend should not be null");
-        }
-
-        return this.friendIdList.remove(friendId);
-    }
-
-    /**
-     * @return number of games in which the user died
-     */
-    public int getNumberOfDiedGames() {
-        return numberOfDiedGames;
-    }
-
-    /**
-     * @return the unique user id
-     */
-    public String getUserId() {
-        return userId;
-    }
-
-    /**
-     * @return the adress of the user
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * @return the name of the user
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the number of games the user played
-     */
-    public int getNumberOfPlayedGames() {
-        return numberOfPlayedGames;
-    }
-
-    public List<String> getFriendIdList(){
-        return new ArrayList<>(this.friendIdList);
-    }
-
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
+    public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+
         return userId.equals(user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
-                numberOfDiedGames == user.numberOfDiedGames &&
-                name.equals(user.name) &&
-                address.equals(user.address)
-                && friendIdList.equals(user.friendIdList);
+                numberOfDiedGames == user.numberOfDiedGames;
     }
 
     @Override
@@ -302,15 +323,4 @@ public class User implements Serializable {
         }
     }
 
-
-    /**
-     * @param question
-     * @return the answer of the question asked
-     */
-    public String ask(String question) {
-        String answer = "";
-        //TODO: display question on  user's screen and store the response
-        return answer;
-    }
-    //TODO: add later methods related to the game itself
 }

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view"
-    >
+    tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/profile_button"
 
             android:icon="@drawable/ic_baseline_person_register"
             android:title="@string/menu_home" />
-        <item
-            android:id="@+id/leaderboard_button"
-            android:icon="@drawable/ic_baseline_leaderboard"
-            android:title="@string/menu_leaderboard_button_text" />
         <item
             android:id="@+id/main_leaderboard_button"
             android:icon="@drawable/ic_baseline_leaderboard"
