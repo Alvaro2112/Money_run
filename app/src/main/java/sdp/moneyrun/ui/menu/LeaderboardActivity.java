@@ -53,7 +53,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
-        setDummyPlayers();
         getEndGamePlayers();
         linkToMenuButton();
     }
@@ -109,39 +108,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
         if (user != null)
             addPlayer(user);
-    }
-
-    /**
-     * This function will set up players in the leaderboard once we know their player ids and names
-     * it will set up dummy players before that so that we have a leaderboard nonetheless every time a player joins
-     * the game( up to 6 players for now), on data change listeners will be attached to these players here so that
-     * once real players join the leaderboard updates accordingly
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void setDummyPlayers() {
-        PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
-        String[] dummyPlayerNames = {"Josh", "David", "Helena", "Chris", "Bryan"};
-        ArrayList<Player> dummies = new ArrayList<>();
-        Player dummy1 = new Player(Integer.toString(1000000));
-        dummy1.setName("James");
-        dummy1.setScore(700);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        addPlayer(dummy1);
-        attachListenerToPlayer(dummy1, databaseProxy);
-        Random random = new Random();
-        for (int i = 2; i < 6; ++i) {
-            Player dummy = new Player(Integer.toString(i * 1000000));
-            dummy.setName(dummyPlayerNames[i - 1]);
-            dummy.setScore(Math.abs(random.nextInt() % 1000));
-            dummies.add(dummy);
-        }
-        Helpers.bestToWorstPlayer(dummies);
-        addPlayerList(dummies);
-
     }
 
     /**

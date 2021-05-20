@@ -58,7 +58,7 @@ public class LeaderboardInstrumentedTest {
                 player.setScore(8008, false);
                 a.addPlayer(player);
 
-                assertEquals(a.getPlayerList().size(), 6);
+                assertEquals(a.getPlayerList().size(), 1);
             });
         } catch (Exception e) {
             assertEquals(2, 1);
@@ -73,7 +73,7 @@ public class LeaderboardInstrumentedTest {
                 Player player = new Player("123", "Tess", 0);
                 player.setScore(8008, false);
                 a.addPlayer(player);
-                assertEquals(a.getLdbAdapter().getCount(), 6);
+                assertEquals(a.getLdbAdapter().getCount(), 1);
 
             });
         }
@@ -103,7 +103,7 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getPlayerList().size(), 7);
+                assertEquals(a.getPlayerList().size(), 2);
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public class LeaderboardInstrumentedTest {
                 list.add(player);
                 list.add(player2);
                 a.addPlayerList(list);
-                assertEquals(a.getLdbAdapter().getCount(), 7);
+                assertEquals(a.getLdbAdapter().getCount(), 2);
 
             });
         }
@@ -138,28 +138,6 @@ public class LeaderboardInstrumentedTest {
         exception.expect(RuntimeException.class);
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a -> a.addPlayerList(null));
-        }
-    }
-
-    @Test
-    public void testIfOneDummyPlayerIsSet() {
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a -> {
-                boolean check = false;
-                try {
-                    Thread.sleep(5000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    assertEquals(-2, 1);
-                }
-                for (Player p : a.getPlayerList()) {
-                    if (p.getName().equals("Chris")) {
-                        check = true;
-                        break;
-                    }
-                }
-                assertTrue(check);
-            });
         }
     }
 
