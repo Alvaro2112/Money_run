@@ -552,8 +552,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         System.out.println("Should not enter if coin is not removed");
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude()-game_center.getLatitude(),2)+ Math.pow(coin.getLatitude()-game_center.getLatitude(),2));
-        if(distance < circleRadius){
-            System.out.println("Entered checking");
+        if(distance > circleRadius){
+            System.out.println("Entered checking with distance = "+distance+" and circle radius = "+ circleRadius);
             // should end the game for this user
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
         }

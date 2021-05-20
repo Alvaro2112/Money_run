@@ -123,6 +123,7 @@ public class EndGameActivity extends AppCompatActivity {
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User p = pdp.getUserFromTask(task);
+                System.out.println(p);
                 p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
             }
         });
