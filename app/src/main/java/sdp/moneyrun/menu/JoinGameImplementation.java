@@ -146,24 +146,32 @@ public class JoinGameImplementation extends MenuImplementation {
         buttonId = 0;
         for (GameRepresentation gameRepresentation : gameRepresentations) {
             LocationRepresentation gameStartLocation = gameRepresentation.getStartLocation();
-            if(gameStartLocation == null){
-                return;
-            }
-
             String gameName = gameRepresentation.getName();
-            if(gameName == null){
+            if(gameStartLocation == null || gameName == null){
                 return;
             }
 
             double distance = gameStartLocation.distanceTo(foundLocation);
             String lowerName = gameName.toLowerCase(Locale.getDefault());
 
-            if ((filterText == null || lowerName.contains(filterText))
-                    && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
+            if (canDisplayGame(filterText, lowerName, distance)) {
                 displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                 buttonId++;
             }
         }
+    }
+
+    /**
+     * Conditions to be able to add a game to the list
+     * @param filterText the filter text
+     * @param lowerName the game name
+     * @param distance the distance from the user to the start game location
+     * @return
+     */
+    private boolean canDisplayGame(String filterText,
+                                   String lowerName,
+                                   double distance){
+        return (filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME;
     }
 
     /**
