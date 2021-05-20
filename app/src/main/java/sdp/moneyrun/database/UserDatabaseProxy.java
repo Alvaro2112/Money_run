@@ -145,13 +145,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @return a list of user whose names contain the filter string
      */
     public List<User> getUserListFromTaskFromSimilarName(Task<DataSnapshot> task, String filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("name should not be null.");
-        }
-        String cleanFilter = filter.trim().toLowerCase(Locale.getDefault());
-        if (cleanFilter.equals("")) {
-            throw new IllegalArgumentException("name should not be the empty string.");
-        }
+        String cleanFilter = getCleanString(filter);
 
         if (!task.isComplete() || !task.isSuccessful()) {
             Log.e(TAG, "Error getting data", task.getException());
@@ -167,13 +161,31 @@ public class UserDatabaseProxy extends DatabaseProxy {
                 continue;
             }
 
-            String cleanUserName = user.getName().trim().toLowerCase();
+            String cleanUserName = getCleanString(user.getName());
             if(cleanUserName.contains(cleanFilter)){
                 resultList.add(user);
             }
         }
 
         return resultList;
+    }
+
+    /**
+     * Get clean filter given name filter
+     * @param string the string to clean
+     * @return the cleaned string
+     */
+    @NonNull
+    private String getCleanString(String string){
+        if (string == null) {
+            throw new IllegalArgumentException("name should not be null.");
+        }
+        String cleanFilter = string.trim().toLowerCase(Locale.getDefault());
+        if (cleanFilter.equals("")) {
+            throw new IllegalArgumentException("name should not be the empty string.");
+        }
+
+        return string;
     }
 
     /**
