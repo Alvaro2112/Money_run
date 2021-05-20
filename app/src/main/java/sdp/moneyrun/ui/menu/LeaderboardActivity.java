@@ -2,7 +2,6 @@ package sdp.moneyrun.ui.menu;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

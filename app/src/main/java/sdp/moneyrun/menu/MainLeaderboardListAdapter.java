@@ -7,17 +7,13 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings("FieldMayBeFinal")
 public class MainLeaderboardListAdapter extends ListAdapterWithUser {
 
     // Medal emotes

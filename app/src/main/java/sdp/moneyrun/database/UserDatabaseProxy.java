@@ -75,8 +75,9 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     /**
      * Get all the users in the database.
-     * @return Task containing the users datas
+     * @return Task containing the users data
      */
+    @NonNull
     public Task<DataSnapshot> getUsersTask(){
         return usersRef.get();
     }
@@ -144,7 +145,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param filter the name filter
      * @return a list of user whose names contain the filter string
      */
-    public List<User> getUserListFromTaskFromSimilarName(Task<DataSnapshot> task, String filter) {
+    @Nullable
+    public List<User> getUserListFromTaskFromSimilarName(@NonNull Task<DataSnapshot> task, @NonNull String filter) {
         String cleanFilter = getCleanString(filter);
 
         if (!task.isComplete() || !task.isSuccessful()) {
@@ -154,11 +156,10 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
         DataSnapshot result = task.getResult();
 
-        List<User> resultList = getMatchingUserList(result, cleanFilter);
-
-        return resultList;
+        return getMatchingUserList(result, cleanFilter);
     }
 
+    @NonNull
     private List<User> getMatchingUserList(@NonNull DataSnapshot result,
                                            @NonNull String cleanFilter){
         List<User> resultList = new ArrayList<>();
@@ -210,7 +211,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
      * @param user the user to update
      * @return the task that retrieves the user from the database
      */
-    public Task<DataSnapshot> updatedFriendListFromDatabase(User user){
+    @Nullable
+    public Task<DataSnapshot> updatedFriendListFromDatabase(@Nullable User user){
         if(user == null || user.getUserId() == null){
             return null;
         }
