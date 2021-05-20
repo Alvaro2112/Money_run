@@ -154,7 +154,14 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
         DataSnapshot result = task.getResult();
 
-        ArrayList<User> resultList = new ArrayList<>();
+        List<User> resultList = getMatchingUserList(result, cleanFilter);
+
+        return resultList;
+    }
+
+    private List<User> getMatchingUserList(@NonNull DataSnapshot result,
+                                           @NonNull String cleanFilter){
+        List<User> resultList = new ArrayList<>();
         for(DataSnapshot dataSnapshot: result.getChildren()){
             User user = dataSnapshot.getValue(User.class);
             if(user == null || user.getName() == null){
@@ -163,7 +170,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
             addMatchingUser(resultList, user, cleanFilter);
         }
-
         return resultList;
     }
 
