@@ -23,6 +23,10 @@ public class MainActivityInstrumentedTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
+    @Test
+    public void splashScreenSoundPlays(){
+        
+    }
 
     @Test
     public void activityChangesToDashBoardAfter3Sec() {
