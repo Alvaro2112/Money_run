@@ -114,6 +114,7 @@ public class JoinGameImplementation extends MenuImplementation {
             requestLocationPermissions(requestPermissionsLauncher);
 
             loadGameListFromLocation(filterText, gameRepresentations, popupWindow, gameLayout, false);
+            openGamesLayout.addView(gameLayout);
 
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(activity, location -> {
