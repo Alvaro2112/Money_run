@@ -58,7 +58,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new LeaderboardListAdapter(this, playerList);
-        Helpers.addAdapter(ldbAdapter, playerList, user, this);
+        Helpers.addAdapter(ldbAdapter, playerList, user, this, R.id.ldblistView);
     }
 
     /**

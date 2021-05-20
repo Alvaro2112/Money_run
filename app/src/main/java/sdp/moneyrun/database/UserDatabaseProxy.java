@@ -177,15 +177,12 @@ public class UserDatabaseProxy extends DatabaseProxy {
      */
     @NonNull
     private String getCleanString(@NonNull String string){
-        if (string == null) {
-            throw new IllegalArgumentException("name should not be null.");
-        }
-        String cleanFilter = string.trim().toLowerCase(Locale.getDefault());
-        if (cleanFilter.equals("")) {
+        String cleanString = string.trim().toLowerCase(Locale.getDefault());
+        if (cleanString.equals("")) {
             throw new IllegalArgumentException("name should not be the empty string.");
         }
 
-        return string;
+        return cleanString;
     }
 
     /**

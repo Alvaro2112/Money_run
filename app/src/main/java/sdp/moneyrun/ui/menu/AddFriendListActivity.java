@@ -49,7 +49,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     private void addAdapter(){
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new AddFriendListListAdapter(this, resultList, user);
-        Helpers.addAdapter(ldbAdapter ,resultList, user, this);
+        Helpers.addAdapter(ldbAdapter ,resultList, user, this, R.id.friend_add_list_view);
     }
 
     /**
