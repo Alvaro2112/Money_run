@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -69,6 +70,7 @@ public class JoinGameImplementation extends MenuImplementation {
      * @param view the current view
      */
     public void onClickShowJoinGamePopupWindow(View view) {
+        MediaPlayer.create(activity.getApplicationContext(), R.raw.button_press).start();
         // Show popup
         PopupWindow popupWindow = onButtonShowPopupWindowClick(view, focusable, layoutId);
         // Load game list
