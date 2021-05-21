@@ -226,29 +226,27 @@ public class GameDatabaseProxy extends DatabaseProxy {
     }
 
     public void addGameListener(@Nullable Game game, @Nullable ValueEventListener l) {
-        if (game == null) {
-            throw new IllegalArgumentException("game should not be null.");
-        }
-        if (l == null) {
-            throw new IllegalArgumentException("event listener should not be null.");
-        }
+      checkGameListenerMethodsArguments(game,l);
         if (game.getHasBeenAdded()) {
             gamesRef.child(game.getId()).addValueEventListener(l);
         }
     }
 
     public void removeGameListener(Game game, ValueEventListener listener){
+      checkGameListenerMethodsArguments(game,listener);
+        if (game.getHasBeenAdded()) {
+            gamesRef.child(game.getId()).removeEventListener(listener);
+        }
+    }
+
+    private void checkGameListenerMethodsArguments(Game game, ValueEventListener listener){
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
         }
         if (listener == null) {
             throw new IllegalArgumentException("event listener should not be null.");
         }
-        if (game.getHasBeenAdded()) {
-            gamesRef.child(game.getId()).removeEventListener(listener);
-        }
     }
-
 
 
     public void addCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
