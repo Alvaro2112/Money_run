@@ -29,7 +29,9 @@ public class UserTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+        FirebaseDatabase.getInstance().goOffline();
     }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void putUserFailsCorrectly() {
@@ -64,9 +66,10 @@ public class UserTest {
     public void setAddressWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
+        String address = "Someeewhere";
         String newAddress = "New Address";
         String id = "1234567891";
+
         User player = new User(id, name, address, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
@@ -95,6 +98,7 @@ public class UserTest {
             assert (false);
         }
         db.removeUserListener(player, listener);
+        FirebaseDatabase.getInstance().goOnline();
     }
 
 

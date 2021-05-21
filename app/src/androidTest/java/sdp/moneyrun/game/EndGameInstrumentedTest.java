@@ -40,15 +40,16 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class EndGameInstrumentedTest {
 
     @BeforeClass
+
     public static void setPersistence() {
         if (!MainActivity.calledAlready) {
             try {
@@ -58,7 +59,11 @@ public class EndGameInstrumentedTest {
                 e.printStackTrace();
             }
         }
+
     }
+
+
+
 
     @Test
     public void updateTextFailsWithoutLists() {
@@ -111,10 +116,10 @@ public class EndGameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
+
     public void updatePlayerUpdateScoreTest() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             String playerid = "98732";
@@ -123,6 +128,7 @@ public class EndGameInstrumentedTest {
             CountDownLatch added = new CountDownLatch(1);
             OnCompleteListener addedListener = task -> added.countDown();
             db.putPlayer(player, addedListener);
+
             long ASYNC_CALL_TIMEOUT = 5L;
             try {
                 added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -130,6 +136,7 @@ public class EndGameInstrumentedTest {
             } catch (InterruptedException e) {
                 fail();
             }
+
             CountDownLatch updated = new CountDownLatch(1);
             ValueEventListener listener = new ValueEventListener() {
                 @Override
@@ -191,8 +198,8 @@ public class EndGameInstrumentedTest {
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
-
         }
+
     }
 
 

@@ -55,6 +55,7 @@ import static org.junit.Assert.fail;
 
 public class MapInstrumentedTest {
 
+    private String DATABASE_GAME = "games";
     @Nullable
     private final CountDownLatch moved = null;
     final double minZoomForBuilding = 15.;
@@ -65,6 +66,7 @@ public class MapInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+
     }
 
     @NonNull
@@ -711,376 +713,6 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void LakeLemanIsDetectedAsInappropriateTest() {
-        Intent intent = createIntentAndPutInDB();
-        double lat = 46.49396808615545;
-        double lon = 6.638823143919147;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-
-            scenario.onActivity(a -> {
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void SwissPlasmaCenterIsDetectedAsInappropriateTest() {
-        double lat = 46.517583898897826;
-        double lon = 6.565050387400619;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-
-                    }));
-
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-
-    @Test
-    public void RandomBuildingIsDetectedAsInappropriateTest() {
-        double lat = 46.517396499876476;
-        double lon = 6.645705058098468;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void RandomParkIsDetectedAsAppropriateTest() {
-        double minZoomForBuilding = 16.;
-        double lat = 46.51479170858094;
-        double lon = 6.621513963216489;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                a.isLocationAppropriate(location);
-                assert (a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void RandomFreePlaceIsDetectedAsAppropriateTest() {
-        double lat = 46.51192799046872;
-        double lon = 6.619113183264966;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                a.isLocationAppropriate(location);
-                assert (a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void sportCenterIsDetectedAsInappropriateTest() {
-        double lat = 46.511488;
-        double lon = 6.618642;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                a.isLocationAppropriate(location);
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void RouteCantonaleIsDetectedAsInappropriateTest() {
-        double lat = 46.517319;
-        double lon = 6.568376;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                a.isLocationAppropriate(location);
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
-
-    @Test
-    public void highwayIsDetectedAsInappropriateTest() {
-        double lat = 46.526493;
-        double lon = 6.580576;
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(lat, lon, minZoomForBuilding);
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-
-                    break;
-                }
-            }
-            scenario.onActivity(a -> {
-                a.isLocationAppropriate(location);
-                assert (!a.isLocationAppropriate(location));
-            });
-        }
-    }
 
     @Test
     public void placingCoins() {
@@ -1143,6 +775,7 @@ public class MapInstrumentedTest {
         location.setLatitude(37.42);
         location.setLongitude(-122.084);
 
+
         int num_coins = 2;
         double duration = 4;
         double radius = 20;
@@ -1153,7 +786,6 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-
         GameDatabaseProxy gdp = new GameDatabaseProxy();
 
         List<Player> players = game.getPlayers();
@@ -1232,7 +864,9 @@ public class MapInstrumentedTest {
                 }
             });
 
-        }
+            }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -1268,13 +902,6 @@ public class MapInstrumentedTest {
         players.add(host);
 
         String id = gdp.putGame(game);
-
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         intent.putExtra("currentGameId", id);
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
@@ -1321,6 +948,8 @@ public class MapInstrumentedTest {
                 assertEquals(1, activity.symbolManager.getAnnotations().size());
             });
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -1337,13 +966,6 @@ public class MapInstrumentedTest {
         players.add(justJoined);
         game.setPlayers(players, false);
         String id = gdp.putGame(game);
-
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         intent.putExtra("currentGameId", id);
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
@@ -1381,6 +1003,8 @@ public class MapInstrumentedTest {
             });
 
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test

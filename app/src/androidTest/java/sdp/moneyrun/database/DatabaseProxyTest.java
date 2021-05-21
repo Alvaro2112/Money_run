@@ -1,9 +1,6 @@
 package sdp.moneyrun.database;
 
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,10 +18,8 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.map.MapActivity;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -34,6 +29,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
     private final long ASYNC_CALL_TIMEOUT = 5L;
+    private final String DATABASE_PLAYER = "players";
 
     @BeforeClass
     public static void setPersistence() {
@@ -41,7 +37,9 @@ public class DatabaseProxyTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
+        FirebaseDatabase.getInstance().goOnline();
     }
+
 
     @Test
     public void getDatabaseWorks() {
@@ -80,7 +78,6 @@ public class DatabaseProxyTest {
 
     @Test
     public void getPlayerFromDatabase() {
-        FirebaseDatabase.getInstance().goOffline();
         final Player player = new Player("1236", "Johann", 0);
         final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
         CountDownLatch updated = new CountDownLatch(1);
@@ -107,7 +104,7 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             fail();
         }
-        FirebaseDatabase.getInstance().goOnline();
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_PLAYER).child("1236").removeValue();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -142,20 +139,12 @@ public class DatabaseProxyTest {
         CountDownLatch added = new CountDownLatch(1);
         OnCompleteListener addedListener = task -> added.countDown();
         db.putPlayer(player, addedListener);
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertThat(added.getCount(), is(0L));
-        } catch (InterruptedException e) {
-            fail();
-        }
+        db.putPlayer(player);
         String newName = "Simon";
-
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                System.out.println("Got there ");
                 player.setName(p.getName());
                 if (p.getName().equals(newName)) {
                     received.countDown();
@@ -168,8 +157,8 @@ public class DatabaseProxyTest {
             }
         };
         db.addPlayerListener(player, listener);
-
-        Player p = new Player("564123", newName, 0);
+        String id = "564123";
+        Player p = new Player(id, newName, 0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -178,9 +167,9 @@ public class DatabaseProxyTest {
             e.printStackTrace();
             assert (false);
         }
-
         assertThat(player.getName(), is(newName));
         db.removePlayerListener(player, listener);
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_PLAYER).child(id).removeValue();
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -179,10 +179,11 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
             Thread.sleep(2000);
             intended(hasComponent(GameLobbyActivity.class.getName()));
-            Intents.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Intents.release();
+        }
+        finally {
+           Intents.release();
         }
     }
 

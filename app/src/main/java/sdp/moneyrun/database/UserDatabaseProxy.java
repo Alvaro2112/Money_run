@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +46,16 @@ public class UserDatabaseProxy extends DatabaseProxy {
         }
 
         usersRef.child(String.valueOf(user.getUserId())).setValue(user);
+    }
+
+    public void putUser(User user, OnCompleteListener listener){
+        if(user == null){
+            throw new IllegalArgumentException("user should not be null");
+        }
+        if(listener == null){
+            throw new IllegalArgumentException("listener should not be null");
+        }
+        usersRef.child(String.valueOf(user.getUserId())).setValue(user).addOnCompleteListener(listener);
     }
 
     /**
