@@ -535,8 +535,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null && !seenCoins.contains(coin)) {
             seenCoins.add(coin);
-            assert riddleDb != null;
-
             try{ onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
             } catch (WindowManager.BadTokenException e){
                 seenCoins.remove(coin);
@@ -553,7 +551,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleManager.deleteAll();
         CircleOptions circleOptions = new CircleOptions();
         circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.4f);
+        circleOptions = circleOptions.withCircleOpacity(0.2f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);

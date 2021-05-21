@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -22,14 +23,17 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -213,6 +217,22 @@ public class LeaderboardInstrumentedTest {
                 assertEquals(a.getPlayerList().size(), 1);
             });
             Intents.release();
+        }
+    }
+
+    @Test
+    public void testLinkToMenuButton(){
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
+        User user = new User("FFFF","Bib","Here",0,0,0);
+        intent.putExtra("userEnd",user);
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            Espresso.onView(withId(R.id.leaderboard_button_end)).perform(click());
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        }catch (Exception e){
+            Intents.release();
+            fail();
         }
     }
 }
