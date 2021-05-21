@@ -189,13 +189,15 @@ public class GameLobbyActivity extends AppCompatActivity {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if ((boolean) snapshot.child("started").getValue()) {
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        intent.putExtra("player", user);
-                        intent.putExtra("gameId", gameId);
-                        intent.putExtra("host", false);
-                        startActivity(intent);
-                        finish();
+                    if(snapshot!= null && snapshot.child("started").getValue() != null) {
+                        if ((boolean) snapshot.child("started").getValue()) {
+                            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                            intent.putExtra("player", user);
+                            intent.putExtra("gameId", gameId);
+                            intent.putExtra("host", false);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 }
 
