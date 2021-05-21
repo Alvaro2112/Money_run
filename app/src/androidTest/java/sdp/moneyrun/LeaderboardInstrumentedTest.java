@@ -225,7 +225,7 @@ public class LeaderboardInstrumentedTest {
             Intents.init();
             onView(ViewMatchers.withId(R.id.leaderboard_button_end)).perform(ViewActions.click());
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
