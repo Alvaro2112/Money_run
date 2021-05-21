@@ -124,7 +124,6 @@ public class EndGameActivity extends AppCompatActivity {
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User p = pdp.getUserFromTask(task);
-                System.out.println(p);
                 p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
             }
         });
@@ -166,7 +165,6 @@ public class EndGameActivity extends AppCompatActivity {
     private List<Player> getPlayersFromGame() {
         List<Player> players = new ArrayList<>();
         int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers", 0);
-        System.out.println("Number of players is in end game"+ players);
         for (int i = 0; i < numberOfPlayers; ++i) {
             Player player = (Player) getIntent().getSerializableExtra("players" + i);
             players.add(player);
