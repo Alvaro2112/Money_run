@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -54,6 +55,7 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
 
 
 /*
@@ -168,21 +170,20 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      *               finishes by adding a listener for the coins
      */
     public void initializeGame(String gameId) {
-
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 coinsToPlace = game.getNumCoins();
                 game_radius = game.getRadius();
-                circleRadius = (float) game_radius;
+                circleRadius = (float) game_radius*10;
                 game_time = (int) Math.floor(game.getDuration() * 60);
                 game_center = game.getStartLocation();
                 initChronometer();
 
+
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
                     addedCoins = true;
-                    initCircle();
                 }
                 addCoinsListener();
                 if (host) {
@@ -191,7 +192,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
+                initCircle();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -316,7 +317,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), MapActivity.this);
+                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
@@ -494,6 +495,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         circleRadius *= shrinkingFactor;
         initCircle();
+        boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
+        if(check)
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
 
     }
 
@@ -550,9 +554,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleManager.deleteAll();
         CircleOptions circleOptions = new CircleOptions();
         circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.4f);
+        circleOptions = circleOptions.withCircleOpacity(0.2f);
         circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
-        System.out.println("Current lat is " + getCurrentLocation().getLatitude() + " and longitude is : " + getCurrentLocation().getLongitude());
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
@@ -561,4 +564,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return circleManager;
     }
 
+    public boolean checkIfLegalPosition(Coin coin, double radius, double center_x,double center_y){
+        // calculates distance between the current coin and the game center
+        double distance = Math.sqrt(Math.pow(coin.getLatitude()-center_x,2)+ Math.pow(coin.getLongitude()-center_y,2));
+        return (distance > radius);
+    }
 }

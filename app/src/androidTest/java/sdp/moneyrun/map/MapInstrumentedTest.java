@@ -367,7 +367,7 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), a);
+                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
                 finished.set(true);
             }));
             do {
@@ -1554,5 +1554,36 @@ public class MapInstrumentedTest {
         }
     }
 
+    @Test
+    public void gameEndsWhenOutsideTheRadius(){
+            Intent intent = createIntentAndPutInDB();
+            try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+                Intents.init();
+
+                final AtomicBoolean finished = new AtomicBoolean(false);
+
+                scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                    boolean c = a.checkIfLegalPosition(new Coin(90,90,2),3,0.0,0.0);
+                    if (c)
+                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
+                    assertEquals(c,true);
+                    finished.set(true);
+                }));
+                do {
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+                } while (!finished.get());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                intended(hasComponent(EndGameActivity.class.getName()));
+                Intents.release();
+            }
+        }
 
 }
