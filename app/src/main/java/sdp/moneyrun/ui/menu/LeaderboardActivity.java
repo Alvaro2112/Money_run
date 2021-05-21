@@ -166,7 +166,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     public void linkToMenuButton(Button button){
         userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
         button.setOnClickListener( v -> {
-            Intent menuIntent = new Intent(LeaderboardActivity.this,EndGameActivity.class);
+            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
             menuIntent.putExtra("user",userFromEnd);
             startActivity(menuIntent);
             finish();
