@@ -32,7 +32,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     @SuppressLint({"ViewHolder", "InflateParams"})
     public View getView(int position, View view, ViewGroup parent) {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.add_friend_list_item_layout, parent, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.add_friend_list_item_layout, null, false);
         User userRequested = getItem(position);
 
         TextView userNameView = view.findViewById(R.id.add_friend_list_player_name);
