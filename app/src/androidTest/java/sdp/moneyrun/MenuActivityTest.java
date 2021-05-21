@@ -549,4 +549,14 @@ public class MenuActivityTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void returnButtonDoesNotMakeAppCrash() {
+        // Since we disable the back button by simply returning the function shouldn't do anything
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> a.onBackPressed());
+        }catch (Exception e){
+            fail();
+        }
+    }
 }

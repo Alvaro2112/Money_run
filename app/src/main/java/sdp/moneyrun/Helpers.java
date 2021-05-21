@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -146,5 +147,11 @@ public class Helpers {
         ListView ldbView = activity.findViewById(viewInt);
         ldbView.setAdapter(ldbAdapter);
         ldbAdapter.clear();
+    }
+
+    public static void putPlayersInIntent(Intent intent, List<Player>players){
+        for (int i = 0; i < players.size(); ++i) {
+            intent.putExtra("players" + i, players.get(i));
+        }
     }
 }

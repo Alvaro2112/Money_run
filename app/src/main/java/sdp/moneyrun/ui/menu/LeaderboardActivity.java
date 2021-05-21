@@ -1,7 +1,11 @@
 package sdp.moneyrun.ui.menu;
 
+import android.app.UiAutomation;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +23,11 @@ import java.util.Random;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
@@ -29,6 +36,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private LeaderboardListAdapter ldbAdapter;
     @Nullable
     private Player user;
+    User userFromEnd;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -36,15 +44,15 @@ public class LeaderboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
-
+        Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
         setMainPlayer(user);
         //TODO
         // Put addPlayer with local cache
-        setDummyPlayers();
-        //getEndGamePlayers(); //TODO: this function should be called at the end of the game
+        getEndGamePlayers();
+        linkToMenuButton(toMenu);
     }
 
     /**
@@ -101,39 +109,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * This function will set up players in the leaderboard once we know their player ids and names
-     * it will set up dummy players before that so that we have a leaderboard nonetheless every time a player joins
-     * the game( up to 6 players for now), on data change listeners will be attached to these players here so that
-     * once real players join the leaderboard updates accordingly
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void setDummyPlayers() {
-        PlayerDatabaseProxy databaseProxy = new PlayerDatabaseProxy();
-        String[] dummyPlayerNames = {"Josh", "David", "Helena", "Chris", "Bryan"};
-        ArrayList<Player> dummies = new ArrayList<>();
-        Player dummy1 = new Player(Integer.toString(1000000));
-        dummy1.setName("James");
-        dummy1.setScore(700);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        addPlayer(dummy1);
-        attachListenerToPlayer(dummy1, databaseProxy);
-        Random random = new Random();
-        for (int i = 2; i < 6; ++i) {
-            Player dummy = new Player(Integer.toString(i * 1000000));
-            dummy.setName(dummyPlayerNames[i - 1]);
-            dummy.setScore(Math.abs(random.nextInt() % 1000));
-            dummies.add(dummy);
-        }
-        Helpers.bestToWorstPlayer(dummies);
-        addPlayerList(dummies);
-
-    }
-
-    /**
      * @param dummy1:        dummy representation of a player that will later evolve into a player that was in a game
      * @param databaseProxy: the proxy database that we use to access Firebase
      *                       Attaches a lister to a player so that once real players join the game the dummy player will represent
@@ -176,5 +151,24 @@ public class LeaderboardActivity extends AppCompatActivity {
             Player player = (Player) getIntent().getSerializableExtra("players" + i);
             addPlayer(player);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // We disable the user from clicking the back button and force him to use the dedicated button
+        return;
+    }
+
+    /**
+     * Sends user to end game screen
+     */
+    public void linkToMenuButton(Button button){
+        userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
+        button.setOnClickListener( v -> {
+            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
+            menuIntent.putExtra("user",userFromEnd);
+            startActivity(menuIntent);
+            finish();
+        });
     }
 }
