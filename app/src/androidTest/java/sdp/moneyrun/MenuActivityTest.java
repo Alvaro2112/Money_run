@@ -183,7 +183,7 @@ public class MenuActivityTest {
         }
     }
 
-    @Test
+    /*@Test
     public void postNewGameWorks(){
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
@@ -199,7 +199,7 @@ public class MenuActivityTest {
             Intents.release();
         }
     }
-
+    */
 
     @Test
     public void newGamePopupIsDisplayed() {
