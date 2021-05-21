@@ -106,7 +106,6 @@ public class EndGameInstrumentedTest {
 
     @Test
     public void toMenuButtonWorks() {
-        FirebaseDatabase.getInstance().goOnline();
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
@@ -117,7 +116,6 @@ public class EndGameInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        FirebaseDatabase.getInstance().goOffline();
     }
 
     @Test

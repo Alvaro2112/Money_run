@@ -29,6 +29,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class DatabaseProxyTest {
     private final long ASYNC_CALL_TIMEOUT = 5L;
+    private final String DATABASE_PLAYER = "players";
 
     @BeforeClass
     public static void setPersistence() {
@@ -36,7 +37,7 @@ public class DatabaseProxyTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
-        FirebaseDatabase.getInstance().goOffline();
+        FirebaseDatabase.getInstance().goOnline();
     }
 
 
@@ -103,6 +104,7 @@ public class DatabaseProxyTest {
         } catch (InterruptedException e) {
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_PLAYER).child("1236").removeValue();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -143,7 +145,6 @@ public class DatabaseProxyTest {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Player p = snapshot.getValue(Player.class);
-                System.out.println("Got there ");
                 player.setName(p.getName());
                 if (p.getName().equals(newName)) {
                     received.countDown();
@@ -156,8 +157,8 @@ public class DatabaseProxyTest {
             }
         };
         db.addPlayerListener(player, listener);
-
-        Player p = new Player("564123", newName, 0);
+        String id = "564123";
+        Player p = new Player(id, newName, 0);
         db.putPlayer(p);
         try {
             received.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -168,6 +169,7 @@ public class DatabaseProxyTest {
         }
         assertThat(player.getName(), is(newName));
         db.removePlayerListener(player, listener);
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_PLAYER).child(id).removeValue();
     }
 
     @Test(expected = IllegalArgumentException.class)
