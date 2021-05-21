@@ -148,7 +148,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     public void getEndGamePlayers() {
         ldbAdapter.clear();
         int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers", 0);
-        userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
         for (int i = 0; i < numberOfPlayers; ++i) {
             Player player = (Player) getIntent().getSerializableExtra("players" + i);
             addPlayer(player);
@@ -165,8 +164,9 @@ public class LeaderboardActivity extends AppCompatActivity {
      * Sends user to end game screen
      */
     public void linkToMenuButton(Button button){
+        userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
         button.setOnClickListener( v -> {
-            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
+            Intent menuIntent = new Intent(LeaderboardActivity.this,EndGameActivity.class);
             menuIntent.putExtra("user",userFromEnd);
             startActivity(menuIntent);
             finish();

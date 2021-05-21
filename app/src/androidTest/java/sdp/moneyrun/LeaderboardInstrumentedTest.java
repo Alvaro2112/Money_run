@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.RegisterUserActivity;
+import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -228,10 +229,18 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Espresso.onView(withId(R.id.leaderboard_button_end)).perform(click());
+            intended(hasComponent(EndGameActivity.class.getName()));
             Intents.release();
         }catch (Exception e){
             Intents.release();
             fail();
+        }
+    }
+
+    @Test
+    public void testBackButtonSimplyReturns(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            scenario.onActivity(a -> a.onBackPressed());
         }
     }
 }
