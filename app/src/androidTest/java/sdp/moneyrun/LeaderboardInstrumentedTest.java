@@ -215,4 +215,24 @@ public class LeaderboardInstrumentedTest {
             Intents.release();
         }
     }
+    @Test
+    public void goToMenuButtonWorks() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
+        Player user = new Player("3", "Bob", 0);
+        User user2 = new User("rrrrr");
+        intent.putExtra("userEnd",user2);
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
+            onView(ViewMatchers.withId(R.id.leaderboard_button_end)).perform(ViewActions.click());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+        }catch (Exception e){
+            fail();
+        }
+    }
 }
