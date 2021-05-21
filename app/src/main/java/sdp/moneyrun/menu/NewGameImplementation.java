@@ -182,27 +182,22 @@ public class NewGameImplementation extends MenuImplementation {
      */
     @SuppressLint("MissingPermission")
     private void tryLocation(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-        // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
         fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
-            // Got last known location. In some rare situations this can be null
-            // In this case, the game cannot be instantiated
-            if (location == null) {
+            if (location != null) {
+                postNewGame(name, maxPlayerCount, numCoins, gameRadius, gameDuration, location);
+            }else{
                 Log.e("location", "Error getting location");
-                return;
             }
-            postNewGame(name, maxPlayerCount, numCoins, gameRadius, gameDuration, location);
         });
     }
 
     public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, Location loc){
-        // Build new game given fields filled by user
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);
         Game game = new Game(name, player, maxPlayerCount, riddles, coins, loc, true, numCoins, gameRadius, gameDuration);
         game.setId(user.getUserId());
-        // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
         launchLobbyActivity(game.getId(), player);
