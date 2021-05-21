@@ -1324,6 +1324,94 @@ public class MapInstrumentedTest {
     }
 
     @Test
+    public void chronometerZeroStartsEndGame() {
+
+        String name = "Game";
+
+        Player host = new Player("32", "usersAreUnnecessary", 0);
+        int maxPlayerCount = 2;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(37.42);
+        location.setLongitude(-122.084);
+
+        int num_coins = 0;
+        double duration = 0.10;
+        double radius = 20;
+        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            Intents.init();
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+
+                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
+                        if (fully1) {
+                            finished.set(true);
+                        }
+                    }));
+                    a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
+
+                }
+            }));
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+                if (finished.get()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        assertEquals(-1, 2);
+                    }
+
+                    break;
+                }
+            }
+            scenario.onActivity(a -> {
+                assertTrue(a.getChronometerCounter() > 0);
+            });
+             try{
+                 Thread.sleep(10000);
+             }catch (Exception e){
+
+             }
+            intended(hasComponent(EndGameActivity.class.getName()));
+            Intents.release();
+
+
+
+        }
+    }
+
+
+    @Test
     public void leaderBoardWorks() {
         Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);

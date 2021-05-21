@@ -116,6 +116,7 @@ public class EndGameActivity extends AppCompatActivity {
         if (player != null) {
             player.setScore(gameScore, true);
         }
+
         return player;
     }
 
@@ -123,8 +124,14 @@ public class EndGameActivity extends AppCompatActivity {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+
                 User p = pdp.getUserFromTask(task);
-                p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                if(p != null) {
+                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                }
+                else{
+                    updateText(-1, -1, false);
+                }
             }
         });
 

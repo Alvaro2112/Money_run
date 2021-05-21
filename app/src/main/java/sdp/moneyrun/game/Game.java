@@ -235,6 +235,7 @@ public class Game {
         endGameIntent.putExtra("playerId", playerId);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
+
     }
 
     public boolean isStarted() {
