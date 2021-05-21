@@ -494,7 +494,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         circleRadius *= shrinkingFactor;
         initCircle();
-        checkIfLegalPosition(coin);
+        boolean check = checkIfLegalPosition(coin,game_radius,game_center.getLatitude(),game_center.getLongitude());
+        if(check) Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
 
     }
 
@@ -561,14 +562,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return circleManager;
     }
 
-    public void checkIfLegalPosition(Coin coin){
+    public boolean checkIfLegalPosition(Coin coin, double radius, double center_x,double center_y){
         // calculates distance between the current coin and the game center
-        assert game_center != null;
-        double distance = Math.sqrt(Math.pow(coin.getLatitude()-game_center.getLatitude(),2)+ Math.pow(coin.getLatitude()-game_center.getLatitude(),2));
-        if(distance > circleRadius){
-            // should end the game for this user
-            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
-        }
-
+        double distance = Math.sqrt(Math.pow(coin.getLatitude()-center_x,2)+ Math.pow(coin.getLongitude()-center_y,2));
+        return (distance > radius);
     }
 }

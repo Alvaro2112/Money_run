@@ -102,13 +102,13 @@ public class FriendListTest {
         }
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Thread.sleep(3000);
+            Thread.sleep(6000);
             //Check default friends
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(2).getUserId()))).check(matches(isDisplayed()));

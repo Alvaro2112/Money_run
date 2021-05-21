@@ -1556,44 +1556,35 @@ public class MapInstrumentedTest {
 
     @Test
     public void gameEndsWhenOutsideTheRadius(){
-        Intent intent = createIntentAndPutInDB();
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
+            Intent intent = createIntentAndPutInDB();
+            try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+                Intents.init();
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
+                final AtomicBoolean finished = new AtomicBoolean(false);
 
-                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
-                        if (fully1) {
-                            finished.set(true);
-                        }
-                    }));
-                    a.moveCameraWithoutAnimation(a.getCurrentLocation().getLatitude(), a.getCurrentLocation().getLongitude(), minZoomForBuilding);
-
-                }
-            }));
-            while (true) {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-                if (finished.get()) {
+                scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                    boolean c = a.checkIfLegalPosition(new Coin(90,90,2),3,0.0,0.0);
+                    if (c)
+                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
+                    assertEquals(c,true);
+                    finished.set(true);
+                }));
+                do {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         assertEquals(-1, 2);
                     }
-
-                    break;
+                } while (!finished.get());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                intended(hasComponent(EndGameActivity.class.getName()));
+                Intents.release();
             }
-            scenario.onActivity(a -> {
-                a.checkIfLegalPosition(new Coin(90,90,2));
-                
-            });
         }
-    }
 
 
 }
