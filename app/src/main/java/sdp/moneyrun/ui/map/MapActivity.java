@@ -494,8 +494,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         circleRadius *= shrinkingFactor;
         initCircle();
-        boolean check = checkIfLegalPosition(coin,game_radius,game_center.getLatitude(),game_center.getLongitude());
-        if(check) Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
+        boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
+        if(check)
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
 
     }
 

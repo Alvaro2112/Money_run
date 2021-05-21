@@ -36,7 +36,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     private LeaderboardListAdapter ldbAdapter;
     @Nullable
     private Player user;
-    private String playerId;
     User userFromEnd;
 
 
