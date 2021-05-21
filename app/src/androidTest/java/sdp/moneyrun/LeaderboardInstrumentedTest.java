@@ -222,23 +222,6 @@ public class LeaderboardInstrumentedTest {
     }
 
     @Test
-    public void testLinkToMenuButton(){
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), LeaderboardActivity.class);
-        User user = new User("FFFF","Bib","Here",0,0,0);
-        intent.putExtra("userEnd",user);
-        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
-            Intents.init();
-            Espresso.onView(withId(R.id.leaderboard_button_end)).perform(click());
-            Thread.sleep(5000);
-            intended(hasComponent(EndGameActivity.class.getName()));
-            Intents.release();
-        }catch (Exception e){
-            Intents.release();
-            fail();
-        }
-    }
-
-    @Test
     public void testBackButtonSimplyReturns(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(a -> a.onBackPressed());
