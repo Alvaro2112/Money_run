@@ -229,6 +229,7 @@ public class LeaderboardInstrumentedTest {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             Espresso.onView(withId(R.id.leaderboard_button_end)).perform(click());
+            Thread.sleep(5000);
             intended(hasComponent(EndGameActivity.class.getName()));
             Intents.release();
         }catch (Exception e){
