@@ -2,6 +2,7 @@ package sdp.moneyrun.ui.authentication;
 
 import android.Manifest;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,12 +87,14 @@ public class LoginActivity extends AppCompatActivity {
 
     // link from signUp button to signUp page
     public void signUp(View view) {
+        MediaPlayer.create(this, R.raw.button_press).start();
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
     private void setLogIn(@NonNull Button loginButton) {
         loginButton.setOnClickListener(clicked -> {
+            MediaPlayer.create(this, R.raw.button_press).start();
             EditText emailView = findViewById(R.id.loginEmailAddress);
             EditText passwordView = findViewById(R.id.loginPassword);
             String email = emailView.getText().toString().trim();
@@ -180,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
         if (guestButton == null)
             throw new IllegalArgumentException("Guest button was clicked but was null");
         guestButton.setOnClickListener(v -> {
+            MediaPlayer.create(this, R.raw.button_press).start();
             Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
             guestMenuIntent.putExtra("guestUser", true);
             startActivity(guestMenuIntent);

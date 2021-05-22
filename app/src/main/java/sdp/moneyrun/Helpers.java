@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -101,6 +103,7 @@ public class Helpers {
         return task;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter){
         if (objectList == null) {
             throw new NullPointerException("List is null");
@@ -134,4 +137,21 @@ public class Helpers {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
     }
 
+    /**
+     * Link list adapter to the activity
+     */
+    public static <T> void addAdapter(@NonNull ArrayAdapter<T> ldbAdapter,
+                                      @NonNull Activity activity,
+                                      int viewInt){
+        // The adapter lets us add item to a ListView easily.
+        ListView ldbView = activity.findViewById(viewInt);
+        ldbView.setAdapter(ldbAdapter);
+        ldbAdapter.clear();
+    }
+
+    public static void putPlayersInIntent(Intent intent, List<Player>players){
+        for (int i = 0; i < players.size(); ++i) {
+            intent.putExtra("players" + i, players.get(i));
+        }
+    }
 }

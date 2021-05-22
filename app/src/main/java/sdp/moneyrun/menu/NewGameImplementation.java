@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
+import android.media.MediaPlayer;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,7 @@ public class NewGameImplementation extends MenuImplementation {
      */
     public void onClickShowNewGamePopupWindow(View view) {
         // inflate the layout of the popup window
+        MediaPlayer.create(activity.getApplicationContext(), R.raw.button_press).start();
         LayoutInflater inflater = (LayoutInflater)
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.new_game_popup, null);
@@ -79,7 +81,7 @@ public class NewGameImplementation extends MenuImplementation {
      *
      * @param newGameLayout the game layout
      */
-    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, PopupWindow popupWindow) {
+    public void onSubmitPostNewGame(@NonNull LinearLayout newGameLayout, @NonNull PopupWindow popupWindow) {
         nameGameView = newGameLayout.findViewById(R.id.nameGameField);
         maxPlayerNumberView = newGameLayout.findViewById(R.id.maxPlayerCountField);
         numCoinsView = newGameLayout.findViewById(R.id.newGameNumCoins);

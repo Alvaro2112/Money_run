@@ -5,7 +5,6 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,19 +89,9 @@ public class GameInstrumentedTest {
     @Test
     public void GameIsAddedToDB() {
         Game g = getGame();
-        CountDownLatch added = new CountDownLatch(1);
         CountDownLatch updated = new CountDownLatch(1);
-        OnCompleteListener addedListener = task -> added.countDown();
         db.putGame(g);
-        db.updateGameInDatabase(g, addedListener);
-        try {
-            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, added.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
         String id = g.getId();
-
         //Something went wrong, game might not have been uploaded properly
         if (id.equals("")) {
             fail();
@@ -125,12 +114,13 @@ public class GameInstrumentedTest {
             }
             updated.countDown();
         });
-        try {
-            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, updated.getCount());
-        } catch (InterruptedException e) {
-            fail();
-        }
+       try{
+           updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+           assertEquals(0l,updated.getCount());
+       } catch (InterruptedException e) {
+           fail();
+       }
+       FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -139,16 +129,18 @@ public class GameInstrumentedTest {
         db.putGame(g);
         String id = g.getId();
         assertEquals(id, db.putGame(g));
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     /**
      * This tests that the player list is in synchro with the DB
      */
     @Test
+
     public void GamePlayerListChangesWithDB() {
         Game g = getGame();
-        CountDownLatch added = new CountDownLatch(1);
         db.putGame(g);
+        CountDownLatch added = new CountDownLatch(1);
         db.updateGameInDatabase(g, task -> added.countDown());
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -174,6 +166,7 @@ public class GameInstrumentedTest {
             fail();
         }
         assertEquals(players, g.getPlayers());
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -181,7 +174,6 @@ public class GameInstrumentedTest {
         Game g = getGame();
         db.putGame(g);
         CountDownLatch added = new CountDownLatch(1);
-        db.putGame(g);
         db.updateGameInDatabase(g, task -> added.countDown());
         try {
             added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
@@ -226,6 +218,8 @@ public class GameInstrumentedTest {
         } catch (InterruptedException e) {
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -262,7 +256,7 @@ public class GameInstrumentedTest {
     @Test
     public void setIsVisibleSetsItInDB() {
         Game g = getGame();
-        db.putGame(g);
+        String id = db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -289,6 +283,7 @@ public class GameInstrumentedTest {
         }
         boolean visible = task.getResult().getValue(boolean.class);
         assertFalse(visible);
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -369,13 +364,9 @@ public class GameInstrumentedTest {
     @Test
     public void setPlayersSetsPlayersOnDB() {
         Game g = getGame();
-        db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String id = db.putGame(g);
         List<Player> p = new ArrayList<>();
+        CountDownLatch complete = new CountDownLatch(1);
         Player toAdd = new Player("542", "Iron Man", 0);
         Player toAdd2 = new Player("544", "Pepper Pots", 0);
         p.add(toAdd);
@@ -387,12 +378,15 @@ public class GameInstrumentedTest {
             e.printStackTrace();
         }
         assertEquals(p, g.getPlayers());
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
     public void addPlayerSetsPlayersOnDB() {
         Game g = getGame();
-        db.putGame(g);
+        String id = db.putGame(g);
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -410,12 +404,14 @@ public class GameInstrumentedTest {
             e.printStackTrace();
         }
         assertEquals(players, g.getPlayers());
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
     public void removePlayerSetsPlayersOnDB() {
         Game g = getGame();
-        db.putGame(g);
+        String id = db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -427,12 +423,15 @@ public class GameInstrumentedTest {
         players.add(host);
         g.addPlayer(player, false);
         g.removePlayer(player, false);
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         assertEquals(players, g.getPlayers());
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -460,7 +459,7 @@ public class GameInstrumentedTest {
             }
         };
         Game g = getGame();
-        db.putGame(g);
+        String id = db.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -471,18 +470,16 @@ public class GameInstrumentedTest {
         } catch (Exception e) {
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
     public void getIdReturnsId() {
         Game g = getGame();
         String id = db.putGame(g);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         assertEquals(id, g.getId());
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
 
@@ -519,7 +516,6 @@ public class GameInstrumentedTest {
         Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 3;
         List<Player> players = new ArrayList<>();
-
         players.add(host);
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
@@ -608,7 +604,6 @@ public class GameInstrumentedTest {
         double lat = 17.;
         double lon = 18.;
         g.setCoins(Arrays.asList(new Coin(lat, lon, firstValue), new Coin(456456, 4564, 222)), true);
-
         CountDownLatch updated = new CountDownLatch(1);
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -628,7 +623,7 @@ public class GameInstrumentedTest {
             }
         };
         GameDatabaseProxy p = new GameDatabaseProxy();
-        p.putGame(g);
+        String id = p.putGame(g);
         CountDownLatch added = new CountDownLatch(1);
         p.updateGameInDatabase(g, task -> added.countDown());
         try {
@@ -649,6 +644,8 @@ public class GameInstrumentedTest {
         }
         assertEquals(updatedValue, g.getGameDbData().getCoins().get(0).getValue());
         p.removeCoinListener(g, listener);
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
     @Test
@@ -672,22 +669,11 @@ public class GameInstrumentedTest {
             }
         };
         GameDatabaseProxy p = new GameDatabaseProxy();
-        p.putGame(g);
+        String id = p.putGame(g);
         g.setStarted(true, false);
+        p.removeGameListener(g, listener);
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        p.addGameListener(g, listener);
-
-        try {
-            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0L, updated.getCount());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -730,22 +716,26 @@ public class GameInstrumentedTest {
         Location location = new Location("LocationManager#GPS_PROVIDER");
         location.setLatitude(10);
         location.setLongitude(20);
+
+
+        CountDownLatch gotten = new CountDownLatch(1);
         Game g = new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 1, 1);
-        gdp.putGame(g);
+        String id = gdp.putGame(g);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         Task<DataSnapshot> g2 = gdp.getGameDataSnapshot(g.getId());
+        g2.addOnCompleteListener(task -> gotten.countDown());
         try {
-            Thread.sleep(4000);
+            gotten.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail();
         }
         Game gg2 = gdp.getGameFromTaskSnapshot(g2);
         assertEquals(gg2, g);
-
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -765,7 +755,8 @@ public class GameInstrumentedTest {
     public void setIsDeletedSetsValueInDB() {
         Game g = getGame();
         GameDatabaseProxy gdp = new GameDatabaseProxy();
-        gdp.putGame(g);
+
+        String id = gdp.putGame(g);
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -779,15 +770,17 @@ public class GameInstrumentedTest {
             e.printStackTrace();
             fail();
         }
+        CountDownLatch gotten = new CountDownLatch(1);
         Task<DataSnapshot> dbr = FirebaseDatabase.getInstance().getReference()
-                .child("games")
+                .child(DATABASE_GAME)
                 .child(g.getId())
                 .child("isDeleted")
-                .get();
+                .get()
+                .addOnCompleteListener(task -> gotten.countDown());
         try {
-            Thread.sleep(3000);
+            gotten.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0l, gotten.getCount());
         } catch (InterruptedException e) {
-            e.printStackTrace();
             fail();
         }
         if (dbr.isSuccessful()) {
@@ -796,6 +789,8 @@ public class GameInstrumentedTest {
         } else {
             fail();
         }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+
     }
 
 

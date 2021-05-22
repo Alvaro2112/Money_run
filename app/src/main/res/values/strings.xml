@@ -10,12 +10,14 @@
     <string name="login_page_email_input_hint">Email address</string>
     <string name="login_page_password_input_hint">Password</string>
     <string name="title_activity_login">Login page</string>
+    <string name="friend_list_button_text">Friend list</string>
 
     <string name="menu_main_leaderboard_button_text">Main Leaderboard</string>
     <string name="menu_main_weather_placeholder_text">coin placeholder</string>
     <string name="leaderboard_header_position">Position</string>
     <string name="leaderboard_header_name">Name</string>
     <string name="leaderboard_header_score">Score</string>
+    <string name="leaderboard_to_menu_button">Back to Menu</string>
 
     <string name="login_page_signup_button_text">Sign up</string>
     <string name="login_page_welcome_text">Login with your email or sign up!</string>
@@ -123,6 +125,19 @@
     <string name="newGameDurationText">Enter the duration of the game in minutes</string>
     <string name="newGameRadiusText">Enter the radius of the game in meter</string>
     <string name="delete_button_text">Delete</string>
+
+    <string name="add_friend_tag_0">userState</string>
+    <string name="add_friend_tag_1">requestedUserId</string>
+    <string name="add_friend_button_follow_text">Follow</string>
+    <string name="add_friend_button_unfollow_text">Unfollow</string>
+    <string name="add_friend_button_search">Search name</string>
+    <string name="add_friend_button_search_user">Search user</string>
+    <string name="add_friend_button_go_back">Go back to friend list</string>
+    <string name="friend_button_search">Search friends</string>
+
+    <string name="friend_list_logo_n_played">Number of games played 🏃</string>
+    <string name="friend_list_logo_max_score">Max score 💯</string>
+    <string name="friend_list_join_game_text">Join friend</string>
 
 
 </resources>

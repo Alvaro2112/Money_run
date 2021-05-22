@@ -179,7 +179,9 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Intents.release();
+        }
+        finally {
+           Intents.release();
         }
     }
 
@@ -561,6 +563,16 @@ public class MenuActivityTest {
             onView(withId(R.id.weather_icon)).check(matches(not(withContentDescription("coin placeholder"))));
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void returnButtonDoesNotMakeAppCrash() {
+        // Since we disable the back button by simply returning the function shouldn't do anything
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> a.onBackPressed());
+        }catch (Exception e){
+            fail();
         }
     }
 }

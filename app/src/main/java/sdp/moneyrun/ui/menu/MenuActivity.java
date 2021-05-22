@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -166,7 +167,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        MediaPlayer.create(this, R.raw.button_press).start();
         switch (item.getItemId()) {
 
             case R.id.profile_button: {
@@ -174,6 +175,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
 
+            case R.id.friend_list_button: {
+                onButtonSwitchToActivity(FriendListActivity.class, false);
+                break;
+            }
+            
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
                 break;
@@ -269,5 +275,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         weatherTypeText.setText(report.getWeatherType());
     }
 
-
+    @Override
+    public void onBackPressed() {
+        // disable the back button from menu since the user should not be able to log in again once logged in properly
+        return;
+    }
 }

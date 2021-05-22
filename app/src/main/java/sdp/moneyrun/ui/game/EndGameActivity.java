@@ -1,6 +1,7 @@
 package sdp.moneyrun.ui.game;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
@@ -115,6 +117,7 @@ public class EndGameActivity extends AppCompatActivity {
         if (player != null) {
             player.setScore(gameScore, true);
         }
+
         return player;
     }
 
@@ -122,8 +125,14 @@ public class EndGameActivity extends AppCompatActivity {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+
                 User p = pdp.getUserFromTask(task);
-                p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                if(p != null) {
+                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                }
+                else{
+                    updateText(-1, -1, false);
+                }
             }
         });
 
@@ -142,12 +151,19 @@ public class EndGameActivity extends AppCompatActivity {
         if (resultButton == null || players == null)
             throw new IllegalArgumentException("Button linking end to results or players list is null");
         resultButton.setOnClickListener(v -> {
+            MediaPlayer.create(this, R.raw.button_press).start();
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
-            for (int i = 0; i < players.size(); ++i) {
-                resultIntent.putExtra("players" + i, players.get(i));
-            }
-            startActivity(resultIntent);
+            Helpers.putPlayersInIntent(resultIntent,players);
+            UserDatabaseProxy pdp = new UserDatabaseProxy();
+            pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    User p = pdp.getUserFromTask(task);
+                    resultIntent.putExtra("userEnd", p);
+                    startActivity(resultIntent);
+                    finish();
+                }
+            });
         });
     }
 
@@ -157,9 +173,9 @@ public class EndGameActivity extends AppCompatActivity {
     @NonNull
     private List<Player> getPlayersFromGame() {
         List<Player> players = new ArrayList<>();
-        int numberOfPlayers = getIntent().getIntExtra("players", 0);
+        int numberOfPlayers = getIntent().getIntExtra("numberOfPlayers", 0);
         for (int i = 0; i < numberOfPlayers; ++i) {
-            Player player = (Player) getIntent().getSerializableExtra("player" + i);
+            Player player = (Player) getIntent().getSerializableExtra("players" + i);
             players.add(player);
         }
         return players;

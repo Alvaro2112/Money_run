@@ -3,7 +3,6 @@ package sdp.moneyrun.ui.menu;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,9 +64,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
         ldbAdapter = new MainLeaderboardListAdapter(this, userList, user);
-        ListView ldbView = findViewById(R.id.ldblistView);
-        ldbView.setAdapter(ldbAdapter);
-        ldbAdapter.clear();
+        Helpers.addAdapter(ldbAdapter, this, R.id.ldblistView);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
