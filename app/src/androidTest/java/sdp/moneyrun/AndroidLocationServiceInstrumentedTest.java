@@ -3,10 +3,12 @@ package sdp.moneyrun;
 import android.content.Intent;
 import android.location.Criteria;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.location.LocationRepresentation;
@@ -16,12 +18,22 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
 @RunWith(AndroidJUnit4.class)
 public class AndroidLocationServiceInstrumentedTest {
+
+    @BeforeClass
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
+    }
 
     private Intent getStartIntent() {
         User currentUser = new User("999", "CURRENT_USER", "Epfl"
