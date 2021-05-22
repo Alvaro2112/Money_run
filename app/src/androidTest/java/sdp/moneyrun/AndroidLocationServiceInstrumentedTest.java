@@ -21,6 +21,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
@@ -83,6 +84,22 @@ public class AndroidLocationServiceInstrumentedTest {
 
                 assertTrue(locationService.isLocationMocked());
                 assertEquals(locationService.getCurrentLocation(), locationRepresentation);
+
+                locationService.resetMockedLocation();
+                assertFalse(locationService.isLocationMocked());
+            });
+        }
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void MockedLocationFailsOnNullLocation() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                Criteria criteria = new Criteria();
+                criteria.setAccuracy(Criteria.ACCURACY_FINE);
+
+                AndroidLocationService locationService = AndroidLocationService.buildFromContextAndCriteria(a.getApplicationContext(), criteria);
+                locationService.setMockedLocation(null);
             });
         }
     }
