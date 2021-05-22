@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,12 @@ public class FriendListActivity extends AppCompatActivity {
 
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
-        db.updatedFriendListFromDatabase(user).addOnCompleteListener(task -> {
+        Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
+        if(taskUpdatedUser == null){
+            return;
+        }
+
+        taskUpdatedUser.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 showFriendList();
             }
