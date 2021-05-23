@@ -198,6 +198,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * Adds a coin listener to database proxy,
+     * used to update the coin in the current game for the player map
+     */
     private void addCoinsListener() {
 
         proxyG.addCoinListener(game, new ValueEventListener() {
@@ -232,6 +236,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Adds functionality to the leaderboard button
+     */
     private void addLeaderboardButton() {
         leaderboardButton.setOnClickListener(v -> onButtonShowLeaderboard(mapView, true, R.layout.in_game_scores));
     }
@@ -371,6 +378,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
+    /**
+     * Function used when clicking the leaderboard button,
+     * fetches the game from the database and shows the name and score of the player in descending order
+     *
+     * @param view  The view on top of which the popup will be shown
+     * @param focusable whether the popup is focused
+     * @param layoutId the layoutId of the popup
+     *
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void onButtonShowLeaderboard(View view, Boolean focusable, int layoutId) {
         PopupWindow popupWindow = Helpers.onButtonShowPopupWindowClick(this, view, focusable, layoutId);
@@ -505,6 +521,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     }
 
+    /**
+     *
+     * Removes the coin from the symbol manager
+     * @param coin Coin to delete from the Symbolmanager
+     *
+     */
     public void deleteCoinFromMap(@NonNull Coin coin){
         LongSparseArray<Symbol> symbols = symbolManager.getAnnotations();
 

@@ -55,7 +55,8 @@ public class EndGameInstrumentedTest {
         }
 
     }
-    public static User  getUser(){
+
+    public static User getUser() {
         String name = "John Doe";
         String address = "Someeewhere";
         String id = "1234567891";
@@ -63,7 +64,8 @@ public class EndGameInstrumentedTest {
         User user = new User(id, name, address, 0, 0, 0);
         return user;
     }
-    public static Intent getEndGameIntent(){
+
+    public static Intent getEndGameIntent() {
         Intents.init();
         UserDatabaseProxy db = new UserDatabaseProxy();
         User user = getUser();
@@ -74,17 +76,15 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("hasDied", true);
 
         endGameIntent.putExtra("playerId", "1234567891");
-        try{
+        try {
             Thread.sleep(5000);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
 
         return endGameIntent;
     }
-
-
 
 
     @Test
@@ -148,8 +148,7 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             try {
                 Thread.sleep(5000);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 fail();
             }
             CountDownLatch updated = new CountDownLatch(1);
@@ -158,9 +157,9 @@ public class EndGameInstrumentedTest {
             userdb.getUserTask(user.getUserId()).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     User p = userdb.getUserFromTask(task);
-                    assertEquals(1,p.getNumberOfPlayedGames());
-                    assertEquals(1,p.getNumberOfDiedGames());
-                    assertEquals(3,p.getMaxScoreInGame());
+                    assertEquals(1, p.getNumberOfPlayedGames());
+                    assertEquals(1, p.getNumberOfDiedGames());
+                    assertEquals(3, p.getMaxScoreInGame());
                     updated.countDown();
                 }
             });

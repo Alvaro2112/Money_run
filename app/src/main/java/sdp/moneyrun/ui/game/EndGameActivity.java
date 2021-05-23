@@ -89,9 +89,7 @@ public class EndGameActivity extends AppCompatActivity {
      *                  Else shows that it failed to get the score
      */
     public void updateText(int numCoins, int gameScore, boolean succeeded) {
-
         StringBuilder textBuilder = new StringBuilder();
-
         if (succeeded) {
             textBuilder = textBuilder.append("You have gathered").append(numCoins).append("coins");
             textBuilder = textBuilder.append("\n");
@@ -99,11 +97,16 @@ public class EndGameActivity extends AppCompatActivity {
         } else {
             textBuilder = textBuilder.append("Unfortunately the coin you collected have been lost");
         }
-
         String newText = textBuilder.toString();
         endText.setText(newText);
     }
 
+    /**
+     * @param playerId The id of the user to update
+     * @param gameScore The score the player in the game
+     *
+     *  Updates the user in the database
+     */
     public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
@@ -122,7 +125,6 @@ public class EndGameActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
 
