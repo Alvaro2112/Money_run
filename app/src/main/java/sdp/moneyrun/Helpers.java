@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -20,13 +21,17 @@ import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -153,5 +158,51 @@ public class Helpers {
         for (int i = 0; i < players.size(); ++i) {
             intent.putExtra("players" + i, players.get(i));
         }
+    }
+
+    /**
+     * Define invalid button type
+     * @param button the button
+     */
+    public static void setInvalidButtonType(@NonNull Button button){
+        button.setEnabled(false);
+        button.setVisibility(View.GONE);
+    }
+
+    /**
+     * Join a lobby given the representation of a game
+     * @param gameRepresentation
+     */
+    public static void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation,
+                                         DatabaseReference databaseReference,
+                                         Activity activity,
+                                         User currentUser) {
+        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
+        final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
+        gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {
+                });
+                players.add(newPlayer);
+                gamePlayers.setValue(players);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("database", "Error adding a player who joined the Game to the DB \n" + error.getMessage());
+            }
+
+        });
+
+        Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
+        // Pass the game id to the lobby activity
+        if (newPlayer == null) {
+            throw new IllegalArgumentException();
+        }
+        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId())
+                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer)
+                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser);
+        activity.startActivity(lobbyIntent);
     }
 }
