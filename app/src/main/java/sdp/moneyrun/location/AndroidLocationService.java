@@ -117,8 +117,11 @@ public final class AndroidLocationService implements LocationService {
     }
 
     private Location getUpdatedLocation(Location location, Location l){
-        boolean isBetterLocation = location == null || l.getAccuracy() < location.getAccuracy();
-        if (l != null && isBetterLocation) {
+        if(l == null){
+            return location;
+        }
+
+        if (location == null || l.getAccuracy() < location.getAccuracy()) {
             return l;
         }
         return location;
