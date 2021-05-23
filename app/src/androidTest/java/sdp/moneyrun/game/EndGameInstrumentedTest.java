@@ -66,15 +66,13 @@ public class EndGameInstrumentedTest {
     }
 
     public static Intent getEndGameIntent() {
-        Intents.init();
-        UserDatabaseProxy db = new UserDatabaseProxy();
+         UserDatabaseProxy db = new UserDatabaseProxy();
         User user = getUser();
         db.putUser(user);
         Intent endGameIntent = new Intent(ApplicationProvider.getApplicationContext(), EndGameActivity.class);
         endGameIntent.putExtra("score", 3);
         endGameIntent.putExtra("numberOfCollectedCoins", 2);
         endGameIntent.putExtra("hasDied", true);
-
         endGameIntent.putExtra("playerId", "1234567891");
         try {
             Thread.sleep(5000);
@@ -112,7 +110,6 @@ public class EndGameInstrumentedTest {
     public void updateTextDisplaysGoodNumbers() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             scenario.onActivity(a -> a.updateText(1, 1, true));
-
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
             textBuilder = textBuilder.append("\n");
@@ -128,7 +125,8 @@ public class EndGameInstrumentedTest {
 
     @Test
     public void toMenuButtonWorks() {
-        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
             Thread.sleep(2000);
@@ -202,7 +200,6 @@ public class EndGameInstrumentedTest {
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
         }
-
     }
 
 
