@@ -66,7 +66,7 @@ public class EndGameInstrumentedTest {
     }
 
     public static Intent getEndGameIntent() {
-         UserDatabaseProxy db = new UserDatabaseProxy();
+        UserDatabaseProxy db = new UserDatabaseProxy();
         User user = getUser();
         db.putUser(user);
         Intent endGameIntent = new Intent(ApplicationProvider.getApplicationContext(), EndGameActivity.class);
@@ -126,7 +126,7 @@ public class EndGameInstrumentedTest {
     @Test
     public void toMenuButtonWorks() {
 
-        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
             Thread.sleep(2000);
