@@ -118,7 +118,7 @@ public class Game {
         }
 
         if (numCoins < 0) {
-            throw new IllegalArgumentException("Number of coins should be bigger than 0.");
+            throw new IllegalArgumentException("Number of coins should be bigger or equal than 0.");
         }
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius should be bigger than 0.");

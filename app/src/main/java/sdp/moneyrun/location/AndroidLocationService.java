@@ -4,6 +4,8 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.location.Criteria;
 
+import java.util.List;
+
 public final class AndroidLocationService implements LocationService {
 
     private final LocationManager locationManager;
@@ -73,7 +75,19 @@ public final class AndroidLocationService implements LocationService {
     @Override
     public LocationRepresentation getCurrentLocation() {
         try{
-            android.location.Location location = this.locationManager.getLastKnownLocation(getLocationProvider());
+            android.location.Location location = null;
+            List<String> providers = locationManager.getProviders(true);
+
+            for (String provider : providers) {
+                android.location.Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (location == null || l.getAccuracy() < location.getAccuracy()) {
+                    location = l;
+                }
+            }
+
             if(this.isLocationMocked){
                 return this.mockedLocation;
             }

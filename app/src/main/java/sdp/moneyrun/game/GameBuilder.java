@@ -27,6 +27,10 @@ public class GameBuilder {
     private Location startLocation;
     private boolean isVisible = true;
 
+    private static final int DEFAULT_NUM_COINS = 1;
+    private static final int DEFAULT_RADIUS = 10;
+    private static final int DEFAULT_DURATION = 60;
+
     /**
      * Empty constructor
      */
@@ -136,22 +140,21 @@ public class GameBuilder {
         return this;
     }
 
-    public void build() {
-
+    public Game build() {
         checkBuildArguments();
+        Game game;
 
-        if (riddles == null )
-            new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+        if (riddles == null ) {
+            game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins, DEFAULT_NUM_COINS, DEFAULT_RADIUS, DEFAULT_DURATION);
+        }else{
+            game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible, DEFAULT_NUM_COINS, DEFAULT_RADIUS, DEFAULT_DURATION);
 
-        else{
-
-            Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
-
-            if (players != null)
+            if (players != null) {
                 game.setPlayers(players, true);
-
+            }
         }
 
+        return game;
     }
 
     public void checkBuildArguments(){

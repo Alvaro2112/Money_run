@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -21,22 +22,31 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameRepresentation;
-import sdp.moneyrun.map.LocationRepresentation;
-import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
+import sdp.moneyrun.location.LocationService;
 import sdp.moneyrun.user.User;
 
 public class FriendListListAdapter extends ListAdapterWithUser {
 
     private Game friendGame = null;
+    private AndroidLocationService locationService;
 
-    public FriendListListAdapter(Activity context, List<User> userList, User user) {
-        super(context,userList, user);
+    private Button button;
+    private User userRequested;
+
+    public static final String TAG_BUTTON_PREFIX = "button";
+
+    public FriendListListAdapter(Activity context, List<User> userList, User user, AndroidLocationService locationService) {
+        super(context, userList, user);
+
+        this.locationService = locationService;
     }
 
     @SuppressLint("ViewHolder")
     public View getView(int position, View view, ViewGroup parent) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.friend_list_item_layout, parent, false);
-        User userRequested = getItem(position);
+        userRequested = getItem(position);
 
         TextView userNameView = view.findViewById(R.id.friend_list_name);
         TextView playedView = view.findViewById(R.id.friend_list_n_played_result);
@@ -47,26 +57,36 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         maxScoreView.setText(String.valueOf(userRequested.getMaxScoreInGame()));
 
         //Define button
-        Button button = view.findViewById(R.id.friend_list_join_game);
-        button.setOnClickListener(v -> addFriendButtonImplementation((Button) v));
-        updateFriendGameAccessibility(userRequested, button);
+        button = view.findViewById(R.id.friend_list_join_game);
+        Helpers.setInvalidButtonType(button);
+        updateJoinButton(userRequested, button);
 
         //Define a tag to recognize the user.
         view.setTag(userRequested.getUserId());
+        button.setTag(TAG_BUTTON_PREFIX + userRequested.getUserId());
 
         return view;
     }
 
-    private void updateFriendGameAccessibility(@NonNull User userRequested,
-                                               @NonNull Button button){
+    /**
+     * Define the join game button as valid or invalid depending on predicates
+     * @param userRequested the friend that may have a game
+     * @param button the join button
+     */
+    private void updateJoinButton(@NonNull User userRequested,
+                                  @NonNull Button button){
         Task<DataSnapshot> gameTask = getTaskFriendGame(userRequested);
         gameTask.addOnCompleteListener(task -> {
-            if(!task.isSuccessful() || (task.isSuccessful() && !friendGameIsJoinable())){
-                Helpers.setInvalidButtonType(button);
+            if(task.isSuccessful() && friendGameIsJoinable()) {
+                Helpers.setValidButtonType(button);
+                button.setOnClickListener(v -> addFriendButtonImplementation());
             }
         });
     }
 
+    /**
+     * @return true if the user can join the friend's game
+     */
     private boolean friendGameIsJoinable(){
         if(friendGame == null){
             return false;
@@ -76,11 +96,15 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         if(gameLocation == null){
             return false;
         }
+
         LocationRepresentation gameLocationRepr = new LocationRepresentation(gameLocation);
+        LocationRepresentation userLocation = locationService.getCurrentLocation();
+        if(userLocation == null){
+            return false;
+        }
+        double distance = gameLocationRepr.distanceTo(userLocation);
 
-        double distance = gameLocationRepr.distanceTo(...);
-
-        return friendGame != null && distance <= MenuImplementation.MAX_DISTANCE_TO_JOIN_GAME;
+        return distance <= MenuImplementation.MAX_DISTANCE_TO_JOIN_GAME;
     }
 
     /**
@@ -93,17 +117,30 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         Task<DataSnapshot> gameTask = db.getGameDataSnapshot(requestedUser.getUserId());
 
         gameTask.addOnCompleteListener(task -> {
-            if(task.getResult() == null){
+            try{
+                friendGame = db.getGameFromTaskSnapshot(task);
+            }catch(IllegalArgumentException e){
                 friendGame = null;
             }
-
-            friendGame = db.getGameFromTaskSnapshot(task);
         });
 
         return gameTask;
     }
 
-    private void addFriendButtonImplementation(@NonNull Button button){
+    /**
+     * Add button interaction to join game lobby
+     */
+    private void addFriendButtonImplementation(){
+        LocationRepresentation gameLocationRep = new LocationRepresentation(friendGame.getStartLocation());
 
+        GameRepresentation gameRepresentation = new GameRepresentation(friendGame.getId(),
+                friendGame.getName(),
+                friendGame.getPlayerCount(),
+                friendGame.getMaxPlayerCount(),
+                gameLocationRep);
+        Helpers.joinLobbyFromJoinButton(gameRepresentation,
+                FirebaseDatabase.getInstance().getReference(),
+                (Activity) getContext(),
+                getCurrentUser());
     }
 }

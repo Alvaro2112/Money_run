@@ -170,8 +170,20 @@ public class Helpers {
     }
 
     /**
+     * Define invalid button type
+     * @param button the button
+     */
+    public static void setValidButtonType(@NonNull Button button){
+        button.setEnabled(true);
+        button.setVisibility(View.VISIBLE);
+    }
+
+    /**
      * Join a lobby given the representation of a game
-     * @param gameRepresentation
+     * @param gameRepresentation the game to join
+     * @param databaseReference the database reference
+     * @param activity the activity
+     * @param currentUser the user that joins the game
      */
     public static void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation,
                                          DatabaseReference databaseReference,
