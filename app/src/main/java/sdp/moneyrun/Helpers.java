@@ -186,9 +186,13 @@ public class Helpers {
      * @param currentUser the user that joins the game
      */
     public static void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation,
-                                         DatabaseReference databaseReference,
-                                         Activity activity,
-                                         User currentUser) {
+                                               @NonNull DatabaseReference databaseReference,
+                                               @NonNull Activity activity,
+                                               @NonNull User currentUser) {
+        if(gameRepresentation.getGameId() == null){
+            throw new IllegalArgumentException("game representation id should not be null.");
+        }
+
         DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
         final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {

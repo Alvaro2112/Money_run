@@ -1,6 +1,8 @@
 package sdp.moneyrun.location;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Location;
 import android.location.LocationManager;
 import android.location.Criteria;
 
@@ -90,18 +92,7 @@ public final class AndroidLocationService implements LocationService {
             }
 
             // Otherwise, look for best location getter
-            android.location.Location location = null;
-            List<String> providers = locationManager.getProviders(true);
-
-            for (String provider : providers) {
-                android.location.Location l = locationManager.getLastKnownLocation(provider);
-                if (l == null) {
-                    continue;
-                }
-                if (location == null || l.getAccuracy() < location.getAccuracy()) {
-                    location = l;
-                }
-            }
+            Location location = getBestLocation();
 
             if(location == null){
                 return null;
@@ -113,6 +104,26 @@ public final class AndroidLocationService implements LocationService {
         }
     }
 
+    private Location getBestLocation(){
+        Location location = null;
+        List<String> providers = locationManager.getProviders(true);
+
+        for (String provider : providers) {
+            @SuppressLint("MissingPermission")
+            Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (location == null || l.getAccuracy() < location.getAccuracy()) {
+                location = l;
+            }
+        }
+        return location;
+    }
+
+    /**
+     * Define a mocked location.
+     */
     public void setMockedLocation(LocationRepresentation locationRepresentation){
         if(locationRepresentation == null){
             throw new IllegalArgumentException("mocked location representation should not be null.");
@@ -121,6 +132,9 @@ public final class AndroidLocationService implements LocationService {
         this.mockedLocation = locationRepresentation;
     }
 
+    /**
+     * Remove mocked location and use default location.
+     */
     public void resetMockedLocation(){
         this.isLocationMocked = false;
     }

@@ -107,8 +107,8 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         if(userLocation == null){
             return false;
         }
-        double distance = gameLocationRepr.distanceTo(userLocation);
 
+        double distance = gameLocationRepr.distanceTo(userLocation);
         return distance <= MenuImplementation.MAX_DISTANCE_TO_JOIN_GAME;
     }
 
@@ -137,6 +137,9 @@ public class FriendListListAdapter extends ListAdapterWithUser {
      */
     private void addFriendButtonImplementation(@Nullable Game friendGame){
         if(friendGame == null){
+            return;
+        }
+        if(getCurrentUser() == null){
             return;
         }
 
