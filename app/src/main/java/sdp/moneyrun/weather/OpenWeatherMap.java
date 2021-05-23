@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.location.LocationRepresentation;
 
 
 public class OpenWeatherMap {

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.location.LocationRepresentation;
 
 public class AddressGeocoder {
 
