@@ -195,21 +195,7 @@ public class Helpers {
 
         DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
         final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
-        gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {
-                });
-                players.add(newPlayer);
-                gamePlayers.setValue(players);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("database", "Error adding a player who joined the Game to the DB \n" + error.getMessage());
-            }
-
-        });
+        addGamePlayersListener(gamePlayers, newPlayer);
 
         Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
         // Pass the game id to the lobby activity
@@ -220,5 +206,22 @@ public class Helpers {
                 .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer)
                 .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser);
         activity.startActivity(lobbyIntent);
+    }
+
+    private static void addGamePlayersListener(DatabaseReference gamePlayers, Player newPlayer){
+        gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {});
+                players.add(newPlayer);
+                gamePlayers.setValue(players);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("database", "Error adding a player who joined the Game to the DB \n" + error.getMessage());
+            }
+
+        });
     }
 }

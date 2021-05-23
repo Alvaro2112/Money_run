@@ -111,12 +111,15 @@ public final class AndroidLocationService implements LocationService {
         for (String provider : providers) {
             @SuppressLint("MissingPermission")
             Location l = locationManager.getLastKnownLocation(provider);
-            if (l == null) {
-                continue;
-            }
-            if (location == null || l.getAccuracy() < location.getAccuracy()) {
-                location = l;
-            }
+            location = getUpdatedLocation(location, l);
+        }
+        return location;
+    }
+
+    private Location getUpdatedLocation(Location location, Location l){
+        boolean isBetterLocation = location == null || l.getAccuracy() < location.getAccuracy();
+        if (l != null && isBetterLocation) {
+            return l;
         }
         return location;
     }
