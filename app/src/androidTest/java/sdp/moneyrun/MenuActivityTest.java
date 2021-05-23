@@ -132,7 +132,7 @@ public class MenuActivityTest {
         }
     }
 
-
+    @Test
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
 

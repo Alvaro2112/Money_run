@@ -32,7 +32,7 @@ import java.util.Locale;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
-import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;

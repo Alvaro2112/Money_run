@@ -36,7 +36,7 @@ import java.io.IOException;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.RiddlesDatabase;
-import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
