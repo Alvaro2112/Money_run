@@ -19,8 +19,6 @@ public class User implements Serializable {
     private String userId;
     @Nullable
     private String name;
-    @Nullable
-    private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
     @NonNull
@@ -44,13 +42,12 @@ public class User implements Serializable {
      *
      * @param userId              the unique id that identifies a user
      * @param name the name of the user
-     * @param address the address of the user
      * @param numberOfDiedGames the number of games a user lost
      * @param numberOfPlayedGames the number of games a user played
      * @param maxScoreInGame  the highest score this user achieved in any game
-     * @throws IllegalArgumentException on empty or null address or name and on user = 0
+     * @throws IllegalArgumentException on empty or null name and on user = 0
      */
-    public User(@Nullable String userId, @Nullable String name, @Nullable String address, int numberOfDiedGames,
+    public User(@Nullable String userId, @Nullable String name, int numberOfDiedGames,
                 int numberOfPlayedGames, int maxScoreInGame) {
         if (userId == null)
             throw new IllegalArgumentException("The user ID cannot be null");
@@ -58,15 +55,11 @@ public class User implements Serializable {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("The name of the user cannot be null");
 
-        if (address == null || address.isEmpty())
-            throw new IllegalArgumentException("The address of the user cannot be null nor empty");
-
         if (maxScoreInGame < 0)
             throw new IllegalArgumentException("The max score of a user must be positive");
 
         this.userId = userId;
         this.name = name;
-        this.address = address;
         this.numberOfDiedGames = numberOfDiedGames;
         this.numberOfPlayedGames = numberOfPlayedGames;
         this.maxScoreInGame = maxScoreInGame;
@@ -105,16 +98,6 @@ public class User implements Serializable {
         dbUpdate(dbChange);
     }
 
-    /**
-     * Setter for address. By design the user already had an address
-     *
-     * @param address The new address of the user
-     * @param dbChange whether the database entry must be updated
-     */
-    public void setAddress(String address, boolean dbChange) {
-        this.address = address;
-        dbUpdate(dbChange);
-    }
 
     /**
      * Increments the number of played games
@@ -225,23 +208,6 @@ public class User implements Serializable {
     }
 
     /**
-     * @return the address of the user
-     */
-    @Nullable
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * Setter without db change
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.setAddress(address, false);
-    }
-
-    /**
      * @return the name of the user
      */
     @Nullable
@@ -315,13 +281,12 @@ public class User implements Serializable {
                 numberOfPlayedGames == user.numberOfPlayedGames &&
                 numberOfDiedGames == user.numberOfDiedGames &&
                 Objects.equals(name, user.name) &&
-                Objects.equals(address, user.address) &&
                 Objects.equals(friendIdList, user.friendIdList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, name, address, numberOfPlayedGames, numberOfDiedGames);
+        return Objects.hash(userId, name, numberOfPlayedGames, numberOfDiedGames);
     }
 
     /**

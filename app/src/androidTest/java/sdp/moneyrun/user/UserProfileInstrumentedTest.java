@@ -45,7 +45,7 @@ public class UserProfileInstrumentedTest {
 
     @NonNull
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
@@ -54,7 +54,7 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void checkButtonOpenRightActivities() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -78,12 +78,10 @@ public class UserProfileInstrumentedTest {
             Intents.init();
 
             String name = "John";
-            String address = "New York";
             int diedN = 0;
             int playedN = 5;
             User user = new User("12345");
             user.setName(name);
-            user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> a.setDisplayedTexts(user));
@@ -92,8 +90,6 @@ public class UserProfileInstrumentedTest {
                     .check(matches(withText("User has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
                     .check(matches(withText("User has played 5 many games")));
-            Espresso.onView(withId(R.id.playerAddress))
-                    .check(matches(withText("User address : New York")));
             Espresso.onView(withId(R.id.playerName))
                     .check(matches(withText("User name : John")));
             Intents.release();

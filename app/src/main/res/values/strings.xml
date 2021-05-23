@@ -23,6 +23,7 @@
     <string name="login_page_welcome_text">Login with your email or sign up!</string>
     <string name="login_page_keep_signed_in_text">Keep me signed in</string>
     <string name="go_back_to_main_menu">Go back to Main Menu</string>
+    <string name="profile_creation_chose_name">Chose the username other players will see</string>
     <string name="submit">submit</string>
     <string name="join_game">Join Game</string>
     <string name="open_games">Open Games</string>
@@ -109,7 +110,6 @@
     <string name="image_on_top_of_join_game_description">Image on top of join game</string>
     <string name="image_on_top_of_create_game_description">Image on top of create game</string>
     <string name="name_prompt_text">Enter your Name</string>
-    <string name="address_prompt_text">Enter your address</string>
     <string name="favorite_color_prompt_text">Enter your favorite color</string>
     <string name="favorite_animal_text">Enter your favorite animal</string>
     <string name="game_name_prompt_text">Enter game name</string>

@@ -38,23 +38,6 @@
         app:layout_constraintVertical_bias="0.185" />
 
     <EditText
-        android:id="@+id/registerAddressText"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_marginEnd="16dp"
-        android:autofillHints="Enter your address"
-        android:background="@drawable/inputs_register_profile"
-        android:drawableStart="@drawable/ic_baseline_house_register"
-        android:drawablePadding="12dp"
-        android:hint="@string/address_prompt_text"
-        android:inputType="textPostalAddress"
-        android:textColorHint="@color/cardview_dark_background"
-        app:layout_constraintBottom_toTopOf="@+id/submitProfileButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerNameText"
-        app:layout_constraintVertical_bias="0.151" />
-
-    <EditText
         android:id="@+id/registerColorText"
         android:layout_width="match_parent"
         android:layout_height="65dp"

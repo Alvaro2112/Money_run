@@ -48,16 +48,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
         usersRef.child(String.valueOf(user.getUserId())).setValue(user);
     }
 
-    public void putUser(User user, OnCompleteListener listener){
-        if(user == null){
-            throw new IllegalArgumentException("user should not be null");
-        }
-        if(listener == null){
-            throw new IllegalArgumentException("listener should not be null");
-        }
-        usersRef.child(String.valueOf(user.getUserId())).setValue(user).addOnCompleteListener(listener);
-    }
-
     /**
      * Remove a user to the database.
      *
@@ -107,7 +97,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
         } else {
             return null;
         }
-
     }
 
     /**
@@ -227,7 +216,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
         if(user == null || user.getUserId() == null){
             return null;
         }
-
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> userTask = db.getUserTask(user.getUserId());
         userTask.addOnCompleteListener(task -> {

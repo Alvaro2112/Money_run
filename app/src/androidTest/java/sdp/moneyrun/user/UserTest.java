@@ -49,9 +49,8 @@ public class UserTest {
     public void addUserListenerFailsCorrectly() {
         UserDatabaseProxy db = new UserDatabaseProxy();
         String name = "John Doe";
-        String address = "Somewhere";
         String id = "1234567891";
-        User user = new User(id, name, address, 0, 0, 0);
+        User user = new User(id, name, 0, 0, 0);
         db.addUserListener(user, null);
     }
 
@@ -63,54 +62,13 @@ public class UserTest {
     }
 
     @Test
-    public void setAddressWithDBUpdateWorks() {
-        CountDownLatch updated = new CountDownLatch(1);
-        String name = "John Doe";
-        String address = "Someeewhere";
-        String newAddress = "New Address";
-        String id = "1234567891";
-
-        User player = new User(id, name, address, 0, 0, 0);
-        UserDatabaseProxy db = new UserDatabaseProxy();
-        db.putUser(player);
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User p = snapshot.getValue(User.class);
-                if (p.getAddress().equals(newAddress)) {
-                    assertThat(p.getAddress(), is(newAddress));
-                    updated.countDown();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                assert (false);
-            }
-        };
-        db.addUserListener(player, listener);
-        player.setAddress(newAddress, true);
-        try {
-            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertThat(updated.getCount(), is(0L));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            assert (false);
-        }
-        db.removeUserListener(player, listener);
-        FirebaseDatabase.getInstance().goOnline();
-    }
-
-
-    @Test
     public void setNameWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         String newName = "New Address";
         String id = "1234567892";
 
-        User player = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
@@ -146,11 +104,10 @@ public class UserTest {
     public void setPlayedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         int newPlayedGames = 75;
         String id = "1234567893";
-        User player = new User(id, name, address, 0, 0, 0);
-        User player2 = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
+        User player2 = new User(id, name, 0, 0, 0);
 
 
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -190,11 +147,10 @@ public class UserTest {
     public void setDiedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         int newDiedGames = 75;
         String id = "1234567894";
 
-        User player = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
         ValueEventListener listener = new ValueEventListener() {
@@ -229,10 +185,9 @@ public class UserTest {
     public void updatePlayedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         String id = "1234567895";
 
-        User player = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
         ValueEventListener listener = new ValueEventListener() {
@@ -266,9 +221,8 @@ public class UserTest {
     public void updateDiedGamesWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         String id = "1234567896";
-        User player = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 
@@ -303,11 +257,10 @@ public class UserTest {
     public void setScoreWithDBUpdateWorks() {
         CountDownLatch updated = new CountDownLatch(1);
         String name = "John Doe";
-        String address = "Somewhere";
         int score = 75;
         String id = "1234567897";
 
-        User player = new User(id, name, address, 0, 0, 0);
+        User player = new User(id, name, 0, 0, 0);
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.putUser(player);
 

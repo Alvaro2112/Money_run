@@ -194,7 +194,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -258,7 +257,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -319,7 +317,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 

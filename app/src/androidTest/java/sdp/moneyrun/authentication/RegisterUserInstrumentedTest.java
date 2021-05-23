@@ -49,15 +49,12 @@ public class RegisterUserInstrumentedTest {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
-            String address = "New York";
             String pet = "Dog";
             String color = "Green";
             Espresso.onView(ViewMatchers.withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAddressText)).perform(typeText(address), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerNameText)).check(matches(withText(name)));
-            Espresso.onView(withId(R.id.registerAddressText)).check(matches(withText(address)));
             Espresso.onView(withId(R.id.registerAnimalText)).check(matches(withText(pet)));
             Espresso.onView(withId(R.id.registerColorText)).check(matches(withText(color)));
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
@@ -80,48 +77,13 @@ public class RegisterUserInstrumentedTest {
     }
 
     @Test
-    public void checkErrorWhenAddressIsEmpty() {
-        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
-            Intents.init();
-            final String expected = "Address field is empty";
-            Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.registerAddressText)).check(matches(withError(expected)));
-            Intents.release();
-        }
-    }
-
-    @Test
-    public void checkErrorWhenAnimalIsEmpty() {
-        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
-            Intents.init();
-            final String expected = "Animal field is empty";
-            Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.registerAnimalText)).check(matches(withError(expected)));
-            Intents.release();
-        }
-    }
-
-    @Test
-    public void checkErrorWhenColorIsEmpty() {
-        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
-            Intents.init();
-            final String expected = "Color field is empty";
-            Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
-            Espresso.onView(withId(R.id.registerColorText)).check(matches(withError(expected)));
-            Intents.release();
-        }
-    }
-
-    @Test
     public void checkProfileHasCorrectAttributesWhenPlayerRegisters() {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
-            String address = "New York";
             String pet = "Dog";
             String color = "Green";
             Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAddressText)).perform(typeText(address), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
@@ -136,8 +98,6 @@ public class RegisterUserInstrumentedTest {
                     .check(matches(withText("Player has died 0 many times")));
             Espresso.onView(withId(R.id.playerPlayedGames))
                     .check(matches(withText("Player has played 0 many games")));
-            Espresso.onView(withId(R.id.playerAddress))
-                    .check(matches(withText("Player address : New York")));
             Espresso.onView(withId(R.id.playerName))
                     .check(matches(withText("Player name : John")));
             Intents.release();
@@ -154,11 +114,9 @@ public class RegisterUserInstrumentedTest {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             String name = "John";
-            String address = "New York";
             String pet = "Dog";
             String color = "Green";
             Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAddressText)).perform(typeText(address), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());

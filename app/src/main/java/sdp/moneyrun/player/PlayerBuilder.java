@@ -36,10 +36,10 @@ public class PlayerBuilder {
     }
 
     /**
-     * Builds current instance. Address and name cannot be null or empty and playerId cannot be 0
+     * Builds current instance. name cannot be null or empty and playerId cannot be 0
      *
      * @return the player built with the attributes set
-     * @throws IllegalStateException if the address or name is null or empty, if the playerId is null
+     * @throws IllegalStateException if the name is null or empty, if the playerId is null
      */
     @NonNull
     public Player build() {

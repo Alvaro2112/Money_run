@@ -195,7 +195,6 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
         }
