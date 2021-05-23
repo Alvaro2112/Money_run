@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
-import sdp.moneyrun.location.LocationService;
 import sdp.moneyrun.user.User;
 
 public class FriendListListAdapter extends ListAdapterWithUser {

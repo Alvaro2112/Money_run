@@ -208,6 +208,11 @@ public class Helpers {
         activity.startActivity(lobbyIntent);
     }
 
+    /**
+     * Add game listener.
+     * @param gamePlayers the players
+     * @param newPlayer the new player
+     */
     private static void addGamePlayersListener(DatabaseReference gamePlayers, Player newPlayer){
         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -104,6 +104,9 @@ public final class AndroidLocationService implements LocationService {
         }
     }
 
+    /**
+     * @return the best location provider.
+     */
     private Location getBestLocation(){
         Location location = null;
         List<String> providers = locationManager.getProviders(true);
@@ -116,6 +119,11 @@ public final class AndroidLocationService implements LocationService {
         return location;
     }
 
+    /**
+     * @param location a location
+     * @param l another location
+     * @return the best location between 2 locations.
+     */
     private Location getUpdatedLocation(Location location, Location l){
         if(l == null){
             return location;
