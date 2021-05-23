@@ -44,6 +44,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -281,17 +282,23 @@ public class FriendListTest {
 
         try(ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(5000);
+
+            // Mock location
             scenario.onActivity(a -> {
                AndroidLocationService newLocationService = a.getLocationService();
                 newLocationService.setMockedLocation(new LocationRepresentation(getMockedLocation()));
                 a.setLocationService(newLocationService);
             });
 
-
             Thread.sleep(3000);
 
+            // Test join button states
             onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(2).getUserId()))).check(matches(not(isDisplayed())));
+
+            // Test join buttons functionality
+            onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(1).getUserId()))).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.lobby_title)).check(matches(withText(game.getName())));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -299,9 +306,5 @@ public class FriendListTest {
         for(User user : usersDatabase){
             db.removeUser(user);
         }
-
-        // DOES NOT WORK
-        GameDatabaseProxy gdb = new GameDatabaseProxy();
-        gdb.removeGame(game);
     }
 }

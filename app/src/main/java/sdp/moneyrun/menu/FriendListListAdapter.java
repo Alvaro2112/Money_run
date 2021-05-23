@@ -10,11 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import sdp.moneyrun.Helpers;
@@ -29,11 +32,8 @@ import sdp.moneyrun.user.User;
 
 public class FriendListListAdapter extends ListAdapterWithUser {
 
-    private Game friendGame = null;
     private AndroidLocationService locationService;
-
-    private Button button;
-    private User userRequested;
+    HashMap<Integer, Game> gamesByPosition = new HashMap<Integer, Game>();
 
     public static final String TAG_BUTTON_PREFIX = "button";
 
@@ -46,7 +46,9 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     @SuppressLint("ViewHolder")
     public View getView(int position, View view, ViewGroup parent) {
         view = LayoutInflater.from(getContext()).inflate(R.layout.friend_list_item_layout, parent, false);
-        userRequested = getItem(position);
+        User userRequested = getItem(position);
+        // Define game in hash map
+        gamesByPosition.put(position, null);
 
         TextView userNameView = view.findViewById(R.id.friend_list_name);
         TextView playedView = view.findViewById(R.id.friend_list_n_played_result);
@@ -57,9 +59,9 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         maxScoreView.setText(String.valueOf(userRequested.getMaxScoreInGame()));
 
         //Define button
-        button = view.findViewById(R.id.friend_list_join_game);
+        Button button = view.findViewById(R.id.friend_list_join_game);
         Helpers.setInvalidButtonType(button);
-        updateJoinButton(userRequested, button);
+        updateJoinButton(userRequested, button, position);
 
         //Define a tag to recognize the user.
         view.setTag(userRequested.getUserId());
@@ -74,12 +76,15 @@ public class FriendListListAdapter extends ListAdapterWithUser {
      * @param button the join button
      */
     private void updateJoinButton(@NonNull User userRequested,
-                                  @NonNull Button button){
-        Task<DataSnapshot> gameTask = getTaskFriendGame(userRequested);
+                                  @NonNull Button button,
+                                  int position){
+        Task<DataSnapshot> gameTask = getTaskFriendGame(userRequested, position);
         gameTask.addOnCompleteListener(task -> {
-            if(task.isSuccessful() && friendGameIsJoinable()) {
+            Game friendGame = gamesByPosition.get(position);
+
+            if(task.isSuccessful() && friendGameIsJoinable(friendGame)) {
                 Helpers.setValidButtonType(button);
-                button.setOnClickListener(v -> addFriendButtonImplementation());
+                button.setOnClickListener(v -> addFriendButtonImplementation(friendGame));
             }
         });
     }
@@ -87,7 +92,7 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     /**
      * @return true if the user can join the friend's game
      */
-    private boolean friendGameIsJoinable(){
+    private boolean friendGameIsJoinable(@Nullable Game friendGame){
         if(friendGame == null){
             return false;
         }
@@ -112,15 +117,15 @@ public class FriendListListAdapter extends ListAdapterWithUser {
      * @param requestedUser the user's friend
      * @return the task retrieving the friends task from database
      */
-    private Task<DataSnapshot> getTaskFriendGame(@NonNull User requestedUser){
+    private Task<DataSnapshot> getTaskFriendGame(@NonNull User requestedUser, int position){
         GameDatabaseProxy db = new GameDatabaseProxy();
         Task<DataSnapshot> gameTask = db.getGameDataSnapshot(requestedUser.getUserId());
 
         gameTask.addOnCompleteListener(task -> {
             try{
-                friendGame = db.getGameFromTaskSnapshot(task);
+                gamesByPosition.put(position, db.getGameFromTaskSnapshot(task));
             }catch(IllegalArgumentException e){
-                friendGame = null;
+                gamesByPosition.put(position, null);
             }
         });
 
@@ -130,7 +135,11 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     /**
      * Add button interaction to join game lobby
      */
-    private void addFriendButtonImplementation(){
+    private void addFriendButtonImplementation(@Nullable Game friendGame){
+        if(friendGame == null){
+            return;
+        }
+
         LocationRepresentation gameLocationRep = new LocationRepresentation(friendGame.getStartLocation());
 
         GameRepresentation gameRepresentation = new GameRepresentation(friendGame.getId(),

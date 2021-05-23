@@ -56,6 +56,9 @@ public final class AndroidLocationService implements LocationService {
         );
     }
 
+    /**
+     * @return the location provider
+     */
     public String getLocationProvider() {
         if (this.locationProvider != null) {
             return this.locationProvider;
@@ -64,10 +67,16 @@ public final class AndroidLocationService implements LocationService {
         return this.locationManager.getBestProvider(this.locationCriteria, true);
     }
 
+    /**
+     * @return the location criteria
+     */
     public Criteria getLocationCriteria() {
         return this.locationCriteria;
     }
 
+    /**
+     * @return true if the location is mocked, false otherwise
+     */
     public boolean isLocationMocked(){
         return this.isLocationMocked;
     }
@@ -75,6 +84,12 @@ public final class AndroidLocationService implements LocationService {
     @Override
     public LocationRepresentation getCurrentLocation() {
         try{
+            // Return mocked location if enabled
+            if(this.isLocationMocked){
+                return this.mockedLocation;
+            }
+
+            // Otherwise, look for best location getter
             android.location.Location location = null;
             List<String> providers = locationManager.getProviders(true);
 
@@ -86,10 +101,6 @@ public final class AndroidLocationService implements LocationService {
                 if (location == null || l.getAccuracy() < location.getAccuracy()) {
                     location = l;
                 }
-            }
-
-            if(this.isLocationMocked){
-                return this.mockedLocation;
             }
 
             if(location == null){
