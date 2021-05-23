@@ -1,6 +1,5 @@
 package sdp.moneyrun.ui.map;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -55,7 +54,6 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.EndGameActivity;
 
 
 /*
@@ -321,7 +319,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } else {
                 if(! hasEnded) {
                     hasEnded = true;
-                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
+                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
 
                 }
             }
@@ -503,7 +501,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         initCircle();
         boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
         if(check)
-            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,true);;
 
     }
 

@@ -35,6 +35,7 @@ public class EndGameActivity extends AppCompatActivity {
     private TextView endText;
     private String playerId;
     private Button resultButton;
+    private boolean hasDied;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class EndGameActivity extends AppCompatActivity {
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
         score = getIntent().getIntExtra("score", 0);
         playerId = getIntent().getStringExtra("playerId");
+        hasDied = getIntent().getBooleanExtra("hasDied",false);
         updateText(numberOfCollectedCoins, score, true);
 
         if (playerId != null) {
@@ -117,7 +119,6 @@ public class EndGameActivity extends AppCompatActivity {
         if (player != null) {
             player.setScore(gameScore, true);
         }
-
         return player;
     }
 
@@ -125,10 +126,14 @@ public class EndGameActivity extends AppCompatActivity {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-
                 User p = pdp.getUserFromTask(task);
                 if(p != null) {
-                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
+                    int max_score = p.getMaxScoreInGame() > gameScore ? p.getMaxScoreInGame() : gameScore;
+                    p.setMaxScoreInGame(max_score,true);
+                    p.setNumberOfPlayedGames(p.getNumberOfPlayedGames()+1,true);
+                    if(hasDied){
+                        p.setNumberOfDiedGames(p.getNumberOfDiedGames()+1,true);
+                    }
                 }
                 else{
                     updateText(-1, -1, false);
