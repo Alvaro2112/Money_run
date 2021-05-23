@@ -110,8 +110,7 @@ public class EndGameActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 User p = pdp.getUserFromTask(task);
                 if(p != null) {
-
-                    int max_score = p.getMaxScoreInGame() > gameScore ? p.getMaxScoreInGame() : gameScore;
+                    int max_score = Math.max(p.getMaxScoreInGame(), gameScore);
                     p.setMaxScoreInGame(max_score,true);
                     p.setNumberOfPlayedGames(p.getNumberOfPlayedGames()+1,true);
                     if(hasDied){
