@@ -69,8 +69,6 @@ public class GameBuilderTest {
         assertThrows(IllegalArgumentException.class, () -> gb.setCoins(null));
         assertThrows(IllegalArgumentException.class, () -> gb.setRiddles(null));
         assertThrows(IllegalArgumentException.class, () -> gb.setStartLocation(null));
-        assertThrows(IllegalArgumentException.class, () -> gb.setRadius(0));
-        assertThrows(IllegalArgumentException.class, () -> gb.setDuration(0));
     }
 
     @Test
@@ -88,8 +86,6 @@ public class GameBuilderTest {
                 .setRiddles(new ArrayList<>())
                 .setPlayers(players)
                 .setIsVisible(false)
-                .setRadius(10)
-                .setDuration(60)
                 .build();
     }
 }
