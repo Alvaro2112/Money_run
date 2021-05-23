@@ -29,7 +29,6 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings("FieldCanBeLocal")
 public class EndGameActivity extends AppCompatActivity {
 
-    private final int gameScore = 0;
     private int score;
     private int numberOfCollectedCoins;
     private TextView endText;
@@ -49,8 +48,7 @@ public class EndGameActivity extends AppCompatActivity {
         updateText(numberOfCollectedCoins, score, true);
 
         if (playerId != null) {
-            updatePlayer(playerId, gameScore);
-            updateUser(playerId, gameScore);
+            updateUser(playerId, score);
         } else {
             playerId = "";
             updateText(-1, -1, false);
@@ -106,28 +104,13 @@ public class EndGameActivity extends AppCompatActivity {
         endText.setText(newText);
     }
 
-
-    /**
-     * Adds the score of the game to the player total score
-     *
-     * @param playerId  player to update
-     * @param gameScore score to be added
-     */
-    @NonNull
-    public Player updatePlayer(String playerId, int gameScore) {
-        final Player player = new Player(playerId, "name", gameScore);
-        if (player != null) {
-            player.setScore(gameScore, true);
-        }
-        return player;
-    }
-
     public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User p = pdp.getUserFromTask(task);
                 if(p != null) {
+
                     int max_score = p.getMaxScoreInGame() > gameScore ? p.getMaxScoreInGame() : gameScore;
                     p.setMaxScoreInGame(max_score,true);
                     p.setNumberOfPlayedGames(p.getNumberOfPlayedGames()+1,true);

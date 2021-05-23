@@ -369,7 +369,7 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
+                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a,false);
                 finished.set(true);
             }));
             do {
@@ -1277,7 +1277,7 @@ public class MapInstrumentedTest {
                 scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
                     boolean c = a.checkIfLegalPosition(new Coin(90,90,2),3,0.0,0.0);
                     if (c)
-                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a);
+                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a,false);
                     assertEquals(c,true);
                     finished.set(true);
                 }));
