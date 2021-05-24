@@ -13,6 +13,7 @@ import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +26,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.offline.OfflineManager;
+import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
@@ -95,6 +101,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private double shrinkingFactor = 0.9;
 
     private ArrayList<Coin> seenCoins;
+    private OfflineManager offlineManager;
+    private boolean hasFoundMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +114,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView, R.layout.activity_map);
+
         mapView.getMapAsync(this);
 
         getViews();
@@ -266,11 +275,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-
+        hasFoundMap = false;
         callback = new LocationCheckObjectivesCallback(this);
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
-
+            offlineManager = OfflineManager.getInstance(MapActivity.this);
+            getDownloadedRegion();
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
             symbolManager.setIconAllowOverlap(true);
@@ -301,6 +311,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public double getGameDuration(){return game_time;}
     @Nullable
     public Location getGameCenter(){return game_center;}
+    public boolean getHasFoundMap() {
+        return hasFoundMap;
+    }
 
 
     @Nullable
@@ -568,6 +581,41 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
     }
+    private void getDownloadedRegion() {
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+
+            @Override
+            public void onList(@Nullable OfflineRegion[] offlineRegions) {
+                if (offlineRegions == null || offlineRegions.length == 0) {
+                    hasFoundMap = false;
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
+
+                hasFoundMap = true;
+                // Create new camera position
+                int regionSelected = 0;
+                LatLngBounds bounds = (offlineRegions[regionSelected].getDefinition()).getBounds();
+                double regionZoom = (offlineRegions[regionSelected].getDefinition()).getMinZoom();
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(bounds.getCenter())
+                        .zoom(regionZoom)
+                        .build();
+                Toast.makeText(getApplicationContext(), bounds.toString(), Toast.LENGTH_SHORT).show();
+
+                // Move camera to new position
+                mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(MapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     /**
      * Draws a circle of a predefined radius that corresponds to the radius inside which coins get generated
