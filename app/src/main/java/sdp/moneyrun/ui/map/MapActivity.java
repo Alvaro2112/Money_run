@@ -315,10 +315,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         chronometer.start();
         chronometerCounter = 0;
         chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
+        shrinkingFactor = (circleRadius)/(2*game_time);
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
-                circleRadius *= shrinkingFactor;
+                circleRadius -= shrinkingFactor;
                 initCircle();
             } else {
                 if(! hasEnded) {
