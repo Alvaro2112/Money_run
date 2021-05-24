@@ -46,14 +46,12 @@ public class EndGameActivity extends AppCompatActivity {
         playerId = getIntent().getStringExtra("playerId");
         hasDied = getIntent().getBooleanExtra("hasDied",false);
         updateText(numberOfCollectedCoins, score, true);
-
         if (playerId != null) {
             updateUser(playerId, score);
         } else {
             playerId = "";
             updateText(-1, -1, false);
         }
-
         final ImageButton toMenu = findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
         resultButton = findViewById(R.id.end_game_button_to_results);
