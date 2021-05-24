@@ -73,7 +73,13 @@ public class SignUpActivity extends AppCompatActivity {
                         updateUI(user);
                     } else {
                         Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignUpActivity.this, "Authentication failed : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        String errorMessage = task.getException().getMessage() == null
+                                ? "Reason unknown"
+                                : task.getException().getMessage();
+                        Toast.makeText(
+                                SignUpActivity.this,
+                                "Authentication failed : " + errorMessage,
+                                Toast.LENGTH_SHORT).show();
                         submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.design_default_color_background));
                     }
                 });
