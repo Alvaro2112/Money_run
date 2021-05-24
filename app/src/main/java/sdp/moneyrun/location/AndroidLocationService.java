@@ -124,7 +124,7 @@ public final class AndroidLocationService implements LocationService {
      * @param l another location
      * @return the best location between 2 locations.
      */
-    private Location getUpdatedLocation(Location location, Location l){
+    public Location getUpdatedLocation(Location location, Location l){
         if(l == null){
             return location;
         }

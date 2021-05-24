@@ -3,6 +3,7 @@ package sdp.moneyrun;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
@@ -143,6 +144,9 @@ public class FriendListTest {
                 .setCoins(new ArrayList<>())
                 .setPlayers(players)
                 .setRiddles(new ArrayList<>())
+                .setNumCoins(10)
+                .setRadius(10)
+                .setDuration(999999)
                 .build();
         game.setId(host.getPlayerId());
         gdb.putGame(game);
