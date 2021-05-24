@@ -189,34 +189,31 @@ public class GameBuilder {
 
     public void checkBuildArguments(){
 
-        if (name == null){
+        if (name == null)
             throw new IllegalStateException("name should not be null.");
 
-        }
-        if (host == null){
+        if (host == null)
             throw new IllegalStateException("host should not be null.");
-        }
-        if (maxPlayerCount <= 0){
-            throw new IllegalStateException("max player count should be greater than 0.");
-        }
-        if (coins == null){
-            throw new IllegalStateException("coins should not be null.");
-        }
-        if (startLocation == null){
-            throw new IllegalStateException("start location should not be null.");
-        }
-        if (riddles == null && players == null){
-            throw new IllegalStateException("players and riddles should not be null.");
-        }
-        if (numCoins < 0) {
-            throw new IllegalStateException("number of coins should be bigger or equal than 0.");
-        }
-        if (radius <= 0) {
-            throw new IllegalStateException("radius should be bigger than 0.");
-        }
-        if (duration <= 0) {
-            throw new IllegalStateException("duration should be bigger than 0.");
-        }
 
+        if (maxPlayerCount <= 0)
+            throw new IllegalStateException("max player count should be greater than 0.");
+
+        if (coins == null)
+            throw new IllegalStateException("coins should not be null.");
+
+        if (startLocation == null)
+            throw new IllegalStateException("start location should not be null.");
+
+        if (riddles == null && players == null)
+            throw new IllegalStateException("players and riddles should not be null.");
+
+        if (numCoins < 0)
+            throw new IllegalStateException("number of coins should be bigger or equal than 0.");
+
+        if (radius <= 0)
+            throw new IllegalStateException("radius should be bigger than 0.");
+
+        if (duration <= 0)
+            throw new IllegalStateException("duration should be bigger than 0.");
     }
 }
