@@ -23,8 +23,13 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         view = LayoutInflater.from(getContext()).inflate(R.layout.friend_list_item_layout, parent, false);
         User userRequested = getItem(position);
 
-        TextView userNameView = view.findViewById(R.id.add_friend_list_player_name);
+        TextView userNameView = view.findViewById(R.id.friend_list_name);
+        TextView playedView = view.findViewById(R.id.friend_list_n_played_result);
+        TextView maxScoreView = view.findViewById(R.id.friend_list_logo_max_score_result);
+
         userNameView.setText(String.valueOf(userRequested.getName()));
+        playedView.setText(String.valueOf(userRequested.getNumberOfPlayedGames()));
+        maxScoreView.setText(String.valueOf(userRequested.getMaxScoreInGame()));
 
         //Define a tag to recognize the user.
         view.setTag(userRequested.getUserId());

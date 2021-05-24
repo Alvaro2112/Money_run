@@ -1,4 +1,4 @@
-package sdp.moneyrun.map;
+package sdp.moneyrun.location;
 
 import android.location.Location;
 

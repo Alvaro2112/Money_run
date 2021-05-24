@@ -65,7 +65,7 @@ this map implements all the functionality we will need.
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     private static final double ZOOM_FOR_FEATURES = 15.;
-    private static int chronometerCounter = 0;
+    private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
     private final String COIN_ID = "COIN";
     private final float ICON_SIZE = 1.5f;
@@ -87,7 +87,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean host = false;
     private MapPlayerListAdapter ldbListAdapter;
     public int coinsToPlace;
-
+    private boolean hasEnded;
     private CircleManager circleManager;
     private double game_radius;
     private int game_time;
@@ -145,6 +145,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         seenCoins = new ArrayList<>();
         proxyG = new GameDatabaseProxy();
         localPlayer = new LocalPlayer();
+        hasEnded = false;
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -282,7 +283,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public Chronometer getChronometer() {
         return chronometer;
     }
-
+    public int getChronometerCounter(){return chronometerCounter;}
     public Location getCurrentLocation() {
         return currentLocation;
     }
@@ -312,12 +313,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private void initChronometer() {
 
         chronometer.start();
+        chronometerCounter = 0;
         chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
             } else {
-                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
+                if(! hasEnded) {
+                    hasEnded = true;
+                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
+
+                }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });

@@ -239,6 +239,7 @@ public class Game {
         Helpers.putPlayersInIntent(endGameIntent,players);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
+
     }
 
     public boolean isStarted() {

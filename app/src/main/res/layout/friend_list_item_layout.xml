@@ -1,17 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:textSize="20sp"
-        android:textColor="#CCCCCC"
-        android:text="Medium Text"
-        android:gravity="start"
-        android:id="@+id/add_friend_list_player_name"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="78dp">
+
+        <Button
+            android:id="@+id/friend_list_join_game"
+            android:layout_width="89dp"
+            android:layout_height="26dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/layout_rounded"
+            android:text="@string/friend_list_join_game_text"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/friend_list_name"
+            android:layout_width="246dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:gravity="start"
+            android:text=""
+            android:textColor="#CCCCCC"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/friend_list_n_played"
+            android:layout_width="207dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:gravity="start"
+            android:text="@string/friend_list_logo_n_played"
+            android:textColor="#CCCCCC"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friend_list_name" />
+
+        <TextView
+            android:id="@+id/friend_list_max_score"
+            android:layout_width="103dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="120dp"
+            android:gravity="start"
+            android:text="@string/friend_list_logo_max_score"
+            android:textColor="#CCCCCC"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friend_list_n_played" />
+
+        <TextView
+            android:id="@+id/friend_list_n_played_result"
+            android:layout_width="51dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="2dp"
+            android:gravity="start"
+            android:text=""
+            android:textColor="#CCCCCC"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/friend_list_n_played"
+            app:layout_constraintTop_toBottomOf="@+id/friend_list_name" />
+
+        <TextView
+            android:id="@+id/friend_list_logo_max_score_result"
+            android:layout_width="51dp"
+            android:layout_height="21dp"
+            android:gravity="start"
+            android:text=""
+            android:textColor="#CCCCCC"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/friend_list_max_score"
+            app:layout_constraintTop_toBottomOf="@+id/friend_list_n_played_result" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
