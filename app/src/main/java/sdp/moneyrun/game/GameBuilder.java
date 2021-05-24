@@ -27,9 +27,9 @@ public class GameBuilder {
     private Location startLocation;
     private boolean isVisible = true;
 
-    private static final int DEFAULT_NUM_COINS = 1;
-    private static final int DEFAULT_RADIUS = 10;
-    private static final int DEFAULT_DURATION = 60;
+    private int numCoins = -1;
+    private int radius = 0;
+    private int duration = 0;
 
     /**
      * Empty constructor
@@ -140,14 +140,44 @@ public class GameBuilder {
         return this;
     }
 
+    @NonNull
+    public GameBuilder setNumCoins(int numCoins){
+        if(numCoins < 0){
+            throw new IllegalArgumentException("number of coins should be bigger or equal than 0.");
+        }
+        this.numCoins = numCoins;
+
+        return this;
+    }
+
+    @NonNull
+    public GameBuilder setRadius(int radius){
+        if(radius <= 0){
+            throw new IllegalArgumentException("Radius should be bigger than 0.");
+        }
+        this.radius = radius;
+
+        return this;
+    }
+
+    @NonNull
+    public GameBuilder setDuration(int duration){
+        if(duration <= 0){
+            throw new IllegalArgumentException("duration should be bigger than 0.");
+        }
+        this.duration = duration;
+
+        return this;
+    }
+
     public Game build() {
         checkBuildArguments();
         Game game;
 
         if (riddles == null ) {
-            game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins, DEFAULT_NUM_COINS, DEFAULT_RADIUS, DEFAULT_DURATION);
+            game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         }else{
-            game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible, DEFAULT_NUM_COINS, DEFAULT_RADIUS, DEFAULT_DURATION);
+            game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible, numCoins, radius, duration);
 
             if (players != null) {
                 game.setPlayers(players, true);
@@ -159,23 +189,34 @@ public class GameBuilder {
 
     public void checkBuildArguments(){
 
-        if (name == null)
+        if (name == null){
             throw new IllegalStateException("name should not be null.");
 
-        if (host == null)
+        }
+        if (host == null){
             throw new IllegalStateException("host should not be null.");
-
-        if (maxPlayerCount <= 0)
+        }
+        if (maxPlayerCount <= 0){
             throw new IllegalStateException("max player count should be greater than 0.");
-
-        if (coins == null)
+        }
+        if (coins == null){
             throw new IllegalStateException("coins should not be null.");
-
-        if (startLocation == null)
+        }
+        if (startLocation == null){
             throw new IllegalStateException("start location should not be null.");
-
-        if (riddles == null && players == null)
+        }
+        if (riddles == null && players == null){
             throw new IllegalStateException("players and riddles should not be null.");
+        }
+        if (numCoins < 0) {
+            throw new IllegalStateException("number of coins should be bigger or equal than 0.");
+        }
+        if (radius <= 0) {
+            throw new IllegalStateException("radius should be bigger than 0.");
+        }
+        if (duration <= 0) {
+            throw new IllegalStateException("duration should be bigger than 0.");
+        }
 
     }
 }
