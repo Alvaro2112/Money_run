@@ -1,6 +1,5 @@
 package sdp.moneyrun.ui.map;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -44,6 +43,7 @@ import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
@@ -55,7 +55,6 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.EndGameActivity;
 
 
 /*
@@ -124,6 +123,23 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initializeGame(gameId);
             }
         });
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

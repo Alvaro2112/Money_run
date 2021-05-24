@@ -1,11 +1,9 @@
 package sdp.moneyrun.ui.menu;
 
-import android.app.UiAutomation;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,14 +17,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -34,6 +31,8 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private final List<Player> playerList = new ArrayList<>();
     private LeaderboardListAdapter ldbAdapter;
+
+    private final String TAG = LeaderboardActivity.class.getSimpleName();
     @Nullable
     private Player user;
     User userFromEnd;
@@ -53,6 +52,23 @@ public class LeaderboardActivity extends AppCompatActivity {
         // Put addPlayer with local cache
         getEndGamePlayers();
         linkToMenuButton(toMenu);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

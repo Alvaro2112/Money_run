@@ -16,12 +16,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 
 public class SignUpActivity extends AppCompatActivity {
     private final String TAG = SignUpActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private boolean isClicked;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,23 @@ public class SignUpActivity extends AppCompatActivity {
                 submitSignUp(email, password);
             }
         });
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     @Override

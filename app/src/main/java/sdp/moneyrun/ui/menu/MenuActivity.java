@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
@@ -70,6 +71,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private LocationRepresentation currentLocation;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
+
+    private final String TAG = MenuActivity.class.getSimpleName();
+
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
@@ -112,6 +116,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         runFunctionalities();
         addDownloadButton();
         addOfflineMapButton();
+
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     public void addDownloadButton() {

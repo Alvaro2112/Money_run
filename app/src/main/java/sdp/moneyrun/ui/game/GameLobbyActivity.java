@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
@@ -63,6 +64,23 @@ public class GameLobbyActivity extends AppCompatActivity {
         this.thisGame = FirebaseDatabase.getInstance().getReference()
                 .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     public LobbyPlayerListAdapter getListAdapter() {
