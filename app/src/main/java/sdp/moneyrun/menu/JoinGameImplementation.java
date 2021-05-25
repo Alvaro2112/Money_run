@@ -117,12 +117,10 @@ public class JoinGameImplementation extends MenuImplementation {
                 AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
                 LocationRepresentation location = locationService.getCurrentLocation();
                 if(location == null || gameRepresentation.getStartLocation() == null){
-                    System.out.println("LOCATION RESULT IS " + location + " " + gameRepresentation.getStartLocation());
                     return;
                 }
 
                 double distance = location.distanceTo(gameRepresentation.getStartLocation());
-                System.out.println("DISTANCE " + gameRepresentation.getName() +" IS" + distance);
                 if ((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
                     displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                     buttonId++;
