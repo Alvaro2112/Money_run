@@ -37,6 +37,7 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {
@@ -48,6 +49,8 @@ public class JoinGameImplementation extends MenuImplementation {
     @Nullable
     private final User currentUser;
     private int buttonId;
+
+    public static final String TAG_GAME_PREFIX = "game";
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -111,13 +114,15 @@ public class JoinGameImplementation extends MenuImplementation {
                 String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
 
                 // Get user location and compute distance
-                AndroidLocationService locationService = AndroidLocationService.buildFromContextAndProvider(gameLayout.getContext(), "");
+                AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
                 LocationRepresentation location = locationService.getCurrentLocation();
                 if(location == null || gameRepresentation.getStartLocation() == null){
+                    System.out.println("LOCATION RESULT IS " + location + " " + gameRepresentation.getStartLocation());
                     return;
                 }
 
                 double distance = location.distanceTo(gameRepresentation.getStartLocation());
+                System.out.println("DISTANCE " + gameRepresentation.getName() +" IS" + distance);
                 if ((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
                     displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                     buttonId++;
@@ -215,6 +220,8 @@ public class JoinGameImplementation extends MenuImplementation {
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
         gameLayout.addView(gameRow, gameParams);
+        // Define view tag
+        gameLayout.setTag(TAG_GAME_PREFIX + gameRepresentation.getGameId());
     }
 
     @SuppressLint("MissingPermission")
