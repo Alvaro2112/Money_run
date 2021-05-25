@@ -128,7 +128,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initializeGame(gameId);
         });
 
-        initLocationManager();
+        //initLocationManager();
 
     }
 
