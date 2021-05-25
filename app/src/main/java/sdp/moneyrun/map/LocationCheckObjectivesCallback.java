@@ -33,12 +33,13 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     @Override
     public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
-        if (activity != null) {
+        if (activity != null && !init) {
             Location location = result.getLastLocation();
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null && location != null) {
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                 activity.checkObjectives(location);
+                init = true;
             }
         }
     }
