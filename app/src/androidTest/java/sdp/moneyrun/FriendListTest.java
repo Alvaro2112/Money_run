@@ -174,21 +174,21 @@ public class FriendListTest {
         }
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
             //Join add friends
             onView(ViewMatchers.withId(R.id.friend_list_search_button)).perform(ViewActions.click());
-
+            Thread.sleep(5000);
             //Search
             onView(ViewMatchers.withId(R.id.friend_add_list_filter)).perform(typeText(randomString), closeSoftKeyboard());
             onView(ViewMatchers.withId(R.id.friend_add_list_search_button)).perform(ViewActions.click());
 
-            Thread.sleep(3000);
+            Thread.sleep(5000);
 
             //Remove Paul to the friend list
             onView(ViewMatchers.withTagKey(R.string.add_friend_tag_1, Matchers.is(usersDatabase.get(1).getUserId()))).perform(ViewActions.click());
@@ -196,7 +196,7 @@ public class FriendListTest {
             //Check that Paul is not a friend anymore
             onView(ViewMatchers.withId(R.id.friend_add_list_button_back)).perform(ViewActions.click());
 
-            Thread.sleep(3000);
+            Thread.sleep(5000);
 
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(doesNotExist());
 
