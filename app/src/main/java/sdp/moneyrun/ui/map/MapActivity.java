@@ -158,8 +158,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
 
         };
-       // if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-         //   locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+
+        try {
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+        }catch (Exception e){
+            //Phone does not have GPS capabilities
+        }
     }
 
 
