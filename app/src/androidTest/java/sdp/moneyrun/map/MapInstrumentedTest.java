@@ -1298,4 +1298,108 @@ public class MapInstrumentedTest {
             }
         }
 
+
+    @Test
+    public void endsGameIfCoinNotInCircle() {
+
+        Player currentUser = new Player("3212", "CURRENT_USER", 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        toStart.putExtra("currentUser", currentUser);
+
+        String name = "Game";
+        Player host = new Player("98934", "Bob", 0);
+        int maxPlayerCount = 2;
+        List<Riddle> riddles = new ArrayList<>();
+        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
+        List<Coin> coins = new ArrayList<>();
+        Location location = new Location("LocationManager#GPS_PROVIDER");
+        location.setLatitude(37.42);
+        location.setLongitude(-122.084);
+
+
+        int num_coins = 2;
+        double duration = 4;
+        double radius = 5.01;
+
+        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
+        intent.putExtra("player", host);
+        intent.putExtra("host", true);
+        intent.putExtra("useDB", true);
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+            scenario.onActivity(a -> {
+                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
+                    @Override
+                    public void onDidFinishRenderingMap(boolean fully) {
+                        if (fully) {
+                            finished.set(true);
+                        }
+                    }
+                });
+            });
+            do {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+            } while (!finished.get());
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+                assertEquals(-1, 2);
+            }
+
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            final GameDatabaseProxy db = new GameDatabaseProxy();
+            //FIRST CHECK THAT IT IS INITIALIZED WELL
+            Task<DataSnapshot> dataTask = ref.child("games").child(id).get();
+            dataTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Game fromDB = db.getGameFromTaskSnapshot(task);
+                    scenario.onActivity(activity -> {
+                        assertEquals(2, activity.coinsToPlace);
+                        assertEquals(2, activity.getSymbolManager().getAnnotations().size());
+                        assertEquals(2, activity.getLocalPlayer().getLocallyAvailableCoins().size());
+                    });
+                    assertEquals(2, fromDB.getCoins().size());
+                    scenario.onActivity(activity -> {
+                        activity.removeCoin(fromDB.getCoins().get(0), true);
+                    });
+                } else {
+                    fail();
+                }
+            });
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail();
+            }
+
+            onView(withId(R.id.end_game_activity))
+                    .check(matches(isDisplayed()));
+
+        }
+
+    }
+
 }
