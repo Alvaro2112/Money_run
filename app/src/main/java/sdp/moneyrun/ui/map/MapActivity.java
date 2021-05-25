@@ -159,11 +159,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         };
 
-        try {
+       /* try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
         }catch (Exception e){
             //Phone does not have GPS capabilities
-        }
+        }*/
     }
 
 
