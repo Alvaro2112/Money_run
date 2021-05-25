@@ -1,11 +1,8 @@
 package sdp.moneyrun.ui.menu;
 
-import android.app.UiAutomation;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,15 +16,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.user.User;
+
+import static sdp.moneyrun.Helpers.goToMenuWithUser;
 
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
@@ -164,10 +161,7 @@ public class LeaderboardActivity extends AppCompatActivity {
      */
     public void linkToMenuButton(Button button){
         userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
-        button.setOnClickListener( v -> {
-            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
-            menuIntent.putExtra("user",userFromEnd);
-            startActivity(menuIntent);
+        button.setOnClickListener( v -> {goToMenuWithUser(this,this.getApplicationContext(),userFromEnd);
             finish();
         });
     }

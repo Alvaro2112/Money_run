@@ -1,7 +1,6 @@
 package sdp.moneyrun.ui.map;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -29,8 +28,9 @@ import org.json.JSONObject;
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.TrackedMap;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
+
+import static sdp.moneyrun.Helpers.goToMenuWithUser;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class OfflineMapDownloaderActivity extends TrackedMap {
@@ -69,11 +69,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> {
-            Intent mainIntent = new Intent(OfflineMapDownloaderActivity.this, MenuActivity.class);
-            mainIntent.putExtra("user", user);
-            startActivity(mainIntent);
-            finish();
+        exitButton.setOnClickListener(v -> {goToMenuWithUser(this,this.getApplicationContext(),this.user);
         });
     }
 

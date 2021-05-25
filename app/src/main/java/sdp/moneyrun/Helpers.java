@@ -1,6 +1,7 @@
 package sdp.moneyrun;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -137,6 +139,13 @@ public class Helpers {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));
     }
 
+    public static void goToMenuWithUser(AppCompatActivity activity, Context currentContext, User user){
+        Intent menuIntent = new Intent(currentContext, MenuActivity.class);
+        menuIntent.putExtra("user", user);
+        activity.startActivity(menuIntent);
+        activity.finish();
+
+    }
     /**
      * Link list adapter to the activity
      */
