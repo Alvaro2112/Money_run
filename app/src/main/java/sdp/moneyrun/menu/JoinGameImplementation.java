@@ -33,9 +33,11 @@ import java.util.Locale;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
+import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {
@@ -47,6 +49,8 @@ public class JoinGameImplementation extends MenuImplementation {
     @Nullable
     private final User currentUser;
     private int buttonId;
+
+    public static final String TAG_GAME_PREFIX = "game";
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -108,7 +112,16 @@ public class JoinGameImplementation extends MenuImplementation {
             buttonId = 0;
             for (GameRepresentation gameRepresentation : gameRepresentations) {
                 String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-                if (filterText == null || lowerName.contains(filterText)) {
+
+                // Get user location and compute distance
+                AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
+                LocationRepresentation location = locationService.getCurrentLocation();
+                if(location == null || gameRepresentation.getStartLocation() == null){
+                    return;
+                }
+
+                double distance = location.distanceTo(gameRepresentation.getStartLocation());
+                if ((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
                     displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                     buttonId++;
                 }
@@ -205,6 +218,8 @@ public class JoinGameImplementation extends MenuImplementation {
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
         gameLayout.addView(gameRow, gameParams);
+        // Define view tag
+        gameLayout.setTag(TAG_GAME_PREFIX + gameRepresentation.getGameId());
     }
 
     @SuppressLint("MissingPermission")
@@ -223,24 +238,6 @@ public class JoinGameImplementation extends MenuImplementation {
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instantiated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                        return;
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void addFullGameListener(@NonNull Button button, @NonNull GameRepresentation gameRepresentation) {

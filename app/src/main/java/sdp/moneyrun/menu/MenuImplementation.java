@@ -24,7 +24,7 @@ import sdp.moneyrun.user.User;
 
 public class MenuImplementation {
 
-    public static final float MAX_DISTANCE_TO_JOIN_GAME = 500;
+    public static final float MAX_DISTANCE_TO_JOIN_GAME = 1000;
 
     protected final Activity activity;
     protected final DatabaseReference databaseReference;
