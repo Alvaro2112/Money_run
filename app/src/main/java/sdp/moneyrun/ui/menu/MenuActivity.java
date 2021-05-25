@@ -44,7 +44,6 @@ import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.AddressGeocoder;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
@@ -65,7 +64,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private User user;
 
     private OpenWeatherMap openWeatherMap;
-    private AddressGeocoder addressGeocoder;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
     DatabaseReference databaseReference;
@@ -236,7 +234,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             System.out.println("Your device does not have network capabilities");
         }
         openWeatherMap = OpenWeatherMap.build();
-        addressGeocoder = AddressGeocoder.fromContext(this);
     }
 
 
@@ -277,6 +274,5 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         // disable the back button from menu since the user should not be able to log in again once logged in properly
-        return;
     }
 }

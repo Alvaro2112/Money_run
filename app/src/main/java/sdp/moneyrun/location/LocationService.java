@@ -1,5 +1,4 @@
 package sdp.moneyrun.location;
-import android.location.Criteria;
 
 public interface LocationService {
     /**

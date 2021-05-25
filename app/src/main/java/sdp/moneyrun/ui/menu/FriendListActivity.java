@@ -20,7 +20,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings("FieldMayBeFinal")
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 public class FriendListActivity extends AppCompatActivity {
 
     @NonNull

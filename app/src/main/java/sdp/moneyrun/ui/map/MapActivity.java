@@ -1,8 +1,11 @@
 package sdp.moneyrun.ui.map;
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +59,6 @@ import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.EndGameActivity;
 
 
 /*
@@ -95,8 +98,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private Location game_center;
     private float circleRadius;
     private double shrinkingFactor = 0.9;
-
     private ArrayList<Coin> seenCoins;
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +124,44 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         addLeaderboardButton();
 
         mapView.addOnDidFinishRenderingMapListener(fully -> {
-            if (gameId != null) {
+            if (gameId != null)
                 initializeGame(gameId);
-            }
         });
+
+        initLocationManager();
+
     }
+
+    public void initLocationManager(){
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        @NonNull
+        LocationListener locationListenerGPS = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                getMapboxMap().getLocationComponent().forceLocationUpdate(location);
+                checkObjectives(location);
+            }
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {
+
+            }
+
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+    }
+
 
     /**
      * get all the extras necessary to run this activity
@@ -263,7 +300,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
         callback = new LocationCheckObjectivesCallback(this);
-
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
 
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
@@ -503,7 +539,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         initCircle();
         boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
         if(check)
-            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);;
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this);
 
     }
 

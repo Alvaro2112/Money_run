@@ -31,7 +31,7 @@ public final class AndroidLocationService implements LocationService {
     /**
      * @param context  the context of the activity
      * @param locationProvider the location provider
-     * @return a new lcation service with a fixed location provider
+     * @return a new location service with a fixed location provider
      */
     public static AndroidLocationService buildFromContextAndProvider(Context context, String locationProvider) {
         return new AndroidLocationService(
