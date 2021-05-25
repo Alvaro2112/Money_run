@@ -27,9 +27,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -188,7 +186,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_center = game.getStartLocation();
                 initChronometer();
 
-
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
                     addedCoins = true;
@@ -291,7 +288,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             circleManager = new CircleManager(mapView, mapboxMap, style);
 
         });
-
         this.mapboxMap = mapboxMap;
     }
 
@@ -596,17 +592,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 hasFoundMap = true;
                 // Create new camera position
                 int regionSelected = 0;
-                LatLngBounds bounds = (offlineRegions[regionSelected].getDefinition()).getBounds();
                 double regionZoom = (offlineRegions[regionSelected].getDefinition()).getMinZoom();
 
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(bounds.getCenter())
                         .zoom(regionZoom)
                         .build();
-                Toast.makeText(getApplicationContext(), bounds.toString(), Toast.LENGTH_SHORT).show();
 
-                // Move camera to new position
-                mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
 
             @Override

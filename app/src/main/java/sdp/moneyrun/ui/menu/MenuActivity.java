@@ -40,7 +40,6 @@ import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
-import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.user.User;
@@ -111,17 +110,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         runFunctionalities();
         addDownloadButton();
-        addOfflineMapButton();
     }
 
     public void addDownloadButton() {
         Button download = findViewById(R.id.download_map);
         download.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false));
-    }
-
-    public void addOfflineMapButton() {
-        Button offline_map = findViewById(R.id.offline_map_menu);
-        offline_map.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapActivity.class, false));
     }
 
     public void runFunctionalities() {

@@ -83,16 +83,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/offline_map_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/menu_to_offline_map_button"
-        app:layout_constraintBaseline_toBaselineOf="@+id/download_map"
-        app:layout_constraintEnd_toStartOf="@+id/download_map"
-        app:layout_constraintHorizontal_bias="0.186"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/weather_type"
