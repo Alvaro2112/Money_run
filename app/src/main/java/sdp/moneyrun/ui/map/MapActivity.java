@@ -158,8 +158,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
 
         };
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+       // if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+         //   locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
     }
 
 
@@ -307,6 +307,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
         callback = new LocationCheckObjectivesCallback(this);
+
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
 
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
