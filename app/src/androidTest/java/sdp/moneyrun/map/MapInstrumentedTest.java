@@ -1389,13 +1389,13 @@ public class MapInstrumentedTest {
                 }
             });
             try {
-                Thread.sleep(4000);
+                Thread.sleep(5000);
             } catch (Exception e) {
                 e.printStackTrace();
                 fail();
             }
 
-            onView(withId(R.id.end_game_activity))
+            onView(withId(R.id.end_game_button_to_results))
                     .check(matches(isDisplayed()));
 
         }
