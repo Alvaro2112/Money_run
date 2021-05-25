@@ -1344,7 +1344,6 @@ public class MapInstrumentedTest {
 
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            Intents.init();
             final AtomicBoolean finished = new AtomicBoolean(false);
             scenario.onActivity(a -> {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
@@ -1395,8 +1394,6 @@ public class MapInstrumentedTest {
                 e.printStackTrace();
                 fail();
             }
-            intended(hasComponent(EndGameActivity.class.getName()));
-            Intents.release();
         }
 
     }
