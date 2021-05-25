@@ -27,6 +27,10 @@ public class GameBuilder {
     private Location startLocation;
     private boolean isVisible = true;
 
+    private int numCoins = -1;
+    private int radius = 0;
+    private int duration = 0;
+
     /**
      * Empty constructor
      */
@@ -136,22 +140,51 @@ public class GameBuilder {
         return this;
     }
 
-    public void build() {
+    @NonNull
+    public GameBuilder setNumCoins(int numCoins){
+        if(numCoins < 0){
+            throw new IllegalArgumentException("number of coins should be bigger or equal than 0.");
+        }
+        this.numCoins = numCoins;
 
+        return this;
+    }
+
+    @NonNull
+    public GameBuilder setRadius(int radius){
+        if(radius <= 0){
+            throw new IllegalArgumentException("Radius should be bigger than 0.");
+        }
+        this.radius = radius;
+
+        return this;
+    }
+
+    @NonNull
+    public GameBuilder setDuration(int duration){
+        if(duration <= 0){
+            throw new IllegalArgumentException("duration should be bigger than 0.");
+        }
+        this.duration = duration;
+
+        return this;
+    }
+
+    public Game build() {
         checkBuildArguments();
+        Game game;
 
-        if (riddles == null )
-            new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
+        if (riddles == null ) {
+            game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
+        }else{
+            game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible, numCoins, radius, duration);
 
-        else{
-
-            Game game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible);
-
-            if (players != null)
+            if (players != null) {
                 game.setPlayers(players, true);
-
+            }
         }
 
+        return game;
     }
 
     public void checkBuildArguments(){
@@ -174,5 +207,13 @@ public class GameBuilder {
         if (riddles == null && players == null)
             throw new IllegalStateException("players and riddles should not be null.");
 
+        if (numCoins < 0)
+            throw new IllegalStateException("number of coins should be bigger or equal than 0.");
+
+        if (radius <= 0)
+            throw new IllegalStateException("radius should be bigger than 0.");
+
+        if (duration <= 0)
+            throw new IllegalStateException("duration should be bigger than 0.");
     }
 }

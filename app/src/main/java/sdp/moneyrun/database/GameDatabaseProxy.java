@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class GameDatabaseProxy extends DatabaseProxy {
@@ -75,6 +76,19 @@ public class GameDatabaseProxy extends DatabaseProxy {
         game.setHasBeenAdded(true);
         game.setStarted(false, false);
         return id;
+    }
+
+    /**
+     * Remove a game to the database.
+     *
+     * @param game the game to be removed in the database
+     */
+    public void removeGame(@Nullable Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("game should not be null");
+        }
+
+        gamesRef.child(String.valueOf(game.getId())).removeValue();
     }
 
     public void updateGameInDatabase(@Nullable Game game, @Nullable OnCompleteListener listener) {
