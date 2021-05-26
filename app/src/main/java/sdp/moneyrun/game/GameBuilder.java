@@ -141,8 +141,8 @@ public class GameBuilder {
     }
 
     @NonNull
-    public GameBuilder setNumCoins(int numCoins){
-        if(numCoins < 0){
+    public GameBuilder setNumCoins(int numCoins) {
+        if (numCoins < 0) {
             throw new IllegalArgumentException("number of coins should be bigger or equal than 0.");
         }
         this.numCoins = numCoins;
@@ -151,8 +151,8 @@ public class GameBuilder {
     }
 
     @NonNull
-    public GameBuilder setRadius(int radius){
-        if(radius <= 0){
+    public GameBuilder setRadius(int radius) {
+        if (radius <= 0) {
             throw new IllegalArgumentException("Radius should be bigger than 0.");
         }
         this.radius = radius;
@@ -161,8 +161,8 @@ public class GameBuilder {
     }
 
     @NonNull
-    public GameBuilder setDuration(int duration){
-        if(duration <= 0){
+    public GameBuilder setDuration(int duration) {
+        if (duration <= 0) {
             throw new IllegalArgumentException("duration should be bigger than 0.");
         }
         this.duration = duration;
@@ -170,13 +170,14 @@ public class GameBuilder {
         return this;
     }
 
+    @Nullable
     public Game build() {
         checkBuildArguments();
         Game game;
 
-        if (riddles == null ) {
+        if (riddles == null) {
             game = new Game(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
-        }else{
+        } else {
             game = new Game(name, host, maxPlayerCount, riddles, coins, startLocation, isVisible, numCoins, radius, duration);
 
             if (players != null) {
@@ -187,7 +188,7 @@ public class GameBuilder {
         return game;
     }
 
-    public void checkBuildArguments(){
+    public void checkBuildArguments() {
 
         if (name == null)
             throw new IllegalStateException("name should not be null.");

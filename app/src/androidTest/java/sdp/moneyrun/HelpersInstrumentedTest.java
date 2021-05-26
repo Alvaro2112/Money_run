@@ -1,13 +1,9 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
-import android.location.Location;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,10 +15,6 @@ import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 public class HelpersInstrumentedTest {
 
@@ -54,7 +46,7 @@ public class HelpersInstrumentedTest {
                Helpers.joinLobbyFromJoinButton(gameRep,
                        FirebaseDatabase.getInstance().getReference(),
                        a,
-                       currentUser);
+                       currentUser, null);
             });
         }
     }

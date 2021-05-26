@@ -22,13 +22,12 @@ public class Riddle {
     private final String fourthAnswer;
 
     /**
-     *
-     * @param question The riddle question
+     * @param question      The riddle question
      * @param correctAnswer The correct answer to the riddle
-     * @param firstAnswer First possible answer
-     * @param secondAnswer Second possible answer
-     * @param thirdAnswer Third possible answer
-     * @param fourthAnswer Fourth possible answer
+     * @param firstAnswer   First possible answer
+     * @param secondAnswer  Second possible answer
+     * @param thirdAnswer   Third possible answer
+     * @param fourthAnswer  Fourth possible answer
      */
     public Riddle(@Nullable String question, @Nullable String correctAnswer, @Nullable String firstAnswer, @Nullable String secondAnswer, @Nullable String thirdAnswer, @Nullable String fourthAnswer) {
         if (question == null || correctAnswer == null) {

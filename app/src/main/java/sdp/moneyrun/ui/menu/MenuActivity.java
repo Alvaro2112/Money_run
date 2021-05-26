@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
@@ -45,13 +46,12 @@ import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.AddressGeocoder;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
+@SuppressWarnings({"CanBeFinal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //In meters
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
@@ -63,23 +63,23 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
 
     protected DrawerLayout mDrawerLayout;
-    private User user;
-
-    private OpenWeatherMap openWeatherMap;
-    private AddressGeocoder addressGeocoder;
-    private WeatherForecast currentForecast;
-    private LocationRepresentation currentLocation;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
-
     AndroidLocationService locationService;
+    private User user;
+    private OpenWeatherMap openWeatherMap;
+    private WeatherForecast currentForecast;
+    private LocationRepresentation currentLocation;
+
+
+    private final String TAG = MenuActivity.class.getSimpleName();
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             loadWeather(location);
-            if(currentForecast != null)
+            if (currentForecast != null)
                 setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
 
         }
@@ -117,6 +117,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         runFunctionalities();
         addDownloadButton();
         addOfflineMapButton();
+
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     public void addDownloadButton() {
@@ -183,7 +201,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(FriendListActivity.class, false);
                 break;
             }
-            
+
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
                 break;
@@ -241,7 +259,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             System.out.println("Your device does not have network capabilities");
         }
         openWeatherMap = OpenWeatherMap.build();
-        addressGeocoder = AddressGeocoder.fromContext(this);
     }
 
 
@@ -282,17 +299,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         // disable the back button from menu since the user should not be able to log in again once logged in properly
-        return;
     }
 
     /**
      * @return the location service
      */
-    public AndroidLocationService getLocationService(){
+    public AndroidLocationService getLocationService() {
         return locationService;
     }
 
-    public void setLocationService(@NonNull AndroidLocationService locationService){
+    public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
     }
 }

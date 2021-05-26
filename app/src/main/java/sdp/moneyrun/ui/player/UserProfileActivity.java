@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
@@ -22,6 +23,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView playerPlayedGames;
     public TextView playerIsEmptyText;
     public Button goBackToMain;
+    private final String TAG = UserProfileActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,23 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         setDisplayedTexts(user);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     public void setDisplayedTexts(@Nullable User user) {
