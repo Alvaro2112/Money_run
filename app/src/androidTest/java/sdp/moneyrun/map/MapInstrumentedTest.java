@@ -1297,5 +1297,5 @@ public class MapInstrumentedTest {
                 Intents.release();
             }
         }
-
+        
 }

@@ -158,7 +158,7 @@ public final class GameDbData {
 
     public boolean getStarted() {
         return started;
-    }
+    } 
 
     @NonNull
     public List<Player> getPlayers() {
