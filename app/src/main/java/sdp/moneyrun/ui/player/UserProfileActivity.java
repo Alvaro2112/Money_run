@@ -19,7 +19,6 @@ public class UserProfileActivity extends AppCompatActivity {
     public TextView playerName;
     public TextView playerDiedGames;
     public TextView playerPlayedGames;
-    public TextView playerIsEmptyText;
     public Button goBackToMain;
 
     @Override
@@ -51,6 +50,7 @@ public class UserProfileActivity extends AppCompatActivity {
             playerDiedGames.setText("");
             playerPlayedGames.setText(R.string.profile_never_created);
         } else {
+            playerName.setAllCaps(true);
             playerName.setText(user.getName());
             playerDiedGames.setText(String.format(Locale.getDefault(), "Times you died in a game \n %d", user.getNumberOfDiedGames()));
             playerPlayedGames.setText(String.format(Locale.getDefault(), "Games played \n %d", user.getNumberOfPlayedGames()));
