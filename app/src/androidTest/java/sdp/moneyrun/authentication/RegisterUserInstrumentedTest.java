@@ -49,14 +49,8 @@ public class RegisterUserInstrumentedTest {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
-            String pet = "Dog";
-            String color = "Green";
             Espresso.onView(ViewMatchers.withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.registerNameText)).check(matches(withText(name)));
-            Espresso.onView(withId(R.id.registerAnimalText)).check(matches(withText(pet)));
-            Espresso.onView(withId(R.id.registerColorText)).check(matches(withText(color)));
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
             Intents.release();
         } catch (Exception e) {
@@ -81,17 +75,11 @@ public class RegisterUserInstrumentedTest {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             Intents.init();
             String name = "John";
-            String pet = "Dog";
-            String color = "Green";
             Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
             intended(hasComponent(MenuActivity.class.getName()));
             Espresso.onView(withId(R.id.profile_button)).perform(click());
-            Context appContext2 = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Thread.sleep(1000);
             intended(hasComponent(UserProfileActivity.class.getName()));
             Espresso.onView(withId(R.id.playerDiedGames))
@@ -114,11 +102,7 @@ public class RegisterUserInstrumentedTest {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(intent)) {
             Intents.init();
             String name = "John";
-            String pet = "Dog";
-            String color = "Green";
             Espresso.onView(withId(R.id.registerNameText)).perform(typeText(name), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerAnimalText)).perform(typeText(pet), closeSoftKeyboard());
-            Espresso.onView(withId(R.id.registerColorText)).perform(typeText(color), closeSoftKeyboard());
             Espresso.onView(withId(R.id.submitProfileButton)).perform(click());
             Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             try {

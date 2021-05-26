@@ -23,6 +23,7 @@
     <string name="login_page_welcome_text">Login with your email or sign up!</string>
     <string name="login_page_keep_signed_in_text">Keep me signed in</string>
     <string name="go_back_to_main_menu">Go back to Main Menu</string>
+    <string name="profile_never_created">You have no profile, logout then back in to create one</string>
     <string name="profile_creation_chose_name">Chose the username other players will see</string>
     <string name="submit">submit</string>
     <string name="join_game">Join Game</string>
@@ -91,7 +92,6 @@
     <string name="continue_run">Continue run</string>
     <string name="CorrectAnswerMessage">You are correct!</string>
     <string name="incorrect_answer_message">You are incorrect!\n The answer was </string>
-    <string name="fillup_player_warning">PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER</string>
     <string name="emptyString" />
     <string name="button_to_leave_game_description">button to leave game</string>
     <string name="game_results_button_text">Game Results</string>

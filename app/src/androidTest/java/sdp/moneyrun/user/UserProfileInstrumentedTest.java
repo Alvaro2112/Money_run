@@ -101,9 +101,9 @@ public class UserProfileInstrumentedTest {
 
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
             Intents.init();
-            Espresso.onView(withId(R.id.playerEmptyMessage))
+            Espresso.onView(withId(R.id.playerPlayedGames))
                     .perform(click())
-                    .check(matches(withText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER")));
+                    .check(matches(withText("You have no profile, logout then back in to create one")));
             Intents.release();
         }
     }

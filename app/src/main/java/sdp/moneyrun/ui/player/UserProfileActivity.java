@@ -29,7 +29,6 @@ public class UserProfileActivity extends AppCompatActivity {
         playerName = findViewById(R.id.playerName);
         playerDiedGames = findViewById(R.id.playerDiedGames);
         playerPlayedGames = findViewById(R.id.playerPlayedGames);
-        playerIsEmptyText = findViewById(R.id.playerEmptyMessage);
         goBackToMain = findViewById(R.id.goBackToMainMenu);
 
         Intent playerIntent = getIntent();
@@ -48,12 +47,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void setDisplayedTexts(@Nullable User user) {
         if (user == null) {
-            playerIsEmptyText.setAllCaps(true);
-            playerIsEmptyText.setText(R.string.fillup_player_warning);
+            playerName.setText("");
+            playerDiedGames.setText("");
+            playerPlayedGames.setText(R.string.profile_never_created);
         } else {
-            playerName.setText(String.format("User name : %s", user.getName()));
-            playerDiedGames.setText(String.format(Locale.getDefault(), "User has died %d many times", user.getNumberOfDiedGames()));
-            playerPlayedGames.setText(String.format(Locale.getDefault(), "User has played %d many games", user.getNumberOfPlayedGames()));
+            playerName.setText(user.getName());
+            playerDiedGames.setText(String.format(Locale.getDefault(), "Times you died in a game \n %d", user.getNumberOfDiedGames()));
+            playerPlayedGames.setText(String.format(Locale.getDefault(), "Games played \n %d", user.getNumberOfPlayedGames()));
         }
     }
 }
