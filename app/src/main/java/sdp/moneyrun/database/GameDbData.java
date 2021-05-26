@@ -33,6 +33,7 @@ public final class GameDbData {
     @Nullable
     private Location startLocation;
     boolean started;
+    boolean ended;
     private int numCoins;
     private double radius;
     private double duration;
@@ -69,6 +70,7 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.started = false;
+        this.ended = false;
     }
 
     public GameDbData(@Nullable String name,
@@ -115,6 +117,7 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.started = false;
+        this.ended = false;
         this.radius = radius;
         this.numCoins = numCoins;
         this.duration = duration;
@@ -134,6 +137,7 @@ public final class GameDbData {
         this.coins = other.coins;
         this.isDeleted = false;
         this.started = other.started;
+        this.ended = other.ended;
         this.duration = other.duration;
         this.radius = other.radius;
         this.numCoins = other.numCoins;
@@ -158,7 +162,15 @@ public final class GameDbData {
 
     public boolean getStarted() {
         return started;
-    } 
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+
+    public boolean getEnded() {
+        return ended;
+    }
 
     @NonNull
     public List<Player> getPlayers() {

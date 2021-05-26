@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.MediaPlayer;
@@ -96,6 +97,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private double shrinkingFactor = 0.99;
 
     private ArrayList<Coin> seenCoins;
+    private  ValueEventListener isEndedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +194,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
                 initCircle();
+                listenEnded();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -329,8 +332,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } else {
                 if(! hasEnded) {
                     hasEnded = true;
+                    if(host)
+                        game.setEnded(true,false);
                     Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
-
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
@@ -600,5 +604,26 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude()-center_x,2)+ Math.pow(coin.getLongitude()-center_y,2));
         return (distance > radius);
+    }
+
+    public void listenEnded(){
+            if (!host) {
+                isEndedListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot!= null && snapshot.child("ended").getValue() != null) {
+                            if ((boolean) snapshot.child("ended").getValue()) {
+                                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, error.getMessage());
+                    }
+                };
+                proxyG.addGameListener(game, isEndedListener);
+            }
     }
 }

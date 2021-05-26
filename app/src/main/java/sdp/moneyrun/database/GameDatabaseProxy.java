@@ -41,6 +41,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
     private final String DATABASE_GAME_NUMCOINS = "numCoins";
     private final String DATABASE_GAME_DURATION = "duration";
     private final String DATABASE_GAME_STARTED = "started";
+    private final String DATABASE_GAME_ENDED = "ended";
 
     @NonNull
     private final DatabaseReference gamesRef;
@@ -75,6 +76,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
         linkCoinsToDB(game);
         game.setHasBeenAdded(true);
         game.setStarted(false, false);
+        game.setEnded(false,false);
         return id;
     }
 
@@ -203,6 +205,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
             Boolean retIsVisible = getDatabaseValue(ds, DATABASE_GAME_IS_VISIBLE, Boolean.class);
             Boolean started = getDatabaseValue(ds, DATABASE_GAME_STARTED, Boolean.class);
+            Boolean ended = getDatabaseValue(ds, DATABASE_GAME_ENDED, Boolean.class);
             Integer numCoins = getDatabaseValue(ds, DATABASE_GAME_NUMCOINS, Integer.class);
             Double radius = getDatabaseValue(ds, DATABASE_GAME_RADIUS, Double.class);
             Double duration = getDatabaseValue(ds, DATABASE_GAME_DURATION, Double.class);
@@ -232,6 +235,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             retGame.setId(ds.getKey());
             retGame.setHasBeenAdded(true);
             retGame.setStarted(started, true);
+            retGame.setEnded(ended,true);
 
             toReturn = retGame;
         }

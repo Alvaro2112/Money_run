@@ -32,6 +32,7 @@ public class Game {
     private final String DATABASE_IS_DELETED = "isDeleted";
     private final String DATABASE_IS_VISIBLE = "isVisible";
     private final String DATABASE_STARTED = "started";
+    private final String DATABASE_ENDED = "ended";
     //Attributes
     @NonNull
     private final GameDbData gameDbData;
@@ -44,6 +45,7 @@ public class Game {
     private boolean hasBeenAdded;
 
     private boolean started;
+    private boolean ended;
 
     /**
      * This constructor is used to create a game that has never been added to the database.
@@ -133,7 +135,7 @@ public class Game {
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = riddles;
         started = false;
-
+        ended = false;
     }
 
     /**
@@ -175,6 +177,7 @@ public class Game {
 
         this.hasBeenAdded = false;
         started = false;
+        ended = false;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
@@ -224,6 +227,7 @@ public class Game {
 
         this.hasBeenAdded = false;
         started = false;
+        ended = false;
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
 
@@ -295,6 +299,23 @@ public class Game {
         }
         gameDbData.setStarted(started);
         this.started = started;
+
+    }
+
+    public boolean getEnded() {
+        return gameDbData.getEnded();
+    }
+
+    public void setEnded(boolean ended, boolean forceLocal) {
+        if (!forceLocal) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_ENDED)
+                    .setValue(ended);
+        }
+        gameDbData.setEnded(ended);
+        this.ended = ended;
 
     }
 
