@@ -62,6 +62,18 @@
 
         </ListView>
 
+        <Button
+            android:id="@+id/back_from_main_leaderboard_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="162dp"
+            android:layout_marginEnd="162dp"
+            android:layout_marginBottom="26dp"
+            android:text="@string/back_to_menu" />
+
 
     </RelativeLayout>
 

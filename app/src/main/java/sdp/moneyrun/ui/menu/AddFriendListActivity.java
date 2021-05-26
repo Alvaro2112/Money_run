@@ -119,4 +119,8 @@ public class AddFriendListActivity extends AppCompatActivity {
         ldbAdapter.addAll(userList);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 }

@@ -281,6 +281,9 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 
 }
 

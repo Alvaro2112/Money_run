@@ -145,5 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
         return retValue;
     }
 
-
+    @Override
+    public void onBackPressed() {
+    }
 }

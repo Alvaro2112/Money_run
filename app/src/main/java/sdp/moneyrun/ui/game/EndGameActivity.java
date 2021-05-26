@@ -187,4 +187,8 @@ public class EndGameActivity extends AppCompatActivity {
         return players;
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 }

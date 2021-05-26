@@ -114,4 +114,8 @@ public class RegisterUserActivity extends AppCompatActivity {
             animalText.setError("Animal field is empty");
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

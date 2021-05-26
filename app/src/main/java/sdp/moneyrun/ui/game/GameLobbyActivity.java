@@ -26,6 +26,7 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.player.LobbyPlayerListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -297,5 +298,9 @@ public class GameLobbyActivity extends AppCompatActivity {
                 thisGame.removeValue();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

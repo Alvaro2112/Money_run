@@ -185,4 +185,5 @@ public class LeaderboardActivity extends AppCompatActivity {
             finish();
         });
     }
+
 }

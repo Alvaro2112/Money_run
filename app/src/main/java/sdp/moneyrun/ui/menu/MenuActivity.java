@@ -311,4 +311,5 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
     }
+
 }

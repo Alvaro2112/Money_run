@@ -131,20 +131,6 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     /**
-     * Add a user list to the list adapter
-     *
-     * @param userList the user list to add
-     */
-    public void addUserList(@Nullable List<User> userList) {
-        if (userList == null) {
-            throw new NullPointerException("user list should not be null.");
-        }
-
-        ldbAdapter.clear();
-        ldbAdapter.addAll(userList);
-    }
-
-    /**
      * @return the location service.
      */
     public AndroidLocationService getLocationService() {
@@ -158,5 +144,9 @@ public class FriendListActivity extends AppCompatActivity {
         this.locationService = locationService;
         // Update friend list
         showFriendList();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

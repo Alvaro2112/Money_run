@@ -78,4 +78,8 @@ public class UserProfileActivity extends AppCompatActivity {
             playerPlayedGames.setText(String.format(Locale.getDefault(), "User has played %d many games", user.getNumberOfPlayedGames()));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

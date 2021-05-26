@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.player;
+package sdp.moneyrun.player;
 
 import android.app.Activity;
 import android.widget.ArrayAdapter;

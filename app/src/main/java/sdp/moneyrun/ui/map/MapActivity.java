@@ -312,7 +312,13 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
+        exitButton.setOnClickListener( v -> {
+            if (!hasEnded) {
+                hasEnded = true;
+                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+            }
+        }
+        );
     }
 
     /**
@@ -406,7 +412,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 if (!hasEnded) {
                     hasEnded = true;
                     Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
-
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
@@ -675,5 +680,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         MediaPlayer.create(this, R.raw.button_press).start();
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void setLogIn(@NonNull Button loginButton) {
@@ -183,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                     menuIntent.putExtra("user", user);
                     startActivity(menuIntent);
                 }
+                finish();
             }
         });
     }
@@ -210,7 +212,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
             guestMenuIntent.putExtra("guestUser", true);
             startActivity(guestMenuIntent);
+            finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }
