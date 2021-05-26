@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,10 +30,16 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.game.GameBuilder;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -64,19 +71,104 @@ public class MenuActivityTest {
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("888", "CURRENT_USER", "Epfl"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
     }
 
+    private Location getMockedLocation(){
+        Location gameLocation = new Location("");
+        gameLocation.setLongitude(12.);
+        gameLocation.setLatitude(12.);
+
+        return gameLocation;
+    }
+
+    private Location getFarLocation(){
+        Location gameLocation = new Location("");
+        gameLocation.setLongitude(22.);
+        gameLocation.setLatitude(22.);
+
+        return gameLocation;
+    }
+
+    private Game addFirstGameToDatabase(){
+        // Define game location
+        Location gameLocation = getMockedLocation();
+        Location farLocation = getFarLocation();
+
+        // Define game host
+        User userHost = new User("777", "CURRENT_USER", "Epfl", 0, 0, 0);
+        PlayerBuilder hostBuilder = new PlayerBuilder();
+        Player host = hostBuilder.setPlayerId(userHost.getUserId())
+                .setName(userHost.getName())
+                .setScore(0)
+                .build();
+
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+
+        // Define game
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        GameBuilder gb = new GameBuilder();
+        Game game = gb.setName("Near game")
+                .setHost(host)
+                .setMaxPlayerCount(10)
+                .setStartLocation(gameLocation)
+                .setIsVisible(true)
+                .setCoins(new ArrayList<>())
+                .setPlayers(players)
+                .setRiddles(new ArrayList<>())
+                .setNumCoins(10)
+                .setRadius(10)
+                .setDuration(999999)
+                .build();
+        game.setId(host.getPlayerId());
+        gdb.putGame(game);
+
+        return game;
+    }
+
+    private Game addSecondGameToDatabase(){
+        // Define game location
+        Location farLocation = getFarLocation();
+
+        // Define game host
+        User userHost = new User("888", "CURRENT_USER", "Epfl", 0, 0, 0);
+        PlayerBuilder hostBuilder = new PlayerBuilder();
+        Player host = hostBuilder.setPlayerId(userHost.getUserId())
+                .setName(userHost.getName())
+                .setScore(0)
+                .build();
+
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+
+        // Define game
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        GameBuilder gb = new GameBuilder();
+        Game game = gb.setName("Far game")
+                .setHost(host)
+                .setMaxPlayerCount(10)
+                .setStartLocation(farLocation)
+                .setIsVisible(true)
+                .setCoins(new ArrayList<>())
+                .setPlayers(players)
+                .setRiddles(new ArrayList<>())
+                .setNumCoins(10)
+                .setRadius(10)
+                .setDuration(999999)
+                .build();
+        game.setId(host.getPlayerId());
+        gdb.putGame(game);
+
+        return game;
+    }
 
     @Rule
     public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-
-
-
 
     //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
     @NonNull
@@ -573,6 +665,35 @@ public class MenuActivityTest {
             scenario.onActivity(a -> a.onBackPressed());
         }catch (Exception e){
             fail();
+        }
+    }
+
+    @Test
+    public void onlyNearGamesShow(){
+        Game nearGame = addFirstGameToDatabase();
+        Game farGame = addSecondGameToDatabase();
+
+        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(5000);
+
+            // Mock location
+            scenario.onActivity(a -> {
+                AndroidLocationService newLocationService = a.getLocationService();
+                newLocationService.setMockedLocation(new LocationRepresentation(getMockedLocation()));
+                a.setLocationService(newLocationService);
+            });
+
+            Thread.sleep(3000);
+
+            onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
+
+            Thread.sleep(7000);
+
+            onView(ViewMatchers.withTagValue(Matchers.is(JoinGameImplementation.TAG_GAME_PREFIX + "777"))).check(matches(isDisplayed()));
+            onView(ViewMatchers.withTagValue(Matchers.is(JoinGameImplementation.TAG_GAME_PREFIX + "888"))).check(doesNotExist());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.user.User;
@@ -22,13 +23,13 @@ import sdp.moneyrun.user.User;
 public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     private final int color_light_gray = Color.rgb(220, 220, 220);
-    private final int color_gold = Color.rgb(255,215,0);
+    private final int color_gold = Color.rgb(255, 215, 0);
 
     private final int CORNER_RADIUS = 20;
     private final int BUTTON_WIDTH = 5;
 
     public AddFriendListListAdapter(Activity context, List<User> userList, User user) {
-        super(context,userList, user);
+        super(context, userList, user);
     }
 
     @SuppressLint({"ViewHolder", "InflateParams"})
@@ -47,13 +48,13 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
         userButtonView.setTag(R.string.add_friend_tag_1, userRequested.getUserId());
 
         // Change button given some state: can follow, already followed or invalid
-        if(userRequested.getUserId() == null ||
-                userRequested.getUserId().equals(getCurrentUser().getUserId())){
-            setInvalidButtonType(userButtonView);
-        }else if(getCurrentUser().getFriendIdList().contains(userRequested.getUserId())){
+        if (userRequested.getUserId() == null ||
+                userRequested.getUserId().equals(getCurrentUser().getUserId())) {
+            Helpers.setInvalidButtonType(userButtonView);
+        } else if (getCurrentUser().getFriendIdList().contains(userRequested.getUserId())) {
             userButtonView.setTag(R.string.add_friend_tag_0, true);
             setButtonType(userButtonView, false);
-        }else{
+        } else {
             userButtonView.setTag(R.string.add_friend_tag_0, false);
             setButtonType(userButtonView, true);
         }
@@ -65,33 +66,34 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Functionality for every follow/unfollow buttons to add or remove user from the friend list
+     *
      * @param button the button view
      */
-    private void defineFollowButton(@NonNull Button button){
+    private void defineFollowButton(@NonNull Button button) {
 
         boolean hasFollowed = (boolean) button.getTag(R.string.add_friend_tag_0);
 
         //Update database and user friend list
-        if(getCurrentUser().getUserId() == null){
+        if (getCurrentUser().getUserId() == null) {
             throw new IllegalArgumentException("user id should not be null");
         }
         UserDatabaseProxy db = new UserDatabaseProxy();
         db.getUserTask(getCurrentUser().getUserId()).addOnCompleteListener(task -> {
             User userFromDb = db.getUserFromTask(task);
-            if(userFromDb == null){
+            if (userFromDb == null) {
                 return;
             }
 
             String friendId = (String) button.getTag(R.string.add_friend_tag_1);
-            if(friendId == null){
+            if (friendId == null) {
                 return;
             }
 
             //Remove or add user from the user's friend list
             //and update button look
-            if(hasFollowed){
+            if (hasFollowed) {
                 removeUserFromFriendList(userFromDb, friendId, button);
-            }else{
+            } else {
                 addUserFromFriendList(userFromDb, friendId, button);
             }
             db.putUser(userFromDb);
@@ -103,11 +105,12 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Implementation to do when removing a user from friend list
+     *
      * @param userFromDb the user
-     * @param friendId the friend id
-     * @param button the button
+     * @param friendId   the friend id
+     * @param button     the button
      */
-    private void removeUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button){
+    private void removeUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button) {
         userFromDb.removeFriendId(friendId);
         getCurrentUser().removeFriendId(friendId);
         setButtonType(button, true);
@@ -115,11 +118,12 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Implementation to do when adding a user from friend list
+     *
      * @param userFromDb the user
-     * @param friendId the friend id
-     * @param button the button
+     * @param friendId   the friend id
+     * @param button     the button
      */
-    private void addUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button){
+    private void addUserFromFriendList(@NonNull User userFromDb, String friendId, @NonNull Button button) {
         userFromDb.addFriendId(friendId);
         getCurrentUser().addFriendId(friendId);
         setButtonType(button, false);
@@ -127,18 +131,20 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Define invalid button type
+     *
      * @param button the button
      */
-    private void setInvalidButtonType(@NonNull Button button){
+    private void setInvalidButtonType(@NonNull Button button) {
         button.setEnabled(false);
         button.setVisibility(View.GONE);
     }
 
     /**
      * Define button type
+     *
      * @param button the button
      */
-    private void setButtonType(@NonNull Button button, boolean follow){
+    private void setButtonType(@NonNull Button button, boolean follow) {
         int text = follow ? R.string.add_friend_button_follow_text : R.string.add_friend_button_unfollow_text;
         int color = follow ? color_gold : color_light_gray;
 
@@ -148,11 +154,12 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Define the look of the button.
+     *
      * @param backgroundColor the button's background color
      * @return the button's background
      */
     @NonNull
-    private GradientDrawable getButtonBackground(int backgroundColor){
+    private GradientDrawable getButtonBackground(int backgroundColor) {
 
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(backgroundColor);

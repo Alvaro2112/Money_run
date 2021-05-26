@@ -118,7 +118,7 @@ public class Game {
         }
 
         if (numCoins < 0) {
-            throw new IllegalArgumentException("Number of coins should be bigger than 0.");
+            throw new IllegalArgumentException("Number of coins should be bigger or equal than 0.");
         }
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius should be bigger than 0.");
@@ -229,14 +229,16 @@ public class Game {
 
     }
 
-    public static void endGame(int numberOfCollectedCoins, int score, String playerId,List<Player>players, @NonNull Activity currentActivity) {
+    public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull List<Player> players, @NonNull Activity currentActivity, boolean hasDied) {
 
         Intent endGameIntent = new Intent(currentActivity, EndGameActivity.class);
         endGameIntent.putExtra("numberOfCollectedCoins", numberOfCollectedCoins);
         endGameIntent.putExtra("score", score);
         endGameIntent.putExtra("playerId", playerId);
-        endGameIntent.putExtra("numberOfPlayers",players.size());
-        Helpers.putPlayersInIntent(endGameIntent,players);
+        endGameIntent.putExtra("numberOfPlayers", players.size());
+        endGameIntent.putExtra("hasDied", hasDied);
+
+        Helpers.putPlayersInIntent(endGameIntent, players);
         currentActivity.startActivity(endGameIntent);
         currentActivity.finish();
 
@@ -356,8 +358,8 @@ public class Game {
 
     }
 
-    public void setDatabaseVariable(@NonNull String variable, @Nullable Object value){
-        if(value == null)
+    public void setDatabaseVariable(@NonNull String variable, @Nullable Object value) {
+        if (value == null)
             throw new NullPointerException();
 
         FirebaseDatabase.getInstance().getReference()
@@ -417,7 +419,7 @@ public class Game {
 
     }
 
-    public void setPlayers(List<Player> players, boolean forceLocal, OnCompleteListener listener) {
+    public void setPlayers(@Nullable List<Player> players, boolean forceLocal, @NonNull OnCompleteListener listener) {
         if (players == null) {
             throw new IllegalArgumentException("players should not be null.");
         }

@@ -15,8 +15,8 @@ public class ListAdapterWithUser extends ArrayAdapter<User> {
     private final User currentUser;
 
     public ListAdapterWithUser(Activity context, List<User> userList, @Nullable User user) {
-        super(context,0 , userList);
-        if(user == null){
+        super(context, 0, userList);
+        if (user == null) {
             throw new IllegalArgumentException("user should not be null.");
         }
 
@@ -27,7 +27,7 @@ public class ListAdapterWithUser extends ArrayAdapter<User> {
      * @return the current user
      */
     @Nullable
-    protected User getCurrentUser(){
+    protected User getCurrentUser() {
         return currentUser;
     }
 }

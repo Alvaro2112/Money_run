@@ -80,7 +80,7 @@ public class OpenWeatherMap {
         return new WeatherForecast(reports);
     }
 
-    private WeatherReport tryToParseReport(JSONObject jsonObject, int day){
+    private WeatherReport tryToParseReport(JSONObject jsonObject, int day) {
 
         WeatherReport report;
 

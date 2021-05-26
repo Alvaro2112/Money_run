@@ -16,6 +16,7 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -29,12 +30,14 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings("FieldCanBeLocal")
 public class EndGameActivity extends AppCompatActivity {
 
-    private final int gameScore = 0;
     private int score;
     private int numberOfCollectedCoins;
     private TextView endText;
     private String playerId;
     private Button resultButton;
+
+    private final String TAG = EndGameActivity.class.getSimpleName();
+    private boolean hasDied;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +47,36 @@ public class EndGameActivity extends AppCompatActivity {
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
         score = getIntent().getIntExtra("score", 0);
         playerId = getIntent().getStringExtra("playerId");
+        hasDied = getIntent().getBooleanExtra("hasDied", false);
         updateText(numberOfCollectedCoins, score, true);
-
         if (playerId != null) {
-            updatePlayer(playerId, gameScore);
-            updateUser(playerId, gameScore);
+            updateUser(playerId, score);
         } else {
             playerId = "";
             updateText(-1, -1, false);
         }
-
         final ImageButton toMenu = findViewById(R.id.end_game_button_to_menu);
         linkToMenuButton(toMenu);
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);
 
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
@@ -89,9 +107,7 @@ public class EndGameActivity extends AppCompatActivity {
      *                  Else shows that it failed to get the score
      */
     public void updateText(int numCoins, int gameScore, boolean succeeded) {
-
         StringBuilder textBuilder = new StringBuilder();
-
         if (succeeded) {
             textBuilder = textBuilder.append("You have gathered").append(numCoins).append("coins");
             textBuilder = textBuilder.append("\n");
@@ -99,43 +115,33 @@ public class EndGameActivity extends AppCompatActivity {
         } else {
             textBuilder = textBuilder.append("Unfortunately the coin you collected have been lost");
         }
-
         String newText = textBuilder.toString();
         endText.setText(newText);
     }
 
-
     /**
-     * Adds the score of the game to the player total score
-     *
-     * @param playerId  player to update
-     * @param gameScore score to be added
+     * @param playerId  The id of the user to update
+     * @param gameScore The score the player in the game
+     *                  <p>
+     *                  Updates the user in the database
      */
-    @NonNull
-    public Player updatePlayer(String playerId, int gameScore) {
-        final Player player = new Player(playerId, "name", gameScore);
-        if (player != null) {
-            player.setScore(gameScore, true);
-        }
-
-        return player;
-    }
-
     public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-
                 User p = pdp.getUserFromTask(task);
-                if(p != null) {
-                    p.setMaxScoreInGame(p.getMaxScoreInGame() + gameScore);
-                }
-                else{
+                if (p != null) {
+                    int max_score = Math.max(p.getMaxScoreInGame(), gameScore);
+                    p.setMaxScoreInGame(max_score, true);
+                    p.setNumberOfPlayedGames(p.getNumberOfPlayedGames() + 1, true);
+                    if (hasDied) {
+                        p.setNumberOfDiedGames(p.getNumberOfDiedGames() + 1, true);
+                    }
+                } else {
                     updateText(-1, -1, false);
                 }
             }
         });
-
     }
 
 
@@ -154,7 +160,7 @@ public class EndGameActivity extends AppCompatActivity {
             MediaPlayer.create(this, R.raw.button_press).start();
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
-            Helpers.putPlayersInIntent(resultIntent,players);
+            Helpers.putPlayersInIntent(resultIntent, players);
             UserDatabaseProxy pdp = new UserDatabaseProxy();
             pdp.getUserTask(playerId).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

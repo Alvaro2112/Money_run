@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -61,6 +62,23 @@ public class LoginActivity extends AppCompatActivity {
 
         final Button guestButton = findViewById(R.id.guestButton);
         setGuestButton(guestButton);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     @Override
@@ -128,7 +146,12 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        String errorMessage = task.getException().getMessage() == null
+                                ? "Reason unknown"
+                                : task.getException().getMessage();
+                        Toast.makeText(
+                                LoginActivity.this,
+                                "Authentication failed: " + errorMessage,
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

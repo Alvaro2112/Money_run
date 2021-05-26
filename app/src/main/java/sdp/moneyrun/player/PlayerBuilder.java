@@ -18,21 +18,30 @@ public class PlayerBuilder {
     /**
      * @param playerId the unique player Id
      */
-    public void setPlayerId(String playerId) {
+    @NonNull
+    public PlayerBuilder setPlayerId(String playerId) {
         this.playerId = playerId;
+
+        return this;
     }
 
     /**
      * @param name
      */
-    public void setName(@Nullable String name) {
+    @NonNull
+    public PlayerBuilder setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
+
+        return this;
     }
 
-    public void setScore(int score) {
+    @NonNull
+    public PlayerBuilder setScore(int score) {
         this.score = score;
+
+        return this;
     }
 
     /**

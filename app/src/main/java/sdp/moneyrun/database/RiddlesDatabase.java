@@ -64,7 +64,6 @@ public class RiddlesDatabase {
     }
 
     /**
-     *
      * @return Returns the current instance of the riddle database
      */
     @Nullable
@@ -95,7 +94,6 @@ public class RiddlesDatabase {
     }
 
     /**
-     *
      * @return the next Riddle in the shuffled array
      */
     public Riddle getRandomRiddle() {

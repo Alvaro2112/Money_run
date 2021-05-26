@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
 import sdp.moneyrun.user.User;
@@ -26,6 +27,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
 
+    private final String TAG = MainLeaderboardActivity.class.getSimpleName();
     @NonNull
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
@@ -40,6 +42,23 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         addAdapter();
         addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

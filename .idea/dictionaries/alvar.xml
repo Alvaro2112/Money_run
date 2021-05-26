@@ -10,6 +10,7 @@
       <w>geocoder</w>
       <w>mapbox</w>
       <w>mapboxmap</w>
+      <w>symbolmanager</w>
     </words>
   </dictionary>
 </component>
