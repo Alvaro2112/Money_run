@@ -49,7 +49,7 @@ import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
+@SuppressWarnings({"CanBeFinal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //In meters
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
@@ -274,6 +274,5 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         // disable the back button from menu since the user should not be able to log in again once logged in properly
-        return;
     }
 }

@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class GameDatabaseProxy extends DatabaseProxy {

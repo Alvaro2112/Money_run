@@ -560,7 +560,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         initCircle();
         boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
         if(check)
-            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,true);;
+            Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,true);
 
     }
 

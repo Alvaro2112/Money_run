@@ -2,7 +2,6 @@ package sdp.moneyrun.menu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.location.LocationRepresentation;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {

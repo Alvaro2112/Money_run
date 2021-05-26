@@ -28,10 +28,11 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class FriendListListAdapter extends ListAdapterWithUser {
 
     private AndroidLocationService locationService;
-    HashMap<Integer, Game> gamesByPosition = new HashMap<Integer, Game>();
+    HashMap<Integer, Game> gamesByPosition = new HashMap<>();
 
     public static final String TAG_BUTTON_PREFIX = "button";
     private String LOCATION_MODE = "gps";

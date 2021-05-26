@@ -1,7 +1,6 @@
 package sdp.moneyrun.menu;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.Nullable;

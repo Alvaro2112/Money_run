@@ -33,6 +33,7 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class NewGameImplementation extends MenuImplementation {
     TextView nameGameView;
     TextView maxPlayerNumberView;

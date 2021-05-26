@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity {
     public static boolean calledAlready = false;
     private MediaPlayer mp;
