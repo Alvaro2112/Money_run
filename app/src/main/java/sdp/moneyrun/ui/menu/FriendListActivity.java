@@ -18,11 +18,14 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class FriendListActivity extends AppCompatActivity {
+
+    private AndroidLocationService locationService;
 
     @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
@@ -34,6 +37,8 @@ public class FriendListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
+
+        locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
 
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -75,7 +80,7 @@ public class FriendListActivity extends AppCompatActivity {
      */
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
-        ldbAdapter = new FriendListListAdapter(this, friendList, user);
+        ldbAdapter = new FriendListListAdapter(this, friendList, user, locationService);
         Helpers.addAdapter(ldbAdapter, this, R.id.friend_list_view);
     }
 
@@ -137,5 +142,21 @@ public class FriendListActivity extends AppCompatActivity {
 
         ldbAdapter.clear();
         ldbAdapter.addAll(userList);
+    }
+
+    /**
+     * @return the location service.
+     */
+    public AndroidLocationService getLocationService(){
+        return locationService;
+    }
+
+    /**
+     * Sets the location service.
+     */
+    public void setLocationService(@NonNull AndroidLocationService locationService){
+        this.locationService = locationService;
+        // Update friend list
+        showFriendList();
     }
 }

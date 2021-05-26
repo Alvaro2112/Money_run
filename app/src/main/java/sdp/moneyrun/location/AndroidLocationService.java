@@ -1,8 +1,12 @@
 package sdp.moneyrun.location;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Location;
 import android.location.LocationManager;
 import android.location.Criteria;
+
+import java.util.List;
 
 public final class AndroidLocationService implements LocationService {
 
@@ -54,6 +58,9 @@ public final class AndroidLocationService implements LocationService {
         );
     }
 
+    /**
+     * @return the location provider
+     */
     public String getLocationProvider() {
         if (this.locationProvider != null) {
             return this.locationProvider;
@@ -62,10 +69,16 @@ public final class AndroidLocationService implements LocationService {
         return this.locationManager.getBestProvider(this.locationCriteria, true);
     }
 
+    /**
+     * @return the location criteria
+     */
     public Criteria getLocationCriteria() {
         return this.locationCriteria;
     }
 
+    /**
+     * @return true if the location is mocked, false otherwise
+     */
     public boolean isLocationMocked(){
         return this.isLocationMocked;
     }
@@ -73,10 +86,13 @@ public final class AndroidLocationService implements LocationService {
     @Override
     public LocationRepresentation getCurrentLocation() {
         try{
-            android.location.Location location = this.locationManager.getLastKnownLocation(getLocationProvider());
+            // Return mocked location if enabled
             if(this.isLocationMocked){
                 return this.mockedLocation;
             }
+
+            // Otherwise, look for best location getter
+            Location location = getBestLocation();
 
             if(location == null){
                 return null;
@@ -88,6 +104,40 @@ public final class AndroidLocationService implements LocationService {
         }
     }
 
+    /**
+     * @return the best location provider.
+     */
+    private Location getBestLocation(){
+        Location location = null;
+        List<String> providers = locationManager.getProviders(true);
+
+        for (String provider : providers) {
+            @SuppressLint("MissingPermission")
+            Location l = locationManager.getLastKnownLocation(provider);
+            location = getUpdatedLocation(location, l);
+        }
+        return location;
+    }
+
+    /**
+     * @param location a location
+     * @param l another location
+     * @return the best location between 2 locations.
+     */
+    public Location getUpdatedLocation(Location location, Location l){
+        if(l == null){
+            return location;
+        }
+
+        if (location == null || l.getAccuracy() < location.getAccuracy()) {
+            return l;
+        }
+        return location;
+    }
+
+    /**
+     * Define a mocked location.
+     */
     public void setMockedLocation(LocationRepresentation locationRepresentation){
         if(locationRepresentation == null){
             throw new IllegalArgumentException("mocked location representation should not be null.");
@@ -96,6 +146,9 @@ public final class AndroidLocationService implements LocationService {
         this.mockedLocation = locationRepresentation;
     }
 
+    /**
+     * Remove mocked location and use default location.
+     */
     public void resetMockedLocation(){
         this.isLocationMocked = false;
     }

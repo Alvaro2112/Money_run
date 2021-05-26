@@ -181,7 +181,7 @@ public class SignUpActivityTest {
             String password = "abcd";
             Espresso.onView(withId(R.id.signUpEmailText)).perform(typeText(email), closeSoftKeyboard());
             Espresso.onView(withId(R.id.signUpPassword)).perform(typeText(password), closeSoftKeyboard());
-            final String expected = "Password is too weak";
+            final String expected = "The password should be at least seven characters";
             Espresso.onView(withId(R.id.signUpSubmitButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.signUpPassword)).check(matches(withError(expected)));
             Intents.release();

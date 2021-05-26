@@ -53,4 +53,10 @@ public class GameDataBaseProxyInstrumentedTests {
         Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 1, 1);
        gdp.removeGameListener(game, null);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeGameThrowsExceptionForNullGame(){
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        gdp.removeGame(null);
+    }
 }

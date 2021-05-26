@@ -21,7 +21,7 @@ import sdp.moneyrun.database.DatabaseProxy;
 public class SignUpActivity extends AppCompatActivity {
     private final String TAG = SignUpActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
-    private boolean isClicked;
+    private Button submitButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,17 +29,13 @@ public class SignUpActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        final Button submitButton = findViewById(R.id.signUpSubmitButton);
+        submitButton = findViewById(R.id.signUpSubmitButton);
         submitButton.setOnClickListener(clicked -> {
             EditText emailView = findViewById(R.id.signUpEmailText);
             EditText passwordView = findViewById(R.id.signUpPassword);
             String email = emailView.getText().toString().trim();
             String password = passwordView.getText().toString().trim();
-            isClicked = !isClicked;
-            if (isClicked)
-                submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-            else
-                submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.design_default_color_background));
+            submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
             if (checkInput(emailView, passwordView)) {
                 submitSignUp(email, password);
             }
@@ -62,6 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
+
 
     @Override
     public void onStart() {
@@ -89,12 +86,19 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnCompleteListener(SignUpActivity.this, task -> {
                     if (task.isSuccessful()) {
                         //Sign-In success
-                        Log.d(TAG, "createUserWithEmail:success"); //Not sure about the tag thing
+                        Log.d(TAG, "createUserWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
                         Log.w(TAG, "CreateUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignUpActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        String errorMessage = task.getException().getMessage() == null
+                                ? "Reason unknown"
+                                : task.getException().getMessage();
+                        Toast.makeText(
+                                SignUpActivity.this,
+                                "Authentication failed : " + errorMessage,
+                                Toast.LENGTH_SHORT).show();
+                        submitButton.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.design_default_color_background));
                     }
                 });
     }
@@ -133,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
             emailView.requestFocus();
             retValue = false;
         } else if (!isPasswordValid(password)) {
-            passwordView.setError("Password is too weak");
+            passwordView.setError("The password should be at least seven characters");
             passwordView.requestFocus();
             retValue = false;
         }

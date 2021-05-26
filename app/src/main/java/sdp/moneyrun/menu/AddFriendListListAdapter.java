@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.user.User;
@@ -49,7 +50,7 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
         // Change button given some state: can follow, already followed or invalid
         if(userRequested.getUserId() == null ||
                 userRequested.getUserId().equals(getCurrentUser().getUserId())){
-            setInvalidButtonType(userButtonView);
+            Helpers.setInvalidButtonType(userButtonView);
         }else if(getCurrentUser().getFriendIdList().contains(userRequested.getUserId())){
             userButtonView.setTag(R.string.add_friend_tag_0, true);
             setButtonType(userButtonView, false);
