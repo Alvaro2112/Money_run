@@ -30,16 +30,23 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
+    public boolean hasToUpdate(){
+        TrackedMap activity = activityWeakReference.get();
+        boolean hasToUpdate = !init || useDefaultLocation;
+        return activity != null && hasToUpdate;
+    }
+
     /* Updates the location, then checks if near a coin and calls a  function accordingly
      */
     @Override
     public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
-        boolean hasToUpdate = !init || useDefaultLocation;
-        if (activity != null && hasToUpdate) {
+
+        if (hasToUpdate()) {
             Location location = result.getLastLocation();
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null && location != null) {
+
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                 activity.checkObjectives(location);
                 init = true;

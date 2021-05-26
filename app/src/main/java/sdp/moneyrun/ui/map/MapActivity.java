@@ -607,7 +607,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null && !seenCoins.contains(coin)) {
             seenCoins.add(coin);
-            try{ onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
+            try{
+                onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
             } catch (WindowManager.BadTokenException e){
                 seenCoins.remove(coin);
             }
