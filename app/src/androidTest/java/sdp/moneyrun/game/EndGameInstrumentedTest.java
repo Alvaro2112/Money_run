@@ -58,10 +58,9 @@ public class EndGameInstrumentedTest {
 
     public static User getUser() {
         String name = "John Doe";
-        String address = "Someeewhere";
         String id = "1234567891";
 
-        User user = new User(id, name, address, 0, 0, 0);
+        User user = new User(id, name, 0, 0, 0);
         return user;
     }
 
