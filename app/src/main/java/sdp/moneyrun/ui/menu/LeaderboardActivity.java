@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.menu;
 
+import android.app.UiAutomation;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,12 +19,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Random;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -153,6 +156,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // We disable the user from clicking the back button and force him to use the dedicated button
+        return;
     }
 
     /**

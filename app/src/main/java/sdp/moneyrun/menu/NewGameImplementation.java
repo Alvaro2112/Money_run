@@ -39,7 +39,7 @@ public class NewGameImplementation extends MenuImplementation {
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
-
+    private String LOCATION_MODE = "gps";
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  User user,
@@ -207,6 +207,8 @@ public class NewGameImplementation extends MenuImplementation {
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), user);
+        lobbyIntent.putExtra("locationMode", LOCATION_MODE);
+
         activity.startActivity(lobbyIntent);
         activity.finish();
     }

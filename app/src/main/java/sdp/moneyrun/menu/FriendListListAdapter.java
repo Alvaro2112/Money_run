@@ -34,6 +34,7 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     HashMap<Integer, Game> gamesByPosition = new HashMap<Integer, Game>();
 
     public static final String TAG_BUTTON_PREFIX = "button";
+    private String LOCATION_MODE = "gps";
 
     public FriendListListAdapter(Activity context, List<User> userList, User user, AndroidLocationService locationService) {
         super(context, userList, user);
@@ -151,6 +152,7 @@ public class FriendListListAdapter extends ListAdapterWithUser {
         Helpers.joinLobbyFromJoinButton(gameRepresentation,
                 FirebaseDatabase.getInstance().getReference(),
                 (Activity) getContext(),
-                getCurrentUser());
+                getCurrentUser(),
+                LOCATION_MODE);
     }
 }

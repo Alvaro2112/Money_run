@@ -47,6 +47,7 @@ public class JoinGameImplementation extends MenuImplementation {
     @Nullable
     private final User currentUser;
     private int buttonId;
+    private String LOCATION_MODE = "gps";
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -214,7 +215,7 @@ public class JoinGameImplementation extends MenuImplementation {
         button.setText(activity.getString(R.string.join_game_message));
 
         button.setOnClickListener(v -> {
-            Helpers.joinLobbyFromJoinButton(gameRepresentation, databaseReference, activity, currentUser);
+            Helpers.joinLobbyFromJoinButton(gameRepresentation, databaseReference, activity, currentUser, LOCATION_MODE);
             popupWindow.dismiss();
         });
 

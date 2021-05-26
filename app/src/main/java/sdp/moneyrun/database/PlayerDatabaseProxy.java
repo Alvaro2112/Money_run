@@ -25,6 +25,7 @@ public class PlayerDatabaseProxy extends DatabaseProxy {
 
     public PlayerDatabaseProxy() {
         super();
+
         playersRef = getReference().child(DATABASE_PLAYER);
     }
 

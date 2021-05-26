@@ -188,7 +188,8 @@ public class Helpers {
     public static void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation,
                                                @NonNull DatabaseReference databaseReference,
                                                @NonNull Activity activity,
-                                               @NonNull User currentUser) {
+                                               @NonNull User currentUser,
+                                                String locationMode) {
         if(gameRepresentation.getGameId() == null){
             throw new IllegalArgumentException("game representation id should not be null.");
         }
@@ -204,7 +205,8 @@ public class Helpers {
         }
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId())
                 .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer)
-                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser);
+                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser)
+                .putExtra("locationMode", locationMode);
         activity.startActivity(lobbyIntent);
     }
 

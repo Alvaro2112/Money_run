@@ -274,5 +274,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         // disable the back button from menu since the user should not be able to log in again once logged in properly
+        return;
     }
 }
