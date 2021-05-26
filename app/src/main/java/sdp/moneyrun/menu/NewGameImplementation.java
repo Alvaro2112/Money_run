@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public class NewGameImplementation extends MenuImplementation {
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
-    private String LOCATION_MODE = "gps";
+    private String LOCATION_MODE = LocationManager.GPS_PROVIDER;
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  User user,

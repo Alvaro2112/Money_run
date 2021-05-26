@@ -41,6 +41,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Nullable
     private Location game_center;
     private float circleRadius;
-    private double shrinkingFactor = 0.9;
+    private double shrinkingFactor = 0.99;
     private ArrayList<Coin> seenCoins;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
@@ -159,10 +160,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
 
         };
-        if (locationMode.equals("gps"))
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-        else if(locationMode.equals("network"))
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+            locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
 
 
     }
@@ -224,7 +222,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_time = (int) Math.floor(game.getDuration() * 60);
                 game_center = game.getStartLocation();
                 initChronometer();
-
 
                 if (!addedCoins && host) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
@@ -366,9 +363,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         chronometer.start();
         chronometerCounter = 0;
         chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
+        shrinkingFactor = (circleRadius)/(2*game_time);
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
+                circleRadius -= shrinkingFactor;
+                initCircle();
             } else {
                 if(! hasEnded) {
                     hasEnded = true;
@@ -556,8 +556,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         deleteCoinFromMap(coin);
 
-        circleRadius *= shrinkingFactor;
-        initCircle();
         boolean check = checkIfLegalPosition(coin,circleRadius,game_center.getLatitude(),game_center.getLongitude());
         if(check)
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,true);
@@ -624,8 +622,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleManager.deleteAll();
         CircleOptions circleOptions = new CircleOptions();
         circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.2f);
-        circleOptions = circleOptions.withCircleColor("" + Color.blue(8));
+        circleOptions = circleOptions.withCircleOpacity(0.5f).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
@@ -634,6 +631,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return circleManager;
     }
 
+    /**
+     *Checks if the coin the player wants to pick up is allowed
+     *
+     * @param coin coin that the player wants to pick up
+     * @param radius the current radius of the game
+     * @param center_x the x coordinate of the center of the game
+     * @param center_y the y coordinate of the center of the game
+     * @return true if the coin is inside the game circle
+     */
     public boolean checkIfLegalPosition(Coin coin, double radius, double center_x,double center_y){
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude()-center_x,2)+ Math.pow(coin.getLongitude()-center_y,2));

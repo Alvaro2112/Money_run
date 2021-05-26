@@ -3,6 +3,7 @@ package sdp.moneyrun.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     HashMap<Integer, Game> gamesByPosition = new HashMap<>();
 
     public static final String TAG_BUTTON_PREFIX = "button";
-    private String LOCATION_MODE = "gps";
+    private String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public FriendListListAdapter(Activity context, List<User> userList, User user, AndroidLocationService locationService) {
         super(context, userList, user);
