@@ -37,7 +37,6 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
-import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
