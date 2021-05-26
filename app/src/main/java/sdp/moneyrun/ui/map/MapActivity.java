@@ -101,6 +101,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private ArrayList<Coin> seenCoins;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
+    private String locationMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,12 +128,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (gameId != null)
                 initializeGame(gameId);
         });
-
-        initLocationManager();
+        if(locationMode != null)
+            initLocationManager(locationMode);
 
     }
 
-    public void initLocationManager(){
+    public void initLocationManager(String locationMode){
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -158,12 +159,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
 
         };
-
-       /* try {
+        if (locationMode.equals("gps"))
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-        }catch (Exception e){
-            //Phone does not have GPS capabilities
-        }*/
+        else if(locationMode.equals("network"))
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+
+
     }
 
 
@@ -177,6 +178,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             gameId = getIntent().getStringExtra("gameId");
         }
         host = getIntent().getBooleanExtra("host", false);
+        locationMode = getIntent().getStringExtra("locationMode");
+
     }
 
     /**
@@ -310,7 +313,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
-        callback = new LocationCheckObjectivesCallback(this);
+        callback = new LocationCheckObjectivesCallback(this, locationMode == null);
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
 

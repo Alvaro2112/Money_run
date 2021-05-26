@@ -19,9 +19,11 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     @NonNull
     private final WeakReference<TrackedMap> activityWeakReference;
     boolean init = false;
+    boolean useDefaultLocation = true;
 
-    public LocationCheckObjectivesCallback(MapActivity activity) {
+    public LocationCheckObjectivesCallback(MapActivity activity, boolean useDefaultLocation) {
         this.activityWeakReference = new WeakReference<>(activity);
+        this.useDefaultLocation = useDefaultLocation;
     }
 
     public LocationCheckObjectivesCallback(OfflineMapDownloaderActivity activity) {
@@ -33,7 +35,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     @Override
     public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
-        if (activity != null && !init) {
+        if (activity != null && (!init || useDefaultLocation)) {
             Location location = result.getLastLocation();
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null && location != null) {

@@ -48,6 +48,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     private String gameId;
     private Player user;
     private User actualUser;
+    private String locationMode;
     private DatabaseReference thisGame;
     GameDatabaseProxy proxyG;
 
@@ -60,6 +61,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
+        locationMode = getIntent().getStringExtra("locationMode");
         this.thisGame = FirebaseDatabase.getInstance().getReference()
                 .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
@@ -156,6 +158,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 intent.putExtra("player", user);
                 intent.putExtra("gameId", gameId);
                 intent.putExtra("host", true);
+                intent.putExtra("locationMode", locationMode);
                 startActivity(intent);
                 finish();
             }
@@ -195,6 +198,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                             intent.putExtra("player", user);
                             intent.putExtra("gameId", gameId);
                             intent.putExtra("host", false);
+                            intent.putExtra("locationMode", locationMode);
                             startActivity(intent);
                             finish();
                         }
