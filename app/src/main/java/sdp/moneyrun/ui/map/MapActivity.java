@@ -49,6 +49,7 @@ import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
@@ -129,6 +130,25 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (gameId != null)
                 initializeGame(gameId);
         });
+
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
+
         if (locationMode != null)
             initLocationManager(locationMode);
 
@@ -161,6 +181,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         };
         locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+
 
 
     }

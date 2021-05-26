@@ -16,6 +16,7 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -34,6 +35,8 @@ public class EndGameActivity extends AppCompatActivity {
     private TextView endText;
     private String playerId;
     private Button resultButton;
+
+    private final String TAG = EndGameActivity.class.getSimpleName();
     private boolean hasDied;
 
     @Override
@@ -57,6 +60,23 @@ public class EndGameActivity extends AppCompatActivity {
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);
 
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

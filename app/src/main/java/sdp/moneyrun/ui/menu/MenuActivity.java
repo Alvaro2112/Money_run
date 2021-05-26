@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
@@ -69,6 +70,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+
+
+    private final String TAG = MenuActivity.class.getSimpleName();
+
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -112,6 +117,24 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         runFunctionalities();
         addDownloadButton();
         addOfflineMapButton();
+
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     public void addDownloadButton() {

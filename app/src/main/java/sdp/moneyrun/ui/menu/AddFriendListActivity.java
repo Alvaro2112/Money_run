@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.AddFriendListListAdapter;
 import sdp.moneyrun.user.User;
@@ -25,7 +26,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     @Nullable
     private AddFriendListListAdapter ldbAdapter;
     private User user;
-
+    private final String TAG = AddFriendListActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,23 @@ public class AddFriendListActivity extends AppCompatActivity {
         searchButton.setOnClickListener(v -> searchButtonFunctionality());
         Button goButton = findViewById(R.id.friend_add_list_button_back);
         goButton.setOnClickListener(v -> goBackButtonFunctionality());
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

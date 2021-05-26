@@ -20,6 +20,7 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
@@ -31,6 +32,8 @@ public class LeaderboardActivity extends AppCompatActivity {
     private final List<Player> playerList = new ArrayList<>();
     User userFromEnd;
     private LeaderboardListAdapter ldbAdapter;
+
+    private final String TAG = LeaderboardActivity.class.getSimpleName();
     @Nullable
     private Player user;
 
@@ -48,6 +51,23 @@ public class LeaderboardActivity extends AppCompatActivity {
         // Put addPlayer with local cache
         getEndGamePlayers();
         linkToMenuButton(toMenu);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**

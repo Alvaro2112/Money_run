@@ -16,6 +16,7 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.menu.FriendListListAdapter;
@@ -30,6 +31,7 @@ public class FriendListActivity extends AppCompatActivity {
     private ArrayList<User> friendList = new ArrayList<>();
     private FriendListListAdapter ldbAdapter;
     private User user;
+    private final String TAG = FriendListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,23 @@ public class FriendListActivity extends AppCompatActivity {
         addAdapter();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
