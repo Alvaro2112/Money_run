@@ -43,14 +43,15 @@ public class GameLobbyActivity extends AppCompatActivity {
     ValueEventListener getDeleteListener;
     ValueEventListener playerListListener;
     ValueEventListener isStartedListener;
+    GameDatabaseProxy proxyG;
     private LobbyPlayerListAdapter listAdapter;
     @Nullable
     private Game game;
     private String gameId;
     private Player user;
     private User actualUser;
+    private String locationMode;
     private DatabaseReference thisGame;
-    GameDatabaseProxy proxyG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
         user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
+        locationMode = getIntent().getStringExtra("locationMode");
         this.thisGame = FirebaseDatabase.getInstance().getReference()
                 .child(this.getString(R.string.database_games)).child(gameId);
         getGameFromDb();
@@ -174,6 +176,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 intent.putExtra("player", user);
                 intent.putExtra("gameId", gameId);
                 intent.putExtra("host", true);
+                intent.putExtra("locationMode", locationMode);
                 startActivity(intent);
                 finish();
             }
@@ -207,12 +210,13 @@ public class GameLobbyActivity extends AppCompatActivity {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot!= null && snapshot.child("started").getValue() != null) {
+                    if (snapshot != null && snapshot.child("started").getValue() != null) {
                         if ((boolean) snapshot.child("started").getValue()) {
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                             intent.putExtra("player", user);
                             intent.putExtra("gameId", gameId);
                             intent.putExtra("host", false);
+                            intent.putExtra("locationMode", locationMode);
                             startActivity(intent);
                             finish();
                         }

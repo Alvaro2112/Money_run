@@ -2,7 +2,7 @@ package sdp.moneyrun.menu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -35,13 +34,12 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {
 
+    public static final String TAG_GAME_PREFIX = "game";
     // Distance in meters
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
     private final boolean focusable;
@@ -49,8 +47,7 @@ public class JoinGameImplementation extends MenuImplementation {
     @Nullable
     private final User currentUser;
     private int buttonId;
-
-    public static final String TAG_GAME_PREFIX = "game";
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -116,7 +113,7 @@ public class JoinGameImplementation extends MenuImplementation {
                 // Get user location and compute distance
                 AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
                 LocationRepresentation location = locationService.getCurrentLocation();
-                if(location == null || gameRepresentation.getStartLocation() == null){
+                if (location == null || gameRepresentation.getStartLocation() == null) {
                     return;
                 }
 
@@ -229,7 +226,7 @@ public class JoinGameImplementation extends MenuImplementation {
         button.setText(activity.getString(R.string.join_game_message));
 
         button.setOnClickListener(v -> {
-            Helpers.joinLobbyFromJoinButton(gameRepresentation, databaseReference, activity, currentUser);
+            Helpers.joinLobbyFromJoinButton(gameRepresentation, databaseReference, activity, currentUser, LOCATION_MODE);
             popupWindow.dismiss();
         });
 

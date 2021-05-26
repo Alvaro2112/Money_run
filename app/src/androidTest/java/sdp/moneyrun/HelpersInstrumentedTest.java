@@ -46,7 +46,7 @@ public class HelpersInstrumentedTest {
                Helpers.joinLobbyFromJoinButton(gameRep,
                        FirebaseDatabase.getInstance().getReference(),
                        a,
-                       currentUser);
+                       currentUser, null);
             });
         }
     }

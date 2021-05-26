@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,11 +49,11 @@ public class UserDatabaseProxy extends DatabaseProxy {
         usersRef.child(String.valueOf(user.getUserId())).setValue(user);
     }
 
-    public void putUser(User user, OnCompleteListener listener){
-        if(user == null){
+    public void putUser(@Nullable User user, @Nullable OnCompleteListener listener) {
+        if (user == null) {
             throw new IllegalArgumentException("user should not be null");
         }
-        if(listener == null){
+        if (listener == null) {
             throw new IllegalArgumentException("listener should not be null");
         }
         usersRef.child(String.valueOf(user.getUserId())).setValue(user).addOnCompleteListener(listener);
@@ -86,15 +87,17 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     /**
      * Get all the users in the database.
+     *
      * @return Task containing the users data
      */
     @NonNull
-    public Task<DataSnapshot> getUsersTask(){
+    public Task<DataSnapshot> getUsersTask() {
         return usersRef.get();
     }
 
-    /** get a user from a task
     /**
+     * get a user from a task
+     * /**
      * get a user from a task
      *
      * @param task the task containing a user
@@ -152,7 +155,8 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     /**
      * Get a list of players that have a name containing the filter string.
-     * @param task the task from the database to sort
+     *
+     * @param task   the task from the database to sort
      * @param filter the name filter
      * @return a list of user whose names contain the filter string
      */
@@ -172,11 +176,11 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     @NonNull
     private List<User> getMatchingUserList(@NonNull DataSnapshot result,
-                                           @NonNull String cleanFilter){
+                                           @NonNull String cleanFilter) {
         List<User> resultList = new ArrayList<>();
-        for(DataSnapshot dataSnapshot: result.getChildren()){
+        for (DataSnapshot dataSnapshot : result.getChildren()) {
             User user = dataSnapshot.getValue(User.class);
-            if(user == null || user.getName() == null){
+            if (user == null || user.getName() == null) {
                 continue;
             }
 
@@ -187,11 +191,12 @@ public class UserDatabaseProxy extends DatabaseProxy {
 
     /**
      * Get clean filter given name filter
+     *
      * @param string the string to clean
      * @return the cleaned string
      */
     @NonNull
-    private String getCleanString(@NonNull String string){
+    private String getCleanString(@NonNull String string) {
         String cleanString = string.trim().toLowerCase(Locale.getDefault());
         if (cleanString.equals("")) {
             throw new IllegalArgumentException("name should not be the empty string.");
@@ -205,26 +210,27 @@ public class UserDatabaseProxy extends DatabaseProxy {
      */
     private void addMatchingUser(@NonNull List<User> resultList,
                                  @NonNull User user,
-                                 @NonNull String cleanFilter){
+                                 @NonNull String cleanFilter) {
         String name = user.getName();
-        if(name == null){
+        if (name == null) {
             throw new IllegalArgumentException("name should not be null.");
         }
 
         String cleanUserName = getCleanString(user.getName());
-        if(cleanUserName.contains(cleanFilter)){
+        if (cleanUserName.contains(cleanFilter)) {
             resultList.add(user);
         }
     }
 
     /**
      * Given a user, updates their friend list given the database
+     *
      * @param user the user to update
      * @return the task that retrieves the user from the database
      */
     @Nullable
-    public Task<DataSnapshot> updatedFriendListFromDatabase(@Nullable User user){
-        if(user == null || user.getUserId() == null){
+    public Task<DataSnapshot> updatedFriendListFromDatabase(@Nullable User user) {
+        if (user == null || user.getUserId() == null) {
             return null;
         }
 
@@ -232,7 +238,7 @@ public class UserDatabaseProxy extends DatabaseProxy {
         Task<DataSnapshot> userTask = db.getUserTask(user.getUserId());
         userTask.addOnCompleteListener(task -> {
             User userUpdated = db.getUserFromTask(task);
-            if(userUpdated != null){
+            if (userUpdated != null) {
                 user.setFriendIdList(userUpdated.getFriendIdList());
             }
         });
