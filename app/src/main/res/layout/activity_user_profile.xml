@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/playerPlayedGames"
         android:layout_width="205dp"
-        android:layout_height="105dp"
+        android:layout_height="140dp"
 
         android:gravity="center"
         android:textAppearance="@color/cardview_light_background"

@@ -73,10 +73,8 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists() {
-        //TODO: find a way to put info into result array in UserProfileActivity
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
-
             String name = "John";
             int diedN = 0;
             int playedN = 5;
@@ -87,11 +85,11 @@ public class UserProfileInstrumentedTest {
             scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("User has died 0 many times")));
+                    .check(matches(withText("Times you died in a game \n 0")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("User has played 5 many games")));
+                    .check(matches(withText("Games played \n 5")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText("User name : John")));
+                    .check(matches(withText(name.toUpperCase())));
             Intents.release();
         }
     }
