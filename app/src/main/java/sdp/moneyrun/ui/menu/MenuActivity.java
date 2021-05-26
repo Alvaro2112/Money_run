@@ -71,11 +71,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
 
-    DatabaseReference databaseReference;
-    FusedLocationProviderClient fusedLocationClient;
 
     private final String TAG = MenuActivity.class.getSimpleName();
-    AndroidLocationService locationService;
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
