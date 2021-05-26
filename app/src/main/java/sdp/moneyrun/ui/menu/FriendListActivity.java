@@ -32,6 +32,7 @@ public class FriendListActivity extends AppCompatActivity {
     private FriendListListAdapter ldbAdapter;
     private User user;
     private final String TAG = FriendListActivity.class.getSimpleName();
+    private Button goBackToMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +44,29 @@ public class FriendListActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
-        if (taskUpdatedUser == null) {
+
+        if (taskUpdatedUser == null)
             return;
-        }
 
         taskUpdatedUser.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful())
                 showFriendList();
-            }
         });
 
         addAdapter();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
         DatabaseProxy.addOfflineListener(this, TAG);
+
+        goBackToMenu = findViewById(R.id.back_from_friend_list_button);
+
+        goBackToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(FriendListActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
     }
 
     @Override

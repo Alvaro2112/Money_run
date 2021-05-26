@@ -255,6 +255,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
+
                 initCircle();
             } else {
                 Log.e(TAG, task.getException().getMessage());

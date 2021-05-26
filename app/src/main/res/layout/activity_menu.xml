@@ -21,16 +21,5 @@
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_menu_drawer" />
 
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:orientation="vertical">-->
-    <!--        <FrameLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:id="@+id/fragment_container">-->
-
-    <!--        </FrameLayout>-->
-    <!--    </LinearLayout>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
