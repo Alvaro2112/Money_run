@@ -382,6 +382,9 @@ public class LoginInstrumentedTest {
 
     @Test
     public void logInWithoutConnectionDisplaysError(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             String email = "logintest@epfl.ch";
