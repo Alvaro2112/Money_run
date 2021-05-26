@@ -110,7 +110,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
         } else {
             return null;
         }
-
     }
 
     /**
@@ -233,7 +232,6 @@ public class UserDatabaseProxy extends DatabaseProxy {
         if (user == null || user.getUserId() == null) {
             return null;
         }
-
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> userTask = db.getUserTask(user.getUserId());
         userTask.addOnCompleteListener(task -> {

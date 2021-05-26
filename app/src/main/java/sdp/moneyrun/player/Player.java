@@ -31,7 +31,7 @@ public class Player implements Serializable {
      *
      * @param playerId the unique id that identifies a player
      * @param name
-     * @throws IllegalArgumentException on empty or null address or name and on player = 0
+     * @throws IllegalArgumentException on empty or null name and on player = 0
      */
     public Player(@Nullable String playerId, @Nullable String name, int score) {
         if (playerId == null || name == null || name.isEmpty())

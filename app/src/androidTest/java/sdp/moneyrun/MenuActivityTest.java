@@ -71,7 +71,7 @@ public class MenuActivityTest {
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
     private Intent getStartIntent() {
-        User currentUser = new User("888", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -100,7 +100,7 @@ public class MenuActivityTest {
         Location farLocation = getFarLocation();
 
         // Define game host
-        User userHost = new User("777", "CURRENT_USER", "Epfl", 0, 0, 0);
+        User userHost = new User("777", "CURRENT_USER", 0, 0, 0);
         PlayerBuilder hostBuilder = new PlayerBuilder();
         Player host = hostBuilder.setPlayerId(userHost.getUserId())
                 .setName(userHost.getName())
@@ -136,7 +136,7 @@ public class MenuActivityTest {
         Location farLocation = getFarLocation();
 
         // Define game host
-        User userHost = new User("888", "CURRENT_USER", "Epfl", 0, 0, 0);
+        User userHost = new User("888", "CURRENT_USER", 0, 0, 0);
         PlayerBuilder hostBuilder = new PlayerBuilder();
         Player host = hostBuilder.setPlayerId(userHost.getUserId())
                 .setName(userHost.getName())
@@ -283,7 +283,7 @@ public class MenuActivityTest {
     @Test
     public void newGamePopupIsDisplayed() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
 
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
