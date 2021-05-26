@@ -290,13 +290,7 @@ public class Game {
     }
 
     public void setStarted(boolean started, boolean forceLocal) {
-        if (!forceLocal) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child(DATABASE_GAME)
-                    .child(id)
-                    .child(DATABASE_STARTED)
-                    .setValue(started);
-        }
+        setGameStartAndEnd(started,forceLocal,DATABASE_STARTED);
         gameDbData.setStarted(started);
         this.started = started;
 
@@ -307,16 +301,20 @@ public class Game {
     }
 
     public void setEnded(boolean ended, boolean forceLocal) {
+        setGameStartAndEnd(ended,forceLocal,DATABASE_ENDED);
+        gameDbData.setEnded(ended);
+        this.ended = ended;
+
+    }
+
+    private void setGameStartAndEnd(boolean value,boolean forceLocal,String part){
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
-                    .child(DATABASE_ENDED)
-                    .setValue(ended);
+                    .child(part)
+                    .setValue(value);
         }
-        gameDbData.setEnded(ended);
-        this.ended = ended;
-
     }
 
     @Nullable

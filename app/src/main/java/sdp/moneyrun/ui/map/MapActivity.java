@@ -257,12 +257,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-                initCircle();
-                listenEnded();
+                initCircleAndSetEndListener();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
         });
+    }
+
+    private void initCircleAndSetEndListener(){
+        initCircle();
+        if(!host)
+            listenEnded();
     }
 
     /**
@@ -683,14 +688,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     public void listenEnded(){
-            if (!host) {
                 isEndedListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot!= null && snapshot.child("ended").getValue() != null) {
-                            if ((boolean) snapshot.child("ended").getValue()) {
+                        if(snapshot!= null && snapshot.child("ended").getValue() != null&&(boolean) snapshot.child("ended").getValue()) {
                                 Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
-                            }
                         }
                     }
 
@@ -700,6 +702,5 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     }
                 };
                 proxyG.addGameListener(game, isEndedListener);
-            }
     }
 }
