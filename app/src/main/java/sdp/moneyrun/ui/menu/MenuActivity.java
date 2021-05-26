@@ -159,7 +159,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient,
+                locationService,
                 true,
                 R.layout.join_game_popup);
 
@@ -167,7 +167,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient);
+                locationService);
 
 
         runWeather();

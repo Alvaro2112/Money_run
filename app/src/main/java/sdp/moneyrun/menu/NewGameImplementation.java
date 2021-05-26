@@ -28,6 +28,8 @@ import java.util.List;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
@@ -48,8 +50,8 @@ public class NewGameImplementation extends MenuImplementation {
                                  DatabaseReference databaseReference,
                                  User user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                 FusedLocationProviderClient fusedLocationClient) {
-        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+                                 AndroidLocationService locationService) {
+        super(activity, databaseReference, user, requestPermissionsLauncher, locationService);
     }
 
 
@@ -110,7 +112,7 @@ public class NewGameImplementation extends MenuImplementation {
 
         popupWindow.dismiss();
 
-        tryLocation(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
+        postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber, locationService.getCurrentLocation());
     }
 
     /**
@@ -181,26 +183,13 @@ public class NewGameImplementation extends MenuImplementation {
 
     }
 
-
-    /**
-     * try getting the player's location to start the game
-     */
-    @SuppressLint("MissingPermission")
-    private void tryLocation(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-        requestLocationPermissions(requestPermissionsLauncher);
-        fusedLocationClient.getLastLocation().addOnSuccessListener(activity, location -> {
-            if (location != null) {
-                postNewGame(name, maxPlayerCount, numCoins, gameRadius, gameDuration, location);
-            }else{
-                Log.e("location", "Error getting location");
-            }
-        });
-    }
-
-    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, Location loc){
+    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, LocationRepresentation location){
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);
+        Location loc = new Location("");
+        loc.setLatitude(location.getLatitude());
+        loc.setLongitude(location.getLongitude());
         Game game = new Game(name, player, maxPlayerCount, riddles, coins, loc, true, numCoins, gameRadius, gameDuration);
         game.setId(user.getUserId());
         GameDatabaseProxy gdb = new GameDatabaseProxy();

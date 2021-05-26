@@ -246,10 +246,14 @@ public class MenuActivityTest {
         }
     }
 
-
     @Test
     public void CreateGameWorksWhenFieldsAreAppropriate() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Intents.init();
+            scenario.onActivity(a ->{
+                AndroidLocationService locationS = a.getLocationService();
+                locationS.setMockedLocation(new LocationRepresentation(4,5));
+            });
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
@@ -269,6 +273,7 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
+            intended(hasComponent(GameLobbyActivity.class.getName()));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -276,24 +281,6 @@ public class MenuActivityTest {
            Intents.release();
         }
     }
-
-    @Test
-    public void postNewGameWorks(){
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            Intents.init();
-
-            Location loc = new Location("");
-            loc.setLongitude(0);
-            loc.setLatitude(0);
-
-            scenario.onActivity(a -> {
-                a.newGameImplementation.postNewGame("LOOOL",3, 5, 25, 5, loc);
-            });
-            intended(hasComponent(GameLobbyActivity.class.getName()));
-            Intents.release();
-        }
-    }
-
 
     @Test
     public void newGamePopupIsDisplayed() {
