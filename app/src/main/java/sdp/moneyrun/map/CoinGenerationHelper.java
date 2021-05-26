@@ -5,10 +5,6 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.geojson.Feature;
-
-import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 public class CoinGenerationHelper {

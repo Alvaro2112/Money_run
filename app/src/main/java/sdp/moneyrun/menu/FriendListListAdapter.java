@@ -32,11 +32,11 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings("FieldCanBeLocal")
 public class FriendListListAdapter extends ListAdapterWithUser {
 
-    private AndroidLocationService locationService;
-    HashMap<Integer, Game> gamesByPosition = new HashMap<>();
-
     public static final String TAG_BUTTON_PREFIX = "button";
-    private String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    @NonNull
+    HashMap<Integer, Game> gamesByPosition = new HashMap<>();
+    private final AndroidLocationService locationService;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public FriendListListAdapter(Activity context, List<User> userList, User user, AndroidLocationService locationService) {
         super(context, userList, user);
@@ -73,17 +73,18 @@ public class FriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Define the join game button as valid or invalid depending on predicates
+     *
      * @param userRequested the friend that may have a game
-     * @param button the join button
+     * @param button        the join button
      */
     private void updateJoinButton(@NonNull User userRequested,
                                   @NonNull Button button,
-                                  int position){
+                                  int position) {
         Task<DataSnapshot> gameTask = getTaskFriendGame(userRequested, position);
         gameTask.addOnCompleteListener(task -> {
             Game friendGame = gamesByPosition.get(position);
 
-            if(task.isSuccessful() && friendGameIsJoinable(friendGame)) {
+            if (task.isSuccessful() && friendGameIsJoinable(friendGame)) {
                 Helpers.setValidButtonType(button);
                 button.setOnClickListener(v -> addFriendButtonImplementation(friendGame));
             }
@@ -93,19 +94,19 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     /**
      * @return true if the user can join the friend's game
      */
-    private boolean friendGameIsJoinable(@Nullable Game friendGame){
-        if(friendGame == null){
+    private boolean friendGameIsJoinable(@Nullable Game friendGame) {
+        if (friendGame == null) {
             return false;
         }
 
         Location gameLocation = friendGame.getStartLocation();
-        if(gameLocation == null){
+        if (gameLocation == null) {
             return false;
         }
 
         LocationRepresentation gameLocationRepr = new LocationRepresentation(gameLocation);
         LocationRepresentation userLocation = locationService.getCurrentLocation();
-        if(userLocation == null){
+        if (userLocation == null) {
             return false;
         }
 
@@ -115,17 +116,19 @@ public class FriendListListAdapter extends ListAdapterWithUser {
 
     /**
      * Get the friend's game from database.
+     *
      * @param requestedUser the user's friend
      * @return the task retrieving the friends task from database
      */
-    private Task<DataSnapshot> getTaskFriendGame(@NonNull User requestedUser, int position){
+    @NonNull
+    private Task<DataSnapshot> getTaskFriendGame(@NonNull User requestedUser, int position) {
         GameDatabaseProxy db = new GameDatabaseProxy();
         Task<DataSnapshot> gameTask = db.getGameDataSnapshot(requestedUser.getUserId());
 
         gameTask.addOnCompleteListener(task -> {
-            try{
+            try {
                 gamesByPosition.put(position, db.getGameFromTaskSnapshot(task));
-            }catch(IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 gamesByPosition.put(position, null);
             }
         });
@@ -136,11 +139,11 @@ public class FriendListListAdapter extends ListAdapterWithUser {
     /**
      * Add button interaction to join game lobby
      */
-    private void addFriendButtonImplementation(@Nullable Game friendGame){
-        if(friendGame == null){
+    private void addFriendButtonImplementation(@Nullable Game friendGame) {
+        if (friendGame == null) {
             return;
         }
-        if(getCurrentUser() == null){
+        if (getCurrentUser() == null) {
             return;
         }
 

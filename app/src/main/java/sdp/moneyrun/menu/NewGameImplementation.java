@@ -41,7 +41,8 @@ public class NewGameImplementation extends MenuImplementation {
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
-    private String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  User user,

@@ -39,6 +39,7 @@ import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {
 
+    public static final String TAG_GAME_PREFIX = "game";
     // Distance in meters
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
     private final boolean focusable;
@@ -46,9 +47,7 @@ public class JoinGameImplementation extends MenuImplementation {
     @Nullable
     private final User currentUser;
     private int buttonId;
-    private String LOCATION_MODE = LocationManager.GPS_PROVIDER;
-
-    public static final String TAG_GAME_PREFIX = "game";
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -114,7 +113,7 @@ public class JoinGameImplementation extends MenuImplementation {
                 // Get user location and compute distance
                 AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
                 LocationRepresentation location = locationService.getCurrentLocation();
-                if(location == null || gameRepresentation.getStartLocation() == null){
+                if (location == null || gameRepresentation.getStartLocation() == null) {
                     return;
                 }
 

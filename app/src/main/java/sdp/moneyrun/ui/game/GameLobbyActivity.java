@@ -42,6 +42,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     ValueEventListener getDeleteListener;
     ValueEventListener playerListListener;
     ValueEventListener isStartedListener;
+    GameDatabaseProxy proxyG;
     private LobbyPlayerListAdapter listAdapter;
     @Nullable
     private Game game;
@@ -50,7 +51,6 @@ public class GameLobbyActivity extends AppCompatActivity {
     private User actualUser;
     private String locationMode;
     private DatabaseReference thisGame;
-    GameDatabaseProxy proxyG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +192,7 @@ public class GameLobbyActivity extends AppCompatActivity {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot!= null && snapshot.child("started").getValue() != null) {
+                    if (snapshot != null && snapshot.child("started").getValue() != null) {
                         if ((boolean) snapshot.child("started").getValue()) {
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                             intent.putExtra("player", user);

@@ -20,7 +20,9 @@ import sdp.moneyrun.user.User;
 
 public class AddFriendListActivity extends AppCompatActivity {
 
+    @Nullable
     private List<User> resultList = new ArrayList<>();
+    @Nullable
     private AddFriendListListAdapter ldbAdapter;
     private User user;
 

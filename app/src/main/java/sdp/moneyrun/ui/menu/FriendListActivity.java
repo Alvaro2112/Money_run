@@ -41,7 +41,7 @@ public class FriendListActivity extends AppCompatActivity {
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
-        if(taskUpdatedUser == null){
+        if (taskUpdatedUser == null) {
             return;
         }
 
@@ -128,14 +128,14 @@ public class FriendListActivity extends AppCompatActivity {
     /**
      * @return the location service.
      */
-    public AndroidLocationService getLocationService(){
+    public AndroidLocationService getLocationService() {
         return locationService;
     }
 
     /**
      * Sets the location service.
      */
-    public void setLocationService(@NonNull AndroidLocationService locationService){
+    public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
         // Update friend list
         showFriendList();

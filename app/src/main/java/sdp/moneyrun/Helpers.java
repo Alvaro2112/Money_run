@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -80,10 +79,10 @@ public class Helpers {
 
         DatabaseReference newDatabaseReference;
 
-        if(object instanceof Player)
-            newDatabaseReference = databaseReference.child(String.valueOf(((Player)object).getPlayerId()));
+        if (object instanceof Player)
+            newDatabaseReference = databaseReference.child(String.valueOf(((Player) object).getPlayerId()));
         else if (object instanceof User)
-            newDatabaseReference = databaseReference.child(String.valueOf(((User)object).getUserId()));
+            newDatabaseReference = databaseReference.child(String.valueOf(((User) object).getUserId()));
         else
             throw new IllegalArgumentException("Objects need to be a User or a Player");
 
@@ -94,7 +93,7 @@ public class Helpers {
     }
 
     @NonNull
-    public static Task<DataSnapshot> addOnCompleteListener(String TAG, @NonNull Task<DataSnapshot> task){
+    public static Task<DataSnapshot> addOnCompleteListener(String TAG, @NonNull Task<DataSnapshot> task) {
 
         task.addOnCompleteListener(task1 -> {
             if (!task1.isSuccessful()) {
@@ -109,11 +108,11 @@ public class Helpers {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter){
+    public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter) {
         if (objectList == null) {
             throw new NullPointerException("List is null");
         }
-        if(objectList.isEmpty()){
+        if (objectList.isEmpty()) {
             return;
         }
         listAdapter.addAll(objectList);
@@ -122,11 +121,11 @@ public class Helpers {
             objects.add(listAdapter.getItem(i));
         listAdapter.clear();
 
-        if(objectList.get(0) instanceof User){
-            bestToWorstUser((ArrayList<User>)objects);
-        }else if(objectList.get(0) instanceof Player){
-            bestToWorstPlayer((ArrayList<Player>)objects);
-        }else{
+        if (objectList.get(0) instanceof User) {
+            bestToWorstUser((ArrayList<User>) objects);
+        } else if (objectList.get(0) instanceof Player) {
+            bestToWorstPlayer((ArrayList<Player>) objects);
+        } else {
             throw new IllegalArgumentException("List must contain Users or Players");
         }
         listAdapter.addAll(objects);
@@ -147,14 +146,14 @@ public class Helpers {
      */
     public static <T> void addAdapter(@NonNull ArrayAdapter<T> ldbAdapter,
                                       @NonNull Activity activity,
-                                      int viewInt){
+                                      int viewInt) {
         // The adapter lets us add item to a ListView easily.
         ListView ldbView = activity.findViewById(viewInt);
         ldbView.setAdapter(ldbAdapter);
         ldbAdapter.clear();
     }
 
-    public static void putPlayersInIntent(Intent intent, List<Player>players){
+    public static void putPlayersInIntent(@NonNull Intent intent, @NonNull List<Player> players) {
         for (int i = 0; i < players.size(); ++i) {
             intent.putExtra("players" + i, players.get(i));
         }
@@ -162,35 +161,38 @@ public class Helpers {
 
     /**
      * Define invalid button type
+     *
      * @param button the button
      */
-    public static void setInvalidButtonType(@NonNull Button button){
+    public static void setInvalidButtonType(@NonNull Button button) {
         button.setEnabled(false);
         button.setVisibility(View.GONE);
     }
 
     /**
      * Define invalid button type
+     *
      * @param button the button
      */
-    public static void setValidButtonType(@NonNull Button button){
+    public static void setValidButtonType(@NonNull Button button) {
         button.setEnabled(true);
         button.setVisibility(View.VISIBLE);
     }
 
     /**
      * Join a lobby given the representation of a game
+     *
      * @param gameRepresentation the game to join
-     * @param databaseReference the database reference
-     * @param activity the activity
-     * @param currentUser the user that joins the game
+     * @param databaseReference  the database reference
+     * @param activity           the activity
+     * @param currentUser        the user that joins the game
      */
     public static void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation,
                                                @NonNull DatabaseReference databaseReference,
                                                @NonNull Activity activity,
                                                @NonNull User currentUser,
-                                                String locationMode) {
-        if(gameRepresentation.getGameId() == null){
+                                               String locationMode) {
+        if (gameRepresentation.getGameId() == null) {
             throw new IllegalArgumentException("game representation id should not be null.");
         }
 
@@ -212,14 +214,16 @@ public class Helpers {
 
     /**
      * Add game listener.
+     *
      * @param gamePlayers the players
-     * @param newPlayer the new player
+     * @param newPlayer   the new player
      */
-    private static void addGamePlayersListener(DatabaseReference gamePlayers, Player newPlayer){
+    private static void addGamePlayersListener(@NonNull DatabaseReference gamePlayers, Player newPlayer) {
         gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {});
+                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {
+                });
                 players.add(newPlayer);
                 gamePlayers.setValue(players);
             }

@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -30,11 +29,10 @@ public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
     private final List<Player> playerList = new ArrayList<>();
+    User userFromEnd;
     private LeaderboardListAdapter ldbAdapter;
     @Nullable
     private Player user;
-    User userFromEnd;
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -158,11 +156,11 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * Sends user to end game screen
      */
-    public void linkToMenuButton(Button button){
+    public void linkToMenuButton(@NonNull Button button) {
         userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
-        button.setOnClickListener( v -> {
-            Intent menuIntent = new Intent(LeaderboardActivity.this,MenuActivity.class);
-            menuIntent.putExtra("user",userFromEnd);
+        button.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(LeaderboardActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", userFromEnd);
             startActivity(menuIntent);
             finish();
         });

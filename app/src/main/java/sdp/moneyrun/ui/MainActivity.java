@@ -18,6 +18,7 @@ import sdp.moneyrun.ui.authentication.LoginActivity;
 public class MainActivity extends AppCompatActivity {
     public static boolean calledAlready = false;
     private MediaPlayer mp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

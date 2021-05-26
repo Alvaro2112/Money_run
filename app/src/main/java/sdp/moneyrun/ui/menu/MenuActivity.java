@@ -62,22 +62,19 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
 
     protected DrawerLayout mDrawerLayout;
+    DatabaseReference databaseReference;
+    FusedLocationProviderClient fusedLocationClient;
+    AndroidLocationService locationService;
     private User user;
-
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    DatabaseReference databaseReference;
-    FusedLocationProviderClient fusedLocationClient;
-
-    AndroidLocationService locationService;
-
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             loadWeather(location);
-            if(currentForecast != null)
+            if (currentForecast != null)
                 setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
 
         }
@@ -181,7 +178,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(FriendListActivity.class, false);
                 break;
             }
-            
+
             case R.id.main_leaderboard_button: {
                 onButtonSwitchToActivity(MainLeaderboardActivity.class, false);
                 break;
@@ -284,11 +281,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     /**
      * @return the location service
      */
-    public AndroidLocationService getLocationService(){
+    public AndroidLocationService getLocationService() {
         return locationService;
     }
 
-    public void setLocationService(@NonNull AndroidLocationService locationService){
+    public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
     }
 }

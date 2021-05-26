@@ -37,6 +37,7 @@ public abstract class TrackedMap extends BaseMap implements
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     public LocationEngine locationEngine;
+    @Nullable
     protected LocationCheckObjectivesCallback callback;
     private PermissionsManager permissionsManager;
 

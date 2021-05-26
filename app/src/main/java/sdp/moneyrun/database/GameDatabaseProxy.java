@@ -190,8 +190,10 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Player retHost = getDatabaseValue(ds, DATABASE_GAME_HOST, Player.class);
             Integer retMaxPlayerCount = getDatabaseValue(ds, DATABASE_GAME_MAX_PLAYER_COUNT, Integer.class);
 
-            List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>() {});
-            List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>() {});
+            List<Player> retPlayers = ds.child(DATABASE_GAME_PLAYERS).getValue(new GenericTypeIndicator<List<Player>>() {
+            });
+            List<Coin> retCoin = ds.child(DATABASE_COIN).getValue(new GenericTypeIndicator<List<Coin>>() {
+            });
 
             Double retLatitude = ds.child(DATABASE_GAME_START_LOCATION)
                     .child(DATABASE_LOCATION_LATITUDE)
@@ -212,7 +214,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             if (retPlayers == null)
                 throw new IllegalArgumentException("players should not be null.");
 
-                if (retMaxPlayerCount == null)
+            if (retMaxPlayerCount == null)
                 throw new IllegalArgumentException("max player count should not be null.");
 
             if (retLatitude == null)
@@ -239,20 +241,20 @@ public class GameDatabaseProxy extends DatabaseProxy {
     }
 
     public void addGameListener(@Nullable Game game, @Nullable ValueEventListener l) {
-      checkGameListenerMethodsArguments(game,l);
+        checkGameListenerMethodsArguments(game, l);
         if (game.getHasBeenAdded()) {
             gamesRef.child(game.getId()).addValueEventListener(l);
         }
     }
 
-    public void removeGameListener(Game game, ValueEventListener listener){
-      checkGameListenerMethodsArguments(game,listener);
+    public void removeGameListener(@NonNull Game game, @NonNull ValueEventListener listener) {
+        checkGameListenerMethodsArguments(game, listener);
         if (game.getHasBeenAdded()) {
             gamesRef.child(game.getId()).removeEventListener(listener);
         }
     }
 
-    private void checkGameListenerMethodsArguments(Game game, ValueEventListener listener){
+    private void checkGameListenerMethodsArguments(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
         }
@@ -273,13 +275,13 @@ public class GameDatabaseProxy extends DatabaseProxy {
     }
 
     @NonNull
-    public DatabaseReference getDatabaseChildOfGame(@NonNull Game game, @NonNull String variable){
+    public DatabaseReference getDatabaseChildOfGame(@NonNull Game game, @NonNull String variable) {
         return gamesRef.child(game.getId())
                 .child(variable);
     }
 
     @Nullable
-    public <T> T getDatabaseValue(@NonNull DataSnapshot ds, @NonNull String variable, @NonNull Class<T> type){
+    public <T> T getDatabaseValue(@NonNull DataSnapshot ds, @NonNull String variable, @NonNull Class<T> type) {
         T value = ds.child(variable).getValue(type);
         if (value == null) {
             throw new IllegalArgumentException(variable + " should not be null.");

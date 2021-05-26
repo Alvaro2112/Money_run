@@ -21,6 +21,7 @@ import sdp.moneyrun.player.Player;
 public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
+    boolean started;
     @Nullable
     private String name;
     @Nullable
@@ -32,7 +33,6 @@ public final class GameDbData {
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
-    boolean started;
     private int numCoins;
     private double radius;
     private double duration;
@@ -152,13 +152,13 @@ public final class GameDbData {
         return host;
     }
 
+    public boolean getStarted() {
+        return started;
+    }
+
     public void setStarted(boolean started) {
         this.started = started;
     }
-
-    public boolean getStarted() {
-        return started;
-    } 
 
     @NonNull
     public List<Player> getPlayers() {

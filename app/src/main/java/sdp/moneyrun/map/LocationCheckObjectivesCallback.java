@@ -30,7 +30,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
-    public boolean hasToUpdate(){
+    public boolean hasToUpdate() {
         TrackedMap activity = activityWeakReference.get();
         boolean hasToUpdate = !init || useDefaultLocation;
         return activity != null && hasToUpdate;
