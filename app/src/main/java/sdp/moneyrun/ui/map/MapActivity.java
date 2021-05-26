@@ -65,7 +65,7 @@ import sdp.moneyrun.player.Player;
 /*
 this map implements all the functionality we will need.
  */
-@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal", "FieldMayBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     private static final double ZOOM_FOR_FEATURES = 15.;

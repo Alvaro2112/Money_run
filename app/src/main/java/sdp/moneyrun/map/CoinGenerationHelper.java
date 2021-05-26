@@ -61,41 +61,6 @@ public class CoinGenerationHelper {
         return copy;
     }
 
-    public static boolean checkIndividualFeature(@NonNull Feature feature, @NonNull List<String> inappropriateLocations) {
-        String[] relevantFields = new String[]{"type", "class", "name"};
-        boolean isAppropriate = true;
-
-        for (String field : relevantFields)
-            isAppropriate &= checkField(inappropriateLocations, feature, field);
-        // An inappropriate characteristics may be in different property fields
-
-        return isAppropriate;
-    }
-
-    public static boolean checkField(@NonNull List<String> inappropriateLocations, @NonNull Feature feature, String field){
-        boolean isAppropriate = true;
-
-        if (feature.properties().has(field)) {
-
-            String locationType = feature.properties().get(field).toString();
-
-            if (inappropriateLocations.contains(locationType.substring(1, locationType.length() - 1).toLowerCase(Locale.ROOT)))
-                isAppropriate = false;
-        }
-
-        return isAppropriate;
-    }
-
-
-
-    public static boolean hasAtLeasOneProperty(@NonNull List<Feature> features) {
-        for (Feature feature : features) {
-            if (!feature.properties().toString().equals("{}")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static int coinValue(@Nullable Location coinLoc, @Nullable Location centerLoc) {
         if (coinLoc == null) {
