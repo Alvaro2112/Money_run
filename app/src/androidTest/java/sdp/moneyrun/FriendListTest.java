@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -33,6 +34,7 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.player.PlayerBuilderInstrumentedTest;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -42,6 +44,8 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
@@ -225,6 +229,37 @@ public class FriendListTest {
             db.removeUser(user);
         }
     }
+
+    private Intent getStartIntent1() {
+        User currentUser = new User("888", "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), FriendListActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+    @Test
+    public void goBackToMenuWorks(){
+
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
+            Intents.init();
+            Thread.sleep(3000);
+            //Join add friends
+            //Search
+            onView(ViewMatchers.withId(R.id.back_from_friend_list_button)).perform(ViewActions.click());
+
+            Thread.sleep(3000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+
+    }
+
 
     @Test
     public void removeFriendWorks() {

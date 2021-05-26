@@ -6,7 +6,9 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
@@ -16,10 +18,15 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -89,6 +96,36 @@ public class MainLeaderboardInstrumentedTest {
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addUser(null));
         }
+    }
+
+    private Intent getStartIntent1() {
+        User currentUser = new User("888", "CURRENT_USER", "Epfl"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+    @Test
+    public void goBackToMenuWorks(){
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
+            Intents.init();
+            Thread.sleep(3000);
+            //Join add friends
+            //Search
+            onView(ViewMatchers.withId(R.id.back_from_main_leaderboard_button)).perform(ViewActions.click());
+
+            Thread.sleep(3000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+
     }
 
     @Test

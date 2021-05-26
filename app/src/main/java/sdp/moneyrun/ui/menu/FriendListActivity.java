@@ -42,6 +42,15 @@ public class FriendListActivity extends AppCompatActivity {
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
 
         user = (User) getIntent().getSerializableExtra("user");
+        goBackToMenu = findViewById(R.id.back_from_friend_list_button);
+
+        goBackToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(FriendListActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
 
@@ -58,14 +67,8 @@ public class FriendListActivity extends AppCompatActivity {
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
         DatabaseProxy.addOfflineListener(this, TAG);
 
-        goBackToMenu = findViewById(R.id.back_from_friend_list_button);
 
-        goBackToMenu.setOnClickListener(v -> {
-            Intent menuIntent = new Intent(FriendListActivity.this, MenuActivity.class);
-            menuIntent.putExtra("user", user);
-            startActivity(menuIntent);
-            finish();
-        });
+
 
     }
 
