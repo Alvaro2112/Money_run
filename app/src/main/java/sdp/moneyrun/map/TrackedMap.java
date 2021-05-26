@@ -1,7 +1,6 @@
 package sdp.moneyrun.map;
 
 import android.annotation.SuppressLint;
-import android.graphics.PointF;
 import android.location.Location;
 import android.widget.Toast;
 
@@ -13,7 +12,6 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -39,6 +37,7 @@ public abstract class TrackedMap extends BaseMap implements
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     public LocationEngine locationEngine;
+    @Nullable
     protected LocationCheckObjectivesCallback callback;
     private PermissionsManager permissionsManager;
 
@@ -145,34 +144,6 @@ public abstract class TrackedMap extends BaseMap implements
         mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-    public boolean isLocationAppropriate(@NonNull Location location) {
-        List<Feature> features = getFeatureAtLocation(location);
-        if (features.size() == 0)
-            return false;//If there's no feature at all something is wrong and it is probably not appropriate to put a coin there
-
-        for (Feature feature : features) {
-            if (feature != null && feature.properties() != null) {
-                if (!CoinGenerationHelper.checkIndividualFeature(feature, INAPPROPRIATE_LOCATIONS))
-                    return false; //A feature was deemed inappropriate
-            }// Advised by MapBox
-
-        }// A location may yield multiple feature and we check that none is inappropriate
-        return CoinGenerationHelper.hasAtLeasOneProperty(features); //If none of the feature has a property field, it's probably a body of water
-    }
-
-    @NonNull
-    private List<Feature> getFeatureAtLocation(@NonNull Location location) {
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
-        LatLng point = new LatLng(lat, lon);
-
-        // Convert LatLng coordinates to screen pixel and only query the rendered features.
-        //This is because the query feature API function only accepts pixel as an arg
-        final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
-
-
-        return mapboxMap.queryRenderedFeatures(pixel);
-    }
 
     /**
      * @param location

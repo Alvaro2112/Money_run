@@ -21,6 +21,7 @@ public class SignUpActivity extends AppCompatActivity {
     private final String TAG = SignUpActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
     private Button submitButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

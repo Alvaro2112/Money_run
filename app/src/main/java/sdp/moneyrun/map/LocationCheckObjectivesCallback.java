@@ -18,27 +18,38 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
 
     @NonNull
     private final WeakReference<TrackedMap> activityWeakReference;
+    boolean init = false;
+    boolean useDefaultLocation = true;
 
-    public LocationCheckObjectivesCallback(MapActivity activity) {
+    public LocationCheckObjectivesCallback(MapActivity activity, boolean useDefaultLocation) {
         this.activityWeakReference = new WeakReference<>(activity);
+        this.useDefaultLocation = useDefaultLocation;
     }
 
     public LocationCheckObjectivesCallback(OfflineMapDownloaderActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
+    public boolean hasToUpdate() {
+        TrackedMap activity = activityWeakReference.get();
+        boolean hasToUpdate = !init || useDefaultLocation;
+        return activity != null && hasToUpdate;
+    }
 
     /* Updates the location, then checks if near a coin and calls a  function accordingly
      */
     @Override
     public void onSuccess(@NonNull LocationEngineResult result) {
         TrackedMap activity = activityWeakReference.get();
-        if (activity != null) {
+
+        if (hasToUpdate()) {
             Location location = result.getLastLocation();
             // Pass the new location to the Maps SDK's LocationComponent
             if (activity.getMapboxMap() != null && location != null) {
+
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                 activity.checkObjectives(location);
+                init = true;
             }
         }
     }
@@ -51,4 +62,6 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
