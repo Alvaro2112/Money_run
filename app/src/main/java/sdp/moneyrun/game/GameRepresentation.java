@@ -2,7 +2,7 @@ package sdp.moneyrun.game;
 
 import androidx.annotation.Nullable;
 
-import sdp.moneyrun.map.LocationRepresentation;
+import sdp.moneyrun.location.LocationRepresentation;
 
 /**
  * This class implements a representation of a game, a class containing information of

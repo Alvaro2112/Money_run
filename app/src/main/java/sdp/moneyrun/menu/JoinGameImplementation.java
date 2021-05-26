@@ -2,7 +2,7 @@ package sdp.moneyrun.menu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -23,30 +23,31 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.game.GameRepresentation;
-import sdp.moneyrun.map.LocationRepresentation;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class JoinGameImplementation extends MenuImplementation {
 
+    public static final String TAG_GAME_PREFIX = "game";
     // Distance in meters
-    private final static float MAX_DISTANCE_TO_JOIN_GAME = 500;
     private static final String TAG = JoinGameImplementation.class.getSimpleName();
     private final boolean focusable;
     private final int layoutId;
     @Nullable
     private final User currentUser;
     private int buttonId;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
@@ -108,7 +109,16 @@ public class JoinGameImplementation extends MenuImplementation {
             buttonId = 0;
             for (GameRepresentation gameRepresentation : gameRepresentations) {
                 String lowerName = gameRepresentation.getName().toLowerCase(Locale.getDefault());
-                if (filterText == null || lowerName.contains(filterText)) {
+
+                // Get user location and compute distance
+                AndroidLocationService locationService = ((MenuActivity) activity).getLocationService();
+                LocationRepresentation location = locationService.getCurrentLocation();
+                if (location == null || gameRepresentation.getStartLocation() == null) {
+                    return;
+                }
+
+                double distance = location.distanceTo(gameRepresentation.getStartLocation());
+                if ((filterText == null || lowerName.contains(filterText)) && distance <= MAX_DISTANCE_TO_JOIN_GAME) {
                     displayGameInterface(popupWindow, gameLayout, buttonId, gameRepresentation);
                     buttonId++;
                 }
@@ -205,6 +215,8 @@ public class JoinGameImplementation extends MenuImplementation {
         createPlayerCountNameInfoDisplay(gameRepresentation, gameRow);
 
         gameLayout.addView(gameRow, gameParams);
+        // Define view tag
+        gameLayout.setTag(TAG_GAME_PREFIX + gameRepresentation.getGameId());
     }
 
     @SuppressLint("MissingPermission")
@@ -214,7 +226,7 @@ public class JoinGameImplementation extends MenuImplementation {
         button.setText(activity.getString(R.string.join_game_message));
 
         button.setOnClickListener(v -> {
-            joinLobbyFromJoinButton(gameRepresentation);
+            Helpers.joinLobbyFromJoinButton(gameRepresentation, databaseReference, activity, currentUser, LOCATION_MODE);
             popupWindow.dismiss();
         });
 
@@ -223,24 +235,6 @@ public class JoinGameImplementation extends MenuImplementation {
         // Modify button if game is too far
         // Grant permissions if necessary
         requestLocationPermissions(requestPermissionsLauncher);
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(activity, location -> {
-                    // Got last known location. In some rare situations this can be null
-                    // In this case, the game cannot be instantiated
-                    if (location == null) {
-                        Log.e("location", "Error getting location");
-                        return;
-                    }
-                    LocationRepresentation locationRep = new LocationRepresentation(location.getLatitude(), location.getLongitude());
-
-                    double distance = gameRepresentation.getStartLocation().distanceTo(locationRep);
-
-                    if (distance > MAX_DISTANCE_TO_JOIN_GAME) {
-                        button.setEnabled(false);
-                        button.setText(activity.getString(R.string.join_game_too_far_message));
-                    }
-                });
     }
 
     private void addFullGameListener(@NonNull Button button, @NonNull GameRepresentation gameRepresentation) {
@@ -304,36 +298,4 @@ public class JoinGameImplementation extends MenuImplementation {
 
         gameRow.addView(playerNumberView);
     }
-
-    private void joinLobbyFromJoinButton(@NonNull GameRepresentation gameRepresentation) {
-        DatabaseReference gamePlayers = databaseReference.child(activity.getString(R.string.database_games)).child(gameRepresentation.getGameId()).child(activity.getString(R.string.database_open_games_players));
-        final Player newPlayer = new Player(currentUser.getUserId(), currentUser.getName(), 0);
-        gamePlayers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Player> players = snapshot.getValue(new GenericTypeIndicator<List<Player>>() {
-                });
-                players.add(newPlayer);
-                gamePlayers.setValue(players);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Error adding a player who joined the Game to the DB \n" + error.getMessage());
-            }
-
-        });
-
-        Intent lobbyIntent = new Intent(activity.getApplicationContext(), GameLobbyActivity.class);
-        // Pass the game id to the lobby activity
-        if (newPlayer == null) {
-            throw new IllegalArgumentException();
-        }
-        lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameRepresentation.getGameId())
-                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), newPlayer)
-                .putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), currentUser);
-        activity.startActivity(lobbyIntent);
-    }
-
-
 }

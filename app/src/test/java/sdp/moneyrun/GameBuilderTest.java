@@ -20,6 +20,7 @@ public class GameBuilderTest {
         assertThrows(IllegalStateException.class, gb::build);
         gb.setName("game test");
         assertThrows(IllegalStateException.class, gb::build);
+        Player host = new Player("1", "James", 4);
         gb.setHost(new Player("1", "James", 4));
         assertThrows(IllegalStateException.class, gb::build);
         gb.setMaxPlayerCount(1);
@@ -27,6 +28,15 @@ public class GameBuilderTest {
         gb.setCoins(new ArrayList<>());
         assertThrows(IllegalStateException.class, gb::build);
         gb.setStartLocation(new Location(""));
+        assertThrows(IllegalStateException.class, gb::build);
+        gb.setRiddles(new ArrayList<>());
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(host);
+        gb.setPlayers(players);
+        assertThrows(IllegalStateException.class, gb::build);
+        gb.setNumCoins(1);
+        assertThrows(IllegalStateException.class, gb::build);
+        gb.setRadius(1);
         assertThrows(IllegalStateException.class, gb::build);
     }
 
@@ -43,6 +53,9 @@ public class GameBuilderTest {
                 .setCoins(new ArrayList<>())
                 .setStartLocation(new Location(""))
                 .setPlayers(players)
+                .setNumCoins(1)
+                .setRadius(10)
+                .setDuration(60)
                 .build();
     }
 
@@ -55,6 +68,9 @@ public class GameBuilderTest {
                 .setCoins(new ArrayList<>())
                 .setStartLocation(new Location(""))
                 .setRiddles(new ArrayList<>())
+                .setNumCoins(1)
+                .setRadius(10)
+                .setDuration(60)
                 .build();
     }
 
@@ -69,6 +85,9 @@ public class GameBuilderTest {
         assertThrows(IllegalArgumentException.class, () -> gb.setCoins(null));
         assertThrows(IllegalArgumentException.class, () -> gb.setRiddles(null));
         assertThrows(IllegalArgumentException.class, () -> gb.setStartLocation(null));
+        assertThrows(IllegalArgumentException.class, () -> gb.setNumCoins(-1));
+        assertThrows(IllegalArgumentException.class, () -> gb.setRadius(0));
+        assertThrows(IllegalArgumentException.class, () -> gb.setDuration(0));
     }
 
     @Test
@@ -86,6 +105,9 @@ public class GameBuilderTest {
                 .setRiddles(new ArrayList<>())
                 .setPlayers(players)
                 .setIsVisible(false)
+                .setNumCoins(1)
+                .setRadius(10)
+                .setDuration(60)
                 .build();
     }
 }

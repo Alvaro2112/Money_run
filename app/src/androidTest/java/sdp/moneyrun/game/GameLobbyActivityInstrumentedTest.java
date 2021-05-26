@@ -200,6 +200,7 @@ public class    GameLobbyActivityInstrumentedTest {
         intent.putExtra("host", true);
         User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         intent.putExtra("UserTypeCurrentUser", actualUser);
+        intent.putExtra("locationMode", (String)null);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 

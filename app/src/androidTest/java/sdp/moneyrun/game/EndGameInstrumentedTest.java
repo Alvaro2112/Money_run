@@ -3,8 +3,8 @@ package sdp.moneyrun.game;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
@@ -12,11 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,12 +23,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.player.Player;
+import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -40,8 +36,6 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -62,7 +56,33 @@ public class EndGameInstrumentedTest {
 
     }
 
+    public static User getUser() {
+        String name = "John Doe";
+        String address = "Someeewhere";
+        String id = "1234567891";
 
+        User user = new User(id, name, address, 0, 0, 0);
+        return user;
+    }
+
+    public static Intent getEndGameIntent() {
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        User user = getUser();
+        db.putUser(user);
+        Intent endGameIntent = new Intent(ApplicationProvider.getApplicationContext(), EndGameActivity.class);
+        endGameIntent.putExtra("score", 3);
+        endGameIntent.putExtra("numberOfCollectedCoins", 2);
+        endGameIntent.putExtra("hasDied", true);
+        endGameIntent.putExtra("playerId", "1234567891");
+        try {
+            Thread.sleep(5000);
+
+        } catch (Exception e) {
+            fail();
+        }
+
+        return endGameIntent;
+    }
 
 
     @Test
@@ -90,7 +110,6 @@ public class EndGameInstrumentedTest {
     public void updateTextDisplaysGoodNumbers() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             scenario.onActivity(a -> a.updateText(1, 1, true));
-
             StringBuilder textBuilder = new StringBuilder();
             textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
             textBuilder = textBuilder.append("\n");
@@ -106,6 +125,7 @@ public class EndGameInstrumentedTest {
 
     @Test
     public void toMenuButtonWorks() {
+
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_menu)).perform(ViewActions.click());
@@ -120,47 +140,28 @@ public class EndGameInstrumentedTest {
 
     @Test
 
-    public void updatePlayerUpdateScoreTest() {
-        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            String playerid = "98732";
-            final Player player = new Player(playerid, "O", 5);
-            final PlayerDatabaseProxy db = new PlayerDatabaseProxy();
-            CountDownLatch added = new CountDownLatch(1);
-            OnCompleteListener addedListener = task -> added.countDown();
-            db.putPlayer(player, addedListener);
-
-            long ASYNC_CALL_TIMEOUT = 5L;
+    public void endGameUpdatesUserScores() {
+        Intent endGameIntent = getEndGameIntent();
+        User user = getUser();
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             try {
-                added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-                assertThat(added.getCount(), is(0L));
-            } catch (InterruptedException e) {
+                Thread.sleep(5000);
+            } catch (Exception e) {
                 fail();
             }
-
             CountDownLatch updated = new CountDownLatch(1);
-            ValueEventListener listener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Player p = snapshot.getValue(Player.class);
-                    if (p.getScore() == 10) {
-                        assertEquals(p.getScore(), 10);
-                        updated.countDown();
-                    }
-                }
+            UserDatabaseProxy userdb = new UserDatabaseProxy();
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    assert (false);
+            userdb.getUserTask(user.getUserId()).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    User p = userdb.getUserFromTask(task);
+                    assertEquals(1, p.getNumberOfPlayedGames());
+                    assertEquals(1, p.getNumberOfDiedGames());
+                    assertEquals(3, p.getMaxScoreInGame());
+                    updated.countDown();
                 }
-            };
-            scenario.onActivity(a -> {
-                Player p = a.updatePlayer(playerid, 10);
             });
-            db.addPlayerListener(player, listener);
-            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-
-            db.removePlayerListener(player, listener);
-
+            updated.await(5L, TimeUnit.SECONDS);
         } catch (Exception e) {
             fail();
             e.printStackTrace();
@@ -198,7 +199,6 @@ public class EndGameInstrumentedTest {
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
         }
-
     }
 
 

@@ -68,6 +68,7 @@ public class LocalPlayer implements Serializable {
 
     /**
      * Adds a coin that was lost because of an incorrectly answered riddle
+     *
      * @param coin The coin to be added
      */
     public void addLostCoin(@Nullable Coin coin) {
@@ -80,6 +81,7 @@ public class LocalPlayer implements Serializable {
 
     /**
      * Adds a coin that was collected because of an correctly answered riddle
+     *
      * @param coin The coin to be added
      */
     public void addCollectedCoin(@Nullable Coin coin) {

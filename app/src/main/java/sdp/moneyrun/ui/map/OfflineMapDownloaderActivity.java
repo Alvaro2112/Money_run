@@ -175,7 +175,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
     }
 
-    public void createOfflineRegion(@NonNull byte[] metadata, @NonNull OfflineTilePyramidRegionDefinition definition){
+    public void createOfflineRegion(@NonNull byte[] metadata, @NonNull OfflineTilePyramidRegionDefinition definition) {
         offlineManager.createOfflineRegion(
                 definition,
                 metadata,
@@ -198,7 +198,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                 });
     }
 
-    public void setOfflineRegionObserver(@NonNull OfflineRegion offlineRegion){
+    public void setOfflineRegionObserver(@NonNull OfflineRegion offlineRegion) {
         offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
             @Override
             public void onStatusChanged(@NonNull OfflineRegionStatus status) {
@@ -227,7 +227,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
     @Nullable
-    public byte[] setMetaData(){
+    public byte[] setMetaData() {
         byte[] metadata;
 
         try {
@@ -268,14 +268,16 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                             }
 
                             @Override
-                            public void onError(String error) {}
+                            public void onError(String error) {
+                            }
                         });
                     }
                 }
             }
 
             @Override
-            public void onError(String error) {}
+            public void onError(String error) {
+            }
         });
     }
 

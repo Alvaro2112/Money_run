@@ -33,7 +33,9 @@ public class User implements Serializable {
     }
 
     public User(@Nullable String userId) {
-        if(userId == null){throw new NullPointerException("UserID is null");}
+        if (userId == null) {
+            throw new NullPointerException("UserID is null");
+        }
         this.userId = userId;
     }
 
@@ -79,18 +81,10 @@ public class User implements Serializable {
 
     }
 
-    public void setUserId(@Nullable String userId) {
-        if(userId == null){
-            throw new NullPointerException();
-        }
-        this.userId = userId;
-    }
-
-
     /**
      * Setter for name. By design the user already had a name
      *
-     * @param name The new name of the user
+     * @param name     The new name of the user
      * @param dbChange whether the database entry must be updated
      */
     public void setName(String name, boolean dbChange) {
@@ -148,7 +142,7 @@ public class User implements Serializable {
      * sets the number of played games
      *
      * @param playedGames The new number of games this user player
-     * @param dbChange Whether to update the database or not
+     * @param dbChange    Whether to update the database or not
      */
     public void setNumberOfPlayedGames(int playedGames, boolean dbChange) {
         numberOfPlayedGames = playedGames;
@@ -165,7 +159,7 @@ public class User implements Serializable {
             throw new IllegalArgumentException("friend id should not be null");
         }
 
-        if(!this.friendIdList.contains(friendId)){
+        if (!this.friendIdList.contains(friendId)) {
             this.friendIdList.add(friendId);
         }
     }
@@ -205,6 +199,13 @@ public class User implements Serializable {
     @Nullable
     public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(@Nullable String userId) {
+        if (userId == null) {
+            throw new NullPointerException();
+        }
+        this.userId = userId;
     }
 
     /**
@@ -276,7 +277,7 @@ public class User implements Serializable {
      * @param user the other user
      * @return true if user has same attributes as this
      */
-    private boolean sameAttributes(@NonNull User user){
+    private boolean sameAttributes(@NonNull User user) {
         return Objects.equals(userId, user.userId) &&
                 numberOfPlayedGames == user.numberOfPlayedGames &&
                 numberOfDiedGames == user.numberOfDiedGames &&

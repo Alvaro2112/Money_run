@@ -1,6 +1,9 @@
 package sdp.moneyrun;
 
 import android.content.Intent;
+import android.location.Location;
+
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
@@ -19,7 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import sdp.moneyrun.database.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.game.Game;
+import sdp.moneyrun.game.GameBuilder;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
+import sdp.moneyrun.menu.FriendListListAdapter;
+import sdp.moneyrun.player.Player;
+import sdp.moneyrun.player.PlayerBuilder;
+import sdp.moneyrun.player.PlayerBuilderInstrumentedTest;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -30,7 +42,11 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
@@ -94,6 +110,50 @@ public class FriendListTest {
         return toStart;
     }
 
+    private Location getMockedLocation(){
+        Location gameLocation = new Location("");
+        gameLocation.setLongitude(12.);
+        gameLocation.setLatitude(12.);
+
+        return gameLocation;
+    }
+
+    private Game addGameToDatabase(){
+        // Define game location
+        Location gameLocation = getMockedLocation();
+
+        // Define game host
+        User userHost = usersDatabase.get(1);
+        PlayerBuilder hostBuilder = new PlayerBuilder();
+        Player host = hostBuilder.setPlayerId(userHost.getUserId())
+                .setName(userHost.getName())
+                .setScore(0)
+                .build();
+
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+
+        // Define game
+        GameDatabaseProxy gdb = new GameDatabaseProxy();
+        GameBuilder gb = new GameBuilder();
+        Game game = gb.setName("Paul's game")
+                .setHost(host)
+                .setMaxPlayerCount(10)
+                .setStartLocation(gameLocation)
+                .setIsVisible(false)
+                .setCoins(new ArrayList<>())
+                .setPlayers(players)
+                .setRiddles(new ArrayList<>())
+                .setNumCoins(10)
+                .setRadius(10)
+                .setDuration(999999)
+                .build();
+        game.setId(host.getPlayerId());
+        gdb.putGame(game);
+
+        return game;
+    }
+
     @Test
     public void defaultFriendsWork(){
         UserDatabaseProxy db = new UserDatabaseProxy();
@@ -107,7 +167,7 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(6000);
             //Check default friends
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
@@ -179,7 +239,7 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(3000);
             //Join add friends
             onView(ViewMatchers.withId(R.id.friend_list_search_button)).perform(ViewActions.click());
@@ -200,6 +260,49 @@ public class FriendListTest {
 
             onView(ViewMatchers.withTagValue(Matchers.is(usersDatabase.get(1).getUserId()))).check(doesNotExist());
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(User user : usersDatabase){
+            db.removeUser(user);
+        }
+    }
+
+    @Test
+    public void JoinFriendGameWorks(){
+        UserDatabaseProxy db = new UserDatabaseProxy();
+        for(User user : usersDatabase){
+            db.putUser(user);
+        }
+
+        Game game = addGameToDatabase();
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try(ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(5000);
+
+            // Mock location
+            scenario.onActivity(a -> {
+               AndroidLocationService newLocationService = a.getLocationService();
+                newLocationService.setMockedLocation(new LocationRepresentation(getMockedLocation()));
+                a.setLocationService(newLocationService);
+            });
+
+            Thread.sleep(3000);
+
+            // Test join button states
+            onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(1).getUserId()))).check(matches(isDisplayed()));
+            onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(2).getUserId()))).check(matches(not(isDisplayed())));
+
+            // Test join buttons functionality
+            onView(ViewMatchers.withTagValue(Matchers.is(FriendListListAdapter.TAG_BUTTON_PREFIX + usersDatabase.get(1).getUserId()))).perform(ViewActions.click());
+            onView(ViewMatchers.withId(R.id.lobby_title)).check(matches(withText(game.getName())));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
