@@ -13,37 +13,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/layout_bg.xml" />
 
         <activity android:name=".ui.game.EndGameActivity" />
-        <activity android:name=".ui.map.MapActivity"
-            android:screenOrientation="portrait"
-
-            />
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.menu.LeaderboardActivity"
             android:theme="@style/NullTheme" />
-
-
         <activity android:name=".ui.menu.MainLeaderboardActivity" />
         <activity android:name=".ui.menu.FriendListActivity" />
         <activity android:name=".ui.menu.AddFriendListActivity" />
-
         <activity
             android:name=".ui.authentication.SignUpActivity"
             android:theme="@style/NullTheme"
             tools:ignore="AllowBackup" />
-
         <activity
             android:name=".ui.menu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".ui.map.OfflineMapActivity" />
         <activity android:name=".ui.map.OfflineMapDownloaderActivity" />
@@ -59,7 +56,6 @@
             android:label="Register Player"
             android:theme="@style/NullTheme" />
         <activity android:name=".ui.game.GameLobbyActivity" />
-
     </application>
 
 </manifest>

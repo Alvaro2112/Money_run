@@ -105,7 +105,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();

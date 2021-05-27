@@ -135,9 +135,18 @@
     <string name="add_friend_button_go_back">Go back to friend list</string>
     <string name="friend_button_search">Search friends</string>
 
-    <string name="friend_list_logo_n_played">Number of games played 🏃</string>
+    <string name="friend_list_logo_n_played">Number of games played 🏃 </string>
     <string name="friend_list_logo_max_score">Max score 💯</string>
     <string name="friend_list_join_game_text">Join friend</string>
+
+    <!-- Help PopUp  -->
+    <string name="how_to_play">How to play</string>
+    <string name="turn_on_location">- Turn on your Location</string>
+    <string name="join_or_create_lobby">- Join or create your own lobby</string>
+    <string name="when_game_launches">- When the game launches, run towards the coins</string>
+    <string name="you_will_question">- You will be asked a question when you reach a coin</string>
+    <string name="get_it_right">- Get it right, and you will earn the coin</string>
+    <string name="be_faster">- Be faster than the other players, there are only so many coins!</string>
 
 
 </resources>
