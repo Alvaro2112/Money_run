@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.menu;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,22 +20,23 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.user.User;
 
-import static sdp.moneyrun.Helpers.goToMenuWithUser;
 
 public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
     private final List<Player> playerList = new ArrayList<>();
+    User userFromEnd;
     private LeaderboardListAdapter ldbAdapter;
+
+    private final String TAG = LeaderboardActivity.class.getSimpleName();
     @Nullable
     private Player user;
-    User userFromEnd;
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -46,10 +48,25 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         addAdapter();
         setMainPlayer(user);
-        //TODO
-        // Put addPlayer with local cache
         getEndGamePlayers();
         linkToMenuButton(toMenu);
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
@@ -153,15 +170,17 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // We disable the user from clicking the back button and force him to use the dedicated button
-        return;
     }
 
     /**
      * Sends user to end game screen
      */
-    public void linkToMenuButton(Button button){
+    public void linkToMenuButton(@NonNull Button button) {
         userFromEnd = (User) getIntent().getSerializableExtra("userEnd");
-        button.setOnClickListener( v -> {goToMenuWithUser(this,this.getApplicationContext(),userFromEnd);
+        button.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(LeaderboardActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", userFromEnd);
+            startActivity(menuIntent);
             finish();
         });
     }

@@ -2,6 +2,7 @@ package sdp.moneyrun;
 
 import android.content.Intent;
 import android.location.Criteria;
+import android.location.Location;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class AndroidLocationServiceInstrumentedTest {
     }
 
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -100,6 +101,24 @@ public class AndroidLocationServiceInstrumentedTest {
 
                 AndroidLocationService locationService = AndroidLocationService.buildFromContextAndCriteria(a.getApplicationContext(), criteria);
                 locationService.setMockedLocation(null);
+            });
+        }
+    }
+
+    @Test
+    public void getUpdatedLocationWorksAsExpected() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            scenario.onActivity(a -> {
+                AndroidLocationService androidLocationService = AndroidLocationService.buildFromContextAndProvider(a.getApplicationContext(), "");
+                Location location = new Location("");
+                location.setLatitude(0);
+                location.setLongitude(0);
+                Location retLocation1 = androidLocationService.getUpdatedLocation(location, null);
+                assertEquals(retLocation1, location);
+
+                Location retLocation2 = androidLocationService.getUpdatedLocation(null, location);
+                assertEquals(retLocation2, location);
+
             });
         }
     }

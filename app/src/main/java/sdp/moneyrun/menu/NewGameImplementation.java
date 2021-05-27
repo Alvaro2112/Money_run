@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,12 +34,14 @@ import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class NewGameImplementation extends MenuImplementation {
     TextView nameGameView;
     TextView maxPlayerNumberView;
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
@@ -207,6 +210,8 @@ public class NewGameImplementation extends MenuImplementation {
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_id), gameId);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_user), player);
         lobbyIntent.putExtra(activity.getString(R.string.join_game_lobby_intent_extra_type_user), user);
+        lobbyIntent.putExtra("locationMode", LOCATION_MODE);
+
         activity.startActivity(lobbyIntent);
         activity.finish();
     }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -144,6 +145,7 @@ public class PermissionsRequester {
     /**
      * @return the permissions requested
      */
+    @NonNull
     public String[] getPermissions() {
         return permissions.clone();
     }

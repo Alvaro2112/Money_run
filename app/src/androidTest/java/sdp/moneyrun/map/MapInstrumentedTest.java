@@ -1024,11 +1024,16 @@ public class MapInstrumentedTest {
                 }
             }
             scenario.onActivity(a -> {
+                try{
+                    Thread.sleep(3000);
+                }catch (Exception ignored){
+
+                }
                 assertTrue(a.getChronometerCounter() > 0);
             });
              try{
                  Thread.sleep(10000);
-             }catch (Exception e){
+             }catch (Exception ignored){
 
              }
             intended(hasComponent(EndGameActivity.class.getName()));
@@ -1297,5 +1302,5 @@ public class MapInstrumentedTest {
                 Intents.release();
             }
         }
-
+        
 }

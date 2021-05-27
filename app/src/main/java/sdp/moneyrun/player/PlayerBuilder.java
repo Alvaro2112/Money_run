@@ -18,28 +18,37 @@ public class PlayerBuilder {
     /**
      * @param playerId the unique player Id
      */
-    public void setPlayerId(String playerId) {
+    @NonNull
+    public PlayerBuilder setPlayerId(String playerId) {
         this.playerId = playerId;
+
+        return this;
     }
 
     /**
      * @param name
      */
-    public void setName(@Nullable String name) {
+    @NonNull
+    public PlayerBuilder setName(@Nullable String name) {
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException();
         this.name = name;
+
+        return this;
     }
 
-    public void setScore(int score) {
+    @NonNull
+    public PlayerBuilder setScore(int score) {
         this.score = score;
+
+        return this;
     }
 
     /**
-     * Builds current instance. Address and name cannot be null or empty and playerId cannot be 0
+     * Builds current instance. name cannot be null or empty and playerId cannot be 0
      *
      * @return the player built with the attributes set
-     * @throws IllegalStateException if the address or name is null or empty, if the playerId is null
+     * @throws IllegalStateException if the name is null or empty, if the playerId is null
      */
     @NonNull
     public Player build() {

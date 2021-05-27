@@ -16,27 +16,34 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings("FieldMayBeFinal")
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 public class FriendListActivity extends AppCompatActivity {
+
+    private AndroidLocationService locationService;
 
     @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
     private FriendListListAdapter ldbAdapter;
     private User user;
+    private final String TAG = FriendListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
+        locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
+
         user = (User) getIntent().getSerializableExtra("user");
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
-        if(taskUpdatedUser == null){
+        if (taskUpdatedUser == null) {
             return;
         }
 
@@ -49,6 +56,23 @@ public class FriendListActivity extends AppCompatActivity {
         addAdapter();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
@@ -56,7 +80,7 @@ public class FriendListActivity extends AppCompatActivity {
      */
     private void addAdapter() {
         // The adapter lets us add item to a ListView easily.
-        ldbAdapter = new FriendListListAdapter(this, friendList, user);
+        ldbAdapter = new FriendListListAdapter(this, friendList, user, locationService);
         Helpers.addAdapter(ldbAdapter, this, R.id.friend_list_view);
     }
 
@@ -118,5 +142,21 @@ public class FriendListActivity extends AppCompatActivity {
 
         ldbAdapter.clear();
         ldbAdapter.addAll(userList);
+    }
+
+    /**
+     * @return the location service.
+     */
+    public AndroidLocationService getLocationService() {
+        return locationService;
+    }
+
+    /**
+     * Sets the location service.
+     */
+    public void setLocationService(@NonNull AndroidLocationService locationService) {
+        this.locationService = locationService;
+        // Update friend list
+        showFriendList();
     }
 }

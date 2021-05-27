@@ -16,6 +16,7 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
@@ -34,6 +35,8 @@ public class EndGameActivity extends AppCompatActivity {
     private TextView endText;
     private String playerId;
     private Button resultButton;
+
+    private final String TAG = EndGameActivity.class.getSimpleName();
     private boolean hasDied;
 
     @Override
@@ -44,7 +47,7 @@ public class EndGameActivity extends AppCompatActivity {
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
         score = getIntent().getIntExtra("score", 0);
         playerId = getIntent().getStringExtra("playerId");
-        hasDied = getIntent().getBooleanExtra("hasDied",false);
+        hasDied = getIntent().getBooleanExtra("hasDied", false);
         updateText(numberOfCollectedCoins, score, true);
         if (playerId != null) {
             updateUser(playerId, score);
@@ -57,6 +60,23 @@ public class EndGameActivity extends AppCompatActivity {
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);
 
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        DatabaseProxy.removeOfflineListener();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseProxy.addOfflineListener(this, TAG);
+    }
+
+    protected void onStop(){
+        super.onStop();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
@@ -100,25 +120,24 @@ public class EndGameActivity extends AppCompatActivity {
     }
 
     /**
-     * @param playerId The id of the user to update
+     * @param playerId  The id of the user to update
      * @param gameScore The score the player in the game
-     *
-     *  Updates the user in the database
+     *                  <p>
+     *                  Updates the user in the database
      */
     public void updateUser(@NonNull String playerId, int gameScore) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 User p = pdp.getUserFromTask(task);
-                if(p != null) {
+                if (p != null) {
                     int max_score = Math.max(p.getMaxScoreInGame(), gameScore);
-                    p.setMaxScoreInGame(max_score,true);
-                    p.setNumberOfPlayedGames(p.getNumberOfPlayedGames()+1,true);
-                    if(hasDied){
-                        p.setNumberOfDiedGames(p.getNumberOfDiedGames()+1,true);
+                    p.setMaxScoreInGame(max_score, true);
+                    p.setNumberOfPlayedGames(p.getNumberOfPlayedGames() + 1, true);
+                    if (hasDied) {
+                        p.setNumberOfDiedGames(p.getNumberOfDiedGames() + 1, true);
                     }
-                }
-                else{
+                } else {
                     updateText(-1, -1, false);
                 }
             }
@@ -141,7 +160,7 @@ public class EndGameActivity extends AppCompatActivity {
             MediaPlayer.create(this, R.raw.button_press).start();
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
-            Helpers.putPlayersInIntent(resultIntent,players);
+            Helpers.putPlayersInIntent(resultIntent, players);
             UserDatabaseProxy pdp = new UserDatabaseProxy();
             pdp.getUserTask(playerId).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

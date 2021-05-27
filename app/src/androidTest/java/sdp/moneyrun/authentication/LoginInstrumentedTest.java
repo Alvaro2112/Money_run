@@ -85,6 +85,7 @@ public class LoginInstrumentedTest {
         };
     }
 
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -194,7 +195,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -258,7 +258,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -319,7 +318,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -376,6 +374,25 @@ public class LoginInstrumentedTest {
             scenario.onActivity(a ->{
                     a.setGuestButton(null);
             });
+        }
+    }
+
+    @Test
+    public void logInWithoutConnectionDisplaysError(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            Intents.init();
+            String email = "logintest@epfl.ch";
+            String password = "abcasdfafafafa";
+
+            Espresso.onView(withId(R.id.loginEmailAddress)).perform(typeText(email), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginPassword)).perform(typeText(password), closeSoftKeyboard());
+            Espresso.onView(withId(R.id.loginButton)).perform(ViewActions.click());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Intents.release();
         }
     }
 

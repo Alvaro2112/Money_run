@@ -7,6 +7,85 @@
     android:layout_height="match_parent"
     tools:context=".ui.map.MapActivity">
 
+    <Chronometer
+        android:id="@+id/mapChronometer"
+        android:layout_width="95dp"
+        android:layout_height="35dp"
+        android:background="@drawable/layout_rounded"
+        android:countDown="false"
+        android:enabled="true"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <Button
+        android:id="@+id/close_map"
+        android:layout_width="25dp"
+        android:layout_height="28dp"
+        android:layout_gravity="start"
+        android:background="@drawable/roundedbutton"
+        android:text="@string/cross"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.989"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.006" />
+
+    <Button
+        android:id="@+id/new_question"
+        android:layout_width="105dp"
+        android:layout_height="35dp"
+        android:background="@drawable/layout_rounded"
+        android:text="@string/new_question_button_text"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.405"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008" />
+
+    <TextView
+        android:id="@+id/map_score_view"
+        android:layout_width="105dp"
+        android:layout_height="35dp"
+        android:background="@drawable/layout_rounded"
+        android:gravity="center"
+        android:text="@string/map_score_text"
+        android:textSize="15sp"
+
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.816"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008" />
+
+    <Button
+        android:id="@+id/in_game_scores_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_rounded"
+        android:text="@string/map_in_game_scores"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.944"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.953" />
+
+
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
@@ -14,93 +93,6 @@
         mapbox:mapbox_cameraTargetLat="46.51"
         mapbox:mapbox_cameraTargetLng="6.6"
         mapbox:mapbox_cameraZoom="18.2">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.menu.MenuActivity">
-
-            <Chronometer
-                android:id="@+id/mapChronometer"
-                android:layout_width="95dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_rounded"
-                android:countDown="false"
-                android:enabled="true"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.015"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.01" />
-
-            <Button
-                android:id="@+id/close_map"
-                android:layout_width="25dp"
-                android:layout_height="28dp"
-                android:layout_gravity="start"
-                android:background="@drawable/roundedbutton"
-                android:text="@string/cross"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.989"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.006" />
-
-            <Button
-                android:id="@+id/new_question"
-                android:layout_width="105dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_rounded"
-                android:text="@string/new_question_button_text"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.405"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.008" />
-
-            <TextView
-                android:id="@+id/map_score_view"
-                android:layout_width="105dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_rounded"
-                android:gravity="center"
-                android:text="@string/map_score_text"
-                android:textSize="15sp"
-
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.816"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.008" />
-
-            <Button
-                android:id="@+id/in_game_scores_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_rounded"
-                android:text="@string/map_in_game_scores"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.944"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.953" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </com.mapbox.mapboxsdk.maps.MapView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
