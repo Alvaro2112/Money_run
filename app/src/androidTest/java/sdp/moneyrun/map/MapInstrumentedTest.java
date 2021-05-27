@@ -98,7 +98,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
+        intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -865,7 +865,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
+        intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
 
         List<Player> players = game.getPlayers();
@@ -1021,7 +1021,7 @@ public class MapInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);
-        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
+        intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();

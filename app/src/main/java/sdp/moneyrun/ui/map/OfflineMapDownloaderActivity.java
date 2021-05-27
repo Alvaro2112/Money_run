@@ -40,7 +40,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
-    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    private final String LOCATION_MODE = LocationManager.NETWORK_PROVIDER;
     private final float LAT_OFFSET = 0.1f;
     private final float LONG_OFFSET = 0.1f;
     private final int MAX_ZOOM = 15;

@@ -77,7 +77,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final float ICON_SIZE = 1.5f;
     public int coinsToPlace;
     private Chronometer chronometer;
-    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     @Nullable
     private RiddlesDatabase riddleDb;
@@ -179,7 +178,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         localPlayer = new LocalPlayer();
         hasEnded = false;
         isAnswering = false;
-        initLocationManager(LOCATION_MODE);
+        if(locationMode == null){
+            locationMode = LocationManager.NETWORK_PROVIDER;
+        }
+        initLocationManager(locationMode);
 
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
