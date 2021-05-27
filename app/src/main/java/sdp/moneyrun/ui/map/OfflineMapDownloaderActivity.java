@@ -92,6 +92,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, this::enableLocationComponent);
         this.mapboxMap = mapboxMap;
+        initLocationManager(locationMode);
 
     }
 
