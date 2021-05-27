@@ -42,8 +42,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
@@ -467,6 +469,30 @@ public class    GameLobbyActivityInstrumentedTest {
             FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
             Intents.release();
         }
+    }
+
+    @Test
+    public void launchIsDisabledForNonHost(){
+        Game g = getGame();
+        g.addPlayer(new Player("999", "CURRENT_USER", 0), true);
+        Intent intent = getStartIntent();
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        String id = gdp.putGame(g);
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+        intent.putExtra("currentGameId", id);
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
+            Thread.sleep(3000);
+            onView(withId(R.id.launch_game_button)).check(matches(not(isEnabled())));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
 
