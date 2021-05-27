@@ -401,18 +401,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     private void initChronometer() {
 
-        chronometer.start();
-        chronometerCounter = 0;
-        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
-        shrinkingFactor = (circleRadius) / (2 * game_time);
-        if (host) {
-            long current = System.currentTimeMillis() / 1000;
-            game.setStartTime(current, false);
-        }else {
-            long current = System.currentTimeMillis()/1000;
-            long start = game.getStartTime();
-            chronometerCounter = (int) (current-start+2);
-        }
+        setupChronometer();
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
@@ -430,6 +419,23 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
+    }
+
+    /**
+     * Helper method to set the chronometer functionality
+     */
+    private void setupChronometer(){
+        chronometer.start();
+        chronometerCounter = 0;
+        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
+        shrinkingFactor = (circleRadius) / (2 * game_time);
+        long current = System.currentTimeMillis() / 1000;
+        if (host) {
+            game.setStartTime(current, false);
+        }else {
+            long start = game.getStartTime();
+            chronometerCounter = (int) (current-start+2);
+        }
     }
 
 
@@ -696,6 +702,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return (distance > radius);
     }
 
+    /**
+     *  Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing
+     */
     public void listenEnded(){
                 isEndedListener = new ValueEventListener() {
                     @Override
