@@ -72,13 +72,6 @@ public class MapInstrumentedTest {
 
     }
 
-    @NonNull
-    private Intent getStartIntent() {
-        Player currentUser = new Player("3212", "CURRENT_USER", 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        toStart.putExtra("currentUser", currentUser);
-        return toStart;
-    }
 
     @NonNull
     public Game getGame() {
@@ -487,8 +480,10 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
-                finished.set(true);
+                if(fully){
+                    a.onButtonShowQuestionPopupWindowClick(a.findViewById(R.id.mapView), true, R.layout.question_popup, riddle, null);
+                    finished.set(true);
+                }
             }));
             do {
                 try {
@@ -624,7 +619,7 @@ public class MapInstrumentedTest {
 
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {if(fully)finished.set(true);}));
             do {
                 try {
                     Thread.sleep(100);
@@ -701,7 +696,6 @@ public class MapInstrumentedTest {
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
                 if (fully) {
-
                     a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
                         if (fully1) {
                             finished.set(true);
@@ -740,8 +734,6 @@ public class MapInstrumentedTest {
     public void CollectingACoinRemovesCoinFromDBTest() {
 
         Player currentUser = new Player("3212", "CURRENT_USER", 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        toStart.putExtra("currentUser", currentUser);
 
         String name = "Game";
         Player host = new Player("98934", "Bob", 0);
@@ -764,6 +756,8 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
+        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
+
         GameDatabaseProxy gdp = new GameDatabaseProxy();
 
         List<Player> players = game.getPlayers();
@@ -850,8 +844,6 @@ public class MapInstrumentedTest {
     @Test
     public void RemovingACoinFromDBRemovesCoinFromTheMapTest() {
         Player currentUser = new Player("3212", "CURRENT_USER", 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        toStart.putExtra("currentUser", currentUser);
 
         String name = "Game";
         Player host = new Player("98934", "Bob", 0);
@@ -873,7 +865,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-
+        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
 
         List<Player> players = game.getPlayers();
@@ -884,7 +876,7 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully ->{ if(fully){finished.set(true);}}));
             do {
                 try {
                     Thread.sleep(100);
@@ -1029,6 +1021,7 @@ public class MapInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
         intent.putExtra("player", host);
         intent.putExtra("host", true);
+        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
@@ -1201,25 +1194,11 @@ public class MapInstrumentedTest {
                 a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
                     @Override
                     public void onDidFinishRenderingMap(boolean fully) {
-                        if (fully) {
-
-                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
-                                @Override
-                                public void onCameraDidChange(boolean animated) {
-                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                        @Override
-                                        public void onDidFinishRenderingFrame(boolean fully) {
-                                            if (fully) {
-                                                finished.set(true);
-                                            }
-                                        }
-                                    });
+                            if (fully) {
+                                finished.set(true);
                                 }
-                            });
-                        }
-                    }
-                });
-            });
+           }}
+           );});
             while (true) {
                 try {
                     Thread.sleep(100);
@@ -1237,10 +1216,16 @@ public class MapInstrumentedTest {
                 }
             }
             scenario.onActivity(a -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 assertNotNull(a.getCircleManager());
                 a.initCircle();
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -1319,5 +1304,5 @@ public class MapInstrumentedTest {
                 Intents.release();
             }
         }
-        
+
 }

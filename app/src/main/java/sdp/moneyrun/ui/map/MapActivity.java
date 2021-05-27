@@ -2,6 +2,7 @@ package sdp.moneyrun.ui.map;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,7 +55,6 @@ import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
-import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
@@ -77,6 +77,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final float ICON_SIZE = 1.5f;
     public int coinsToPlace;
     private Chronometer chronometer;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+
     @Nullable
     private RiddlesDatabase riddleDb;
     private Location currentLocation;
@@ -177,8 +179,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         localPlayer = new LocalPlayer();
         hasEnded = false;
         isAnswering = false;
-        if (locationMode != null)
-            initLocationManager(locationMode);
+        initLocationManager(LOCATION_MODE);
 
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
@@ -295,7 +296,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         hasFoundMap = false;
-        callback = new LocationCheckObjectivesCallback(this, locationMode == null);
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
             offlineManager = OfflineManager.getInstance(MapActivity.this);
             getDownloadedRegion();
