@@ -38,7 +38,7 @@ public abstract class TrackedMap extends BaseMap implements
         PermissionsListener {
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final double ZOOM_FOR_FEATURES = 15.;
-    private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 500;
 
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
