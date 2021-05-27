@@ -2,8 +2,11 @@ package sdp.moneyrun.ui.menu;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,6 +15,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,6 +74,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    private Dialog helpDialog;
+    private ImageView informationImage;
 
 
     private final String TAG = MenuActivity.class.getSimpleName();
@@ -113,9 +119,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        helpDialog = new Dialog(this);
+
         runFunctionalities();
         addDownloadButton();
         addOfflineMapButton();
+        addInfoImageButton();
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
@@ -146,6 +155,13 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         offline_map.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapActivity.class, false));
     }
 
+    private void addInfoImageButton(){
+        informationImage = (ImageView)findViewById(R.id.info_image);
+        informationImage.setOnClickListener(v -> {
+            showPopup();
+        });
+    }
+
     public void runFunctionalities() {
         //Setting the current player object
         user = (User) getIntent().getSerializableExtra("user");
@@ -168,7 +184,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 user,
                 requestPermissionsLauncher,
                 fusedLocationClient);
-
 
         runWeather();
 
@@ -233,6 +248,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (shouldFinish) {
             finish();
         }
+    }
+
+    public void showPopup() {
+        TextView txtclose;
+        helpDialog.setContentView(R.layout.help_pop_up);
+        txtclose =(TextView) helpDialog.findViewById(R.id.txtclose);
+        txtclose.setOnClickListener(v1 -> helpDialog.dismiss());
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialog.show();
     }
 
     public void setGuestPlayerFields(boolean guest) {

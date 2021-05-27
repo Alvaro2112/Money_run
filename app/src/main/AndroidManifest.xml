@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/layout_bg.xml" />
 
         <activity android:name=".ui.game.EndGameActivity" />
         <activity
