@@ -85,9 +85,16 @@ public class FriendListTest {
     }
 
 
+
+    private Intent getStartIntent2() {
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), AddFriendListActivity .class);
+        toStart.putExtra("user", usersDatabase.get(0));
+        return toStart;
+    }
+
     @Test
     public void backButtonDoesNothing(){
-        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(AddFriendListActivity.class)) {
+        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(getStartIntent2())) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());

@@ -19,6 +19,7 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
@@ -74,7 +75,14 @@ public class MainLeaderboardInstrumentedTest {
 
     @Test
     public void backButtonDoesNothing1(){
-        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(MainLeaderboardActivity.class)) {
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
+        intent.putExtra("user", user);
+
+
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());

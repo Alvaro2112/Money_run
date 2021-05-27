@@ -231,7 +231,14 @@ public class MenuActivityTest {
 
     @Test
     public void backButtonDoesNothing1(){
-        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
+        intent.putExtra("user", user);
+
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
