@@ -54,7 +54,9 @@ import sdp.moneyrun.database.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
+import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
+import sdp.moneyrun.map.MockLocationCheckObjectivesCallback;
 import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
@@ -177,8 +179,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         localPlayer = new LocalPlayer();
         hasEnded = false;
         isAnswering = false;
-        initLocationManager(locationMode);
-
+        mockLocationCheckObjectivesCallback = new MockLocationCheckObjectivesCallback(this);
+        locationCheckObjectivesCallback = new LocationCheckObjectivesCallback(this);
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -256,7 +258,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-
             }
 
             @Override
@@ -303,6 +304,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setTextAllowOverlap(true);
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.coin_image)), false);
             enableLocationComponent(style);
+            initLocationManager(locationMode);
 
             circleManager = new CircleManager(mapView, mapboxMap, style);
 
@@ -593,6 +595,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     @Override
     public void checkObjectives(@NonNull Location location) {
+        System.out.println("CHECKING OBJJSJS");
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
         if (coin != null && !seenCoins.contains(coin) && !isAnswering) {

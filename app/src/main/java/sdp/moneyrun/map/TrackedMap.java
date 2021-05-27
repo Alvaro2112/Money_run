@@ -3,8 +3,6 @@ package sdp.moneyrun.map;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,16 +17,15 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
-import com.mapbox.mapboxsdk.location.LocationUpdate;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.location.MapLocationManager;
 
 
 /*
@@ -46,6 +43,8 @@ public abstract class TrackedMap extends BaseMap implements
     public LocationEngine locationEngine;
     @Nullable
     private PermissionsManager permissionsManager;
+    protected  MockLocationCheckObjectivesCallback mockLocationCheckObjectivesCallback;
+    protected LocationCheckObjectivesCallback locationCheckObjectivesCallback;
 
 
     // source
@@ -97,49 +96,26 @@ public abstract class TrackedMap extends BaseMap implements
 
             locationComponent.setRenderMode(RenderMode.COMPASS);
 
-
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
-    }
 
+    }
     /**
      * Initializes the location manager and sets a callback so that checObjectives function is called
      *  everytime there is an update of the location
      * @param locationMode mode of location, by default is GPS_PROVIDER so that we don't use wifi
      */
-    public void initLocationManager(String locationMode) {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    public void initLocationManager( String locationMode) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        MapLocationManager mapLocationManager = new MapLocationManager(locationManager,locationMode);
 
-        @NonNull
-        LocationListener locationListenerGPS = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
+        MapLocationManager mapLocationManager = new MapLocationManager(new WeakReference<>(this),locationMode);
+        mapLocationManager.setUpCallBack(mockLocationCheckObjectivesCallback,locationCheckObjectivesCallback);
 
-                LocationUpdate.Builder locBuilder = new LocationUpdate.Builder();
-                locBuilder.location(location);
-                LocationUpdate locationUpdate = locBuilder.build();
-                getMapboxMap().getLocationComponent().forceLocationUpdate(locationUpdate);
-                checkObjectives(location);
-            }
 
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(@NonNull String provider) {
-
-            }
-
-        };
-        mapLocationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
     }
 
     @Override
@@ -202,6 +178,8 @@ public abstract class TrackedMap extends BaseMap implements
 
         return min_coin;
     }
-
+    public MockLocationCheckObjectivesCallback getCallback(){
+        return mockLocationCheckObjectivesCallback;
+    }
     public abstract void checkObjectives(Location location);
 }
