@@ -3,6 +3,7 @@ package sdp.moneyrun.ui.map;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,6 @@ import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
 import org.json.JSONObject;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -38,6 +38,9 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     // JSON encoding/decoding
     public static final String JSON_CHARSET = "UTF-8";
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
     private final float LAT_OFFSET = 0.1f;
     private final float LONG_OFFSET = 0.1f;
     private final int MAX_ZOOM = 15;
@@ -65,6 +68,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
         exitButton = findViewById(R.id.downloader_exit);
         addExitButton();
+        mapView.addOnDidFinishRenderingMapListener(fully -> {initLocationManager(LOCATION_MODE);});
 
     }
 
@@ -86,10 +90,9 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
      */
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
-        callback = new LocationCheckObjectivesCallback(this);
-
         mapboxMap.setStyle(Style.MAPBOX_STREETS, this::enableLocationComponent);
         this.mapboxMap = mapboxMap;
+
     }
 
 
@@ -110,9 +113,10 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         return hasStartedDownload;
     }
 
-    // Progress bar methods
+    /**
+     * Adds a bar to show the download progress
+     */
     private void startProgress() {
-        // Start and show the progress bar
         isEndNotified = false;
         hasStartedDownload = true;
         progressBar.setIndeterminate(true);
@@ -124,6 +128,11 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         progressBar.setProgress(percentage);
     }
 
+    /**
+     * Called when the map has finished downloading, deletes the bar and deletes older maps
+     * Will also show a toast saying the message
+     * @param message Message to be shown at the end of the download
+     */
     private void endProgress(final String message) {
         if (isEndNotified) {
             return;
@@ -138,15 +147,24 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     }
 
     /**
-     * @param location the center of the downloaded map
-     *                 The map will be downloaded when the location provider updates the location so that we download the map where the user is.
+     * Check if the map has started downloading, if not downloads it
+     * @param location Location given by the location update
+     *
      */
     @Override
     public void checkObjectives(@NonNull Location location) {
 
         if (isEndNotified || hasStartedDownload)
             return;
+        downloadMap(location);
+    }
 
+    /**
+     * The map will be downloaded when the location provider updates the location so that we download the map where the user is.
+     * @param location the center of the downloaded map
+     */
+
+    public void downloadMap(@NonNull Location location){
         offlineManager = OfflineManager.getInstance(OfflineMapDownloaderActivity.this);
 
         // Create a bounding box for the offline region
@@ -175,6 +193,11 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
 
     }
 
+    /**
+     * Starts the download of the map
+     * @param metadata metadata of the region to be downloaded
+     * @param definition The tiles of the region to be downloaded
+     */
     public void createOfflineRegion(@NonNull byte[] metadata, @NonNull OfflineTilePyramidRegionDefinition definition) {
         offlineManager.createOfflineRegion(
                 definition,
@@ -198,6 +221,11 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                 });
     }
 
+
+    /**
+     * Adds and observer to know the state of the download
+     * @param offlineRegion offline region that will be observer to know the state of the download
+     */
     public void setOfflineRegionObserver(@NonNull OfflineRegion offlineRegion) {
         offlineRegion.setObserver(new OfflineRegion.OfflineRegionObserver() {
             @Override

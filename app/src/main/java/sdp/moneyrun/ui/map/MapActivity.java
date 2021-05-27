@@ -1,11 +1,7 @@
 package sdp.moneyrun.ui.map;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
@@ -139,8 +134,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         DatabaseProxy.addOfflineListener(this, TAG);
         
-        if (locationMode != null)
-            initLocationManager(locationMode);
     }
 
     @Override
@@ -158,35 +151,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
 
-    }
-
-    public void initLocationManager(String locationMode) {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        @NonNull
-        LocationListener locationListenerGPS = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                getMapboxMap().getLocationComponent().forceLocationUpdate(location);
-                checkObjectives(location);
-            }
-
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(@NonNull String provider) {
-
-            }
-
-        };
-        locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
     }
 
 
@@ -213,6 +177,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         localPlayer = new LocalPlayer();
         hasEnded = false;
         isAnswering = false;
+        if (locationMode != null)
+            initLocationManager(locationMode);
+
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -678,12 +645,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * and it shrinks by a shrinking factor that is also predefined
      */
     public void initCircle() {
-        circleManager.deleteAll();
-        CircleOptions circleOptions = new CircleOptions();
-        circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.5f).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
-        circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
-        circleManager.create(circleOptions);
+        if(getCurrentLocation() != null){
+            circleManager.deleteAll();
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions = circleOptions.withCircleRadius(circleRadius);
+            circleOptions = circleOptions.withCircleOpacity(0.5f).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
+
+            circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
+            circleManager.create(circleOptions);
+        }
     }
 
     public CircleManager getCircleManager() {

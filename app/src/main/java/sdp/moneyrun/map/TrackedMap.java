@@ -1,15 +1,17 @@
 package sdp.moneyrun.map;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineProvider;
-import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -17,6 +19,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.LocationUpdate;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
@@ -33,6 +36,10 @@ import sdp.moneyrun.R;
 @SuppressWarnings("FieldCanBeLocal")
 public abstract class TrackedMap extends BaseMap implements
         PermissionsListener {
+    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
+    private static final double ZOOM_FOR_FEATURES = 15.;
+    private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
+
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
     private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
@@ -91,7 +98,6 @@ public abstract class TrackedMap extends BaseMap implements
 
             locationComponent.setRenderMode(RenderMode.COMPASS);
 
-            initLocationEngine();
 
         } else {
             permissionsManager = new PermissionsManager(this);
@@ -100,18 +106,41 @@ public abstract class TrackedMap extends BaseMap implements
     }
 
     /**
-     * Set up the LocationEngine and the parameters for querying the device's location
+     * Initializes the location manager and sets a callback so that checObjectives function is called
+     *  everytime there is an update of the location
+     * @param locationMode mode of location, by default is GPS_PROVIDER so that we don't use wifi
      */
-    @SuppressLint("MissingPermission")
-    private void initLocationEngine() {
-        locationEngine = LocationEngineProvider.getBestLocationEngine(this);
+    public void initLocationManager(String locationMode) {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        LocationEngineRequest request = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_IN_MILLISECONDS)
-                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                .setMaxWaitTime(DEFAULT_MAX_WAIT_TIME).build();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
 
-        locationEngine.requestLocationUpdates(request, callback, getMainLooper());
-        locationEngine.getLastLocation(callback);
+        @NonNull
+        LocationListener locationListenerGPS = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+
+                LocationUpdate.Builder locBuilder = new LocationUpdate.Builder();
+                locBuilder.location(location);
+                LocationUpdate locationUpdate = locBuilder.build();
+                getMapboxMap().getLocationComponent().forceLocationUpdate(locationUpdate);
+                checkObjectives(location);
+            }
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {
+
+            }
+
+        };
+        locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
     }
 
     @Override

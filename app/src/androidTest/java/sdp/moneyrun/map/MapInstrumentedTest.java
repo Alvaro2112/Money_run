@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,6 +105,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
+        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
