@@ -217,7 +217,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_center = game.getStartLocation();
                 initChronometer();
 
-                if (!addedCoins && host) {
+                if (!addedCoins && host && getCurrentLocation() != null) {
                     placeRandomCoins(coinsToPlace, game_radius, THRESHOLD_DISTANCE);
                     addedCoins = true;
                 }

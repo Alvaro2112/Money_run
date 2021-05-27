@@ -81,7 +81,7 @@ public class MapInstrumentedTest {
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
-        Location location = new Location("LocationManager#GPS_PROVIDER");
+        Location location = new Location("LocationManager#NETWORK_PROVIDER");
         location.setLatitude(37.42);
         location.setLongitude(-122.084);
 
@@ -95,7 +95,7 @@ public class MapInstrumentedTest {
     public Intent createIntentAndPutInDB() {
         Player host = new Player("1234567891", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        intent.putExtra("player", host);
+        intent.putExtra("player ", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
         intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
