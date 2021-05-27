@@ -77,7 +77,7 @@ public class MainLeaderboardInstrumentedTest {
     public void backButtonDoesNothing1(){
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
-        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
 
 
@@ -120,7 +120,7 @@ public class MainLeaderboardInstrumentedTest {
     }
 
     private Intent getStartIntent1() {
-        User currentUser = new User("888", "CURRENT_USER", "Epfl"
+        User currentUser = new User("888", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
         toStart.putExtra("user", currentUser);

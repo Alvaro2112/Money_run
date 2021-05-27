@@ -234,7 +234,7 @@ public class MenuActivityTest {
 
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
-        User user = new User("3", "Bob", "Epfl", 0, 0, 0);
+        User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
 
 
@@ -653,7 +653,7 @@ public class MenuActivityTest {
                 location.setLatitude(0.7126);
                 location.setLongitude(38.2699);
                 a.loadWeather(location);
-                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport(WeatherForecast.Day.TODAY));
+                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport());
             });
             Thread.sleep(5000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
