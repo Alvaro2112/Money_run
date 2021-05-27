@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.map.MapActivity">
 
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:mapbox_cameraTargetLat="46.51"
+        mapbox:mapbox_cameraTargetLng="6.6"
+        mapbox:mapbox_cameraZoom="18.2"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="3dp"></com.mapbox.mapboxsdk.maps.MapView>
+
     <Chronometer
         android:id="@+id/mapChronometer"
         android:layout_width="95dp"
@@ -84,15 +95,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.953" />
-
-
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        mapbox:mapbox_cameraTargetLat="46.51"
-        mapbox:mapbox_cameraTargetLng="6.6"
-        mapbox:mapbox_cameraZoom="18.2">
-    </com.mapbox.mapboxsdk.maps.MapView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
