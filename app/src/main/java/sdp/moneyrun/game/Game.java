@@ -33,6 +33,7 @@ public class Game {
     private final String DATABASE_IS_VISIBLE = "isVisible";
     private final String DATABASE_STARTED = "started";
     private final String DATABASE_ENDED = "ended";
+    private final String DATABASE_START_TIME = "startTime";
     //Attributes
     @NonNull
     private final GameDbData gameDbData;
@@ -46,6 +47,7 @@ public class Game {
 
     private boolean started;
     private boolean ended;
+    private long start_time = 0;
 
     /**
      * This constructor is used to create a game that has never been added to the database.
@@ -88,6 +90,7 @@ public class Game {
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
+        start_time = System.currentTimeMillis()/1000;
     }
 
     public Game(@Nullable String name,
@@ -136,6 +139,7 @@ public class Game {
         this.riddles = riddles;
         started = false;
         ended = false;
+        start_time = System.currentTimeMillis()/1000;
     }
 
     /**
@@ -178,6 +182,7 @@ public class Game {
         this.hasBeenAdded = false;
         started = false;
         ended = false;
+        start_time = System.currentTimeMillis()/1000;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
@@ -230,7 +235,7 @@ public class Game {
         ended = false;
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
-
+        start_time = System.currentTimeMillis()/1000;
     }
 
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull List<Player> players, @NonNull Activity currentActivity, boolean hasDied) {
@@ -283,6 +288,20 @@ public class Game {
     @NonNull
     public List<Player> getPlayers() {
         return gameDbData.getPlayers();
+    }
+
+    public long getStartTime(){ return gameDbData.getStartTime();}
+
+    public void setStartTime(long start_time, boolean forceLocal){
+        if (!forceLocal) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_START_TIME)
+                    .setValue(start_time);
+        }
+        gameDbData.setStartTime(start_time);
+        this.start_time = start_time;
     }
 
     public boolean getStarted() {

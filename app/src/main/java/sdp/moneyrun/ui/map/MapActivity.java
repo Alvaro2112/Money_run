@@ -405,6 +405,14 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         chronometerCounter = 0;
         chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         shrinkingFactor = (circleRadius) / (2 * game_time);
+        if (host) {
+            long current = System.currentTimeMillis() / 1000;
+            game.setStartTime(current, false);
+        }else {
+            long current = System.currentTimeMillis()/1000;
+            long start = game.getStartTime();
+            chronometerCounter = (int) (current-start+2);
+        }
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
@@ -416,6 +424,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
                     if(host)
                         game.setEnded(true,false);
+                    System.out.println("The game ended too early");
                     Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
                 }
             }
@@ -702,5 +711,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                     }
                 };
                 proxyG.addGameListener(game, isEndedListener);
+    }
+
+    public void startTimeForNonHosts(){
+
     }
 }

@@ -37,6 +37,7 @@ public final class GameDbData {
     private int numCoins;
     private double radius;
     private double duration;
+    private long start_time = 0;
 
 
     public GameDbData(@Nullable String name,
@@ -71,6 +72,7 @@ public final class GameDbData {
         this.isDeleted = false;
         this.started = false;
         this.ended = false;
+        start_time = System.currentTimeMillis()/1000;
     }
 
     public GameDbData(@Nullable String name,
@@ -121,6 +123,7 @@ public final class GameDbData {
         this.radius = radius;
         this.numCoins = numCoins;
         this.duration = duration;
+        start_time = System.currentTimeMillis()/1000;
     }
 
 
@@ -141,6 +144,7 @@ public final class GameDbData {
         this.duration = other.duration;
         this.radius = other.radius;
         this.numCoins = other.numCoins;
+        this.start_time = other.start_time;
     }
 
     public GameDbData() {
@@ -164,7 +168,13 @@ public final class GameDbData {
         this.started = started;
     }
 
+    public long getStartTime(){
+        return start_time;
+    }
 
+    public void setStartTime(long start_time){
+        this.start_time = start_time;
+    }
 
     public void setEnded(boolean ended) {
         this.ended = ended;
