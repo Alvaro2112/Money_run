@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -26,6 +27,7 @@ import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -34,6 +36,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -76,6 +79,15 @@ public class LeaderboardInstrumentedTest {
             });
         } catch (Exception e) {
             assertEquals(2, 1);
+        }
+    }
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
         }
     }
 

@@ -7,8 +7,6 @@ public class UserBuilder {
     private String userId;
     @Nullable
     private String name;
-    @Nullable
-    private String address;
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
     private int score;
@@ -36,15 +34,6 @@ public class UserBuilder {
     }
 
     /**
-     * @param address
-     */
-    public void setAddress(@Nullable String address) {
-        if (address == null || address.isEmpty())
-            throw new IllegalArgumentException();
-        this.address = address;
-    }
-
-    /**
      * @param numberOfPlayedGames
      */
     public void setNumberOfPlayedGames(int numberOfPlayedGames) {
@@ -60,16 +49,16 @@ public class UserBuilder {
     }
 
     /**
-     * Builds current instance. Address and name cannot be null or empty and userId cannot be 0
+     * Builds current instance. name cannot be null or empty and userId cannot be 0
      *
      * @return the user built with the attributes set
-     * @throws IllegalStateException if the address or name is null or empty, if the userId is null
+     * @throws IllegalStateException if the name is null or empty, if the userId is null
      */
     @NonNull
     public User build() {
-        if (userId == null || name == null || address == null)
+        if (userId == null || name == null)
             throw new IllegalStateException();
-        return new User(userId, name, address, numberOfDiedGames, numberOfPlayedGames, score);
+        return new User(userId, name, numberOfDiedGames, numberOfPlayedGames, score);
     }
 
 

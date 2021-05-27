@@ -134,6 +134,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
 
         DatabaseProxy.addOfflineListener(this, TAG);
+
+        if (locationMode != null)
+            initLocationManager(locationMode);
     }
 
     @Override
@@ -141,21 +144,22 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
-
-        if (locationMode != null)
-            initLocationManager(locationMode);
-
     }
 
+    /**
+     * Initializes all the logic to keep the location updated
+     * @param locationMode the location mode that will be used ("gps" for gps location, "network" for network location and null for the default MapBox location (i.e. getLastLocation))
+     */
     public void initLocationManager(String locationMode) {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -183,7 +187,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         };
         locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-
 
 
     }
@@ -320,7 +323,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
+        exitButton.setOnClickListener(v -> {
+                    if (!hasEnded) {
+                        endGame();
+                    }
+                }
+        );
     }
 
     /**
@@ -410,11 +418,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } else {
                 if (!hasEnded) {
                     hasEnded = true;
-
                     if(host)
                         game.setEnded(true,false);
-                    System.out.println("The game ended too early");
                     Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
+
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
@@ -437,6 +444,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             chronometerCounter = (int) (current-start+2);
         }
     }
+
 
 
     /**
@@ -722,7 +730,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 proxyG.addGameListener(game, isEndedListener);
     }
 
-    public void startTimeForNonHosts(){
 
+
+    @Override
+    public void onBackPressed() {
     }
 }

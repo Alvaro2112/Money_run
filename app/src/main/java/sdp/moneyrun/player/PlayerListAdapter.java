@@ -1,11 +1,9 @@
-package sdp.moneyrun.ui.player;
+package sdp.moneyrun.player;
 
 import android.app.Activity;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
-
-import sdp.moneyrun.player.Player;
 
 public abstract class PlayerListAdapter extends ArrayAdapter<Player> {
 

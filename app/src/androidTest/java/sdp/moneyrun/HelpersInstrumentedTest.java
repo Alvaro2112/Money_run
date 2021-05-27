@@ -27,7 +27,7 @@ public class HelpersInstrumentedTest {
     }
 
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -39,7 +39,7 @@ public class HelpersInstrumentedTest {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             LocationRepresentation locationRep = new LocationRepresentation(10, 10);
             GameRepresentation gameRep = new GameRepresentation(null, "game", 1, 10, locationRep);
-            User currentUser = new User("999", "CURRENT_USER", "Epfl"
+            User currentUser = new User("999", "CURRENT_USER"
                     , 0, 0, 0);
 
             scenario.onActivity(a -> {

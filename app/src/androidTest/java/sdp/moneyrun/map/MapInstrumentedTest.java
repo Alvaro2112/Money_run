@@ -28,6 +28,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,6 +38,7 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
+import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -44,6 +46,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -95,6 +98,15 @@ public class MapInstrumentedTest {
 
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
     }
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
 
     public Intent createIntentAndPutInDB() {
         Player host = new Player("1234567891", "Bob", 0);

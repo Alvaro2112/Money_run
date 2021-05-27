@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.player.PlayerListAdapter;
+import sdp.moneyrun.player.PlayerListAdapter;
 
 public class MapPlayerListAdapter extends PlayerListAdapter {
 

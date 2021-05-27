@@ -3,6 +3,7 @@ package sdp.moneyrun.game;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.SignUpActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -34,6 +36,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
@@ -58,10 +61,9 @@ public class EndGameInstrumentedTest {
 
     public static User getUser() {
         String name = "John Doe";
-        String address = "Someeewhere";
         String id = "1234567891";
 
-        User user = new User(id, name, address, 0, 0, 0);
+        User user = new User(id, name, 0, 0, 0);
         return user;
     }
 
@@ -82,6 +84,15 @@ public class EndGameInstrumentedTest {
         }
 
         return endGameIntent;
+    }
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
     }
 
 
@@ -196,7 +207,6 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
         }

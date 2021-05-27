@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -45,6 +46,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -91,6 +93,15 @@ public class LoginInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("sdp.moneyrun", appContext.getPackageName());
+    }
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
     }
 
     @Test
@@ -195,7 +206,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -259,7 +269,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -320,7 +329,6 @@ public class LoginInstrumentedTest {
                             // valid instance in the database
                             playerUserRef.set(new User(playerId));
                             playerUserRef.get().setName("Bob");
-                            playerUserRef.get().setAddress("Somewhere");
                         }
                     }));
 
@@ -382,6 +390,9 @@ public class LoginInstrumentedTest {
 
     @Test
     public void logInWithoutConnectionDisplaysError(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             Intents.init();
             String email = "logintest@epfl.ch";
