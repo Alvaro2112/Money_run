@@ -125,6 +125,7 @@ public class GameLobbyActivity extends AppCompatActivity {
 
     private void listenToIsDeleted() {
         if (!user.equals(game.getHost())) {
+
             isDeletedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -158,6 +159,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
         }
+    }
+
+    private void disableLaunchButtonIfNotHost(){
+
     }
 
     /**
