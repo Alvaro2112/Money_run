@@ -132,6 +132,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
 
         DatabaseProxy.addOfflineListener(this, TAG);
+        
+        if (locationMode != null)
+            initLocationManager(locationMode);
     }
 
     @Override
@@ -148,9 +151,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     protected void onStop(){
         super.onStop();
         DatabaseProxy.removeOfflineListener();
-
-        if (locationMode != null)
-            initLocationManager(locationMode);
 
     }
 
