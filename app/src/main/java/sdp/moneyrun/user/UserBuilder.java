@@ -7,7 +7,6 @@ public class UserBuilder {
     private String userId;
     @Nullable
     private String name;
-    @Nullable
     private int numberOfPlayedGames;
     private int numberOfDiedGames;
     private int score;

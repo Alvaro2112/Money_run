@@ -70,13 +70,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -92,22 +93,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * This is needed for testing
-     * Also, since it's one of the first activity created, it's reasonable to assume that when it's
-     * destroyed the user should be signed out
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAuth.signOut();
-    }
-
     // link from signUp button to signUp page
     public void signUp(View view) {
         MediaPlayer.create(this, R.raw.button_press).start();
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void setLogIn(@NonNull Button loginButton) {
@@ -183,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                     menuIntent.putExtra("user", user);
                     startActivity(menuIntent);
                 }
+                finish();
             }
         });
     }
@@ -210,7 +202,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
             guestMenuIntent.putExtra("guestUser", true);
             startActivity(guestMenuIntent);
+            finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

@@ -1,8 +1,10 @@
 package sdp.moneyrun.ui.menu;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +24,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"CanBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
@@ -32,6 +34,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
+    private Button backToMenu;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -43,6 +46,16 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         addAdapter();
         addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
         DatabaseProxy.addOfflineListener(this, TAG);
+        backToMenu = findViewById(R.id.back_from_main_leaderboard_button);
+
+        backToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(MainLeaderboardActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
+
     }
 
     @Override
@@ -50,13 +63,14 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -134,5 +148,9 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         }
         ArrayList<User> to_add = new ArrayList<>(Collections.singletonList(user));
         addUserList(to_add);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

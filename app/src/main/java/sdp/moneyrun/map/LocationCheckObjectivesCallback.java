@@ -19,6 +19,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     @NonNull
     private final WeakReference<TrackedMap> activityWeakReference;
     boolean init = false;
+    //Whether we use the default MapBox location or if we use the GPS/Network location
     boolean useDefaultLocation = true;
 
     public LocationCheckObjectivesCallback(MapActivity activity, boolean useDefaultLocation) {
@@ -30,6 +31,10 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
         this.activityWeakReference = new WeakReference<>(activity);
     }
 
+    /**
+     *     If we use the GPS/Network location we only need to get the location from MapBox once at the start (We only need the getLastLocation to start)
+     *     and thus we will never update again using MapBox
+     */
     public boolean hasToUpdate() {
         TrackedMap activity = activityWeakReference.get();
         boolean hasToUpdate = !init || useDefaultLocation;
@@ -49,7 +54,7 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
 
                 activity.getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                 activity.checkObjectives(location);
-                init = true;
+                init = true; //We got the first location, if useDefaultLocation is false we will never enter this if statement again.
             }
         }
     }

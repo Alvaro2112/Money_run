@@ -21,12 +21,13 @@ import sdp.moneyrun.user.User;
 
 public class AddFriendListActivity extends AppCompatActivity {
 
+    private final String TAG = AddFriendListActivity.class.getSimpleName();
     @Nullable
     private List<User> resultList = new ArrayList<>();
     @Nullable
     private AddFriendListListAdapter ldbAdapter;
     private User user;
-    private final String TAG = AddFriendListActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +50,14 @@ public class AddFriendListActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -117,6 +119,10 @@ public class AddFriendListActivity extends AppCompatActivity {
 
         ldbAdapter.clear();
         ldbAdapter.addAll(userList);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

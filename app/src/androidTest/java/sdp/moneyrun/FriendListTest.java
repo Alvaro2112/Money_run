@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -33,6 +35,9 @@ import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.player.PlayerBuilderInstrumentedTest;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.map.OfflineMapActivity;
+import sdp.moneyrun.ui.menu.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -42,11 +47,15 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
@@ -75,6 +84,32 @@ public class FriendListTest {
         }
     }
 
+
+
+    private Intent getStartIntent2() {
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), AddFriendListActivity .class);
+        toStart.putExtra("user", usersDatabase.get(0));
+        return toStart;
+    }
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(getStartIntent2())) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(FriendListActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
 
     private static List<User> getUsers(){
         ArrayList<User> users = new ArrayList<>();
@@ -225,6 +260,37 @@ public class FriendListTest {
             db.removeUser(user);
         }
     }
+
+    private Intent getStartIntent1() {
+        User currentUser = new User("888", "CURRENT_USER"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), FriendListActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+    @Test
+    public void goBackToMenuWorks(){
+
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
+            Intents.init();
+            Thread.sleep(3000);
+            //Join add friends
+            //Search
+            onView(ViewMatchers.withId(R.id.back_from_friend_list_button)).perform(ViewActions.click());
+
+            Thread.sleep(3000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+
+    }
+
 
     @Test
     public void removeFriendWorks() {

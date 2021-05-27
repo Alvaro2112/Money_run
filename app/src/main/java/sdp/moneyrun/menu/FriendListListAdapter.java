@@ -29,14 +29,14 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "CanBeFinal"})
 public class FriendListListAdapter extends ListAdapterWithUser {
 
     public static final String TAG_BUTTON_PREFIX = "button";
-    @NonNull
-    HashMap<Integer, Game> gamesByPosition = new HashMap<>();
     private final AndroidLocationService locationService;
     private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    @NonNull
+    HashMap<Integer, Game> gamesByPosition = new HashMap<>();
 
     public FriendListListAdapter(Activity context, List<User> userList, User user, AndroidLocationService locationService) {
         super(context, userList, user);

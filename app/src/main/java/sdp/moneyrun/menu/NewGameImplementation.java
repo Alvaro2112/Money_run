@@ -39,12 +39,12 @@ import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class NewGameImplementation extends MenuImplementation {
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
     TextView nameGameView;
     TextView maxPlayerNumberView;
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
-    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,

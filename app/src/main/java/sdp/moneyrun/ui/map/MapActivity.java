@@ -132,7 +132,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
 
         DatabaseProxy.addOfflineListener(this, TAG);
-        
+
         if (locationMode != null)
             initLocationManager(locationMode);
     }
@@ -142,18 +142,22 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
-
     }
 
+    /**
+     * Initializes all the logic to keep the location updated
+     * @param locationMode the location mode that will be used ("gps" for gps location, "network" for network location and null for the default MapBox location (i.e. getLastLocation))
+     */
     public void initLocationManager(String locationMode) {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -181,7 +185,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         };
         locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-
 
 
     }
@@ -255,6 +258,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
+
                 initCircle();
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -312,7 +316,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
+        exitButton.setOnClickListener(v -> {
+                    if (!hasEnded) {
+                        endGame();
+                    }
+                }
+        );
     }
 
     /**
@@ -404,13 +413,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
-                    hasEnded = true;
-                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
-
+                    endGame();
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
+    }
+
+
+    public void endGame() {
+        hasEnded = true;
+        Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
     }
 
 
@@ -675,5 +688,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

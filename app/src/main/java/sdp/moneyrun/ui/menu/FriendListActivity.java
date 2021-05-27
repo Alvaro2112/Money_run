@@ -22,16 +22,18 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal", "FieldCanBeLocal"})
 public class FriendListActivity extends AppCompatActivity {
 
+    private final String TAG = FriendListActivity.class.getSimpleName();
+    @Nullable
     private AndroidLocationService locationService;
-
     @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
+    @Nullable
     private FriendListListAdapter ldbAdapter;
     private User user;
-    private final String TAG = FriendListActivity.class.getSimpleName();
+    private Button goBackToMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +43,32 @@ public class FriendListActivity extends AppCompatActivity {
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
 
         user = (User) getIntent().getSerializableExtra("user");
+        goBackToMenu = findViewById(R.id.back_from_friend_list_button);
+
+        goBackToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(FriendListActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
-        if (taskUpdatedUser == null) {
+
+        if (taskUpdatedUser == null)
             return;
-        }
 
         taskUpdatedUser.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful())
                 showFriendList();
-            }
         });
 
         addAdapter();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
         DatabaseProxy.addOfflineListener(this, TAG);
+
+
     }
 
     @Override
@@ -64,13 +76,14 @@ public class FriendListActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -131,22 +144,9 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     /**
-     * Add a user list to the list adapter
-     *
-     * @param userList the user list to add
-     */
-    public void addUserList(@Nullable List<User> userList) {
-        if (userList == null) {
-            throw new NullPointerException("user list should not be null.");
-        }
-
-        ldbAdapter.clear();
-        ldbAdapter.addAll(userList);
-    }
-
-    /**
      * @return the location service.
      */
+    @Nullable
     public AndroidLocationService getLocationService() {
         return locationService;
     }
@@ -158,5 +158,9 @@ public class FriendListActivity extends AppCompatActivity {
         this.locationService = locationService;
         // Update friend list
         showFriendList();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

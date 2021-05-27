@@ -99,5 +99,8 @@ public class OfflineMapActivity extends BaseMap {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 
 }

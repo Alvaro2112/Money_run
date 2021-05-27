@@ -17,11 +17,11 @@ import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {
+    private final String TAG = UserProfileActivity.class.getSimpleName();
     public TextView playerName;
     public TextView playerDiedGames;
     public TextView playerPlayedGames;
     public Button goBackToMain;
-    private final String TAG = UserProfileActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,14 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -74,5 +75,9 @@ public class UserProfileActivity extends AppCompatActivity {
             playerDiedGames.setText(String.format(Locale.getDefault(), "Times you died in a game \n %d", user.getNumberOfDiedGames()));
             playerPlayedGames.setText(String.format(Locale.getDefault(), "Games played \n %d", user.getNumberOfPlayedGames()));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

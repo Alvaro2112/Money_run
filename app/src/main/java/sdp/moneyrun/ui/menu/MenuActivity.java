@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -60,18 +61,17 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     map -> {
                     });
-
-
+    private final String TAG = MenuActivity.class.getSimpleName();
     protected DrawerLayout mDrawerLayout;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
+    @Nullable
     AndroidLocationService locationService;
     private User user;
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
     public NewGameImplementation newGameImplementation;
-    private final String TAG = MenuActivity.class.getSimpleName();
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
@@ -79,7 +79,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         public void onLocationChanged(@NonNull Location location) {
             loadWeather(location);
             if (currentForecast != null)
-                setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+                setWeatherFieldsToday(currentForecast.getWeatherReport());
 
         }
 
@@ -125,13 +125,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -185,6 +186,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         RiddlesDatabase.reset();
     }
 
+    /**
+     * This functions takes care of the logic regarding the buttons that are in the navigation side bar
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -303,6 +307,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     /**
      * @return the location service
      */
+    @Nullable
     public AndroidLocationService getLocationService() {
         return locationService;
     }
@@ -310,4 +315,5 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
     }
+
 }
