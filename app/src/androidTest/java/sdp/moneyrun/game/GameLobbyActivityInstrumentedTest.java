@@ -98,7 +98,31 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @Test
     public void backButtonDoesNothing(){
-        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(GameLobbyActivity.class)) {
+
+        Player host = new Player("12634", "Bob", 0);
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
+        intent.putExtra("currentUser", host);
+        intent.putExtra("host", true);
+
+        GameDatabaseProxy gdp = new GameDatabaseProxy();
+        Game game = getGame();
+
+        List<Player> players = game.getPlayers();
+        players.add(host);
+
+        String id = gdp.putGame(game);
+        CountDownLatch added = new CountDownLatch(1);
+        gdp.updateGameInDatabase(game, task -> added.countDown());
+        try {
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        intent.putExtra("currentGameId", id);
+
+        try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
