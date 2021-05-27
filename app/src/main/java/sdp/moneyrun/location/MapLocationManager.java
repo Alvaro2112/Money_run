@@ -24,7 +24,6 @@ public class MapLocationManager  {
             Location mockedLocation = new Location("");
             mockedLocation.setLatitude(37.42);
             mockedLocation.setLongitude(-122.084);
-
             locationManager.setTestProviderLocation(provider,mockedLocation);
         }
         this.locationManager = locationManager;
