@@ -71,6 +71,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    public NewGameImplementation newGameImplementation;
+
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -158,15 +160,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient,
+                locationService,
                 true,
                 R.layout.join_game_popup);
 
-        NewGameImplementation newGameImplementation = new NewGameImplementation(this,
+        newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient);
+                locationService);
 
 
         runWeather();

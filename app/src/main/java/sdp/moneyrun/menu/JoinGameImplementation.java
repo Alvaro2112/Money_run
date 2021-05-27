@@ -53,10 +53,10 @@ public class JoinGameImplementation extends MenuImplementation {
                                   DatabaseReference databaseReference,
                                   @Nullable User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                  FusedLocationProviderClient fusedLocationClient,
+                                  AndroidLocationService locationService,
                                   boolean focusable,
                                   int layoutId) {
-        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, locationService);
         if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
