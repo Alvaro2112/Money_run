@@ -157,9 +157,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     private void addInfoImageButton(){
         informationImage = (ImageView)findViewById(R.id.info_image);
-        informationImage.setOnClickListener(v -> {
-            showPopup();
-        });
+        informationImage.setOnClickListener(v -> showPopup());
     }
 
     public void runFunctionalities() {
