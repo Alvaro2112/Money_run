@@ -417,11 +417,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
-                    hasEnded = true;
                     if(host)
                         game.setEnded(true,false);
-                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
-
+                    endGame();
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
@@ -445,6 +443,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
     }
 
+
+    public void endGame() {
+        hasEnded = true;
+        Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+    }
 
 
     /**
