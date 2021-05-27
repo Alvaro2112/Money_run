@@ -756,7 +756,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-        intent.putExtra("locationMode", LocationManager.GPS_PROVIDER);
+        intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
 

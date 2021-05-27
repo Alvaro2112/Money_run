@@ -40,7 +40,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
-    private final String LOCATION_MODE = LocationManager.NETWORK_PROVIDER;
+    private  String locationMode;
     private final float LAT_OFFSET = 0.1f;
     private final float LONG_OFFSET = 0.1f;
     private final int MAX_ZOOM = 15;
@@ -62,13 +62,17 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         setContentView(R.layout.activity_offline_map_downloader);
 
         user = (User) getIntent().getSerializableExtra("user");
+        locationMode =  getIntent().getStringExtra("locationMode");
+        if(locationMode == null){
+            locationMode = LocationManager.NETWORK_PROVIDER;
+        }
         mapView = findViewById(R.id.mapView_downloader);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this::onMapReady);
 
         exitButton = findViewById(R.id.downloader_exit);
         addExitButton();
-        mapView.addOnDidFinishRenderingMapListener(fully -> {initLocationManager(LOCATION_MODE);});
+        mapView.addOnDidFinishRenderingMapListener(fully -> {initLocationManager(locationMode);});
 
     }
 
@@ -278,21 +282,17 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
             @Override
             public void onList(@NonNull OfflineRegion[] offlineRegions) {
-
                 if (offlineRegions.length > 1) {
-                    // delete the last item in the offlineRegions list which will be yosemite offline map
                     for (int i = 0; i < offlineRegions.length - 1; ++i) {
                         offlineRegions[i].delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                             @Override
                             public void onDelete() {
-
                                 Toast.makeText(
                                         OfflineMapDownloaderActivity.this,
                                         getString(R.string.offline_map_deleted),
                                         Toast.LENGTH_LONG
                                 ).show();
                             }
-
                             @Override
                             public void onError(String error) {
                             }
@@ -300,13 +300,11 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                     }
                 }
             }
-
             @Override
             public void onError(String error) {
             }
         });
     }
-
 
 }
 
