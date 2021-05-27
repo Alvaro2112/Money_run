@@ -401,32 +401,6 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void questionButtonWorks() {
-
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
-            do {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-            } while (!finished.get());
-
-            onView(withId(R.id.new_question)).perform(ViewActions.click());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            onView(withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        }
-    }
 
     @Test
     public void questionWorksOnCorrectAnswer() {
