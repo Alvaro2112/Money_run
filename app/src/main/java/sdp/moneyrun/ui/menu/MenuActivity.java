@@ -114,7 +114,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         runFunctionalities();
         addDownloadButton();
-        addOfflineMapButton();
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
