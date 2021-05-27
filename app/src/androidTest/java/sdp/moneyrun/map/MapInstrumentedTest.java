@@ -69,7 +69,6 @@ public class MapInstrumentedTest {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
-
     }
 
 
@@ -81,7 +80,7 @@ public class MapInstrumentedTest {
         List<Riddle> riddles = new ArrayList<>();
         riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
         List<Coin> coins = new ArrayList<>();
-        Location location = new Location("LocationManager#NETWORK_PROVIDER");
+        Location location = new Location("");
         location.setLatitude(37.42);
         location.setLongitude(-122.084);
 
@@ -98,7 +97,7 @@ public class MapInstrumentedTest {
         intent.putExtra("player ", host);
         intent.putExtra("host", true);
         intent.putExtra("useDB", true);
-        intent.putExtra("locationMode", LocationManager.NETWORK_PROVIDER);
+        intent.putExtra("locationMode", "test_provider");
 
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();

@@ -2,7 +2,6 @@ package sdp.moneyrun.ui.map;
 
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -178,9 +177,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         localPlayer = new LocalPlayer();
         hasEnded = false;
         isAnswering = false;
-        if(locationMode == null){
-            locationMode = LocationManager.NETWORK_PROVIDER;
-        }
         initLocationManager(locationMode);
 
         try {

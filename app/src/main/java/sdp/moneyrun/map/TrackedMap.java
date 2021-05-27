@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.location.MapLocationManager;
 
 
 /*
@@ -37,7 +38,6 @@ import sdp.moneyrun.R;
 public abstract class TrackedMap extends BaseMap implements
         PermissionsListener {
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 500;
 
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
@@ -111,10 +111,10 @@ public abstract class TrackedMap extends BaseMap implements
      */
     public void initLocationManager(String locationMode) {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        MapLocationManager mapLocationManager = new MapLocationManager(locationManager,locationMode);
 
         @NonNull
         LocationListener locationListenerGPS = new LocationListener() {
@@ -139,7 +139,7 @@ public abstract class TrackedMap extends BaseMap implements
             }
 
         };
-        locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
+        mapLocationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
     }
 
     @Override

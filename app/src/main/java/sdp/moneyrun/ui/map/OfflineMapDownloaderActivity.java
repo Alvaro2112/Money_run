@@ -38,8 +38,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     // JSON encoding/decoding
     public static final String JSON_CHARSET = "UTF-8";
     public static final String JSON_FIELD_REGION_NAME = "FIELD_REGION_NAME";
-    public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
-    private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private  String locationMode;
     private final float LAT_OFFSET = 0.1f;
     private final float LONG_OFFSET = 0.1f;
