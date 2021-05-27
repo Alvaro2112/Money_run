@@ -110,6 +110,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private OfflineManager offlineManager;
     private boolean hasFoundMap;
     private String locationMode;
+    private boolean isAnswering;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,6 +217,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         proxyG = new GameDatabaseProxy();
         localPlayer = new LocalPlayer();
         hasEnded = false;
+        isAnswering = false;
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -640,13 +642,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null && !seenCoins.contains(coin)) {
+        if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
             seenCoins.add(coin);
+            isAnswering = true;
             try {
                 onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
             } catch (WindowManager.BadTokenException e) {
                 seenCoins.remove(coin);
             }
+            isAnswering = false;
         }
 
     }
