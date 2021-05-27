@@ -1,5 +1,20 @@
 package sdp.moneyrun.map;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import android.content.Intent;
 import android.location.Location;
 
@@ -28,7 +43,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,23 +52,9 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
+import sdp.moneyrun.user.User;
 
 public class MapInstrumentedTest {
 
@@ -401,32 +401,6 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void questionButtonWorks() {
-
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
-            do {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-            } while (!finished.get());
-
-            onView(withId(R.id.new_question)).perform(ViewActions.click());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            onView(withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        }
-    }
 
     @Test
     public void questionWorksOnCorrectAnswer() {
@@ -1314,5 +1288,42 @@ public class MapInstrumentedTest {
                 Intents.release();
             }
         }
-        
+    @Test
+    public void usesDownloadedMap(){
+        User currentUser = new User("999", "CURRENT_USER", 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
+        toStart.putExtra("user", currentUser);
+
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(toStart)) {
+            try {
+                Thread.sleep(30000);
+            } catch (Exception e) {
+                fail();
+            }
+        }
+        Intent mapIntent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenarioMap = ActivityScenario.launch(mapIntent)) {
+            final AtomicBoolean finished = new AtomicBoolean(false);
+
+            scenarioMap.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                finished.set(true);
+            }));
+            do {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
+                }
+            } while (!finished.get());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            scenarioMap.onActivity(a -> assertEquals(true,a.getHasFoundMap()));
+
+        }
+
+    }
+
 }

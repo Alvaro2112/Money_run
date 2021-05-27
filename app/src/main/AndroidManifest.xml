@@ -45,7 +45,6 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.map.OfflineMapActivity" />
         <activity android:name=".ui.map.OfflineMapDownloaderActivity" />
         <activity
             android:name=".ui.authentication.LoginActivity"
