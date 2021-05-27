@@ -50,21 +50,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.006" />
 
-    <Button
-        android:id="@+id/new_question"
-        android:layout_width="105dp"
-        android:layout_height="35dp"
-        android:background="@drawable/layout_rounded"
-        android:text="@string/new_question_button_text"
-        android:textAlignment="center"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.405"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.008" />
 
     <TextView
         android:id="@+id/map_score_view"

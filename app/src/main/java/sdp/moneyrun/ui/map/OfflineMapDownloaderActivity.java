@@ -41,7 +41,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     private final float LAT_OFFSET = 0.1f;
     private final float LONG_OFFSET = 0.1f;
     private final int MAX_ZOOM = 15;
-    private final int MIN_ZOOM = 9;
+    private final int MIN_ZOOM = 7;
     private boolean isEndNotified = false;
     private boolean hasStartedDownload = false;
     private ProgressBar progressBar;
@@ -254,8 +254,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
                 if (offlineRegions.length > 1) {
                     // delete the last item in the offlineRegions list which will be yosemite offline map
                     for (int i = 0; i < offlineRegions.length - 1; ++i) {
-                        Toast.makeText(OfflineMapDownloaderActivity.this.getApplicationContext(), offlineRegions[i].getDefinition().getBounds().toString(), Toast.LENGTH_SHORT).show();
-
                         offlineRegions[i].delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                             @Override
                             public void onDelete() {

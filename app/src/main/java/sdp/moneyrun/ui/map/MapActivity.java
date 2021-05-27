@@ -89,7 +89,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private GameDatabaseProxy proxyG;
     private TextView currentScoreView;
     private Button exitButton;
-    private Button questionButton;
     private Button leaderboardButton;
     private LocalPlayer localPlayer;
     @Nullable
@@ -131,7 +130,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView.setText(default_score);
 
         addExitButton();
-        addQuestionButton();
         addLeaderboardButton();
 
         mapView.addOnDidFinishRenderingMapListener(fully -> {
@@ -189,9 +187,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
         };
         locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
-
-
-
     }
 
 
@@ -324,12 +319,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
     }
 
-    /**
-     * Add functionality to the question button so that we can see random questions popup
-     */
-    private void addQuestionButton() {
-        questionButton.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null));
-    }
 
     /**
      * @param mapboxMap the map where everything will be done
