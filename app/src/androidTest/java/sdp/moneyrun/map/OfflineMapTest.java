@@ -16,9 +16,11 @@ import org.junit.Test;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.map.OfflineMapActivity;
+import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,6 +34,15 @@ public class OfflineMapTest {
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapActivity.class);
         toStart.putExtra("user", currentUser);
         return toStart;
+    }
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<OfflineMapActivity> scenario = ActivityScenario.launch(OfflineMapActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
     }
 
     @Test

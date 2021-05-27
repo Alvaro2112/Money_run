@@ -315,8 +315,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private void addExitButton() {
         exitButton.setOnClickListener( v -> {
             if (!hasEnded) {
-                hasEnded = true;
-                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+                endGame();
             }
         }
         );
@@ -411,12 +410,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
-                    hasEnded = true;
-                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+                    endGame();
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
+    }
+
+
+    public void endGame(){
+        hasEnded = true;
+        Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
     }
 
 

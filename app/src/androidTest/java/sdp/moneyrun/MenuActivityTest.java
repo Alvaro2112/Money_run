@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -41,6 +43,7 @@ import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
+import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -55,6 +58,7 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -221,6 +225,16 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.join_game)).perform(ViewActions.click());
             onView(ViewMatchers.withId(R.id.join_popup)).check(matches(isDisplayed()));
             Intents.release();
+        }
+    }
+
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(MenuActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
         }
     }
 

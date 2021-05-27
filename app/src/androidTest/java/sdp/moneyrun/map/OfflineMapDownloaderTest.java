@@ -19,10 +19,12 @@ import org.junit.Test;
 import java.nio.charset.Charset;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -75,6 +77,16 @@ public class OfflineMapDownloaderTest {
             Intents.release();
         }
     }
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
 
     @Test
     public void downloadsOneMapTest() {

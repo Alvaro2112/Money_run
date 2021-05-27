@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
@@ -27,6 +28,7 @@ import sdp.moneyrun.user.User;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -65,6 +67,17 @@ public class MainLeaderboardInstrumentedTest {
 
                 assertTrue(a.getUserList().size() <= a.getMaxUserNumber() + 1);
             });
+        }
+    }
+
+
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(MainLeaderboardActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
         }
     }
 

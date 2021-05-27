@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.action.ViewActions;
@@ -35,6 +36,8 @@ import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.player.PlayerBuilderInstrumentedTest;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.authentication.LoginActivity;
+import sdp.moneyrun.ui.map.OfflineMapActivity;
+import sdp.moneyrun.ui.menu.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
@@ -49,8 +52,10 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
@@ -79,6 +84,25 @@ public class FriendListTest {
         }
     }
 
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(AddFriendListActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(FriendListActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
 
     private static List<User> getUsers(){
         ArrayList<User> users = new ArrayList<>();

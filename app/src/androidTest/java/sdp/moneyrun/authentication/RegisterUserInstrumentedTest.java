@@ -3,6 +3,7 @@ package sdp.moneyrun.authentication;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -20,18 +21,22 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.authentication.RegisterUserActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.player.UserProfileActivity;
 
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 import static sdp.moneyrun.authentication.SignUpActivityTest.withError;
 
 @RunWith(AndroidJUnit4.class)
@@ -76,6 +81,16 @@ public class RegisterUserInstrumentedTest {
             Espresso.onView(withId(R.id.submitProfileButton)).perform(ViewActions.click());
             Espresso.onView(withId(R.id.registerNameText)).check(matches(withError(expected)));
             Intents.release();
+        }
+    }
+
+
+    @Test
+    public void backButtonDoesNothing(){
+        try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
         }
     }
 
