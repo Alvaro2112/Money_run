@@ -49,7 +49,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Nullable
     private Game game;
     private String gameId;
-    private Player user;
+    private Player player;
     private User actualUser;
     private String locationMode;
     private DatabaseReference thisGame;
@@ -61,7 +61,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         addAdapter();
         proxyG = new GameDatabaseProxy();
         gameId = getIntent().getStringExtra(getResources().getString(R.string.join_game_lobby_intent_extra_id));
-        user = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
+        player = (Player) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_user));
         actualUser = (User) getIntent().getSerializableExtra(getResources().getString(R.string.join_game_lobby_intent_extra_type_user));
         locationMode = getIntent().getStringExtra("locationMode");
         this.thisGame = FirebaseDatabase.getInstance().getReference()
@@ -125,7 +125,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void listenToIsDeleted() {
-        if (!user.equals(game.getHost())) {
+        if (!player.equals(game.getHost())) {
             isDeletedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -134,7 +134,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                         intent.putExtra("user", actualUser);
                         startActivity(intent);
                         finish();
-                        game.removePlayer(user, false);
+                        game.removePlayer(player, false);
                     }
                 }
 
@@ -152,7 +152,7 @@ public class GameLobbyActivity extends AppCompatActivity {
      * leaves and deletes the game if the user is the host
      */
     private void createDeleteOrLeaveButton() {
-        if (user.equals(game.getHost())) {
+        if (player.equals(game.getHost())) {
             Button leaveButton = findViewById(R.id.leave_lobby_button);
             leaveButton.setText(R.string.delete_button_text);
             leaveButton.setOnClickListener(getDeleteClickListener());
@@ -171,10 +171,10 @@ public class GameLobbyActivity extends AppCompatActivity {
         name.setText(game.getName());
 
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
-            if (game.getHost().equals(user)) {
+            if (game.getHost().equals(player)) {
                 game.setStarted(true, false);
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                intent.putExtra("player", user);
+                intent.putExtra("player", player);
                 intent.putExtra("gameId", gameId);
                 intent.putExtra("host", true);
                 intent.putExtra("locationMode", locationMode);
@@ -207,14 +207,14 @@ public class GameLobbyActivity extends AppCompatActivity {
     }
 
     private void listenToStarted() {
-        if (!game.getHost().equals(user)) {
+        if (!game.getHost().equals(player)) {
             isStartedListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot != null && snapshot.child("started").getValue() != null) {
                         if ((boolean) snapshot.child("started").getValue()) {
                             Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                            intent.putExtra("player", user);
+                            intent.putExtra("player", player);
                             intent.putExtra("gameId", gameId);
                             intent.putExtra("host", false);
                             intent.putExtra("locationMode", locationMode);
@@ -264,7 +264,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @NonNull
     private View.OnClickListener getLeaveClickListener() {
         return v -> {
-            game.removePlayer(user, false);
+            game.removePlayer(player, false);
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
             intent.putExtra("user", actualUser);
             startActivity(intent);
@@ -281,7 +281,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         if (playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
 
-        if (user != null && game != null && !user.equals(game.getHost())) {
+        if (player != null && game != null && !player.equals(game.getHost())) {
             if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
