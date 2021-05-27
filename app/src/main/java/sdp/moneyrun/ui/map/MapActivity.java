@@ -227,7 +227,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView = findViewById(R.id.map_score_view);
         chronometer = findViewById(R.id.mapChronometer);
         exitButton = findViewById(R.id.close_map);
-        questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
     }
 
