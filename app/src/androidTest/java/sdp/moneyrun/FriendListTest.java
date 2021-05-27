@@ -117,17 +117,17 @@ public class FriendListTest {
         Random random = new Random();
         randomString = Integer.toString(random.nextInt(100000000));
 
-        User currentUser = new User("hM667", "CURRENT_USER" + randomString, "Epfl", 0, 0, 0);
+        User currentUser = new User("hM667", "CURRENT_USER" + randomString, 0, 0, 0);
         ArrayList<String> friendIdList = new ArrayList<>();
         friendIdList.add("hM668");
         friendIdList.add("hM669");
         currentUser.setFriendIdList(friendIdList);
 
-        User friend1 = new User("hM668", "Paul" + randomString, "Lausanne", 0, 0, 0);
-        User friend2 = new User("hM669", "Jacques" + randomString, "Lucens", 0, 0, 0);
-        User user3 = new User("hM670", "Patricia" + randomString, "Paris", 0, 0, 0);
-        User user4 = new User("hM671", "Marc" + randomString, "Berne", 0, 0, 0);
-        User user5 = new User("hM672", "Marceline" + randomString, "Vers-chez-les-Blanc", 0, 0, 0);
+        User friend1 = new User("hM668", "Paul" + randomString, 0, 0, 0);
+        User friend2 = new User("hM669", "Jacques" + randomString, 0, 0, 0);
+        User user3 = new User("hM670", "Patricia" + randomString, 0, 0, 0);
+        User user4 = new User("hM671", "Marc" + randomString, 0, 0, 0);
+        User user5 = new User("hM672", "Marceline" + randomString, 0, 0, 0);
 
         users.add(currentUser);
         users.add(friend1);

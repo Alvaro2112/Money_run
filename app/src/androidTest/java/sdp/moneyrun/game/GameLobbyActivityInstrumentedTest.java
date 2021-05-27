@@ -73,7 +73,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
     @NonNull
     private Intent getStartIntent() {
-        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         Player currentUser = new Player("78646", "CURRENT_USER", 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         toStart.putExtra("currentUser", currentUser);
@@ -193,7 +193,7 @@ public class    GameLobbyActivityInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
-        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         intent.putExtra("UserTypeCurrentUser", actualUser);
 
 
@@ -234,7 +234,7 @@ public class    GameLobbyActivityInstrumentedTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         intent.putExtra("currentUser", host);
         intent.putExtra("host", true);
-        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         intent.putExtra("UserTypeCurrentUser", actualUser);
         intent.putExtra("locationMode", (String)null);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
@@ -477,7 +477,7 @@ public class    GameLobbyActivityInstrumentedTest {
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
-        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);
@@ -569,7 +569,7 @@ public class    GameLobbyActivityInstrumentedTest {
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
         Player host = new Player("12634", "Bob", 0);
         toStart.putExtra("currentUser", host);
-        User actualUser = new User("32", "usersAreUnnecessary", "likeReallyUnnecessary", 0, 0, 0);
+        User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         toStart.putExtra("UserTypeCurrentUser", actualUser);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);

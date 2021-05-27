@@ -18,10 +18,8 @@ import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {
     public TextView playerName;
-    public TextView playerAddress;
     public TextView playerDiedGames;
     public TextView playerPlayedGames;
-    public TextView playerIsEmptyText;
     public Button goBackToMain;
     private final String TAG = UserProfileActivity.class.getSimpleName();
 
@@ -30,10 +28,8 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         playerName = findViewById(R.id.playerName);
-        playerAddress = findViewById(R.id.playerAddress);
         playerDiedGames = findViewById(R.id.playerDiedGames);
         playerPlayedGames = findViewById(R.id.playerPlayedGames);
-        playerIsEmptyText = findViewById(R.id.playerEmptyMessage);
         goBackToMain = findViewById(R.id.goBackToMainMenu);
 
         Intent playerIntent = getIntent();
@@ -69,13 +65,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void setDisplayedTexts(@Nullable User user) {
         if (user == null) {
-            playerIsEmptyText.setAllCaps(true);
-            playerIsEmptyText.setText(R.string.fillup_player_warning);
+            playerName.setText("");
+            playerDiedGames.setText("");
+            playerPlayedGames.setText(R.string.profile_never_created);
         } else {
-            playerName.setText(String.format("User name : %s", user.getName()));
-            playerAddress.setText(String.format("User address : %s", user.getAddress()));
-            playerDiedGames.setText(String.format(Locale.getDefault(), "User has died %d many times", user.getNumberOfDiedGames()));
-            playerPlayedGames.setText(String.format(Locale.getDefault(), "User has played %d many games", user.getNumberOfPlayedGames()));
+            playerName.setAllCaps(true);
+            playerName.setText(user.getName());
+            playerDiedGames.setText(String.format(Locale.getDefault(), "Times you died in a game \n %d", user.getNumberOfDiedGames()));
+            playerPlayedGames.setText(String.format(Locale.getDefault(), "Games played \n %d", user.getNumberOfPlayedGames()));
         }
     }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_backgroud_balck_white_sign_up"
+    android:background="@drawable/signup_background"
     tools:context=".ui.authentication.SignUpActivity">
 
     <EditText

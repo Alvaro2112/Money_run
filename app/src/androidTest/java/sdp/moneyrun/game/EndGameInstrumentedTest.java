@@ -61,10 +61,9 @@ public class EndGameInstrumentedTest {
 
     public static User getUser() {
         String name = "John Doe";
-        String address = "Someeewhere";
         String id = "1234567891";
 
-        User user = new User(id, name, address, 0, 0, 0);
+        User user = new User(id, name, 0, 0, 0);
         return user;
     }
 
@@ -208,7 +207,6 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
-            Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
         }

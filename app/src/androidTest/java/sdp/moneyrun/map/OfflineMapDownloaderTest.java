@@ -33,7 +33,7 @@ public class OfflineMapDownloaderTest {
 
     @NonNull
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
         toStart.putExtra("user", currentUser);

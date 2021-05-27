@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class TestUser {
     @NonNull
     final
-    User user = new User("1", "Bob", "New York", 0, 0, 0);
+    User user = new User("1", "Bob", 0, 0, 0);
 
     @Test
     public void InstanceUserWorks() {
@@ -34,10 +34,6 @@ public class TestUser {
         assertEquals(user.getName(), "Bob");
     }
 
-    @Test
-    public void testAddressSetup() {
-        assertEquals("New York", user.getAddress());
-    }
 
     @Test
     public void testNumberOfDiedGames() {
@@ -59,9 +55,9 @@ public class TestUser {
         int nbrOfPlayedGames = 0;
         String address = "Foooooooo";
         String name = "BaaaRRfF";
-        User user = new User(userId, name, address, nbrOfDiedGames, nbrOfPlayedGames, 0);
+        User user = new User(userId, name, nbrOfDiedGames, nbrOfPlayedGames, 0);
         assertEquals(user.hashCode(),
-                Objects.hash(userId, name, address, nbrOfPlayedGames, nbrOfDiedGames));
+                Objects.hash(userId, name, nbrOfPlayedGames, nbrOfDiedGames));
     }
 
     @Test
@@ -69,35 +65,9 @@ public class TestUser {
         String userId = "123";
         String address = "Foooooooo";
         String name = "BaaaRRfF";
-        User user1 = new User(userId, name, address, 0, 0, 0);
+        User user1 = new User(userId, name, 0, 0, 0);
 
         assert (!user1.equals(null));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void userThrowsExceptionOnNullAddress() {
-        Random r = new Random();
-        int userId = r.nextInt();
-        if (userId == 0) userId++;
-        String stringId = Integer.toString(userId);
-        String address = null;
-        String name = "Rodric";
-        int played = r.nextInt();
-        int died = r.nextInt();
-        User p = new User(stringId, name, address, died, played, 0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void userThrowsExceptionOnEmptyAddress() {
-        Random r = new Random();
-        int userId = r.nextInt();
-        if (userId == 0) userId++;
-        String strId = Integer.toString(userId);
-        String address = "";
-        String name = "Rodric";
-        int played = r.nextInt();
-        int died = r.nextInt();
-        User p = new User(strId, name, address, died, played, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -110,7 +80,7 @@ public class TestUser {
         String name = null;
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(strId, name, address, died, played, 0);
+        User p = new User(strId, name, died, played, 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -123,7 +93,7 @@ public class TestUser {
         String name = "";
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(strId, name, address, died, played, 0);
+        User p = new User(strId, name, died, played, 0);
     }
 
 
@@ -136,12 +106,12 @@ public class TestUser {
         String name = "Rodric";
         int played = r.nextInt();
         int died = r.nextInt();
-        User p = new User(userId, name, address, died, played, 0);
+        User p = new User(userId, name, died, played, 0);
     }
 
     @Test
     public void setNumberDiedGamesUpdatesAttributeCorrectly() {
-        User p = new User("123", "STUFF", "OTHER stuff", 0, 0, 0);
+        User p = new User("123", "OTHER stuff", 0, 0, 0);
         int died = 43;
         p.setNumberOfDiedGames(died);
         assertEquals(died, p.getNumberOfDiedGames());
@@ -149,24 +119,15 @@ public class TestUser {
 
     @Test
     public void setNumberPlayedGamesUpdatesAttributeCorrectly() {
-        User p = new User("123", "STUFF", "OTHER stuff", 0, 0, 0);
+        User p = new User("123", "OTHER stuff", 0, 0, 0);
         int played = 43;
         p.setNumberOfPlayedGames(played);
         assertEquals(played, p.getNumberOfPlayedGames());
     }
 
     @Test
-    public void setAddressCorrectlyUpdatesAddress() {
-        User p = new User("123", "STUFF", "OTHER stuff", 0, 0, 0);
-        String address = "Foobar";
-        p.setAddress(address);
-        assertEquals(address, p.getAddress());
-
-    }
-
-    @Test
     public void setNameCorrectlyUpdatesName() {
-        User p = new User("123", "STUFF", "OTHER stuff", 0, 0, 0);
+        User p = new User("123", "OTHER stuff", 0, 0, 0);
         String address = "Foobar";
         p.setName(address);
         assertEquals(address, p.getName());
@@ -175,7 +136,7 @@ public class TestUser {
 
     @Test
     public void setScoreCorrectlyUpdatesScore() {
-        User p = new User("123", "STUFF", "OTHER stuff", 0, 0, 0);
+        User p = new User("123", "OTHER stuff", 0, 0, 0);
         int score = 8;
         p.setMaxScoreInGame(score);
         assertEquals(score, p.getMaxScoreInGame());
@@ -183,7 +144,7 @@ public class TestUser {
 
     @Test
     public void setPlayerListWorks() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
         List<String> friendIdList = new ArrayList<>();
         friendIdList.add("123456");
 
@@ -194,14 +155,14 @@ public class TestUser {
 
     @Test(expected = IllegalArgumentException.class)
     public void setPlayerFailsWithNullList() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         user.setFriendIdList(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void setPlayerFailsWithNullFriend() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         List<String> friendIdList = new ArrayList<>();
         friendIdList.add(null);
@@ -211,7 +172,7 @@ public class TestUser {
 
     @Test
     public void addFriendWorks() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         List<String> friendIdList = new ArrayList<>();
         friendIdList.add("jgf978g93");
@@ -223,14 +184,14 @@ public class TestUser {
 
     @Test(expected = IllegalArgumentException.class)
     public void addNullFriendFails() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         user.addFriendId(null);
     }
 
     @Test
     public void removeFriendWorks() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         List<String> friendIdList = new ArrayList<>();
         friendIdList.add("7834g4tg78t43");
@@ -245,21 +206,21 @@ public class TestUser {
 
     @Test(expected = IllegalArgumentException.class)
     public void removeNullFriendFails() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
 
         user.removeFriendId(null);
     }
 
     @Test()
     public void setIdWorks() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
         user.setUserId("12");
         assertEquals("12",(user.getUserId()));
     }
 
     @Test(expected = NullPointerException.class)
     public void setIdThrowsExceptionOnNullID() {
-        User user = new User("122dfs3", "Jean", "OTHER stuff", 0, 0, 0);
+        User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
         user.setUserId(null);
     }
 

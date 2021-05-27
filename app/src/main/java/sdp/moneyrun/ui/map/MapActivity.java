@@ -151,9 +151,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     protected void onStop(){
         super.onStop();
         DatabaseProxy.removeOfflineListener();
-
-
-
     }
 
     public void initLocationManager(String locationMode) {

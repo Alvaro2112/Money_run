@@ -48,7 +48,7 @@ public class UserProfileInstrumentedTest {
 
     @NonNull
     private Intent getStartIntent() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), UserProfileActivity.class);
         toStart.putExtra("user", currentUser);
@@ -67,7 +67,7 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void checkButtonOpenRightActivities() {
-        User currentUser = new User("999", "CURRENT_USER", "Epfl"
+        User currentUser = new User("999", "CURRENT_USER"
                 , 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
         toStart.putExtra("user", currentUser);
@@ -86,29 +86,23 @@ public class UserProfileInstrumentedTest {
 
     @Test
     public void checkProfileInfoDisplayedWhenPlayerExists() {
-        //TODO: find a way to put info into result array in UserProfileActivity
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
-
             String name = "John";
-            String address = "New York";
             int diedN = 0;
             int playedN = 5;
             User user = new User("12345");
             user.setName(name);
-            user.setAddress(address);
             user.setNumberOfDiedGames(diedN);
             user.setNumberOfPlayedGames(playedN);
             scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("User has died 0 many times")));
+                    .check(matches(withText("Times you died in a game \n 0")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("User has played 5 many games")));
-            Espresso.onView(withId(R.id.playerAddress))
-                    .check(matches(withText("User address : New York")));
+                    .check(matches(withText("Games played \n 5")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText("User name : John")));
+                    .check(matches(withText(name.toUpperCase())));
             Intents.release();
         }
     }
@@ -118,9 +112,9 @@ public class UserProfileInstrumentedTest {
 
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
             Intents.init();
-            Espresso.onView(withId(R.id.playerEmptyMessage))
+            Espresso.onView(withId(R.id.playerPlayedGames))
                     .perform(click())
-                    .check(matches(withText("PLAYER IS EMPTY GO BACK TO MAIN MANY TO FILL UP THE INFO FOR THE PLAYER")));
+                    .check(matches(withText("You have no profile, logout then back in to create one")));
             Intents.release();
         }
     }
