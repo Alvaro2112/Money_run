@@ -30,10 +30,9 @@ public class LeaderboardActivity extends AppCompatActivity {
     //// for more explanation go to https://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#attaching-the-adapter-to-a-listview
 
     private final List<Player> playerList = new ArrayList<>();
+    private final String TAG = LeaderboardActivity.class.getSimpleName();
     User userFromEnd;
     private LeaderboardListAdapter ldbAdapter;
-
-    private final String TAG = LeaderboardActivity.class.getSimpleName();
     @Nullable
     private Player user;
 
@@ -59,13 +58,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }

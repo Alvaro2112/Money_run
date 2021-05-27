@@ -24,7 +24,7 @@ import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.menu.MainLeaderboardListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"CanBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
     private final int NUM_PLAYERS_LEADERBOARD = 10;
@@ -35,6 +35,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
     private Button backToMenu;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         backToMenu = findViewById(R.id.back_from_main_leaderboard_button);
 
         backToMenu.setOnClickListener(v -> {
-                Intent menuIntent = new Intent(MainLeaderboardActivity.this, MenuActivity.class);
-                menuIntent.putExtra("user", user);
-                startActivity(menuIntent);
-                finish();
+            Intent menuIntent = new Intent(MainLeaderboardActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
         });
 
 
@@ -62,13 +63,14 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }

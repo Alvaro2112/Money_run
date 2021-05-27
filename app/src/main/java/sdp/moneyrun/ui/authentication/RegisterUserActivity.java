@@ -19,11 +19,12 @@ import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class RegisterUserActivity extends AppCompatActivity {
+    private final String TAG = RegisterUserActivity.class.getSimpleName();
     private Button submitButton;
     private EditText nameText;
     private UserDatabaseProxy pdb;
     private String nameResult;
-    private final String TAG = RegisterUserActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +46,14 @@ public class RegisterUserActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }

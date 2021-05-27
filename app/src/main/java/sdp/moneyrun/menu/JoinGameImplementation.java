@@ -46,8 +46,8 @@ public class JoinGameImplementation extends MenuImplementation {
     private final int layoutId;
     @Nullable
     private final User currentUser;
-    private int buttonId;
     private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    private int buttonId;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,

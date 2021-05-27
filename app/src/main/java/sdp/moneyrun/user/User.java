@@ -43,10 +43,10 @@ public class User implements Serializable {
      * Constructor, returns instance of user
      *
      * @param userId              the unique id that identifies a user
-     * @param name the name of the user
-     * @param numberOfDiedGames the number of games a user lost
+     * @param name                the name of the user
+     * @param numberOfDiedGames   the number of games a user lost
      * @param numberOfPlayedGames the number of games a user played
-     * @param maxScoreInGame  the highest score this user achieved in any game
+     * @param maxScoreInGame      the highest score this user achieved in any game
      * @throws IllegalArgumentException on empty or null name and on user = 0
      */
     public User(@Nullable String userId, @Nullable String name, int numberOfDiedGames,
@@ -293,7 +293,7 @@ public class User implements Serializable {
     /**
      * Updates user values in the firebase database
      *
-     * @param dbChange
+     * @param dbChange Whether we want to update tje dataBase
      */
     private void dbUpdate(boolean dbChange) {
         if (dbChange) {

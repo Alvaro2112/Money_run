@@ -22,16 +22,17 @@ import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal", "FieldCanBeLocal"})
 public class FriendListActivity extends AppCompatActivity {
 
+    private final String TAG = FriendListActivity.class.getSimpleName();
+    @Nullable
     private AndroidLocationService locationService;
-
     @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
+    @Nullable
     private FriendListListAdapter ldbAdapter;
     private User user;
-    private final String TAG = FriendListActivity.class.getSimpleName();
     private Button goBackToMenu;
 
     @Override
@@ -68,8 +69,6 @@ public class FriendListActivity extends AppCompatActivity {
         DatabaseProxy.addOfflineListener(this, TAG);
 
 
-
-
     }
 
     @Override
@@ -77,13 +76,14 @@ public class FriendListActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
@@ -146,6 +146,7 @@ public class FriendListActivity extends AppCompatActivity {
     /**
      * @return the location service.
      */
+    @Nullable
     public AndroidLocationService getLocationService() {
         return locationService;
     }

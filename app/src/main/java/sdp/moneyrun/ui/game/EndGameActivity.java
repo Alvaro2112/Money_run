@@ -30,13 +30,12 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings("FieldCanBeLocal")
 public class EndGameActivity extends AppCompatActivity {
 
+    private final String TAG = EndGameActivity.class.getSimpleName();
     private int score;
     private int numberOfCollectedCoins;
     private TextView endText;
     private String playerId;
     private Button resultButton;
-
-    private final String TAG = EndGameActivity.class.getSimpleName();
     private boolean hasDied;
 
     @Override
@@ -68,13 +67,14 @@ public class EndGameActivity extends AppCompatActivity {
         super.onPause();
         DatabaseProxy.removeOfflineListener();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         DatabaseProxy.removeOfflineListener();
     }
