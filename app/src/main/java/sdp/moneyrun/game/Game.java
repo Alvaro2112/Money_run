@@ -32,6 +32,8 @@ public class Game {
     private final String DATABASE_IS_DELETED = "isDeleted";
     private final String DATABASE_IS_VISIBLE = "isVisible";
     private final String DATABASE_STARTED = "started";
+    private final String DATABASE_ENDED = "ended";
+    private final String DATABASE_START_TIME = "startTime";
     //Attributes
     @NonNull
     private final GameDbData gameDbData;
@@ -44,6 +46,8 @@ public class Game {
     private boolean hasBeenAdded;
 
     private boolean started;
+    private boolean ended;
+    private long start_time = 0;
 
     /**
      * This constructor is used to create a game that has never been added to the database.
@@ -86,6 +90,7 @@ public class Game {
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
+        start_time = System.currentTimeMillis()/1000;
     }
 
     public Game(@Nullable String name,
@@ -133,7 +138,8 @@ public class Game {
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = riddles;
         started = false;
-
+        ended = false;
+        start_time = System.currentTimeMillis()/1000;
     }
 
     /**
@@ -175,6 +181,8 @@ public class Game {
 
         this.hasBeenAdded = false;
         started = false;
+        ended = false;
+        start_time = System.currentTimeMillis()/1000;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
@@ -224,9 +232,10 @@ public class Game {
 
         this.hasBeenAdded = false;
         started = false;
+        ended = false;
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
-
+        start_time = System.currentTimeMillis()/1000;
     }
 
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull List<Player> players, @NonNull Activity currentActivity, boolean hasDied) {
@@ -281,21 +290,50 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
+    public long getStartTime(){ return gameDbData.getStartTime();}
+
+    public void setStartTime(long start_time, boolean forceLocal){
+        if (!forceLocal) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_START_TIME)
+                    .setValue(start_time);
+        }
+        gameDbData.setStartTime(start_time);
+        this.start_time = start_time;
+    }
+
     public boolean getStarted() {
         return gameDbData.getStarted();
     }
 
     public void setStarted(boolean started, boolean forceLocal) {
+        setGameStartAndEnd(started,forceLocal,DATABASE_STARTED);
+        gameDbData.setStarted(started);
+        this.started = started;
+
+    }
+
+    public boolean getEnded() {
+        return gameDbData.getEnded();
+    }
+
+    public void setEnded(boolean ended, boolean forceLocal) {
+        setGameStartAndEnd(ended,forceLocal,DATABASE_ENDED);
+        gameDbData.setEnded(ended);
+        this.ended = ended;
+
+    }
+
+    private void setGameStartAndEnd(boolean value,boolean forceLocal,String part){
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
                     .child(id)
-                    .child(DATABASE_STARTED)
-                    .setValue(started);
+                    .child(part)
+                    .setValue(value);
         }
-        gameDbData.setStarted(started);
-        this.started = started;
-
     }
 
     @Nullable

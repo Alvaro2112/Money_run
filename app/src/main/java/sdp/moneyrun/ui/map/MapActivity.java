@@ -1,5 +1,6 @@
 package sdp.moneyrun.ui.map;
 
+import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -106,6 +107,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private float circleRadius;
     private double shrinkingFactor = 0.99;
     private ArrayList<Coin> seenCoins;
+    private  ValueEventListener isEndedListener;
     private String locationMode;
     private boolean isAnswering;
     private boolean hasFoundMap;
@@ -264,12 +266,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-
-                initCircle();
+                initCircleAndSetEndListener();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
         });
+    }
+
+    private void initCircleAndSetEndListener(){
+        initCircle();
+        if(!host)
+            listenEnded();
     }
 
     /**
@@ -408,10 +415,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     private void initChronometer() {
 
-        chronometer.start();
-        chronometerCounter = 0;
-        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
-        shrinkingFactor = (circleRadius) / (2 * game_time);
+        setupChronometer();
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
@@ -419,11 +423,30 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
+                    if(host)
+                        game.setEnded(true,false);
                     endGame();
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
+    }
+
+    /**
+     * Helper method to set the chronometer functionality
+     */
+    private void setupChronometer(){
+        chronometer.start();
+        chronometerCounter = 0;
+        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
+        shrinkingFactor = (circleRadius) / (2 * game_time);
+        long current = System.currentTimeMillis() / 1000;
+        if (host) {
+            game.setStartTime(current, false);
+        }else {
+            long start = game.getStartTime();
+            chronometerCounter = (int) (current-start+2);
+        }
     }
 
 
@@ -727,6 +750,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
     }
+
+    /**
+     *  Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing
+     */
+    public void listenEnded(){
+                isEndedListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot!= null && snapshot.child("ended").getValue() != null&&(boolean) snapshot.child("ended").getValue()) {
+                                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, error.getMessage());
+                    }
+                };
+                proxyG.addGameListener(game, isEndedListener);
+    }
+
+
 
     @Override
     public void onBackPressed() {

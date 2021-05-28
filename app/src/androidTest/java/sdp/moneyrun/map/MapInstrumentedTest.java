@@ -1288,6 +1288,7 @@ public class MapInstrumentedTest {
                 Intents.release();
             }
         }
+
     @Test
     public void usesDownloadedMap(){
         User currentUser = new User("999", "CURRENT_USER", 0, 0, 0);
@@ -1325,5 +1326,4 @@ public class MapInstrumentedTest {
         }
 
     }
-
 }
