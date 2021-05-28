@@ -7,10 +7,10 @@
     android:background="@drawable/layout_rounded"
     >
 
-    <TextView
+    <Button
         android:id="@+id/txtclose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="61dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"

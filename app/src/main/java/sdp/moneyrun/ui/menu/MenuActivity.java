@@ -249,9 +249,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void showPopup() {
-        TextView txtclose;
+        Button txtclose;
         helpDialog.setContentView(R.layout.help_pop_up);
-        txtclose =(TextView) helpDialog.findViewById(R.id.txtclose);
+        txtclose =(Button) helpDialog.findViewById(R.id.txtclose);
         txtclose.setOnClickListener(v1 -> helpDialog.dismiss());
         helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.show();
