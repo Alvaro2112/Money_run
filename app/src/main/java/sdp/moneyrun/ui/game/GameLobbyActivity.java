@@ -114,7 +114,6 @@ public class GameLobbyActivity extends AppCompatActivity {
 
         proxyG.getGameDataSnapshot(gameId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                System.out.println(gameId);
                 this.game = proxyG.getGameFromTaskSnapshot(task);
                 setAllFieldsAccordingToGame();
                 listenToIsDeleted();
