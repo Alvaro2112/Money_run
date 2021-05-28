@@ -3,7 +3,6 @@ package sdp.moneyrun;
 import android.content.Intent;
 import android.location.Location;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -33,10 +32,7 @@ import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.FriendListListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
-import sdp.moneyrun.player.PlayerBuilderInstrumentedTest;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.authentication.LoginActivity;
-import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.menu.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -49,7 +45,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;

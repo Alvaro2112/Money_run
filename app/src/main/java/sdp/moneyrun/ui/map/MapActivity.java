@@ -18,6 +18,7 @@ import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,10 +32,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.offline.OfflineManager;
+import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
@@ -86,7 +90,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private GameDatabaseProxy proxyG;
     private TextView currentScoreView;
     private Button exitButton;
-    private Button questionButton;
     private Button leaderboardButton;
     private LocalPlayer localPlayer;
     @Nullable
@@ -106,6 +109,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private ArrayList<Coin> seenCoins;
     private  ValueEventListener isEndedListener;
     private String locationMode;
+    private boolean isAnswering;
+    private boolean hasFoundMap;
+    private  OfflineManager offlineManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +131,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView.setText(default_score);
 
         addExitButton();
-        addQuestionButton();
         addLeaderboardButton();
 
         mapView.addOnDidFinishRenderingMapListener(fully -> {
@@ -214,6 +219,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         proxyG = new GameDatabaseProxy();
         localPlayer = new LocalPlayer();
         hasEnded = false;
+        isAnswering = false;
+        hasFoundMap = false;
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -228,7 +235,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView = findViewById(R.id.map_score_view);
         chronometer = findViewById(R.id.mapChronometer);
         exitButton = findViewById(R.id.close_map);
-        questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
     }
 
@@ -334,9 +340,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * Add functionality to the question button so that we can see random questions popup
      */
-    private void addQuestionButton() {
-        questionButton.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null));
-    }
 
     /**
      * @param mapboxMap the map where everything will be done
@@ -350,6 +353,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         callback = new LocationCheckObjectivesCallback(this, locationMode == null);
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+            offlineManager = OfflineManager.getInstance(MapActivity.this);
+            getDownloadedRegion();
 
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
@@ -393,6 +398,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public Location getGameCenter() {
         return game_center;
     }
+    public boolean getHasFoundMap() {return hasFoundMap; }
 
 
     @Nullable
@@ -670,13 +676,15 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null && !seenCoins.contains(coin)) {
+        if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
+            isAnswering = true;
             seenCoins.add(coin);
             try {
                 onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
             } catch (WindowManager.BadTokenException e) {
                 seenCoins.remove(coin);
             }
+            isAnswering = false;
         }
 
     }
@@ -693,6 +701,36 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
+    private void getDownloadedRegion() {
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+
+            @Override
+            public void onList(@Nullable OfflineRegion[] offlineRegions) {
+                if (offlineRegions == null || offlineRegions.length == 0) {
+                    hasFoundMap = false;
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
+
+                hasFoundMap = true;
+                // Create new camera position
+                int regionSelected = 0;
+                double regionZoom = (offlineRegions[regionSelected].getDefinition()).getMinZoom();
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .zoom(regionZoom)
+                        .build();
+
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(MapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public CircleManager getCircleManager() {
         return circleManager;

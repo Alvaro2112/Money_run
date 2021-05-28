@@ -1,5 +1,20 @@
 package sdp.moneyrun.map;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import android.content.Intent;
 import android.location.Location;
 
@@ -28,7 +43,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,23 +52,9 @@ import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
+import sdp.moneyrun.user.User;
 
 public class MapInstrumentedTest {
 
@@ -401,32 +401,6 @@ public class MapInstrumentedTest {
         }
     }
 
-    @Test
-    public void questionButtonWorks() {
-
-        Intent intent = createIntentAndPutInDB();
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            final AtomicBoolean finished = new AtomicBoolean(false);
-
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> finished.set(true)));
-            do {
-                try {
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    assertEquals(-1, 2);
-                }
-            } while (!finished.get());
-
-            onView(withId(R.id.new_question)).perform(ViewActions.click());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            onView(withId(R.id.ask_question_popup)).check(matches(isDisplayed()));
-        }
-    }
 
     @Test
     public void questionWorksOnCorrectAnswer() {
@@ -1316,53 +1290,24 @@ public class MapInstrumentedTest {
         }
 
     @Test
-    public void GameEndsForNonHostsAfterItEndsForHost() {
-        Player currentUser = new Player("3212", "CURRENT_USER", 0);
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        toStart.putExtra("currentUser", currentUser);
+    public void usesDownloadedMap(){
+        User currentUser = new User("999", "CURRENT_USER", 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
+        toStart.putExtra("user", currentUser);
 
-        String name = "Game";
-        Player host = new Player("98934", "Bob", 0);
-        int maxPlayerCount = 2;
-        List<Riddle> riddles = new ArrayList<>();
-        riddles.add(new Riddle("yes?", "blue", "green", "yellow", "brown", "a"));
-        List<Coin> coins = new ArrayList<>();
-        Location location = new Location("LocationManager#GPS_PROVIDER");
-        location.setLatitude(37.42);
-        location.setLongitude(-122.084);
-
-        int num_coins = 2;
-        double duration = 4;
-        double radius = 20;
-
-        Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MapActivity.class);
-        intent.putExtra("player", host);
-        intent.putExtra("useDB", true);
-
-        GameDatabaseProxy gdp = new GameDatabaseProxy();
-
-        List<Player> players = game.getPlayers();
-        players.add(host);
-
-        String id = gdp.putGame(game);
-
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(toStart)) {
+            try {
+                Thread.sleep(30000);
+            } catch (Exception e) {
+                fail();
+            }
         }
-
-        intent.putExtra("currentGameId", id);
-
-        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-            Intents.init();
+        Intent mapIntent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenarioMap = ActivityScenario.launch(mapIntent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                if (fully) {
-                    finished.set(true);
-                }
+            scenarioMap.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                finished.set(true);
             }));
             do {
                 try {
@@ -1372,19 +1317,13 @@ public class MapInstrumentedTest {
                 }
             } while (!finished.get());
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-                game.setEnded(true,false);
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-               intended(hasComponent(EndGameActivity.class.getName()));
-            Intents.release();
+            scenarioMap.onActivity(a -> assertEquals(true,a.getHasFoundMap()));
+
         }
+
     }
-        
 }
