@@ -690,13 +690,6 @@ public class MenuActivityTest {
             onView(ViewMatchers.withId(R.id.info_image)).perform(ViewActions.click());
             onView(withText("How to play")).check(matches(isDisplayed()));
             Thread.sleep(2000);
-            onView(ViewMatchers.withId(R.id.txtclose)).perform(ViewActions.click());
-            Thread.sleep(2000);
-            try {
-                onView(withText("How to play")).check(matches(not(isDisplayed())));
-            }catch (NoMatchingViewException e){
-                return;
-            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

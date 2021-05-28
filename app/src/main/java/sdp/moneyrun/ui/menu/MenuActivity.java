@@ -255,7 +255,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         txtclose.setOnClickListener(v1 -> helpDialog.dismiss());
         helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.show();
-        
+
     }
 
     public void setGuestPlayerFields(boolean guest) {
