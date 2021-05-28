@@ -316,7 +316,7 @@ public final class GameDbData {
         return name.equals(gameDbData.name) && players.equals(gameDbData.players) &&
                 (maxPlayerCount == gameDbData.maxPlayerCount) &&
                 (startLocation.getLongitude() == gameDbData.startLocation.getLongitude()) &&
-                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude());
+                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude()); 
     }
 
     @Override
