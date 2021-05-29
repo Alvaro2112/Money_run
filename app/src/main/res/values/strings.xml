@@ -61,6 +61,9 @@
     <string name="database_game_start_location">startLocation</string>
 
     <!-- LOCATION -->
+    <!-- End Game -->
+    <string name="end_game_score_show">  You have gathered %1$d coins\nfor a total score of %2$d</string>
+    <string name="end_game_score_failed">Unfortunately the coin you collected have been lost</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

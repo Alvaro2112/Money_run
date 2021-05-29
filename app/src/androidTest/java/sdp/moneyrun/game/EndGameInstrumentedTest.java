@@ -27,8 +27,8 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -101,8 +101,9 @@ public class EndGameInstrumentedTest {
 
             Espresso.onView(ViewMatchers.withId(R.id.end_game_text)).check(matches(withText("Unfortunately the coin you collected have been lost")));
         } catch (Exception e) {
-            assertEquals(-1, 2);
             e.printStackTrace();
+            assertEquals(-1, 2);
+
         }
     }
 
@@ -121,14 +122,14 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             scenario.onActivity(a -> a.updateText(1, 1, true));
             StringBuilder textBuilder = new StringBuilder();
-            textBuilder = textBuilder.append("You have gathered").append(1).append("coins");
+            textBuilder = textBuilder.append("You have gathered ").append(1).append( " coins");
             textBuilder = textBuilder.append("\n");
-            textBuilder = textBuilder.append("For a total score of ").append(1);
+            textBuilder = textBuilder.append("for a total score of ").append(1);
             String text = textBuilder.toString();
             Espresso.onView(withId(R.id.end_game_text)).check(matches(withText(text)));
         } catch (Exception e) {
-            assertEquals(-1, 2);
             e.printStackTrace();
+            assertEquals(-1, 2);
         }
     }
 

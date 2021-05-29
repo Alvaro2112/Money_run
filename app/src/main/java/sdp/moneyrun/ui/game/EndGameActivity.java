@@ -109,16 +109,13 @@ public class EndGameActivity extends AppCompatActivity {
      *                  Else shows that it failed to get the score
      */
     public void updateText(int numCoins, int gameScore, boolean succeeded) {
-        StringBuilder textBuilder = new StringBuilder();
+        String text;
         if (succeeded) {
-            textBuilder = textBuilder.append("You have gathered").append(numCoins).append("coins");
-            textBuilder = textBuilder.append("\n");
-            textBuilder = textBuilder.append("For a total score of ").append(gameScore);
+             text = getString(R.string.end_game_score_show, numCoins, gameScore);
         } else {
-            textBuilder = textBuilder.append("Unfortunately the coin you collected have been lost");
+            text = getString(R.string.end_game_score_failed);
         }
-        String newText = textBuilder.toString();
-        endText.setText(newText);
+        endText.setText(text);
     }
 
     /**
