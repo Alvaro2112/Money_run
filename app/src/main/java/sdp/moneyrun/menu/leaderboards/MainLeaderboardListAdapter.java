@@ -12,11 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
-<<<<<<< HEAD:app/src/main/java/sdp/moneyrun/menu/leaderboards/MainLeaderboardListAdapter.java
 import sdp.moneyrun.menu.ListAdapterWithUser;
-=======
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
->>>>>>> c6f3d1be3e5bf19905b88609908775cdddfebbed:app/src/main/java/sdp/moneyrun/menu/MainLeaderboardListAdapter.java
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 
 public class MainLeaderboardListAdapter extends ListAdapterWithUser {
