@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +37,7 @@ public class EndGameActivity extends AppCompatActivity {
     private String playerId;
     private Button resultButton;
     private boolean hasDied;
+    private Button toMenuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class EndGameActivity extends AppCompatActivity {
             playerId = "";
             updateText(-1, -1, false);
         }
-        final ImageButton toMenu = findViewById(R.id.end_game_button_to_menu);
-        linkToMenuButton(toMenu);
+        toMenuButton = findViewById(R.id.end_game_button_to_menu);
+        linkToMenuButton(toMenuButton);
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);
 
@@ -86,7 +86,7 @@ public class EndGameActivity extends AppCompatActivity {
      *               Call this on the button to make start the Menu activity
      */
 
-    private void linkToMenuButton(@NonNull ImageButton toMenu) {
+    private void linkToMenuButton(@NonNull Button toMenu) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         toMenu.setOnClickListener(v -> pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
