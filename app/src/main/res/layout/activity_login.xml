@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:background="@drawable/theme_gradient">
 
     <EditText
         android:id="@+id/loginEmailAddress"
@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:autofillHints=""
-        android:background="@drawable/inputs_register_profile"
         android:drawableStart="@drawable/ic_baseline_person_register"
         android:drawablePadding="12dp"
         android:ems="10"
@@ -23,7 +22,7 @@
 
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
@@ -33,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="300dp"
         android:autofillHints=""
-        android:background="@drawable/inputs_register_profile"
         android:drawableStart="@drawable/ic_baseline_lock_sign_up"
         android:drawablePadding="12dp"
         android:ems="10"
