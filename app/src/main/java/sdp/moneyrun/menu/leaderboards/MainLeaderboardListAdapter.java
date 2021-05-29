@@ -12,7 +12,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
+<<<<<<< HEAD:app/src/main/java/sdp/moneyrun/menu/leaderboards/MainLeaderboardListAdapter.java
 import sdp.moneyrun.menu.ListAdapterWithUser;
+=======
+import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+>>>>>>> c6f3d1be3e5bf19905b88609908775cdddfebbed:app/src/main/java/sdp/moneyrun/menu/MainLeaderboardListAdapter.java
 import sdp.moneyrun.user.User;
 
 public class MainLeaderboardListAdapter extends ListAdapterWithUser {
@@ -34,15 +38,17 @@ public class MainLeaderboardListAdapter extends ListAdapterWithUser {
         TextView user_score = view.findViewById(R.id.main_player_score);
 
         String text_position;
-        if (position < rank.length) {
+        if(position < rank.length) {
             text_position = rank[position];
-        } else {
+        }else if(position >= MainLeaderboardActivity.NUM_PLAYERS_LEADERBOARD && user.equals(getCurrentUser())) {
+            text_position = " -";
+        }else{
             text_position = " " + (position + 1);
         }
 
         user_position.setText(text_position);
         user_name.setText(String.valueOf(user.getName()));
-        if (user.equals(getCurrentUser())) {
+        if(user.equals(getCurrentUser())) {
             user_name.setTextColor(COLOR_GOLD);
             user_name.setTypeface(user_name.getTypeface(), Typeface.BOLD);
         }
