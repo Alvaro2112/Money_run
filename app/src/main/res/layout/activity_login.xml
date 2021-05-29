@@ -86,7 +86,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="217dp"
         android:layout_height="48dp"
         android:fontFamily="monospace"

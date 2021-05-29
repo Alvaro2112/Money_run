@@ -116,7 +116,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 userList = new ArrayList<>(userToShow);
                 addUserList(userList);
                 // Always add yourself at the end
-                if(!userList.contains(user)){
+                if (!userList.contains(user)) {
                     addUser(user);
                 }
             }

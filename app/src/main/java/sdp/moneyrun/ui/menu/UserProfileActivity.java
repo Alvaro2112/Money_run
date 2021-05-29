@@ -66,11 +66,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
             String gamesLost = String.format(Locale.getDefault(), "Number of games lost\n\n%d", user.getNumberOfDiedGames());
             SpannableString gamesLostContent = new SpannableString(gamesLost);
-            gamesLostContent.setSpan(new UnderlineSpan(), 0, gamesLost.length()- Integer.toString(user.getNumberOfDiedGames()).length(), 0);
+            gamesLostContent.setSpan(new UnderlineSpan(), 0, gamesLost.length() - Integer.toString(user.getNumberOfDiedGames()).length(), 0);
 
             String gamesPlayed = String.format(Locale.getDefault(), "Number of games played\n\n%d", user.getNumberOfPlayedGames());
             SpannableString gamesPlayedContent = new SpannableString(gamesPlayed);
-            gamesPlayedContent.setSpan(new UnderlineSpan(), 0, gamesLost.length()- Integer.toString(user.getNumberOfPlayedGames()).length(), 0);
+            gamesPlayedContent.setSpan(new UnderlineSpan(), 0, gamesLost.length() - Integer.toString(user.getNumberOfPlayedGames()).length(), 0);
 
             playerDiedGames.setText(gamesLostContent);
             playerPlayedGames.setText(gamesPlayedContent);

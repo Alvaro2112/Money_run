@@ -19,8 +19,8 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.user.User;
 
 
@@ -100,7 +100,7 @@ public class EndGameActivity extends AppCompatActivity {
     public void updateText(int numCoins, int gameScore, boolean succeeded) {
         String text;
         if (succeeded) {
-             text = getString(R.string.end_game_score_show, numCoins, gameScore);
+            text = getString(R.string.end_game_score_show, numCoins, gameScore);
         } else {
             text = getString(R.string.end_game_score_failed);
         }

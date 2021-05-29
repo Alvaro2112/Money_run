@@ -20,8 +20,6 @@
     <string name="leaderboard_to_menu_button">Back to Menu</string>
 
     <string name="login_page_signup_button_text">Sign up</string>
-    <string name="login_page_welcome_text">Login with your email or sign up!</string>
-    <string name="login_page_keep_signed_in_text">Keep me signed in</string>
     <string name="go_back_to_main_menu">Go back to Main Menu</string>
     <string name="profile_never_created">You have no profile, logout then back in to create one</string>
     <string name="profile_creation_chose_name">Chose the username other players will see</string>
@@ -32,7 +30,6 @@
 
     <string name="join_game_message">Join</string>
     <string name="join_game_full_message">Full</string>
-    <string name="join_game_too_far_message">Too far</string>
     <string name="join_game_filter_message">Search game</string>
     <string name="join_game_filter_button">Filter</string>
     <string name="game_name_display">%1$s</string>
@@ -84,8 +81,6 @@
     <string name="tile_limit_exceeded">Tile limit exceeded download failed.</string>
 
     <string name="offline_map_name">offline map</string>
-    <string name="menu_to_offline_map_button">Offline game</string>
-    <string name="menu_to_map_downloader_button">Download map</string>
 
     <string name="user_location_permission_explanation">This app needs location permissions in order to work.</string>
     <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
@@ -107,14 +102,9 @@
     <string name="for_offline_mode_description">(For offline mode)</string>
     <string name="welcome_image_description">Welcome image when opening app</string>
     <string name="cross">x</string>
-    <string name="new_question_button_text">new_question</string>
     <string name="submit_button_text">Submit</string>
-    <string name="player_avatar_description">Avatar of a player</string>
     <string name="image_on_top_of_join_game_description">Image on top of join game</string>
     <string name="image_on_top_of_create_game_description">Image on top of create game</string>
-    <string name="name_prompt_text">Enter your Name</string>
-    <string name="favorite_color_prompt_text">Enter your favorite color</string>
-    <string name="favorite_animal_text">Enter your favorite animal</string>
     <string name="game_name_prompt_text">Game name</string>
     <string name="game_max_players_prompt_text">Max player count</string>
     <string name="submit_game_text">Submit</string>

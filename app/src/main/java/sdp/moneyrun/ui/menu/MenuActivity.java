@@ -62,6 +62,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                     map -> {
                     });
     private final String TAG = MenuActivity.class.getSimpleName();
+    @Nullable
+    public NewGameImplementation newGameImplementation;
     protected DrawerLayout mDrawerLayout;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -71,8 +73,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    public NewGameImplementation newGameImplementation;
-
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -117,8 +117,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
-
-
 
 
     public void runFunctionalities() {
@@ -193,7 +191,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.download_map: {
                 onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false);
-            break;
+                break;
 
             }
 

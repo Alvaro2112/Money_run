@@ -32,8 +32,8 @@ public class LocationCheckObjectivesCallback implements LocationEngineCallback<L
     }
 
     /**
-     *     If we use the GPS/Network location we only need to get the location from MapBox once at the start (We only need the getLastLocation to start)
-     *     and thus we will never update again using MapBox
+     * If we use the GPS/Network location we only need to get the location from MapBox once at the start (We only need the getLastLocation to start)
+     * and thus we will never update again using MapBox
      */
     public boolean hasToUpdate() {
         TrackedMap activity = activityWeakReference.get();

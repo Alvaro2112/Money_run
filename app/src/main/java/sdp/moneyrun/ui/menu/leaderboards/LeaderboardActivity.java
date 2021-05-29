@@ -10,10 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +18,6 @@ import java.util.Objects;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
 import sdp.moneyrun.menu.leaderboards.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.menu.MenuActivity;
