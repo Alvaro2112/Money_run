@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
@@ -32,22 +31,20 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.WeatherForecast;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;

@@ -1,4 +1,4 @@
-package sdp.moneyrun.map;
+package sdp.moneyrun.database.riddle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

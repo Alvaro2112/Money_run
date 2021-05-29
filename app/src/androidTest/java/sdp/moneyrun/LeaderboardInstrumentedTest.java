@@ -7,10 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,13 +22,7 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.authentication.RegisterUserActivity;
-import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.menu.FriendListActivity;
 import sdp.moneyrun.ui.menu.LeaderboardActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

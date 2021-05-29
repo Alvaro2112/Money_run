@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -40,6 +41,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main_leaderboard);
 
         user = (User) getIntent().getSerializableExtra("user");

@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.friendlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.menu.AddFriendListListAdapter;
+import sdp.moneyrun.menu.friendlist.AddFriendListListAdapter;
 import sdp.moneyrun.user.User;
 
 public class AddFriendListActivity extends AppCompatActivity {

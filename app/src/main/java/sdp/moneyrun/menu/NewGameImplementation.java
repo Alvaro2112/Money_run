@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.view.Gravity;
@@ -19,19 +18,18 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;

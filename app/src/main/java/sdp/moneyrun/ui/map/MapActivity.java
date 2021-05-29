@@ -1,6 +1,5 @@
 package sdp.moneyrun.ui.map;
 
-import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -55,14 +54,14 @@ import java.util.Objects;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -41,6 +42,7 @@ public class EndGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_end_game);
         endText = findViewById(R.id.end_game_text);
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);

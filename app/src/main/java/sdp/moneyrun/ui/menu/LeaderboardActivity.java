@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -40,6 +41,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_leaderboard);
         Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
