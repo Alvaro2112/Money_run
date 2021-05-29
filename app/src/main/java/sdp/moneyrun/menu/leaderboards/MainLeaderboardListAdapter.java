@@ -1,4 +1,4 @@
-package sdp.moneyrun.menu;
+package sdp.moneyrun.menu.leaderboards;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.menu.ListAdapterWithUser;
 import sdp.moneyrun.user.User;
 
 public class MainLeaderboardListAdapter extends ListAdapterWithUser {

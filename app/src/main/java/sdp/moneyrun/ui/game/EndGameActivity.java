@@ -19,7 +19,7 @@ import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 

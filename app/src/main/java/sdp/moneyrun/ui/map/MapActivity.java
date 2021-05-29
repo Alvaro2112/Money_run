@@ -628,7 +628,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         deleteCoinFromMap(coin);
-
+        System.out.println("REMOVE COIN");
         boolean check = checkIfLegalPosition(coin, circleRadius, game_center.getLatitude(), game_center.getLongitude());
         if (check)
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, true);
@@ -674,7 +674,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
-        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
+        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), 5*THRESHOLD_DISTANCE);
+        System.out.println("IS COIN?."+coin.toString());
         if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
             isAnswering = true;
             seenCoins.add(coin);
@@ -683,6 +684,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             } catch (WindowManager.BadTokenException e) {
                 seenCoins.remove(coin);
             }
+            System.out.println("PUTTING TO FALSE");
             isAnswering = false;
         }
 
@@ -700,6 +702,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
+
+
+    /**
+     * Check if there is a downloaded map and show a toast if there is one or not
+     */
     private void getDownloadedRegion() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
 

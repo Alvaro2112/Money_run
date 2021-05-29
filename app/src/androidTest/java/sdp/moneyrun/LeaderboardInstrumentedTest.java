@@ -22,18 +22,12 @@ import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class LeaderboardInstrumentedTest {
 

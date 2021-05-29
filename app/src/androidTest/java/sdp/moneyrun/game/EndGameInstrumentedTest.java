@@ -26,9 +26,8 @@ import java.util.concurrent.TimeUnit;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.authentication.SignUpActivity;
 import sdp.moneyrun.ui.game.EndGameActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 

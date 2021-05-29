@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.leaderboards;
 
 import android.content.Intent;
 import android.os.Build;
@@ -22,7 +22,8 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.menu.MainLeaderboardListAdapter;
+import sdp.moneyrun.menu.leaderboards.MainLeaderboardListAdapter;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})

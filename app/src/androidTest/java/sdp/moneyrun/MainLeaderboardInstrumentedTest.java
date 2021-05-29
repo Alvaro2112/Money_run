@@ -19,8 +19,8 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 

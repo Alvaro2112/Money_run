@@ -20,11 +20,11 @@
 
             />
         <activity
-            android:name=".ui.menu.LeaderboardActivity"
+            android:name=".ui.menu.leaderboards.LeaderboardActivity"
             android:theme="@style/NullTheme" />
 
 
-        <activity android:name=".ui.menu.MainLeaderboardActivity" />
+        <activity android:name=".ui.menu.leaderboards.MainLeaderboardActivity" />
         <activity android:name=".ui.menu.friendlist.FriendListActivity" />
         <activity android:name=".ui.menu.friendlist.AddFriendListActivity" />
 
@@ -51,7 +51,7 @@
             android:label="@string/title_activity_login"
             android:theme="@style/NullTheme" />
         <activity
-            android:name=".ui.player.UserProfileActivity"
+            android:name=".ui.menu.UserProfileActivity"
             android:theme="@style/NullTheme" />
         <activity
             android:name=".ui.authentication.RegisterUserActivity"

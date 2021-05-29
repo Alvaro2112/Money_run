@@ -42,7 +42,7 @@ import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 

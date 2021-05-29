@@ -12,7 +12,7 @@
         android:layout_margin="4dp"
         android:gravity="start"
         android:text="Medium Text"
-        android:textColor="#CCCCCC"
+        android:textColor="#3A3B3C"
         android:textSize="20sp" />
 
 
@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:text="Medium Text"
-        android:textColor="#CCCCCC"
+        android:textColor="#3A3B3C"
         android:textSize="20sp" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_margin="4dp"
         android:gravity="end"
         android:text="Medium Text"
-        android:textColor="#CCCCCC"
+        android:textColor="#3A3B3C"
         android:textSize="20sp" />
 
 </RelativeLayout>

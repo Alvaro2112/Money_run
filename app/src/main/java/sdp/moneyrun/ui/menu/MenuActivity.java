@@ -45,7 +45,7 @@ import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
