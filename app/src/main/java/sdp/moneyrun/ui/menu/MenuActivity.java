@@ -118,22 +118,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
 
     public void addDownloadButton() {
         Button download = findViewById(R.id.download_map);
@@ -178,6 +162,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
