@@ -17,6 +17,7 @@ import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,6 +105,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private double shrinkingFactor = 0.99;
     private ArrayList<Coin> seenCoins;
     private String locationMode;
+    private final int DISTANCE_BETWEEN_COINS = 2;
+    private final int COIN_PLACING_TRIES_FACTOR = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -620,10 +623,23 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  " + number);
         if (minRadius >= maxRadius)
             throw new IllegalArgumentException("Min radius cannot be bigger or equal than max Radius ");
-
-        for (int i = 0; i < number; i++) {
-            Location loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
-            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
+        int tries = 0;
+        int try_limit = COIN_PLACING_TRIES_FACTOR * number;
+        int addedCoins = 0;
+        for (int i = 0; i < number && tries <try_limit ; i++) {
+            Location loc = null;
+            do {
+                 loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
+                 System.out.println("i is " + i +" try is " + tries  + " loc is " + loc.getLatitude() + " and " + loc.getLatitude());
+                tries ++;
+            }while(minDistWithExistingCoins(loc) < DISTANCE_BETWEEN_COINS && tries < try_limit);
+            if(loc !=null &&minDistWithExistingCoins(loc) > DISTANCE_BETWEEN_COINS) {
+                addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
+                addedCoins++;
+            }
+        }
+        if(addedCoins<number){
+            Toast.makeText(this, "Only " + addedCoins +" could be added within the specified radius", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -675,5 +691,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
+    }
+
+    private double minDistWithExistingCoins(Location loc){
+        List<Coin> coins = localPlayer.getLocallyAvailableCoins();
+        if (coins == null) {
+            throw new IllegalStateException();
+        }
+        if(coins.isEmpty()){
+            return Double.MAX_VALUE;
+        }
+        double minDist = Double.MAX_VALUE;
+        int retained_index = -1;
+
+        for(int i = 0; i < coins.size(); i++){
+            Coin coin = coins.get(i);
+            double distance = distance(loc.getLatitude(), loc.getLongitude(), coin.getLatitude(), coin.getLongitude());
+            if (minDist > distance){
+                minDist = distance;
+                retained_index = i;
+            }
+        }
+        if (retained_index < 0) return -1.0;
+        else return minDist;
     }
 }
