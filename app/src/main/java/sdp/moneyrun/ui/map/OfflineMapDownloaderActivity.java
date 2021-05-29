@@ -56,7 +56,6 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
-
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView_downloader, R.layout.activity_offline_map_downloader);
         setContentView(R.layout.activity_offline_map_downloader);

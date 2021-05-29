@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.LobbyPlayerListAdapter;
 import sdp.moneyrun.player.Player;
@@ -273,8 +273,12 @@ public class GameLobbyActivity extends AppCompatActivity {
             if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
-            if (isStartedListener != null)
+            if (isStartedListener != null){
+                System.out.println("REMOVED THE PLAYER LISTENER");
+
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+                proxyG.removeGameListener(game,isStartedListener);
+            }
 
         } else {
             //otherwise it will also remove it from the DB when it is launched

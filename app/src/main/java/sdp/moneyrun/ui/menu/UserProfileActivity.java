@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.player;
+package sdp.moneyrun.ui.menu;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -16,7 +16,6 @@ import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {

@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
-import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.database.game.GameDbData;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
 

@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.game;
 
 import android.location.Location;
 

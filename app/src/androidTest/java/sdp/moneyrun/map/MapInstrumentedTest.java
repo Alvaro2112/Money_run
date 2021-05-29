@@ -47,7 +47,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;

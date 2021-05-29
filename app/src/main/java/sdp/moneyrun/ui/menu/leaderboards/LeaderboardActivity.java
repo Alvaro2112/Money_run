@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.leaderboards;
 
 import android.content.Intent;
 import android.os.Build;
@@ -17,13 +17,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.menu.LeaderboardListAdapter;
+import sdp.moneyrun.menu.leaderboards.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -40,6 +42,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_leaderboard);
         Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
