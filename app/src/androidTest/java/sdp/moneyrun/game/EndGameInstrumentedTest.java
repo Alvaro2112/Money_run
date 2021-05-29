@@ -191,9 +191,9 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("playerId", "1234567891");
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
-            textBuilder = textBuilder.append("You have gathered").append(2).append("coins");
+            textBuilder = textBuilder.append("You have gathered ").append(2).append( " coins");
             textBuilder = textBuilder.append("\n");
-            textBuilder = textBuilder.append("For a total score of ").append(3);
+            textBuilder = textBuilder.append("for a total score of ").append(3);
             String text = textBuilder.toString();
             Espresso.onView(withId(R.id.end_game_text)).check(matches(withText(text)));
 
