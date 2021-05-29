@@ -2,6 +2,8 @@ package sdp.moneyrun.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,8 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Locale;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
@@ -98,12 +102,13 @@ public class UserProfileInstrumentedTest {
             scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Times you died in a game \n 0")));
+                    .check(matches(withText("Number of games lost\n\n0")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Games played \n 5")));
+                    .check(matches(withText("Number of games played\n\n5")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText(name.toUpperCase())));
+                    .check(matches(withText(name)));
             Intents.release();
+
         }
     }
 
