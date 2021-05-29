@@ -28,7 +28,7 @@ import sdp.moneyrun.user.User;
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
-    private final int NUM_PLAYERS_LEADERBOARD = 10;
+    public static final int NUM_PLAYERS_LEADERBOARD = 10;
 
     private final String TAG = MainLeaderboardActivity.class.getSimpleName();
     @NonNull
@@ -124,6 +124,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 }
                 userList = new ArrayList<>(userToShow);
                 addUserList(userList);
+                // Always add yourself at the end
+                if(!userList.contains(user)){
+                    addUser(user);
+                }
             }
         });
     }
