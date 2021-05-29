@@ -26,6 +26,8 @@ import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.TrackedMap;
@@ -53,6 +55,7 @@ public class OfflineMapDownloaderActivity extends TrackedMap {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         createMap(savedInstanceState, R.id.mapView_downloader, R.layout.activity_offline_map_downloader);

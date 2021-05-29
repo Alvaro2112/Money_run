@@ -113,7 +113,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         runFunctionalities();
-        addDownloadButton();
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
@@ -135,10 +134,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         DatabaseProxy.removeOfflineListener();
     }
 
-    public void addDownloadButton() {
-        Button download = findViewById(R.id.download_map);
-        download.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false));
-    }
 
 
     public void runFunctionalities() {
@@ -209,6 +204,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(LoginActivity.class, true);
                 break;
             }
+
+            case R.id.download_map: {
+                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false);
+            break;
+
+            }
+
+
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

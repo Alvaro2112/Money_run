@@ -124,29 +124,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @param dummy1:        dummy representation of a player that will later evolve into a player that was in a game
-     * @param databaseProxy: the proxy database that we use to access Firebase
-     *                       Attaches a lister to a player so that once real players join the game the dummy player will represent
-     *                       an actual person with all the player object attributes associated with it
-     */
-    private void attachListenerToPlayer(@NonNull Player dummy1, @NonNull PlayerDatabaseProxy databaseProxy) {
-        databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player update = snapshot.getValue(Player.class);
-                System.out.println(snapshot.getValue(Player.class) + "Getting snapshot on data change in leaderboard class");
-                if (update != null)
-                    dummy1.setName(update.getName());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    /**
      * @return: returns the player object representing the person that wants to access the leaderboard
      */
     @Nullable

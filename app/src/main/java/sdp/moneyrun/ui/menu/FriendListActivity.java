@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -38,6 +39,8 @@ public class FriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
         setContentView(R.layout.activity_friend_list);
 
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");

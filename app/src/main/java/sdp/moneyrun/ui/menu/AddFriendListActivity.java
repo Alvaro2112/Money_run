@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
@@ -31,6 +32,7 @@ public class AddFriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_add_friend_list);
 
         user = (User) getIntent().getSerializableExtra("user");

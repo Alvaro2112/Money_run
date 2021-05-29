@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/player_profile_gold">
+    android:background="@drawable/login_gradient">
 
     <TextView
         android:id="@+id/playerName"
-        android:layout_width="205dp"
-        android:layout_height="105dp"
+        android:layout_width="244dp"
+        android:layout_height="108dp"
 
         android:layout_marginTop="56dp"
         android:gravity="center"
@@ -22,8 +22,8 @@
 
     <TextView
         android:id="@+id/playerPlayedGames"
-        android:layout_width="205dp"
-        android:layout_height="140dp"
+        android:layout_width="323dp"
+        android:layout_height="159dp"
 
         android:gravity="center"
         android:textAppearance="@color/cardview_light_background"
@@ -36,9 +36,9 @@
 
     <TextView
         android:id="@+id/playerDiedGames"
-        android:layout_width="205dp"
+        android:layout_width="326dp"
 
-        android:layout_height="105dp"
+        android:layout_height="118dp"
         android:layout_marginBottom="44dp"
         android:gravity="center"
         android:textAppearance="@color/cardview_light_background"
@@ -52,13 +52,15 @@
 
     <Button
         android:id="@+id/goBackToMainMenu"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/go_back_to_main_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="10dp"
+        android:background="@drawable/layout_rounded"
         app:layout_constraintVertical_bias="0.971" />
 
 

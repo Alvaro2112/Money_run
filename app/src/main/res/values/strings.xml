@@ -96,8 +96,8 @@
     <string name="button_to_leave_game_description">button to leave game</string>
     <string name="game_results_button_text">Game Results</string>
     <string name="game_lobby_title">Game Lobby</string>
-    <string name="players_in_lobby_message">Players in Lobby :</string>
-    <string name="players_missing_message">Players Missing :</string>
+    <string name="players_in_lobby_message">Players in this lobby :</string>
+    <string name="players_missing_message">Missing players :</string>
     <string name="leave_button_text">Leave</string>
     <string name="launch_game_button_text">Launch game</string>
     <string name="guest_button_text">Guest</string>
@@ -139,6 +139,7 @@
     <string name="friend_list_logo_max_score">Max score 💯</string>
     <string name="friend_list_join_game_text">Join friend</string>
     <string name="back_to_menu">Back to menu</string>
+    <string name="download_map">Download Map</string>
 
 
 </resources>

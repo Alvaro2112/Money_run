@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
 
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(

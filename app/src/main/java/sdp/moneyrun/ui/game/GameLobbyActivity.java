@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
@@ -57,6 +58,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
         proxyG = new GameDatabaseProxy();
