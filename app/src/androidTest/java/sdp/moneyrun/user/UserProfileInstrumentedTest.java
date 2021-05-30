@@ -2,8 +2,6 @@ package sdp.moneyrun.user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 
 import androidx.annotation.NonNull;
@@ -22,8 +20,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.Locale;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;

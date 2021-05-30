@@ -44,8 +44,6 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         addAdapter();
         setMainPlayer(user);
-        //TODO
-        // Put addPlayer with local cache
         getEndGamePlayers();
         linkToMenuButton(toMenu);
         DatabaseProxy.addOfflineListener(this, TAG);
@@ -121,7 +119,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * Gets the players' scores once the game has ended and displays them
      */
-    //TODO: when end game is linked to the rest of the game call this method when result button is clicked
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getEndGamePlayers() {
         ldbAdapter.clear();

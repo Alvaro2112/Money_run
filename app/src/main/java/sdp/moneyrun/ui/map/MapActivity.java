@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -74,7 +73,6 @@ this map implements all the functionality we will need.
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
@@ -329,9 +327,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * Add functionality to the question button so that we can see random questions popup
-     */
-
-    /**
+     *
      * @param mapboxMap the map where everything will be done
      *                  this overrides the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
@@ -667,7 +663,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
-        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), 5 * THRESHOLD_DISTANCE);
+        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
 
         if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
             isAnswering = true;
@@ -713,7 +709,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 hasFoundMap = true;
                 // Create new camera position
                 int regionSelected = 0;
-                double regionZoom = (offlineRegions[regionSelected].getDefinition()).getMinZoom();
 
             }
 

@@ -35,7 +35,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapView;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -57,6 +56,7 @@ import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.user.User;
 
+@SuppressWarnings("FieldMayBeFinal")
 public class MapInstrumentedTest {
 
     private String DATABASE_GAME = "games";
@@ -337,9 +337,7 @@ public class MapInstrumentedTest {
     public void addCoinFailsCorrectly() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
 
-            scenario.onActivity(a -> {
-                a.addCoin(null, true);
-            });
+            scenario.onActivity(a -> a.addCoin(null, true));
         }
     }
 
@@ -347,27 +345,21 @@ public class MapInstrumentedTest {
     public void removeCoinFailsCorrectly() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
 
-            scenario.onActivity(a -> {
-                a.removeCoin(null, true);
-            });
+            scenario.onActivity(a -> a.removeCoin(null, true));
         }
     }
 
     @Test(expected = Exception.class)
     public void placeRandomCoinsFailsCorrectly1() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            scenario.onActivity(a -> {
-                a.placeRandomCoins(-1, 2, 1);
-            });
+            scenario.onActivity(a -> a.placeRandomCoins(-1, 2, 1));
         }
     }
 
     @Test(expected = Exception.class)
     public void placeRandomCoinsFailsCorrectly2() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
-            scenario.onActivity(a -> {
-                a.placeRandomCoins(1, 2, 4);
-            });
+            scenario.onActivity(a -> a.placeRandomCoins(1, 2, 4));
         }
     }
 
@@ -791,16 +783,11 @@ public class MapInstrumentedTest {
 
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
-            scenario.onActivity(a -> {
-                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-                    @Override
-                    public void onDidFinishRenderingMap(boolean fully) {
-                        if (fully) {
-                            finished.set(true);
-                        }
-                    }
-                });
-            });
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
+                    finished.set(true);
+                }
+            }));
             do {
                 try {
                     Thread.sleep(100);
@@ -827,9 +814,7 @@ public class MapInstrumentedTest {
                         assertEquals(2, activity.getLocalPlayer().getLocallyAvailableCoins().size());
                     });
                     assertEquals(2, fromDB.getCoins().size());
-                    scenario.onActivity(activity -> {
-                        activity.removeCoin(fromDB.getCoins().get(0), true);
-                    });
+                    scenario.onActivity(activity -> activity.removeCoin(fromDB.getCoins().get(0), true));
                 } else {
                     fail();
                 }
@@ -1206,29 +1191,16 @@ public class MapInstrumentedTest {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
-            scenario.onActivity(a -> {
-                a.mapView.addOnDidFinishRenderingMapListener(new MapView.OnDidFinishRenderingMapListener() {
-                    @Override
-                    public void onDidFinishRenderingMap(boolean fully) {
-                        if (fully) {
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                if (fully) {
 
-                            a.mapView.addOnCameraDidChangeListener(new MapView.OnCameraDidChangeListener() {
-                                @Override
-                                public void onCameraDidChange(boolean animated) {
-                                    a.mapView.addOnDidFinishRenderingFrameListener(new MapView.OnDidFinishRenderingFrameListener() {
-                                        @Override
-                                        public void onDidFinishRenderingFrame(boolean fully) {
-                                            if (fully) {
-                                                finished.set(true);
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                    a.mapView.addOnCameraDidChangeListener(animated -> a.mapView.addOnDidFinishRenderingFrameListener(fully1 -> {
+                        if (fully1) {
+                            finished.set(true);
                         }
-                    }
-                });
-            });
+                    }));
+                }
+            }));
             while (true) {
                 try {
                     Thread.sleep(100);
@@ -1270,7 +1242,7 @@ public class MapInstrumentedTest {
                     boolean c = a.checkIfLegalPosition(new Coin(90,90,2),3,0.0,0.0);
                     if (c)
                         Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a,false);
-                    assertEquals(c,true);
+                    assertTrue(c);
                     finished.set(true);
                 }));
                 do {
@@ -1322,7 +1294,7 @@ public class MapInstrumentedTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            scenarioMap.onActivity(a -> assertEquals(true,a.getHasFoundMap()));
+            scenarioMap.onActivity(a -> assertTrue(a.getHasFoundMap()));
 
         }
 
