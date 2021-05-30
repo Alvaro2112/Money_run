@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.UserProfileActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

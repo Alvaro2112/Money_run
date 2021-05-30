@@ -13,7 +13,7 @@
         android:layout_marginTop="2dp"
         android:gravity="start"
         android:text="Medium Text"
-        android:textColor="#CCCCCC"
+        android:textColor="#808080"
         android:textSize="20sp" />
 
     <Button

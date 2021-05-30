@@ -54,14 +54,14 @@ import java.util.Objects;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
@@ -618,7 +618,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         deleteCoinFromMap(coin);
-
         boolean check = checkIfLegalPosition(coin, circleRadius, game_center.getLatitude(), game_center.getLongitude());
         if (check)
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, true);
@@ -665,6 +664,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
+
         if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
             isAnswering = true;
             seenCoins.add(coin);
@@ -675,7 +675,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             }
             isAnswering = false;
         }
-
     }
 
     /**
@@ -690,6 +689,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
+
+
+    /**
+     * Check if there is a downloaded map and show a toast if there is one or not
+     */
     private void getDownloadedRegion() {
         offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
 

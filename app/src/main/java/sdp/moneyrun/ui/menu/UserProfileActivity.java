@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.player;
+package sdp.moneyrun.ui.menu;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -10,10 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -26,6 +26,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_user_profile);
         playerName = findViewById(R.id.playerName);
         playerDiedGames = findViewById(R.id.playerDiedGames);

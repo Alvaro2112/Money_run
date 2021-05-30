@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 
@@ -28,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_interface);
         // Initialize Firebase Auth
+        Objects.requireNonNull(getSupportActionBar()).hide();
         mAuth = FirebaseAuth.getInstance();
 
         submitButton = findViewById(R.id.signUpSubmitButton);

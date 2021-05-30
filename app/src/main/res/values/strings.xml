@@ -61,6 +61,9 @@
     <string name="database_game_start_location">startLocation</string>
 
     <!-- LOCATION -->
+    <!-- End Game -->
+    <string name="end_game_score_show">  You have gathered %1$d coins\nfor a total score of %2$d</string>
+    <string name="end_game_score_failed">Unfortunately the coin you collected have been lost</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -112,8 +115,8 @@
     <string name="name_prompt_text">Enter your Name</string>
     <string name="favorite_color_prompt_text">Enter your favorite color</string>
     <string name="favorite_animal_text">Enter your favorite animal</string>
-    <string name="game_name_prompt_text">Enter game name</string>
-    <string name="game_max_players_prompt_text">Enter max player count</string>
+    <string name="game_name_prompt_text">Game name</string>
+    <string name="game_max_players_prompt_text">Max player count</string>
     <string name="submit_game_text">Submit</string>
     <string name="question_title_text">Question</string>
     <string name="wrong_answer_cross">X</string>
@@ -121,9 +124,9 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="newGameNumCoinsText">Enter the number of coins</string>
-    <string name="newGameDurationText">Enter the duration of the game in minutes</string>
-    <string name="newGameRadiusText">Enter the radius of the game in meter</string>
+    <string name="newGameNumCoinsText">Number of coins</string>
+    <string name="newGameDurationText">Duration of the game in minutes</string>
+    <string name="newGameRadiusText">Radius of the game in meters</string>
     <string name="delete_button_text">Delete</string>
 
     <string name="add_friend_tag_0">userState</string>

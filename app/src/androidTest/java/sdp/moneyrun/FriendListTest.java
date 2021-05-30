@@ -23,18 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
-import sdp.moneyrun.menu.FriendListListAdapter;
+import sdp.moneyrun.menu.friendlist.FriendListListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.MainActivity;
-import sdp.moneyrun.ui.menu.AddFriendListActivity;
-import sdp.moneyrun.ui.menu.FriendListActivity;
+import sdp.moneyrun.ui.menu.friendlist.AddFriendListActivity;
+import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,13 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
@@ -37,10 +37,12 @@ public class EndGameActivity extends AppCompatActivity {
     private String playerId;
     private Button resultButton;
     private boolean hasDied;
+    private Button toMenuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_end_game);
         endText = findViewById(R.id.end_game_text);
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
@@ -54,8 +56,8 @@ public class EndGameActivity extends AppCompatActivity {
             playerId = "";
             updateText(-1, -1, false);
         }
-        final ImageButton toMenu = findViewById(R.id.end_game_button_to_menu);
-        linkToMenuButton(toMenu);
+        toMenuButton = findViewById(R.id.end_game_button_to_menu);
+        linkToMenuButton(toMenuButton);
         resultButton = findViewById(R.id.end_game_button_to_results);
         linkToResult(resultButton);
 
@@ -73,7 +75,7 @@ public class EndGameActivity extends AppCompatActivity {
      *               Call this on the button to make start the Menu activity
      */
 
-    private void linkToMenuButton(@NonNull ImageButton toMenu) {
+    private void linkToMenuButton(@NonNull Button toMenu) {
         UserDatabaseProxy pdp = new UserDatabaseProxy();
         toMenu.setOnClickListener(v -> pdp.getUserTask(playerId).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -96,16 +98,13 @@ public class EndGameActivity extends AppCompatActivity {
      *                  Else shows that it failed to get the score
      */
     public void updateText(int numCoins, int gameScore, boolean succeeded) {
-        StringBuilder textBuilder = new StringBuilder();
+        String text;
         if (succeeded) {
-            textBuilder = textBuilder.append("You have gathered").append(numCoins).append("coins");
-            textBuilder = textBuilder.append("\n");
-            textBuilder = textBuilder.append("For a total score of ").append(gameScore);
+             text = getString(R.string.end_game_score_show, numCoins, gameScore);
         } else {
-            textBuilder = textBuilder.append("Unfortunately the coin you collected have been lost");
+            text = getString(R.string.end_game_score_failed);
         }
-        String newText = textBuilder.toString();
-        endText.setText(newText);
+        endText.setText(text);
     }
 
     /**

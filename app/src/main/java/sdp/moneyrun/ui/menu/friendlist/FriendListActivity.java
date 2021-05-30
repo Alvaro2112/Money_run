@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.friendlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,13 +13,15 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.location.AndroidLocationService;
-import sdp.moneyrun.menu.FriendListListAdapter;
+import sdp.moneyrun.menu.friendlist.FriendListListAdapter;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal", "FieldCanBeLocal"})
@@ -39,7 +41,7 @@ public class FriendListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
-
+        Objects.requireNonNull(getSupportActionBar()).hide();
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
 
         user = (User) getIntent().getSerializableExtra("user");

@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.game;
 
 import android.location.Location;
 import android.util.Log;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;

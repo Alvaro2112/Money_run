@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertArrayEquals;

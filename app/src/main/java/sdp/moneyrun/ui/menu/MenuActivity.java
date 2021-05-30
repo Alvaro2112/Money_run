@@ -37,14 +37,15 @@ import java.io.IOException;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
