@@ -47,22 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
 
 
     @Override
@@ -84,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         mAuth.signOut();
+        DatabaseProxy.removeOfflineListener();
     }
 
     private void submitSignUp(@NonNull String email, @NonNull String password) {

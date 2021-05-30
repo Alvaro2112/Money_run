@@ -72,22 +72,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
 
     public LobbyPlayerListAdapter getListAdapter() {
         return listAdapter;
@@ -281,6 +265,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        DatabaseProxy.removeOfflineListener();
         if (playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
 

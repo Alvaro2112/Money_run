@@ -74,19 +74,8 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
