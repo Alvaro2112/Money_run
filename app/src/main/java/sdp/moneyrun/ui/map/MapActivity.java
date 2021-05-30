@@ -673,7 +673,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     @Override
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
-        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), 5*THRESHOLD_DISTANCE);
+        Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
 
         if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
             isAnswering = true;
