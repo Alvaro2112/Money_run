@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -105,6 +106,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 listenToIsDeleted();
                 listenToStarted();
                 createDeleteOrLeaveButton();
+                disableLaunchButtonIfNotHost();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -146,6 +148,14 @@ public class GameLobbyActivity extends AppCompatActivity {
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
         }
+    }
+
+    private void disableLaunchButtonIfNotHost(){
+        if(!player.equals(game.getHost())){
+            Button but = (Button)findViewById(R.id.launch_game_button);
+            but.setEnabled(false);
+        }
+
     }
 
     /**

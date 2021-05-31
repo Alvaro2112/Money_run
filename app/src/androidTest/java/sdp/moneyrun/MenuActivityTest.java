@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -698,6 +699,18 @@ public class MenuActivityTest {
             onView(ViewMatchers.withTagValue(Matchers.is(JoinGameImplementation.TAG_GAME_PREFIX + "777"))).check(matches(isDisplayed()));
             onView(ViewMatchers.withTagValue(Matchers.is(JoinGameImplementation.TAG_GAME_PREFIX + "888"))).check(doesNotExist());
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void helpPopupOpensAndClosesWithButtons(){
+        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+            Thread.sleep(2000);
+            onView(ViewMatchers.withId(R.id.info_image)).perform(ViewActions.click());
+            onView(withText("How to play")).check(matches(isDisplayed()));
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
