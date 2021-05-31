@@ -7,8 +7,8 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.database.riddle.Riddle;
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 
 public class GameBuilder {

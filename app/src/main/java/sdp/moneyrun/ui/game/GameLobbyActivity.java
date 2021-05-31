@@ -273,11 +273,11 @@ public class GameLobbyActivity extends AppCompatActivity {
             if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
-            if (isStartedListener != null){
+            if (isStartedListener != null) {
                 System.out.println("REMOVED THE PLAYER LISTENER");
 
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
-                proxyG.removeGameListener(game,isStartedListener);
+                proxyG.removeGameListener(game, isStartedListener);
             }
 
         } else {

@@ -105,7 +105,7 @@ public class NewGameImplementation extends MenuImplementation {
         double gameDurationNumber = Double.parseDouble(gameDurationStr);
 
         if (!checkNewGameParametersValues(maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber)) {
-            return ;
+            return;
         }
 
         popupWindow.dismiss();
@@ -181,7 +181,7 @@ public class NewGameImplementation extends MenuImplementation {
 
     }
 
-    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, LocationRepresentation location){
+    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, @NonNull LocationRepresentation location) {
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);

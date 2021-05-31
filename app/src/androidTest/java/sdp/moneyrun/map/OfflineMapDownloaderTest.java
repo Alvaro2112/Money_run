@@ -19,7 +19,6 @@ import org.junit.Test;
 import java.nio.charset.Charset;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.user.User;
 

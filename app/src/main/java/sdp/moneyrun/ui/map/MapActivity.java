@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -55,13 +54,13 @@ import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
-import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
@@ -74,7 +73,6 @@ this map implements all the functionality we will need.
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
@@ -106,11 +104,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private float circleRadius;
     private double shrinkingFactor = 0.99;
     private ArrayList<Coin> seenCoins;
-    private  ValueEventListener isEndedListener;
+    private ValueEventListener isEndedListener;
     private String locationMode;
     private boolean isAnswering;
     private boolean hasFoundMap;
-    private  OfflineManager offlineManager;
+    private OfflineManager offlineManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +150,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * Initializes all the logic to keep the location updated
+     *
      * @param locationMode the location mode that will be used ("gps" for gps location, "network" for network location and null for the default MapBox location (i.e. getLastLocation))
      */
     public void initLocationManager(String locationMode) {
@@ -262,9 +261,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
-    private void initCircleAndSetEndListener(){
+    private void initCircleAndSetEndListener() {
         initCircle();
-        if(!host)
+        if (!host)
             listenEnded();
     }
 
@@ -328,9 +327,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
 
     /**
      * Add functionality to the question button so that we can see random questions popup
-     */
-
-    /**
+     *
      * @param mapboxMap the map where everything will be done
      *                  this overrides the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
@@ -387,7 +384,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public Location getGameCenter() {
         return game_center;
     }
-    public boolean getHasFoundMap() {return hasFoundMap; }
+
+    public boolean getHasFoundMap() {
+        return hasFoundMap;
+    }
 
 
     @Nullable
@@ -412,8 +412,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
-                    if(host)
-                        game.setEnded(true,false);
+                    if (host)
+                        game.setEnded(true, false);
                     endGame();
                 }
             }
@@ -424,7 +424,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     /**
      * Helper method to set the chronometer functionality
      */
-    private void setupChronometer(){
+    private void setupChronometer() {
         chronometer.start();
         chronometerCounter = 0;
         chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
@@ -432,9 +432,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         long current = System.currentTimeMillis() / 1000;
         if (host) {
             game.setStartTime(current, false);
-        }else {
+        } else {
             long start = game.getStartTime();
-            chronometerCounter = (int) (current-start+2);
+            chronometerCounter = (int) (current - start + 2);
         }
     }
 
@@ -709,11 +709,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 hasFoundMap = true;
                 // Create new camera position
                 int regionSelected = 0;
-                double regionZoom = (offlineRegions[regionSelected].getDefinition()).getMinZoom();
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .zoom(regionZoom)
-                        .build();
 
             }
 
@@ -745,25 +740,24 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     /**
-     *  Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing
+     * Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing
      */
-    public void listenEnded(){
-                isEndedListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot!= null && snapshot.child("ended").getValue() != null&&(boolean) snapshot.child("ended").getValue()) {
-                                Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(),game.getPlayers(), MapActivity.this,false);
-                        }
-                    }
+    public void listenEnded() {
+        isEndedListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot != null && snapshot.child("ended").getValue() != null && (boolean) snapshot.child("ended").getValue()) {
+                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, error.getMessage());
-                    }
-                };
-                proxyG.addGameListener(game, isEndedListener);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        };
+        proxyG.addGameListener(game, isEndedListener);
     }
-
 
 
     @Override

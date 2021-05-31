@@ -15,7 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseProxy {
 
-    private final static String TAG = DatabaseProxy.class.getSimpleName();
     private static final String ONLINE_MESSAGE = "You are now online";
     private static final String OFFLINE_MESSAGE = "You are now offline";
     private final static DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");

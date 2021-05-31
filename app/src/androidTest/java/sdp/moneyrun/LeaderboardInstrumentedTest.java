@@ -222,7 +222,7 @@ public class LeaderboardInstrumentedTest {
     @Test
     public void testBackButtonSimplyReturns(){
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
-            scenario.onActivity(a -> a.onBackPressed());
+            scenario.onActivity(LeaderboardActivity::onBackPressed);
         }
     }
 }

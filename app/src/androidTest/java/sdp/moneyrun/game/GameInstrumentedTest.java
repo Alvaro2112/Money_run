@@ -116,7 +116,7 @@ public class GameInstrumentedTest {
         });
        try{
            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-           assertEquals(0l,updated.getCount());
+           assertEquals(0L,updated.getCount());
        } catch (InterruptedException e) {
            fail();
        }
@@ -779,7 +779,7 @@ public class GameInstrumentedTest {
                 .addOnCompleteListener(task -> gotten.countDown());
         try {
             gotten.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, gotten.getCount());
+            assertEquals(0L, gotten.getCount());
         } catch (InterruptedException e) {
             fail();
         }

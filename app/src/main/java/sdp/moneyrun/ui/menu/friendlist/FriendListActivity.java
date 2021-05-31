@@ -40,6 +40,8 @@ public class FriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
         setContentView(R.layout.activity_friend_list);
         Objects.requireNonNull(getSupportActionBar()).hide();
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");

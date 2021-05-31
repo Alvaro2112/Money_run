@@ -39,10 +39,11 @@ public class Helpers {
 
     /**
      * Will create a PopupWindow
+     *
      * @param currentActivity In what activity will the popup appear
-     * @param view On what view in that activity will it be shown
-     * @param focusable Wether its focusable or not
-     * @param layoutId What is the layoutId of the popup we want to show
+     * @param view            On what view in that activity will it be shown
+     * @param focusable       Whether its focusable or not
+     * @param layoutId        What is the layoutId of the popup we want to show
      * @return The popupWindow to be displayed
      */
     @NonNull
@@ -65,11 +66,12 @@ public class Helpers {
     }
 
     /**
-     * Returns a view for the leaderboard with all the correct fields for agiven player
+     * Returns a view for the leaderboard with all the correct fields for a given player
+     *
      * @param position the position in the leaderboard of a player
-     * @param view The view of the leaderboard
-     * @param player The player in question
-     * @return A filled up view with the correct attibutes
+     * @param view     The view of the leaderboard
+     * @param player   The player in question
+     * @return A filled up view with the correct attributes
      */
     @Nullable
     public static View getView(int position, @Nullable View view, @NonNull Player player) {
@@ -89,11 +91,12 @@ public class Helpers {
 
     /**
      * Adds or removes a listener from a dataBase reference
-     * @param object The object to which the listner is or will be associated to
-     * @param listener The listener to add or remove
+     *
+     * @param object            The object to which the listener is or will be associated to
+     * @param listener          The listener to add or remove
      * @param databaseReference The database reference associated to the object
-     * @param remove Whether we remove the listener or add it
-     * @param <T> The typer of the object
+     * @param remove            Whether we remove the listener or add it
+     * @param <T>               The type of the object
      */
     public static <T> void addOrRemoveListener(@Nullable T object, @Nullable ValueEventListener listener, @NonNull DatabaseReference databaseReference, boolean remove) {
         if (listener == null || object == null)
@@ -116,6 +119,7 @@ public class Helpers {
 
     /**
      * Adds an on complete listener to a task
+     *
      * @param task the task to which the listener will be added to
      */
     @NonNull
@@ -135,10 +139,11 @@ public class Helpers {
 
     /**
      * Adds Objects to a ListAdapter
-     * @param objectList The objects to be added
+     *
+     * @param objectList  The objects to be added
      * @param listAdapter The listAdapter to which they will be added to
-     * @param <T> The type of the objects
-     * @param <U> The type of the ListAdapter
+     * @param <T>         The type of the objects
+     * @param <U>         The type of the ListAdapter
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter) {
@@ -168,6 +173,7 @@ public class Helpers {
 
     /**
      * Sorts players by their score
+     *
      * @param players the players to be sorted
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -177,6 +183,7 @@ public class Helpers {
 
     /**
      * Sorts Users by their maxInGameScore
+     *
      * @param users The users to be sorted
      */
     @RequiresApi(api = Build.VERSION_CODES.N)

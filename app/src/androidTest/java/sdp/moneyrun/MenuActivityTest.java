@@ -65,6 +65,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 
+@SuppressWarnings("FieldMayBeFinal")
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
     private  long ASYNC_CALL_TIMEOUT = 10L;
@@ -667,7 +668,7 @@ public class MenuActivityTest {
     public void returnButtonDoesNotMakeAppCrash() {
         // Since we disable the back button by simply returning the function shouldn't do anything
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            scenario.onActivity(a -> a.onBackPressed());
+            scenario.onActivity(MenuActivity::onBackPressed);
         }catch (Exception e){
             fail();
         }

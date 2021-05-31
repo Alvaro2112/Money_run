@@ -9,11 +9,10 @@
     <EditText
         android:id="@+id/join_game_text_filter"
         android:layout_width="170dp"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:autofillHints="@string/join_game_filter_message"
-        android:background="@drawable/inputs_register_profile"
         android:drawableStart="@drawable/baseline_search_24"
         android:drawablePadding="12dp"
         android:ems="10"

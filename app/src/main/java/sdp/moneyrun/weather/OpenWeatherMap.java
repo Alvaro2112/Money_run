@@ -45,6 +45,7 @@ public class OpenWeatherMap {
 
     /**
      * This function will get a report as a JSONObject and will parse it to convert it into a usable WeatherReport Object
+     *
      * @param report The report to be converted
      * @return The converted report
      */
@@ -68,6 +69,7 @@ public class OpenWeatherMap {
 
     /**
      * This function will get a forecast as a JSONObject and will parse it to convert it into a usable WeatherForecast Object
+     *
      * @param forecast The weatherForecast to be converted
      * @return The converted weatherForecast
      */
@@ -89,6 +91,7 @@ public class OpenWeatherMap {
 
     /**
      * Basically the parseForecast function surrounded by a try catch in case an Exception occurs
+     *
      * @param jsonObject The Report to be converted
      * @return
      */
@@ -108,6 +111,7 @@ public class OpenWeatherMap {
 
     /**
      * Gets the forecast as a string for a given location from the OpenWeather website
+     *
      * @param location The location for which we want the weather forecast
      * @return The weather forecast as a String
      */
@@ -158,6 +162,7 @@ public class OpenWeatherMap {
 
     /**
      * Returns the weatherForecast for a given location
+     *
      * @param location the location for which we want the forecast
      * @return the forecast
      */

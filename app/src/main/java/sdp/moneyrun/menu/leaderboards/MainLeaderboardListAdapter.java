@@ -20,7 +20,7 @@ public class MainLeaderboardListAdapter extends ListAdapterWithUser {
 
     // Medal emotes
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
-    private final int COLOR_GOLD = Color.rgb(255, 204, 51);
+    private final int COLOR_GOLD = Color.rgb(235, 116, 52);
 
     public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
         super(context, userList, user);
@@ -35,17 +35,17 @@ public class MainLeaderboardListAdapter extends ListAdapterWithUser {
         TextView user_score = view.findViewById(R.id.main_player_score);
 
         String text_position;
-        if(position < rank.length) {
+        if (position < rank.length) {
             text_position = rank[position];
-        }else if(position >= MainLeaderboardActivity.NUM_PLAYERS_LEADERBOARD && user.equals(getCurrentUser())) {
+        } else if (position >= MainLeaderboardActivity.NUM_PLAYERS_LEADERBOARD && user.equals(getCurrentUser())) {
             text_position = " -";
-        }else{
+        } else {
             text_position = " " + (position + 1);
         }
 
         user_position.setText(text_position);
         user_name.setText(String.valueOf(user.getName()));
-        if(user.equals(getCurrentUser())) {
+        if (user.equals(getCurrentUser())) {
             user_name.setTextColor(COLOR_GOLD);
             user_name.setTypeface(user_name.getTypeface(), Typeface.BOLD);
         }

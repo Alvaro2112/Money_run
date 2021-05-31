@@ -62,8 +62,7 @@ public class EndGameInstrumentedTest {
         String name = "John Doe";
         String id = "1234567891";
 
-        User user = new User(id, name, 0, 0, 0);
-        return user;
+        return new User(id, name, 0, 0, 0);
     }
 
     public static Intent getEndGameIntent() {
@@ -110,9 +109,7 @@ public class EndGameInstrumentedTest {
     @Test(expected = Exception.class)
     public void linkToResultsFailsCorrectly() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
-            scenario.onActivity(activity -> {
-                activity.linkToResult(null);
-            });
+            scenario.onActivity(activity -> activity.linkToResult(null));
         }
     }
 
