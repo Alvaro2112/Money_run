@@ -16,9 +16,17 @@
             android:id="@+id/main_leaderboard_button"
             android:icon="@drawable/ic_baseline_leaderboard"
             android:title="@string/menu_main_leaderboard_button_text" />
+
+        <item
+            android:id="@+id/download_map"
+            android:icon="@drawable/ic_download"
+            android:title="@string/download_map" />
+
         <item
             android:id="@+id/log_out_button"
             android:icon="@drawable/ic_baseline_close_app"
             android:title="@string/log_out" />
+
+
     </group>
 </menu>

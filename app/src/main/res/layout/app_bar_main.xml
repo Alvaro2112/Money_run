@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.menu.MenuActivity">
+    tools:context=".ui.menu.MenuActivity"
+    android:background="@drawable/login_gradient">
 
     <ImageView
         android:layout_width="46dp"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/layout_rounded"
         android:text="@string/Start_game"
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.726"
@@ -53,7 +55,7 @@
         android:clickable="true"
         android:focusable="true"
         android:text="@string/join_game"
-
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.277"
@@ -72,17 +74,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.891"
         app:srcCompat="@drawable/running_guy" />
-
-    <Button
-        android:id="@+id/download_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/menu_to_map_downloader_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/weather_type"

@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.UserProfileActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -98,12 +98,13 @@ public class UserProfileInstrumentedTest {
             scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Times you died in a game \n 0")));
+                    .check(matches(withText("Number of games lost\n\n0")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Games played \n 5")));
+                    .check(matches(withText("Number of games played\n\n5")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText(name.toUpperCase())));
+                    .check(matches(withText(name)));
             Intents.release();
+
         }
     }
 

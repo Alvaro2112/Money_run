@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.riddle;
 
 import android.content.Context;
 
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.map.Riddle;
 
 public class RiddlesDatabase {
 

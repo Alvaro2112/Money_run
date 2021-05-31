@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.game;
 
 import android.location.Location;
 
@@ -22,6 +22,7 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean started;
+    boolean ended;
     @Nullable
     private String name;
     @Nullable
@@ -33,7 +34,6 @@ public final class GameDbData {
     private int maxPlayerCount;
     @Nullable
     private Location startLocation;
-    boolean ended;
     private int numCoins;
     private double radius;
     private double duration;
@@ -72,7 +72,7 @@ public final class GameDbData {
         this.isDeleted = false;
         this.started = false;
         this.ended = false;
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
     public GameDbData(@Nullable String name,
@@ -123,7 +123,7 @@ public final class GameDbData {
         this.radius = radius;
         this.numCoins = numCoins;
         this.duration = duration;
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
 
@@ -168,20 +168,20 @@ public final class GameDbData {
         this.started = started;
     }
 
-    public long getStartTime(){
+    public long getStartTime() {
         return start_time;
     }
 
-    public void setStartTime(long start_time){
+    public void setStartTime(long start_time) {
         this.start_time = start_time;
-    }
-
-    public void setEnded(boolean ended) {
-        this.ended = ended;
     }
 
     public boolean getEnded() {
         return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
     }
 
     @NonNull
@@ -316,7 +316,7 @@ public final class GameDbData {
         return name.equals(gameDbData.name) && players.equals(gameDbData.players) &&
                 (maxPlayerCount == gameDbData.maxPlayerCount) &&
                 (startLocation.getLongitude() == gameDbData.startLocation.getLongitude()) &&
-                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude()); 
+                (startLocation.getLatitude() == gameDbData.startLocation.getLatitude());
     }
 
     @Override

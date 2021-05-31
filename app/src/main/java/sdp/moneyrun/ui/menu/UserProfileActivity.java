@@ -1,8 +1,10 @@
-package sdp.moneyrun.ui.player;
+package sdp.moneyrun.ui.menu;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -10,10 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_user_profile);
         playerName = findViewById(R.id.playerName);
         playerDiedGames = findViewById(R.id.playerDiedGames);
@@ -48,19 +51,8 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -70,10 +62,18 @@ public class UserProfileActivity extends AppCompatActivity {
             playerDiedGames.setText("");
             playerPlayedGames.setText(R.string.profile_never_created);
         } else {
-            playerName.setAllCaps(true);
             playerName.setText(user.getName());
-            playerDiedGames.setText(String.format(Locale.getDefault(), "Times you died in a game \n %d", user.getNumberOfDiedGames()));
-            playerPlayedGames.setText(String.format(Locale.getDefault(), "Games played \n %d", user.getNumberOfPlayedGames()));
+
+            String gamesLost = String.format(Locale.getDefault(), "Number of games lost\n\n%d", user.getNumberOfDiedGames());
+            SpannableString gamesLostContent = new SpannableString(gamesLost);
+            gamesLostContent.setSpan(new UnderlineSpan(), 0, gamesLost.length() - Integer.toString(user.getNumberOfDiedGames()).length(), 0);
+
+            String gamesPlayed = String.format(Locale.getDefault(), "Number of games played\n\n%d", user.getNumberOfPlayedGames());
+            SpannableString gamesPlayedContent = new SpannableString(gamesPlayed);
+            gamesPlayedContent.setSpan(new UnderlineSpan(), 0, gamesLost.length() - Integer.toString(user.getNumberOfPlayedGames()).length(), 0);
+
+            playerDiedGames.setText(gamesLostContent);
+            playerPlayedGames.setText(gamesPlayedContent);
         }
     }
 

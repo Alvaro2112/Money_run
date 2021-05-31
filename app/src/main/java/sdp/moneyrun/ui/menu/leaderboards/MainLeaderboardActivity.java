@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.leaderboards;
 
 import android.content.Intent;
 import android.os.Build;
@@ -16,18 +16,20 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.menu.MainLeaderboardListAdapter;
+import sdp.moneyrun.menu.leaderboards.MainLeaderboardListAdapter;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
-    private final int NUM_PLAYERS_LEADERBOARD = 10;
+    public static final int NUM_PLAYERS_LEADERBOARD = 10;
 
     private final String TAG = MainLeaderboardActivity.class.getSimpleName();
     @NonNull
@@ -40,6 +42,7 @@ public class MainLeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main_leaderboard);
 
         user = (User) getIntent().getSerializableExtra("user");
@@ -58,20 +61,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -122,6 +115,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 }
                 userList = new ArrayList<>(userToShow);
                 addUserList(userList);
+                // Always add yourself at the end
+                if (!userList.contains(user)) {
+                    addUser(user);
+                }
             }
         });
     }

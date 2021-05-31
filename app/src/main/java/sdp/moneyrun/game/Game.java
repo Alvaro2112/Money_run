@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
-import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.database.game.GameDbData;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.EndGameActivity;
 
@@ -90,7 +90,7 @@ public class Game {
         players.add(host);
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = riddles;
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
     public Game(@Nullable String name,
@@ -139,7 +139,7 @@ public class Game {
         this.riddles = riddles;
         started = false;
         ended = false;
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
     /**
@@ -182,7 +182,7 @@ public class Game {
         this.hasBeenAdded = false;
         started = false;
         ended = false;
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
 
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins);
         this.riddles = new ArrayList<>();
@@ -235,7 +235,7 @@ public class Game {
         ended = false;
         this.gameDbData = new GameDbData(name, host, players, maxPlayerCount, startLocation, isVisible, coins, numCoins, radius, duration);
         this.riddles = new ArrayList<>();
-        start_time = System.currentTimeMillis()/1000;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
     public static void endGame(int numberOfCollectedCoins, int score, String playerId, @NonNull List<Player> players, @NonNull Activity currentActivity, boolean hasDied) {
@@ -290,9 +290,11 @@ public class Game {
         return gameDbData.getPlayers();
     }
 
-    public long getStartTime(){ return gameDbData.getStartTime();}
+    public long getStartTime() {
+        return gameDbData.getStartTime();
+    }
 
-    public void setStartTime(long start_time, boolean forceLocal){
+    public void setStartTime(long start_time, boolean forceLocal) {
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)
@@ -309,7 +311,7 @@ public class Game {
     }
 
     public void setStarted(boolean started, boolean forceLocal) {
-        setGameStartAndEnd(started,forceLocal,DATABASE_STARTED);
+        setGameStartAndEnd(started, forceLocal, DATABASE_STARTED);
         gameDbData.setStarted(started);
         this.started = started;
 
@@ -320,13 +322,13 @@ public class Game {
     }
 
     public void setEnded(boolean ended, boolean forceLocal) {
-        setGameStartAndEnd(ended,forceLocal,DATABASE_ENDED);
+        setGameStartAndEnd(ended, forceLocal, DATABASE_ENDED);
         gameDbData.setEnded(ended);
         this.ended = ended;
 
     }
 
-    private void setGameStartAndEnd(boolean value,boolean forceLocal,String part){
+    private void setGameStartAndEnd(boolean value, boolean forceLocal, @NonNull String part) {
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)

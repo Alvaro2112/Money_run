@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/leaderboard_top"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/theme_gradient"
     android:orientation="vertical">
 
 
@@ -18,8 +17,8 @@
             android:id="@+id/friend_list_search_button"
             android:layout_width="123dp"
             android:layout_height="36dp"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="132dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/layout_rounded"
             android:text="@string/friend_button_search"
             android:textAlignment="center"
@@ -31,7 +30,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
-        android:id="@+id/friend_list_scrollable"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/friend_list_header"
@@ -57,7 +55,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="142dp"
             android:layout_marginEnd="149dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="19dp"
             android:background="@drawable/layout_rounded"
             android:text="@string/back_to_menu" />
 

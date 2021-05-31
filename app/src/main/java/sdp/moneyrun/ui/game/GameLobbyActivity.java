@@ -21,10 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.player.LobbyPlayerListAdapter;
 import sdp.moneyrun.player.Player;
@@ -57,6 +58,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_game_lobby);
         addAdapter();
         proxyG = new GameDatabaseProxy();
@@ -70,22 +72,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
 
     public LobbyPlayerListAdapter getListAdapter() {
         return listAdapter;
@@ -279,6 +265,7 @@ public class GameLobbyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        DatabaseProxy.removeOfflineListener();
         if (playerListListener != null)
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
 
@@ -286,8 +273,12 @@ public class GameLobbyActivity extends AppCompatActivity {
             if (thisGame != null && isDeletedListener != null)
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
-            if (isStartedListener != null)
+            if (isStartedListener != null) {
+                System.out.println("REMOVED THE PLAYER LISTENER");
+
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+                proxyG.removeGameListener(game, isStartedListener);
+            }
 
         } else {
             //otherwise it will also remove it from the DB when it is launched

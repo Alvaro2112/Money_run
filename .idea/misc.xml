@@ -3,9 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_end_game.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_friend_list.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_game_lobby.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_leaderboard.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_main_leaderboard.xml" value="0.3269927536231884" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.19972826086956522" />
-        <entry key="app/src/main/res/layout/activity_menu.xml" value="0.1578125" />
-        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1578125" />
+        <entry key="app/src/main/res/layout/activity_menu.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_offline_map.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_offline_map_downloader.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_user_profile.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/add_friend_list_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2759426378434819" />
+        <entry key="app/src/main/res/layout/create_profile.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/friend_list_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/in_game_scores.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/lobby_player_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/main_leaderboard_item_layout.xml" value="0.3269927536231884" />
       </map>
     </option>
   </component>
@@ -56,7 +71,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

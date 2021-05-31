@@ -19,10 +19,8 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.AddFriendListActivity;
-import sdp.moneyrun.ui.menu.FriendListActivity;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
@@ -101,8 +99,7 @@ public class MainLeaderboardInstrumentedTest {
                 User player = new User("123", "Tess", 0, 0, 0);
                 player.setMaxScoreInGame(8008, false);
                 a.addUser(player);
-                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 1);
-
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 2);
             });
         }
     }
@@ -176,6 +173,43 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void AddPlayerListAddsAllPlayerToView() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        User user = new User("3", "Bob", 0, 0, 999999999);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            scenario.onActivity(a -> {
+
+                //Address was not set here before I don't know why
+                User player = new User("123", "Tess", 0, 0, 0);
+                player.setMaxScoreInGame(8008, false);
+
+                //Address was not set here before I don't know why
+                User player2 = new User("12", "Rafa", 0, 0, 0);
+                player2.setMaxScoreInGame(8001, false);
+                ArrayList<User> list = new ArrayList<>();
+                list.add(player);
+                list.add(player2);
+                a.addUserList(list);
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 3);
+
+            });
+
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddPlayerListAddsAllPlayerToViewUserEnd() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
         User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
 
@@ -200,9 +234,13 @@ public class MainLeaderboardInstrumentedTest {
                     e.printStackTrace();
                 }
 
-                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 2);
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 3);
 
             });
+
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,4 +1,4 @@
-package sdp.moneyrun.menu;
+package sdp.moneyrun.menu.friendlist;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,11 +22,13 @@ import java.util.List;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameRepresentation;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
+import sdp.moneyrun.menu.ListAdapterWithUser;
+import sdp.moneyrun.menu.MenuImplementation;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings({"FieldCanBeLocal", "CanBeFinal"})

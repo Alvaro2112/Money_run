@@ -1,4 +1,4 @@
-package sdp.moneyrun.menu;
+package sdp.moneyrun.menu.friendlist;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,6 +17,7 @@ import java.util.List;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.menu.ListAdapterWithUser;
 import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")

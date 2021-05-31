@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.game;
 
 import android.location.Location;
 import android.util.Log;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
@@ -76,8 +77,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
         linkCoinsToDB(game);
         game.setHasBeenAdded(true);
         game.setStarted(false, false);
-        game.setEnded(false,false);
-        game.setStartTime(System.currentTimeMillis()/1000,false);
+        game.setEnded(false, false);
+        game.setStartTime(System.currentTimeMillis() / 1000, false);
         return id;
     }
 
@@ -209,7 +210,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
             Boolean retIsVisible = getDatabaseValue(ds, DATABASE_GAME_IS_VISIBLE, Boolean.class);
             Boolean started = getDatabaseValue(ds, DATABASE_GAME_STARTED, Boolean.class);
             Boolean ended = getDatabaseValue(ds, DATABASE_GAME_ENDED, Boolean.class);
-            Long start_time = getDatabaseValue(ds,DATABASE_START_TIME,Long.class);
+            Long start_time = getDatabaseValue(ds, DATABASE_START_TIME, Long.class);
             Integer numCoins = getDatabaseValue(ds, DATABASE_GAME_NUMCOINS, Integer.class);
             Double radius = getDatabaseValue(ds, DATABASE_GAME_RADIUS, Double.class);
             Double duration = getDatabaseValue(ds, DATABASE_GAME_DURATION, Double.class);
@@ -239,8 +240,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
             retGame.setId(ds.getKey());
             retGame.setHasBeenAdded(true);
             retGame.setStarted(started, true);
-            retGame.setEnded(ended,true);
-            retGame.setStartTime(start_time,true);
+            retGame.setEnded(ended, true);
+            retGame.setStartTime(start_time, true);
 
             toReturn = retGame;
         }

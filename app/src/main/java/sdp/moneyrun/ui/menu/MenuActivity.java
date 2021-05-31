@@ -37,14 +37,15 @@ import java.io.IOException;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
@@ -61,6 +62,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                     map -> {
                     });
     private final String TAG = MenuActivity.class.getSimpleName();
+    @Nullable
+    public NewGameImplementation newGameImplementation;
     protected DrawerLayout mDrawerLayout;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
@@ -70,8 +73,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    public NewGameImplementation newGameImplementation;
-
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -113,31 +114,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         runFunctionalities();
-        addDownloadButton();
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    public void addDownloadButton() {
-        Button download = findViewById(R.id.download_map);
-        download.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false));
     }
 
 
@@ -178,6 +156,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+        DatabaseProxy.removeOfflineListener();
     }
 
     /**
@@ -209,6 +188,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(LoginActivity.class, true);
                 break;
             }
+
+            case R.id.download_map: {
+                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false);
+                break;
+
+            }
+
+
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.leaderboards;
 
 import android.content.Intent;
 import android.os.Build;
@@ -10,20 +10,17 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.PlayerDatabaseProxy;
-import sdp.moneyrun.menu.LeaderboardListAdapter;
+import sdp.moneyrun.menu.leaderboards.LeaderboardListAdapter;
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -40,33 +37,21 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_leaderboard);
         Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
 
         addAdapter();
         setMainPlayer(user);
-        //TODO
-        // Put addPlayer with local cache
         getEndGamePlayers();
         linkToMenuButton(toMenu);
         DatabaseProxy.addOfflineListener(this, TAG);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -124,29 +109,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * @param dummy1:        dummy representation of a player that will later evolve into a player that was in a game
-     * @param databaseProxy: the proxy database that we use to access Firebase
-     *                       Attaches a lister to a player so that once real players join the game the dummy player will represent
-     *                       an actual person with all the player object attributes associated with it
-     */
-    private void attachListenerToPlayer(@NonNull Player dummy1, @NonNull PlayerDatabaseProxy databaseProxy) {
-        databaseProxy.addPlayerListener(dummy1, new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Player update = snapshot.getValue(Player.class);
-                System.out.println(snapshot.getValue(Player.class) + "Getting snapshot on data change in leaderboard class");
-                if (update != null)
-                    dummy1.setName(update.getName());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    /**
      * @return: returns the player object representing the person that wants to access the leaderboard
      */
     @Nullable
@@ -157,7 +119,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * Gets the players' scores once the game has ended and displays them
      */
-    //TODO: when end game is linked to the rest of the game call this method when result button is clicked
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getEndGamePlayers() {
         ldbAdapter.clear();

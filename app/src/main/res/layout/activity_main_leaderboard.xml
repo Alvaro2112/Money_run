@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/theme_gradient">
 
 
     <RelativeLayout
@@ -17,8 +18,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="17dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:text="@string/leaderboard_header_position"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -30,6 +31,7 @@
             android:layout_marginEnd="9dp"
             android:layout_marginBottom="4dp"
             android:text="@string/leaderboard_header_score"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
@@ -38,9 +40,9 @@
             android:layout_alignParentEnd="true"
 
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="152dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="140dp"
             android:text="@string/leaderboard_header_name"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
     </RelativeLayout>
