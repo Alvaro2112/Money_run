@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.game;
+package sdp.moneyrun.player;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,8 +11,6 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.player.PlayerListAdapter;
 
 public class LobbyPlayerListAdapter extends PlayerListAdapter {
 

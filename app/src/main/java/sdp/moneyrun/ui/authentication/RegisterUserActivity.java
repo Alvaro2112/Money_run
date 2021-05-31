@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
 import java.util.Random;
 
 import sdp.moneyrun.R;
@@ -19,14 +20,16 @@ import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class RegisterUserActivity extends AppCompatActivity {
+    private final String TAG = RegisterUserActivity.class.getSimpleName();
     private Button submitButton;
     private EditText nameText;
     private UserDatabaseProxy pdb;
     private String nameResult;
-    private final String TAG = RegisterUserActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.create_profile);
         submitButton = findViewById(R.id.submitProfileButton);
         nameText = findViewById(R.id.registerNameText);
@@ -41,18 +44,8 @@ public class RegisterUserActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -86,5 +79,9 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
         nameResult = name;
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

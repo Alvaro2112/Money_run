@@ -1,9 +1,7 @@
 package sdp.moneyrun;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +37,15 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class Helpers {
 
-
+    /**
+     * Will create a PopupWindow
+     *
+     * @param currentActivity In what activity will the popup appear
+     * @param view            On what view in that activity will it be shown
+     * @param focusable       Whether its focusable or not
+     * @param layoutId        What is the layoutId of the popup we want to show
+     * @return The popupWindow to be displayed
+     */
     @NonNull
     public static PopupWindow onButtonShowPopupWindowClick(@NonNull Activity currentActivity, View view, Boolean focusable, int layoutId) {
 
@@ -60,6 +65,14 @@ public class Helpers {
         return popupWindow;
     }
 
+    /**
+     * Returns a view for the leaderboard with all the correct fields for a given player
+     *
+     * @param position the position in the leaderboard of a player
+     * @param view     The view of the leaderboard
+     * @param player   The player in question
+     * @return A filled up view with the correct attributes
+     */
     @Nullable
     public static View getView(int position, @Nullable View view, @NonNull Player player) {
 
@@ -76,6 +89,15 @@ public class Helpers {
         return view;
     }
 
+    /**
+     * Adds or removes a listener from a dataBase reference
+     *
+     * @param object            The object to which the listener is or will be associated to
+     * @param listener          The listener to add or remove
+     * @param databaseReference The database reference associated to the object
+     * @param remove            Whether we remove the listener or add it
+     * @param <T>               The type of the object
+     */
     public static <T> void addOrRemoveListener(@Nullable T object, @Nullable ValueEventListener listener, @NonNull DatabaseReference databaseReference, boolean remove) {
         if (listener == null || object == null)
             throw new IllegalArgumentException();
@@ -95,6 +117,11 @@ public class Helpers {
             newDatabaseReference.addValueEventListener(listener);
     }
 
+    /**
+     * Adds an on complete listener to a task
+     *
+     * @param task the task to which the listener will be added to
+     */
     @NonNull
     public static Task<DataSnapshot> addOnCompleteListener(String TAG, @NonNull Task<DataSnapshot> task) {
 
@@ -110,35 +137,55 @@ public class Helpers {
         return task;
     }
 
+    /**
+     * Adds Objects to a ListAdapter
+     *
+     * @param objectList  The objects to be added
+     * @param listAdapter The listAdapter to which they will be added to
+     * @param <T>         The type of the objects
+     * @param <U>         The type of the ListAdapter
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static <T, U extends ArrayAdapter<T>> void addObjectListToAdapter(@Nullable ArrayList<T> objectList, @NonNull U listAdapter) {
-        if (objectList == null) {
+        if (objectList == null)
             throw new NullPointerException("List is null");
-        }
-        if (objectList.isEmpty()) {
+
+        if (objectList.isEmpty())
             return;
-        }
+
         listAdapter.addAll(objectList);
         ArrayList<T> objects = new ArrayList<>();
+
         for (int i = 0; i < listAdapter.getCount(); ++i)
             objects.add(listAdapter.getItem(i));
+
         listAdapter.clear();
 
-        if (objectList.get(0) instanceof User) {
+        if (objectList.get(0) instanceof User)
             bestToWorstUser((ArrayList<User>) objects);
-        } else if (objectList.get(0) instanceof Player) {
+        else if (objectList.get(0) instanceof Player)
             bestToWorstPlayer((ArrayList<Player>) objects);
-        } else {
+        else
             throw new IllegalArgumentException("List must contain Users or Players");
-        }
+
         listAdapter.addAll(objects);
     }
 
+    /**
+     * Sorts players by their score
+     *
+     * @param players the players to be sorted
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void bestToWorstPlayer(@NonNull List<Player> players) {
         players.sort((o1, o2) -> Integer.compare(o2.getScore(), o1.getScore()));
     }
 
+    /**
+     * Sorts Users by their maxInGameScore
+     *
+     * @param users The users to be sorted
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void bestToWorstUser(@NonNull List<User> users) {
         users.sort((o1, o2) -> Integer.compare(o2.getMaxScoreInGame(), o1.getMaxScoreInGame()));

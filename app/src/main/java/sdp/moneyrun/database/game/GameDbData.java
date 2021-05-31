@@ -1,4 +1,4 @@
-package sdp.moneyrun.database;
+package sdp.moneyrun.database.game;
 
 import android.location.Location;
 
@@ -22,6 +22,7 @@ public final class GameDbData {
     boolean isVisible;
     boolean isDeleted;
     boolean started;
+    boolean ended;
     @Nullable
     private String name;
     @Nullable
@@ -36,6 +37,7 @@ public final class GameDbData {
     private int numCoins;
     private double radius;
     private double duration;
+    private long start_time = 0;
 
 
     public GameDbData(@Nullable String name,
@@ -69,6 +71,8 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.started = false;
+        this.ended = false;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
     public GameDbData(@Nullable String name,
@@ -115,9 +119,11 @@ public final class GameDbData {
         this.isVisible = isVisible;
         this.isDeleted = false;
         this.started = false;
+        this.ended = false;
         this.radius = radius;
         this.numCoins = numCoins;
         this.duration = duration;
+        start_time = System.currentTimeMillis() / 1000;
     }
 
 
@@ -134,9 +140,11 @@ public final class GameDbData {
         this.coins = other.coins;
         this.isDeleted = false;
         this.started = other.started;
+        this.ended = other.ended;
         this.duration = other.duration;
         this.radius = other.radius;
         this.numCoins = other.numCoins;
+        this.start_time = other.start_time;
     }
 
     public GameDbData() {
@@ -158,6 +166,22 @@ public final class GameDbData {
 
     public void setStarted(boolean started) {
         this.started = started;
+    }
+
+    public long getStartTime() {
+        return start_time;
+    }
+
+    public void setStartTime(long start_time) {
+        this.start_time = start_time;
+    }
+
+    public boolean getEnded() {
+        return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
     }
 
     @NonNull

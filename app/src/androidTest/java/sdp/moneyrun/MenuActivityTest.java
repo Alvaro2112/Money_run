@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -31,21 +32,20 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.weather.WeatherForecast;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -56,6 +56,7 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -65,6 +66,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 
+@SuppressWarnings("FieldMayBeFinal")
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
     private  long ASYNC_CALL_TIMEOUT = 10L;
@@ -225,6 +227,23 @@ public class MenuActivityTest {
         }
     }
 
+
+    @Test
+    public void backButtonDoesNothing1(){
+
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
+        User user = new User("3", "Bob", 0, 0, 0);
+        intent.putExtra("user", user);
+
+
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(intent)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
     @Test
     public void filterWithNotExistingNameWorks() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
@@ -247,11 +266,14 @@ public class MenuActivityTest {
         }
     }
 
-
     @Test
-    public void CreateGameSendsYouToLobby() {
+    public void CreateGameWorksWhenFieldsAreAppropriate() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
+            scenario.onActivity(a ->{
+                AndroidLocationService locationS = a.getLocationService();
+                locationS.setMockedLocation(new LocationRepresentation(4,5));
+            });
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
 
@@ -263,6 +285,7 @@ public class MenuActivityTest {
             final String radius = String.valueOf(25);
             final String duration = String.valueOf(5);
 
+
             Espresso.onView(withId(R.id.nameGameField)).perform(typeText(game_name), closeSoftKeyboard());
             Espresso.onView(withId(R.id.maxPlayerCountField)).perform(typeText(max_player_count), closeSoftKeyboard());
             Espresso.onView(withId(R.id.newGameNumCoins)).perform(typeText(numCoins), closeSoftKeyboard());
@@ -270,7 +293,6 @@ public class MenuActivityTest {
             Espresso.onView(withId(R.id.newGameDuration)).perform(typeText(duration), closeSoftKeyboard());
 
             Espresso.onView(withId(R.id.newGameSubmit)).perform(ViewActions.click());
-            Thread.sleep(2000);
             intended(hasComponent(GameLobbyActivity.class.getName()));
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -279,7 +301,6 @@ public class MenuActivityTest {
            Intents.release();
         }
     }
-
 
     @Test
     public void newGamePopupIsDisplayed() {
@@ -633,7 +654,7 @@ public class MenuActivityTest {
                 location.setLatitude(0.7126);
                 location.setLongitude(38.2699);
                 a.loadWeather(location);
-                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport(WeatherForecast.Day.TODAY));
+                a.setWeatherFieldsToday(a.getCurrentForecast().getWeatherReport());
             });
             Thread.sleep(5000);
             onView(withId(R.id.weather_temp_average)).check(matches(not(withText(""))));
@@ -648,7 +669,7 @@ public class MenuActivityTest {
     public void returnButtonDoesNotMakeAppCrash() {
         // Since we disable the back button by simply returning the function shouldn't do anything
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
-            scenario.onActivity(a -> a.onBackPressed());
+            scenario.onActivity(MenuActivity::onBackPressed);
         }catch (Exception e){
             fail();
         }

@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 
@@ -28,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_interface);
         // Initialize Firebase Auth
+        Objects.requireNonNull(getSupportActionBar()).hide();
         mAuth = FirebaseAuth.getInstance();
 
         submitButton = findViewById(R.id.signUpSubmitButton);
@@ -42,22 +45,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop(){
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
     }
 
 
@@ -80,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         mAuth.signOut();
+        DatabaseProxy.removeOfflineListener();
     }
 
     private void submitSignUp(@NonNull String email, @NonNull String password) {
@@ -145,5 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
         return retValue;
     }
 
-
+    @Override
+    public void onBackPressed() {
+    }
 }

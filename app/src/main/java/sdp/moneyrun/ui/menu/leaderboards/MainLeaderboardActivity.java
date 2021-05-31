@@ -1,8 +1,10 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.leaderboards;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,50 +16,55 @@ import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
-import sdp.moneyrun.menu.MainLeaderboardListAdapter;
+import sdp.moneyrun.menu.leaderboards.MainLeaderboardListAdapter;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"CanBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MainLeaderboardActivity extends AppCompatActivity {
 
-    private final int NUM_PLAYERS_LEADERBOARD = 10;
+    public static final int NUM_PLAYERS_LEADERBOARD = 10;
 
     private final String TAG = MainLeaderboardActivity.class.getSimpleName();
     @NonNull
     private ArrayList<User> userList = new ArrayList<>();
     private MainLeaderboardListAdapter ldbAdapter;
     private User user;
+    private Button backToMenu;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main_leaderboard);
 
         user = (User) getIntent().getSerializableExtra("user");
         addAdapter();
         addUsersToLeaderboard(NUM_PLAYERS_LEADERBOARD);
         DatabaseProxy.addOfflineListener(this, TAG);
+        backToMenu = findViewById(R.id.back_from_main_leaderboard_button);
+
+        backToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(MainLeaderboardActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
+
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
 
-    protected void onStop(){
-        super.onStop();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -108,6 +115,10 @@ public class MainLeaderboardActivity extends AppCompatActivity {
                 }
                 userList = new ArrayList<>(userToShow);
                 addUserList(userList);
+                // Always add yourself at the end
+                if (!userList.contains(user)) {
+                    addUser(user);
+                }
             }
         });
     }
@@ -134,5 +145,9 @@ public class MainLeaderboardActivity extends AppCompatActivity {
         }
         ArrayList<User> to_add = new ArrayList<>(Collections.singletonList(user));
         addUserList(to_add);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

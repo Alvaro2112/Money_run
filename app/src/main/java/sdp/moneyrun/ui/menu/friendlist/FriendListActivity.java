@@ -1,4 +1,4 @@
-package sdp.moneyrun.ui.menu;
+package sdp.moneyrun.ui.menu.friendlist;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,65 +13,71 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
 import sdp.moneyrun.location.AndroidLocationService;
-import sdp.moneyrun.menu.FriendListListAdapter;
+import sdp.moneyrun.menu.friendlist.FriendListListAdapter;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
-@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal", "FieldCanBeLocal"})
 public class FriendListActivity extends AppCompatActivity {
 
+    private final String TAG = FriendListActivity.class.getSimpleName();
+    @Nullable
     private AndroidLocationService locationService;
-
     @NonNull
     private ArrayList<User> friendList = new ArrayList<>();
+    @Nullable
     private FriendListListAdapter ldbAdapter;
     private User user;
-    private final String TAG = FriendListActivity.class.getSimpleName();
+    private Button goBackToMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list);
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
+        setContentView(R.layout.activity_friend_list);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         locationService = AndroidLocationService.buildFromContextAndProvider(this, "");
 
         user = (User) getIntent().getSerializableExtra("user");
+        goBackToMenu = findViewById(R.id.back_from_friend_list_button);
+
+        goBackToMenu.setOnClickListener(v -> {
+            Intent menuIntent = new Intent(FriendListActivity.this, MenuActivity.class);
+            menuIntent.putExtra("user", user);
+            startActivity(menuIntent);
+            finish();
+        });
+
         UserDatabaseProxy db = new UserDatabaseProxy();
         Task<DataSnapshot> taskUpdatedUser = db.updatedFriendListFromDatabase(user);
-        if (taskUpdatedUser == null) {
+
+        if (taskUpdatedUser == null)
             return;
-        }
 
         taskUpdatedUser.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful())
                 showFriendList();
-            }
         });
 
         addAdapter();
         Button searchButton = findViewById(R.id.friend_list_search_button);
         searchButton.setOnClickListener(v -> friendButtonFunctionality());
         DatabaseProxy.addOfflineListener(this, TAG);
+
+
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -131,22 +137,9 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     /**
-     * Add a user list to the list adapter
-     *
-     * @param userList the user list to add
-     */
-    public void addUserList(@Nullable List<User> userList) {
-        if (userList == null) {
-            throw new NullPointerException("user list should not be null.");
-        }
-
-        ldbAdapter.clear();
-        ldbAdapter.addAll(userList);
-    }
-
-    /**
      * @return the location service.
      */
+    @Nullable
     public AndroidLocationService getLocationService() {
         return locationService;
     }
@@ -158,5 +151,9 @@ public class FriendListActivity extends AppCompatActivity {
         this.locationService = locationService;
         // Update friend list
         showFriendList();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

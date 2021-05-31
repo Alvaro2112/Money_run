@@ -1,4 +1,4 @@
-package sdp.moneyrun.menu;
+package sdp.moneyrun.menu.leaderboards;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,13 +12,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.menu.ListAdapterWithUser;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 
 public class MainLeaderboardListAdapter extends ListAdapterWithUser {
 
     // Medal emotes
     private final String[] rank = {"\uD83E\uDD47", "\uD83E\uDD48", "\uD83E\uDD49"};
-    private final int COLOR_GOLD = Color.rgb(255, 204, 51);
+    private final int COLOR_GOLD = Color.rgb(235, 116, 52);
 
     public MainLeaderboardListAdapter(Activity context, ArrayList<User> userList, User user) {
         super(context, userList, user);
@@ -35,6 +37,8 @@ public class MainLeaderboardListAdapter extends ListAdapterWithUser {
         String text_position;
         if (position < rank.length) {
             text_position = rank[position];
+        } else if (position >= MainLeaderboardActivity.NUM_PLAYERS_LEADERBOARD && user.equals(getCurrentUser())) {
+            text_position = " -";
         } else {
             text_position = " " + (position + 1);
         }

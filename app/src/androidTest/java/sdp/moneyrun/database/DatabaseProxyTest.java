@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 

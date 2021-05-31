@@ -1,4 +1,4 @@
-package sdp.moneyrun.menu;
+package sdp.moneyrun.menu.leaderboards;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

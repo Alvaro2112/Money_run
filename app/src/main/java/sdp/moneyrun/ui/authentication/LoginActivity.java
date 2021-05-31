@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
 
         PermissionsRequester locationPermissionsRequester = new PermissionsRequester(
@@ -66,18 +69,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
-
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
 
@@ -92,22 +85,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * This is needed for testing
-     * Also, since it's one of the first activity created, it's reasonable to assume that when it's
-     * destroyed the user should be signed out
-     */
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAuth.signOut();
-    }
-
     // link from signUp button to signUp page
     public void signUp(View view) {
         MediaPlayer.create(this, R.raw.button_press).start();
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void setLogIn(@NonNull Button loginButton) {
@@ -183,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                     menuIntent.putExtra("user", user);
                     startActivity(menuIntent);
                 }
+                finish();
             }
         });
     }
@@ -210,7 +194,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent guestMenuIntent = new Intent(LoginActivity.this, RegisterUserActivity.class);
             guestMenuIntent.putExtra("guestUser", true);
             startActivity(guestMenuIntent);
+            finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

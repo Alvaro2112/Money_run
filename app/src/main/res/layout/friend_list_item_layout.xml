@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +30,7 @@
             android:layout_marginTop="4dp"
             android:gravity="start"
             android:text=""
-            android:textColor="#CCCCCC"
+            android:textColor="#3A3B3C"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +43,7 @@
             android:layout_marginTop="2dp"
             android:gravity="start"
             android:text="@string/friend_list_logo_n_played"
-            android:textColor="#CCCCCC"
+            android:textColor="#3A3B3C"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/friend_list_name" />
@@ -56,7 +55,7 @@
             android:layout_marginStart="120dp"
             android:gravity="start"
             android:text="@string/friend_list_logo_max_score"
-            android:textColor="#CCCCCC"
+            android:textColor="#3A3B3C"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/friend_list_n_played" />
@@ -68,7 +67,7 @@
             android:layout_marginTop="2dp"
             android:gravity="start"
             android:text=""
-            android:textColor="#CCCCCC"
+            android:textColor="#3A3B3C"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/friend_list_n_played"
             app:layout_constraintTop_toBottomOf="@+id/friend_list_name" />
@@ -79,7 +78,7 @@
             android:layout_height="21dp"
             android:gravity="start"
             android:text=""
-            android:textColor="#CCCCCC"
+            android:textColor="#3A3B3C"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/friend_list_max_score"
             app:layout_constraintTop_toBottomOf="@+id/friend_list_n_played_result" />

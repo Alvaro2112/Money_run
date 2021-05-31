@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.Gravity;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
@@ -22,7 +23,7 @@ import org.junit.runner.RunWith;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.menu.MenuActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.UserProfileActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -30,8 +31,10 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class UserProfileInstrumentedTest {
@@ -51,6 +54,16 @@ public class UserProfileInstrumentedTest {
         toStart.putExtra("user", currentUser);
         return toStart;
     }
+
+    @Test
+    public void backButtonDoesNothing1(){
+        try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
 
     @Test
     public void checkButtonOpenRightActivities() {
@@ -85,12 +98,13 @@ public class UserProfileInstrumentedTest {
             scenario.onActivity(a -> a.setDisplayedTexts(user));
 
             Espresso.onView(withId(R.id.playerDiedGames))
-                    .check(matches(withText("Times you died in a game \n 0")));
+                    .check(matches(withText("Number of games lost\n\n0")));
             Espresso.onView(withId(R.id.playerPlayedGames))
-                    .check(matches(withText("Games played \n 5")));
+                    .check(matches(withText("Number of games played\n\n5")));
             Espresso.onView(withId(R.id.playerName))
-                    .check(matches(withText(name.toUpperCase())));
+                    .check(matches(withText(name)));
             Intents.release();
+
         }
     }
 

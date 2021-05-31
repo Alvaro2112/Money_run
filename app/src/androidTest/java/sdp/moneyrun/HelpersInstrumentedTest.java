@@ -42,12 +42,10 @@ public class HelpersInstrumentedTest {
             User currentUser = new User("999", "CURRENT_USER"
                     , 0, 0, 0);
 
-            scenario.onActivity(a -> {
-               Helpers.joinLobbyFromJoinButton(gameRep,
-                       FirebaseDatabase.getInstance().getReference(),
-                       a,
-                       currentUser, null);
-            });
+            scenario.onActivity(a -> Helpers.joinLobbyFromJoinButton(gameRep,
+                    FirebaseDatabase.getInstance().getReference(),
+                    a,
+                    currentUser, null));
         }
     }
 }

@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
@@ -16,10 +19,15 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
-import sdp.moneyrun.ui.menu.LeaderboardActivity;
-import sdp.moneyrun.ui.menu.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -61,6 +69,24 @@ public class MainLeaderboardInstrumentedTest {
         }
     }
 
+
+
+    @Test
+    public void backButtonDoesNothing1(){
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        User user = new User("3", "Bob", 0, 0, 0);
+        intent.putExtra("user", user);
+
+
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
     @Test
     public void addPLayerAddsPlayerToView() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
@@ -73,8 +99,7 @@ public class MainLeaderboardInstrumentedTest {
                 User player = new User("123", "Tess", 0, 0, 0);
                 player.setMaxScoreInGame(8008, false);
                 a.addUser(player);
-                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 1);
-
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 2);
             });
         }
     }
@@ -89,6 +114,36 @@ public class MainLeaderboardInstrumentedTest {
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addUser(null));
         }
+    }
+
+    private Intent getStartIntent1() {
+        User currentUser = new User("888", "CURRENT_USER"
+                , 0, 0, 0);
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        toStart.putExtra("user", currentUser);
+        return toStart;
+    }
+
+    @Test
+    public void goBackToMenuWorks(){
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
+            Intents.init();
+            Thread.sleep(3000);
+            //Join add friends
+            //Search
+            onView(ViewMatchers.withId(R.id.back_from_main_leaderboard_button)).perform(ViewActions.click());
+
+            Thread.sleep(3000);
+
+            intended(hasComponent(MenuActivity.class.getName()));
+            Intents.release();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Intents.release();
+        }
+
     }
 
     @Test
@@ -118,6 +173,43 @@ public class MainLeaderboardInstrumentedTest {
     @Test
     public void AddPlayerListAddsAllPlayerToView() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
+        User user = new User("3", "Bob", 0, 0, 999999999);
+        intent.putExtra("user", user);
+
+        try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
+            scenario.onActivity(a -> {
+
+                //Address was not set here before I don't know why
+                User player = new User("123", "Tess", 0, 0, 0);
+                player.setMaxScoreInGame(8008, false);
+
+                //Address was not set here before I don't know why
+                User player2 = new User("12", "Rafa", 0, 0, 0);
+                player2.setMaxScoreInGame(8001, false);
+                ArrayList<User> list = new ArrayList<>();
+                list.add(player);
+                list.add(player2);
+                a.addUserList(list);
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 3);
+
+            });
+
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void AddPlayerListAddsAllPlayerToViewUserEnd() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
         User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
 
@@ -142,9 +234,13 @@ public class MainLeaderboardInstrumentedTest {
                     e.printStackTrace();
                 }
 
-                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 2);
+                assertTrue(a.getLdbAdapter().getCount() <= a.getMaxUserNumber() + 3);
 
             });
+
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

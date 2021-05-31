@@ -4,24 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.menu.MenuActivity">
-
-
-    <Button
-        android:id="@+id/join_game"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_rounded"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/join_game"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.111"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.936" />
+    tools:context=".ui.menu.MenuActivity"
+    android:background="@drawable/login_gradient">
 
     <ImageView
         android:layout_width="30dp"
@@ -41,23 +25,30 @@
         android:layout_height="wrap_content"
         android:background="@drawable/layout_rounded"
         android:text="@string/Start_game"
-        app:layout_constraintBaseline_toBaselineOf="@+id/join_game"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="30dp"
-        android:layout_height="67dp"
-        android:contentDescription="@string/image_on_top_of_create_game_description"
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.199"
+        app:layout_constraintHorizontal_bias="0.726"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.858"
-        app:srcCompat="@drawable/running_guy" />
+        app:layout_constraintVertical_bias="0.967" />
+
+
+    <Button
+        android:id="@+id/join_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_rounded"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/join_game"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.968" />
 
     <ImageView
         android:layout_width="46dp"
@@ -71,27 +62,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.838"
         app:srcCompat="@drawable/running_guy" />
-
-    <Button
-        android:id="@+id/download_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/menu_to_map_downloader_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/offline_map_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/menu_to_offline_map_button"
-        app:layout_constraintBaseline_toBaselineOf="@+id/download_map"
-        app:layout_constraintEnd_toStartOf="@+id/download_map"
-        app:layout_constraintHorizontal_bias="0.186"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/weather_type"
@@ -137,10 +107,10 @@
         android:layout_height="69dp"
         app:layout_constraintBottom_toTopOf="@+id/join_game"
         app:layout_constraintEnd_toStartOf="@+id/new_game"
-        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintHorizontal_bias="0.565"
         app:layout_constraintStart_toEndOf="@+id/join_game"
         app:layout_constraintTop_toBottomOf="@+id/weather_temp_average"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.585"
         app:srcCompat="@drawable/information" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

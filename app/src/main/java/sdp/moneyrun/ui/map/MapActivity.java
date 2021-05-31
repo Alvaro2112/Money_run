@@ -17,6 +17,7 @@ import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,8 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.offline.OfflineManager;
+import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
@@ -50,14 +53,14 @@ import java.util.Objects;
 import sdp.moneyrun.Helpers;
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.map.CoinGenerationHelper;
 import sdp.moneyrun.map.LocationCheckObjectivesCallback;
 import sdp.moneyrun.map.MapPlayerListAdapter;
-import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.map.TrackedMap;
 import sdp.moneyrun.player.LocalPlayer;
 import sdp.moneyrun.player.Player;
@@ -70,7 +73,6 @@ this map implements all the functionality we will need.
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public static final double THRESHOLD_DISTANCE = 5;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
-    private static final double ZOOM_FOR_FEATURES = 15.;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
@@ -85,7 +87,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private GameDatabaseProxy proxyG;
     private TextView currentScoreView;
     private Button exitButton;
-    private Button questionButton;
     private Button leaderboardButton;
     private LocalPlayer localPlayer;
     @Nullable
@@ -103,7 +104,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private float circleRadius;
     private double shrinkingFactor = 0.99;
     private ArrayList<Coin> seenCoins;
+    private ValueEventListener isEndedListener;
     private String locationMode;
+    private boolean isAnswering;
+    private boolean hasFoundMap;
+    private OfflineManager offlineManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +128,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView.setText(default_score);
 
         addExitButton();
-        addQuestionButton();
         addLeaderboardButton();
 
         mapView.addOnDidFinishRenderingMapListener(fully -> {
@@ -132,28 +136,23 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
 
         DatabaseProxy.addOfflineListener(this, TAG);
-        
+
         if (locationMode != null)
             initLocationManager(locationMode);
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         DatabaseProxy.removeOfflineListener();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(this, TAG);
-    }
 
-    protected void onStop(){
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-
-    }
-
+    /**
+     * Initializes all the logic to keep the location updated
+     *
+     * @param locationMode the location mode that will be used ("gps" for gps location, "network" for network location and null for the default MapBox location (i.e. getLastLocation))
+     */
     public void initLocationManager(String locationMode) {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -183,7 +182,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         locationManager.requestLocationUpdates(locationMode, MINIMUM_TIME_BEFORE_UPDATE, DISTANCE_CHANGE_BEFORE_UPDATE, locationListenerGPS);
 
 
-
     }
 
 
@@ -209,6 +207,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         proxyG = new GameDatabaseProxy();
         localPlayer = new LocalPlayer();
         hasEnded = false;
+        isAnswering = false;
+        hasFoundMap = false;
         try {
             riddleDb = RiddlesDatabase.createInstance(getApplicationContext());
         } catch (RuntimeException e) {
@@ -223,7 +223,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         currentScoreView = findViewById(R.id.map_score_view);
         chronometer = findViewById(R.id.mapChronometer);
         exitButton = findViewById(R.id.close_map);
-        questionButton = findViewById(R.id.new_question);
         leaderboardButton = findViewById(R.id.in_game_scores_button);
     }
 
@@ -255,11 +254,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 } else {
                     localPlayer.setLocallyAvailableCoins((ArrayList<Coin>) game.getCoins());
                 }
-                initCircle();
+                initCircleAndSetEndListener();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
         });
+    }
+
+    private void initCircleAndSetEndListener() {
+        initCircle();
+        if (!host)
+            listenEnded();
     }
 
     /**
@@ -312,17 +317,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      * Add the functionality of leaving the map Activity
      */
     private void addExitButton() {
-        exitButton.setOnClickListener(v -> finish()); //TODO: end game not finish
+        exitButton.setOnClickListener(v -> {
+                    if (!hasEnded) {
+                        endGame();
+                    }
+                }
+        );
     }
 
     /**
      * Add functionality to the question button so that we can see random questions popup
-     */
-    private void addQuestionButton() {
-        questionButton.setOnClickListener(v -> onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), null));
-    }
-
-    /**
+     *
      * @param mapboxMap the map where everything will be done
      *                  this overrides the OnMapReadyCallback in the implemented interface
      *                  We set up the symbol manager here, it will allow us to add markers and other visual stuff on the map
@@ -334,6 +339,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         callback = new LocationCheckObjectivesCallback(this, locationMode == null);
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, style -> {
+            offlineManager = OfflineManager.getInstance(MapActivity.this);
+            getDownloadedRegion();
 
             GeoJsonOptions geoJsonOptions = new GeoJsonOptions().withTolerance(0.4f);
             symbolManager = new SymbolManager(mapView, mapboxMap, style, null, geoJsonOptions);
@@ -378,6 +385,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         return game_center;
     }
 
+    public boolean getHasFoundMap() {
+        return hasFoundMap;
+    }
+
 
     @Nullable
     public String getPlayerId() {
@@ -393,10 +404,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     private void initChronometer() {
 
-        chronometer.start();
-        chronometerCounter = 0;
-        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
-        shrinkingFactor = (circleRadius) / (2 * game_time);
+        setupChronometer();
         chronometer.setOnChronometerTickListener(chronometer -> {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
@@ -404,13 +412,36 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 initCircle();
             } else {
                 if (!hasEnded) {
-                    hasEnded = true;
-                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
-
+                    if (host)
+                        game.setEnded(true, false);
+                    endGame();
                 }
             }
             chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
         });
+    }
+
+    /**
+     * Helper method to set the chronometer functionality
+     */
+    private void setupChronometer() {
+        chronometer.start();
+        chronometerCounter = 0;
+        chronometer.setFormat("REMAINING TIME " + (game_time - chronometerCounter));
+        shrinkingFactor = (circleRadius) / (2 * game_time);
+        long current = System.currentTimeMillis() / 1000;
+        if (host) {
+            game.setStartTime(current, false);
+        } else {
+            long start = game.getStartTime();
+            chronometerCounter = (int) (current - start + 2);
+        }
+    }
+
+
+    public void endGame() {
+        hasEnded = true;
+        Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
     }
 
 
@@ -587,7 +618,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         }
 
         deleteCoinFromMap(coin);
-
         boolean check = checkIfLegalPosition(coin, circleRadius, game_center.getLatitude(), game_center.getLongitude());
         if (check)
             Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, true);
@@ -634,15 +664,17 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     public void checkObjectives(@NonNull Location location) {
         currentLocation = location;
         Coin coin = nearestCoin(location, localPlayer.getLocallyAvailableCoins(), THRESHOLD_DISTANCE);
-        if (coin != null && !seenCoins.contains(coin)) {
+
+        if (coin != null && !seenCoins.contains(coin) && !isAnswering) {
+            isAnswering = true;
             seenCoins.add(coin);
             try {
                 onButtonShowQuestionPopupWindowClick(mapView, true, R.layout.question_popup, riddleDb.getRandomRiddle(), coin);
             } catch (WindowManager.BadTokenException e) {
                 seenCoins.remove(coin);
             }
+            isAnswering = false;
         }
-
     }
 
     /**
@@ -657,6 +689,36 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
         circleManager.create(circleOptions);
     }
+
+
+    /**
+     * Check if there is a downloaded map and show a toast if there is one or not
+     */
+    private void getDownloadedRegion() {
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+
+            @Override
+            public void onList(@Nullable OfflineRegion[] offlineRegions) {
+                if (offlineRegions == null || offlineRegions.length == 0) {
+                    hasFoundMap = false;
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
+
+                hasFoundMap = true;
+                // Create new camera position
+                int regionSelected = 0;
+
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(MapActivity.this, getString(R.string.no_offline_regions), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     public CircleManager getCircleManager() {
         return circleManager;
@@ -675,5 +737,30 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         // calculates distance between the current coin and the game center
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
+    }
+
+    /**
+     * Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing
+     */
+    public void listenEnded() {
+        isEndedListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot != null && snapshot.child("ended").getValue() != null && (boolean) snapshot.child("ended").getValue()) {
+                    Game.endGame(localPlayer.getCollectedCoins().size(), localPlayer.getScore(), player.getPlayerId(), game.getPlayers(), MapActivity.this, false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, error.getMessage());
+            }
+        };
+        proxyG.addGameListener(game, isEndedListener);
+    }
+
+
+    @Override
+    public void onBackPressed() {
     }
 }

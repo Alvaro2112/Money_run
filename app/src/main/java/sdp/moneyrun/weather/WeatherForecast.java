@@ -3,26 +3,22 @@ package sdp.moneyrun.weather;
 import androidx.annotation.NonNull;
 
 public final class WeatherForecast {
-    private WeatherReport[] reports;
+    private WeatherReport report;
 
-    public WeatherForecast(@NonNull WeatherReport[] reports) {
-        if (reports.length < 3) {
-            throw new IllegalArgumentException("reports array must contain at least 3 elements.");
+    public WeatherForecast(@NonNull WeatherReport report) {
+        if (report == null) {
+            throw new IllegalArgumentException("Report must not be null");
         }
 
-        this.reports = reports;
+        this.report = report;
     }
 
-    public void setReports(WeatherReport[] reports) {
-        this.reports = reports;
+    public void setReports(WeatherReport report) {
+        this.report = report;
     }
 
-    public WeatherReport getWeatherReport(@NonNull Day offset) {
-        return this.reports[offset.ordinal()];
+    public WeatherReport getWeatherReport() {
+        return this.report;
     }
 
-
-    public enum Day {
-        TODAY, TOMORROW, AFTER_TOMORROW
-    }
 }

@@ -18,17 +18,18 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.R;
-import sdp.moneyrun.database.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
+import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
 import sdp.moneyrun.ui.map.MapActivity;
@@ -36,19 +37,19 @@ import sdp.moneyrun.user.User;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class NewGameImplementation extends MenuImplementation {
+    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
     TextView nameGameView;
     TextView maxPlayerNumberView;
     TextView numCoinsView;
     TextView gameRadiusView;
     TextView gameDurationView;
-    private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
 
     public NewGameImplementation(Activity activity,
                                  DatabaseReference databaseReference,
                                  User user,
                                  ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                 FusedLocationProviderClient fusedLocationClient) {
-        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+                                 AndroidLocationService locationService) {
+        super(activity, databaseReference, user, requestPermissionsLauncher, locationService);
     }
 
 
@@ -108,7 +109,8 @@ public class NewGameImplementation extends MenuImplementation {
         }
 
         popupWindow.dismiss();
-        postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber);
+
+        postNewGame(gameName, maxPlayerNumber, numCoinsNumber, gameRadiusNumber, gameDurationNumber, locationService.getCurrentLocation());
     }
 
     /**
@@ -179,26 +181,15 @@ public class NewGameImplementation extends MenuImplementation {
 
     }
 
-
-    /**
-     * Post a new game.
-     *
-     * @param name           the game name
-     * @param maxPlayerCount the maximum number of players in the game
-     */
-    @SuppressLint("MissingPermission")
-    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration) {
-
-        // Grant permissions if necessary
-        requestLocationPermissions(requestPermissionsLauncher);
-
-        // Build new game given fields filled by user
+    public void postNewGame(String name, int maxPlayerCount, int numCoins, double gameRadius, double gameDuration, @NonNull LocationRepresentation location) {
         List<Riddle> riddles = new ArrayList<>();
         List<Coin> coins = new ArrayList<>();
         Player player = new Player(user.getUserId(), user.getName(), 0);
-        Game game = new Game(name, player, maxPlayerCount, riddles, coins, new Location(""), true, numCoins, gameRadius, gameDuration);
+        Location loc = new Location("");
+        loc.setLatitude(location.getLatitude());
+        loc.setLongitude(location.getLongitude());
+        Game game = new Game(name, player, maxPlayerCount, riddles, coins, loc, true, numCoins, gameRadius, gameDuration);
         game.setId(user.getUserId());
-        // post game to database
         GameDatabaseProxy gdb = new GameDatabaseProxy();
         gdb.putGame(game);
         launchLobbyActivity(game.getId(), player);

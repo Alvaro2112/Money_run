@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.game.GameLobbyActivity">
+    tools:context=".ui.game.GameLobbyActivity"
+    android:background="@drawable/theme_gradient">
 
     <TextView
         android:id="@+id/lobby_title"
@@ -56,9 +57,10 @@
         android:id="@+id/leave_lobby_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="52dp"
         android:layout_marginBottom="40dp"
-        android:background="#FF392E"
+        android:background="@drawable/layout_rounded_leave_game"
+        android:paddingHorizontal="10dp"
         android:text="@string/leave_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -68,7 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="84dp"
-        android:background="#77dd77"
+        android:background="@drawable/layout_rounded_start_game"
+        android:paddingHorizontal="10dp"
         android:text="@string/launch_game_button_text"
         app:layout_constraintBaseline_toBaselineOf="@+id/leave_lobby_button"
         app:layout_constraintEnd_toEndOf="parent"
