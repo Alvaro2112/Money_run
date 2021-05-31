@@ -47,17 +47,17 @@ public class MainActivity extends AppCompatActivity {
     private void startAnimations(){
         new Handler().postDelayed(() -> {
             runningMan.startAnimation(translateMan);
-        },1000);
+        },750);
 
         new Handler().postDelayed(() -> {
             coinImage.setVisibility(View.INVISIBLE);
-        },3000);
+        },2250);
 
         new Handler().postDelayed(() -> {
             coinImage.setVisibility(View.INVISIBLE);
             appTitleImage.startAnimation(alphaTitle);
             mp.start();
-        },3500);
+        },2700);
 
         if (!calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             Intent authIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(authIntent);
             finish();
-        }, 5750);
+        }, 4500);
     }
 
     /**
