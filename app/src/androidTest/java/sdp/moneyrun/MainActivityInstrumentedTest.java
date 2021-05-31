@@ -23,7 +23,7 @@ public class MainActivityInstrumentedTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
-    
+
 
     @Test
     public void activityChangesToDashBoardAfter5750Sec() {

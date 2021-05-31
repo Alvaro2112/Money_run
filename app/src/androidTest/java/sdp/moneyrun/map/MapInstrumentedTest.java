@@ -633,6 +633,7 @@ public class MapInstrumentedTest {
                     assertEquals(-1, 2);
                 }
             } while (!finished.get());
+            
 
             scenario.onActivity(a -> {
                 Location curloc = a.getCurrentLocation();
