@@ -22,6 +22,7 @@ public class MainActivityInstrumentedTest {
     @NonNull
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
+
     
 
     @Test
