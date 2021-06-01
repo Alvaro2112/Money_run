@@ -110,6 +110,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean hasFoundMap;
     private OfflineManager offlineManager;
     private final double scalingFactor = 5000.0;
+    private final int MapboxScale = 10;
+    private final int numberOfSecondsInAMinute = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,8 +243,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 coinsToPlace = game.getNumCoins();
                 game_radius = game.getRadius();
-                int MapboxScale = 10;
-                int numberOfSecondsInAMinute = 60;
                 circleRadius = (float) game_radius * MapboxScale;
                 game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
                 game_center = game.getStartLocation();
