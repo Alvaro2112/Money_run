@@ -241,8 +241,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 coinsToPlace = game.getNumCoins();
                 game_radius = game.getRadius();
-                circleRadius = (float) game_radius * 10;
-                game_time = (int) Math.floor(game.getDuration() * 60);
+                int MapboxScale = 10;
+                int numberOfSecondsInAMinute = 60;
+                circleRadius = (float) game_radius * MapboxScale;
+                game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
                 game_center = game.getStartLocation();
                 initChronometer();
 
@@ -438,7 +440,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             game.setStartTime(current, false);
         } else {
             long start = game.getStartTime();
-            chronometerCounter = (int) (current - start + 6);
+            int loadingTimeInSeconds = 6;
+            chronometerCounter = (int) (current - start + loadingTimeInSeconds);
         }
     }
 
