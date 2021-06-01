@@ -30,6 +30,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -39,6 +41,7 @@ import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.Line;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
@@ -164,8 +167,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         LocationListener locationListenerGPS = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                getMapboxMap().getLocationComponent().forceLocationUpdate(location);
-                checkObjectives(location);
+                if(getMapboxMap() != null) {
+                    getMapboxMap().getLocationComponent().forceLocationUpdate(location);
+                    checkObjectives(location);
+                }
             }
 
             @Override
@@ -409,7 +414,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
                 circleRadius -= shrinkingFactor;
-                initCircle();
+                if(chronometerCounter % 2 == 0)
+                    initCircle();
             } else {
                 if (!hasEnded) {
                     if (host)
@@ -434,7 +440,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             game.setStartTime(current, false);
         } else {
             long start = game.getStartTime();
-            chronometerCounter = (int) (current - start + 2);
+            chronometerCounter = (int) (current - start + 6);
         }
     }
 
@@ -683,11 +689,29 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void initCircle() {
         circleManager.deleteAll();
+        circleHelper(256,game_center,circleRadius/5000.0);
+    }
+
+
+    private void circleHelper(int numberOfSides,Location centerCoordinates,double radiusInKilometers){
         CircleOptions circleOptions = new CircleOptions();
-        circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.5f).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
-        circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
-        circleManager.create(circleOptions);
+        List<LatLng> positions = new ArrayList<>();
+        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
+        double distanceY = radiusInKilometers / 110.574;
+        double slice = (2 * Math.PI) / numberOfSides;
+        double theta;
+        double x;
+        double y;
+        LatLng position;
+        for (int i = 0; i < numberOfSides; ++i) {
+            theta = i * slice;
+            x = distanceX * Math.cos(theta);
+            y = distanceY * Math.sin(theta);
+            position = new LatLng(centerCoordinates.getLatitude() + y,
+                    centerCoordinates.getLongitude() + x);
+            positions.add(position);
+            circleManager.create(circleOptions.withCircleRadius(3f).withLatLng(position).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary))));
+        }
     }
 
 
