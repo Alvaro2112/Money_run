@@ -30,8 +30,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -41,7 +39,6 @@ import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleManager;
 import com.mapbox.mapboxsdk.plugins.annotation.CircleOptions;
-import com.mapbox.mapboxsdk.plugins.annotation.Line;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
@@ -112,6 +109,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean isAnswering;
     private boolean hasFoundMap;
     private OfflineManager offlineManager;
+    private final double scalingFactor = 5000.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -689,15 +687,19 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void initCircle() {
         circleManager.deleteAll();
-        circleHelper(256,game_center,circleRadius/5000.0);
+        circleHelper(game_center,circleRadius/scalingFactor);
     }
 
 
-    private void circleHelper(int numberOfSides,Location centerCoordinates,double radiusInKilometers){
+    private void circleHelper(Location centerCoordinates,double radiusInKilometers){
+        int numberOfSides = 256;
+        int halfCircleDegrees = 180;
+        double scaleLongitudeToKilometers = 111.319;
+        double scaleLatitudeToKilometers = 110.574;
         CircleOptions circleOptions = new CircleOptions();
         List<LatLng> positions = new ArrayList<>();
-        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
-        double distanceY = radiusInKilometers / 110.574;
+        double distanceX = radiusInKilometers / (scaleLongitudeToKilometers * Math.cos(centerCoordinates.getLatitude() * Math.PI / halfCircleDegrees));
+        double distanceY = radiusInKilometers / scaleLatitudeToKilometers;
         double slice = (2 * Math.PI) / numberOfSides;
         double theta;
         double x;
@@ -731,9 +733,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
 
                 hasFoundMap = true;
-                // Create new camera position
-                int regionSelected = 0;
-
             }
 
             @Override
