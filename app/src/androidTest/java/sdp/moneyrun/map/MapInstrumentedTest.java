@@ -1225,7 +1225,7 @@ public class MapInstrumentedTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                assertEquals(a.getCircleManager().getAnnotations().size(), 1);
+                assertEquals(a.getCircleManager().getAnnotations().size(), 256);
             });
         }
     }

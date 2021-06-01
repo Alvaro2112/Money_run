@@ -109,6 +109,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private boolean isAnswering;
     private boolean hasFoundMap;
     private OfflineManager offlineManager;
+    private final double scalingFactor = 5000.0;
+    private final int MapboxScale = 10;
+    private final int numberOfSecondsInAMinute = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,8 +167,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         LocationListener locationListenerGPS = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                getMapboxMap().getLocationComponent().forceLocationUpdate(location);
-                checkObjectives(location);
+                if(getMapboxMap() != null) {
+                    getMapboxMap().getLocationComponent().forceLocationUpdate(location);
+                    checkObjectives(location);
+                }
             }
 
             @Override
@@ -238,8 +243,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game = proxyG.getGameFromTaskSnapshot(task);
                 coinsToPlace = game.getNumCoins();
                 game_radius = game.getRadius();
-                circleRadius = (float) game_radius * 10;
-                game_time = (int) Math.floor(game.getDuration() * 60);
+                circleRadius = (float) game_radius * MapboxScale;
+                game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
                 game_center = game.getStartLocation();
                 initChronometer();
 
@@ -409,7 +414,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
                 circleRadius -= shrinkingFactor;
-                initCircle();
+                if(chronometerCounter % 2 == 0)
+                    initCircle();
             } else {
                 if (!hasEnded) {
                     if (host)
@@ -434,7 +440,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             game.setStartTime(current, false);
         } else {
             long start = game.getStartTime();
-            chronometerCounter = (int) (current - start + 2);
+            int loadingTimeInSeconds = 6;
+            chronometerCounter = (int) (current - start + loadingTimeInSeconds);
         }
     }
 
@@ -683,11 +690,31 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void initCircle() {
         circleManager.deleteAll();
+        circleHelper(game_center,circleRadius/scalingFactor);
+    }
+
+
+    private void circleHelper(Location centerCoordinates,double radiusInKilometers){
+        int numberOfSides = 256;
+        int halfCircleDegrees = 180;
+        double scaleLongitudeToKilometers = 111.319;
+        double scaleLatitudeToKilometers = 110.574;
         CircleOptions circleOptions = new CircleOptions();
-        circleOptions = circleOptions.withCircleRadius(circleRadius);
-        circleOptions = circleOptions.withCircleOpacity(0.5f).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary)));
-        circleOptions.withLatLng(new LatLng(getCurrentLocation().getLatitude(), getCurrentLocation().getLongitude()));
-        circleManager.create(circleOptions);
+        double distanceX = radiusInKilometers / (scaleLongitudeToKilometers * Math.cos(centerCoordinates.getLatitude() * Math.PI / halfCircleDegrees));
+        double distanceY = radiusInKilometers / scaleLatitudeToKilometers;
+        double slice = (2 * Math.PI) / numberOfSides;
+        double theta;
+        double x;
+        double y;
+        LatLng position;
+        for (int i = 0; i < numberOfSides; ++i) {
+            theta = i * slice;
+            x = distanceX * Math.cos(theta);
+            y = distanceY * Math.sin(theta);
+            position = new LatLng(centerCoordinates.getLatitude() + y,
+                    centerCoordinates.getLongitude() + x);
+            circleManager.create(circleOptions.withCircleRadius(3f).withLatLng(position).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary))));
+        }
     }
 
 
@@ -707,9 +734,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 Toast.makeText(getApplicationContext(), getString(R.string.found_offline_regions), Toast.LENGTH_SHORT).show();
 
                 hasFoundMap = true;
-                // Create new camera position
-                int regionSelected = 0;
-
             }
 
             @Override
