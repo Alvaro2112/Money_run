@@ -697,7 +697,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double scaleLongitudeToKilometers = 111.319;
         double scaleLatitudeToKilometers = 110.574;
         CircleOptions circleOptions = new CircleOptions();
-        List<LatLng> positions = new ArrayList<>();
         double distanceX = radiusInKilometers / (scaleLongitudeToKilometers * Math.cos(centerCoordinates.getLatitude() * Math.PI / halfCircleDegrees));
         double distanceY = radiusInKilometers / scaleLatitudeToKilometers;
         double slice = (2 * Math.PI) / numberOfSides;
@@ -711,7 +710,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             y = distanceY * Math.sin(theta);
             position = new LatLng(centerCoordinates.getLatitude() + y,
                     centerCoordinates.getLongitude() + x);
-            positions.add(position);
             circleManager.create(circleOptions.withCircleRadius(3f).withLatLng(position).withCircleColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.colorPrimary))));
         }
     }
