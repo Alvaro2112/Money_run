@@ -28,6 +28,15 @@ public class MainActivity extends AppCompatActivity {
     private ImageView coinImage;
     private ImageView appTitleImage;
 
+    //TIMES FOR THE ANIMATION
+    private final int ANIMATION_START = 750;
+    private final int ANIMATION_COIN_FADE = 2250;
+    private final int ANIMATION_TITLE_FADE = 2700;
+    private final int INTENT_START_ACTIVITY = 5400;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +56,16 @@ public class MainActivity extends AppCompatActivity {
     private void startAnimations(){
         new Handler().postDelayed(() -> {
             runningMan.startAnimation(translateMan);
-        },750);
+        },ANIMATION_START);
 
         new Handler().postDelayed(() -> {
             coinImage.setVisibility(View.INVISIBLE);
-        },2250);
+        },ANIMATION_COIN_FADE);
 
         new Handler().postDelayed(() -> {
-            coinImage.setVisibility(View.INVISIBLE);
             appTitleImage.startAnimation(alphaTitle);
             mp.start();
-        },2700);
+        },ANIMATION_TITLE_FADE);
 
         if (!calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -67,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Intent authIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(authIntent);
             finish();
-        }, 4500);
+        }, INTENT_START_ACTIVITY);
     }
 
     /**
