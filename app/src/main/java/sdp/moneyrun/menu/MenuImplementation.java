@@ -15,35 +15,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.firebase.database.DatabaseReference;
 
 import sdp.moneyrun.R;
+import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.user.User;
 
 public class MenuImplementation {
-
-    public static final float MAX_DISTANCE_TO_JOIN_GAME = 10000000;
+    public static final float MAX_DISTANCE_TO_JOIN_GAME = 1000;
 
     protected final Activity activity;
     protected final DatabaseReference databaseReference;
     protected final User user;
     protected final ActivityResultLauncher<String[]> requestPermissionsLauncher;
-    protected final FusedLocationProviderClient fusedLocationClient;
+    protected final AndroidLocationService locationService;
+
 
     public MenuImplementation(Activity activity,
                               DatabaseReference databaseReference,
                               User user,
                               ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                              FusedLocationProviderClient fusedLocationClient
+                              AndroidLocationService locationService
     ) {
         this.activity = activity;
         this.databaseReference = databaseReference;
         this.user = user;
         this.requestPermissionsLauncher = requestPermissionsLauncher;
-        this.fusedLocationClient = fusedLocationClient;
+        this.locationService = locationService;
     }
+
 
     /**
      * Requests location permissions to the user

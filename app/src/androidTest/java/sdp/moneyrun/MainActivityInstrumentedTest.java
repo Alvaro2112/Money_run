@@ -22,13 +22,14 @@ public class MainActivityInstrumentedTest {
     @NonNull
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
-    
+
+
 
     @Test
-    public void activityChangesToDashBoardAfter3Sec() {
+    public void activityChangesToDashBoardAfter5750Sec() {
         Intents.init();
         try {
-            Thread.sleep(4000);
+            Thread.sleep(6000);
         } catch (InterruptedException e) {
             e.printStackTrace();
             Intents.release();

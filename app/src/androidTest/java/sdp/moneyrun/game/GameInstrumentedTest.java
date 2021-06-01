@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import sdp.moneyrun.database.GameDatabaseProxy;
-import sdp.moneyrun.database.GameDbData;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.game.GameDbData;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 
@@ -116,7 +116,7 @@ public class GameInstrumentedTest {
         });
        try{
            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-           assertEquals(0l,updated.getCount());
+           assertEquals(0L,updated.getCount());
        } catch (InterruptedException e) {
            fail();
        }
@@ -779,7 +779,7 @@ public class GameInstrumentedTest {
                 .addOnCompleteListener(task -> gotten.countDown());
         try {
             gotten.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-            assertEquals(0l, gotten.getCount());
+            assertEquals(0L, gotten.getCount());
         } catch (InterruptedException e) {
             fail();
         }

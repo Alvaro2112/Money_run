@@ -43,7 +43,12 @@ public class OpenWeatherMap {
         return new OpenWeatherMap(open_weather_key);
     }
 
-
+    /**
+     * This function will get a report as a JSONObject and will parse it to convert it into a usable WeatherReport Object
+     *
+     * @param report The report to be converted
+     * @return The converted report
+     */
     @NonNull
     private WeatherReport parseReport(@Nullable JSONObject report) throws JSONException {
         if (report == null) {
@@ -62,38 +67,54 @@ public class OpenWeatherMap {
         );
     }
 
+    /**
+     * This function will get a forecast as a JSONObject and will parse it to convert it into a usable WeatherForecast Object
+     *
+     * @param forecast The weatherForecast to be converted
+     * @return The converted weatherForecast
+     */
     @NonNull
     private WeatherForecast parseForecast(@Nullable JSONObject forecast) throws JSONException {
         if (forecast == null)
             throw new NullPointerException();
 
         JSONArray daily = forecast.getJSONArray("daily");
-        WeatherReport[] reports = new WeatherReport[Math.max(3, daily.length())];
+        WeatherReport report;
 
-        for (int i = 0; i < Math.max(3, daily.length()); ++i) {
-            if (i >= daily.length())
-                reports[i] = NO_DATA;
-            else
-                reports[i] = tryToParseReport(daily.getJSONObject(i), i);
-        }
+        if (0 == daily.length())
+            report = NO_DATA;
+        else
+            report = tryToParseReport(daily.getJSONObject(0));
 
-        return new WeatherForecast(reports);
+        return new WeatherForecast(report);
     }
 
-    private WeatherReport tryToParseReport(JSONObject jsonObject, int day) {
+    /**
+     * Basically the parseForecast function surrounded by a try catch in case an Exception occurs
+     *
+     * @param jsonObject The Report to be converted
+     * @return
+     */
+    private WeatherReport tryToParseReport(JSONObject jsonObject) {
 
         WeatherReport report;
 
         try {
             report = parseReport(jsonObject);
         } catch (JSONException ex) {
-            Log.e("OpenWeatherMapWeather", "Error when parsing day " + day, ex);
+            Log.e("OpenWeatherMapWeather", "Error when parsing day 0", ex);
             report = NO_DATA;
         }
 
         return report;
     }
 
+    /**
+     * Gets the forecast as a string for a given location from the OpenWeather website
+     *
+     * @param location The location for which we want the weather forecast
+     * @return The weather forecast as a String
+     */
     @Nullable
     private String getRawForecast(@NonNull LocationRepresentation location) throws IOException {
         String queryUrl = API_ENDPOINT +
@@ -139,6 +160,12 @@ public class OpenWeatherMap {
 
     }
 
+    /**
+     * Returns the weatherForecast for a given location
+     *
+     * @param location the location for which we want the forecast
+     * @return the forecast
+     */
     @NonNull
     public WeatherForecast getForecast(@NonNull LocationRepresentation location) throws IOException {
         String forecast = getRawForecast(location);

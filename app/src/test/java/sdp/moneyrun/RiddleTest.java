@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;

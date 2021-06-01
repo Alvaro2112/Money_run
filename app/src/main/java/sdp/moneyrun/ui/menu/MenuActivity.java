@@ -2,8 +2,11 @@ package sdp.moneyrun.ui.menu;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -36,15 +40,15 @@ import java.io.IOException;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.DatabaseProxy;
-import sdp.moneyrun.database.RiddlesDatabase;
+import sdp.moneyrun.database.riddle.RiddlesDatabase;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.menu.NewGameImplementation;
 import sdp.moneyrun.ui.authentication.LoginActivity;
-import sdp.moneyrun.ui.map.OfflineMapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
-import sdp.moneyrun.ui.player.UserProfileActivity;
+import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 import sdp.moneyrun.weather.OpenWeatherMap;
 import sdp.moneyrun.weather.WeatherForecast;
@@ -60,19 +64,21 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     map -> {
                     });
-
-
+    private final String TAG = MenuActivity.class.getSimpleName();
+    @Nullable
+    public NewGameImplementation newGameImplementation;
     protected DrawerLayout mDrawerLayout;
     DatabaseReference databaseReference;
     FusedLocationProviderClient fusedLocationClient;
+    @Nullable
     AndroidLocationService locationService;
     private User user;
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
+    private Dialog helpDialog;
+    private ImageView informationImage;
 
-
-    private final String TAG = MenuActivity.class.getSimpleName();
 
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
@@ -80,7 +86,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         public void onLocationChanged(@NonNull Location location) {
             loadWeather(location);
             if (currentForecast != null)
-                setWeatherFieldsToday(currentForecast.getWeatherReport(WeatherForecast.Day.TODAY));
+                setWeatherFieldsToday(currentForecast.getWeatherReport());
 
         }
 
@@ -105,7 +111,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_menu);
         setNavigationViewListener();
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // setup database instance
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -114,37 +119,20 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         // Get player location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        helpDialog = new Dialog(this);
+
         runFunctionalities();
-        addDownloadButton();
-        addOfflineMapButton();
+
+        addInfoImageButton();
+
 
         DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        DatabaseProxy.removeOfflineListener();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        DatabaseProxy.addOfflineListener(MenuActivity.this, TAG);
-    }
 
-    protected void onStop(){
-        super.onStop();
-        DatabaseProxy.removeOfflineListener();
-    }
-
-    public void addDownloadButton() {
-        Button download = findViewById(R.id.download_map);
-        download.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false));
-    }
-
-    public void addOfflineMapButton() {
-        Button offline_map = findViewById(R.id.offline_map_menu);
-        offline_map.setOnClickListener(v -> onButtonSwitchToActivity(OfflineMapActivity.class, false));
+    private void addInfoImageButton(){
+        informationImage = (ImageView)findViewById(R.id.info_image);
+        informationImage.setOnClickListener(v -> showPopup());
     }
 
     public void runFunctionalities() {
@@ -160,16 +148,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient,
+                locationService,
                 true,
                 R.layout.join_game_popup);
 
-        NewGameImplementation newGameImplementation = new NewGameImplementation(this,
+        newGameImplementation = new NewGameImplementation(this,
                 databaseReference,
                 user,
                 requestPermissionsLauncher,
-                fusedLocationClient);
-
+                locationService);
 
         runWeather();
 
@@ -184,8 +171,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         RiddlesDatabase.reset();
+        DatabaseProxy.removeOfflineListener();
     }
 
+    /**
+     * This functions takes care of the logic regarding the buttons that are in the navigation side bar
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -212,6 +203,14 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 onButtonSwitchToActivity(LoginActivity.class, true);
                 break;
             }
+
+            case R.id.download_map: {
+                onButtonSwitchToActivity(OfflineMapDownloaderActivity.class, false);
+                break;
+
+            }
+
+
         }
         //close navigation drawer
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -234,6 +233,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         if (shouldFinish) {
             finish();
         }
+    }
+
+    public void showPopup() {
+        Button txtclose;
+        helpDialog.setContentView(R.layout.help_pop_up);
+        txtclose =(Button) helpDialog.findViewById(R.id.txtclose);
+        txtclose.setOnClickListener(v1 -> helpDialog.dismiss());
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialog.show();
+
     }
 
     public void setGuestPlayerFields(boolean guest) {
@@ -304,6 +313,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     /**
      * @return the location service
      */
+    @Nullable
     public AndroidLocationService getLocationService() {
         return locationService;
     }
@@ -311,4 +321,5 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void setLocationService(@NonNull AndroidLocationService locationService) {
         this.locationService = locationService;
     }
+
 }

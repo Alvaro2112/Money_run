@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_end_game.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_friend_list.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_game_lobby.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_leaderboard.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_main_leaderboard.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_map.xml" value="0.19972826086956522" />
+        <entry key="app/src/main/res/layout/activity_menu.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_offline_map.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_offline_map_downloader.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/activity_user_profile.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/add_friend_list_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.2759426378434819" />
+        <entry key="app/src/main/res/layout/create_profile.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/friend_list_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/in_game_scores.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/lobby_player_item_layout.xml" value="0.3269927536231884" />
+        <entry key="app/src/main/res/layout/main_leaderboard_item_layout.xml" value="0.3269927536231884" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <pattern value="sdp.moneyrun.database.DatabaseProxy" method="getDatabase" />
   </component>
@@ -28,7 +52,7 @@
     </option>
     <option name="myNotNulls">
       <value>
-        <list size="13">
+        <list size="14">
           <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
           <item index="1" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
           <item index="2" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
@@ -42,6 +66,7 @@
           <item index="10" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
           <item index="11" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
           <item index="12" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
+          <item index="13" class="java.lang.String" itemvalue="lombok.NonNull" />
         </list>
       </value>
     </option>

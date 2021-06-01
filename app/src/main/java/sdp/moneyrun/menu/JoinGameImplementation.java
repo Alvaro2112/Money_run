@@ -18,7 +18,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,17 +45,17 @@ public class JoinGameImplementation extends MenuImplementation {
     private final int layoutId;
     @Nullable
     private final User currentUser;
-    private int buttonId;
     private final String LOCATION_MODE = LocationManager.GPS_PROVIDER;
+    private int buttonId;
 
     public JoinGameImplementation(Activity activity,
                                   DatabaseReference databaseReference,
                                   @Nullable User user,
                                   ActivityResultLauncher<String[]> requestPermissionsLauncher,
-                                  FusedLocationProviderClient fusedLocationClient,
+                                  AndroidLocationService locationService,
                                   boolean focusable,
                                   int layoutId) {
-        super(activity, databaseReference, user, requestPermissionsLauncher, fusedLocationClient);
+        super(activity, databaseReference, user, requestPermissionsLauncher, locationService);
         if (user == null) {
             throw new IllegalArgumentException("user is null");
         }

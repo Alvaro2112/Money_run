@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,43 +15,27 @@ import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseProxy {
 
+    private static final String ONLINE_MESSAGE = "You are now online";
+    private static final String OFFLINE_MESSAGE = "You are now offline";
+    private final static DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+    @Nullable
+    private static ValueEventListener listener = null;
+    private static boolean isConnected = false;
     @NonNull
     private final DatabaseReference ref;
     @NonNull
     private final FirebaseDatabase db;
-
-    private final static String TAG = DatabaseProxy.class.getSimpleName();
-
-    private static final String ONLINE_MESSAGE = "You are now online";
-
-    private static final String OFFLINE_MESSAGE = "You are now offline";
-
-    private  static ValueEventListener listener = null;
-
-    private static boolean isConnected = false;
-
-    private final static DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
 
     public DatabaseProxy() {
         db = FirebaseDatabase.getInstance();
         ref = db.getReference();
     }
 
-
-
-    @NonNull
-    public DatabaseReference getReference() {
-        return ref;
-    }
-
-    @NonNull
-    public FirebaseDatabase getDatabase() {
-        return db;
-    }
-
-
     /**
+<<<<<<< HEAD
      *Add a listener on the database that displays a toast on connect/disconnect
+=======
+>>>>>>> master
      * @param context
      * @param TAG
      */
@@ -63,12 +48,13 @@ public class DatabaseProxy {
                 if (connected && !isConnected) {
                     Log.d(TAG, "connected");
                     Toast.makeText(context, ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
-                } else if (!connected && isConnected){
+                } else if (!connected && isConnected) {
                     Log.d(TAG, "not connected");
                     Toast.makeText(context, OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
                 }
                 isConnected = connected;
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Listener was cancelled");
@@ -79,13 +65,20 @@ public class DatabaseProxy {
 
     /**
      * removes the offline listener if it was attached
-     * @return true if a listener was attached, false otherwise
      */
-    public static boolean removeOfflineListener(){
-        if(listener == null) return false;
-        else{
+    public static void removeOfflineListener() {
+        if (listener != null) {
             connectedRef.removeEventListener(listener);
-            return true;
         }
+    }
+
+    @NonNull
+    public DatabaseReference getReference() {
+        return ref;
+    }
+
+    @NonNull
+    public FirebaseDatabase getDatabase() {
+        return db;
     }
 }

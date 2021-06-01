@@ -13,9 +13,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.map.Riddle;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 
 public class GameDataBaseProxyInstrumentedTests {
