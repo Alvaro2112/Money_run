@@ -16,7 +16,7 @@
         android:layout_gravity="end"
         android:background="#FF8A80"
         android:gravity="center"
-        android:text="X"
+        android:text="@string/X_close_window"
         android:textStyle="bold" />
 
     <TextView
