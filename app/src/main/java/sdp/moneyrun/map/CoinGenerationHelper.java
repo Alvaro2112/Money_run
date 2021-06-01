@@ -69,6 +69,12 @@ public class CoinGenerationHelper {
         return (int) Math.ceil(dist / VALUE_RADIUS);
     }
 
+    /**
+     * computes the distance between the location and the closest coin
+     * @param loc
+     * @param coins
+     * @return the distance  between the location and the closest coin
+     */
     public static double minDistWithExistingCoins(Location loc, List<Coin> coins){
         if (coins == null) {
             throw new IllegalStateException();
