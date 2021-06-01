@@ -8,14 +8,51 @@
     android:background="@drawable/theme_gradient">
 
     <ImageView
-        android:layout_width="459dp"
-        android:layout_height="357dp"
-        android:contentDescription="@string/welcome_image_description"
+        android:id="@+id/imageView4"
+        android:layout_width="384dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="black ground"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ground" />
+
+    <ImageView
+        android:id="@+id/coin_image"
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="68dp"
+        android:contentDescription="golden coin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/coin_image" />
+
+    <ImageView
+        android:id="@+id/app_title"
+        android:layout_width="417dp"
+        android:layout_height="245dp"
+        android:layout_marginTop="28dp"
+        android:contentDescription="Money run, main app title"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.264"
-        app:srcCompat="@drawable/main_logo" />
+        app:srcCompat="@drawable/money_run_splash" />
 
+    <ImageView
+        android:id="@+id/running_man"
+        android:layout_width="107dp"
+        android:layout_height="127dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="174dp"
+        android:layout_marginBottom="52dp"
+        android:contentDescription="Silhouette of man running"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/coin_image"
+        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/running_man" />
 </androidx.constraintlayout.widget.ConstraintLayout>

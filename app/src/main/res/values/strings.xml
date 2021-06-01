@@ -100,11 +100,9 @@
     <string name="launch_game_button_text">Launch game</string>
     <string name="guest_button_text">Guest</string>
     <string name="for_offline_mode_description">(For offline mode)</string>
-    <string name="welcome_image_description">Welcome image when opening app</string>
     <string name="cross">x</string>
     <string name="submit_button_text">Submit</string>
     <string name="image_on_top_of_join_game_description">Image on top of join game</string>
-    <string name="image_on_top_of_create_game_description">Image on top of create game</string>
     <string name="game_name_prompt_text">Game name</string>
     <string name="game_max_players_prompt_text">Max player count</string>
     <string name="submit_game_text">Submit</string>
@@ -138,6 +136,7 @@
 
     <!-- Help PopUp  -->
     <string name="how_to_play">How to play</string>
+    <string name="X_close_window">X</string>
     <string name="turn_on_location">- Turn on your Location</string>
     <string name="join_or_create_lobby">- Join or create your own lobby</string>
     <string name="when_game_launches">- When the game launches, run towards the coins</string>

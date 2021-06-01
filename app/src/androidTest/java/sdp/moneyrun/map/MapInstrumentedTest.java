@@ -634,6 +634,7 @@ public class MapInstrumentedTest {
                 }
             } while (!finished.get());
 
+
             scenario.onActivity(a -> {
                 Location curloc = a.getCurrentLocation();
                 Coin coin = new Coin(curloc.getLatitude() / 2, curloc.getLongitude(), 1);
