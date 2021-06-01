@@ -645,7 +645,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             tries++;
         }while(CoinGenerationHelper.minDistWithExistingCoins(loc, coins) < DISTANCE_BETWEEN_COINS && tries <COIN_PLACEMENT_ATTEMPT_LIMIT);
         if(tries == COIN_PLACEMENT_ATTEMPT_LIMIT){
-                return null;
+                loc = null;
             } // if no successful loc was found we return null
         return loc;
     }
