@@ -5,12 +5,12 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
 import java.util.Random;
 
 public class CoinGenerationHelper {
 
     public static final double VALUE_RADIUS = 100;
-
     /**
      * https://stackoverflow.com/a/36919707
      *
@@ -68,5 +68,29 @@ public class CoinGenerationHelper {
         double dist = TrackedMap.distance(coinLoc.getLatitude(), coinLoc.getLongitude(), centerLoc.getLatitude(), centerLoc.getLongitude());
         return (int) Math.ceil(dist / VALUE_RADIUS);
     }
+
+    public static double minDistWithExistingCoins(Location loc, List<Coin> coins){
+        if (coins == null) {
+            throw new IllegalStateException();
+        }
+        if(coins.isEmpty()){
+            return Double.MAX_VALUE;
+        }
+        double minDist = Double.MAX_VALUE;
+        int retained_index = -1;
+
+        for(int i = 0; i < coins.size(); i++){
+            Coin coin = coins.get(i);
+            double distance = TrackedMap.distance(loc.getLatitude(), loc.getLongitude(), coin.getLatitude(), coin.getLongitude());
+            if (minDist > distance){
+                minDist = distance;
+                retained_index = i;
+            }
+        }
+        if (retained_index < 0) return -1.0;
+        else return minDist;
+    }
+
+
 }
 
