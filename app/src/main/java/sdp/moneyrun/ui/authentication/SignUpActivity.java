@@ -92,6 +92,10 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     *
+     * @param user
+     */
     private void updateUI(@Nullable FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(this, RegisterUserActivity.class);
@@ -101,14 +105,30 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Ensures password is at least 7 characters long
+     * @param password
+     * @return
+     */
     private boolean isPasswordValid(@NonNull CharSequence password) {
         return password.length() > 6;
     }
 
+    /**
+     * Ensure email has basic email format
+     * @param email
+     * @return
+     */
     private boolean isEmailValid(@NonNull CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    /**
+     * Check that text fields are valid i.e non empty and correct format
+     * @param emailView
+     * @param passwordView
+     * @return
+     */
     private boolean checkInput(@NonNull EditText emailView, @NonNull EditText passwordView) {
         boolean retValue = true;
         String email = emailView.getText().toString().trim();

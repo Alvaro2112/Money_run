@@ -85,7 +85,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // link from signUp button to signUp page
+    /**
+     * link from signUp button to signUp page
+      */
     public void signUp(View view) {
         MediaPlayer.create(this, R.raw.button_press).start();
         Intent intent = new Intent(this, SignUpActivity.class);
@@ -93,6 +95,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * set the listener that defines the behaviour on button click
+     * @param loginButton
+     */
     private void setLogIn(@NonNull Button loginButton) {
         loginButton.setOnClickListener(clicked -> {
             MediaPlayer.create(this, R.raw.button_press).start();
@@ -118,6 +124,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Send authentication attempt to backend
+     * @param email
+     * @param password
+     */
     private void submitLogin(@NonNull String email, @NonNull String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, task -> {
@@ -140,6 +151,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * On successful login goes to menu
+     * @param user
+     */
     private void updateUI(@Nullable FirebaseUser user) {
         if (user != null) {
             Intent menuIntent = new Intent(LoginActivity.this, MenuActivity.class);
@@ -171,6 +186,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Ensures that email has basic email format
+     * @param email
+     * @return
+     */
     private boolean isEmailValid(@NonNull CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }

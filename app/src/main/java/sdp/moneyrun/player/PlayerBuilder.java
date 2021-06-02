@@ -26,7 +26,9 @@ public class PlayerBuilder {
     }
 
     /**
+     * set the name of the build player
      * @param name
+     * @return instance to chain calls
      */
     @NonNull
     public PlayerBuilder setName(@Nullable String name) {
@@ -37,6 +39,11 @@ public class PlayerBuilder {
         return this;
     }
 
+    /**
+     * set the score of the build player
+     * @param score
+     * @return instance to chain calls
+     */
     @NonNull
     public PlayerBuilder setScore(int score) {
         this.score = score;
