@@ -106,6 +106,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private ArrayList<Coin> seenCoins;
     private ValueEventListener isEndedListener;
     private String locationMode;
+    private final int DISTANCE_BETWEEN_COINS = 2;
+    private final int COIN_PLACEMENT_ATTEMPT_LIMIT = 50;
     private boolean isAnswering;
     private boolean hasFoundMap;
     private OfflineManager offlineManager;
@@ -657,11 +659,31 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             throw new IllegalArgumentException("Number of coins to place is less than 0, number of coin is  " + number);
         if (minRadius >= maxRadius)
             throw new IllegalArgumentException("Min radius cannot be bigger or equal than max Radius ");
-
+        int addedCoins = 0;
         for (int i = 0; i < number; i++) {
-            Location loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
-            addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
+            Location loc = generateSingleLocation(maxRadius, minRadius);
+            if(loc !=null) {
+                addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
+                addedCoins++;
+            }
         }
+        if(addedCoins<number){
+            Toast.makeText(this, "Only " + addedCoins +" could be added within the specified radius", Toast.LENGTH_LONG).show();
+        }
+    }
+
+   private Location generateSingleLocation(double maxRadius, double minRadius){
+       List<Coin> coins = localPlayer.getLocallyAvailableCoins();
+       Location loc;
+       int tries = 0;
+        do {
+            loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
+            tries++;
+        }while(CoinGenerationHelper.minDistWithExistingCoins(loc, coins) < DISTANCE_BETWEEN_COINS && tries <COIN_PLACEMENT_ATTEMPT_LIMIT);
+        if(tries == COIN_PLACEMENT_ATTEMPT_LIMIT){
+                loc = null;
+            } // if no successful loc was found we return null
+        return loc;
     }
 
     /**
@@ -762,6 +784,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         double distance = Math.sqrt(Math.pow(coin.getLatitude() - center_x, 2) + Math.pow(coin.getLongitude() - center_y, 2));
         return (distance > radius);
     }
+
 
     /**
      * Sets up the listener for the end of the game, if host time reached 0 everyone should not be able to continue playing

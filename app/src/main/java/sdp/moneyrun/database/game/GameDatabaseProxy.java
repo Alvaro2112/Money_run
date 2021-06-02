@@ -95,6 +95,11 @@ public class GameDatabaseProxy extends DatabaseProxy {
         gamesRef.child(String.valueOf(game.getId())).removeValue();
     }
 
+    /**
+     * Put the game in the database, if already present, replaces it
+     * @param game
+     * @param listener
+     */
     public void updateGameInDatabase(@Nullable Game game, @Nullable OnCompleteListener listener) {
         if (game == null) throw new IllegalArgumentException();
         if (!game.getHasBeenAdded()) {
@@ -249,6 +254,11 @@ public class GameDatabaseProxy extends DatabaseProxy {
         return toReturn;
     }
 
+    /**
+     * Add listener to game entry in database
+     * @param game
+     * @param l
+     */
     public void addGameListener(@Nullable Game game, @Nullable ValueEventListener l) {
         checkGameListenerMethodsArguments(game, l);
         if (game.getHasBeenAdded()) {
@@ -256,6 +266,11 @@ public class GameDatabaseProxy extends DatabaseProxy {
         }
     }
 
+    /**
+     * removes listener to entry in database
+     * @param game
+     * @param listener
+     */
     public void removeGameListener(@NonNull Game game, @NonNull ValueEventListener listener) {
         checkGameListenerMethodsArguments(game, listener);
         if (game.getHasBeenAdded()) {
@@ -263,6 +278,11 @@ public class GameDatabaseProxy extends DatabaseProxy {
         }
     }
 
+    /**
+     * Checks that those argument aren't null
+     * @param game
+     * @param listener
+     */
     private void checkGameListenerMethodsArguments(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (game == null) {
             throw new IllegalArgumentException("game should not be null.");
@@ -273,15 +293,26 @@ public class GameDatabaseProxy extends DatabaseProxy {
     }
 
 
+    /**
+     * Add listener to game entry in database
+     * @param game
+     * @param listener
+     */
     public void addCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
         getDatabaseChildOfGame(game, DATABASE_COIN).addValueEventListener(listener);
     }
 
+    /**
+     * Removes listener to game entry in database
+     * @param game
+     * @param listener
+     */
     public void removeCoinListener(@Nullable Game game, @Nullable ValueEventListener listener) {
         if (listener == null || game == null) throw new IllegalArgumentException();
         getDatabaseChildOfGame(game, DATABASE_COIN).removeEventListener(listener);
     }
+
 
     @NonNull
     public DatabaseReference getDatabaseChildOfGame(@NonNull Game game, @NonNull String variable) {

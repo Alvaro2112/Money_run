@@ -23,7 +23,6 @@ import sdp.moneyrun.permissions.PermissionsRequester;
 import sdp.moneyrun.user.User;
 
 public class MenuImplementation {
-
     public static final float MAX_DISTANCE_TO_JOIN_GAME = 1000;
 
     protected final Activity activity;
@@ -31,6 +30,7 @@ public class MenuImplementation {
     protected final User user;
     protected final ActivityResultLauncher<String[]> requestPermissionsLauncher;
     protected final AndroidLocationService locationService;
+
 
     public MenuImplementation(Activity activity,
                               DatabaseReference databaseReference,
