@@ -303,6 +303,8 @@ public class GameDatabaseProxy extends DatabaseProxy {
         getDatabaseChildOfGame(game, DATABASE_COIN).addValueEventListener(listener);
     }
 
+
+
     /**
      * Removes listener to game entry in database
      * @param game

@@ -274,6 +274,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             listenEnded();
     }
 
+
     /**
      * Adds a coin listener to database proxy,
      * used to update the coin in the current game for the player map
@@ -355,11 +356,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             symbolManager.setTextAllowOverlap(true);
             style.addImage(COIN_ID, BitmapUtils.getBitmapFromDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.coin_image)), false);
             enableLocationComponent(style);
-
             circleManager = new CircleManager(mapView, mapboxMap, style);
-
         });
-
         this.mapboxMap = mapboxMap;
     }
 
@@ -551,7 +549,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             tv.setText(String.format("%s: '%s'", getString(R.string.incorrect_answer_message), riddle.getAnswer()));
             tv.setTextColor(Color.RED);
 
-
             closePopupListener(wrongAnswerPopupWindow, R.id.continue_run);
 
             if (coin != null) {
@@ -663,7 +660,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         for (int i = 0; i < number; i++) {
             Location loc = generateSingleLocation(maxRadius, minRadius);
             if(loc !=null) {
-                addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
+                Coin c = new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation()));
+                addCoin(c, true);
                 addedCoins++;
             }
         }

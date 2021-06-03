@@ -173,7 +173,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 intent.putExtra("player", player);
                 intent.putExtra("gameId", gameId);
                 intent.putExtra("host", true);
-           //     intent.putExtra("locationMode", locationMode);
+                intent.putExtra("locationMode", locationMode);
                 startActivity(intent);
                 finish();
             }
@@ -213,7 +213,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                             intent.putExtra("player", player);
                             intent.putExtra("gameId", gameId);
                             intent.putExtra("host", false);
-               //             intent.putExtra("locationMode", locationMode);
+                            intent.putExtra("locationMode", locationMode);
                             startActivity(intent);
                             finish();
                         }
@@ -292,7 +292,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         } else {
             //otherwise it will also remove it from the DB when it is launched
             if (game != null && thisGame != null && game.getIsDeleted()) {
-
                 if (getDeleteListener != null) {
                     thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                     proxyG.removeGameListener(game, getDeleteListener);

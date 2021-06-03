@@ -10,7 +10,8 @@ import java.util.Random;
 
 public class CoinGenerationHelper {
 
-    public static final double VALUE_RADIUS = 100;
+    // THRESHOLD  IN METERS TO INCREASE COINS VALUE
+    public static final double VALUE_RADIUS = 20;
     /**
      * https://stackoverflow.com/a/36919707
      *

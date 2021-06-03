@@ -28,6 +28,8 @@ public final class AndroidLocationService implements LocationService {
         this.isLocationMocked = false;
     }
 
+
+
     /**
      * @param context the activity context
      * @return a location manager from the given context.
