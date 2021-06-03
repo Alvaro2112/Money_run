@@ -105,7 +105,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 listenToIsDeleted();
                 listenToStarted();
                 createDeleteOrLeaveButton();
-                disableLaunchButtonIfNotHost();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -131,7 +130,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            proxyG.addGameListener(game,isDeletedListener);
+            thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
         }
     }
 
@@ -147,14 +146,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
         }
-    }
-
-    private void disableLaunchButtonIfNotHost(){
-        if(!player.equals(game.getHost())){
-            Button but = (Button)findViewById(R.id.launch_game_button);
-            but.setEnabled(false);
-        }
-
     }
 
     /**
@@ -253,7 +244,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            proxyG.addGameListener(game,getDeleteListener);
+            thisGame.child(DB_PLAYERS).addValueEventListener(getDeleteListener);
         };
     }
 
@@ -279,19 +270,23 @@ public class GameLobbyActivity extends AppCompatActivity {
             thisGame.child(DB_PLAYERS).removeEventListener(playerListListener);
 
         if (player != null && game != null && !player.equals(game.getHost())) {
-            if (thisGame != null && isDeletedListener != null) {
-                proxyG.removeGameListener(game, isDeletedListener);
-            }
-            if (isStartedListener != null) {
-                proxyG.removeGameListener(game, isStartedListener);
+            if (thisGame != null && isDeletedListener != null)
+                thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
+
+            if (isStartedListener != null){
+                System.out.println("REMOVED THE PLAYER LISTENER");
+
+                thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
+                proxyG.removeGameListener(game,isStartedListener);
             }
 
         } else {
             //otherwise it will also remove it from the DB when it is launched
             if (game != null && thisGame != null && game.getIsDeleted()) {
-                if (getDeleteListener != null) {
-                    proxyG.removeGameListener(game, getDeleteListener);
-                }
+
+                if (getDeleteListener != null)
+                    thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
+
                 thisGame.removeValue();
             }
         }
