@@ -27,6 +27,7 @@ public class PlayerBuilder {
 
     /**
      * set the name of the build player
+     *
      * @param name
      * @return instance to chain calls
      */
@@ -41,6 +42,7 @@ public class PlayerBuilder {
 
     /**
      * set the score of the build player
+     *
      * @param score
      * @return instance to chain calls
      */

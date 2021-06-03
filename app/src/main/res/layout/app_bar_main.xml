@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.menu.MenuActivity"
-    android:background="@drawable/login_gradient">
+    android:background="@drawable/login_gradient"
+    tools:context=".ui.menu.MenuActivity">
 
     <ImageView
         android:layout_width="30dp"
@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/layout_rounded"
-        android:text="@string/Start_game"
         android:paddingHorizontal="10dp"
+        android:text="@string/Start_game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.726"
@@ -41,8 +41,8 @@
         android:background="@drawable/layout_rounded"
         android:clickable="true"
         android:focusable="true"
-        android:text="@string/join_game"
         android:paddingHorizontal="10dp"
+        android:text="@string/join_game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.277"

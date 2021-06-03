@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
-    android:background="@drawable/theme_gradient">
+    android:background="@drawable/theme_gradient"
+    tools:context=".ui.MainActivity">
 
     <ImageView
         android:id="@+id/imageView4"

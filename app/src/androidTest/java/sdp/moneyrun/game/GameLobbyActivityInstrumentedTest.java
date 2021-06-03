@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.R;
 import sdp.moneyrun.database.game.GameDatabaseProxy;
-import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.database.riddle.Riddle;
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class    GameLobbyActivityInstrumentedTest {
+public class GameLobbyActivityInstrumentedTest {
     private final String DATABASE_GAME = "games";
     private final long ASYNC_CALL_TIMEOUT = 5L;
 
@@ -64,8 +64,8 @@ public class    GameLobbyActivityInstrumentedTest {
 
 
     @BeforeClass
-    public static void setPersistence(){
-        if(!MainActivity.calledAlready){
+    public static void setPersistence() {
+        if (!MainActivity.calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             MainActivity.calledAlready = true;
         }
@@ -98,7 +98,7 @@ public class    GameLobbyActivityInstrumentedTest {
     }
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
 
         Player host = new Player("12634", "Bob", 0);
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GameLobbyActivity.class);
@@ -237,7 +237,7 @@ public class    GameLobbyActivityInstrumentedTest {
         intent.putExtra("host", true);
         User actualUser = new User("32", "usersAreUnnecessary", 0, 0, 0);
         intent.putExtra("UserTypeCurrentUser", actualUser);
-        intent.putExtra("locationMode", (String)null);
+        intent.putExtra("locationMode", (String) null);
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         Game game = getGame();
 
@@ -246,9 +246,9 @@ public class    GameLobbyActivityInstrumentedTest {
 
         String id = gdp.putGame(game);
         CountDownLatch added = new CountDownLatch(1);
-        gdp.updateGameInDatabase(game,task -> added.countDown());
+        gdp.updateGameInDatabase(game, task -> added.countDown());
         try {
-           added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            added.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
@@ -431,8 +431,7 @@ public class    GameLobbyActivityInstrumentedTest {
 
         try (ActivityScenario<GameLobbyActivity> scenario = ActivityScenario.launch(intent)) {
             scenario.onActivity(a -> a.addPlayerList(null));
-        }
-        finally {
+        } finally {
             FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
         }
     }
@@ -464,8 +463,7 @@ public class    GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
-        }
-        finally {
+        } finally {
             Intents.release();
         }
         FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
@@ -483,7 +481,7 @@ public class    GameLobbyActivityInstrumentedTest {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String id = gdp.putGame(g);
         CountDownLatch added = new CountDownLatch(1);
-        gdp.updateGameInDatabase(g,task -> added.countDown());
+        gdp.updateGameInDatabase(g, task -> added.countDown());
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -499,15 +497,14 @@ public class    GameLobbyActivityInstrumentedTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail();
-        }
-        finally {
+        } finally {
             FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
             Intents.release();
         }
     }
 
     @Test
-    public void launchIsDisabledForNonHost(){
+    public void launchIsDisabledForNonHost() {
         Game g = getGame();
         g.addPlayer(new Player("999", "CURRENT_USER", 0), true);
         Intent intent = getStartIntent();

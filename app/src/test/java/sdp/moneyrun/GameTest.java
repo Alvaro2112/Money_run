@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -43,7 +43,7 @@ public class GameTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void setDatabaseVariableFailsCorrectly(){
+    public void setDatabaseVariableFailsCorrectly() {
         String name = "name";
         Player host = new Player("3", "Bob", 0);
         int maxPlayerCount = 3;
@@ -188,7 +188,6 @@ public class GameTest {
 
         assertThrows(IllegalArgumentException.class, () -> new Riddle("a", "blue", "green", "yellow", "brown", null));
     }
-
 
 
     @Test
@@ -413,7 +412,6 @@ public class GameTest {
 
         assertNull(game.getRandomRiddle());
     }
-
 
 
     @Test

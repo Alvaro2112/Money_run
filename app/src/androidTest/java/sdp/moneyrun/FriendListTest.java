@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.database.UserDatabaseProxy;
+import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.location.AndroidLocationService;
@@ -33,9 +33,9 @@ import sdp.moneyrun.menu.friendlist.FriendListListAdapter;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.MainActivity;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.menu.friendlist.AddFriendListActivity;
 import sdp.moneyrun.ui.menu.friendlist.FriendListActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -46,7 +46,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
@@ -55,58 +54,31 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class FriendListTest {
 
-    private static final List<User> usersDatabase = getUsers();
     private static String randomString;
+    private static final List<User> usersDatabase = getUsers();
 
     @BeforeClass
-    public static void buildDatabase(){
-            if (!MainActivity.calledAlready) {
-                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-                MainActivity.calledAlready = true;
-            }
+    public static void buildDatabase() {
+        if (!MainActivity.calledAlready) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            MainActivity.calledAlready = true;
+        }
 
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.putUser(user);
         }
     }
 
     @AfterClass
-    public static void removeDatabase(){
+    public static void removeDatabase() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.removeUser(user);
         }
     }
 
-
-
-    private Intent getStartIntent2() {
-        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), AddFriendListActivity .class);
-        toStart.putExtra("user", usersDatabase.get(0));
-        return toStart;
-    }
-
-    @Test
-    public void backButtonDoesNothing(){
-        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(getStartIntent2())) {
-            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
-            onView(isRoot()).perform(ViewActions.pressBack());
-            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
-        }
-    }
-
-
-    @Test
-    public void backButtonDoesNothing1(){
-        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(FriendListActivity.class)) {
-            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
-            onView(isRoot()).perform(ViewActions.pressBack());
-            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
-        }
-    }
-
-    private static List<User> getUsers(){
+    private static List<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
 
         Random random = new Random();
@@ -134,13 +106,37 @@ public class FriendListTest {
         return users;
     }
 
+    private Intent getStartIntent2() {
+        Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), AddFriendListActivity.class);
+        toStart.putExtra("user", usersDatabase.get(0));
+        return toStart;
+    }
+
+    @Test
+    public void backButtonDoesNothing() {
+        try (ActivityScenario<AddFriendListActivity> scenario = ActivityScenario.launch(getStartIntent2())) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
+    @Test
+    public void backButtonDoesNothing1() {
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(FriendListActivity.class)) {
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+            onView(isRoot()).perform(ViewActions.pressBack());
+            assertEquals(Lifecycle.State.RESUMED, scenario.getState());
+        }
+    }
+
     private Intent getStartIntent() {
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), FriendListActivity.class);
         toStart.putExtra("user", usersDatabase.get(0));
         return toStart;
     }
 
-    private Location getMockedLocation(){
+    private Location getMockedLocation() {
         Location gameLocation = new Location("");
         gameLocation.setLongitude(12.);
         gameLocation.setLatitude(12.);
@@ -148,7 +144,7 @@ public class FriendListTest {
         return gameLocation;
     }
 
-    private Game addGameToDatabase(){
+    private Game addGameToDatabase() {
         // Define game location
         Location gameLocation = getMockedLocation();
 
@@ -185,9 +181,9 @@ public class FriendListTest {
     }
 
     @Test
-    public void defaultFriendsWork(){
+    public void defaultFriendsWork() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.putUser(user);
         }
 
@@ -207,15 +203,15 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.removeUser(user);
         }
     }
 
     @Test
-    public void addFriendWorks(){
+    public void addFriendWorks() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.putUser(user);
         }
 
@@ -251,7 +247,7 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.removeUser(user);
         }
     }
@@ -265,7 +261,7 @@ public class FriendListTest {
     }
 
     @Test
-    public void goBackToMenuWorks(){
+    public void goBackToMenuWorks() {
 
         try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
             Intents.init();
@@ -290,7 +286,7 @@ public class FriendListTest {
     @Test
     public void removeFriendWorks() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.putUser(user);
         }
 
@@ -325,15 +321,15 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.removeUser(user);
         }
     }
 
     @Test
-    public void JoinFriendGameWorks(){
+    public void JoinFriendGameWorks() {
         UserDatabaseProxy db = new UserDatabaseProxy();
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.putUser(user);
         }
 
@@ -345,12 +341,12 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        try(ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<FriendListActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(5000);
 
             // Mock location
             scenario.onActivity(a -> {
-               AndroidLocationService newLocationService = a.getLocationService();
+                AndroidLocationService newLocationService = a.getLocationService();
                 newLocationService.setMockedLocation(new LocationRepresentation(getMockedLocation()));
                 a.setLocationService(newLocationService);
             });
@@ -368,7 +364,7 @@ public class FriendListTest {
             e.printStackTrace();
         }
 
-        for(User user : usersDatabase){
+        for (User user : usersDatabase) {
             db.removeUser(user);
         }
     }

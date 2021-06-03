@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import sdp.moneyrun.database.game.GameDatabaseProxy;
 import sdp.moneyrun.database.game.GameDbData;
-import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.database.riddle.Riddle;
+import sdp.moneyrun.map.Coin;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.ui.MainActivity;
 
@@ -114,13 +114,13 @@ public class GameInstrumentedTest {
             }
             updated.countDown();
         });
-       try{
-           updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
-           assertEquals(0L,updated.getCount());
-       } catch (InterruptedException e) {
-           fail();
-       }
-       FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
+        try {
+            updated.await(ASYNC_CALL_TIMEOUT, TimeUnit.SECONDS);
+            assertEquals(0L, updated.getCount());
+        } catch (InterruptedException e) {
+            fail();
+        }
+        FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
     }
 
     @Test
@@ -571,6 +571,7 @@ public class GameInstrumentedTest {
         getGameData().setDuration(0);
         assertEquals(gameData.getDuration(), 0, 0);
     }
+
     @Test
     public void equalsWorks() {
         Game game1 = getGame();
@@ -663,6 +664,7 @@ public class GameInstrumentedTest {
                 }
                 updated.countDown();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 assert (false);

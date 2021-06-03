@@ -85,7 +85,7 @@ public class EndGameInstrumentedTest {
     }
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
@@ -119,7 +119,7 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             scenario.onActivity(a -> a.updateText(1, 1, true));
             StringBuilder textBuilder = new StringBuilder();
-            textBuilder = textBuilder.append("You have gathered ").append(1).append( " coins");
+            textBuilder = textBuilder.append("You have gathered ").append(1).append(" coins");
             textBuilder = textBuilder.append("\n");
             textBuilder = textBuilder.append("for a total score of ").append(1);
             String text = textBuilder.toString();
@@ -188,7 +188,7 @@ public class EndGameInstrumentedTest {
         endGameIntent.putExtra("playerId", "1234567891");
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(endGameIntent)) {
             StringBuilder textBuilder = new StringBuilder();
-            textBuilder = textBuilder.append("You have gathered ").append(2).append( " coins");
+            textBuilder = textBuilder.append("You have gathered ").append(2).append(" coins");
             textBuilder = textBuilder.append("\n");
             textBuilder = textBuilder.append("for a total score of ").append(3);
             String text = textBuilder.toString();

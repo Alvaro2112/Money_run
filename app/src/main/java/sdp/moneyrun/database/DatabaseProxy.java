@@ -32,7 +32,8 @@ public class DatabaseProxy {
     }
 
     /**
-     *Add a listener on the database that displays a toast on connect/disconnect
+     * Add a listener on the database that displays a toast on connect/disconnect
+     *
      * @param context
      * @param TAG
      */

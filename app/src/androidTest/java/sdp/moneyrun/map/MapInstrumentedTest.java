@@ -1,20 +1,5 @@
 package sdp.moneyrun.map;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import android.content.Intent;
 import android.location.Location;
 
@@ -56,13 +41,28 @@ import sdp.moneyrun.ui.map.MapActivity;
 import sdp.moneyrun.ui.map.OfflineMapDownloaderActivity;
 import sdp.moneyrun.user.User;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 @SuppressWarnings("FieldMayBeFinal")
 public class MapInstrumentedTest {
 
-    private String DATABASE_GAME = "games";
+    final double minZoomForBuilding = 15.;
     @Nullable
     private final CountDownLatch moved = null;
-    final double minZoomForBuilding = 15.;
+    private String DATABASE_GAME = "games";
 
     @BeforeClass
     public static void setPersistence() {
@@ -99,8 +99,9 @@ public class MapInstrumentedTest {
 
         return new Game(name, host, maxPlayerCount, riddles, coins, location, true, num_coins, radius, duration);
     }
+
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(MapActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
@@ -374,7 +375,7 @@ public class MapInstrumentedTest {
             final AtomicBoolean finished = new AtomicBoolean(false);
 
             scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a,false);
+                Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), new ArrayList<>(), a, false);
                 finished.set(true);
             }));
             do {
@@ -837,7 +838,7 @@ public class MapInstrumentedTest {
                 }
             });
 
-            }
+        }
         FirebaseDatabase.getInstance().getReference().child(DATABASE_GAME).child(id).removeValue();
 
     }
@@ -997,21 +998,20 @@ public class MapInstrumentedTest {
                 }
             }
             scenario.onActivity(a -> {
-                try{
+                try {
                     Thread.sleep(3000);
-                }catch (Exception ignored){
+                } catch (Exception ignored) {
 
                 }
                 assertTrue(a.getChronometerCounter() > 0);
             });
-             try{
-                 Thread.sleep(10000);
-             }catch (Exception ignored){
+            try {
+                Thread.sleep(10000);
+            } catch (Exception ignored) {
 
-             }
+            }
             intended(hasComponent(EndGameActivity.class.getName()));
             Intents.release();
-
 
 
         }
@@ -1140,7 +1140,7 @@ public class MapInstrumentedTest {
                 assertEquals(2, activity.coinsToPlace);
                 assertEquals(location.getLatitude(), activity.getGameCenter().getLatitude(), 0.01);
                 assertEquals(location.getLongitude(), activity.getGameCenter().getLongitude(), 0.01);
-                assertEquals(4 * 60, activity.getGameDuration(),0.01);
+                assertEquals(4 * 60, activity.getGameDuration(), 0.01);
                 assertEquals(20, activity.getGameRadius(), 0.001);
 
             });
@@ -1232,39 +1232,39 @@ public class MapInstrumentedTest {
     }
 
     @Test
-    public void gameEndsWhenOutsideTheRadius(){
-            Intent intent = createIntentAndPutInDB();
-            try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
-                Intents.init();
+    public void gameEndsWhenOutsideTheRadius() {
+        Intent intent = createIntentAndPutInDB();
+        try (ActivityScenario<MapActivity> scenario = ActivityScenario.launch(intent)) {
+            Intents.init();
 
-                final AtomicBoolean finished = new AtomicBoolean(false);
+            final AtomicBoolean finished = new AtomicBoolean(false);
 
-                scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
-                    boolean c = a.checkIfLegalPosition(new Coin(90,90,2),3,0.0,0.0);
-                    if (c)
-                        Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(),new ArrayList<>(), a,false);
-                    assertTrue(c);
-                    finished.set(true);
-                }));
-                do {
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                        assertEquals(-1, 2);
-                    }
-                } while (!finished.get());
+            scenario.onActivity(a -> a.mapView.addOnDidFinishRenderingMapListener(fully -> {
+                boolean c = a.checkIfLegalPosition(new Coin(90, 90, 2), 3, 0.0, 0.0);
+                if (c)
+                    Game.endGame(a.getLocalPlayer().getCollectedCoins().size(), a.getLocalPlayer().getScore(), a.getPlayerId(), new ArrayList<>(), a, false);
+                assertTrue(c);
+                finished.set(true);
+            }));
+            do {
                 try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    assertEquals(-1, 2);
                 }
-                intended(hasComponent(EndGameActivity.class.getName()));
-                Intents.release();
+            } while (!finished.get());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            intended(hasComponent(EndGameActivity.class.getName()));
+            Intents.release();
         }
+    }
 
     @Test
-    public void usesDownloadedMap(){
+    public void usesDownloadedMap() {
         User currentUser = new User("999", "CURRENT_USER", 0, 0, 0);
         Intent toStart = new Intent(ApplicationProvider.getApplicationContext(), OfflineMapDownloaderActivity.class);
         toStart.putExtra("user", currentUser);

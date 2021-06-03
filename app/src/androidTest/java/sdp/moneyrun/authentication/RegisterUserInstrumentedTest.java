@@ -76,7 +76,7 @@ public class RegisterUserInstrumentedTest {
 
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<RegisterUserActivity> scenario = ActivityScenario.launch(RegisterUserActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());

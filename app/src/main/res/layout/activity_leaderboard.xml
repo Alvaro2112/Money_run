@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/theme_gradient">
+    android:background="@drawable/theme_gradient"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -68,8 +68,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp">
-        </ListView>
+            android:layout_marginBottom="0dp"></ListView>
 
 
     </RelativeLayout>
@@ -79,10 +78,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:paddingHorizontal="10dp"
         android:layout_marginHorizontal="160dp"
         android:layout_marginBottom="85dp"
         android:background="@drawable/layout_rounded"
+        android:paddingHorizontal="10dp"
         android:text="@string/leaderboard_to_menu_button" />
 
 </RelativeLayout>

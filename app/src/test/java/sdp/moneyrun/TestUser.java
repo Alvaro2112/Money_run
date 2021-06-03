@@ -97,7 +97,6 @@ public class TestUser {
     }
 
 
-
     @Test(expected = IllegalArgumentException.class)
     public void userThrowsExceptionOnNullId() {
         Random r = new Random();
@@ -215,7 +214,7 @@ public class TestUser {
     public void setIdWorks() {
         User user = new User("122dfs3", "OTHER stuff", 0, 0, 0);
         user.setUserId("12");
-        assertEquals("12",(user.getUserId()));
+        assertEquals("12", (user.getUserId()));
     }
 
     @Test(expected = NullPointerException.class)

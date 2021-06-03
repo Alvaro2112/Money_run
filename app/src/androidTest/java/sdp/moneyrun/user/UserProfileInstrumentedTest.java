@@ -56,7 +56,7 @@ public class UserProfileInstrumentedTest {
     }
 
     @Test
-    public void backButtonDoesNothing1(){
+    public void backButtonDoesNothing1() {
         try (ActivityScenario<UserProfileActivity> scenario = ActivityScenario.launch(UserProfileActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
