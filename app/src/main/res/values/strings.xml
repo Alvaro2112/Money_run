@@ -143,6 +143,7 @@
     <string name="you_will_question">- You will be asked a question when you reach a coin</string>
     <string name="get_it_right">- Get it right, and you will earn the coin</string>
     <string name="be_faster">- Be faster than the other players, there are only so many coins!</string>
+    <string name="information_button_menu">information button</string>
 
 
 </resources>

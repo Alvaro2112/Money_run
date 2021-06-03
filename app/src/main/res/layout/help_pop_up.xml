@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="350dp"
     android:layout_height="425dp"
@@ -46,7 +47,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="@string/how_to_play"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/textView5"
