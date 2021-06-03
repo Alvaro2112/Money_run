@@ -105,12 +105,13 @@
         android:id="@+id/info_image"
         android:layout_width="72dp"
         android:layout_height="69dp"
-        app:layout_constraintBottom_toTopOf="@+id/join_game"
-        app:layout_constraintEnd_toStartOf="@+id/new_game"
-        app:layout_constraintHorizontal_bias="0.565"
-        app:layout_constraintStart_toEndOf="@+id/join_game"
-        app:layout_constraintTop_toBottomOf="@+id/weather_temp_average"
-        app:layout_constraintVertical_bias="0.585"
-        app:srcCompat="@drawable/information" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.932"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.059"
+        app:srcCompat="@drawable/information"
+        android:contentDescription="@string/button_to_display_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

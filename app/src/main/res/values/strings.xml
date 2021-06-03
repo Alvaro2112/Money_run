@@ -138,11 +138,12 @@
     <string name="how_to_play">How to play</string>
     <string name="X_close_window">X</string>
     <string name="turn_on_location">- Turn on your Location</string>
-    <string name="join_or_create_lobby">- Join or create your own lobby</string>
+    <string name="join_or_create_lobby">- You can join or create your own lobby</string>
     <string name="when_game_launches">- When the game launches, run towards the coins</string>
-    <string name="you_will_question">- You will be asked a question when you reach a coin</string>
-    <string name="get_it_right">- Get it right, and you will earn the coin</string>
+    <string name="you_will_question">- You will be asked a question when you reach a coin, get it right to earn the coin</string>
     <string name="be_faster">- Be faster than the other players, there are only so many coins!</string>
+    <string name="button_to_display_info">button to display info</string>
+    <string name="swipe_from_left_to_right_on_menu_to_see_additional_features">Swipe from left to right on menu to see additional features</string>
 
 
 </resources>
