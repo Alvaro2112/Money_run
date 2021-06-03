@@ -131,7 +131,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
+            proxyG.addGameListener(game,isDeletedListener);
         }
     }
 
@@ -253,7 +253,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                     Log.e(TAG, error.getMessage());
                 }
             };
-            thisGame.child(DB_PLAYERS).addValueEventListener(getDeleteListener);
+            proxyG.addGameListener(game,getDeleteListener);
         };
     }
 
@@ -280,12 +280,9 @@ public class GameLobbyActivity extends AppCompatActivity {
 
         if (player != null && game != null && !player.equals(game.getHost())) {
             if (thisGame != null && isDeletedListener != null) {
-                thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
                 proxyG.removeGameListener(game, isDeletedListener);
             }
             if (isStartedListener != null) {
-
-                thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
                 proxyG.removeGameListener(game, isStartedListener);
             }
 
@@ -293,7 +290,6 @@ public class GameLobbyActivity extends AppCompatActivity {
             //otherwise it will also remove it from the DB when it is launched
             if (game != null && thisGame != null && game.getIsDeleted()) {
                 if (getDeleteListener != null) {
-                    thisGame.child(DB_PLAYERS).removeEventListener(getDeleteListener);
                     proxyG.removeGameListener(game, getDeleteListener);
                 }
                 thisGame.removeValue();
