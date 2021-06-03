@@ -247,7 +247,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_radius = game.getRadius();
                 circleRadius = (float) game_radius * MapboxScale;
                 game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
-                game_center = game.getStartLocation();
+                game_center = getCurrentLocation();
+                if(host)
+                    game.setStartLocation(game_center,false);
+                else
+                    game_center = game.getStartLocation();
                 initChronometer();
 
                 if (!addedCoins && host) {
