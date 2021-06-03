@@ -5,6 +5,15 @@ plugins {
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 android {
+    signingConfigs {
+        debug1 {
+        }
+        debug {
+            storeFile file('/Users/gauthier/Documents/sdp/Untitled')
+            storePassword 'gauthier'
+            keyPassword 'gauthier'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 

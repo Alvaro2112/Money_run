@@ -43,6 +43,7 @@ public class EndGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
         setContentView(R.layout.activity_end_game);
         endText = findViewById(R.id.end_game_text);
         numberOfCollectedCoins = getIntent().getIntExtra("numberOfCollectedCoins", 0);
@@ -149,9 +150,12 @@ public class EndGameActivity extends AppCompatActivity {
             Intent resultIntent = new Intent(EndGameActivity.this, LeaderboardActivity.class);
             resultIntent.putExtra("numberOfPlayers", players.size());
             Helpers.putPlayersInIntent(resultIntent, players);
+
             UserDatabaseProxy pdp = new UserDatabaseProxy();
             pdp.getUserTask(playerId).addOnCompleteListener(task -> {
+                System.out.println("TASK");
                 if (task.isSuccessful()) {
+                    System.out.println("SUCCESFULL");
                     User p = pdp.getUserFromTask(task);
                     resultIntent.putExtra("userEnd", p);
                     startActivity(resultIntent);

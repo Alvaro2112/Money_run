@@ -105,6 +105,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 listenToIsDeleted();
                 listenToStarted();
                 createDeleteOrLeaveButton();
+                disableLaunchButtonIfNotHost();
             } else {
                 Log.e(TAG, task.getException().getMessage());
             }
@@ -145,6 +146,13 @@ public class GameLobbyActivity extends AppCompatActivity {
             leaveButton.setOnClickListener(getDeleteClickListener());
         } else {
             findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
+        }
+    }
+
+    private void disableLaunchButtonIfNotHost(){
+        if(!player.equals(game.getHost())){
+            Button but = (Button)findViewById(R.id.launch_game_button);
+            but.setEnabled(false);
         }
     }
 
@@ -274,8 +282,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
             if (isStartedListener != null){
-                System.out.println("REMOVED THE PLAYER LISTENER");
-
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
                 proxyG.removeGameListener(game,isStartedListener);
             }

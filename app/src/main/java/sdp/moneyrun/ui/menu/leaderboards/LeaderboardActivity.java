@@ -42,6 +42,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         Button toMenu = findViewById(R.id.leaderboard_button_end);
         user = (Player) getIntent().getSerializableExtra("user");
 
+        System.out.print("player");
         addAdapter();
         setMainPlayer(user);
         getEndGamePlayers();
