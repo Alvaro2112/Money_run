@@ -275,8 +275,6 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         game_center = getCurrentLocation();
         if(host)
             game.setStartLocation(game_center,false);
-        else
-            game_center = game.getStartLocation();
     }
 
     /**
@@ -313,7 +311,8 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-
+                if(!host)
+                    game_center = game.getStartLocation();
             }
 
             @Override
