@@ -204,8 +204,12 @@ public class EndGameInstrumentedTest {
         try (ActivityScenario<EndGameActivity> scenario = ActivityScenario.launch(EndGameActivity.class)) {
             Intents.init();
             onView(ViewMatchers.withId(R.id.end_game_button_to_results)).perform(ViewActions.click());
+            Thread.sleep(5000);
             intended(hasComponent(LeaderboardActivity.class.getName()));
             Intents.release();
+        } catch (InterruptedException e) {
+            fail();
+            e.printStackTrace();
         }
     }
 
