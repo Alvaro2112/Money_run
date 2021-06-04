@@ -109,4 +109,17 @@
         android:text="@string/careful_if_you_pickup_a_coin_outside_the_ring_you_will_die"
         android:textSize="18sp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/coins_are_placed_randomly_so_it_is_best_to_play_in_an_open_area"
+        android:textSize="18sp" />
+
 </RelativeLayout>

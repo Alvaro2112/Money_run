@@ -71,14 +71,14 @@ this map implements all the functionality we will need.
  */
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    public static final int THRESHOLD_DISTANCE = 7;
+    public static final int THRESHOLD_DISTANCE = 5;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
     private final String COIN_ID = "COIN";
     private final float ICON_SIZE = 1.5f;
-    private final int DISTANCE_BETWEEN_COINS = THRESHOLD_DISTANCE;
+    private final int DISTANCE_BETWEEN_COINS = 9;
     private final int COIN_PLACEMENT_ATTEMPT_LIMIT = 50;
     private final double scalingFactor = 5000.0;
     private final int MapboxScale = 8;

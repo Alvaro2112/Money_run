@@ -136,20 +136,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Adds a listener to the button that either leaves for a player that joined the game or
-     * leaves and deletes the game if the user is the host
-     */
-    private void createDeleteOrLeaveButton() {
-        if (player.equals(game.getHost())) {
-            Button leaveButton = findViewById(R.id.leave_lobby_button);
-            leaveButton.setText(R.string.delete_button_text);
-            leaveButton.setOnClickListener(getDeleteClickListener());
-        } else {
-            findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
-        }
-    }
-
     private void createLaunchButton(){
         findViewById(R.id.launch_game_button).setOnClickListener(v -> {
             if (game.getHost().equals(player)) {
@@ -166,6 +152,19 @@ public class GameLobbyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adds a listener to the button that either leaves for a player that joined the game or
+     * leaves and deletes the game if the user is the host
+     */
+    private void createDeleteOrLeaveButton() {
+        if (player.equals(game.getHost())) {
+            Button leaveButton = findViewById(R.id.leave_lobby_button);
+            leaveButton.setText(R.string.delete_button_text);
+            leaveButton.setOnClickListener(getDeleteClickListener());
+        } else {
+            findViewById(R.id.leave_lobby_button).setOnClickListener(getLeaveClickListener());
+        }
+    }
 
     private void disableLaunchButtonIfNotHost() {
         if (!player.equals(game.getHost())) {
