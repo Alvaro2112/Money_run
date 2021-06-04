@@ -112,6 +112,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.059"
         app:srcCompat="@drawable/information"
-        android:contentDescription="@string/information_button" />
-
+        android:contentDescription="@string/infomation_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

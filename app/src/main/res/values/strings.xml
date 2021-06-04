@@ -144,6 +144,7 @@
     <string name="be_faster">- Be faster than the other players, there are only so many coins!</string>
     <string name="button_to_display_info">button to display info</string>
     <string name="swipe_from_left_to_right_on_menu_to_see_additional_features">Swipe from left to right on menu to see additional features</string>
-)))
+    <string name="infomation_button">infomation button</string>
+    )))
 
 </resources>
