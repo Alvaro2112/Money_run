@@ -114,6 +114,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final double scalingFactor = 5000.0;
     private final int MapboxScale = 10;
     private final int numberOfSecondsInAMinute = 60;
+    private boolean startLocationIsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,8 +312,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-                if(!host)
-                    game_center = game.getStartLocation();
+                if(!host) {
+                    if(!startLocationIsSet) {
+                        game_center = game.getStartLocation();
+                        startLocationIsSet = true;
+                    }
+                }
             }
 
             @Override
