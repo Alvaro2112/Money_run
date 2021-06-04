@@ -166,23 +166,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         }
     }
 
-    private void createLaunchButton(){
-        findViewById(R.id.launch_game_button).setOnClickListener(v -> {
-            if (game.getHost().equals(player)) {
-                game.setStarted(true, false);
-                game.setIsVisible(false, false);
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                intent.putExtra("player", player);
-                intent.putExtra("gameId", gameId);
-                intent.putExtra("host", true);
-                intent.putExtra("locationMode", locationMode);
-                startActivity(intent);
-                finish();
-            }
-        });
-    }
-
-
     private void disableLaunchButtonIfNotHost() {
         if (!player.equals(game.getHost())) {
             Button but = findViewById(R.id.launch_game_button);
