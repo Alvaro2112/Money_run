@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
         translateMan = AnimationUtils.loadAnimation(this, R.anim.translation_splash_screen);
         alphaTitle = AnimationUtils.loadAnimation(this, R.anim.alpha_title);

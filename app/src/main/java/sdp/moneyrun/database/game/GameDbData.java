@@ -176,8 +176,6 @@ public final class GameDbData {
         this.start_time = start_time;
     }
 
-    public void setStartLocation(Location startLocation){ this.startLocation = startLocation;}
-
     public boolean getEnded() {
         return ended;
     }
@@ -215,6 +213,10 @@ public final class GameDbData {
     @Nullable
     public Location getStartLocation() {
         return startLocation;
+    }
+
+    public void setStartLocation(@Nullable Location startLocation) {
+        this.startLocation = startLocation;
     }
 
     public int getNumCoins() {

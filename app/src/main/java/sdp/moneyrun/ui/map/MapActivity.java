@@ -81,7 +81,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final int DISTANCE_BETWEEN_COINS = THRESHOLD_DISTANCE;
     private final int COIN_PLACEMENT_ATTEMPT_LIMIT = 50;
     private final double scalingFactor = 5000.0;
-    private final int MapboxScale = 10;
+    private final int MapboxScale = 8;
     private final int numberOfSecondsInAMinute = 60;
     public int coinsToPlace;
     private Chronometer chronometer;
@@ -270,12 +270,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     }
 
     /**
-     * Setting Game Center depeding on the host
+     * Setting Game Center depending on the host
      */
-    private void setGameCenter(){
+    private void setGameCenter() {
         game_center = getCurrentLocation();
-        if(host)
-            game.setStartLocation(game_center,false);
+        if (host)
+            game.setStartLocation(game_center, false);
     }
 
     /**
@@ -312,9 +312,9 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-                if(!host && !startLocationIsSet) {
-                        game_center = game.getStartLocation();
-                        startLocationIsSet = true;
+                if (!host && !startLocationIsSet) {
+                    game_center = game.getStartLocation();
+                    startLocationIsSet = true;
                 }
             }
 

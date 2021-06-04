@@ -170,7 +170,7 @@ public class NewGameImplementation extends MenuImplementation {
         }
 
         if (gameRadius <= MapActivity.THRESHOLD_DISTANCE) {
-            gameRadiusView.setError("The radius of the game should be bigger than 5 meters");
+            gameRadiusView.setError("The radius of the game should be bigger than 7 meters");
             outOfBounds = true;
         }
         if (gameDuration <= 0) {

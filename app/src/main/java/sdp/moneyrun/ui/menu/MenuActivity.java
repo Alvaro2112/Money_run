@@ -55,7 +55,7 @@ import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings({"CanBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //In meters
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;

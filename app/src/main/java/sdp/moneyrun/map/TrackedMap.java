@@ -21,7 +21,6 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import java.util.Arrays;
 import java.util.List;
 
 import sdp.moneyrun.R;

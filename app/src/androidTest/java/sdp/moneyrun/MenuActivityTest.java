@@ -559,7 +559,7 @@ public class MenuActivityTest {
             Thread.sleep(1000);
 
             final String max_player_count = String.valueOf(2);
-            final String expected_zero_players = "The radius of the game should be bigger than 5 meters";
+            final String expected_zero_players = "The radius of the game should be bigger than 7 meters";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
             final String radius = String.valueOf(1);
