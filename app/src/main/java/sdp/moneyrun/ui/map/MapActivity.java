@@ -71,13 +71,18 @@ this map implements all the functionality we will need.
  */
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MapActivity extends TrackedMap implements OnMapReadyCallback {
-    public static final double THRESHOLD_DISTANCE = 5;
+    public static final int THRESHOLD_DISTANCE = 7;
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 2;
     private static final long MINIMUM_TIME_BEFORE_UPDATE = 2000;
     private static int chronometerCounter;
     private final String TAG = MapActivity.class.getSimpleName();
     private final String COIN_ID = "COIN";
     private final float ICON_SIZE = 1.5f;
+    private final int DISTANCE_BETWEEN_COINS = THRESHOLD_DISTANCE;
+    private final int COIN_PLACEMENT_ATTEMPT_LIMIT = 50;
+    private final double scalingFactor = 5000.0;
+    private final int MapboxScale = 8;
+    private final int numberOfSecondsInAMinute = 60;
     public int coinsToPlace;
     private Chronometer chronometer;
     @Nullable
@@ -106,14 +111,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private ArrayList<Coin> seenCoins;
     private ValueEventListener isEndedListener;
     private String locationMode;
-    private final int DISTANCE_BETWEEN_COINS = 2;
-    private final int COIN_PLACEMENT_ATTEMPT_LIMIT = 50;
     private boolean isAnswering;
     private boolean hasFoundMap;
     private OfflineManager offlineManager;
-    private final double scalingFactor = 5000.0;
-    private final int MapboxScale = 10;
-    private final int numberOfSecondsInAMinute = 60;
+    private boolean startLocationIsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         LocationListener locationListenerGPS = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                if(getMapboxMap() != null) {
+                if (getMapboxMap() != null) {
                     getMapboxMap().getLocationComponent().forceLocationUpdate(location);
                     checkObjectives(location);
                 }
@@ -247,7 +248,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_radius = game.getRadius();
                 circleRadius = (float) game_radius * MapboxScale;
                 game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
-                game_center = game.getStartLocation();
+                setGameCenter();
                 initChronometer();
 
                 if (!addedCoins && host) {
@@ -268,6 +269,18 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * Setting Game Center depending on the host
+     */
+    private void setGameCenter() {
+        game_center = getCurrentLocation();
+        if (host)
+            game.setStartLocation(game_center, false);
+    }
+
+    /**
+     * Initializes circle and end game listener
+     */
     private void initCircleAndSetEndListener() {
         initCircle();
         if (!host)
@@ -299,7 +312,10 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-
+                if (!host && !startLocationIsSet) {
+                    game_center = game.getStartLocation();
+                    startLocationIsSet = true;
+                }
             }
 
             @Override
@@ -416,7 +432,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
             if (chronometerCounter < game_time) {
                 chronometerCounter += 1;
                 circleRadius -= shrinkingFactor;
-                if(chronometerCounter % 2 == 0)
+                if (chronometerCounter % 2 == 0)
                     initCircle();
             } else {
                 if (!hasEnded) {
@@ -662,27 +678,28 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         int addedCoins = 0;
         for (int i = 0; i < number; i++) {
             Location loc = generateSingleLocation(maxRadius, minRadius);
-            if(loc !=null) {
+            if (loc != null) {
                 addCoin(new Coin(loc.getLatitude(), loc.getLongitude(), CoinGenerationHelper.coinValue(loc, getCurrentLocation())), true);
                 addedCoins++;
             }
         }
-        if(addedCoins<number){
-            Toast.makeText(this, "Only " + addedCoins +" could be added within the specified radius", Toast.LENGTH_LONG).show();
+        if (addedCoins < number) {
+            Toast.makeText(this, "Only " + addedCoins + " could be added within the specified radius", Toast.LENGTH_LONG).show();
         }
     }
 
-   private Location generateSingleLocation(double maxRadius, double minRadius){
-       List<Coin> coins = localPlayer.getLocallyAvailableCoins();
-       Location loc;
-       int tries = 0;
+    @Nullable
+    private Location generateSingleLocation(double maxRadius, double minRadius) {
+        List<Coin> coins = localPlayer.getLocallyAvailableCoins();
+        Location loc;
+        int tries = 0;
         do {
             loc = CoinGenerationHelper.getRandomLocation(getCurrentLocation(), maxRadius, minRadius);
             tries++;
-        }while(CoinGenerationHelper.minDistWithExistingCoins(loc, coins) < DISTANCE_BETWEEN_COINS && tries <COIN_PLACEMENT_ATTEMPT_LIMIT);
-        if(tries == COIN_PLACEMENT_ATTEMPT_LIMIT){
-                loc = null;
-            } // if no successful loc was found we return null
+        } while (CoinGenerationHelper.minDistWithExistingCoins(loc, coins) < DISTANCE_BETWEEN_COINS && tries < COIN_PLACEMENT_ATTEMPT_LIMIT);
+        if (tries == COIN_PLACEMENT_ATTEMPT_LIMIT) {
+            loc = null;
+        } // if no successful loc was found we return null
         return loc;
     }
 
@@ -712,11 +729,11 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
      */
     public void initCircle() {
         circleManager.deleteAll();
-        circleHelper(game_center,circleRadius/scalingFactor);
+        circleHelper(game_center, circleRadius / scalingFactor);
     }
 
 
-    private void circleHelper(Location centerCoordinates,double radiusInKilometers){
+    private void circleHelper(@NonNull Location centerCoordinates, double radiusInKilometers) {
         int numberOfSides = 256;
         int halfCircleDegrees = 180;
         double scaleLongitudeToKilometers = 111.319;

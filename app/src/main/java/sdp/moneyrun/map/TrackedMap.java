@@ -21,7 +21,6 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import java.util.Arrays;
 import java.util.List;
 
 import sdp.moneyrun.R;
@@ -35,7 +34,6 @@ public abstract class TrackedMap extends BaseMap implements
         PermissionsListener {
     private static final long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
     private static final long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
-    private final List<String> INAPPROPRIATE_LOCATIONS = Arrays.asList("building", "motorway", "route cantonale", "sports_centre");
     public LocationEngine locationEngine;
     @Nullable
     protected LocationCheckObjectivesCallback callback;

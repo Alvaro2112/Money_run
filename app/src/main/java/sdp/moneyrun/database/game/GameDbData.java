@@ -215,6 +215,10 @@ public final class GameDbData {
         return startLocation;
     }
 
+    public void setStartLocation(@Nullable Location startLocation) {
+        this.startLocation = startLocation;
+    }
+
     public int getNumCoins() {
         return numCoins;
     }

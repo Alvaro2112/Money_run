@@ -24,7 +24,6 @@ public class MainActivityInstrumentedTest {
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
 
-
     @Test
     public void activityChangesToDashBoardAfter5750Sec() {
         Intents.init();

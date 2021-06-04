@@ -11,6 +11,7 @@ import java.util.Random;
 public class CoinGenerationHelper {
 
     public static final double VALUE_RADIUS = 100;
+
     /**
      * https://stackoverflow.com/a/36919707
      *
@@ -71,24 +72,25 @@ public class CoinGenerationHelper {
 
     /**
      * computes the distance between the location and the closest coin
+     *
      * @param loc
      * @param coins
      * @return the distance  between the location and the closest coin
      */
-    public static double minDistWithExistingCoins(Location loc, List<Coin> coins){
+    public static double minDistWithExistingCoins(@NonNull Location loc, @Nullable List<Coin> coins) {
         if (coins == null) {
             throw new IllegalStateException();
         }
-        if(coins.isEmpty()){
+        if (coins.isEmpty()) {
             return Double.MAX_VALUE;
         }
         double minDist = Double.MAX_VALUE;
         int retained_index = -1;
 
-        for(int i = 0; i < coins.size(); i++){
+        for (int i = 0; i < coins.size(); i++) {
             Coin coin = coins.get(i);
             double distance = TrackedMap.distance(loc.getLatitude(), loc.getLongitude(), coin.getLatitude(), coin.getLongitude());
-            if (minDist > distance){
+            if (minDist > distance) {
                 minDist = distance;
                 retained_index = i;
             }

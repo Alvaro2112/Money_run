@@ -55,7 +55,7 @@ import sdp.moneyrun.weather.WeatherForecast;
 import sdp.moneyrun.weather.WeatherReport;
 
 
-@SuppressWarnings({"CanBeFinal"})
+@SuppressWarnings({"CanBeFinal", "FieldCanBeLocal"})
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //In meters
     public static final float DISTANCE_CHANGE_BEFORE_UPDATE = (float) 100.0;
@@ -76,10 +76,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private OpenWeatherMap openWeatherMap;
     private WeatherForecast currentForecast;
     private LocationRepresentation currentLocation;
-    private Dialog helpDialog;
-    private ImageView informationImage;
-
-
     @NonNull
     LocationListener locationListenerGPS = new LocationListener() {
         @Override
@@ -101,6 +97,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         }
 
     };
+    private Dialog helpDialog;
+    private ImageView informationImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +128,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void addInfoImageButton(){
-        informationImage = (ImageView)findViewById(R.id.info_image);
+    private void addInfoImageButton() {
+        informationImage = findViewById(R.id.info_image);
         informationImage.setOnClickListener(v -> showPopup());
     }
 
@@ -238,7 +236,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public void showPopup() {
         Button txtclose;
         helpDialog.setContentView(R.layout.help_pop_up);
-        txtclose =(Button) helpDialog.findViewById(R.id.txtclose);
+        txtclose = helpDialog.findViewById(R.id.txtclose);
         txtclose.setOnClickListener(v1 -> helpDialog.dismiss());
         helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.show();

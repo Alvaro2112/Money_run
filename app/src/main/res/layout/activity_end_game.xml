@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.game.EndGameActivity"
-    android:background="@drawable/theme_gradient">
+    android:background="@drawable/theme_gradient"
+    tools:context=".ui.game.EndGameActivity">
 
     <TextView
         android:id="@+id/end_game_text"
@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/layout_rounded"
         android:contentDescription="@string/button_to_leave_game_description"
-        android:text="@string/back_to_menu"
         android:paddingHorizontal="10dp"
+        android:text="@string/back_to_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.847"
