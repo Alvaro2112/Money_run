@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 public class PlayerDatabaseProxyTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void getLeaderboardPlayersFailsCorrectly(){
+    public void getLeaderboardPlayersFailsCorrectly() {
         PlayerDatabaseProxy playerDatabaseProxy = new PlayerDatabaseProxy();
         playerDatabaseProxy.getLeaderboardPlayers(-1);
     }

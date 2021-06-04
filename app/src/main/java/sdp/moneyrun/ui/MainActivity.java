@@ -15,12 +15,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 import sdp.moneyrun.R;
 import sdp.moneyrun.ui.authentication.LoginActivity;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity {
     public static boolean calledAlready = false;
+    //TIMES FOR THE ANIMATION
+    private final int ANIMATION_START = 750;
+    private final int ANIMATION_COIN_FADE = 2250;
+    private final int ANIMATION_TITLE_FADE = 2700;
+    private final int INTENT_START_ACTIVITY = 5400;
     private MediaPlayer mp;
     private Animation translateMan;
     private Animation alphaTitle;
@@ -28,18 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView coinImage;
     private ImageView appTitleImage;
 
-    //TIMES FOR THE ANIMATION
-    private final int ANIMATION_START = 750;
-    private final int ANIMATION_COIN_FADE = 2250;
-    private final int ANIMATION_TITLE_FADE = 2700;
-    private final int INTENT_START_ACTIVITY = 5400;
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
         translateMan = AnimationUtils.loadAnimation(this, R.anim.translation_splash_screen);
         alphaTitle = AnimationUtils.loadAnimation(this, R.anim.alpha_title);
@@ -53,19 +52,15 @@ public class MainActivity extends AppCompatActivity {
         startAnimations();
     }
 
-    private void startAnimations(){
-        new Handler().postDelayed(() -> {
-            runningMan.startAnimation(translateMan);
-        },ANIMATION_START);
+    private void startAnimations() {
+        new Handler().postDelayed(() -> runningMan.startAnimation(translateMan), ANIMATION_START);
 
-        new Handler().postDelayed(() -> {
-            coinImage.setVisibility(View.INVISIBLE);
-        },ANIMATION_COIN_FADE);
+        new Handler().postDelayed(() -> coinImage.setVisibility(View.INVISIBLE), ANIMATION_COIN_FADE);
 
         new Handler().postDelayed(() -> {
             appTitleImage.startAnimation(alphaTitle);
             mp.start();
-        },ANIMATION_TITLE_FADE);
+        }, ANIMATION_TITLE_FADE);
 
         if (!calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);

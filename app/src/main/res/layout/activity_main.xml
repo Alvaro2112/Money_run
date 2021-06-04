@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
-    android:background="@drawable/theme_gradient">
+    android:background="@drawable/theme_gradient"
+    tools:context=".ui.MainActivity">
 
     <ImageView
-        android:id="@+id/imageView4"
         android:layout_width="384dp"
         android:layout_height="86dp"
         android:layout_marginBottom="4dp"
-        android:contentDescription="black ground"
+        android:contentDescription="@string/black_ground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.481"
@@ -25,7 +24,7 @@
         android:layout_height="78dp"
         android:layout_marginEnd="44dp"
         android:layout_marginBottom="68dp"
-        android:contentDescription="golden coin"
+        android:contentDescription="@string/golden_coin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/coin_image" />
@@ -35,7 +34,7 @@
         android:layout_width="417dp"
         android:layout_height="245dp"
         android:layout_marginTop="28dp"
-        android:contentDescription="Money run, main app title"
+        android:contentDescription="@string/money_run_main_app_title"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +48,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="174dp"
         android:layout_marginBottom="52dp"
-        android:contentDescription="Silhouette of man running"
+        android:contentDescription="@string/silhouette_of_man_running"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/coin_image"
         app:layout_constraintHorizontal_bias="0.375"

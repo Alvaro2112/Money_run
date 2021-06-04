@@ -93,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param user
      */
     private void updateUI(@Nullable FirebaseUser user) {
@@ -107,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     /**
      * Ensures password is at least 7 characters long
+     *
      * @param password
      * @return
      */
@@ -116,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     /**
      * Ensure email has basic email format
+     *
      * @param email
      * @return
      */
@@ -125,6 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     /**
      * Check that text fields are valid i.e non empty and correct format
+     *
      * @param emailView
      * @param passwordView
      * @return

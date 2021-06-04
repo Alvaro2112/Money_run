@@ -19,9 +19,9 @@ import org.junit.rules.ExpectedException;
 import java.util.ArrayList;
 
 import sdp.moneyrun.player.Player;
+import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.ui.menu.leaderboards.LeaderboardActivity;
 import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
-import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -70,14 +70,12 @@ public class MainLeaderboardInstrumentedTest {
     }
 
 
-
     @Test
-    public void backButtonDoesNothing1(){
+    public void backButtonDoesNothing1() {
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MainLeaderboardActivity.class);
         User user = new User("3", "Bob", 0, 0, 0);
         intent.putExtra("user", user);
-
 
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(intent)) {
@@ -125,7 +123,7 @@ public class MainLeaderboardInstrumentedTest {
     }
 
     @Test
-    public void goBackToMenuWorks(){
+    public void goBackToMenuWorks() {
 
         try (ActivityScenario<MainLeaderboardActivity> scenario = ActivityScenario.launch(getStartIntent1())) {
             Intents.init();

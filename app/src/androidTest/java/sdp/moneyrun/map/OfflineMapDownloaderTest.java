@@ -78,7 +78,7 @@ public class OfflineMapDownloaderTest {
     }
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<OfflineMapDownloaderActivity> scenario = ActivityScenario.launch(OfflineMapDownloaderActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());

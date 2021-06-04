@@ -131,16 +131,6 @@ public class AddFriendListListAdapter extends ListAdapterWithUser {
     }
 
     /**
-     * Define invalid button type
-     *
-     * @param button the button
-     */
-    private void setInvalidButtonType(@NonNull Button button) {
-        button.setEnabled(false);
-        button.setVisibility(View.GONE);
-    }
-
-    /**
      * Define button type
      *
      * @param button the button

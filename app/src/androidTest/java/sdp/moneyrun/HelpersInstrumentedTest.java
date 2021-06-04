@@ -35,7 +35,7 @@ public class HelpersInstrumentedTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void joinLobbyFromJoinButtonThrowsExceptionOnNullGameId(){
+    public void joinLobbyFromJoinButtonThrowsExceptionOnNullGameId() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             LocationRepresentation locationRep = new LocationRepresentation(10, 10);
             GameRepresentation gameRep = new GameRepresentation(null, "game", 1, 10, locationRep);

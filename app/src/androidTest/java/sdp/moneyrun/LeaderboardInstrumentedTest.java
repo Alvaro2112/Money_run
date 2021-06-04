@@ -69,7 +69,7 @@ public class LeaderboardInstrumentedTest {
     }
 
     @Test
-    public void backButtonDoesNothing1(){
+    public void backButtonDoesNothing1() {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
@@ -220,7 +220,7 @@ public class LeaderboardInstrumentedTest {
     }
 
     @Test
-    public void testBackButtonSimplyReturns(){
+    public void testBackButtonSimplyReturns() {
         try (ActivityScenario<LeaderboardActivity> scenario = ActivityScenario.launch(LeaderboardActivity.class)) {
             scenario.onActivity(LeaderboardActivity::onBackPressed);
         }

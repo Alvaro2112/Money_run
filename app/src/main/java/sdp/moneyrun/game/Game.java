@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.internal.$Gson$Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -321,7 +320,7 @@ public class Game {
 
     }
 
-    public void setStartLocation(Location startLocation,boolean forceLocal){
+    public void setStartLocation(@NonNull Location startLocation, boolean forceLocal) {
         if (!forceLocal) {
             FirebaseDatabase.getInstance().getReference()
                     .child(DATABASE_GAME)

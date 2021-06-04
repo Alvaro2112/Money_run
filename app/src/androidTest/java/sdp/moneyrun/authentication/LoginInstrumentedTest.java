@@ -96,7 +96,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<LoginActivity> scenario = ActivityScenario.launch(LoginActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());
@@ -387,7 +387,7 @@ public class LoginInstrumentedTest {
     }
 
     @Test
-    public void logInWithoutConnectionDisplaysError(){
+    public void logInWithoutConnectionDisplaysError() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
 

@@ -4,22 +4,21 @@ import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import sdp.moneyrun.location.AndroidLocationService;
+import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.ui.MainActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
 import sdp.moneyrun.user.User;
-import sdp.moneyrun.location.LocationRepresentation;
-
-
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.core.app.ApplicationProvider;
-
-import com.google.firebase.database.FirebaseDatabase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

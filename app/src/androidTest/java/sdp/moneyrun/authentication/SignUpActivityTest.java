@@ -95,7 +95,7 @@ public class SignUpActivityTest {
     }
 
     @Test
-    public void backButtonDoesNothing(){
+    public void backButtonDoesNothing() {
         try (ActivityScenario<SignUpActivity> scenario = ActivityScenario.launch(SignUpActivity.class)) {
             assertEquals(Lifecycle.State.RESUMED, scenario.getState());
             onView(isRoot()).perform(ViewActions.pressBack());

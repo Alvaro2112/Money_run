@@ -97,6 +97,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * Put the game in the database, if already present, replaces it
+     *
      * @param game
      * @param listener
      */
@@ -256,6 +257,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * Add listener to game entry in database
+     *
      * @param game
      * @param l
      */
@@ -268,6 +270,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * removes listener to entry in database
+     *
      * @param game
      * @param listener
      */
@@ -280,6 +283,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * Checks that those argument aren't null
+     *
      * @param game
      * @param listener
      */
@@ -295,6 +299,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * Add listener to game entry in database
+     *
      * @param game
      * @param listener
      */
@@ -305,6 +310,7 @@ public class GameDatabaseProxy extends DatabaseProxy {
 
     /**
      * Removes listener to game entry in database
+     *
      * @param game
      * @param listener
      */

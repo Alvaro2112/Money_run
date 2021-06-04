@@ -13,7 +13,6 @@ import androidx.lifecycle.Lifecycle.State;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.intent.Intents;
@@ -33,18 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.game.GameBuilder;
 import sdp.moneyrun.location.AndroidLocationService;
 import sdp.moneyrun.location.LocationRepresentation;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.menu.JoinGameImplementation;
 import sdp.moneyrun.player.Player;
 import sdp.moneyrun.player.PlayerBuilder;
 import sdp.moneyrun.ui.game.GameLobbyActivity;
-import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.ui.menu.MenuActivity;
+import sdp.moneyrun.ui.menu.leaderboards.MainLeaderboardActivity;
 import sdp.moneyrun.user.User;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -69,7 +68,30 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("FieldMayBeFinal")
 @RunWith(AndroidJUnit4.class)
 public class MenuActivityTest {
-    private  long ASYNC_CALL_TIMEOUT = 10L;
+    @Rule
+    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
+    private long ASYNC_CALL_TIMEOUT = 10L;
+
+    //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
+    @NonNull
+    private static Matcher<View> withError(final String expected) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof EditText)) {
+                    return false;
+                }
+                EditText editText = (EditText) view;
+                return editText.getError().toString().equals(expected);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
+    }
 
     //Since the features of Menu now depend on the intent it is usually launched with
     //We also need to launch MenuActivity with a valid intent for tests to pass
@@ -81,7 +103,7 @@ public class MenuActivityTest {
         return toStart;
     }
 
-    private Location getMockedLocation(){
+    private Location getMockedLocation() {
         Location gameLocation = new Location("");
         gameLocation.setLongitude(12.);
         gameLocation.setLatitude(12.);
@@ -89,7 +111,7 @@ public class MenuActivityTest {
         return gameLocation;
     }
 
-    private Location getFarLocation(){
+    private Location getFarLocation() {
         Location gameLocation = new Location("");
         gameLocation.setLongitude(22.);
         gameLocation.setLatitude(22.);
@@ -97,7 +119,7 @@ public class MenuActivityTest {
         return gameLocation;
     }
 
-    private Game addFirstGameToDatabase(){
+    private Game addFirstGameToDatabase() {
         // Define game location
         Location gameLocation = getMockedLocation();
         Location farLocation = getFarLocation();
@@ -134,7 +156,7 @@ public class MenuActivityTest {
         return game;
     }
 
-    private Game addSecondGameToDatabase(){
+    private Game addSecondGameToDatabase() {
         // Define game location
         Location farLocation = getFarLocation();
 
@@ -170,32 +192,6 @@ public class MenuActivityTest {
         return game;
     }
 
-    @Rule
-    public ActivityScenarioRule<MenuActivity> testRule = new ActivityScenarioRule<>(getStartIntent());
-
-    //adapted from https://stackoverflow.com/questions/28408114/how-can-to-test-by-espresso-android-widget-textview-seterror/28412476
-    @NonNull
-    private static Matcher<View> withError(final String expected) {
-        return new TypeSafeMatcher<View>() {
-
-            @Override
-            public boolean matchesSafely(View view) {
-                if (!(view instanceof EditText)) {
-                    return false;
-                }
-                EditText editText = (EditText) view;
-                return editText.getError().toString().equals(expected);
-            }
-
-            @Override
-            public void describeTo(Description description) {
-
-            }
-        };
-    }
-
-
-
     @NonNull
     public Game getGame() {
         String name = "JoinGameImplementationTest";
@@ -229,7 +225,7 @@ public class MenuActivityTest {
 
 
     @Test
-    public void backButtonDoesNothing1(){
+    public void backButtonDoesNothing1() {
 
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), MenuActivity.class);
@@ -270,9 +266,9 @@ public class MenuActivityTest {
     public void CreateGameWorksWhenFieldsAreAppropriate() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Intents.init();
-            scenario.onActivity(a ->{
+            scenario.onActivity(a -> {
                 AndroidLocationService locationS = a.getLocationService();
-                locationS.setMockedLocation(new LocationRepresentation(4,5));
+                locationS.setMockedLocation(new LocationRepresentation(4, 5));
             });
 
             onView(ViewMatchers.withId(R.id.new_game)).perform(ViewActions.click());
@@ -296,9 +292,8 @@ public class MenuActivityTest {
             intended(hasComponent(GameLobbyActivity.class.getName()));
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        finally {
-           Intents.release();
+        } finally {
+            Intents.release();
         }
     }
 
@@ -564,7 +559,7 @@ public class MenuActivityTest {
             Thread.sleep(1000);
 
             final String max_player_count = String.valueOf(2);
-            final String expected_zero_players = "The radius of the game should be bigger than 5 meters";
+            final String expected_zero_players = "The radius of the game should be bigger than 7 meters";
             final String game_name = "CreateGameTest";
             final String numCoins = String.valueOf(5);
             final String radius = String.valueOf(1);
@@ -647,7 +642,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void weatherTypeAndTemperatureAreNotEmpty(){
+    public void weatherTypeAndTemperatureAreNotEmpty() {
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             scenario.onActivity(a -> {
                 android.location.Location location = new android.location.Location(LocationManager.PASSIVE_PROVIDER);
@@ -670,17 +665,17 @@ public class MenuActivityTest {
         // Since we disable the back button by simply returning the function shouldn't do anything
         try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             scenario.onActivity(MenuActivity::onBackPressed);
-        }catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
     }
 
     @Test
-    public void onlyNearGamesShow(){
+    public void onlyNearGamesShow() {
         Game nearGame = addFirstGameToDatabase();
         Game farGame = addSecondGameToDatabase();
 
-        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(5000);
 
             // Mock location
@@ -705,8 +700,8 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void helpPopupOpensAndClosesWithButtons(){
-        try(ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
+    public void helpPopupOpensAndClosesWithButtons() {
+        try (ActivityScenario<MenuActivity> scenario = ActivityScenario.launch(getStartIntent())) {
             Thread.sleep(2000);
             onView(ViewMatchers.withId(R.id.info_image)).perform(ViewActions.click());
             onView(withText("How to play")).check(matches(isDisplayed()));

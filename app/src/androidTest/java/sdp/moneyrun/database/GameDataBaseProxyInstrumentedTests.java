@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdp.moneyrun.database.game.GameDatabaseProxy;
+import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.game.Game;
 import sdp.moneyrun.map.Coin;
-import sdp.moneyrun.database.riddle.Riddle;
 import sdp.moneyrun.player.Player;
 
 public class GameDataBaseProxyInstrumentedTests {
 
     @Test(expected = IllegalArgumentException.class)
-    public void removeGameListenerThrowsExceptionForNullGame(){
+    public void removeGameListenerThrowsExceptionForNullGame() {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         gdp.removeGameListener(null, new ValueEventListener() {
             @Override
@@ -38,7 +38,7 @@ public class GameDataBaseProxyInstrumentedTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void removeGameListenerThrowsExceptionForNullListener(){
+    public void removeGameListenerThrowsExceptionForNullListener() {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         String name = "name";
         Player host = new Player("3", "Bob", 0);
@@ -52,11 +52,11 @@ public class GameDataBaseProxyInstrumentedTests {
         location.setLongitude(20);
 
         Game game = new Game(name, host, maxPlayerCount, riddles, coins, location, true, 1, 1, 1);
-       gdp.removeGameListener(game, null);
+        gdp.removeGameListener(game, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void removeGameThrowsExceptionForNullGame(){
+    public void removeGameThrowsExceptionForNullGame() {
         GameDatabaseProxy gdp = new GameDatabaseProxy();
         gdp.removeGame(null);
     }
