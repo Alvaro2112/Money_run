@@ -114,6 +114,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
     private final double scalingFactor = 5000.0;
     private final int MapboxScale = 10;
     private final int numberOfSecondsInAMinute = 60;
+    private boolean startLocationIsSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +248,7 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 game_radius = game.getRadius();
                 circleRadius = (float) game_radius * MapboxScale;
                 game_time = (int) Math.floor(game.getDuration() * numberOfSecondsInAMinute);
-                game_center = game.getStartLocation();
+                setGameCenter();
                 initChronometer();
 
                 if (!addedCoins && host) {
@@ -268,6 +269,18 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
         });
     }
 
+    /**
+     * Setting Game Center depeding on the host
+     */
+    private void setGameCenter(){
+        game_center = getCurrentLocation();
+        if(host)
+            game.setStartLocation(game_center,false);
+    }
+
+    /**
+     * Initializes circle and end game listener
+     */
     private void initCircleAndSetEndListener() {
         initCircle();
         if (!host)
@@ -299,7 +312,12 @@ public class MapActivity extends TrackedMap implements OnMapReadyCallback {
                 for (Coin coin : localPlayer.getLocallyAvailableCoins()) {
                     addCoin(coin, false);
                 }
-
+                if(!host) {
+                    if(!startLocationIsSet) {
+                        game_center = game.getStartLocation();
+                        startLocationIsSet = true;
+                    }
+                }
             }
 
             @Override
