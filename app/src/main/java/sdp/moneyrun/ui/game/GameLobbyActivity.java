@@ -105,6 +105,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 listenToIsDeleted();
                 listenToStarted();
                 createDeleteOrLeaveButton();
+                createLaunchButton();
                 disableLaunchButtonIfNotHost();
             } else {
                 Log.e(TAG, task.getException().getMessage());
@@ -133,6 +134,22 @@ public class GameLobbyActivity extends AppCompatActivity {
             };
             thisGame.child(DB_IS_DELETED).addValueEventListener(isDeletedListener);
         }
+    }
+
+    private void createLaunchButton(){
+        findViewById(R.id.launch_game_button).setOnClickListener(v -> {
+            if (game.getHost().equals(player)) {
+                game.setStarted(true, false);
+                game.setIsVisible(false, false);
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                intent.putExtra("player", player);
+                intent.putExtra("gameId", gameId);
+                intent.putExtra("host", true);
+                intent.putExtra("locationMode", locationMode);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     /**
@@ -165,19 +182,6 @@ public class GameLobbyActivity extends AppCompatActivity {
         //Find all the views and assign them values
         TextView name = findViewById(R.id.lobby_title);
         name.setText(game.getName());
-
-        findViewById(R.id.launch_game_button).setOnClickListener(v -> {
-            if (game.getHost().equals(player)) {
-                game.setStarted(true, false);
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                intent.putExtra("player", player);
-                intent.putExtra("gameId", gameId);
-                intent.putExtra("host", true);
-                intent.putExtra("locationMode", locationMode);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         //Player List is dynamic with DB
         TextView playersMissing = findViewById(R.id.players_missing_TextView);
@@ -283,8 +287,6 @@ public class GameLobbyActivity extends AppCompatActivity {
                 thisGame.child(DB_IS_DELETED).removeEventListener(isDeletedListener);
 
             if (isStartedListener != null) {
-                System.out.println("REMOVED THE PLAYER LISTENER");
-
                 thisGame.child(DB_STARTED).removeEventListener(isStartedListener);
                 proxyG.removeGameListener(game, isStartedListener);
             }
