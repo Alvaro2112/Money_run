@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class CoinGenerationHelper {
 
-    public static final double VALUE_RADIUS = 100;
+    public static final double VALUE_RADIUS = 20;
     /**
      * https://stackoverflow.com/a/36919707
      *
