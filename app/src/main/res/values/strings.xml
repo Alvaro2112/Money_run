@@ -148,6 +148,7 @@
     <string name="silhouette_of_man_running">Silhouette of man running</string>
     <string name="swipe_from_left_to_right_on_menu_to_see_additional_features">- Swipe from left to right on menu to see additional features</string>
     <string name="infomation_button">information button</string>
+    <string name="careful_if_you_pickup_a_coin_outside_the_ring_you_will_die">- Careful, if you pickup a coin outside the ring you will die</string>
     )))
 
 </resources>
