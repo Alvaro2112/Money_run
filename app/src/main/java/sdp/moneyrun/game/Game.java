@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.internal.$Gson$Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ public class Game {
     private final String DATABASE_STARTED = "started";
     private final String DATABASE_ENDED = "ended";
     private final String DATABASE_START_TIME = "startTime";
+    private final String DATABASE_START_LOCATION = "startLocation";
+    private final String DATABASE_START_LOCATION_LATITUDE = "latitude";
+    private final String DATABASE_START_LOCATION_LONGITUDE = "longitude";
     //Attributes
     @NonNull
     private final GameDbData gameDbData;
@@ -315,6 +319,24 @@ public class Game {
         gameDbData.setStarted(started);
         this.started = started;
 
+    }
+
+    public void setStartLocation(Location startLocation,boolean forceLocal){
+        if (!forceLocal) {
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_START_LOCATION)
+                    .child(DATABASE_START_LOCATION_LATITUDE)
+                    .setValue(startLocation.getLatitude());
+            FirebaseDatabase.getInstance().getReference()
+                    .child(DATABASE_GAME)
+                    .child(id)
+                    .child(DATABASE_START_LOCATION)
+                    .child(DATABASE_START_LOCATION_LONGITUDE)
+                    .setValue(startLocation.getLongitude());
+            gameDbData.setStartLocation(startLocation);
+        }
     }
 
     public boolean getEnded() {
